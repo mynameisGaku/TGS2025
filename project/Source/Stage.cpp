@@ -24,10 +24,10 @@ namespace {
 void Stage::Init() {
 
 	if (ground == nullptr)
-		ground = new Object3D(MV1LoadModel("data/model/Stage/Plane1.mv1"), Transform(V3::ZERO, V3::ZERO, V3::HORIZONTAL * 7.0f));
+		ground = new Object3D(MV1LoadModel("data/model/Stage/Ground_000.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(20.0f)));
 
 	if (sky == nullptr)
-		sky = new Object3D(MV1LoadModel("data/model/Stage/Sky.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(20.0f)));
+		sky = new Object3D(MV1LoadModel("data/model/Stage/Sky_000.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(20.0f)));
 
 	if (wall == nullptr)
 		wall = new Object3D(MV1LoadModel("data/model/Stage/StageCollider.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(STAGE_RANGE / 50.0f)));

@@ -18,6 +18,8 @@
 #include "../Source/config.h"
 #include "../Source/Util/Utils.h"
 #include "../Source/Font.h"
+#include "Source/WindowSetting.h"
+#include "Library/FileUtil.h"
 
 #ifdef IMGUI
 
@@ -35,12 +37,17 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 // プログラムは WinMain から始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
-	SetGraphMode(Screen::WIDTH, Screen::HEIGHT, 32);
+    auto& wSetting = WindowSetting::Inst();
+	std::string path = "";
+    SearchFilePath("window.ini", path);
+    wSetting.Load(path);
+
+	SetGraphMode(wSetting.width, wSetting.height, 32);
 	SetOutApplicationLogValidFlag(FALSE); // ログを出さない
 
-	SetMainWindowText(WINDOW_NAME);
-	SetWindowSizeExtendRate(WINDOW_EXTEND);
-	ChangeWindowMode(WINDOW_MODE); // Windowモードの場合
+	SetMainWindowText(wSetting.name.c_str());
+	SetWindowSizeExtendRate(wSetting.extend);
+	ChangeWindowMode(wSetting.isFull); // Windowモードの場合
 
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 	SetZBufferBitDepth(32);
@@ -73,7 +80,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
 	
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
-	Effekseer_Set2DSetting(Screen::WIDTH, Screen::HEIGHT);
+	Effekseer_Set2DSetting(wSetting.width, wSetting.height);
 
 	SetFontSize(32);
 	Font::Load("data/font/", "sazanami_mincho.ttf", "さざなみ明朝");

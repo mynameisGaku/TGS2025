@@ -162,6 +162,9 @@
     <ClInclude Include="Source\CameraDefine.h" />
     <ClInclude Include="Source\CameraManager.h" />
     <ClInclude Include="Source\CameraState_Debug.h" />
+    <ClInclude Include="Source\CharaBase.h" />
+    <ClInclude Include="Source\CharaDefine.h" />
+    <ClInclude Include="Source\CharaManager.h" />
     <ClInclude Include="Source\Component\AnimationEvent.h" />
     <ClInclude Include="Source\Component\Animator.h" />
     <ClInclude Include="Source\Component\ColliderBase.h" />
@@ -289,6 +292,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
     <ClCompile Include="Source\CameraState_Debug.cpp" />
+    <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
     <ClCompile Include="Source\Component\Animator.cpp" />
     <ClCompile Include="Source\Component\ColliderBase.cpp" />
@@ -364,6 +368,7 @@
     <ClCompile Include="Source\Util\Transform.cpp" />
     <ClCompile Include="Source\Util\Vector2.cpp" />
     <ClCompile Include="Source\Util\Vector3.cpp" />
+    <ClCompile Include="Source\CharaManager.cpp" />
     <ClCompile Include="Source\VolumeSetting.cpp" />
     <ClCompile Include="Source\WindowSetting.cpp" />
     <ClCompile Include="vendor\ImGui\imgui.cpp" />

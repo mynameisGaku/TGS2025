@@ -112,6 +112,9 @@
     <ClCompile Include="Source\MouseController.cpp">
       <Filter>Framework\02_Common\System\Input\02_MouseController</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SettingManager.cpp">
+      <Filter>Framework\02_Common\System\SettingManager</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Util\Quaternion.cpp">
       <Filter>Framework\02_Common\Util</Filter>
     </ClCompile>
@@ -281,13 +284,13 @@
       <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Source\SensiSetting.cpp">
-      <Filter>Framework\02_Common\System\Setting\Management\01_SensiSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\01_SensiSetting</Filter>
     </ClCompile>
     <ClCompile Include="Source\VolumeSetting.cpp">
-      <Filter>Framework\02_Common\System\Setting\Management\02_VolumeSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\02_VolumeSetting</Filter>
     </ClCompile>
     <ClCompile Include="Source\SettingBase.cpp">
-      <Filter>Framework\02_Common\System\Setting\Management\00_SettingBase</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\00_SettingBase</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\AnimationEvent.cpp">
       <Filter>Framework\04_Component\Animator</Filter>
@@ -298,20 +301,11 @@
     <ClCompile Include="Source\settings_ini.cpp">
       <Filter>Framework\02_Common\System\Ini</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SettingManager.cpp">
-      <Filter>Framework\02_Common\System\Setting\Management</Filter>
+    <ClCompile Include="Source\CharaBase.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
-    <ClCompile Include="Source\WindowSetting.cpp">
-      <Filter>Framework\02_Common\System\Setting\Other\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\FileUtil.cpp">
-      <Filter>Framework\02_Common\System\File</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Ball.cpp">
-      <Filter>Application\Scenes\02_PlayScene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallAttribute.cpp">
-      <Filter>Application\Scenes\02_PlayScene</Filter>
+    <ClCompile Include="Source\CharaManager.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="Source\MouseController.h">
       <Filter>Framework\02_Common\System\Input\02_MouseController</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SettingManager.h">
+      <Filter>Framework\02_Common\System\SettingManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Anchor.h">
       <Filter>Framework\02_Common\Util</Filter>
@@ -658,13 +655,13 @@
       <Filter>Framework\01_Library</Filter>
     </ClInclude>
     <ClInclude Include="Source\SensiSetting.h">
-      <Filter>Framework\02_Common\System\Setting\Management\01_SensiSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\01_SensiSetting</Filter>
     </ClInclude>
     <ClInclude Include="Source\VolumeSetting.h">
-      <Filter>Framework\02_Common\System\Setting\Management\02_VolumeSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\02_VolumeSetting</Filter>
     </ClInclude>
     <ClInclude Include="Source\SettingBase.h">
-      <Filter>Framework\02_Common\System\Setting\Management\00_SettingBase</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\00_SettingBase</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\AnimationEvent.h">
       <Filter>Framework\04_Component\Animator</Filter>
@@ -681,20 +678,14 @@
     <ClInclude Include="Source\Pool.h">
       <Filter>Framework\02_Common\System\Pool</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SettingManager.h">
-      <Filter>Framework\02_Common\System\Setting\Management</Filter>
+    <ClInclude Include="Source\CharaBase.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WindowSetting.h">
-      <Filter>Framework\02_Common\System\Setting\Other\Window</Filter>
+    <ClInclude Include="Source\CharaManager.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Library\FileUtil.h">
-      <Filter>Framework\02_Common\System\File</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Ball.h">
-      <Filter>Application\Scenes\02_PlayScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallAttribute.h">
-      <Filter>Application\Scenes\02_PlayScene</Filter>
+    <ClInclude Include="Source\CharaDefine.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -817,6 +808,18 @@
     </Filter>
     <Filter Include="Framework\02_Common\System\Input\02_MouseController">
       <UniqueIdentifier>{eb8983fb-95a0-4284-a45f-c93d767a558b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager">
+      <UniqueIdentifier>{e955fcc9-28f0-48a3-857e-0e5671500fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager\00_SettingBase">
+      <UniqueIdentifier>{36bddec0-e412-4eff-b9ec-96d248f19921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager\01_SensiSetting">
+      <UniqueIdentifier>{da95223e-c616-406c-8153-2049069af81b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager\02_VolumeSetting">
+      <UniqueIdentifier>{e81781c8-7ab1-47b0-ad24-2703517e0466}</UniqueIdentifier>
     </Filter>
     <Filter Include="Framework\02_Common\System\Json">
       <UniqueIdentifier>{f9cc9a35-2f5e-4aec-9bed-612b70668d90}</UniqueIdentifier>
@@ -1022,29 +1025,8 @@
     <Filter Include="Application\Scenes\01_TitleScene">
       <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\02_Common\System\Setting">
-      <UniqueIdentifier>{e955fcc9-28f0-48a3-857e-0e5671500fca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Setting\Management">
-      <UniqueIdentifier>{17ccc9d0-f88e-40b6-9907-92beda84fbe1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Setting\Management\02_VolumeSetting">
-      <UniqueIdentifier>{e81781c8-7ab1-47b0-ad24-2703517e0466}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Setting\Management\01_SensiSetting">
-      <UniqueIdentifier>{da95223e-c616-406c-8153-2049069af81b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Setting\Management\00_SettingBase">
-      <UniqueIdentifier>{36bddec0-e412-4eff-b9ec-96d248f19921}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Setting\Other">
-      <UniqueIdentifier>{1f061989-e0dd-4ebb-957f-2e35f9e115ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Setting\Other\Window">
-      <UniqueIdentifier>{98cc9771-5757-433f-8d6b-1f4b58ec52f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\File">
-      <UniqueIdentifier>{1178a8f7-8400-4f80-99a5-b686711874af}</UniqueIdentifier>
+    <Filter Include="Application\Scenes\02_PlayScene\Chara">
+      <UniqueIdentifier>{68c9b294-3a2a-4353-b029-15f527993dce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

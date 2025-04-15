@@ -1,4 +1,4 @@
-#pragma onces
+#pragma once
 
 // Œp³Œ³
 #include "StateBase.h"

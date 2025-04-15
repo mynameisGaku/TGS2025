@@ -3,17 +3,16 @@
 #include "DebugScreen.h"
 
 #include "InputManager.h"
-#include "Ball.h"
-#include "BallManager.h"
+#include "CharaManager.h"
 
-PlayScene::PlayScene(std::string name) : SceneBase(true, name) 
+PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
-	BallManager* ballManager = Instantiate<BallManager>();
-	for (int i = 0; i < 10; i++)
-	{
-		Ball* ball = ballManager->CreateBall(Vector3(100 * i, 100, 0));
-		ball->SetVelocity(Vector3(0, 100 * i, 0));
-	}
+	CharaManager* charaM = Instantiate<CharaManager>();
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 }
 
 PlayScene::~PlayScene()
@@ -22,8 +21,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
-	if (InputManager::Push(KeyCode::T)) 
-	{
+	if (InputManager::Push(KeyCode::T)) {
 		SceneManager::ChangeScene("TitleScene");
 	}
 

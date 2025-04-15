@@ -28,9 +28,9 @@ Camera::Camera() {
 	AddComponent<Shake>();
 
 	stateManager = new StateManager(this);
-	stateManager->AddInstance(0, new CameraState_Debug(stateManager));
+	stateManager->AddInstance(State::sDebug, new CameraState_Debug(stateManager));
 
-	stateManager->ChangeState(0);
+	stateManager->ChangeState(State::sDebug);
 
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }

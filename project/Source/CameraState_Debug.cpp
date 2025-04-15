@@ -11,6 +11,7 @@
 #include "PadController.h"
 #include "MouseController.h"
 
+using namespace KeyDefine;
 using namespace CameraDefine;
 
 namespace {
@@ -38,7 +39,7 @@ void CameraState_Debug::Update() {
 	// 右クリックを検知
 	if (InputManager::Push(KeyCode::RightClick)) {
 		canMove = !canMove;
-		
+
 		// 移動可能な場合、マウスカーソルを画面中央に固定する
 		if (canMove)
 			MouseController::SetMouseMovement(MouseMovement::Fixed);
@@ -81,8 +82,8 @@ void CameraState_Debug::MoveProcess() {
 	//====================================================================================================
 	// ▼マウスによるカメラの向き変更
 
-	camera->transform->rotation.x += (MouseController::Info().moveY * Math::DegToRad(1.0f));
-	camera->transform->rotation.y += (MouseController::Info().moveX * Math::DegToRad(1.0f));
+	camera->transform->rotation.x += (MouseController::Info().Move().y * Math::DegToRad(1.0f));
+	camera->transform->rotation.y += (MouseController::Info().Move().x * Math::DegToRad(1.0f));
 
 	// X軸角度の制限
 	camera->transform->rotation.x = min(max(camera->transform->rotation.x, CAMERA_ROT_X_MIN), CAMERA_ROT_X_MAX);

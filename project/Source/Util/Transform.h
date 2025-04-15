@@ -31,7 +31,7 @@ public:
 	// ▼コンストラクタ・デストラクタ
 
 	// トランスフォームの初期化
-	Transform() : Transform(V3::ZERO, V3::ZERO, V3::ZERO, nullptr) {}
+	Transform() : Transform(V3::ZERO, V3::ZERO, V3::ONE, nullptr) {}
 
 	/// <summary>
 	/// トランスフォームの初期化

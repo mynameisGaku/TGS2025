@@ -3,7 +3,7 @@
 
 Ball::Ball()
 {
-	Object3D::SetModel(ResourceLoader::MV1LoadModel("data/Model/lizard.mv1"));
+	Object3D::SetModel(ResourceLoader::MV1LoadModel("data/Model/Ball/lizard.mv1"));
 }
 
 Ball::~Ball()

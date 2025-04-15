@@ -4,11 +4,16 @@
 
 #include "InputManager.h"
 #include "Ball.h"
+#include "BallManager.h"
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name) 
 {
-	Ball* ball = Instantiate<Ball>();
-	ball->SetVelocity(Vector3(0, 100, 0));
+	BallManager* ballManager = Instantiate<BallManager>();
+	for (int i = 0; i < 10; i++)
+	{
+		Ball* ball = ballManager->CreateBall(Vector3(100 * i, 100, 0));
+		ball->SetVelocity(Vector3(0, 100 * i, 0));
+	}
 }
 
 PlayScene::~PlayScene()

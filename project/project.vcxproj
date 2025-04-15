@@ -150,6 +150,7 @@
     <ClInclude Include="Library\time.h" />
     <ClInclude Include="Source\Ball.h" />
     <ClInclude Include="Source\BallAttribute.h" />
+    <ClInclude Include="Source\BallManager.h" />
     <ClInclude Include="Source\Behavior\BehaviorData.h" />
     <ClInclude Include="Source\Behavior\BehaviorDecorator.h" />
     <ClInclude Include="Source\Behavior\BehaviorNode.h" />
@@ -277,6 +278,7 @@
     <ClCompile Include="Library\time.cpp" />
     <ClCompile Include="Source\Ball.cpp" />
     <ClCompile Include="Source\BallAttribute.cpp" />
+    <ClCompile Include="Source\BallManager.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorData.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorDecorator.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorNode.cpp" />

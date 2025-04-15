@@ -1,0 +1,206 @@
+#pragma once
+#include <unordered_map>
+#include <string>
+
+/// <summary>
+/// <para> 実行されているステートへ送る信号。 </para>
+/// <para> FSMの現在の処理状況を実行中のステートへ伝達できる。</para>
+/// </summary>
+enum FSMSignal
+{
+	SIG_Enter,          // ステート変更後の初回フレーム処理
+	SIG_Update,         // 更新処理
+	SIG_AfterUpdate,    // 更新処理後の更新処理
+	SIG_Exit,           // ステート変更時に入る処理
+};
+
+namespace std
+{
+	template<typename T>
+	struct hash<void(T::*)(FSMSignal)>
+	{
+		size_t operator()(void(T::* ptr)(FSMSignal)) const noexcept
+		{
+			return std::hash<std::uintptr_t>()(reinterpret_cast<std::uintptr_t>(*(void**)(&ptr)));
+		}
+	};
+}
+
+/// <summary>
+/// ステートを表すステートマシンのインターフェース
+/// FSMはfinite state machineの略
+/// </summary>
+/// <typeparam name="T">使用するクラス</typeparam>
+template<typename T>
+class TinyFSM
+{
+public:
+	TinyFSM(T* owner) :
+		m_state(nullptr),
+		m_statePrev(nullptr),
+		m_stateNext(nullptr),
+		m_signal(SIG_Enter),
+		m_needChange(false),
+		m_owner(owner),
+		m_name(""),
+		m_transitCounters(nullptr)
+	{
+#if _DEBUG
+		m_isStatistics = true;
+#else
+		m_isStatistics = false;
+#endif
+	}
+	~TinyFSM()
+	{
+		if (m_transitCounters)
+		{
+			delete m_transitCounters;
+			m_transitCounters = nullptr;
+		}
+		m_needChange = false;
+		m_state = nullptr;
+		m_statePrev = nullptr;
+		m_stateNext = nullptr;
+		m_signal = SIG_Exit;
+	}
+	/// <summary>
+	/// 更新を行う。
+	/// ステートの変更は更新で行われる
+	/// </summary>
+	void Update()
+	{
+		if (m_isStatistics)
+		{
+			if (not m_transitCounters)
+			{
+				m_transitCounters = new std::unordered_map<void(T::*)(FSMSignal), int>();
+			}
+		}
+		else
+		{
+			if (m_transitCounters)
+			{
+				delete m_transitCounters;
+				m_transitCounters = nullptr;
+			}
+		}
+
+		// 変更予約が入っている場合
+		if (m_needChange)
+		{
+			// 終了処理
+			if (m_state)
+			{
+				m_signal = SIG_Exit;
+				(m_owner->*m_state)(m_signal);
+			}
+
+			// ステートの入れ替え
+			m_statePrev = m_state;
+			m_state = m_stateNext;
+			m_stateNext = nullptr;
+
+			// 初回処理
+			if (m_state)
+			{
+				m_signal = SIG_Enter;
+				(m_owner->*m_state)(m_signal);
+			}
+
+			// 予約完了としてフラグをオフる
+			m_needChange = false;
+		}
+
+		// 変更予約なし(通常の更新)
+		if (m_state)
+		{
+			m_signal = SIG_Update;
+			(m_owner->*m_state)(m_signal);
+		}
+
+		// 通常更新後の更新
+		if (m_state)
+		{
+			m_signal = SIG_AfterUpdate;
+			(m_owner->*m_state)(m_signal);
+		}
+	}
+	/// <summary>
+	/// 現在このステートマシンがどの処理段階か
+	/// </summary>
+	/// <returns></returns>
+	FSMSignal GetSignal() const
+	{
+		return m_signal;
+	}
+	/// <summary>
+	/// ステートの変更を予約する
+	/// </summary>
+	/// <param name="state">変更したいステートの関数ポインタ</param>
+	void ChangeState(void(T::*state)(FSMSignal)) 
+	{
+		// すでにステート変更予約が入っている場合は無視
+		if (not m_needChange)
+		{
+			m_stateNext = state;
+			m_needChange = true;
+
+			// 統計が有効な場合は、各ステートの遷移回数を数える
+			if (m_isStatistics)
+			{
+				if (not m_transitCounters)
+				{
+					m_transitCounters = new std::unordered_map<void(T::*)(FSMSignal), int>();
+				}
+				(*m_transitCounters)[state]++;
+			}
+		}
+	}
+
+	// 現在のステート
+	void(T::*GetCurrentState())(FSMSignal) { return m_state; }
+	// 一つ前のステート
+	void(T::*GetPrevState())(FSMSignal) { return m_statePrev; }
+	// 予約されたステート
+	void(T::*GetNextState())(FSMSignal) { return m_stateNext; }
+	// 特定のステートに対する遷移回数を取得 (統計が無効になっている場合は0が返る)
+	int GetTransitCount(void(T::* state)(FSMSignal))
+	{
+		if (not m_isStatistics)
+			return 0;
+
+		if (m_transitCounters)
+			return 0;
+
+		auto it = m_transitCounters->find(state);
+		return (it != m_transitCounters->end()) ? it->second : 0;
+	}
+
+	// 統計を取るようにする
+	void EnableStatistics() { m_isStatistics = true; }
+	// 統計を取らないようにする
+	void DisableStatistics() { m_isStatistics = false; }
+	// 統計を取っているかどうか
+	bool IsStatistics() const { return m_isStatistics; }
+
+private:
+	// 現在、どの段階の処理を行っているか
+	FSMSignal m_signal;
+	// 前回のステート
+	void(T::*m_statePrev)(FSMSignal);
+	// 現在のステート
+	void(T::*m_state)(FSMSignal);
+	// 次のステート
+	void(T::*m_stateNext)(FSMSignal);
+	// ステート変更が必要か
+	bool m_needChange;
+	// 所有者
+	T* m_owner;
+	// このステートマシンの名前
+	std::string m_name;
+	// 各ステートの遷移回数
+	std::unordered_map<void(T::*)(FSMSignal), int>* m_transitCounters;
+	// 統計を取るか
+	bool m_isStatistics;
+};

@@ -207,6 +207,7 @@
     <ClInclude Include="Source\LightManager.h" />
     <ClInclude Include="Source\LoadScreen.h" />
     <ClInclude Include="Source\Locus.h" />
+    <ClInclude Include="Source\Pool.h" />
     <ClInclude Include="Source\SettingBase.h" />
     <ClInclude Include="Source\SettingManager.h" />
     <ClInclude Include="Source\MouseController.h" />
@@ -216,6 +217,8 @@
     <ClInclude Include="Source\playScene.h" />
     <ClInclude Include="Source\sceneFactory.h" />
     <ClInclude Include="Source\SensiSetting.h" />
+    <ClInclude Include="Source\settings_ini.h" />
+    <ClInclude Include="Source\settings_json.h" />
     <ClInclude Include="Source\ShadowMap.h" />
     <ClInclude Include="Source\SoundBase.h" />
     <ClInclude Include="Source\SoundDefine.h" />
@@ -227,6 +230,7 @@
     <ClInclude Include="Source\StateBase.h" />
     <ClInclude Include="Source\StateManager.h" />
     <ClInclude Include="Source\SystemManager.h" />
+    <ClInclude Include="Source\TinyFSM.h" />
     <ClInclude Include="Source\titleScene.h" />
     <ClInclude Include="Source\UI_Base.h" />
     <ClInclude Include="Source\UI_BillBoard.h" />
@@ -324,6 +328,8 @@
     <ClCompile Include="Source\playScene.cpp" />
     <ClCompile Include="Source\sceneFactory.cpp" />
     <ClCompile Include="Source\SensiSetting.cpp" />
+    <ClCompile Include="Source\settings_ini.cpp" />
+    <ClCompile Include="Source\settings_json.cpp" />
     <ClCompile Include="Source\ShadowMap.cpp" />
     <ClCompile Include="Source\SoundBase.cpp" />
     <ClCompile Include="Source\SoundManager.cpp" />

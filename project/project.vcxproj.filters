@@ -2,974 +2,1013 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\bootScene.cpp">
-      <Filter>00_Scene\00_BootScene</Filter>
+      <Filter>Application\Scenes\00_BootScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\titleScene.cpp">
-      <Filter>00_Scene\01_TitleScene</Filter>
+      <Filter>Application\Scenes\01_TitleScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\playScene.cpp">
-      <Filter>00_Scene\02_PlayScene</Filter>
+      <Filter>Application\Scenes\02_PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="Library\main.cpp">
-      <Filter>01_Library</Filter>
+      <Filter>Framework\01_Library</Filter>
     </ClCompile>
     <ClCompile Include="Library\app.cpp">
-      <Filter>01_Library</Filter>
+      <Filter>Framework\01_Library</Filter>
     </ClCompile>
     <ClCompile Include="Library\sceneBase.cpp">
-      <Filter>00_Scene\99_Etc\00_Base</Filter>
+      <Filter>Framework\00_Scene\99_Etc\00_Base</Filter>
     </ClCompile>
     <ClCompile Include="Source\sceneFactory.cpp">
-      <Filter>00_Scene\99_Etc\01_Factory</Filter>
+      <Filter>Framework\00_Scene\99_Etc\01_Factory</Filter>
     </ClCompile>
     <ClCompile Include="Library\sceneManager.cpp">
-      <Filter>00_Scene\99_Etc\02_Manager</Filter>
+      <Filter>Framework\00_Scene\99_Etc\02_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Library\csvReader.cpp">
-      <Filter>02_Common\System\CsvReader</Filter>
+      <Filter>Framework\02_Common\System\CsvReader</Filter>
     </ClCompile>
     <ClCompile Include="Library\resourceLoader.cpp">
-      <Filter>02_Common\System\ResourceLoader</Filter>
+      <Filter>Framework\02_Common\System\ResourceLoader</Filter>
     </ClCompile>
     <ClCompile Include="Source\debugScreen.cpp">
-      <Filter>02_Common\Debug\DebugScreen</Filter>
+      <Filter>Framework\02_Common\Debug\DebugScreen</Filter>
     </ClCompile>
     <ClCompile Include="Library\time.cpp">
-      <Filter>02_Common\Time</Filter>
+      <Filter>Framework\02_Common\Time</Filter>
     </ClCompile>
     <ClCompile Include="Source\SystemManager.cpp">
-      <Filter>02_Common\System\SystemManager</Filter>
+      <Filter>Framework\02_Common\System\SystemManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\LoadScreen.cpp">
-      <Filter>02_Common\System\LoadScreen</Filter>
+      <Filter>Framework\02_Common\System\LoadScreen</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_Text.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\01_Text</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\01_Text</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_SliderInt.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\02_SliderInt</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\02_SliderInt</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_SliderFloat.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\03_SliderFloat</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\03_SliderFloat</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_Button.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\04_Button</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\04_Button</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_CheckBox.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\05_CheckBox</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\05_CheckBox</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_DropDown.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\06_DropDown</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\06_DropDown</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_Space.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\07_Space</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\07_Space</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiNode_ColorEdit4.cpp">
-      <Filter>02_Common\Debug\ImGui\02_Node\08_ColorEdit4</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\08_ColorEdit4</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_demo.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_draw.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_impl_dx11.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_impl_win32.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_tables.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiRoot.cpp">
-      <Filter>02_Common\Debug\ImGui\01_Root</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\01_Root</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiManager.cpp">
-      <Filter>02_Common\Debug\ImGui\00_Manager</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\00_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGuiTree\imGuiFunc.cpp">
-      <Filter>02_Common\Debug\ImGui\03_Func</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\03_Func</Filter>
     </ClCompile>
     <ClCompile Include="Source\KeyDefine.cpp">
-      <Filter>02_Common\System\Input</Filter>
+      <Filter>Framework\02_Common\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\InputManager.cpp">
-      <Filter>02_Common\System\Input</Filter>
+      <Filter>Framework\02_Common\System\Input</Filter>
     </ClCompile>
     <ClCompile Include="Source\KeyController.cpp">
-      <Filter>02_Common\System\Input\00_KeyController</Filter>
+      <Filter>Framework\02_Common\System\Input\00_KeyController</Filter>
     </ClCompile>
     <ClCompile Include="Source\PadController.cpp">
-      <Filter>02_Common\System\Input\01_PadController</Filter>
+      <Filter>Framework\02_Common\System\Input\01_PadController</Filter>
     </ClCompile>
     <ClCompile Include="Source\MouseController.cpp">
-      <Filter>02_Common\System\Input\02_MouseController</Filter>
+      <Filter>Framework\02_Common\System\Input\02_MouseController</Filter>
     </ClCompile>
     <ClCompile Include="Source\SettingManager.cpp">
-      <Filter>02_Common\System\SettingManager</Filter>
+      <Filter>Framework\02_Common\System\SettingManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\Quaternion.cpp">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\RectTransform.cpp">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\Transform.cpp">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\Vector2.cpp">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\Vector3.cpp">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClCompile>
     <ClCompile Include="Source\Fader.cpp">
-      <Filter>06_Decoration\Fader</Filter>
+      <Filter>Framework\06_Decoration\Fader</Filter>
     </ClCompile>
     <ClCompile Include="Source\Object3D.cpp">
-      <Filter>03_Object\Object3D</Filter>
+      <Filter>Framework\03_Object\Object3D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Object2D.cpp">
-      <Filter>03_Object\Object2D</Filter>
+      <Filter>Framework\03_Object\Object2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
-      <Filter>03_Object\Camera</Filter>
+      <Filter>Framework\03_Object\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\CameraManager.cpp">
-      <Filter>03_Object\Camera\01_Manager</Filter>
+      <Filter>Framework\03_Object\Camera\01_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\StateManager.cpp">
-      <Filter>02_Common\DesignPattern\StateMachine</Filter>
+      <Filter>Framework\02_Common\DesignPattern\StateMachine</Filter>
     </ClCompile>
     <ClCompile Include="Source\Light.cpp">
-      <Filter>03_Object\Light\02_Instance</Filter>
+      <Filter>Framework\03_Object\Light\02_Instance</Filter>
     </ClCompile>
     <ClCompile Include="Source\LightManager.cpp">
-      <Filter>03_Object\Light\01_Manager</Filter>
+      <Filter>Framework\03_Object\Light\01_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Stage.cpp">
-      <Filter>03_Object\Stage</Filter>
+      <Filter>Framework\03_Object\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\CameraState_Debug.cpp">
-      <Filter>03_Object\Camera\02_State\99_Debug</Filter>
+      <Filter>Framework\03_Object\Camera\02_State\99_Debug</Filter>
     </ClCompile>
     <ClCompile Include="Source\EffectBase.cpp">
-      <Filter>05_Resource\Effect\01_Base</Filter>
+      <Filter>Framework\05_Resource\Effect\01_Base</Filter>
     </ClCompile>
     <ClCompile Include="Source\EffectManager.cpp">
-      <Filter>05_Resource\Effect\02_Manager</Filter>
+      <Filter>Framework\05_Resource\Effect\02_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\SoundBase.cpp">
-      <Filter>05_Resource\Sound\01_Base</Filter>
+      <Filter>Framework\05_Resource\Sound\01_Base</Filter>
     </ClCompile>
     <ClCompile Include="Source\SoundManager.cpp">
-      <Filter>05_Resource\Sound\02_Manager</Filter>
+      <Filter>Framework\05_Resource\Sound\02_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Font.cpp">
-      <Filter>05_Resource\Font</Filter>
+      <Filter>Framework\05_Resource\Font</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageObject.cpp">
-      <Filter>03_Object\Stage\02_Base</Filter>
+      <Filter>Framework\03_Object\Stage\02_Base</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageObjectManager.cpp">
-      <Filter>03_Object\Stage\01_Manager</Filter>
+      <Filter>Framework\03_Object\Stage\01_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Base.cpp">
-      <Filter>06_Decoration\UI</Filter>
+      <Filter>Framework\06_Decoration\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Canvas.cpp">
-      <Filter>06_Decoration\UI\00_Canvas</Filter>
+      <Filter>Framework\06_Decoration\UI\00_Canvas</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Manager.cpp">
-      <Filter>06_Decoration\UI\02_Manager</Filter>
+      <Filter>Framework\06_Decoration\UI\02_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Text.cpp">
-      <Filter>06_Decoration\UI\03_Text</Filter>
+      <Filter>Framework\06_Decoration\UI\03_Text</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Image.cpp">
-      <Filter>06_Decoration\UI\04_Image</Filter>
+      <Filter>Framework\06_Decoration\UI\04_Image</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Button.cpp">
-      <Filter>06_Decoration\UI\05_Button</Filter>
+      <Filter>Framework\06_Decoration\UI\05_Button</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Slider.cpp">
-      <Filter>06_Decoration\UI\07_Slider</Filter>
+      <Filter>Framework\06_Decoration\UI\07_Slider</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Gauge.cpp">
-      <Filter>06_Decoration\UI\06_Gauge</Filter>
+      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_BillBoard.cpp">
-      <Filter>06_Decoration\UI\08_BillBoard</Filter>
+      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_BillBorad_Numeric.cpp">
-      <Filter>06_Decoration\UI\08_BillBoard</Filter>
+      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI_Subtone.cpp">
-      <Filter>06_Decoration\UI\01_Subtone</Filter>
+      <Filter>Framework\06_Decoration\UI\01_Subtone</Filter>
     </ClCompile>
     <ClCompile Include="Source\gauge.cpp">
-      <Filter>06_Decoration\UI\06_Gauge</Filter>
+      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
     </ClCompile>
     <ClCompile Include="Source\BlurScreen.cpp">
-      <Filter>06_Decoration\BlurScren</Filter>
+      <Filter>Framework\06_Decoration\BlurScren</Filter>
     </ClCompile>
     <ClCompile Include="Source\Locus.cpp">
-      <Filter>06_Decoration\Locus</Filter>
+      <Filter>Framework\06_Decoration\Locus</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Animator.cpp">
-      <Filter>04_Component\Animator</Filter>
+      <Filter>Framework\04_Component\Animator</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\CollisionObserver.cpp">
-      <Filter>04_Component\Collider</Filter>
+      <Filter>Framework\04_Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ColliderBase.cpp">
-      <Filter>04_Component\Collider\04_Shape\00_Base</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\00_Base</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ColliderSphere.cpp">
-      <Filter>04_Component\Collider\04_Shape\01_Sphere</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\01_Sphere</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\CollisionData.cpp">
-      <Filter>04_Component\Collider\01_Data</Filter>
+      <Filter>Framework\04_Component\Collider\01_Data</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\CollisionFunc.cpp">
-      <Filter>04_Component\Collider\03_Function</Filter>
+      <Filter>Framework\04_Component\Collider\03_Function</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\CollisionManager.cpp">
-      <Filter>04_Component\Collider\02_Manager</Filter>
+      <Filter>Framework\04_Component\Collider\02_Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ColliderModel.cpp">
-      <Filter>04_Component\Collider\04_Shape\02_Model</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\02_Model</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ColliderCapsule.cpp">
-      <Filter>04_Component\Collider\04_Shape\03_Capsule</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\03_Capsule</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\MaterialRenderer.cpp">
-      <Filter>04_Component\MaterialRender</Filter>
+      <Filter>Framework\04_Component\MaterialRender</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\MotionBlur.cpp">
-      <Filter>04_Component\MotionBlur</Filter>
+      <Filter>Framework\04_Component\MotionBlur</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Physics.cpp">
-      <Filter>04_Component\Physics</Filter>
+      <Filter>Framework\04_Component\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ShadowCircle.cpp">
-      <Filter>04_Component\ShadowCircle</Filter>
+      <Filter>Framework\04_Component\ShadowCircle</Filter>
     </ClCompile>
     <ClCompile Include="Source\ShadowMap.cpp">
-      <Filter>06_Decoration\ShadowMap</Filter>
+      <Filter>Framework\06_Decoration\ShadowMap</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Shake.cpp">
-      <Filter>04_Component\Shake</Filter>
+      <Filter>Framework\04_Component\Shake</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behavior\BehaviorData.cpp">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behavior\BehaviorDecorator.cpp">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behavior\BehaviorNode.cpp">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behavior\BehaviorTask.cpp">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behavior\BehaviorTree.cpp">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Source\SensiSetting.cpp">
-      <Filter>02_Common\System\SettingManager\01_SensiSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\01_SensiSetting</Filter>
     </ClCompile>
     <ClCompile Include="Source\VolumeSetting.cpp">
-      <Filter>02_Common\System\SettingManager\02_VolumeSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\02_VolumeSetting</Filter>
     </ClCompile>
     <ClCompile Include="Source\SettingBase.cpp">
-      <Filter>02_Common\System\SettingManager\00_SettingBase</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\00_SettingBase</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\AnimationEvent.cpp">
-      <Filter>04_Component\Animator</Filter>
+      <Filter>Framework\04_Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\settings_json.cpp">
+      <Filter>Framework\02_Common\System\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\settings_ini.cpp">
+      <Filter>Framework\02_Common\System\Ini</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
-      <Filter>00_Scene\00_BootScene</Filter>
+      <Filter>Application\Scenes\00_BootScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\titleScene.h">
-      <Filter>00_Scene\01_TitleScene</Filter>
+      <Filter>Application\Scenes\01_TitleScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\playScene.h">
-      <Filter>00_Scene\02_PlayScene</Filter>
+      <Filter>Application\Scenes\02_PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\config.h">
-      <Filter>01_Library</Filter>
+      <Filter>Framework\01_Library</Filter>
     </ClInclude>
     <ClInclude Include="Library\app.h">
-      <Filter>01_Library</Filter>
+      <Filter>Framework\01_Library</Filter>
     </ClInclude>
     <ClInclude Include="Library\sceneBase.h">
-      <Filter>00_Scene\99_Etc\00_Base</Filter>
+      <Filter>Framework\00_Scene\99_Etc\00_Base</Filter>
     </ClInclude>
     <ClInclude Include="Source\sceneFactory.h">
-      <Filter>00_Scene\99_Etc\01_Factory</Filter>
+      <Filter>Framework\00_Scene\99_Etc\01_Factory</Filter>
     </ClInclude>
     <ClInclude Include="Library\sceneManager.h">
-      <Filter>00_Scene\99_Etc\02_Manager</Filter>
+      <Filter>Framework\00_Scene\99_Etc\02_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Library\csvReader.h">
-      <Filter>02_Common\System\CsvReader</Filter>
+      <Filter>Framework\02_Common\System\CsvReader</Filter>
     </ClInclude>
     <ClInclude Include="Library\resourceLoader.h">
-      <Filter>02_Common\System\ResourceLoader</Filter>
+      <Filter>Framework\02_Common\System\ResourceLoader</Filter>
     </ClInclude>
     <ClInclude Include="Source\debugScreen.h">
-      <Filter>02_Common\Debug\DebugScreen</Filter>
+      <Filter>Framework\02_Common\Debug\DebugScreen</Filter>
     </ClInclude>
     <ClInclude Include="Library\time.h">
-      <Filter>02_Common\Time</Filter>
+      <Filter>Framework\02_Common\Time</Filter>
     </ClInclude>
     <ClInclude Include="Library\myDxLib.h">
-      <Filter>02_Common</Filter>
+      <Filter>Framework\02_Common</Filter>
     </ClInclude>
     <ClInclude Include="Source\SystemManager.h">
-      <Filter>02_Common\System\SystemManager</Filter>
+      <Filter>Framework\02_Common\System\SystemManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\LoadScreen.h">
-      <Filter>02_Common\System\LoadScreen</Filter>
+      <Filter>Framework\02_Common\System\LoadScreen</Filter>
     </ClInclude>
     <ClInclude Include="Source\easing.h">
-      <Filter>02_Common</Filter>
+      <Filter>Framework\02_Common</Filter>
     </ClInclude>
     <ClInclude Include="Source\EasingUtils.h">
-      <Filter>02_Common</Filter>
+      <Filter>Framework\02_Common</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_Base.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\00_Base</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\00_Base</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_Text.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\01_Text</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\01_Text</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_SliderInt.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\02_SliderInt</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\02_SliderInt</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_SliderFloat.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\03_SliderFloat</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\03_SliderFloat</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_Button.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\04_Button</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\04_Button</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_CheckBox.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\05_CheckBox</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\05_CheckBox</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_DropDown.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\06_DropDown</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\06_DropDown</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_Space.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\07_Space</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\07_Space</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_ColorEdit4.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\08_ColorEdit4</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\08_ColorEdit4</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_BeginChildren.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\09_Children</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\09_Children</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiNode_EndChildren.h">
-      <Filter>02_Common\Debug\ImGui\02_Node\09_Children</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\02_Node\09_Children</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imconfig.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imgui.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imgui_impl_win32.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imgui_internal.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imstb_rectpack.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imstb_textedit.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imstb_truetype.h">
-      <Filter>01_Library\ImGui</Filter>
+      <Filter>Framework\01_Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiRoot.h">
-      <Filter>02_Common\Debug\ImGui\01_Root</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\01_Root</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiManager.h">
-      <Filter>02_Common\Debug\ImGui\00_Manager</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\00_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGuiTree\imGuiFunc.h">
-      <Filter>02_Common\Debug\ImGui\03_Func</Filter>
+      <Filter>Framework\02_Common\Debug\ImGui\03_Func</Filter>
     </ClInclude>
     <ClInclude Include="Source\KeyDefine.h">
-      <Filter>02_Common\System\Input</Filter>
+      <Filter>Framework\02_Common\System\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\InputManager.h">
-      <Filter>02_Common\System\Input</Filter>
+      <Filter>Framework\02_Common\System\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\KeyController.h">
-      <Filter>02_Common\System\Input\00_KeyController</Filter>
+      <Filter>Framework\02_Common\System\Input\00_KeyController</Filter>
     </ClInclude>
     <ClInclude Include="Source\PadController.h">
-      <Filter>02_Common\System\Input\01_PadController</Filter>
+      <Filter>Framework\02_Common\System\Input\01_PadController</Filter>
     </ClInclude>
     <ClInclude Include="Source\MouseController.h">
-      <Filter>02_Common\System\Input\02_MouseController</Filter>
+      <Filter>Framework\02_Common\System\Input\02_MouseController</Filter>
     </ClInclude>
     <ClInclude Include="Source\SettingManager.h">
-      <Filter>02_Common\System\SettingManager</Filter>
+      <Filter>Framework\02_Common\System\SettingManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Anchor.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Operations.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Quaternion.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\RectTransform.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Transform.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Utils.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Vector2.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Util\Vector3.h">
-      <Filter>02_Common\Util</Filter>
+      <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Fader.h">
-      <Filter>06_Decoration\Fader</Filter>
+      <Filter>Framework\06_Decoration\Fader</Filter>
     </ClInclude>
     <ClInclude Include="Library\magic_enum.hpp">
-      <Filter>01_Library\MagicEnum</Filter>
+      <Filter>Framework\01_Library\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="Source\Object3D.h">
-      <Filter>03_Object\Object3D</Filter>
+      <Filter>Framework\03_Object\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Object2D.h">
-      <Filter>03_Object\Object2D</Filter>
+      <Filter>Framework\03_Object\Object2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
-      <Filter>03_Object\Camera</Filter>
+      <Filter>Framework\03_Object\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\CameraDefine.h">
-      <Filter>03_Object\Camera\00_Define</Filter>
+      <Filter>Framework\03_Object\Camera\00_Define</Filter>
     </ClInclude>
     <ClInclude Include="Source\CameraManager.h">
-      <Filter>03_Object\Camera\01_Manager</Filter>
+      <Filter>Framework\03_Object\Camera\01_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBase.h">
-      <Filter>02_Common\DesignPattern\StateMachine</Filter>
+      <Filter>Framework\02_Common\DesignPattern\StateMachine</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateManager.h">
-      <Filter>02_Common\DesignPattern\StateMachine</Filter>
+      <Filter>Framework\02_Common\DesignPattern\StateMachine</Filter>
     </ClInclude>
     <ClInclude Include="Source\LightDefine.h">
-      <Filter>03_Object\Light\00_Define</Filter>
+      <Filter>Framework\03_Object\Light\00_Define</Filter>
     </ClInclude>
     <ClInclude Include="Source\Light.h">
-      <Filter>03_Object\Light\02_Instance</Filter>
+      <Filter>Framework\03_Object\Light\02_Instance</Filter>
     </ClInclude>
     <ClInclude Include="Source\LightManager.h">
-      <Filter>03_Object\Light\01_Manager</Filter>
+      <Filter>Framework\03_Object\Light\01_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Stage.h">
-      <Filter>03_Object\Stage</Filter>
+      <Filter>Framework\03_Object\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\CameraState_Debug.h">
-      <Filter>03_Object\Camera\02_State\99_Debug</Filter>
+      <Filter>Framework\03_Object\Camera\02_State\99_Debug</Filter>
     </ClInclude>
     <ClInclude Include="Source\EffectDefine.h">
-      <Filter>05_Resource\Effect\00_Define</Filter>
+      <Filter>Framework\05_Resource\Effect\00_Define</Filter>
     </ClInclude>
     <ClInclude Include="Source\EffectBase.h">
-      <Filter>05_Resource\Effect\01_Base</Filter>
+      <Filter>Framework\05_Resource\Effect\01_Base</Filter>
     </ClInclude>
     <ClInclude Include="Source\EffectManager.h">
-      <Filter>05_Resource\Effect\02_Manager</Filter>
+      <Filter>Framework\05_Resource\Effect\02_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\SoundDefine.h">
-      <Filter>05_Resource\Sound\00_Define</Filter>
+      <Filter>Framework\05_Resource\Sound\00_Define</Filter>
     </ClInclude>
     <ClInclude Include="Source\SoundBase.h">
-      <Filter>05_Resource\Sound\01_Base</Filter>
+      <Filter>Framework\05_Resource\Sound\01_Base</Filter>
     </ClInclude>
     <ClInclude Include="Source\SoundManager.h">
-      <Filter>05_Resource\Sound\02_Manager</Filter>
+      <Filter>Framework\05_Resource\Sound\02_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Font.h">
-      <Filter>05_Resource\Font</Filter>
+      <Filter>Framework\05_Resource\Font</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageDefine.h">
-      <Filter>03_Object\Stage\00_Define</Filter>
+      <Filter>Framework\03_Object\Stage\00_Define</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageObject.h">
-      <Filter>03_Object\Stage\02_Base</Filter>
+      <Filter>Framework\03_Object\Stage\02_Base</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageObjectManager.h">
-      <Filter>03_Object\Stage\01_Manager</Filter>
+      <Filter>Framework\03_Object\Stage\01_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Base.h">
-      <Filter>06_Decoration\UI</Filter>
+      <Filter>Framework\06_Decoration\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Canvas.h">
-      <Filter>06_Decoration\UI\00_Canvas</Filter>
+      <Filter>Framework\06_Decoration\UI\00_Canvas</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Manager.h">
-      <Filter>06_Decoration\UI\02_Manager</Filter>
+      <Filter>Framework\06_Decoration\UI\02_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Text.h">
-      <Filter>06_Decoration\UI\03_Text</Filter>
+      <Filter>Framework\06_Decoration\UI\03_Text</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Image.h">
-      <Filter>06_Decoration\UI\04_Image</Filter>
+      <Filter>Framework\06_Decoration\UI\04_Image</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Button.h">
-      <Filter>06_Decoration\UI\05_Button</Filter>
+      <Filter>Framework\06_Decoration\UI\05_Button</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Slider.h">
-      <Filter>06_Decoration\UI\07_Slider</Filter>
+      <Filter>Framework\06_Decoration\UI\07_Slider</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Gauge.h">
-      <Filter>06_Decoration\UI\06_Gauge</Filter>
+      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_BillBoard.h">
-      <Filter>06_Decoration\UI\08_BillBoard</Filter>
+      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_BillBorad_Numeric.h">
-      <Filter>06_Decoration\UI\08_BillBoard</Filter>
+      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Subtone.h">
-      <Filter>06_Decoration\UI\01_Subtone</Filter>
+      <Filter>Framework\06_Decoration\UI\01_Subtone</Filter>
     </ClInclude>
     <ClInclude Include="Source\gauge.h">
-      <Filter>06_Decoration\UI\06_Gauge</Filter>
+      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI_Define.h">
-      <Filter>06_Decoration\UI</Filter>
+      <Filter>Framework\06_Decoration\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\BlurScreen.h">
-      <Filter>06_Decoration\BlurScren</Filter>
+      <Filter>Framework\06_Decoration\BlurScren</Filter>
     </ClInclude>
     <ClInclude Include="Source\Locus.h">
-      <Filter>06_Decoration\Locus</Filter>
+      <Filter>Framework\06_Decoration\Locus</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Component.h">
-      <Filter>04_Component</Filter>
+      <Filter>Framework\04_Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Animator.h">
-      <Filter>04_Component\Animator</Filter>
+      <Filter>Framework\04_Component\Animator</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\CollisionObserver.h">
-      <Filter>04_Component\Collider</Filter>
+      <Filter>Framework\04_Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ColliderBase.h">
-      <Filter>04_Component\Collider\04_Shape\00_Base</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\00_Base</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ColliderSphere.h">
-      <Filter>04_Component\Collider\04_Shape\01_Sphere</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\01_Sphere</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\CollisionData.h">
-      <Filter>04_Component\Collider\01_Data</Filter>
+      <Filter>Framework\04_Component\Collider\01_Data</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\CollisionDefine.h">
-      <Filter>04_Component\Collider\00_Define</Filter>
+      <Filter>Framework\04_Component\Collider\00_Define</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\CollisionFunc.h">
-      <Filter>04_Component\Collider\03_Function</Filter>
+      <Filter>Framework\04_Component\Collider\03_Function</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\CollisionManager.h">
-      <Filter>04_Component\Collider\02_Manager</Filter>
+      <Filter>Framework\04_Component\Collider\02_Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ColliderModel.h">
-      <Filter>04_Component\Collider\04_Shape\02_Model</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\02_Model</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ColliderCapsule.h">
-      <Filter>04_Component\Collider\04_Shape\03_Capsule</Filter>
+      <Filter>Framework\04_Component\Collider\04_Shape\03_Capsule</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\MaterialRenderer.h">
-      <Filter>04_Component\MaterialRender</Filter>
+      <Filter>Framework\04_Component\MaterialRender</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\MotionBlur.h">
-      <Filter>04_Component\MotionBlur</Filter>
+      <Filter>Framework\04_Component\MotionBlur</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Physics.h">
-      <Filter>04_Component\Physics</Filter>
+      <Filter>Framework\04_Component\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ShadowCircle.h">
-      <Filter>04_Component\ShadowCircle</Filter>
+      <Filter>Framework\04_Component\ShadowCircle</Filter>
     </ClInclude>
     <ClInclude Include="Source\ShadowMap.h">
-      <Filter>06_Decoration\ShadowMap</Filter>
+      <Filter>Framework\06_Decoration\ShadowMap</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Shake.h">
-      <Filter>04_Component\Shake</Filter>
+      <Filter>Framework\04_Component\Shake</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behavior\BehaviorData.h">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behavior\BehaviorDecorator.h">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behavior\BehaviorNode.h">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behavior\BehaviorTask.h">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behavior\BehaviorTree.h">
-      <Filter>02_Common\DesignPattern\Behavior</Filter>
+      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Library\gameObject.h">
-      <Filter>01_Library</Filter>
+      <Filter>Framework\01_Library</Filter>
     </ClInclude>
     <ClInclude Include="Source\SensiSetting.h">
-      <Filter>02_Common\System\SettingManager\01_SensiSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\01_SensiSetting</Filter>
     </ClInclude>
     <ClInclude Include="Source\VolumeSetting.h">
-      <Filter>02_Common\System\SettingManager\02_VolumeSetting</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\02_VolumeSetting</Filter>
     </ClInclude>
     <ClInclude Include="Source\SettingBase.h">
-      <Filter>02_Common\System\SettingManager\00_SettingBase</Filter>
+      <Filter>Framework\02_Common\System\SettingManager\00_SettingBase</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\AnimationEvent.h">
-      <Filter>04_Component\Animator</Filter>
+      <Filter>Framework\04_Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\settings_json.h">
+      <Filter>Framework\02_Common\System\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\settings_ini.h">
+      <Filter>Framework\02_Common\System\Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TinyFSM.h">
+      <Filter>Framework\02_Common\DesignPattern\TinyFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pool.h">
+      <Filter>Framework\02_Common\System\Pool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="00_Scene">
-      <UniqueIdentifier>{fdfa1d2d-a98a-480e-95ed-8954d1c9392b}</UniqueIdentifier>
+    <Filter Include="Application">
+      <UniqueIdentifier>{4ccb7ab2-57ea-481a-8063-766de6f97404}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01_Library">
-      <UniqueIdentifier>{e6de0a0e-a84b-4a11-836c-68c0991a4c3f}</UniqueIdentifier>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{93264608-86b6-4a8c-8ea2-9e6ae93daf11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Common">
-      <UniqueIdentifier>{2dc1ccd8-1a67-4a8b-b509-3e4eec2d426e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\00_BootScene">
-      <UniqueIdentifier>{4e7a122b-01b5-4a1f-bdd8-381c4cb2403d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\01_TitleScene">
-      <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\02_PlayScene">
-      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\99_Etc">
-      <UniqueIdentifier>{5dddece6-8bd3-459e-8675-ccfe468f0dc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\99_Etc\00_Base">
-      <UniqueIdentifier>{70952c0a-402e-4436-9f25-62d15a4623ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\99_Etc\01_Factory">
-      <UniqueIdentifier>{1a92ad38-68f0-4647-96af-64be0fe77666}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00_Scene\99_Etc\02_Manager">
-      <UniqueIdentifier>{ff6ff7ce-1f1b-4db8-8eab-9d10fcbb33fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Time">
-      <UniqueIdentifier>{fc3a04e8-f1c5-4424-8af9-1809edb95c1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object">
-      <UniqueIdentifier>{53e2f9d1-a09b-421e-bc7f-f7a3e2732549}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Camera">
-      <UniqueIdentifier>{2ffb8276-8822-44ec-afd3-7797ec172dc1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Light">
-      <UniqueIdentifier>{4336ddff-c523-42dd-a27e-6a8d2fa5047b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Object3D">
-      <UniqueIdentifier>{61033f1c-888b-4699-879c-adb569a29e76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Object2D">
-      <UniqueIdentifier>{1d658d49-d878-431f-b7ed-602bfc247155}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Stage">
-      <UniqueIdentifier>{46e86fe6-62d3-4087-8516-662511aea65c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component">
-      <UniqueIdentifier>{a476a6ff-2298-4863-bcfa-f5eeb7f008b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Animator">
-      <UniqueIdentifier>{0aeacd9f-c985-43f7-acef-5025da07204a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider">
-      <UniqueIdentifier>{4ede321b-41e4-478d-9a9d-8512984277df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\MaterialRender">
-      <UniqueIdentifier>{4b10e910-6714-443c-85c3-bd19dadbb895}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\MotionBlur">
-      <UniqueIdentifier>{ec5b622a-8689-4201-b4a5-346e126af727}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Physics">
-      <UniqueIdentifier>{74088bb6-c15d-4a32-90f8-584c82fa2578}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Shake">
-      <UniqueIdentifier>{21d85508-00bd-42bd-8969-5dceee51d109}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource">
-      <UniqueIdentifier>{1bf50d38-780b-4f12-ac7e-2a9f0a85eecd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Effect">
-      <UniqueIdentifier>{6da4e546-cbd6-45af-958d-b94e2e878bfa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Effect\00_Define">
-      <UniqueIdentifier>{60c7598d-a483-4333-b665-c35e72a29bf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06_Decoration">
+    <Filter Include="Framework\06_Decoration">
       <UniqueIdentifier>{63ea5cd5-8bc1-42e4-934a-6c6187afa597}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05_Resource\Sound">
-      <UniqueIdentifier>{4413976e-9512-45b7-b090-e5e8af095587}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Font">
-      <UniqueIdentifier>{c3a2bcf1-bb84-4680-8f4e-c382257405e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06_Decoration\Fader">
+    <Filter Include="Framework\06_Decoration\Fader">
       <UniqueIdentifier>{d29f5f92-b96e-4472-9355-0d54896fc040}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\BlurScren">
+    <Filter Include="Framework\06_Decoration\BlurScren">
       <UniqueIdentifier>{2e3c961d-22fc-46d3-851a-e2845562c935}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI">
+    <Filter Include="Framework\06_Decoration\UI">
       <UniqueIdentifier>{6c2d5fd0-1240-4556-847e-279aa8cf766f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\Locus">
-      <UniqueIdentifier>{eb5973f8-8734-4b7e-80c0-785393ebde2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\DesignPattern">
-      <UniqueIdentifier>{f9f584ad-3a75-4655-9db5-c1247dae32d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\DesignPattern\StateMachine">
-      <UniqueIdentifier>{6abc0e31-dfe2-4dec-ba6d-ae4b790dbcec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\DesignPattern\Behavior">
-      <UniqueIdentifier>{4695b629-51aa-4eb9-a04c-eb9ca096e222}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System">
-      <UniqueIdentifier>{3ff7a959-2e87-4b5e-946e-75ba96a8c0ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\ResourceLoader">
-      <UniqueIdentifier>{6f17a64d-cb86-4a5a-a530-d35e093980e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\CsvReader">
-      <UniqueIdentifier>{7a89a4bf-348f-4925-b185-33c499268f90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\LoadScreen">
-      <UniqueIdentifier>{e5cf3a1b-7ff3-4098-9819-1cba40836813}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\SystemManager">
-      <UniqueIdentifier>{c9487f0f-4d0f-471e-9549-b0287f824d0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug">
-      <UniqueIdentifier>{089131b8-7f82-4af5-acd8-cd774b8bc764}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui">
-      <UniqueIdentifier>{61d177ba-6331-4abf-825e-1471dd65820e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\DebugScreen">
-      <UniqueIdentifier>{259a0b0b-c3b8-4691-9857-1196de8dbb62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\Input">
-      <UniqueIdentifier>{9815e6a4-ccff-484b-b238-3dc93761e16f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\00_Manager">
-      <UniqueIdentifier>{9b28f1b5-8cfb-4ce2-8b33-e5e9dab17957}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\01_Root">
-      <UniqueIdentifier>{141535fa-5d3d-4961-9e99-5089b1e30b6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node">
-      <UniqueIdentifier>{fd50d0e2-559d-4c8d-b58e-6e2410cecec0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\03_Func">
-      <UniqueIdentifier>{d5b461c6-ae19-49c7-934e-56773b00ef21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\00_Base">
-      <UniqueIdentifier>{002b8872-87af-4937-81c9-4351eb8695e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\01_Text">
-      <UniqueIdentifier>{109375b8-61cd-4729-bd34-48a7daa92bb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\02_SliderInt">
-      <UniqueIdentifier>{76b7f8d6-8528-4171-b08c-c0bf16a62876}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\03_SliderFloat">
-      <UniqueIdentifier>{14be2261-3482-433c-acaf-6c38cdc54f41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\04_Button">
-      <UniqueIdentifier>{65ce08fa-8e61-4013-85d5-52d3fc5e3395}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\05_CheckBox">
-      <UniqueIdentifier>{28bb3be3-caa3-467b-8e9f-08aad5c2655e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\06_DropDown">
-      <UniqueIdentifier>{19149207-2c8c-4daf-9b86-f8f7ee09c749}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\07_Space">
-      <UniqueIdentifier>{f1281586-0dae-4993-a61d-48ea28ce0988}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\08_ColorEdit4">
-      <UniqueIdentifier>{1ff0525c-22ed-4381-af56-8a5069cd80d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01_Library\ImGui">
-      <UniqueIdentifier>{2a55ea4b-2fd2-4005-86d3-70fc4d595c2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Debug\ImGui\02_Node\09_Children">
-      <UniqueIdentifier>{15848ab7-675a-4304-8180-37f55ae5ea40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\Input\01_PadController">
-      <UniqueIdentifier>{aed03f8b-43fa-4f28-9bfa-d22ce4499511}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\Input\00_KeyController">
-      <UniqueIdentifier>{891e4d4e-10b5-4e60-a2da-0f311e966c09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\Input\02_MouseController">
-      <UniqueIdentifier>{eb8983fb-95a0-4284-a45f-c93d767a558b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\Util">
-      <UniqueIdentifier>{e495948d-dc34-4eae-8fb7-6b903585d9aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01_Library\MagicEnum">
-      <UniqueIdentifier>{fb312d9e-2d0c-481b-b25d-05ea7e7c78fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Camera\00_Define">
-      <UniqueIdentifier>{ff0677f9-60ca-41f4-896e-69414c4c8b7d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Camera\01_Manager">
-      <UniqueIdentifier>{2a9ea63a-39a7-410d-b26d-99853998ab9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Camera\02_State">
-      <UniqueIdentifier>{a59c8440-331d-41be-97d1-83e1b9fdaffb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Light\00_Define">
-      <UniqueIdentifier>{cbfce82f-b372-4fe3-b27c-081669fd870a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Light\01_Manager">
-      <UniqueIdentifier>{395c6887-9d27-4f85-86c4-6e44147a410e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Camera\02_State\99_Debug">
-      <UniqueIdentifier>{438492d8-770a-40d5-b807-e050cc000b7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Sound\00_Define">
-      <UniqueIdentifier>{268e7d79-78c3-46a1-a064-3cacf2c4ba13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Sound\01_Base">
-      <UniqueIdentifier>{06d1f00f-97b2-4a0b-9e27-1d6feebb3ac0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Sound\02_Manager">
-      <UniqueIdentifier>{27603a83-df47-4fcc-ae00-7a606afb4906}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Effect\01_Base">
-      <UniqueIdentifier>{2fe73c11-3bf4-4519-a368-db7a7f4b5395}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05_Resource\Effect\02_Manager">
-      <UniqueIdentifier>{af136e36-d096-4ff6-92c4-ba8c88b309fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Stage\00_Define">
-      <UniqueIdentifier>{98accd05-5796-41c0-be2f-95b773c383ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Stage\01_Manager">
-      <UniqueIdentifier>{b10e8a95-4dd0-4c23-8693-95720177080c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03_Object\Stage\02_Base">
-      <UniqueIdentifier>{4a62c368-ab7d-4d81-8fd0-75c2dbb61861}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06_Decoration\UI\00_Canvas">
+    <Filter Include="Framework\06_Decoration\UI\00_Canvas">
       <UniqueIdentifier>{edfba44d-264a-4191-8569-619d6783f9a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04_Component\Collider\00_Define">
-      <UniqueIdentifier>{970a72b2-153b-4e4b-ab07-92cc697f6df9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\01_Data">
-      <UniqueIdentifier>{fc168818-2480-4313-aaa4-94aaf48205c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\02_Manager">
-      <UniqueIdentifier>{e5eee45a-3ff5-4a3e-affb-4bdae5e298df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\03_Function">
-      <UniqueIdentifier>{b15b64d0-b2b8-48db-975a-0c360ec5b79a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\04_Shape">
-      <UniqueIdentifier>{490245fe-2ee6-4066-b303-407823628928}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\04_Shape\00_Base">
-      <UniqueIdentifier>{e7b6d32f-17a4-463c-9b63-e6a7062a79a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\04_Shape\01_Sphere">
-      <UniqueIdentifier>{10c32150-b7a2-4ea5-907b-bb78ddf4a7b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\04_Shape\02_Model">
-      <UniqueIdentifier>{1eee7873-6c6b-432b-85e5-8e9628473c50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\Collider\04_Shape\03_Capsule">
-      <UniqueIdentifier>{cb6b5ba9-7516-45c2-a259-5d44ee47a317}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04_Component\ShadowCircle">
-      <UniqueIdentifier>{8b2fd2de-94d7-4145-93c7-8ab09dd108c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06_Decoration\ShadowMap">
-      <UniqueIdentifier>{b7d55271-683e-45f0-9531-5c3e23e20486}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\SettingManager">
-      <UniqueIdentifier>{e955fcc9-28f0-48a3-857e-0e5671500fca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\SettingManager\00_SettingBase">
-      <UniqueIdentifier>{36bddec0-e412-4eff-b9ec-96d248f19921}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\SettingManager\01_SensiSetting">
-      <UniqueIdentifier>{da95223e-c616-406c-8153-2049069af81b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Common\System\SettingManager\02_VolumeSetting">
-      <UniqueIdentifier>{e81781c8-7ab1-47b0-ad24-2703517e0466}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06_Decoration\UI\01_Subtone">
+    <Filter Include="Framework\06_Decoration\UI\01_Subtone">
       <UniqueIdentifier>{2b8daf66-30a9-4e93-a24a-738659ae5641}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\02_Manager">
+    <Filter Include="Framework\06_Decoration\UI\02_Manager">
       <UniqueIdentifier>{f3ab863a-de38-4562-92a6-7c7e5ce70837}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\03_Text">
+    <Filter Include="Framework\06_Decoration\UI\03_Text">
       <UniqueIdentifier>{a49ab870-fafc-463a-aaef-1a3942d73e51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\04_Image">
+    <Filter Include="Framework\06_Decoration\UI\04_Image">
       <UniqueIdentifier>{0ceabaf4-9db6-431f-9475-244cee0c3fa9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\05_Button">
+    <Filter Include="Framework\06_Decoration\UI\05_Button">
       <UniqueIdentifier>{faa71f62-7e25-46ab-b907-74760cea3f24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\06_Gauge">
+    <Filter Include="Framework\06_Decoration\UI\06_Gauge">
       <UniqueIdentifier>{2353c545-7d40-4a4b-80e0-29a23cf89e64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\07_Slider">
+    <Filter Include="Framework\06_Decoration\UI\07_Slider">
       <UniqueIdentifier>{39d1a70e-f546-4537-b906-1019efc3781c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06_Decoration\UI\08_BillBoard">
+    <Filter Include="Framework\06_Decoration\UI\08_BillBoard">
       <UniqueIdentifier>{fdb938d2-6a26-484a-a999-8c8fa643600a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03_Object\Light\02_Instance">
+    <Filter Include="Framework\06_Decoration\Locus">
+      <UniqueIdentifier>{eb5973f8-8734-4b7e-80c0-785393ebde2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\06_Decoration\ShadowMap">
+      <UniqueIdentifier>{b7d55271-683e-45f0-9531-5c3e23e20486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\00_Scene">
+      <UniqueIdentifier>{fdfa1d2d-a98a-480e-95ed-8954d1c9392b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\00_Scene\99_Etc">
+      <UniqueIdentifier>{5dddece6-8bd3-459e-8675-ccfe468f0dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\00_Scene\99_Etc\00_Base">
+      <UniqueIdentifier>{70952c0a-402e-4436-9f25-62d15a4623ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\00_Scene\99_Etc\01_Factory">
+      <UniqueIdentifier>{1a92ad38-68f0-4647-96af-64be0fe77666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\00_Scene\99_Etc\02_Manager">
+      <UniqueIdentifier>{ff6ff7ce-1f1b-4db8-8eab-9d10fcbb33fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\01_Library">
+      <UniqueIdentifier>{e6de0a0e-a84b-4a11-836c-68c0991a4c3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\01_Library\ImGui">
+      <UniqueIdentifier>{2a55ea4b-2fd2-4005-86d3-70fc4d595c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\01_Library\MagicEnum">
+      <UniqueIdentifier>{fb312d9e-2d0c-481b-b25d-05ea7e7c78fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common">
+      <UniqueIdentifier>{2dc1ccd8-1a67-4a8b-b509-3e4eec2d426e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Time">
+      <UniqueIdentifier>{fc3a04e8-f1c5-4424-8af9-1809edb95c1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\DesignPattern">
+      <UniqueIdentifier>{f9f584ad-3a75-4655-9db5-c1247dae32d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\DesignPattern\StateMachine">
+      <UniqueIdentifier>{6abc0e31-dfe2-4dec-ba6d-ae4b790dbcec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\DesignPattern\Behavior">
+      <UniqueIdentifier>{4695b629-51aa-4eb9-a04c-eb9ca096e222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\DesignPattern\TinyFSM">
+      <UniqueIdentifier>{68720444-f829-43fb-a413-61c93727d781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System">
+      <UniqueIdentifier>{3ff7a959-2e87-4b5e-946e-75ba96a8c0ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\ResourceLoader">
+      <UniqueIdentifier>{6f17a64d-cb86-4a5a-a530-d35e093980e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\CsvReader">
+      <UniqueIdentifier>{7a89a4bf-348f-4925-b185-33c499268f90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\LoadScreen">
+      <UniqueIdentifier>{e5cf3a1b-7ff3-4098-9819-1cba40836813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SystemManager">
+      <UniqueIdentifier>{c9487f0f-4d0f-471e-9549-b0287f824d0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Input">
+      <UniqueIdentifier>{9815e6a4-ccff-484b-b238-3dc93761e16f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Input\01_PadController">
+      <UniqueIdentifier>{aed03f8b-43fa-4f28-9bfa-d22ce4499511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Input\00_KeyController">
+      <UniqueIdentifier>{891e4d4e-10b5-4e60-a2da-0f311e966c09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Input\02_MouseController">
+      <UniqueIdentifier>{eb8983fb-95a0-4284-a45f-c93d767a558b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager">
+      <UniqueIdentifier>{e955fcc9-28f0-48a3-857e-0e5671500fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager\00_SettingBase">
+      <UniqueIdentifier>{36bddec0-e412-4eff-b9ec-96d248f19921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager\01_SensiSetting">
+      <UniqueIdentifier>{da95223e-c616-406c-8153-2049069af81b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\SettingManager\02_VolumeSetting">
+      <UniqueIdentifier>{e81781c8-7ab1-47b0-ad24-2703517e0466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Json">
+      <UniqueIdentifier>{f9cc9a35-2f5e-4aec-9bed-612b70668d90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Ini">
+      <UniqueIdentifier>{fba1957b-1467-4d28-9dfe-f47de500b818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Pool">
+      <UniqueIdentifier>{68d566b5-be52-4a7a-beee-fcfc0dc9b64d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug">
+      <UniqueIdentifier>{089131b8-7f82-4af5-acd8-cd774b8bc764}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui">
+      <UniqueIdentifier>{61d177ba-6331-4abf-825e-1471dd65820e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\00_Manager">
+      <UniqueIdentifier>{9b28f1b5-8cfb-4ce2-8b33-e5e9dab17957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\01_Root">
+      <UniqueIdentifier>{141535fa-5d3d-4961-9e99-5089b1e30b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node">
+      <UniqueIdentifier>{fd50d0e2-559d-4c8d-b58e-6e2410cecec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\00_Base">
+      <UniqueIdentifier>{002b8872-87af-4937-81c9-4351eb8695e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\01_Text">
+      <UniqueIdentifier>{109375b8-61cd-4729-bd34-48a7daa92bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\02_SliderInt">
+      <UniqueIdentifier>{76b7f8d6-8528-4171-b08c-c0bf16a62876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\03_SliderFloat">
+      <UniqueIdentifier>{14be2261-3482-433c-acaf-6c38cdc54f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\04_Button">
+      <UniqueIdentifier>{65ce08fa-8e61-4013-85d5-52d3fc5e3395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\05_CheckBox">
+      <UniqueIdentifier>{28bb3be3-caa3-467b-8e9f-08aad5c2655e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\06_DropDown">
+      <UniqueIdentifier>{19149207-2c8c-4daf-9b86-f8f7ee09c749}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\07_Space">
+      <UniqueIdentifier>{f1281586-0dae-4993-a61d-48ea28ce0988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\08_ColorEdit4">
+      <UniqueIdentifier>{1ff0525c-22ed-4381-af56-8a5069cd80d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\09_Children">
+      <UniqueIdentifier>{15848ab7-675a-4304-8180-37f55ae5ea40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\ImGui\03_Func">
+      <UniqueIdentifier>{d5b461c6-ae19-49c7-934e-56773b00ef21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Debug\DebugScreen">
+      <UniqueIdentifier>{259a0b0b-c3b8-4691-9857-1196de8dbb62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\Util">
+      <UniqueIdentifier>{e495948d-dc34-4eae-8fb7-6b903585d9aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object">
+      <UniqueIdentifier>{53e2f9d1-a09b-421e-bc7f-f7a3e2732549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Camera">
+      <UniqueIdentifier>{2ffb8276-8822-44ec-afd3-7797ec172dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Camera\00_Define">
+      <UniqueIdentifier>{ff0677f9-60ca-41f4-896e-69414c4c8b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Camera\01_Manager">
+      <UniqueIdentifier>{2a9ea63a-39a7-410d-b26d-99853998ab9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Camera\02_State">
+      <UniqueIdentifier>{a59c8440-331d-41be-97d1-83e1b9fdaffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Camera\02_State\99_Debug">
+      <UniqueIdentifier>{438492d8-770a-40d5-b807-e050cc000b7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Light">
+      <UniqueIdentifier>{4336ddff-c523-42dd-a27e-6a8d2fa5047b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Light\00_Define">
+      <UniqueIdentifier>{cbfce82f-b372-4fe3-b27c-081669fd870a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Light\01_Manager">
+      <UniqueIdentifier>{395c6887-9d27-4f85-86c4-6e44147a410e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Light\02_Instance">
       <UniqueIdentifier>{62d28d0e-1b5a-418d-af60-7e4cc101bf3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Object3D">
+      <UniqueIdentifier>{61033f1c-888b-4699-879c-adb569a29e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Object2D">
+      <UniqueIdentifier>{1d658d49-d878-431f-b7ed-602bfc247155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Stage">
+      <UniqueIdentifier>{46e86fe6-62d3-4087-8516-662511aea65c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Stage\00_Define">
+      <UniqueIdentifier>{98accd05-5796-41c0-be2f-95b773c383ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Stage\01_Manager">
+      <UniqueIdentifier>{b10e8a95-4dd0-4c23-8693-95720177080c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\03_Object\Stage\02_Base">
+      <UniqueIdentifier>{4a62c368-ab7d-4d81-8fd0-75c2dbb61861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component">
+      <UniqueIdentifier>{a476a6ff-2298-4863-bcfa-f5eeb7f008b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Animator">
+      <UniqueIdentifier>{0aeacd9f-c985-43f7-acef-5025da07204a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider">
+      <UniqueIdentifier>{4ede321b-41e4-478d-9a9d-8512984277df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\00_Define">
+      <UniqueIdentifier>{970a72b2-153b-4e4b-ab07-92cc697f6df9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\01_Data">
+      <UniqueIdentifier>{fc168818-2480-4313-aaa4-94aaf48205c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\02_Manager">
+      <UniqueIdentifier>{e5eee45a-3ff5-4a3e-affb-4bdae5e298df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\03_Function">
+      <UniqueIdentifier>{b15b64d0-b2b8-48db-975a-0c360ec5b79a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\04_Shape">
+      <UniqueIdentifier>{490245fe-2ee6-4066-b303-407823628928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\04_Shape\00_Base">
+      <UniqueIdentifier>{e7b6d32f-17a4-463c-9b63-e6a7062a79a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\04_Shape\01_Sphere">
+      <UniqueIdentifier>{10c32150-b7a2-4ea5-907b-bb78ddf4a7b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\04_Shape\02_Model">
+      <UniqueIdentifier>{1eee7873-6c6b-432b-85e5-8e9628473c50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Collider\04_Shape\03_Capsule">
+      <UniqueIdentifier>{cb6b5ba9-7516-45c2-a259-5d44ee47a317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\MaterialRender">
+      <UniqueIdentifier>{4b10e910-6714-443c-85c3-bd19dadbb895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\MotionBlur">
+      <UniqueIdentifier>{ec5b622a-8689-4201-b4a5-346e126af727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Physics">
+      <UniqueIdentifier>{74088bb6-c15d-4a32-90f8-584c82fa2578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Shake">
+      <UniqueIdentifier>{21d85508-00bd-42bd-8969-5dceee51d109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\ShadowCircle">
+      <UniqueIdentifier>{8b2fd2de-94d7-4145-93c7-8ab09dd108c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource">
+      <UniqueIdentifier>{1bf50d38-780b-4f12-ac7e-2a9f0a85eecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Effect">
+      <UniqueIdentifier>{6da4e546-cbd6-45af-958d-b94e2e878bfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Effect\00_Define">
+      <UniqueIdentifier>{60c7598d-a483-4333-b665-c35e72a29bf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Effect\01_Base">
+      <UniqueIdentifier>{2fe73c11-3bf4-4519-a368-db7a7f4b5395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Effect\02_Manager">
+      <UniqueIdentifier>{af136e36-d096-4ff6-92c4-ba8c88b309fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Sound">
+      <UniqueIdentifier>{4413976e-9512-45b7-b090-e5e8af095587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Sound\00_Define">
+      <UniqueIdentifier>{268e7d79-78c3-46a1-a064-3cacf2c4ba13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Sound\01_Base">
+      <UniqueIdentifier>{06d1f00f-97b2-4a0b-9e27-1d6feebb3ac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Sound\02_Manager">
+      <UniqueIdentifier>{27603a83-df47-4fcc-ae00-7a606afb4906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\05_Resource\Font">
+      <UniqueIdentifier>{c3a2bcf1-bb84-4680-8f4e-c382257405e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes">
+      <UniqueIdentifier>{2ea6c927-ee62-411c-bc2f-accc1345d832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene">
+      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\00_BootScene">
+      <UniqueIdentifier>{4e7a122b-01b5-4a1f-bdd8-381c4cb2403d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\01_TitleScene">
+      <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

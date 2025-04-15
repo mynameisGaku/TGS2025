@@ -27,7 +27,7 @@ void Stage::Init() {
 		ground = new Object3D(MV1LoadModel("data/model/Stage/Ground_000.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(20.0f)));
 
 	if (sky == nullptr)
-		sky = new Object3D(MV1LoadModel("data/model/Stage/Sky_000.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(20.0f)));
+		sky = new Object3D(MV1LoadModel("data/model/Stage/Sky_000.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(1.0f)));
 
 	if (wall == nullptr)
 		wall = new Object3D(MV1LoadModel("data/model/Stage/StageCollider.mv1"), Transform(V3::ZERO, V3::ZERO, Vector3(STAGE_RANGE / 50.0f)));
@@ -35,42 +35,10 @@ void Stage::Init() {
 	MV1SetupCollInfo(ground->Model(), -1, 8, 8, 8);	//コリジョン情報を構築する
 	MV1RefreshCollInfo(ground->Model(), -1);		//コリジョン情報を更新する
 
-	//EffectManager::PlayEffect3D(EffectDefine::EffectID::eFeild_Sphere_Normal, wall->transform->Copy(), { TrsType::tAll }, 900, true);
 }
 
 void Stage::Update() {
 
-	//EffectBase* feildEffect = EffectManager::IsPlay(EffectDefine::EffectID::eFeild_Sphere_Normal, 900);
-	//if (feildEffect == nullptr) {
-	//	EffectManager::PlayEffect3D(EffectDefine::EffectID::eFeild_Sphere_Normal, wall->transform->Copy(), { TrsType::tAll }, 900, true);
-	//	return;
-	//}
-
-	//// プレイヤーがステージ外周付近にいる場合、エフェクトの不透明度を上げる
-	//CharaManager* charaM = FindGameObject<CharaManager>();
-	//if (charaM == nullptr) {
-	//	feildEffect->SetRGBA(255, 255, 255, 0);
-	//	return;
-	//}
-
-	//Player* player = charaM->Search<Player>();
-
-	//if (player != nullptr) {
-	//	auto collider = player->GetComponent<ColliderCapsule>();
-	//	float outerCircumference = STAGE_RANGE * 0.85f;	// 外周判定をする距離
-	//	float diff = STAGE_RANGE - outerCircumference;	// 外周と外周判定の差
-
-	//	if (ColFunction::ColCheck3D_Circle(player->transform->position, collider->Radius(), feildEffect->transform->position, outerCircumference).IsCollision()) {
-	//		feildEffect->SetRGBA(255, 255, 255, 0);
-	//	}
-	//	else {
-	//		Vector3 VecToPlayer = player->transform->position - feildEffect->transform->position;
-	//		float range = ((VecToPlayer).Size() - outerCircumference) / diff;
-	//		feildEffect->SetRGBA(255, 255, 255, static_cast<int>(range * 255));
-	//	}
-	//}
-	//else
-	//	feildEffect->SetRGBA(255, 255, 255, 0);
 }
 
 void Stage::Draw() {
@@ -78,7 +46,7 @@ void Stage::Draw() {
 	if (sky != nullptr)
 		sky->Draw();
 
-	SetFogColor(50, 50, 150);
+	SetFogColor(200, 200, 150);
 	SetFogStartEnd(150.0f, STAGE_RANGE * 5.0f);
 	SetFogEnable(true);
 

@@ -3,9 +3,16 @@
 #include "DebugScreen.h"
 
 #include "InputManager.h"
+#include "CharaManager.h"
 
-PlayScene::PlayScene(std::string name) : SceneBase(true, name) {
-
+PlayScene::PlayScene(std::string name) : SceneBase(true, name)
+{
+	CharaManager* charaM = Instantiate<CharaManager>();
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 }
 
 PlayScene::~PlayScene()

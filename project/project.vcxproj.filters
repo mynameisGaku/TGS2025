@@ -301,6 +301,12 @@
     <ClCompile Include="Source\settings_ini.cpp">
       <Filter>Framework\02_Common\System\Ini</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CharaBase.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CharaManager.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -672,6 +678,15 @@
     <ClInclude Include="Source\Pool.h">
       <Filter>Framework\02_Common\System\Pool</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CharaBase.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CharaManager.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CharaDefine.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1009,6 +1024,9 @@
     </Filter>
     <Filter Include="Application\Scenes\01_TitleScene">
       <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Chara">
+      <UniqueIdentifier>{68c9b294-3a2a-4353-b029-15f527993dce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

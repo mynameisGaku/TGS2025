@@ -201,7 +201,10 @@ void SystemManager::Debug() {
 
 	if (IsLoadEnd() == false)
 		return;
-
+	
+	if (InputManager::Push(KeyCode::F1)) {
+		ImGuiManager::SetIsActive(!ImGuiManager::IsActive());
+	}
 	if (InputManager::Push(KeyCode::Alpha9)) {
 		MouseController::SetMouseMovement(MouseMovement::Free);
 	}

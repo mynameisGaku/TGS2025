@@ -26,8 +26,8 @@ void LightManager::Init() {
 	SetLightEnable(false);
 
 	CreateLightDir();
-	CreateLightPoint();
-	CreateLightSpot();
+	//CreateLightPoint();
+	//CreateLightSpot();
 }
 
 void LightManager::Update() {
@@ -83,9 +83,9 @@ void LightManager::CreateLightDir() {
 		return;
 
 	LightInfo lightInfo;
-	lightInfo.colorDif = GetColorF(0.65f, 0.65f, 1.0f, 1.0f);
-	lightInfo.colorSpc = GetColorF(0.65f, 0.65f, 1.0f, 1.0f);
-	lightInfo.colorAmb = GetColorF(0.65f, 0.65f, 1.0f, 1.0f);
+	lightInfo.colorDif = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
+	lightInfo.colorSpc = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
+	lightInfo.colorAmb = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
 
 	Light* dir = new Light(lightInfo);
 	dir->SetDegRotation(Vector3(-180.0f, -180.0f, 180.0f));

@@ -38,7 +38,7 @@
 			oldX(0), oldY(0),
 			moveX(0), moveY(0),
 			wheelRot(GetMouseWheelRotVol()),
-			sensitivity(0.0f),
+			sensitivity(MOUSE_SENSI_MAX * 0.5f),
 			movement(MouseMovement::Free),
 			point({ 0 }),
 			hWnd(0)

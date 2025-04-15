@@ -1,0 +1,172 @@
+#include "effectBase.h"
+#include <EffekseerForDXLib.h>
+
+#include "../Library/time.h"
+#include "../Source/Util/Utils.h"
+
+using namespace EffectDefine;
+
+EffectBase::EffectBase() {
+
+	info = EffectInfo();
+	label = "";
+}
+
+EffectBase::~EffectBase() {
+
+	Stop();
+}
+
+void EffectBase::Update() {
+
+	if (IsActive() == false)
+		return;
+
+	SetTransform(*transform);
+	SetPlaySpeed(info.playSpeed);
+
+	if (IsPlaying() == false)
+		Stop();
+}
+
+void EffectBase::Play2D(const EffectDefine::EffectInfo& _info, const Transform& trs, const std::string& _label, const bool& loop) {
+
+	// Šù‚ÉÄ¶’†‚È‚çAÄ¶‚µ‚È‚¢
+	if (IsPlaying())
+		return;
+
+	info = _info;
+
+	Function::DeletePointer(transform);
+	transform = new Transform(trs);
+
+	info.dimension = Dimensional::_2D;
+	info.playingHandle = PlayEffekseer2DEffect(info.handle);
+	info.isLoop = loop;
+
+	SetTransform(*transform);
+	SetPlaySpeed(info.playSpeed);
+
+	label = _label;
+}
+
+void EffectBase::Play3D(const EffectDefine::EffectInfo& _info, const Transform& trs, const std::string& _label, const bool& loop) {
+
+	// Šù‚ÉÄ¶’†‚È‚çAÄ¶‚µ‚È‚¢
+	if (IsPlaying())
+		return;
+
+	info = _info;
+
+	Function::DeletePointer(transform);
+	transform = new Transform(trs);
+
+	info.dimension = Dimensional::_3D;
+	info.playingHandle = PlayEffekseer3DEffect(info.handle);
+	info.isLoop = loop;
+
+	SetTransform(*transform);
+	SetPlaySpeed(info.playSpeed);
+
+	label = _label;
+}
+
+void EffectBase::Stop() {
+
+	info.isLoop = false;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	StopEffekseer2DEffect(info.playingHandle);	break;
+	case Dimensional::_3D:	StopEffekseer3DEffect(info.playingHandle);	break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetTransform(const Transform& trs) {
+
+	transform->position = trs.position;
+	transform->rotation = trs.rotation;
+	transform->scale = trs.scale;
+
+	SetPosition(transform->position);
+	SetRotation(transform->rotation);
+	SetScale(transform->scale);
+}
+
+void EffectBase::SetPosition(const Vector3& pos) {
+
+	transform->position = pos;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetPosPlayingEffekseer2DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
+	case Dimensional::_3D:	SetPosPlayingEffekseer3DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetRotation(const Vector3& rot) {
+
+	transform->rotation = rot;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetRotationPlayingEffekseer2DEffect(info.playingHandle, transform->rotation.x, transform->rotation.y, transform->rotation.z); break;
+	case Dimensional::_3D:	SetRotationPlayingEffekseer3DEffect(info.playingHandle, transform->rotation.x, transform->rotation.y, transform->rotation.z); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetScale(const Vector3& scale) {
+
+	transform->scale = scale;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetScalePlayingEffekseer2DEffect(info.playingHandle, transform->scale.x, transform->scale.y, transform->scale.z); break;
+	case Dimensional::_3D:	SetScalePlayingEffekseer3DEffect(info.playingHandle, transform->scale.x, transform->scale.y, transform->scale.z); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetPlaySpeed(const float& speed) {
+
+	info.playSpeed = speed;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetSpeedPlayingEffekseer2DEffect(info.playingHandle, info.playSpeed * Time::LapseRate()); break;
+	case Dimensional::_3D:	SetSpeedPlayingEffekseer3DEffect(info.playingHandle, info.playSpeed * Time::LapseRate()); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetRGBA(const int& r, const int& g, const int& b, const int& a) {
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetColorPlayingEffekseer2DEffect(info.playingHandle, r, g, b, a); break;
+	case Dimensional::_3D:	SetColorPlayingEffekseer3DEffect(info.playingHandle, r, g, b, a); break;
+	default:
+		break;
+	}
+}
+
+bool EffectBase::IsPlaying() const {
+
+	bool result = false;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	result = (IsEffekseer2DEffectPlaying(info.playingHandle) != -1); break;
+	case Dimensional::_3D:	result = (IsEffekseer3DEffectPlaying(info.playingHandle) != -1); break;
+	default:
+		break;
+	}
+
+	return result;
+}
+
+bool EffectBase::CheckConsistency(const std::string& typeName, const std::string& _label) const {
+
+	return (info.typeName == typeName && label == _label);
+}

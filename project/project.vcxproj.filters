@@ -307,6 +307,21 @@
     <ClCompile Include="Source\CharaManager.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Ball.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BallAttribute.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BallManager.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WindowSetting.cpp">
+      <Filter>Framework\02_Common\System\Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\FileUtil.cpp">
+      <Filter>Framework\02_Common\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -687,6 +702,21 @@
     <ClInclude Include="Source\CharaDefine.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Ball.h">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BallAttribute.h">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BallManager.h">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WindowSetting.h">
+      <Filter>Framework\02_Common\System\Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\FileUtil.h">
+      <Filter>Framework\02_Common\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1027,6 +1057,9 @@
     </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\Chara">
       <UniqueIdentifier>{68c9b294-3a2a-4353-b029-15f527993dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Ball">
+      <UniqueIdentifier>{b0efc5a8-5b17-4781-bd72-62919c5ee6c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

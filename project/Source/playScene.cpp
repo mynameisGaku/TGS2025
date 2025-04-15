@@ -4,6 +4,7 @@
 
 #include "InputManager.h"
 #include "CharaManager.h"
+#include "BallManager.h"
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
@@ -13,6 +14,9 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+
+	BallManager* ballM = Instantiate<BallManager>();
+	ballM->CreateBall(Vector3(0.0f, 0.0f, -50.0f));
 }
 
 PlayScene::~PlayScene()

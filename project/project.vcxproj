@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Library\app.h" />
     <ClInclude Include="Library\csvReader.h" />
+    <ClInclude Include="Library\FileUtil.h" />
     <ClInclude Include="Library\gameObject.h" />
     <ClInclude Include="Library\magic_enum.hpp" />
     <ClInclude Include="Library\myDxLib.h" />
@@ -253,6 +254,7 @@
     <ClInclude Include="Source\Util\Vector2.h" />
     <ClInclude Include="Source\Util\Vector3.h" />
     <ClInclude Include="Source\VolumeSetting.h" />
+    <ClInclude Include="Source\WindowSetting.h" />
     <ClInclude Include="vendor\ImGui\imconfig.h" />
     <ClInclude Include="vendor\ImGui\imgui.h" />
     <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h" />
@@ -265,6 +267,7 @@
   <ItemGroup>
     <ClCompile Include="Library\app.cpp" />
     <ClCompile Include="Library\csvReader.cpp" />
+    <ClCompile Include="Library\FileUtil.cpp" />
     <ClCompile Include="Library\main.cpp" />
     <ClCompile Include="Library\resourceLoader.cpp" />
     <ClCompile Include="Library\sceneBase.cpp" />
@@ -356,6 +359,7 @@
     <ClCompile Include="Source\Util\Vector2.cpp" />
     <ClCompile Include="Source\Util\Vector3.cpp" />
     <ClCompile Include="Source\VolumeSetting.cpp" />
+    <ClCompile Include="Source\WindowSetting.cpp" />
     <ClCompile Include="vendor\ImGui\imgui.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_demo.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_draw.cpp" />

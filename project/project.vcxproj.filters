@@ -301,6 +301,12 @@
     <ClCompile Include="Source\settings_ini.cpp">
       <Filter>Framework\02_Common\System\Ini</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Ball.cpp">
+      <Filter>Application\Scenes\02_PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BallAttribute.cpp">
+      <Filter>Application\Scenes\02_PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -671,6 +677,12 @@
     </ClInclude>
     <ClInclude Include="Source\Pool.h">
       <Filter>Framework\02_Common\System\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ball.h">
+      <Filter>Application\Scenes\02_PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BallAttribute.h">
+      <Filter>Application\Scenes\02_PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

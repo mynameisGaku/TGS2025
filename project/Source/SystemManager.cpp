@@ -10,6 +10,7 @@
 #include "ImGuiTree/imGuiManager.h"
 #include "Font.h"
 #include "InputManager.h"
+#include "MouseController.h"
 #include "SoundManager.h"
 #include "EffectManager.h"
 #include "Fader.h"
@@ -181,6 +182,7 @@ void SystemManager::LoadUpdate() {
 
 	if (loadIndex == LoadingType::ltMax && loadScreen != nullptr && loadScreen->IsLoadEnd()) {
 		isLoading = false;
+		loadScreen->SetIsPushFadeOut(false);
 		loadScreen->FadeOut(0.75f);
 	}
 }
@@ -199,6 +201,13 @@ void SystemManager::Debug() {
 
 	if (IsLoadEnd() == false)
 		return;
+
+	if (InputManager::Push(KeyCode::Alpha9)) {
+		MouseController::SetMouseMovement(MouseMovement::Free);
+	}
+	if (InputManager::Push(KeyCode::Alpha0)) {
+		MouseController::SetMouseMovement(MouseMovement::Fixed);
+	}
 }
 
 #endif // _DEBUG

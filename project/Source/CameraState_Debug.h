@@ -1,5 +1,4 @@
-#pragma once
-// *’²®—\’è*
+#pragma onces
 
 // Œp³Œ³
 #include "StateBase.h"

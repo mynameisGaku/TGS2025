@@ -44,6 +44,11 @@
 			hWnd(0)
 		{
 		};
+
+		/// <summary>
+		/// Š´“xİ’è‚İ‚ÌˆÚ“®—Ê
+		/// </summary>
+		inline Vector2 Move() const { return Vector2(moveX * (sensitivity.x * 0.1f), moveY * (sensitivity.y * 0.1f)); }
 	};
 
 

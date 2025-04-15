@@ -157,9 +157,6 @@
     <ClCompile Include="Source\Stage.cpp">
       <Filter>Framework\03_Object\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CameraState_Debug.cpp">
-      <Filter>Framework\03_Object\Camera\02_State\99_Debug</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EffectBase.cpp">
       <Filter>Framework\05_Resource\Effect\01_Base</Filter>
     </ClCompile>
@@ -321,6 +318,9 @@
     </ClCompile>
     <ClCompile Include="Library\FileUtil.cpp">
       <Filter>Framework\02_Common\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CamState_Debug.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -521,9 +521,6 @@
     </ClInclude>
     <ClInclude Include="Source\Stage.h">
       <Filter>Framework\03_Object\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CameraState_Debug.h">
-      <Filter>Framework\03_Object\Camera\02_State\99_Debug</Filter>
     </ClInclude>
     <ClInclude Include="Source\EffectDefine.h">
       <Filter>Framework\05_Resource\Effect\00_Define</Filter>
@@ -926,12 +923,6 @@
     <Filter Include="Framework\03_Object\Camera\01_Manager">
       <UniqueIdentifier>{2a9ea63a-39a7-410d-b26d-99853998ab9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\03_Object\Camera\02_State">
-      <UniqueIdentifier>{a59c8440-331d-41be-97d1-83e1b9fdaffb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Camera\02_State\99_Debug">
-      <UniqueIdentifier>{438492d8-770a-40d5-b807-e050cc000b7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\03_Object\Light">
       <UniqueIdentifier>{4336ddff-c523-42dd-a27e-6a8d2fa5047b}</UniqueIdentifier>
     </Filter>
@@ -1060,6 +1051,9 @@
     </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\Ball">
       <UniqueIdentifier>{b0efc5a8-5b17-4781-bd72-62919c5ee6c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Camera">
+      <UniqueIdentifier>{12109613-0ff0-4cee-b155-58fa4edfd390}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

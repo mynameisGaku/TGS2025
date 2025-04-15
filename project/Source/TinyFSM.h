@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <vendor/ImGui/imgui.h>
 
 /// <summary>
 /// <para> 実行されているステートへ送る信号。 </para>
@@ -127,6 +128,55 @@ public:
 		}
 	}
 	/// <summary>
+	/// ImGuiを使用したデバッグを描画
+	/// </summary>
+	void ImGuiDebugRender()
+	{
+#if _DEBUG
+		if (ImGui::TreeNode("TinyFSM Debug"))
+		{
+			auto GetStateName = [this](void(T::* state)(FSMSignal)) -> const char*
+				{
+					if (!state) return "(nullptr)";
+					auto it = m_stateNameMap.find(state);
+					if (it != m_stateNameMap.end()) return it->second.c_str();
+					static char buf[64];
+					snprintf(buf, sizeof(buf), "Unregistered_%p", reinterpret_cast<void*>(*reinterpret_cast<uintptr_t*>(&state)));
+					return buf;
+				};
+
+			ImGui::Text("Current State: %s", GetStateName(m_state));
+			ImGui::Text("Previous State: %s", GetStateName(m_statePrev));
+			ImGui::Text("Next State: %s", GetStateName(m_stateNext));
+
+			const char* signalStr = "Unknown";
+			switch (m_signal)
+			{
+			case SIG_Enter:        signalStr = "SIG_Enter"; break;
+			case SIG_Update:       signalStr = "SIG_Update"; break;
+			case SIG_AfterUpdate:  signalStr = "SIG_AfterUpdate"; break;
+			case SIG_Exit:         signalStr = "SIG_Exit"; break;
+			}
+			ImGui::Text("Current Signal: %s", signalStr);
+
+			if (m_isStatistics && m_transitCounters)
+			{
+				if (ImGui::TreeNode("Transition Counts"))
+				{
+					for (const auto& pair : *m_transitCounters)
+					{
+						const char* name = GetStateName(pair.first);
+						ImGui::Text("%s: %d", name, pair.second);
+					}
+					ImGui::TreePop();
+				}
+			}
+
+			ImGui::TreePop();
+		}
+#endif
+	}
+	/// <summary>
 	/// 現在このステートマシンがどの処理段階か
 	/// </summary>
 	/// <returns></returns>
@@ -154,6 +204,14 @@ public:
 					m_transitCounters = new std::unordered_map<void(T::*)(FSMSignal), int>();
 				}
 				(*m_transitCounters)[state]++;
+
+				// 名前未登録ならアドレス文字列で仮登録
+				if (m_stateNameMap.find(state) == m_stateNameMap.end())
+				{
+					char buf[64];
+					snprintf(buf, sizeof(buf), "State_%p", reinterpret_cast<void*>(*reinterpret_cast<uintptr_t*>(&state)));
+					m_stateNameMap[state] = buf;
+				}
 			}
 		}
 	}
@@ -177,12 +235,17 @@ public:
 		return (it != m_transitCounters->end()) ? it->second : 0;
 	}
 
-	// 統計を取るようにする
+	// 統計を取るようにする。TinyFSM::RegisterStateName()でステート名を登録するようにしてください。
 	void EnableStatistics() { m_isStatistics = true; }
 	// 統計を取らないようにする
 	void DisableStatistics() { m_isStatistics = false; }
 	// 統計を取っているかどうか
 	bool IsStatistics() const { return m_isStatistics; }
+    // 指定のステートに名前を設定する (デバッグ用)
+	void RegisterStateName(void(T::* state)(FSMSignal), const std::string& name)
+	{
+		m_stateNameMap[state] = name;
+	}
 
 private:
 	// 現在、どの段階の処理を行っているか
@@ -201,6 +264,8 @@ private:
 	std::string m_name;
 	// 各ステートの遷移回数
 	std::unordered_map<void(T::*)(FSMSignal), int>* m_transitCounters;
+	// 各ステートの名前 (デバッグ用)
+	std::unordered_map<void(T::*)(FSMSignal), std::string> m_stateNameMap;
 	// 統計を取るか
 	bool m_isStatistics;
 };

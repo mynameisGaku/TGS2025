@@ -11,34 +11,35 @@
 // ◇ステート関連
 #include "StateManager.h"
 
-#include "CameraState_Debug.h"
-
 // ◇コンポーネント
 #include "Component/Shake.h"
 
+// ◇個別で必要な物
+#include "InputManager.h"
+#include "PadController.h"
+#include "MouseController.h"
 using namespace CameraDefine;
 
 Camera::Camera() {
 
 	Reset();
 
-	stateManager = nullptr;
 	cameraWork = nullptr;
 	
 	AddComponent<Shake>();
 
-	stateManager = new StateManager(this);
-	stateManager->AddInstance(State::sDebug, new CameraState_Debug(stateManager));
-
-	stateManager->ChangeState(State::sDebug);
-
+	// fsmの初期化
+	fsm = new TinyFSM<Camera>(this);
+    fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	fsm->ChangeState(&Camera::DebugState); // ステートを変更
+	
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 
 Camera::~Camera() {
 
 	holder = nullptr;
-	Function::DeletePointer(stateManager);
+	Function::DeletePointer(fsm);
 	Function::DeletePointer(cameraWork);
 
 	RemoveComponent<Shake>();
@@ -56,8 +57,8 @@ void Camera::Reset() {
 
 void Camera::Update() {
 
-	if (stateManager != nullptr)
-		stateManager->Update();
+	if (fsm != nullptr)
+		fsm->Update();
 
 	Object3D::Update();
 }
@@ -66,8 +67,8 @@ void Camera::Draw() {
 
 	Object3D::Draw();
 
-	if (stateManager != nullptr)
-		stateManager->Draw();
+	if (fsm != nullptr)
+		fsm->ImGuiDebugRender();
 
 	MATRIX mShakeTrs = MGetIdent();	// 振動用行列
 
@@ -88,12 +89,12 @@ void Camera::Draw() {
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 }
 
-void Camera::ChangeState(const CameraDefine::State& id) {
+void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
-	if (id >= State::sMax)
-		assert(0 && "CameraStateを指定出来ません");
+    if (fsm == nullptr)
+        return;
 
-	stateManager->ChangeState(id);
+    fsm->ChangeState(state);
 }
 
 void Camera::ColCheckToTerrain() {
@@ -109,9 +110,36 @@ void Camera::ColCheckToTerrain() {
 	}
 }
 
+void Camera::MoveProcess()
+{
+	//====================================================================================================
+	// ▼マウスによるカメラの向き変更
+
+	transform->rotation.x += (MouseController::Info().Move().y * Math::DegToRad(1.0f));
+	transform->rotation.y += (MouseController::Info().Move().x * Math::DegToRad(1.0f));
+
+	// X軸角度の制限
+	transform->rotation.x = min(max(transform->rotation.x, CAMERA_ROT_X_MIN), CAMERA_ROT_X_MAX);
+	
+    target = transform->position + CAMERA_TARGET_DEF * transform->RotationMatrix();
+
+	//====================================================================================================
+	// ▼移動処理
+
+	Vector3 velocity = (InputManager::AnalogStick() * MOVE_SPEED) * transform->RotationMatrix();
+
+	if (InputManager::Hold(KeyCode::Space))
+		velocity.y += SHIFT_SPEED;
+
+	else if (InputManager::Hold(KeyCode::LeftShift))
+		velocity.y -= SHIFT_SPEED;
+
+	transform->position += velocity;
+}
+
 void Camera::SetPerformance(const std::string& perfType) {
 
-	stateManager->ChangeState(State::sPerformance);
+	//stateManager->ChangeState(State::sPerformance);
 	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
 }
 

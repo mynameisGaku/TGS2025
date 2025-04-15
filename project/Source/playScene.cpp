@@ -7,7 +7,8 @@
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name) 
 {
-	Instantiate<Ball>();
+	Ball* ball = Instantiate<Ball>();
+	ball->SetVelocity(Vector3(0, 100, 0));
 }
 
 PlayScene::~PlayScene()

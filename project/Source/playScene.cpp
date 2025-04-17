@@ -4,18 +4,25 @@
 
 #include "CameraManager.h"
 
+#include "Component/CollisionManager.h"
+#include "Component/PlayerController.h"
+
 #include "InputManager.h"
 #include "CharaManager.h"
 #include "BallManager.h"
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
+	Instantiate<CollisionManager>();
+
 	CharaManager* charaM = Instantiate<CharaManager>();
-	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	CharaBase* player00 = charaM->Create(CharaDefine::CharaTag::tPlayer, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+
+	player00->AddComponent<PlayerController>()->Init(DX_INPUT_PAD1, 100.0f, Math::DegToRad(10.0f));
 
 	BallManager* ballM = Instantiate<BallManager>();
 	ballM->CreateBall(Vector3(0.0f, 0.0f, -50.0f));

@@ -27,6 +27,8 @@ Object3D::~Object3D() {
 
 void Object3D::Draw() {
 
+	GameObject::Draw();
+
 	if (IsActive() == false)
 		return;
 

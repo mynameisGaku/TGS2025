@@ -2,6 +2,10 @@
 #include "Library/resourceLoader.h"
 #include "Util/Utils.h"
 
+#include "Component/Physics.h"
+#include "Component/CollisionDefine.h"
+#include "Component/ColliderCapsule.h"
+
 using namespace CharaDefine;
 
 CharaManager::CharaManager()
@@ -22,7 +26,8 @@ void CharaManager::Update()
 		if ((*it)->IsActive())
 		{
 			(*it)->Update();
-			return;
+			it++;
+			continue;
 		}
 
 		delete* it;
@@ -49,11 +54,25 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 
 	CharaBase* newChara = new CharaBase();
 	int hModel = -1;
+	// “–‚½‚è”»’è‚Ì\’z
+	ColDefine::ColBaseParam colParamCap;
+	colParamCap.trs.scale = Vector3(70.0f);
+	colParamCap.onlyOnce = false;
 
 	switch (tag)
 	{
-	case CharaDefine::CharaTag::tPlayer:	hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");	break;
-	case CharaDefine::CharaTag::tEnemy:		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");	break;
+	case CharaDefine::CharaTag::tPlayer:
+		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
+
+		colParamCap.tag = ColDefine::Tag::tPlayer;
+		colParamCap.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tEnemyAtk };
+		break;
+
+	case CharaDefine::CharaTag::tEnemy:
+		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
+
+		colParamCap.tag = ColDefine::Tag::tEnemy;
+		colParamCap.targetTags = { ColDefine::Tag::tPlayer, ColDefine::Tag::tPlayerAtk };
 		break;
 	}
 
@@ -63,6 +82,17 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 
 	newChara->SetModel(hModel);
 	newChara->SetTransform(trs);
+
+	// •¨—‹““®‚ðÝ’è
+	newChara->AddComponent<Physics>()->Init(GRAVITY, FRICTION);
+
+
+
+	// “–‚½‚è”»’è‚ðÝ’è
+	ColliderCapsule* colliderCap = newChara->AddComponent<ColliderCapsule>();
+	colliderCap->BaseInit(colParamCap);
+	colliderCap->SetOffset(V3::SetY(130.0f));
+	colliderCap->SetDraw(true);
 
 	m_Charas.push_back(newChara);
 

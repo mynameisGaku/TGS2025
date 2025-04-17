@@ -25,6 +25,9 @@ namespace ColFunction {
 	/// <returns>当たった場合:True</returns>
 	CollisionData* ColCheck(ColliderBase* col1, ColliderBase* col2);
 
+	//==========================================================================================
+	// ▼球形
+
 	/// <summary>
 	/// 3Dの球と球の当たり判定
 	/// </summary>
@@ -42,20 +45,45 @@ namespace ColFunction {
 	CollisionData ColCheck_SphereToCapsule(ColliderSphere* col1, ColliderCapsule* col2);
 
 	/// <summary>
-	/// 3Dのカプセルとカプセルの当たり判定
-	/// </summary>
-	/// <param name="_col1">当たり判定を行うColliderCapsuleのポインタ</param>
-	/// <param name="_col2">当たり判定を行うColliderCapsuleのポインタ</param>
-	/// <returns>当たった場合:True</returns>
-	CollisionData ColCheck_CapsuleToCapsule(ColliderCapsule* col1, ColliderCapsule* col2);
-	
-	/// <summary>
 	/// 3Dの球とモデルの当たり判定
 	/// </summary>
 	/// <param name="_col1">当たり判定を行うColliderSphereのポインタ</param>
 	/// <param name="_col2">当たり判定を行うColliderModelのポインタ</param>
 	/// <returns>当たった場合:True</returns>
 	CollisionData ColCheck_SphereToModel(ColliderSphere* col1, ColliderModel* col2);
+
+	//==========================================================================================
+	// ▼カプセル
+
+	/// <summary>
+	/// 3Dのカプセルとカプセルの当たり判定
+	/// </summary>
+	/// <param name="_col1">当たり判定を行うColliderCapsuleのポインタ</param>
+	/// <param name="_col2">当たり判定を行うColliderCapsuleのポインタ</param>
+	/// <returns>当たった場合:True</returns>
+	CollisionData ColCheck_CapsuleToCapsule(ColliderCapsule* col1, ColliderCapsule* col2);
+
+	/// <summary>
+	/// 3Dのカプセルとモデルの当たり判定
+	/// </summary>
+	/// <param name="_col1">当たり判定を行うColliderCapsuleのポインタ</param>
+	/// <param name="_col2">当たり判定を行うColliderModelのポインタ</param>
+	/// <returns>当たった場合:True</returns>
+	CollisionData ColCheck_CapsuleToModel(ColliderCapsule* col1, ColliderModel* col2);
+
+	//==========================================================================================
+	// ▼モデル
+
+	/// <summary>
+	/// 3Dのモデルとモデルの当たり判定
+	/// </summary>
+	/// <param name="_col1">当たり判定を行うColliderModelのポインタ</param>
+	/// <param name="_col2">当たり判定を行うColliderModelのポインタ</param>
+	/// <returns>当たった場合:True</returns>
+	CollisionData ColCheck_ModelToModel(ColliderModel* col1, ColliderModel* col2);
+
+	//==========================================================================================
+	// ▼計算
 
 	/// <summary>
 	/// 3Dの当たり判定(円)
@@ -94,7 +122,7 @@ namespace ColFunction {
 	/// <param name="p2">当たり判定を行う座標</param>
 	/// <param name="v">判定をとるベクトルの大きさ</param>
 	/// <returns>当たった場合:True</returns>
-	CollisionData ColCheck2D_Box(Vector2 p1, Vector2 p2, Vector2 v);	
+	CollisionData ColCheck2D_Box(Vector2 p1, Vector2 p2, Vector2 v);
 
 	/// <summary>
 	/// ∠p1p2p3が鋭角を取得する

@@ -64,7 +64,6 @@ void CollisionManager::Update() {
 			if (col2->HittedDataPtr() != nullptr && col2->HittedDataPtr()->IsHitted(col1)) continue;
 
 			CollisionData* data = ColFunction::ColCheck(col1, col2);
-
 			if (data == nullptr)
 				continue;
 
@@ -89,6 +88,9 @@ void CollisionManager::Update() {
 				col1->parent->CollisionEvent(col1Data);
 				col2->parent->CollisionEvent(col2Data);
 			}
+
+			delete data;
+			data = nullptr;
 		}
 	}
 }

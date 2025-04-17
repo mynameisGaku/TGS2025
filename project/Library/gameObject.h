@@ -48,7 +48,7 @@ public:
 	/// “–‚½‚è”»’èˆ—
 	/// </summary>
 	/// <param name="colData">“–‚½‚è”»’èî•ñ</param>
-	virtual void CollisionEvent(CollisionData colData) {}
+	virtual void CollisionEvent(const CollisionData& colData) {}
 
 	/// <summary>
 	/// Šˆ“®‚·‚é‚©‚ğİ’è‚·‚é

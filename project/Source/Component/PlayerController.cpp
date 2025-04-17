@@ -58,7 +58,8 @@ void PlayerController::Update() {
 	Vector3 velocity = stick * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
 
 	// 速度を適応させる
-	physics->velocity = velocity * V3::HORIZONTAL;
+	physics->velocity.x = velocity.x;
+	physics->velocity.z = velocity.z;
 }
 
 Vector3 PlayerController::AnalogStick() {

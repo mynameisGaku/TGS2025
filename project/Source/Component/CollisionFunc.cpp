@@ -62,7 +62,7 @@ CollisionData ColFunction::ColCheck_SphereToCapsule(ColliderSphere* col1, Collid
 	Vector3 vecNear = V3::ZERO;		// 点と線分の最近傍点
 
 	Vector3 begin = col2_GlobalTrs.position;// カプセルコライダーの始点
-	Vector3 end = begin + col2->Offset();	// カプセルコライダーの終点
+	Vector3 end = begin + col2->OffsetWorld();	// カプセルコライダーの終点
 	Vector3 point = col1_GlobalTrs.position;// 球形コライダーの座標
 
 	Vector3 vecLine = (end - begin).Norm();	// カプセルコライダーの始点と終点の線分の方向を表すベクトル
@@ -101,10 +101,10 @@ CollisionData ColFunction::ColCheck_CapsuleToCapsule(ColliderCapsule* col1, Coll
 	float	t1, t2;
 
 	s1.point = col1_GlobalTrs.position;
-	s1.vec	 = col1->Offset();
+	s1.vec	 = col1->OffsetLocal();
 
 	s2.point = col2_GlobalTrs.position;
-	s2.vec	 = col2->Offset();
+	s2.vec	 = col2->OffsetLocal();
 
 	float d = CalcSegmentSegmentDist(s1, s2, p1, p2, t1, t2);
 

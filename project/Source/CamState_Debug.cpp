@@ -10,6 +10,8 @@
 #include "PadController.h"
 #include "MouseController.h"
 
+using namespace KeyDefine;
+
 void Camera::DebugState(FSMSignal sig)
 {
     // ˆÚ“®‰Â”\‚©

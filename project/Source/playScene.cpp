@@ -32,7 +32,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
-	if (InputManager::Push(KeyCode::T)) {
+	if (InputManager::Push(KeyDefine::KeyCode::T)) {
 		SceneManager::ChangeScene("TitleScene");
 	}
 

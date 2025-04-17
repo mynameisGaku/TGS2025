@@ -83,12 +83,13 @@ void LightManager::CreateLightDir() {
 		return;
 
 	LightInfo lightInfo;
+	lightInfo.type = LightType::Directional;
 	lightInfo.colorDif = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
 	lightInfo.colorSpc = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
 	lightInfo.colorAmb = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
 
 	Light* dir = new Light(lightInfo);
-	dir->SetDegRotation(Vector3(-180.0f, -180.0f, 180.0f));
+	dir->SetDegRotation(Vector3(-180.0f, -180.0f, 0.0f));
 
 	(*lights)[LightType::Directional] = dir;
 }
@@ -102,6 +103,7 @@ void LightManager::CreateLightPoint() {
 		return;
 
 	LightInfo lightInfo;
+	lightInfo.type = LightType::Point;
 	lightInfo.range = 1550.0f;
 	lightInfo.atten0 = 0.001f;
 	lightInfo.atten1 = 0.001f;
@@ -125,6 +127,7 @@ void LightManager::CreateLightSpot() {
 		return;
 
 	LightInfo lightInfo;
+	lightInfo.type = LightType::Spot;
 	lightInfo.outAngle = 100.0f;
 	lightInfo.inAngle = 0.0f;
 	lightInfo.range = 1995.0f;

@@ -325,6 +325,12 @@
     <ClCompile Include="Source\CamState_Chase.cpp">
       <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\PlayerController.cpp">
+      <Filter>Framework\04_Component\PlayerController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -714,6 +720,12 @@
     <ClInclude Include="Library\FileUtil.h">
       <Filter>Framework\02_Common\System</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\PlayerController.h">
+      <Filter>Framework\04_Component\PlayerController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1051,6 +1063,12 @@
     </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\Camera">
       <UniqueIdentifier>{12109613-0ff0-4cee-b155-58fa4edfd390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Chara\Player">
+      <UniqueIdentifier>{53f9d0f6-09ba-4c1d-9791-06c90be0e5e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\PlayerController">
+      <UniqueIdentifier>{7dd39023-6b57-482b-8ef2-b8ccec238446}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -42,10 +42,10 @@ void CharaManager::Draw()
 	}
 }
 
-void CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs) {
+CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs) {
 
 	if (m_Charas.size() >= CHARA_NUM)
-		return;
+		return nullptr;
 
 	CharaBase* newChara = new CharaBase();
 	int hModel = -1;
@@ -58,13 +58,15 @@ void CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs) {
 	}
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ğ180“x‰ñ“]‚³‚¹‚Ä’¼‚·
-	int origin = MV1SearchFrame(hModel, "Armature");
-	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(Math::PI));
+	int origin = MV1SearchFrame(hModel, "mixamorig9:Hips");
+	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(Math::PI) * MGetTranslate(Vector3(0.0f, 100.0f, 0.0f)));
 
 	newChara->SetModel(hModel);
 	newChara->SetTransform(trs);
 
 	m_Charas.push_back(newChara);
+
+	return newChara;
 }
 
 const CharaBase* CharaManager::CharaInst(int index) {

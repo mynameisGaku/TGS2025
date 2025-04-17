@@ -15,7 +15,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void Create(CharaDefine::CharaTag tag, const Transform& trs);
+	CharaBase* Create(CharaDefine::CharaTag tag, const Transform& trs);
 	const CharaBase* CharaInst(int index);
 
 private:

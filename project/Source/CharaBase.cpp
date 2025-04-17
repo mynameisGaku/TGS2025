@@ -1,6 +1,8 @@
 #include "CharaBase.h"
 #include "InputManager.h"
 
+using namespace KeyDefine;
+
 CharaBase::CharaBase()
 {
 

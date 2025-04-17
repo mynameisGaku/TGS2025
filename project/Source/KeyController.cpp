@@ -1,5 +1,7 @@
 #include "KeyController.h"
 
+#include "InputManager.h"
+
 using namespace KeyDefine;
 
 namespace {
@@ -35,7 +37,7 @@ bool KeyController::CheckPushStatusCurrent(KeyCode keyCode) {
 	if (KeyCodeToDeviceType(keyCode) != DeviceType::Key)
 		return false;
 
-	int* value = GetKeyAll()[keyCode].value;
+	const int* value = GetInputData(keyCode).value;
 
 	return (keyInput[*value] != 0);
 }
@@ -45,7 +47,7 @@ bool KeyController::CheckPushStatusBefore(KeyDefine::KeyCode keyCode) {
 	if (KeyCodeToDeviceType(keyCode) != DeviceType::Key)
 		return false;
 
-	int* value = GetKeyAll()[keyCode].value;
+	const int* value = GetInputData(keyCode).value;
 
 	return (keyInputBefore[*value] != 0);
 }

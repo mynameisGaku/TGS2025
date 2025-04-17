@@ -18,6 +18,8 @@
 #include "InputManager.h"
 #include "PadController.h"
 #include "MouseController.h"
+
+using namespace KeyDefine;
 using namespace CameraDefine;
 
 Camera::Camera() {
@@ -142,7 +144,7 @@ void Camera::OperationByMouse() {
 
 	Vector2 addRot = V2::ZERO;	// 加算する回転量
 
-	MouseInfo mouse = MouseController::Info();	// マウスの情報
+	MouseController::MouseInfo mouse = MouseController::Info();	// マウスの情報
 
 	addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);
 	addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);

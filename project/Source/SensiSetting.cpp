@@ -3,6 +3,8 @@
 #include "PadController.h"
 #include "MouseController.h"
 
+using namespace KeyDefine;
+
 SensiSetting::SensiSetting() {
 
 	stickSensitivity = PadController::StickSensitivity();

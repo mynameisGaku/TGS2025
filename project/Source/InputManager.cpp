@@ -2,6 +2,7 @@
 
 // ◇汎用
 #include "../Library/time.h"
+#include "../Library/magic_enum.hpp"
 #include "Util/Utils.h"
 
 #include "KeyController.h"
@@ -13,13 +14,15 @@
 
 using namespace KeyDefine;
 
-namespace {	
+namespace {
 
 	std::unordered_map<std::string, std::vector<KeyCode>>* keyList;			// 仮想ボタン
 	std::unordered_map<int, std::list<AdvancedEntryInfo>>* advancedEntry;	// 先行入力
 
 	std::unordered_map<KeyCode, InputData>* isInputs;		// 入力しているか
 	std::unordered_map<KeyCode, InputData>* isBeforeInputs;	// 1フレーム前に入力しているか
+
+	std::list<InputData> keyCodes;	// 直近に押されたキー情報を保持する
 }
 
 void InputManager::Init() {
@@ -41,28 +44,33 @@ void InputManager::Init() {
 
 		auto& key = (*keyList);
 
-		key["Select"]		= { KeyCode::Z, KeyCode::ButtonA };
-		key["Select_Click"] = { KeyCode::Z, KeyCode::ButtonA, KeyCode::LeftClick };
-		key["Cancel"]		= { KeyCode::X, KeyCode::ButtonB };
-		key["Pause"]		= { KeyCode::Escape, KeyCode::Start };
+		key["Select"] = { KeyCode::Z, KeyCode::ButtonA };
+		key["Cancel"] = { KeyCode::X, KeyCode::ButtonB };
+		key["Pause"] = { KeyCode::Escape, KeyCode::Start };
 		key["TargetCamera"] = { KeyCode::MiddleClick, KeyCode::RightThumb };
-		key["Skip"]			= { KeyCode::Z, KeyCode::ButtonA, KeyCode::LeftClick };
+		key["Skip"] = { KeyCode::Z, KeyCode::Space, KeyCode::ButtonA, KeyCode::LeftClick };
 
-		key["Up"]	 = { KeyCode::Up, KeyCode::UpArrow };
-		key["Down"]	 = { KeyCode::Down, KeyCode::DownArrow };
-		key["Left"]  = { KeyCode::Left, KeyCode::LeftArrow };
+		key["Up"] = { KeyCode::Up, KeyCode::UpArrow };
+		key["Down"] = { KeyCode::Down, KeyCode::DownArrow };
+		key["Left"] = { KeyCode::Left, KeyCode::LeftArrow };
 		key["Right"] = { KeyCode::Right, KeyCode::RightArrow };
 
-		key["Attack"]	= { KeyCode::LeftClick, KeyCode::ButtonX };
-		key["Strong"]	= { KeyCode::RightClick, KeyCode::ButtonY };
-		key["Special"]	= { KeyCode::Z, KeyCode::ButtonB };
-		key["Avoid"]	= { KeyCode::Space, KeyCode::ButtonA };
-		key["Run"]		= { KeyCode::LeftShift, KeyCode::LeftThumb };
+		key["Attack"] = { KeyCode::LeftClick, KeyCode::ButtonX };
+		key["Strong"] = { KeyCode::RightClick, KeyCode::ButtonY };
+		key["Special"] = { KeyCode::Z, KeyCode::ButtonB };
+		key["Avoid"] = { KeyCode::Space, KeyCode::ButtonA };
+		key["Run"] = { KeyCode::LeftShift, KeyCode::LeftThumb };
 
-		key["MoveUp"]	 = { KeyCode::W };
-		key["MoveDown"]  = { KeyCode::S };
-		key["MoveLeft"]  = { KeyCode::A };
+		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
+		key["MoveUp"] = { KeyCode::W };
+		key["MoveDown"] = { KeyCode::S };
+		key["MoveLeft"] = { KeyCode::A };
 		key["MoveRight"] = { KeyCode::D };
+
+		key["GoNext"] = {
+			KeyCode::Z, KeyCode::Space, KeyCode::Enter,
+			KeyCode::ButtonA, KeyCode::ButtonB, KeyCode::ButtonX, KeyCode::ButtonY
+		};
 	}
 
 	//==========================================================================================
@@ -70,6 +78,10 @@ void InputManager::Init() {
 
 	if (advancedEntry == nullptr) {
 		advancedEntry = new std::unordered_map<int, std::list<AdvancedEntryInfo>>();
+
+		for (int i = DX_INPUT_PAD1; i <= PAD_NUMBER_MAX; i++) {
+			(*advancedEntry)[i] = std::list<AdvancedEntryInfo>();
+		}
 	}
 
 	//==========================================================================================
@@ -79,11 +91,11 @@ void InputManager::Init() {
 		isInputs = new std::unordered_map<KeyCode, InputData>();
 
 		for (const auto& itr : GetKeyAll())
-			(*isInputs)[itr.second.keyCode] = InputData(itr.second, 0.0f, false);
+			(*isInputs)[itr.second.keyCode] = itr.second;
 
 		if (isBeforeInputs == nullptr)
 			isBeforeInputs = new std::unordered_map<KeyCode, InputData>();
-		
+
 		*isBeforeInputs = *isInputs;
 	}
 }
@@ -118,7 +130,7 @@ void InputManager::Release() {
 
 	if (isInputs != nullptr) {
 		isInputs->clear();
-		
+
 		delete isInputs;
 		isInputs = nullptr;
 	}
@@ -137,85 +149,120 @@ void InputManager::Update() {
 	PadController::Update();
 	MouseController::Update();
 
-	// 入力情報の更新
-	if (isInputs != nullptr && isBeforeInputs != nullptr) {
-		*isBeforeInputs = *isInputs;
-		for (auto& itr : *isInputs) {
-			if (itr.second.isPut)
-				itr.second.putTime += Time::DeltaTime();
-			else
-				itr.second.putTime = 0.0f;
-		}
+	// 全てのキー入力
+	const std::unordered_map<KeyCode, InputData> keyAll = GetKeyAll();
+
+	// 全ての入力状態を調べる。入力されていたら、その情報を保持する
+	for (const auto& itr : keyAll) {
+		(*isInputs)[itr.first].Update();
 	}
 
-	// 先行入力の更新
-	if (advancedEntry != nullptr) {
-
-		for (auto& itr : *advancedEntry) {
-			for (auto info = itr.second.begin(); info != itr.second.end();) {
-
-				// 保持時間の経過
-				info->saveTime = max(info->saveTime - Time::DeltaTimeLapseRate(), 0.0f);
-
-				if (info->saveTime == 0.0f) {
-					info = itr.second.erase(info);
-					if (info == itr.second.end()) break;
-				}
-				else
-					info++;
-			}
-		}
-	}
+	InputDataUpdate();
 
 	// 先行入力用に入力情報を取得する
-	for (int i = 0; i < PAD_NUMBER_MAX; i++)
-		InputManager::AdvancedEntryUpdate(i + 1, ADVANCED_ENTRY_TIME);
+	for (int i = DX_INPUT_PAD1; i <= PAD_NUMBER_MAX; i++)
+		InputManager::AdvancedEntryUpdate(i, ADVANCED_ENTRY_TIME);
+}
 
-	//dynamic_cast<ImGuiNode_Text*>(ImGuiManager::FindDefineNode("Mouse Pos"))->SetText(Function::FormatToString("Mouse Pos (%.1f, %.1f) Move (%d, %d)", mouse.position.x, mouse.position.y, mouse.moveX, mouse.moveY));
+void InputManager::InputDataUpdate() {
 
-#ifdef _DEBUG
+	if (isInputs == nullptr || isBeforeInputs == nullptr)
+		return;
 
-	//if (InputManager::Push(KeyCode::Alpha0))
-	//	MouseController::SetMouseMovement(MouseMovement::Free);
-	//else if (InputManager::Push(KeyCode::Alpha9))
-	//	MouseController::SetMouseMovement(MouseMovement::Fixed);
-	//else if (InputManager::Push(KeyCode::Alpha8))
-	//	MouseController::SetMouseMovement(MouseMovement::OnScreen);
+	// 入力情報の更新
+	*isBeforeInputs = *isInputs;
 
-	//InputManager::DrawTest(300.0f, 5.0f);
+	for (int i = DX_INPUT_PAD1; i <= PAD_NUMBER_MAX; i++) {
+		for (auto& itr : *isInputs) {
+			if (itr.second.isInput[i][TouchPhase::Moved])
+				itr.second.pushTime += Time::DeltaTime();
+			else
+				itr.second.pushTime = 0.0f;
+		}
+	}
+}
 
-#endif
+void InputManager::AdvancedEntryUpdate(const int& padNumber, const float& _advancedEntry) {
 
+	if (advancedEntry == nullptr) {
+		advancedEntry = new std::unordered_map<int, std::list<AdvancedEntryInfo>>();
+
+		for (int i = DX_INPUT_PAD1; i <= PAD_NUMBER_MAX; i++) {
+			(*advancedEntry)[i] = std::list<AdvancedEntryInfo>();
+		}
+	}
+
+	// 保持されている先行入力の種類数で回す
+	for (auto info = (*advancedEntry)[padNumber].begin(); info != (*advancedEntry)[padNumber].end();) {
+
+		// 保持時間の経過
+		info->saveTime = max(info->saveTime - Time::DeltaTimeLapseRate(), 0.0f);
+
+		// 保持時間が0.0以下の場合、切り離す
+		if (info->saveTime <= 0.0f) {
+			info = (*advancedEntry)[padNumber].erase(info);
+			if (info == (*advancedEntry)[padNumber].end()) break;
+		}
+		else
+			info++;
+	}
+
+	//// 直近の入力情報を取得する
+	//std::list<InputData> keyCodes = InputManager::LatestInput(padNumber);
+
+	//for (const auto& itr : keyCodes) {
+	//	if (itr.value == nullptr)
+	//		continue;
+
+	//	// 入力されていれば、その情報を保持
+	//	(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(itr, _advancedEntry));
+	//}
 }
 
 //====================================================================================================
 // ▼Push
 
-bool InputManager::Push(KeyCode keyCode, int num) {
+bool InputManager::Push(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
 
-	DeviceType device = KeyCodeToDeviceType(keyCode);
+	// 入力情報
+	InputData inputData = (*isInputs)[keyCode];
+
+	// 既に入力を受け付けていた場合
+	if (inputData.isAccepted[padNumber][TouchPhase::Begin])
+		return inputData.isInput[padNumber][TouchPhase::Begin];
+
+	DeviceType device = KeyCodeToDeviceType(keyCode);	// デバイスの種類
+	bool isInput = false;	// 押下されたか
 
 	switch (device) {
 	case KeyDefine::DeviceType::Key:
-		(*isInputs)[keyCode].isPut = (KeyController::CheckPushStatusCurrent(keyCode) && KeyController::CheckPushStatusBefore(keyCode) == false);
+		isInput = (KeyController::CheckPushStatusCurrent(keyCode) && KeyController::CheckPushStatusBefore(keyCode) == false);
 		break;
 
 	case KeyDefine::DeviceType::Pad:
-		if (PadController::CheckPadNumber(num) == false)
+		if (PadController::CheckPadNumber(padNumber) == false)
 			return false;
 
-		(*isInputs)[keyCode].isPut = (PadController::CheckPushStatusCurrent(keyCode, num) && PadController::CheckPushStatusBefore(keyCode, num) == false);
+		isInput = (PadController::CheckPushStatusCurrent(keyCode, padNumber) && PadController::CheckPushStatusBefore(keyCode, padNumber) == false);
 		break;
-	
+
 	case KeyDefine::DeviceType::Mouse:
-		(*isInputs)[keyCode].isPut = MouseController::CheckClick(keyCode);
+		isInput = MouseController::CheckClick(keyCode);
 		break;
 	}
 
-	return (*isInputs)[keyCode].isPut;
+	inputData.isInput[padNumber][TouchPhase::Begin] = isInput;
+	inputData.isAccepted[padNumber][TouchPhase::Begin] = true;
+
+	(*isInputs)[keyCode] = inputData;
+
+	if (isInput)
+		(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(inputData, ADVANCED_ENTRY_TIME));
+
+	return isInput;
 }
 
-bool InputManager::Push(std::string name, int num) {
+bool InputManager::Push(const std::string& name, const int& padNumber) {
 
 	if (keyList == nullptr)
 		return false;
@@ -224,7 +271,7 @@ bool InputManager::Push(std::string name, int num) {
 		return false;
 
 	for (const auto& itr : (*keyList)[name]) {
-		if (Push(itr, num))
+		if (Push(itr, padNumber))
 			return true;
 	}
 
@@ -234,31 +281,47 @@ bool InputManager::Push(std::string name, int num) {
 //====================================================================================================
 // ▼Hold
 
-bool InputManager::Hold(KeyCode keyCode, int num) {
+bool InputManager::Hold(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
 
-	DeviceType device = KeyCodeToDeviceType(keyCode);
+	// 入力情報
+	InputData inputData = (*isInputs)[keyCode];
+
+	// 既に入力を受け付けていた場合
+	if (inputData.isAccepted[padNumber][TouchPhase::Moved])
+		return inputData.isInput[padNumber][TouchPhase::Moved];
+
+	DeviceType device = KeyCodeToDeviceType(keyCode);	// デバイスの種類
+	bool isInput = false;	// 押下されたか
 
 	switch (device) {
 	case KeyDefine::DeviceType::Key:
-		(*isInputs)[keyCode].isPut = KeyController::CheckPushStatusCurrent(keyCode);
+		isInput = (KeyController::CheckPushStatusCurrent(keyCode));
 		break;
 
 	case KeyDefine::DeviceType::Pad:
-		if (PadController::CheckPadNumber(num) == false)
+		if (PadController::CheckPadNumber(padNumber) == false)
 			return false;
 
-		(*isInputs)[keyCode].isPut = PadController::CheckPushStatusCurrent(keyCode, num);
+		isInput = (PadController::CheckPushStatusCurrent(keyCode, padNumber));
 		break;
 
 	case KeyDefine::DeviceType::Mouse:
-		(*isInputs)[keyCode].isPut = MouseController::CheckHold(keyCode);
+		isInput = MouseController::CheckHold(keyCode);
 		break;
 	}
 
-	return (*isInputs)[keyCode].isPut;
+	inputData.isInput[padNumber][TouchPhase::Moved] = isInput;
+	inputData.isAccepted[padNumber][TouchPhase::Moved] = true;
+
+	(*isInputs)[keyCode] = inputData;
+
+	if (isInput)
+		(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(inputData, ADVANCED_ENTRY_TIME));
+
+	return isInput;
 }
 
-bool InputManager::Hold(std::string name, int num) {
+bool InputManager::Hold(const std::string& name, const int& padNumber) {
 
 	if (keyList == nullptr)
 		return false;
@@ -267,7 +330,7 @@ bool InputManager::Hold(std::string name, int num) {
 		return false;
 
 	for (const auto& itr : (*keyList)[name]) {
-		if (Hold(itr, num))
+		if (Hold(itr, padNumber))
 			return true;
 	}
 
@@ -277,31 +340,44 @@ bool InputManager::Hold(std::string name, int num) {
 //====================================================================================================
 // ▼Release
 
-bool InputManager::Release(KeyCode keyCode, int num) {
+bool InputManager::Release(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
 
-	DeviceType device = KeyCodeToDeviceType(keyCode);
+	// 入力情報
+	InputData inputData = (*isInputs)[keyCode];
+
+	// 既に入力を受け付けていた場合
+	if (inputData.isAccepted[padNumber][TouchPhase::Ended])
+		return inputData.isInput[padNumber][TouchPhase::Ended];
+
+	DeviceType device = KeyCodeToDeviceType(keyCode);	// デバイスの種類
+	bool isInput = false;	// 押下されたか
 
 	switch (device) {
 	case KeyDefine::DeviceType::Key:
-		(*isInputs)[keyCode].isPut = (KeyController::CheckPushStatusCurrent(keyCode) == false && KeyController::CheckPushStatusBefore(keyCode));
+		isInput = (KeyController::CheckPushStatusCurrent(keyCode) == false && KeyController::CheckPushStatusBefore(keyCode));
 		break;
 
 	case KeyDefine::DeviceType::Pad:
-		if (PadController::CheckPadNumber(num) == false)
+		if (PadController::CheckPadNumber(padNumber) == false)
 			return false;
 
-		(*isInputs)[keyCode].isPut = (PadController::CheckPushStatusCurrent(keyCode, num) == false && PadController::CheckPushStatusBefore(keyCode, num));
+		isInput = (PadController::CheckPushStatusCurrent(keyCode, padNumber) == false && PadController::CheckPushStatusBefore(keyCode, padNumber));
 		break;
 
 	case KeyDefine::DeviceType::Mouse:
-		(*isInputs)[keyCode].isPut = MouseController::CheckRelease(keyCode);
+		isInput = MouseController::CheckRelease(keyCode);
 		break;
 	}
 
-	return (*isInputs)[keyCode].isPut;
+	inputData.isInput[padNumber][TouchPhase::Ended] = isInput;
+	inputData.isAccepted[padNumber][TouchPhase::Ended] = true;
+
+	(*isInputs)[keyCode] = inputData;
+
+	return isInput;
 }
 
-bool InputManager::Release(std::string name, int num) {
+bool InputManager::Release(const std::string& name, const int& padNumber) {
 
 	if (keyList == nullptr)
 		return false;
@@ -310,14 +386,14 @@ bool InputManager::Release(std::string name, int num) {
 		return false;
 
 	for (const auto& itr : (*keyList)[name]) {
-		if (Release(itr, num))
+		if (Release(itr, padNumber))
 			return true;
 	}
 
 	return false;
 }
 
-bool InputManager::Simultaneously(std::list<KeyDefine::KeyCode> keyCodes, int num) {
+bool InputManager::Simultaneously(const std::list<KeyDefine::KeyCode>& keyCodes, const int& padNumber) {
 
 	if (keyCodes.empty())
 		return false;
@@ -330,11 +406,11 @@ bool InputManager::Simultaneously(std::list<KeyDefine::KeyCode> keyCodes, int nu
 	return true;
 }
 
-std::vector<KeyDefine::KeyCode> InputManager::KeyList(std::string name) {
+std::vector<KeyDefine::KeyCode> InputManager::KeyList(const std::string& name) {
 
 	if (keyList == nullptr)
 		return std::vector<KeyDefine::KeyCode>();
-	
+
 	if (keyList->contains(name) == false)
 		return std::vector<KeyDefine::KeyCode>();
 
@@ -344,63 +420,42 @@ std::vector<KeyDefine::KeyCode> InputManager::KeyList(std::string name) {
 //====================================================================================================
 // ▼先行入力
 
-std::list<KeyInfo> InputManager::LatestInput(int num) {
+std::list<InputData> InputManager::LatestInput(const int& padNumber) {
 
 	// 直近に押されたキー情報を保持する
-	std::list<KeyInfo> keyCodes;
+	std::list<InputData> keyCodes;
 
 	// 全ての入力状態を調べる。入力されていたら、その情報を保持する
-	for (const auto& itr : GetKeyAll()) {
-		if (InputManager::Hold(itr.first, num))
+	for (const auto& itr : *isInputs) {
+		if (itr.second.isInput)
 			keyCodes.push_back(itr.second);
 	}
-
-	// 何も入力が無い場合、Noneを入れる。
-	if (keyCodes.size() == 0)
-		keyCodes.push_back(KeyInfo{ nullptr, KeyCode::None, DeviceType::None });
 
 	// 保持した情報を返す。
 	return keyCodes;
 }
 
-void InputManager::AdvancedEntryUpdate(int num, float _advancedEntry) {
-
-	if (advancedEntry == nullptr)
-		advancedEntry = new std::unordered_map<int, std::list<AdvancedEntryInfo>>();
-
-	// 直近の入力情報を取得する
-	std::list<KeyInfo> keyCodes = InputManager::LatestInput(num);
-
-	for (const auto& itr : keyCodes) {
-		if (itr.value == nullptr)
-			continue;
-
-		// 入力されていれば、その情報を保持
-		(*advancedEntry)[num].push_back(AdvancedEntryInfo(itr, _advancedEntry));
-	}
-}
-
-bool InputManager::AdvancedEntry(KeyDefine::KeyCode keyCode, int num) {
+bool InputManager::AdvancedEntry(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
 
 	if (advancedEntry == nullptr)
 		return false;
 
-	for (const auto& itr : (*advancedEntry)[num]) {
-		if (itr.keyInfo.keyCode == keyCode)
+	for (const auto& itr : (*advancedEntry)[padNumber]) {
+		if (itr.inputData.keyCode == keyCode)
 			return true;
 	}
 
 	return false;
 }
 
-bool InputManager::AdvancedEntry(std::string name, int num) {
+bool InputManager::AdvancedEntry(const std::string& name, const int& padNumber) {
 
 	if (keyList == nullptr || advancedEntry == nullptr)
 		return false;
 
 	for (auto k : (*keyList)[name]) {
-		for (const auto& itr : (*advancedEntry)[num]) {
-			if (itr.keyInfo.keyCode == k)
+		for (const auto& itr : (*advancedEntry)[padNumber]) {
+			if (itr.inputData.keyCode == k)
 				return true;
 		}
 	}
@@ -408,29 +463,31 @@ bool InputManager::AdvancedEntry(std::string name, int num) {
 	return false;
 }
 
-Vector3 InputManager::AnalogStick() {
+Vector3 InputManager::AnalogStick(int padNumber) {
 
 	Vector3 analog = Vector3(PadController::NormalizedLeftStick().x, 0.0f, PadController::NormalizedLeftStick().y);
 
-	if (Hold(KeyDefine::KeyCode::W))		analog.z = 1.0f;
-	if (Hold(KeyDefine::KeyCode::S))		analog.z = -1.0f;
-	if (Hold(KeyDefine::KeyCode::D))		analog.x = 1.0f;
-	if (Hold(KeyDefine::KeyCode::A))		analog.x = -1.0f;
+	if (Hold("MoveUp"))		analog.z = 1.0f;
+	if (Hold("MoveDown"))	analog.z = -1.0f;
+	if (Hold("MoveRight"))	analog.x = 1.0f;
+	if (Hold("MoveLeft"))	analog.x = -1.0f;
 
 	if (analog.Size() > 1.0f) analog = analog.Norm();	// 1を超えないようにリミッターをかける
 
 	return analog;
 }
 
+#ifdef _DEBUG
+
 #include "../Library/magic_enum.hpp"
 
-void InputManager::DrawTest(float x, float y) {
+void InputManager::DrawTest(const float& x, const float& y) {
 
 	std::list<InputData> inputData;
 
 	// 入力データを別のリストに取得
-	for (const auto& itr : *isInputs) {
-		if (itr.second.isPut) {
+	for (auto& itr : *isInputs) {
+		if (itr.second.isInput[DX_INPUT_PAD1][TouchPhase::Moved]) {
 			inputData.push_back(itr.second);
 		}
 	}
@@ -439,10 +496,12 @@ void InputManager::DrawTest(float x, float y) {
 
 	// 入力データを画面に表示
 	for (const auto& itr : inputData) {
-		std::string sKeyName = magic_enum::enum_name(itr.keyInfo.keyCode).data();
-		std::string sPutTime = Function::FormatToString("time %.2f", itr.putTime);
+		std::string sKeyName = magic_enum::enum_name(itr.keyCode).data();
+		std::string sPushTime = Function::FormatToString("time %.2f", itr.pushTime);
 
-		DrawFormatStringF(x, y + 25.0f * pushNum, GetColor(255, 255, 255), (sKeyName + ":" + sPutTime).c_str());
+		DrawFormatStringF(x, y + 25.0f * pushNum, GetColor(255, 255, 255), (sKeyName + ":" + sPushTime).c_str());
 		pushNum++;
 	}
 }
+
+#endif // _DEBUG

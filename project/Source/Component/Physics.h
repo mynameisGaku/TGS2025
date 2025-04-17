@@ -100,6 +100,16 @@ public:
 	/// </summary>
 	inline Vector3 const Friction() const { return friction; }
 
+	/// <summary>
+	/// …•½•ûŒü‚Ì‘¬“x‚ğæ“¾‚·‚é
+	/// </summary>
+	inline Vector3 const FlatVelocity() const { return Vector3(velocity.x, 0, velocity.z); }
+
+	/// <summary>
+	/// ‚’¼•ûŒü‚Ì‘¬“x‚ğæ“¾‚·‚é
+	/// </summary>
+	inline Vector3 const UpVelocity() const { return Vector3(0, velocity.y, 0); }
+
 private:
 	//==========================================================================================
 	// ¥ƒƒ“ƒo•Ï”

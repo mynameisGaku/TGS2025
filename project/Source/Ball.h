@@ -2,6 +2,7 @@
 #include "Object3D.h"
 
 class Physics;
+class ColliderSphere;
 
 /// <summary>
 /// キャラクターが投げるボール
@@ -24,8 +25,9 @@ public:
 	void Throw(const Vector3& velocity);
 private:
 	Physics* m_Physics;
+	ColliderSphere* m_Collider;
 	State m_State;
 
-	bool isHitFloor() const;
+	void collisionToGround();
 	void setVelocity(const Vector3& velocity);
 };

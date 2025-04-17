@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "cameraDefine.h"
+#include "TinyFSM.h"
 
 // ”Ä—p
 #include "../Library/time.h"

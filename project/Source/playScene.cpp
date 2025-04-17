@@ -9,6 +9,9 @@
 #include "BallManager.h"
 #include "Ball.h"
 
+// using
+using namespace KeyDefine;
+
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
 	CharaManager* charaM = Instantiate<CharaManager>();

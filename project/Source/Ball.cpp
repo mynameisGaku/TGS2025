@@ -2,11 +2,12 @@
 #include "Library/resourceLoader.h"
 #include "Component/Physics.h"
 #include "BallRef.h"
+#include "Component/ColliderSphere.h"
+#include "Stage.h"
 
 // ToDo:コリジョン
 namespace
 {
-	static const float FLOOR_Y = 0;
 	static const float BALL_RADIUS = 83.951f;
 }
 
@@ -16,6 +17,15 @@ Ball::Ball()
 
 	m_Physics = Object3D::AddComponent<Physics>();
 	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
+
+	m_Collider = Object3D::AddComponent<ColliderSphere>();
+
+	ColDefine::ColBaseParam param;
+	param.push = true;
+	param.trs.scale = V3::ONE * BALL_RADIUS;
+	// ToDo:tag付ける
+
+	m_Collider->BaseInit(param);
 
 	m_State = S_OWNED;
 }
@@ -28,12 +38,7 @@ void Ball::Update()
 {
 	Object3D::Update();
 
-	// 床で跳ね返る（仮）
-	if (isHitFloor())
-	{
-		transform->position.y = FLOOR_Y + BALL_RADIUS;
-		setVelocity(m_Physics->velocity * -BALL_REF.BouncinessDefault);
-	}
+	collisionToGround();
 }
 
 void Ball::Draw()
@@ -47,9 +52,24 @@ void Ball::Throw(const Vector3& velocity)
 	setVelocity(velocity);
 }
 
-bool Ball::isHitFloor() const
+void Ball::collisionToGround()
 {
-	return (Object3D::transform->position.y - BALL_RADIUS) < FLOOR_Y;
+	Vector3 hitPos;
+	bool hit = Stage::ColCheckGround(transform->position + V3::SetY(BALL_RADIUS), transform->position - V3::SetY(BALL_RADIUS), &hitPos);
+	if (hit)
+	{
+		// Y方向に跳ね返る
+		transform->position = hitPos + V3::SetY(BALL_RADIUS);
+		m_Physics->velocity.y *= -BALL_REF.BouncinessDefault;
+
+		// 転がっていく処理
+		float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
+		transform->rotation.y = forwardRad;
+
+		m_Physics->velocity.x *= 0.99f;
+		m_Physics->velocity.z *= 0.99f;
+		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().Size() * 0.01f;
+	}
 }
 
 void Ball::setVelocity(const Vector3& velocity)

@@ -4,7 +4,7 @@
 
 BallManager::BallManager()
 {
-	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/lizard.mv1");
+	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
 }
 
 BallManager::~BallManager()

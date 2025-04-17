@@ -23,7 +23,7 @@ void LightManager::Init() {
 	ImGuiRoot* LightTree = ImGuiManager::AddRoot(new ImGuiRoot("Light"));
 #endif // IMGUI
 
-	SetLightEnable(false);
+	SetLightEnable(true);
 
 	CreateLightDir();
 	//CreateLightPoint();

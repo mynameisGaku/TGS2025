@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "CharaManager.h"
 #include "BallManager.h"
+#include "CrystalFragmentManager.h"
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
@@ -17,6 +18,12 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	BallManager* ballM = Instantiate<BallManager>();
 	ballM->CreateBall(Vector3(0.0f, 0.0f, -50.0f));
+
+    CrystalFragmentManager* crystalM = Instantiate<CrystalFragmentManager>();
+    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
+    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
+    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
+    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
 }
 
 PlayScene::~PlayScene()

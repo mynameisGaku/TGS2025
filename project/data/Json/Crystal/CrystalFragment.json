@@ -1,0 +1,8 @@
+{
+  "Param": {
+    "RotSpeed": 1.0,
+    "ElementPoint": 10.0,
+    "Size": 50.0,
+    "LifeTime": 30.0
+  }
+}

@@ -322,6 +322,15 @@
     <ClCompile Include="Source\CamState_Debug.cpp">
       <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CrystalFragment.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CrystalFragmentRef.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CrystalFragmentManager.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -714,6 +723,15 @@
     <ClInclude Include="Source\Pool.h">
       <Filter>Framework\02_Common\System\Pool</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CrystalFragment.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentRef.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentManager.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1054,6 +1072,9 @@
     </Filter>
     <Filter Include="Framework\02_Common\System\Pool">
       <UniqueIdentifier>{c45966fb-c2fc-423f-813a-8465f3229d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Crystal">
+      <UniqueIdentifier>{0b1c1c5c-764a-4c3f-904f-f87bf90bf01d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

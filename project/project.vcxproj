@@ -182,6 +182,9 @@
     <ClInclude Include="Source\Component\ShadowCircle.h" />
     <ClInclude Include="Source\Component\Shake.h" />
     <ClInclude Include="Source\config.h" />
+    <ClInclude Include="Source\CrystalFragment.h" />
+    <ClInclude Include="Source\CrystalFragmentManager.h" />
+    <ClInclude Include="Source\CrystalFragmentRef.h" />
     <ClInclude Include="Source\debugScreen.h" />
     <ClInclude Include="Source\easing.h" />
     <ClInclude Include="Source\EasingUtils.h" />
@@ -307,6 +310,9 @@
     <ClCompile Include="Source\Component\Physics.cpp" />
     <ClCompile Include="Source\Component\ShadowCircle.cpp" />
     <ClCompile Include="Source\Component\Shake.cpp" />
+    <ClCompile Include="Source\CrystalFragment.cpp" />
+    <ClCompile Include="Source\CrystalFragmentManager.cpp" />
+    <ClCompile Include="Source\CrystalFragmentRef.cpp" />
     <ClCompile Include="Source\debugScreen.cpp" />
     <ClCompile Include="Source\EffectBase.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />

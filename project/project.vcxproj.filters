@@ -331,6 +331,21 @@
     <ClCompile Include="Source\Component\PlayerController.cpp">
       <Filter>Framework\04_Component\PlayerController</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CrystalFragment.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CrystalFragmentManager.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CrystalFragmentRef.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CrystalFragmentSpawner.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CrystalFragmentSpawnerRef.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -732,6 +747,21 @@
     <ClInclude Include="Source\Component\PlayerController.h">
       <Filter>Framework\04_Component\PlayerController</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CrystalFragment.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentManager.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentRef.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentSpawner.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentSpawnerRef.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1075,6 +1105,9 @@
     </Filter>
     <Filter Include="Framework\04_Component\PlayerController">
       <UniqueIdentifier>{b20eb0a5-bc2a-4ae9-be4d-f5c47f71d029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Crystal">
+      <UniqueIdentifier>{1a34abd5-72cd-44b7-9da8-d4df3fde1fa8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

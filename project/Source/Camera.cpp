@@ -31,6 +31,7 @@ Camera::Camera() {
 	// fsmの初期化
 	fsm = new TinyFSM<Camera>(this);
     fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+    fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	fsm->ChangeState(&Camera::DebugState); // ステートを変更
 	
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
@@ -135,6 +136,36 @@ void Camera::MoveProcess()
 		velocity.y -= SHIFT_SPEED;
 
 	transform->position += velocity;
+}
+
+void Camera::OperationByMouse() {
+
+	Vector2 addRot = V2::ZERO;	// 加算する回転量
+
+	MouseInfo mouse = MouseController::Info();	// マウスの情報
+
+	addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);
+	addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);
+
+	// 勢いがつき過ぎない様に、制限をかける
+	transform->rotation.x += min(max(addRot.x, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
+	transform->rotation.y += min(max(addRot.y, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
+}
+
+void Camera::OperationByStick() {
+
+	Vector2 addRot = V2::ZERO;	// 加算する回転量
+	Vector2 rightStick = PadController::NormalizedRightStick();
+
+	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);
+	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);
+
+	// 勢いがつき過ぎない様に、制限をかける
+	addRot.x = min(max(addRot.x, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
+	addRot.y = min(max(addRot.y, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
+
+	transform->rotation.x += addRot.x;
+	transform->rotation.y += addRot.y;
 }
 
 void Camera::SetPerformance(const std::string& perfType) {

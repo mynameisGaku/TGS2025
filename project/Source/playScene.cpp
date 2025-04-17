@@ -2,6 +2,8 @@
 #include "../Library/sceneManager.h"
 #include "DebugScreen.h"
 
+#include "CameraManager.h"
+
 #include "InputManager.h"
 #include "CharaManager.h"
 #include "BallManager.h"
@@ -17,6 +19,11 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	BallManager* ballM = Instantiate<BallManager>();
 	ballM->CreateBall(Vector3(0.0f, 0.0f, -50.0f));
+
+	Camera* mainCamera = CameraManager::MainCamera();
+
+	mainCamera->SetHolderCharaIndex(0);
+	mainCamera->ChangeState(&Camera::ChaseState);
 }
 
 PlayScene::~PlayScene()

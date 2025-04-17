@@ -11,6 +11,8 @@ public:
 	CharaBase();
 	virtual ~CharaBase();
 
+	virtual void Update() override;
+
 private:
 
 };

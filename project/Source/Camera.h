@@ -64,6 +64,16 @@ public:
 	/// </summary>
 	void MoveProcess();
 
+	/// <summary>
+	/// マウスによるカメラ操作
+	/// </summary>
+	void OperationByMouse();
+
+	/// <summary>
+	/// スティックによるカメラ操作
+	/// </summary>
+	void OperationByStick();
+
 	//================================================================================
 	// ▼セッター
 
@@ -105,6 +115,12 @@ public:
 
 		SetHolderTrs(obj->transform);
 	}
+
+	/// <summary>
+	/// 追従するキャラクターの番号を設定する
+	/// </summary>
+	/// <param name="index">キャラクターの番号</param>
+	inline void SetHolderCharaIndex(int index) { m_CharaIndex = index; }
 
 	/// <summary>
 	/// 演出を設定する
@@ -175,6 +191,10 @@ public:
 	/// </summary>
 	void DebugState(FSMSignal sig);
 
+	/// <summary>
+	/// 追従ステート
+	/// </summary>
+	void ChaseState(FSMSignal sig);
 
 private:
 	//================================================================================
@@ -187,5 +207,6 @@ private:
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報
+	int m_CharaIndex;			// キャラクターの番号
 
 };

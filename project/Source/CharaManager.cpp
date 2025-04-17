@@ -11,7 +11,7 @@ CharaManager::CharaManager()
 
 CharaManager::~CharaManager()
 {
-	Function::DeletePointerList(m_Charas);
+	Function::DeletePointerVector(m_Charas);
 }
 
 void CharaManager::Update()
@@ -57,8 +57,20 @@ void CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs) {
 		break;
 	}
 
+	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ğ180“x‰ñ“]‚³‚¹‚Ä’¼‚·
+	int origin = MV1SearchFrame(hModel, "Armature");
+	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(Math::PI));
+
 	newChara->SetModel(hModel);
 	newChara->SetTransform(trs);
 
 	m_Charas.push_back(newChara);
+}
+
+const CharaBase* CharaManager::CharaInst(int index) {
+
+	if (index < 0 || index > m_Charas.size())
+		return nullptr;
+
+	return m_Charas[index];
 }

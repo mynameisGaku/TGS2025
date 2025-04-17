@@ -1,6 +1,7 @@
 #pragma once
 #include "Library/gameObject.h"
 #include "Util/Transform.h"
+#include <vector>
 
 #include "CharaDefine.h"
 #include "CharaBase.h"
@@ -15,8 +16,9 @@ public:
 	void Draw() override;
 
 	void Create(CharaDefine::CharaTag tag, const Transform& trs);
+	const CharaBase* CharaInst(int index);
 
 private:
 	//Pool<CharaBase*> m_CharaPool;
-	std::list<CharaBase*> m_Charas;
+	std::vector<CharaBase*> m_Charas;
 };

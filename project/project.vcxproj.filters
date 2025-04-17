@@ -322,6 +322,9 @@
     <ClCompile Include="Source\CamState_Debug.cpp">
       <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CamState_Chase.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">

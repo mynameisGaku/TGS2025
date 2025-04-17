@@ -1,7 +1,6 @@
 #pragma once
 #include "Library/gameObject.h"
 #include "Util/Transform.h"
-#include "Pool.h"
 
 #include "CharaDefine.h"
 #include "CharaBase.h"

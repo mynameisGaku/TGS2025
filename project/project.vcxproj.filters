@@ -687,9 +687,6 @@
     <ClInclude Include="Source\TinyFSM.h">
       <Filter>Framework\02_Common\DesignPattern\TinyFSM</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Pool.h">
-      <Filter>Framework\02_Common\System\Pool</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CharaBase.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
@@ -853,9 +850,6 @@
     </Filter>
     <Filter Include="Framework\02_Common\System\Ini">
       <UniqueIdentifier>{fba1957b-1467-4d28-9dfe-f47de500b818}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Pool">
-      <UniqueIdentifier>{68d566b5-be52-4a7a-beee-fcfc0dc9b64d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Framework\02_Common\Debug">
       <UniqueIdentifier>{089131b8-7f82-4af5-acd8-cd774b8bc764}</UniqueIdentifier>

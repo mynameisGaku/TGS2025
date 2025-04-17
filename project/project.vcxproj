@@ -213,7 +213,6 @@
     <ClInclude Include="Source\LightManager.h" />
     <ClInclude Include="Source\LoadScreen.h" />
     <ClInclude Include="Source\Locus.h" />
-    <ClInclude Include="Source\Pool.h" />
     <ClInclude Include="Source\SettingBase.h" />
     <ClInclude Include="Source\SettingManager.h" />
     <ClInclude Include="Source\MouseController.h" />

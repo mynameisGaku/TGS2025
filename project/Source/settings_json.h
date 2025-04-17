@@ -20,6 +20,9 @@
 #include <commdlg.h>
 #endif
 
+//=== 追加のJson変換 ===
+#include "VectorJson.h"
+
 /// <summary>
 /// JSON設定ファイルの読み込み、保存、取得、監視、及びインゲームでのImGuiによるリアルタイム変更を行うクラス。
 /// CSVReaderと相性悪い

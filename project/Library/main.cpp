@@ -26,6 +26,7 @@
 #include "../vendor/ImGui/imgui.h"
 #include "../vendor/ImGui/imgui_impl_dx11.h"
 #include "../vendor/ImGui/imgui_impl_win32.h"
+#include "../vendor/ImGui/imgui_ja_gryph_ranges.cpp"
 
 extern IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -49,6 +50,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetWindowSizeExtendRate(wSetting.extend);
 	ChangeWindowMode(wSetting.isFull); // Windowモードの場合
 
+	SetHookWinProc(WndProc);	//プロシージャの設定
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 	SetZBufferBitDepth(32);
 
@@ -65,16 +67,26 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 #ifdef IMGUI
 
-	SetHookWinProc(WndProc);	//プロシージャの設定
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;       // Enable Gamepad Controls
-	ImGuiStyle& style = ImGui::GetStyle();
-	ImGui_ImplWin32_Init(DxLib::GetMainWindowHandle());
-	ImGui_ImplDX11_Init((ID3D11Device*)DxLib::GetUseDirect3D11Device(), (ID3D11DeviceContext*)DxLib::GetUseDirect3D11DeviceContext());
-	
+	// ImGui
+	{
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		//ImFont* font = io.Fonts->AddFontFromFileTTF("data/font/DotGothic16-Regular.ttf", 18.0f, NULL, glyphRangesJapanese);
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
+
+		ImGui_ImplWin32_Init(DxLib::GetMainWindowHandle());
+		ImGui_ImplDX11_Init((ID3D11Device*)DxLib::GetUseDirect3D11Device(), (ID3D11DeviceContext*)DxLib::GetUseDirect3D11DeviceContext());
+	}
 #endif // IMGUI
 
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
@@ -120,6 +132,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		
 		//※アップデートの最後に呼ぶ
 		ImGui::EndFrame();
+		ImGui::UpdatePlatformWindows();
 
 #endif // IMGUI
 

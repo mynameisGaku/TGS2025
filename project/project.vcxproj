@@ -151,6 +151,7 @@
     <ClInclude Include="Source\Ball.h" />
     <ClInclude Include="Source\BallAttribute.h" />
     <ClInclude Include="Source\BallManager.h" />
+    <ClInclude Include="Source\BallRef.h" />
     <ClInclude Include="Source\Behavior\BehaviorData.h" />
     <ClInclude Include="Source\Behavior\BehaviorDecorator.h" />
     <ClInclude Include="Source\Behavior\BehaviorNode.h" />
@@ -179,7 +180,6 @@
     <ClInclude Include="Source\Component\MaterialRenderer.h" />
     <ClInclude Include="Source\Component\MotionBlur.h" />
     <ClInclude Include="Source\Component\Physics.h" />
-    <ClInclude Include="Source\Component\PlayerController.h" />
     <ClInclude Include="Source\Component\ShadowCircle.h" />
     <ClInclude Include="Source\Component\Shake.h" />
     <ClInclude Include="Source\config.h" />
@@ -214,7 +214,7 @@
     <ClInclude Include="Source\LightManager.h" />
     <ClInclude Include="Source\LoadScreen.h" />
     <ClInclude Include="Source\Locus.h" />
-    <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Pool.h" />
     <ClInclude Include="Source\SettingBase.h" />
     <ClInclude Include="Source\SettingManager.h" />
     <ClInclude Include="Source\MouseController.h" />
@@ -259,6 +259,7 @@
     <ClInclude Include="Source\Util\Utils.h" />
     <ClInclude Include="Source\Util\Vector2.h" />
     <ClInclude Include="Source\Util\Vector3.h" />
+    <ClInclude Include="Source\VectorJson.h" />
     <ClInclude Include="Source\VolumeSetting.h" />
     <ClInclude Include="Source\WindowSetting.h" />
     <ClInclude Include="vendor\ImGui\imconfig.h" />
@@ -282,6 +283,7 @@
     <ClCompile Include="Source\Ball.cpp" />
     <ClCompile Include="Source\BallAttribute.cpp" />
     <ClCompile Include="Source\BallManager.cpp" />
+    <ClCompile Include="Source\BallRef.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorData.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorDecorator.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorNode.cpp" />
@@ -291,7 +293,6 @@
     <ClCompile Include="Source\bootScene.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
-    <ClCompile Include="Source\CamState_Chase.cpp" />
     <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
@@ -307,7 +308,6 @@
     <ClCompile Include="Source\Component\MaterialRenderer.cpp" />
     <ClCompile Include="Source\Component\MotionBlur.cpp" />
     <ClCompile Include="Source\Component\Physics.cpp" />
-    <ClCompile Include="Source\Component\PlayerController.cpp" />
     <ClCompile Include="Source\Component\ShadowCircle.cpp" />
     <ClCompile Include="Source\Component\Shake.cpp" />
     <ClCompile Include="Source\debugScreen.cpp" />
@@ -334,7 +334,6 @@
     <ClCompile Include="Source\LightManager.cpp" />
     <ClCompile Include="Source\LoadScreen.cpp" />
     <ClCompile Include="Source\Locus.cpp" />
-    <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\SettingBase.cpp" />
     <ClCompile Include="Source\SettingManager.cpp" />
     <ClCompile Include="Source\MouseController.cpp" />
@@ -372,6 +371,7 @@
     <ClCompile Include="Source\Util\Vector2.cpp" />
     <ClCompile Include="Source\Util\Vector3.cpp" />
     <ClCompile Include="Source\CharaManager.cpp" />
+    <ClCompile Include="Source\VectorJson.cpp" />
     <ClCompile Include="Source\VolumeSetting.cpp" />
     <ClCompile Include="Source\WindowSetting.cpp" />
     <ClCompile Include="vendor\ImGui\imgui.cpp" />
@@ -381,6 +381,9 @@
     <ClCompile Include="vendor\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_tables.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\Json\Ball.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

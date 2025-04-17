@@ -1,10 +1,14 @@
 #include "BallManager.h"
 #include "Library/resourceLoader.h"
 #include "Ball.h"
+#include "BallManager.h"
+#include "BallRef.h"
 
 BallManager::BallManager()
 {
-	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/lizard.mv1");
+	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
+
+	BallRef::Inst().Load();
 }
 
 BallManager::~BallManager()

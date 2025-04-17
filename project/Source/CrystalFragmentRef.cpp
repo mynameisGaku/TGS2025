@@ -19,4 +19,6 @@ void CrystalFragmentRef::Load(bool _ForceLoad)
     m_ElementPoint    = jsonLoader->GetOrDefault<float>("Param.ElementPoint", 0.0f, FILEKEY);
     m_Size            = jsonLoader->GetOrDefault<float>("Param.Size",         0.0f, FILEKEY);
     m_LifeTime        = jsonLoader->GetOrDefault<float>("Param.LifeTime",     0.0f, FILEKEY);
+
+    m_WasLoad = true;
 }

@@ -191,11 +191,6 @@ public:
 	/// </summary>
 	void DebugState(FSMSignal sig);
 
-	/// <summary>
-	/// 追従ステート
-	/// </summary>
-	void ChaseState(FSMSignal sig);
-
 private:
 	//================================================================================
 	// ▼メンバ変数

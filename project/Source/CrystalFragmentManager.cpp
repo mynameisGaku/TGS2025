@@ -18,7 +18,7 @@ void CrystalFragmentManager::Update()
         auto fragment = (*it);
         if (fragment->m_Lifetime <= 0.0f)
         {
-            delete fragment;
+            fragment->DestroyMe();
             fragment = nullptr;
             it = m_CrystalFragments.erase(it);
         }

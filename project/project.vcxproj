@@ -186,6 +186,8 @@
     <ClInclude Include="Source\CrystalFragment.h" />
     <ClInclude Include="Source\CrystalFragmentManager.h" />
     <ClInclude Include="Source\CrystalFragmentRef.h" />
+    <ClInclude Include="Source\CrystalFragmentSpawner.h" />
+    <ClInclude Include="Source\CrystalFragmentSpawnerRef.h" />
     <ClInclude Include="Source\debugScreen.h" />
     <ClInclude Include="Source\easing.h" />
     <ClInclude Include="Source\EasingUtils.h" />
@@ -316,6 +318,8 @@
     <ClCompile Include="Source\CrystalFragment.cpp" />
     <ClCompile Include="Source\CrystalFragmentManager.cpp" />
     <ClCompile Include="Source\CrystalFragmentRef.cpp" />
+    <ClCompile Include="Source\CrystalFragmentSpawner.cpp" />
+    <ClCompile Include="Source\CrystalFragmentSpawnerRef.cpp" />
     <ClCompile Include="Source\debugScreen.cpp" />
     <ClCompile Include="Source\EffectBase.cpp" />
     <ClCompile Include="Source\EffectManager.cpp" />

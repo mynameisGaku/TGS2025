@@ -13,7 +13,7 @@ CrystalFragment::CrystalFragment() :
     m_Size(0.0f)
 {
     m_pPhysics = AddComponent<Physics>();
-    m_pPhysics->Init(GRAVITY, FRICTION);
+    m_pPhysics->Init(V3::ZERO, FRICTION);
 
     // リファレンスを元に初期化
     auto& ref = CRYSTALFRAGMENT_REF;
@@ -23,13 +23,16 @@ CrystalFragment::CrystalFragment() :
     m_RotSpeed          = ref.m_RotSpeed;
 
     // 初速をランダムで設定
-    float x = static_cast<float>(GetRand(INT_MAX)) / static_cast<float>(INT_MAX);
-    float y = fabsf(static_cast<float>(GetRand(INT_MAX)) / static_cast<float>(INT_MAX));
-    float z = static_cast<float>(GetRand(INT_MAX)) / static_cast<float>(INT_MAX);
+    float rand_ = GetRand(INT_MAX) / (float)INT_MAX - 0.5f;
+    float x = rand_;
+    rand_ = GetRand(INT_MAX) / (float)INT_MAX;
+    float y = rand_;
+    rand_ = GetRand(INT_MAX) / (float)INT_MAX - 0.5f;
+    float z = rand_;
 
-    x *= 50.0f;
-    y *= 50.0f;
-    z *= 50.0f;
+    x *= 150.0f;
+    y *= 80.0f;
+    z *= 150.0f;
 
     m_FirstVelocity = Vector3(x, y, z);
     m_pPhysics->velocity += m_FirstVelocity;
@@ -51,6 +54,9 @@ void CrystalFragment::Update()
 
     // 位置更新
     m_pPhysics->Update();
+    m_pPhysics->velocity.x *= 0.8f; // 摩擦
+    m_pPhysics->velocity.y *= 0.8f; // 摩擦
+    m_pPhysics->velocity.z *= 0.8f; // 摩擦
 
     if (transform->position.y <= 0.0f)
     {

@@ -33,7 +33,7 @@ Camera::Camera() {
 	// fsmの初期化
 	fsm = new TinyFSM<Camera>(this);
     fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-    fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+    //fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	fsm->ChangeState(&Camera::DebugState); // ステートを変更
 	
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");

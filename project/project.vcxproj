@@ -161,7 +161,6 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CameraDefine.h" />
     <ClInclude Include="Source\CameraManager.h" />
-    <ClInclude Include="Source\CameraState_Debug.h" />
     <ClInclude Include="Source\CharaBase.h" />
     <ClInclude Include="Source\CharaDefine.h" />
     <ClInclude Include="Source\CharaManager.h" />
@@ -291,7 +290,7 @@
     <ClCompile Include="Source\bootScene.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
-    <ClCompile Include="Source\CameraState_Debug.cpp" />
+    <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
     <ClCompile Include="Source\Component\Animator.cpp" />

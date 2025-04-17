@@ -4,11 +4,19 @@
 
 // ◇汎用
 #include "../Library/csvReader.h"
+#include "Source/TinyFSM.h"
 
 // ◇個別で必要な物
 #include "cameraDefine.h"
 
 class StateManager;
+
+namespace
+{
+	static const float MOVE_SPEED = 12.0f;	// 横移動速度
+	static const float SHIFT_SPEED = 6.0f;	// 縦移動速度
+	static const float ROT_SPEED = Math::DegToRad(3.0f);	// 回転速度
+}
 
 /// <summary>
 /// カメラのクラス
@@ -40,15 +48,21 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// ステートを変更する処理
+	/// <para>ステートを変更する処理</para>
+	/// <para>引数の先頭に"＆"をつけるのを忘れないでください。</para>
 	/// </summary>
-	/// <param name="id">ステートの番号</param>
-	void ChangeState(const CameraDefine::State& id);
+	/// <param name="state">ステートの関数ポインタ</param>
+	void ChangeState(void(Camera::*state)(FSMSignal));
 
 	/// <summary>
 	/// 地形とめり込まない様にする処理 
 	/// </summary>
 	void ColCheckToTerrain();
+
+	/// <summary>
+	/// 移動処理
+	/// </summary>
+	void MoveProcess();
 
 	//================================================================================
 	// ▼セッター
@@ -104,7 +118,7 @@ public:
 	/// <summary>
 	/// ステートパターンの情報を取得する
 	/// </summary>
-	inline StateManager* State() const { return stateManager; }
+	inline TinyFSM<Camera>* State() const { return fsm; }
 
 	/// <summary>
 	/// 相対座標を取得する
@@ -153,15 +167,25 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
+	//================================================================================
+	// ▼ステート
+
+	/// <summary>
+	/// デバッグステート
+	/// </summary>
+	void DebugState(FSMSignal sig);
+
+
 private:
 	//================================================================================
 	// ▼メンバ変数
 
-	StateManager* stateManager;	// ステートを管理する
+	TinyFSM<Camera>* fsm;
 
 	Vector3 offset;	// カメラの相対座標
 	Vector3 target;	// カメラの注視点
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報
+
 };

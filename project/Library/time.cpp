@@ -1,6 +1,8 @@
 #include "time.h"
 #include <Windows.h>
 
+#include "Source/ImGuiTree/imGuiManager.h"
+
 namespace {
 
 	LARGE_INTEGER freq;
@@ -17,6 +19,10 @@ void Time::Init() {
 	Refresh();
 	lapseRate = 1.0f;
 	hitStop = 0;
+
+#ifdef IMGUI
+	ImGuiManager::AddNode(new ImGuiNode_SliderFloat("Time", &lapseRate, 0.0f, 2.0f, "%.2f"));
+#endif // IMGUI
 }
 
 void Time::Refresh() {

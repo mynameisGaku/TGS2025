@@ -100,7 +100,7 @@ void CameraManager::ChangeStateCamera(const int& number, const State& state) {
 	if (CheckNumber(number) == false)
 		return;
 	
-	(*cameras)[number]->ChangeState(state);
+	//(*cameras)[number]->ChangeState(state);
 }
 
 void CameraManager::SetCameraWork(const int& number, const std::string& type) {
@@ -117,7 +117,7 @@ void CameraManager::CameraChangeStateTheString(const std::string& state) {
 		State stateValue = static_cast<State>(i);
 		std::string stateName = magic_enum::enum_name(stateValue).data();
 		if (state == stateName) {
-			MainCamera()->ChangeState(stateValue);
+			//MainCamera()->ChangeState(stateValue);
 			break;
 		}
 	}

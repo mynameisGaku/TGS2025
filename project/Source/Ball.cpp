@@ -1,12 +1,11 @@
 #include "Ball.h"
 #include "Library/resourceLoader.h"
 #include "Component/Physics.h"
+#include "BallRef.h"
 
-// ToDo:ŠO•”‰»
+// ToDo:ƒRƒŠƒWƒ‡ƒ“
 namespace
 {
-	static const Vector3 GRAVITY_DEFAULT = Vector3(0, -9.8f, 0);
-	static const Vector3 FRICTION_DEFAULT = Vector3(0, 0, 0);
 	static const float FLOOR_Y = 0;
 	static const float BALL_RADIUS = 83.951f;
 }
@@ -16,7 +15,7 @@ Ball::Ball()
 	Object3D::SetModel(ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1"));
 
 	m_Physics = Object3D::AddComponent<Physics>();
-	m_Physics->Init(GRAVITY_DEFAULT, FRICTION_DEFAULT);
+	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
 
 	m_State = S_OWNED;
 }
@@ -33,7 +32,7 @@ void Ball::Update()
 	if (isHitFloor())
 	{
 		transform->position.y = FLOOR_Y + BALL_RADIUS;
-		setVelocity(m_Physics->velocity * -0.5f);
+		setVelocity(m_Physics->velocity * -BALL_REF.BouncinessDefault);
 	}
 }
 

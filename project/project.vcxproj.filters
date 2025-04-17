@@ -711,6 +711,9 @@
     <ClInclude Include="Library\FileUtil.h">
       <Filter>Framework\02_Common\System</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Pool.h">
+      <Filter>Framework\02_Common\System\Pool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1048,6 +1051,9 @@
     </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\Camera">
       <UniqueIdentifier>{12109613-0ff0-4cee-b155-58fa4edfd390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\02_Common\System\Pool">
+      <UniqueIdentifier>{c45966fb-c2fc-423f-813a-8465f3229d87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

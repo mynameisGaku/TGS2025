@@ -30,7 +30,7 @@ void TitleScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push(KeyCode::P)) {
+	if (InputManager::Push(KeyDefine::KeyCode::P)) {
 		SceneManager::ChangeScene("PlayScene");
 	}
 

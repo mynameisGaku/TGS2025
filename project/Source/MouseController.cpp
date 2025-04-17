@@ -6,7 +6,7 @@ using namespace KeyDefine;
 
 namespace {
 
-	MouseInfo mouse;	// マウスの情報
+	MouseController::MouseInfo mouse;	// マウスの情報
 	std::unordered_map<KeyCode, bool>* mouseInputs;			// マウスの入力情報
 	std::unordered_map<KeyCode, bool>* mouseInputsBefore;	// 1フレーム前のマウスの入力情報
 }
@@ -16,7 +16,7 @@ void MouseController::Init() {
 	if (mouseInputs == nullptr) {
 		mouseInputs = new std::unordered_map<KeyCode, bool>();
 
-		auto mouseKeyCodes = DeviceTypeToKeyInfo(DeviceType::Mouse);
+		auto mouseKeyCodes = DeviceTypeToInputData(DeviceType::Mouse);
 
 		for (const auto& itr : mouseKeyCodes)
 			(*mouseInputs)[itr.keyCode] = false;
@@ -95,7 +95,7 @@ void MouseController::PushStatusUpdate() {
 
 	*mouseInputsBefore = *mouseInputs;
 
-	auto mouseKeyCodes = DeviceTypeToKeyInfo(DeviceType::Mouse);
+	auto mouseKeyCodes = DeviceTypeToInputData(DeviceType::Mouse);
 
 	for (const auto& itr : mouseKeyCodes) {
 		(*mouseInputs)[itr.keyCode] = ((GetMouseInput() & (*itr.value)) != 0);
@@ -150,7 +150,7 @@ void MouseController::SetMouseSensitivity(Vector2 value) {
 	mouse.sensitivity = value;
 }
 
-const MouseInfo MouseController::Info() {
+const MouseController::MouseInfo MouseController::Info() {
 
 	return mouse;
 }

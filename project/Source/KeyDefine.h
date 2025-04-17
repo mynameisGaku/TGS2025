@@ -4,7 +4,20 @@
 #include <Dxlib.h>
 #include <unordered_map>
 
+#include "Util/Vector2.h"
+
 namespace KeyDefine {
+
+	static constexpr int KEY_BUFFER = 256;					// キーボードのバッファ
+	static constexpr float HOLD_TIME = 0.25f;				// ボタンの長押しを判定する時間
+	static constexpr float ADVANCED_ENTRY_TIME = 0.2f;		// 先行入力の保持時間
+
+	static constexpr int PAD_NUMBER_MAX = 2;				// パッドの最大接続数
+	static constexpr float STICK_DEADZONE = 0.2f;			// スティックのデッドゾーン定義
+	static constexpr float TRIGGER_DEADZONE = 0.2f;			// トリガーのデッドゾーン定義
+
+	static const Vector2 STICK_SENSI_MAX = Vector2(10.0f);	// 最大スティック感度
+	static const Vector2 MOUSE_SENSI_MAX = Vector2(10.0f);	// 最大マウス感度
 
 	/// <summary>
 	/// 入力の種類 
@@ -112,8 +125,7 @@ namespace KeyDefine {
 	/// <summary>
 	/// 入力状況
 	/// </summary>
-	enum class TouchPhase {
-		None = -1,
+	enum TouchPhase {
 		Begin,		// 押した瞬間
 		Moved,		// 移動中
 		Stationary,	// 押しているが移動していない
@@ -132,12 +144,107 @@ namespace KeyDefine {
 	};
 
 	/// <summary>
+	/// マウスの移動方法
+	/// </summary>
+	enum class MouseMovement {
+		Free = 0,	// 自由に操作可能
+		Fixed,		// 画面中央で固定
+		OnScreen,	// 画面内に留める
+	};
+
+	/// <summary>
 	/// 入力情報
 	/// </summary>
-	struct KeyInfo {
-		int* value;				// 入力の値
+	class InputData {
+	public:
+		int* value;				// 入力値
+		float pushTime;			// 押されている秒数
 		KeyCode keyCode;		// 入力の種類
 		DeviceType deviceType;	// 入力するデバイスの種類
+		std::unordered_map<TouchPhase, bool> isInput[PAD_NUMBER_MAX + 1];		// 押されているか(入力状態、押下の有無)
+		std::unordered_map<TouchPhase, bool> isAccepted[PAD_NUMBER_MAX + 1];	// 既に入力を受け付けたか(入力状態、押下の有無)
+
+		InputData() :
+			value(nullptr),
+			pushTime(0.0f),
+			keyCode(KeyCode::None),
+			deviceType(DeviceType::None)
+		{
+		};
+
+		/// <summary>
+		/// 入力情報の初期化
+		/// </summary>
+		/// <param name="_value">入力値</param>
+		/// <param name="_keyCode">入力の種類</param>
+		/// <param name="_deviceType">入力するデバイスの種類</param>
+		InputData(int* _value, KeyCode _keyCode, DeviceType _deviceType) :
+			value(_value),
+			pushTime(0.0f),
+			keyCode(_keyCode),
+			deviceType(_deviceType)
+		{
+		};
+
+		/// <summary>
+		/// 入力情報の初期化
+		/// </summary>
+		/// <param name="_value">入力値</param>
+		/// <param name="_pushTime">押されている秒数</param>
+		/// <param name="_isPush">押されているか</param>
+		/// <param name="_keyCode">入力の種類</param>
+		/// <param name="_deviceType">入力するデバイスの種類</param>
+		InputData(int* _value, float _pushTime, KeyCode _keyCode, DeviceType _deviceType) :
+			value(_value),
+			pushTime(_pushTime),
+			keyCode(_keyCode),
+			deviceType(_deviceType)
+		{
+		};
+
+		~InputData() {};
+
+		inline void Update() {
+
+			const int maxTouchPhase = TouchPhase::Canceled;
+
+			for (int i = DX_INPUT_PAD1; i <= PAD_NUMBER_MAX; i++) {
+				for (int j = 0; j < maxTouchPhase; j++) {
+					const int padNumber = i;
+					const TouchPhase touchPhase = static_cast<TouchPhase>(j);
+					isInput[padNumber][touchPhase] = false;
+					isAccepted[padNumber][touchPhase] = false;
+				}
+			}
+		}
+	};
+
+	/// <summary>
+	/// 先行入力情報
+	/// </summary>
+	class AdvancedEntryInfo {
+	public:
+		InputData inputData;// 入力情報
+		float saveTime;		// 保持する秒数
+
+		AdvancedEntryInfo() :
+			inputData(InputData()),
+			saveTime(0.0f)
+		{
+		};
+
+		/// <summary>
+		/// 先行入力情報の初期化
+		/// </summary>
+		/// <param name="data">入力情報</param>
+		/// <param name="time">保持する秒数</param>
+		AdvancedEntryInfo(const InputData& data, float time) :
+			inputData(data),
+			saveTime(time)
+		{
+		};
+
+		~AdvancedEntryInfo() {};
 	};
 
 	//============================================================
@@ -168,10 +275,15 @@ namespace KeyDefine {
 	/// </summary>
 	/// <param name="type">入力デバイス</param>
 	/// <returns>入力種類</returns>
-	std::list<KeyInfo> DeviceTypeToKeyInfo(DeviceType type);
+	const std::list<InputData> DeviceTypeToInputData(DeviceType type);
 
 	/// <summary>
 	/// 全ての入力情報を取得する
 	/// </summary>
-	std::unordered_map<KeyCode, KeyInfo> GetKeyAll();
+	const std::unordered_map<KeyCode, InputData> GetKeyAll();
+
+	/// <summary>
+	/// 種類ごとの入力情報を取得する
+	/// </summary>
+	const InputData GetInputData(KeyCode key);
 };

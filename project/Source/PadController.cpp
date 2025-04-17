@@ -6,7 +6,7 @@ namespace {
 
 	std::vector<XINPUT_STATE>* inputs;			// パッドの入力情報
 	std::vector<XINPUT_STATE>* inputsBefore;	// 1フレーム前のパッドの入力情報
-	Vector2 stickSensitivity;	// スティック感度
+	Vector2 stickSensitivity;					// スティック感度
 }
 
 void PadController::Init() {
@@ -54,8 +54,10 @@ void PadController::Update() {
 	// 更新前にinputsBeforeにパッドの入力状態を保存
 	*inputsBefore = *inputs;
 
+	const int inputPadNum = min(max(GetJoypadNum(), 0), PAD_NUMBER_MAX);
+
 	// パッドの情報を更新
-	for (int i = 0; i < GetJoypadNum(); i++) {
+	for (int i = 0; i < inputPadNum; i++) {
 		if (CheckPadNumber(i + 1))
 			GetJoypadXInputState(i + 1, &(*inputs)[i]);
 		else
@@ -71,7 +73,7 @@ bool PadController::CheckPushStatusCurrent(KeyDefine::KeyCode keyCode, int padNu
 	if (KeyCodeToDeviceType(keyCode) != DeviceType::Pad)
 		return false;
 
-	int* value = KeyDefine::GetKeyAll()[keyCode].value;
+	int* value = KeyDefine::GetInputData(keyCode).value;
 
 	return ((*inputs)[padNumber - 1].Buttons[*value] != 0);
 }
@@ -84,7 +86,7 @@ bool PadController::CheckPushStatusBefore(KeyDefine::KeyCode keyCode, int padNum
 	if (KeyCodeToDeviceType(keyCode) != DeviceType::Pad)
 		return false;
 
-	int* value = KeyDefine::GetKeyAll()[keyCode].value;
+	int* value = KeyDefine::GetInputData(keyCode).value;
 
 	return ((*inputsBefore)[padNumber - 1].Buttons[*value] != 0);
 }

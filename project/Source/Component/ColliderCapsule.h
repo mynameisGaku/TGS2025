@@ -28,7 +28,15 @@ public:
 	// 半径を取得する
 	inline float Radius() const { return transform->Global().scale.Average() / 2.0f; }
 
-	inline Vector3 Offset() const { return offset; }
+	/// <summary>
+	/// 終点の位置(相対座標)を取得する
+	/// </summary>
+	inline const Vector3 OffsetLocal() const { return offset; }
+
+	/// <summary>
+	/// 終点の位置(絶対座標)を取得する
+	/// </summary>
+	inline const Vector3 OffsetWorld() const { return transform->Global().position + offset; }
 
 private:
 	Vector3 offset;

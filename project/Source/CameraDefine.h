@@ -14,6 +14,7 @@ namespace CameraDefine {
 		sTitle,			// タイトル
 		sPlay,			// プレイ
 		sResult,		// リザルト
+		sChase,
 		sTarget,		// 注視
 		sPerformance,	// 演出
 		sTeam,			// チームプレイ

@@ -11,6 +11,8 @@
 #include "SensiSetting.h"
 #include "VolumeSetting.h"
 
+using namespace KeyDefine;
+
 namespace {
 
 	static const char* CSV_FILE_NAME = "data/csv/SettingData.csv";

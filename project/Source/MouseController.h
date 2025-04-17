@@ -4,31 +4,20 @@
 #include "KeyDefine.h"
 #include "Util/Vector2.h"
 
-//==========================================================================================
-// ▼定義値
-
-	static const Vector2 MOUSE_SENSI_MAX = Vector2(10.0f);	// 最大マウス感度
-
-	/// <summary>
-	/// マウスの移動方法
-	/// </summary>
-	enum class MouseMovement {
-		Free = 0,	// 自由に操作可能
-		Fixed,		// 画面中央で固定
-		OnScreen,	// 画面内に留める
-	};
+namespace MouseController {
 
 	/// <summary>
 	/// マウスの情報
 	/// </summary>
 	struct MouseInfo {
+
 		Vector2 position;		// マウスの座標(Vector2型)
 		int newX, newY;			// マウスの今いる位置を取得する
 		int oldX, oldY;			// マウスが元居た位置を取得する
 		int moveX, moveY;		// New - Old で移動した距離を取得する
 		int wheelRot;			// マウスホイールの回転量
 		Vector2 sensitivity;	// マウス感度
-		MouseMovement movement;	// マウスの移動方法
+		KeyDefine::MouseMovement movement;	// マウスの移動方法
 		POINT point;			// マウスの情報
 		HWND hWnd;				// ウィンドウの情報
 
@@ -38,8 +27,8 @@
 			oldX(0), oldY(0),
 			moveX(0), moveY(0),
 			wheelRot(GetMouseWheelRotVol()),
-			sensitivity(MOUSE_SENSI_MAX * 0.5f),
-			movement(MouseMovement::Free),
+			sensitivity(V2::ONE),
+			movement(KeyDefine::MouseMovement::Free),
 			point({ 0 }),
 			hWnd(0)
 		{
@@ -50,11 +39,6 @@
 		/// </summary>
 		inline Vector2 Move() const { return Vector2(moveX * (sensitivity.x * 0.1f), moveY * (sensitivity.y * 0.1f)); }
 	};
-
-
-//==========================================================================================
-
-namespace MouseController {
 
 	/// <summary>
 	/// 初期化処理
@@ -103,7 +87,7 @@ namespace MouseController {
 	/// <summary>
 	/// マウスの動きを設定する
 	/// </summary>
-	void SetMouseMovement(MouseMovement move);
+	void SetMouseMovement(KeyDefine::MouseMovement move);
 
 	/// <summary>
 	/// マウス感度を設定する
@@ -116,7 +100,7 @@ namespace MouseController {
 	/// <summary>
 	/// マウスの情報を取得する
 	/// </summary>
-	const MouseInfo Info();
+	const MouseController::MouseInfo Info();
 
 	//==========================================================================================
 	// ▼判定

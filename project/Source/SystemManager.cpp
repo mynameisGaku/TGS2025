@@ -202,14 +202,14 @@ void SystemManager::Debug() {
 	if (IsLoadEnd() == false)
 		return;
 	
-	if (InputManager::Push(KeyCode::F1)) {
+	if (InputManager::Push(KeyDefine::KeyCode::F1)) {
 		ImGuiManager::SetIsActive(!ImGuiManager::IsActive());
 	}
-	if (InputManager::Push(KeyCode::Alpha9)) {
-		MouseController::SetMouseMovement(MouseMovement::Free);
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha9)) {
+		MouseController::SetMouseMovement(KeyDefine::MouseMovement::Free);
 	}
-	if (InputManager::Push(KeyCode::Alpha0)) {
-		MouseController::SetMouseMovement(MouseMovement::Fixed);
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha0)) {
+		MouseController::SetMouseMovement(KeyDefine::MouseMovement::Fixed);
 	}
 }
 

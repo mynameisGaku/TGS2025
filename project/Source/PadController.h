@@ -2,24 +2,10 @@
 
 // ◇汎用
 #include <string>
-#include "Util/Vector2.h"
+#include "../Library/time.h"
 
 // ◇個別で必要な物
 #include "KeyDefine.h"
-
-//==========================================================================================
-// ▼定義値
-
-namespace {
-
-	static constexpr int PAD_NUMBER_MAX = 2;		// パッドの最大接続数
-	static constexpr float STICK_DEADZONE = 0.2f;	// スティックのデッドゾーン定義
-	static constexpr float TRIGGER_DEADZONE = 0.2f;	// トリガーのデッドゾーン定義
-
-	static const Vector2 STICK_SENSI_MAX = Vector2(10.0f);	// 最大スティック感度
-}
-
-//==========================================================================================
 
 namespace PadController {
 
@@ -62,6 +48,26 @@ namespace PadController {
 	/// スティック感度を設定する
 	/// </summary>
 	void SetStickSensitivity(Vector2 value);
+
+	/// <summary>
+	/// パッドの振動を設定する
+	/// </summary>
+	/// <param name="padNumber">振動させるパッドの識別子</param>
+	/// <param name="power">振動の強さ(0～1000)</param>
+	/// <param name="time">効果時間(-1の場合、StopVibration()が呼ばれるまでの間振動する)</param>
+	/// <param name="effectIndex">振動させるモーターの番号</param>
+	inline void SetVibration(int padNumber, int power, float time, int effectIndex = -1) {
+		StartJoypadVibration(padNumber, power, static_cast<int>(Time::SecToFrame(time)), effectIndex);
+	}
+
+	/// <summary>
+	/// パッドの振動を停止する
+	/// </summary>
+	/// <param name="padNumber">振動させるパッドの識別子</param>
+	/// <param name="effectIndex">振動させるモーターの番号</param>
+	inline void StopVibration(int padNumber, int effectIndex = -1) {
+		StopJoypadVibration(padNumber, effectIndex);
+	}
 
 	//==========================================================================================
 	// ▼ゲッター

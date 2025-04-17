@@ -4,8 +4,10 @@
 
 #include "InputManager.h"
 #include "CharaManager.h"
+
+//=== ƒ{[ƒ‹ ===
 #include "BallManager.h"
-#include "CrystalFragmentManager.h"
+#include "Ball.h"
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
@@ -17,13 +19,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(-300.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 
 	BallManager* ballM = Instantiate<BallManager>();
-	ballM->CreateBall(Vector3(0.0f, 0.0f, -50.0f));
-
-    CrystalFragmentManager* crystalM = Instantiate<CrystalFragmentManager>();
-    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
-    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
-    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
-    crystalM->CreateFragment(Vector3(0.0f, 0.0f, 500.0f));
+	Ball* ball = ballM->CreateBall(Vector3(0.0f, 500.0f, -50.0f));
+	ball->Throw(Vector3(20.0f, 50.0f, 5.0f));
 }
 
 PlayScene::~PlayScene()

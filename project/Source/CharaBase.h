@@ -11,6 +11,19 @@ public:
 	CharaBase();
 	virtual ~CharaBase();
 
+	virtual void Update() override;
+
+	/// <summary>
+	/// “–‚½‚è”»’èˆ—
+	/// </summary>
+	/// <param name="colData"></param>
+	void CollisionEvent(const CollisionData& colData) override;
+
+	/// <summary>
+	/// ’n–Ê‚Æ‚Ì“–‚½‚è”»’è
+	/// </summary>
+	void HitGroundProcess();
+
 private:
 
 };

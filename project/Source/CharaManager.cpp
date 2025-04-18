@@ -86,8 +86,6 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 	// •¨—‹““®‚ðÝ’è
 	newChara->AddComponent<Physics>()->Init(GRAVITY, FRICTION);
 
-
-
 	// “–‚½‚è”»’è‚ðÝ’è
 	ColliderCapsule* colliderCap = newChara->AddComponent<ColliderCapsule>();
 	colliderCap->BaseInit(colParamCap);

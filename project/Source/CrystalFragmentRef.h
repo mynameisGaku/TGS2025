@@ -8,8 +8,8 @@
 class CrystalFragmentRef
 {
 private:
-    const std::string   FILENAME = "data/Json/Crystal/CrystalFragment.json";
-    const std::string   FILEKEY  = "CrystalFragment";
+    const std::string   FILEPATH = "data/Json/Crystal/CrystalFragment.json";    // ファイルのパス
+    const std::string   FILEKEY  = "CrystalFragment";                           // ファイル識別用キー
 public:
     static CrystalFragmentRef& Inst()
     {
@@ -19,13 +19,13 @@ public:
 
     void Load(bool _ForceLoad = false);
 
-    float               m_RotSpeed;
-    float               m_ElementPoint;
-    float               m_Size;
-    float               m_LifeTime;
+    float               m_RotSpeed;     // 破片のY軸回転速度
+    float               m_ElementPoint; // 属性ポイント
+    float               m_Size;         // 大きさ
+    float               m_LifeTime;     // 寿命
 
 private:
-    bool                m_WasLoad = false;
+    bool                m_WasLoad = false; // ロード済みか？ 重複回避用
 
     CrystalFragmentRef() :
         m_RotSpeed    (0.0f),

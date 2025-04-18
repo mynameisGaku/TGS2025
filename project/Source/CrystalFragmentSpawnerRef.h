@@ -4,8 +4,8 @@
 class CrystalFragmentSpawnerRef
 {
 private:
-    const std::string   FILENAME = "data/Json/Crystal/CrystalFragmentSpawner.json";
-    const std::string   FILEKEY = "CrystalFragmentSpawner";
+    const std::string   FILEPATH = "data/Json/Crystal/CrystalFragmentSpawner.json"; // ファイルのパス
+    const std::string   FILEKEY = "CrystalFragmentSpawner";                         // ファイル識別用キー
 public:
     static CrystalFragmentSpawnerRef& Inst()
     {
@@ -15,11 +15,11 @@ public:
 
     void Load(bool ForceLoad = false);
 
-    float               SpawnInterval;
-    float               SpawnAmount;
+    float               SpawnInterval;  // 生成までのインターバル
+    float               SpawnAmount;    // 一度で生成する数
 
 private:
-    bool                m_WasLoad = false;
+    bool                m_WasLoad = false; // ロード済みか？ 重複回避用
 
     CrystalFragmentSpawnerRef() :
         SpawnInterval(0.0f),

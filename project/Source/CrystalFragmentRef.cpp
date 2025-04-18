@@ -12,7 +12,7 @@ void CrystalFragmentRef::Load(bool _ForceLoad)
     auto jsonLoader = Settings_json::Inst();
 
     // JSON 読み込み
-    jsonLoader->LoadSettingJson(FILENAME, FILEKEY);
+    jsonLoader->LoadSettingJson(FILEPATH, FILEKEY);
 
     // 各種値取得
     m_RotSpeed        = jsonLoader->GetOrDefault<float>("Param.RotSpeed",     0.0f, FILEKEY);
@@ -20,5 +20,6 @@ void CrystalFragmentRef::Load(bool _ForceLoad)
     m_Size            = jsonLoader->GetOrDefault<float>("Param.Size",         0.0f, FILEKEY);
     m_LifeTime        = jsonLoader->GetOrDefault<float>("Param.LifeTime",     0.0f, FILEKEY);
 
+    // ロードしたよ
     m_WasLoad = true;
 }

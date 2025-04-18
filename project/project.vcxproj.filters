@@ -328,6 +328,9 @@
     <ClCompile Include="Source\BallRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\PlayerController.cpp">
+      <Filter>Framework\04_Component\PlayerController</Filter>
+    </ClCompile>
     <ClCompile Include="Source\CrystalFragment.cpp">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </ClCompile>
@@ -741,13 +744,16 @@
     <ClInclude Include="Source\VectorJson.h">
       <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CrystalFragmentRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    <ClInclude Include="Source\Component\PlayerController.h">
+      <Filter>Framework\04_Component\PlayerController</Filter>
     </ClInclude>
     <ClInclude Include="Source\CrystalFragment.h">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </ClInclude>
     <ClInclude Include="Source\CrystalFragmentManager.h">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CrystalFragmentRef.h">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </ClInclude>
     <ClInclude Include="Source\CrystalFragmentSpawner.h">
@@ -1097,13 +1103,22 @@
     <Filter Include="Framework\02_Common\System\Pool">
       <UniqueIdentifier>{c45966fb-c2fc-423f-813a-8465f3229d87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\04_Component\PlayerController">
+      <UniqueIdentifier>{b20eb0a5-bc2a-4ae9-be4d-f5c47f71d029}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\Crystal">
-      <UniqueIdentifier>{26d0d6fb-ce56-43d5-9d84-ebae66e4390a}</UniqueIdentifier>
+      <UniqueIdentifier>{1a34abd5-72cd-44b7-9da8-d4df3fde1fa8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball.json">
       <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
+    </None>
+    <None Include="data\Json\Crystal\CrystalFragment.json">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </None>
+    <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
+      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </None>
   </ItemGroup>
 </Project>

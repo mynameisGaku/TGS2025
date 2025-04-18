@@ -10,9 +10,11 @@ void CrystalFragmentSpawnerRef::Load(bool ForceLoad)
     auto jsonLoader = Settings_json::Inst();
 
     // JSON “Ç‚Ýž‚Ý
-    jsonLoader->LoadSettingJson(FILENAME, FILEKEY);
+    jsonLoader->LoadSettingJson(FILEPATH, FILEKEY);
 
     // ŠeŽí’lŽæ“¾
     SpawnInterval   = jsonLoader->GetOrDefault<float>("Param.Interval", 0.0f, FILEKEY);
     SpawnAmount     = jsonLoader->GetOrDefault<float>("Param.Amount",   0.0f, FILEKEY);
+
+    m_WasLoad = true;
 }

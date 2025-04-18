@@ -14,6 +14,7 @@ CrystalFragmentSpawner::CrystalFragmentSpawner(const Vector3& pos):
     m_SpawnTimer(0.0f),
     m_IsActive(false)
 {
+    // À•W‚Ì‚Ý‰Šú‰»
     transform->position = pos;
 }
 
@@ -56,5 +57,5 @@ void CrystalFragmentSpawner::Update()
 
 void CrystalFragmentSpawner::Draw()
 {
-    DrawCapsule3D(transform->position, transform->position + Vector3(0.0f, 5.0f, 0.0f), 32.0f, 32.0f, GetColor(255, 255, 255), 0x00ff00, true);
+    DrawCapsule3D(transform->position, transform->position + Vector3(0.0f, 5.0f, 0.0f), 32.0f, 32.0f, GetColor(255, 0, 255), 0x00ff00, true);
 }

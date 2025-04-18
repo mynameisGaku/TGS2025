@@ -30,12 +30,17 @@ CrystalFragment::CrystalFragment() :
     rand_ = GetRand(INT_MAX) / (float)INT_MAX - 0.5f;
     float z = rand_;
 
+    // ‚¢‚¢Š´‚¶‚Éİ’è
     x *= 150.0f;
     y *= 80.0f;
     z *= 150.0f;
 
+    // ‰‘¬‚ğİ’è
     m_FirstVelocity = Vector3(x, y, z);
     m_pPhysics->velocity += m_FirstVelocity;
+
+    // ƒtƒ‰ƒO—§‚Ä‚é
+    m_IsActive = true;
 }
 
 CrystalFragment::~CrystalFragment()
@@ -44,9 +49,14 @@ CrystalFragment::~CrystalFragment()
 
 void CrystalFragment::Update()
 {
+    // õ–½Ø‚ê‚½‚ç–³Œø‰»
     if (m_Lifetime <= 0.0f)
+    {
+        m_IsActive = false;
         return;
+    }
 
+    // õ–½Œ¸‚ç‚·
     m_Lifetime -= Time::DeltaTime();
     
     // ‰ñ“]
@@ -58,18 +68,22 @@ void CrystalFragment::Update()
     m_pPhysics->velocity.y *= 0.8f; // –€C
     m_pPhysics->velocity.z *= 0.8f; // –€C
 
+    // ˆê’U Y<0 ‚É‚È‚Á‚½‚ç”½”­
+    // ToDo : ‚¿‚á‚ñ‚Æ°‚Æ“–‚½‚è”»’è‚·‚é
     if (transform->position.y <= 0.0f)
     {
         transform->position.y = 0.0f;
-        m_pPhysics->velocity.y *= -0.4f;
+        m_pPhysics->velocity.y *= -1.0f;
     }
 }
 
 void CrystalFragment::Draw()
 {
+    // õ–½Ø‚ê‚½‚çÁ‚¦‚é
     if (m_Lifetime <= 0.0f)
         return;
 
+    // ƒJƒvƒZƒ‹‚Å‰¼•`‰æ
     DrawCapsule3D(
         transform->position,
         transform->position + Vector3(0.0f, 100.0f, 0.0f),

@@ -49,7 +49,14 @@ void Ball::Draw()
 void Ball::Throw(const Vector3& velocity)
 {
 	m_State = S_THROWN;
-	setVelocity(velocity);
+	setVelocity(velocity * BALL_REF.SpeedDefault);
+	m_Owner = nullptr;
+}
+
+void Ball::Throw(const Vector3& velocity, CharaBase* owner)
+{
+	Throw(velocity);
+	m_Owner = owner;
 }
 
 void Ball::collisionToGround()

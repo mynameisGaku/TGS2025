@@ -6,12 +6,16 @@
 #include "Component/ColliderCapsule.h"
 #include "Stage.h"
 #include "CharaStamina.h"
+#include "Ball.h"
 
 using namespace KeyDefine;
 
 CharaBase::CharaBase()
 {
-	m_Stamina = Instantiate<CharaStamina>();
+	m_pStamina			= Instantiate<CharaStamina>();
+	m_pBall				= nullptr;
+	m_BallChargeRate	= 0.0f;
+	m_IsCharging		= false;
 }
 
 CharaBase::~CharaBase()
@@ -91,4 +95,56 @@ void CharaBase::HitGroundProcess() {
 		physics->resistance.y = 0.0f;
 		physics->SetGravity(V3::ZERO);
 	}
+
+	if (m_pBall)
+	{
+		m_ChargeRateWatchDog -= Time::DeltaTime();
+		if (m_ChargeRateWatchDog < 0.0f)
+		{
+			m_ChargeRateWatchDog = 0.0f;
+			m_IsCharging = false;
+		}
+
+		m_pBall->transform->position = transform->Global().position;
+		m_pBall->transform->rotation = transform->Global().rotation;
+	}
+}
+
+void CharaBase::ThrowBall(const Vector3& velocity)
+{
+	if (m_pBall == nullptr)
+		return;
+
+	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate), this);
+
+	// ìäù±å„ÇÕä«óùÇ∑ÇÈã`ñ±Çé∏Ç§
+	m_pBall = nullptr;
+}
+
+void CharaBase::ThrowBallForward()
+{
+	if (m_pBall == nullptr)
+		return;
+
+	m_pBall->Throw(transform->Forward() * (1.0f + m_BallChargeRate), this);
+
+	// ìäù±å„ÇÕä«óùÇ∑ÇÈã`ñ±Çé∏Ç§
+	m_pBall = nullptr;
+}
+
+void CharaBase::GenerateBall()
+{
+	m_ChargeRateWatchDog = 0.1f;
+
+	if (m_pBall != nullptr)
+	{
+		m_IsCharging = true;
+		m_BallChargeRate += Time::DeltaTime();
+		return;
+	}
+
+	m_pBall = Instantiate<Ball>();
+	m_pBall->transform->position = transform->Global().position;
+	m_pBall->transform->rotation = transform->Global().rotation;
+	m_pBall->SetParent(this);
 }

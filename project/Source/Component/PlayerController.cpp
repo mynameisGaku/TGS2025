@@ -33,6 +33,30 @@ void PlayerController::Init(int _padNumber, float _moveSpeed, float _rotSpeed) {
 
 void PlayerController::Update() {
 
+	////////////////////////////////////////////////////
+	// ボール投げる処理
+
+	// ToDo : チャージ未対応なので対応させるｒ
+	if (not chara->IsHoldingBall())
+	{
+		if (chara->IsChargingBall())
+		{
+			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
+			{
+				chara->GenerateBall();
+			}
+		}
+	}
+	else
+	{
+		if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
+		{
+			chara->ThrowBallForward();
+		}
+	}
+
+	////////////////////////////////////////////////////
+	// キャラ移動操作処理
 	if (chara == nullptr || IsMoveButton() == false)
 		return;
 

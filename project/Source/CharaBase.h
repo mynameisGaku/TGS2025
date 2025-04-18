@@ -1,5 +1,8 @@
 #pragma once
 #include "Object3D.h"
+#include <Library/time.h>
+
+class CharaStamina;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -25,5 +28,5 @@ public:
 	void HitGroundProcess();
 
 private:
-
+	CharaStamina* m_Stamina; // スタミナのポインター
 };

@@ -165,6 +165,7 @@
     <ClInclude Include="Source\CharaBase.h" />
     <ClInclude Include="Source\CharaDefine.h" />
     <ClInclude Include="Source\CharaManager.h" />
+    <ClInclude Include="Source\CharaStaminaRef.h" />
     <ClInclude Include="Source\Component\AnimationEvent.h" />
     <ClInclude Include="Source\Component\Animator.h" />
     <ClInclude Include="Source\Component\ColliderBase.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="Source\StageDefine.h" />
     <ClInclude Include="Source\StageObject.h" />
     <ClInclude Include="Source\StageObjectManager.h" />
+    <ClInclude Include="Source\CharaStamina.h" />
     <ClInclude Include="Source\StateBase.h" />
     <ClInclude Include="Source\StateManager.h" />
     <ClInclude Include="Source\SystemManager.h" />
@@ -301,6 +303,7 @@
     <ClCompile Include="Source\CameraManager.cpp" />
     <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
+    <ClCompile Include="Source\CharaStaminaRef.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
     <ClCompile Include="Source\Component\Animator.cpp" />
     <ClCompile Include="Source\Component\ColliderBase.cpp" />
@@ -363,6 +366,7 @@
     <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\StageObject.cpp" />
     <ClCompile Include="Source\StageObjectManager.cpp" />
+    <ClCompile Include="Source\CharaStamina.cpp" />
     <ClCompile Include="Source\StateManager.cpp" />
     <ClCompile Include="Source\SystemManager.cpp" />
     <ClCompile Include="Source\titleScene.cpp" />
@@ -396,6 +400,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball.json" />
+    <None Include="data\Json\Chara\CharaStamina.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
   </ItemGroup>

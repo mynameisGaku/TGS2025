@@ -346,6 +346,12 @@
     <ClCompile Include="Source\CrystalFragmentSpawnerRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CharaStamina.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CharaStaminaRef.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -762,6 +768,12 @@
     <ClInclude Include="Source\CrystalFragmentSpawnerRef.h">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CharaStamina.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CharaStaminaRef.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1119,6 +1131,9 @@
     </None>
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
+    </None>
+    <None Include="data\Json\Chara\CharaStamina.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </None>
   </ItemGroup>
 </Project>

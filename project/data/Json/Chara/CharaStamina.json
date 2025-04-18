@@ -1,0 +1,7 @@
+{
+  "Param": {
+    "Max": 100.0,
+    "RegenTakesTime": 1.5,
+    "RegenStartTime": 0.5
+  }
+}

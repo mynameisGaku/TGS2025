@@ -5,16 +5,17 @@
 #include "Component/CollisionDefine.h"
 #include "Component/ColliderCapsule.h"
 #include "Stage.h"
+#include "CharaStamina.h"
 
 using namespace KeyDefine;
 
 CharaBase::CharaBase()
 {
+	m_Stamina = Instantiate<CharaStamina>();
 }
 
 CharaBase::~CharaBase()
 {
-
 }
 
 void CharaBase::Update() {

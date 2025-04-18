@@ -86,7 +86,7 @@ void LightManager::CreateLightDir() {
 	lightInfo.type = LightType::Directional;
 	lightInfo.colorDif = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
 	lightInfo.colorSpc = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
-	lightInfo.colorAmb = GetColorF(1.0f, 1.0f, 0.8f, 1.0f);
+	lightInfo.colorAmb = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
 
 	Light* dir = new Light(lightInfo);
 	dir->SetDegRotation(Vector3(-180.0f, -180.0f, 0.0f));

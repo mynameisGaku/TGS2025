@@ -126,7 +126,10 @@ void CharaBase::ThrowBallForward()
 	if (m_pBall == nullptr)
 		return;
 
-	m_pBall->Throw(transform->Forward() * (1.0f + m_BallChargeRate), this);
+	Vector3 forward = transform->Forward();
+	Vector3 velocity = forward + V3::SetY(0.4f);
+
+	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate), this);
 
 	// “Š±Œã‚ÍŠÇ—‚·‚é‹`–±‚ğ¸‚¤
 	m_pBall = nullptr;

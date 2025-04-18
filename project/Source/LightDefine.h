@@ -44,7 +44,7 @@ namespace LightDefine {
 			inAngle(0.0f),
 			colorDif(COLOR_F(1.0f, 1.0f, 1.0f, 1.0f)),
 			colorSpc(COLOR_F(1.0f, 1.0f, 1.0f, 1.0f)),
-			colorAmb(COLOR_F(1.0f, 1.0f, 1.0f, 1.0f))
+			colorAmb(COLOR_F(0.0f, 0.0f, 0.0f, 0.0f))
 		{
 		}
 		

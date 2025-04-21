@@ -352,6 +352,12 @@
     <ClCompile Include="Source\CharaStaminaRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Source\BloomManager.cpp">
+      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BloomRef.cpp">
+      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -774,6 +780,12 @@
     <ClInclude Include="Source\CharaStaminaRef.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
+    <ClInclude Include="Source\BloomManager.h">
+      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BloomRef.h">
+      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1121,6 +1133,9 @@
     <Filter Include="Application\Scenes\02_PlayScene\Crystal">
       <UniqueIdentifier>{1a34abd5-72cd-44b7-9da8-d4df3fde1fa8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\PostEffect">
+      <UniqueIdentifier>{52c6bece-26c4-4d14-bf01-a287ceb90477}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball.json">
@@ -1134,6 +1149,9 @@
     </None>
     <None Include="data\Json\Chara\CharaStamina.json">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </None>
+    <None Include="data\Json\Bloom\Bloom.json">
+      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
     </None>
   </ItemGroup>
 </Project>

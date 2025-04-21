@@ -157,6 +157,8 @@
     <ClInclude Include="Source\Behavior\BehaviorNode.h" />
     <ClInclude Include="Source\Behavior\BehaviorTask.h" />
     <ClInclude Include="Source\Behavior\BehaviorTree.h" />
+    <ClInclude Include="Source\BloomManager.h" />
+    <ClInclude Include="Source\BloomRef.h" />
     <ClInclude Include="Source\BlurScreen.h" />
     <ClInclude Include="Source\bootScene.h" />
     <ClInclude Include="Source\Camera.h" />
@@ -297,6 +299,8 @@
     <ClCompile Include="Source\Behavior\BehaviorNode.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorTask.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorTree.cpp" />
+    <ClCompile Include="Source\BloomManager.cpp" />
+    <ClCompile Include="Source\BloomRef.cpp" />
     <ClCompile Include="Source\BlurScreen.cpp" />
     <ClCompile Include="Source\bootScene.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -400,6 +404,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball.json" />
+    <None Include="data\Json\Bloom\Bloom.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />

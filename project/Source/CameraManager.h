@@ -36,7 +36,7 @@ namespace CameraManager {
 	/// </summary>
 	/// <param name="number">カメラの番号</param>
 	/// <param name="state">変更するステート</param>
-	void ChangeStateCamera(const int& number, const CameraDefine::State& state);
+	void ChangeStateCamera(const int& number, void(Camera::* state)(FSMSignal));
 
 	//================================================================================
 	// ▼セッター

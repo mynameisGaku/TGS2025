@@ -361,6 +361,9 @@
     <ClCompile Include="Source\Component\AIController.cpp">
       <Filter>Framework\04_Component\Controller</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CamState_Chase.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">

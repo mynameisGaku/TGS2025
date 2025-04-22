@@ -5,6 +5,7 @@
 
 #include "InputManager.h"
 #include "CharaManager.h"
+#include "CameraManager.h"
 #include "Component/PlayerController.h"
 #include "Component/AIController.h"
 
@@ -38,6 +39,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	// ƒuƒ‹[ƒ€
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
+
+	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
 }
 
 PlayScene::~PlayScene()

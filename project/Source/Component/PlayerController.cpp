@@ -14,21 +14,17 @@ PlayerController::PlayerController() {
 
 	chara = nullptr;
 	padNumber = -1;
-	moveSpeed = 0.0f;
-	rotSpeed = 0.0f;
 }
 
 PlayerController::~PlayerController() {
 
 }
 
-void PlayerController::Init(int _padNumber, float _moveSpeed, float _rotSpeed) {
+void PlayerController::Init(int _padNumber) {
 
 	chara = Parent<CharaBase>();
 
 	SetPadNumber(_padNumber);
-	SetMoveSpeed(_moveSpeed);
-	SetRotSpeed(_rotSpeed);
 }
 
 void PlayerController::Update() {
@@ -64,26 +60,10 @@ void PlayerController::Update() {
 	if (camera == nullptr)
 		return;
 
-	Physics* physics = chara->GetComponent<Physics>();
-	if (physics == nullptr)
-		return;
-
 	// カメラの向きに応じたスティックの傾き
 	Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
 
-	float currentRot = chara->transform->rotation.y;	// 現在の向き
-	float terminusRot = atan2f(stick.x, stick.z);		// 終点の向き
-	
-	// 徐々に終点の向きへ合わせる
-	chara->transform->rotation.y = Function::RotAngle(currentRot, terminusRot, rotSpeed);
-
-	float deltaTimeMoveSpeed = moveSpeed * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
-
-	Vector3 velocity = stick * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
-
-	// 速度を適応させる
-	physics->velocity.x = velocity.x;
-	physics->velocity.z = velocity.z;
+	chara->Move(stick);
 }
 
 Vector3 PlayerController::AnalogStick() {

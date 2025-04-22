@@ -14,12 +14,20 @@ CharaBase::CharaBase()
 {
 	m_pStamina			= Instantiate<CharaStamina>();
 	m_pBall				= nullptr;
+	m_pPhysics			= nullptr;
 	m_BallChargeRate	= 0.0f;
 	m_IsCharging		= false;
+	m_MoveSpeed			= 0.0f;
+	m_RotSpeed			= 0.0f;
 }
 
 CharaBase::~CharaBase()
 {
+}
+
+void CharaBase::LoadAddedComponent()
+{
+	m_pPhysics = GetComponent<Physics>();
 }
 
 void CharaBase::Update() {
@@ -41,12 +49,11 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			Vector3 myPos = transform->Global().position;			// 自身の座標
 			Vector3 otherPos = chara->transform->Global().position;	// 相手の座標
 
-			Physics* myPhysics = GetComponent<Physics>();			// 自身の物理挙動
 			Physics* otherPhysics = chara->GetComponent<Physics>();	// 相手の物理挙動
 
 			ColliderCapsule* collider = GetComponent<ColliderCapsule>();	// 当たり判定
 
-			if (myPhysics == nullptr || otherPhysics == nullptr || collider == nullptr)
+			if (m_pPhysics == nullptr || otherPhysics == nullptr || collider == nullptr)
 				return;
 
 			// 相手へ向かうベクトル
@@ -63,7 +70,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			const Vector3 repellentForce = toVec.Norm() * (REPELLENT_FORCE_SCALE_MIN + (REPELLENT_FORCE_SCALE_MAX - REPELLENT_FORCE_SCALE_MIN) * max(0.0f, 1.0f - toVec.Size() / REPELLENT_RADIUS));
 
 			// 反発力を加える
-			myPhysics->resistance -= repellentForce;
+			m_pPhysics->resistance -= repellentForce;
 			otherPhysics->velocity += repellentForce;
 		}
 	}
@@ -108,6 +115,23 @@ void CharaBase::HitGroundProcess() {
 		m_pBall->transform->position = transform->Global().position;
 		m_pBall->transform->rotation = transform->Global().rotation;
 	}
+}
+
+void CharaBase::Move(const Vector3& dir)
+{
+	float currentRot = transform->rotation.y;	// 現在の向き
+	float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
+
+	// 徐々に終点の向きへ合わせる
+	transform->rotation.y = Function::RotAngle(currentRot, terminusRot, m_RotSpeed);
+
+	float deltaTimeMoveSpeed = m_MoveSpeed * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
+
+	Vector3 velocity = dir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
+
+	// 速度を適応させる
+	m_pPhysics->velocity.x = velocity.x;
+	m_pPhysics->velocity.z = velocity.z;
 }
 
 void CharaBase::ThrowBall(const Vector3& velocity)

@@ -4,6 +4,7 @@
 
 class CharaStamina;
 class Ball;
+class Physics;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -15,7 +16,14 @@ public:
 	CharaBase();
 	virtual ~CharaBase();
 
+	/// <summary>
+	/// 自分にくっついてるコンポーネントのポインタを保存
+	/// </summary>
+	void LoadAddedComponent();
 	virtual void Update() override;
+
+	//=======================================================================================
+	// ▼当たり判定
 
 	/// <summary>
 	/// 当たり判定処理
@@ -27,6 +35,30 @@ public:
 	/// 地面との当たり判定
 	/// </summary>
 	void HitGroundProcess();
+
+	//=======================================================================================
+	// ▼移動
+
+	/// <summary>
+	/// 移動速度を設定する
+	/// </summary>
+	/// <param name="moveSpeed">移動速度</param>
+	inline void SetMoveSpeed(float moveSpeed) { m_MoveSpeed = moveSpeed; }
+
+	/// <summary>
+	/// 回転速度を設定する
+	/// </summary>
+	/// <param name="rotSpeed">回転速度</param>
+	inline void SetRotSpeed(float rotSpeed) { m_RotSpeed = rotSpeed; }
+
+	/// <summary>
+	/// 指定方向に移動する
+	/// </summary>
+	/// <param name="dir">移動方向</param>
+	void Move(const Vector3& dir);
+
+	//=======================================================================================
+	// ▼ボール
 
 	/// <summary>
 	/// ボールを投げる
@@ -64,4 +96,7 @@ private:
 	float			m_ChargeRateWatchDog;	// チャージ終了から何秒経ったかを監視する番犬
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
+	Physics*		m_pPhysics;				// 物理挙動のポインター
+	float			m_MoveSpeed;			// 移動速度
+	float			m_RotSpeed;				// 回転速度
 };

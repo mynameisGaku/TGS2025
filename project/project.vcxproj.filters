@@ -329,7 +329,7 @@
       <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\PlayerController.cpp">
-      <Filter>Framework\04_Component\PlayerController</Filter>
+      <Filter>Framework\04_Component\Controller</Filter>
     </ClCompile>
     <ClCompile Include="Source\CrystalFragment.cpp">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
@@ -357,6 +357,9 @@
     </ClCompile>
     <ClCompile Include="Source\BloomRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\AIController.cpp">
+      <Filter>Framework\04_Component\Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -757,7 +760,7 @@
       <Filter>Framework\02_Common\Util</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\PlayerController.h">
-      <Filter>Framework\04_Component\PlayerController</Filter>
+      <Filter>Framework\04_Component\Controller</Filter>
     </ClInclude>
     <ClInclude Include="Source\CrystalFragment.h">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
@@ -785,6 +788,9 @@
     </ClInclude>
     <ClInclude Include="Source\BloomRef.h">
       <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\AIController.h">
+      <Filter>Framework\04_Component\Controller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1127,14 +1133,14 @@
     <Filter Include="Framework\02_Common\System\Pool">
       <UniqueIdentifier>{c45966fb-c2fc-423f-813a-8465f3229d87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\04_Component\PlayerController">
-      <UniqueIdentifier>{b20eb0a5-bc2a-4ae9-be4d-f5c47f71d029}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\Crystal">
       <UniqueIdentifier>{1a34abd5-72cd-44b7-9da8-d4df3fde1fa8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Application\Scenes\02_PlayScene\PostEffect">
       <UniqueIdentifier>{52c6bece-26c4-4d14-bf01-a287ceb90477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\04_Component\Controller">
+      <UniqueIdentifier>{b20eb0a5-bc2a-4ae9-be4d-f5c47f71d029}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

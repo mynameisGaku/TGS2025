@@ -92,6 +92,8 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 	colliderCap->SetOffset(V3::SetY(130.0f));
 	colliderCap->SetDraw(true);
 
+	newChara->LoadAddedComponent();
+
 	m_Charas.push_back(newChara);
 
 	return newChara;

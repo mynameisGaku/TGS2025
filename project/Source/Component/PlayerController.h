@@ -20,7 +20,7 @@ public:
 	//=======================================================================================
 	// ▼各種関数
 
-	void Init(int padNumber, float moveSpeed, float rotSpeed);
+	void Init(int padNumber);
 	void Update() override;
 
 	//=======================================================================================
@@ -31,18 +31,6 @@ public:
 	/// </summary>
 	/// <param name="_padNumber">パッドの番号(DX_INPUT_PAD～)</param>
 	inline void SetPadNumber(int _padNumber) { padNumber = _padNumber; }
-
-	/// <summary>
-	/// 移動速度を設定する
-	/// </summary>
-	/// <param name="_moveSpeed">移動速度</param>
-	inline void SetMoveSpeed(float _moveSpeed) { moveSpeed = _moveSpeed; }
-
-	/// <summary>
-	/// 回転速度を設定する
-	/// </summary>
-	/// <param name="_rotSpeed">回転速度</param>
-	inline void SetRotSpeed(float _rotSpeed) { rotSpeed = _rotSpeed; }
 
 	//=======================================================================================
 	// ▼ゲッター
@@ -85,6 +73,4 @@ private:
 	CharaBase* chara;	// 保有者(CharaBase)
 
 	int padNumber;		// 操作してるパッドの番号
-	float moveSpeed;	// 移動速度
-	float rotSpeed;		// 回転速度
 };

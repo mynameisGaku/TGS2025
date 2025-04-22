@@ -180,6 +180,7 @@
     <ClInclude Include="Source\Component\CollisionManager.h" />
     <ClInclude Include="Source\Component\CollisionObserver.h" />
     <ClInclude Include="Source\Component\Component.h" />
+    <ClInclude Include="Source\Component\AIController.h" />
     <ClInclude Include="Source\Component\MaterialRenderer.h" />
     <ClInclude Include="Source\Component\MotionBlur.h" />
     <ClInclude Include="Source\Component\Physics.h" />
@@ -308,6 +309,7 @@
     <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\CharaStaminaRef.cpp" />
+    <ClCompile Include="Source\Component\AIController.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
     <ClCompile Include="Source\Component\Animator.cpp" />
     <ClCompile Include="Source\Component\ColliderBase.cpp" />

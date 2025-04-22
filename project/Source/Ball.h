@@ -2,7 +2,7 @@
 #include "Object3D.h"
 
 class Physics;
-class ColliderSphere;
+class ColliderCapsule;
 class CharaBase;
 class Collider;
 
@@ -34,7 +34,7 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 private:
 	Physics*		m_Physics;
-	ColliderSphere* m_Collider;
+	ColliderCapsule* m_Collider;
 	State			m_State;
 	CharaBase*		m_Owner;
 

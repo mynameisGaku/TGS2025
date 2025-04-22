@@ -2,7 +2,7 @@
 #include "Library/resourceLoader.h"
 #include "Component/Physics.h"
 #include "BallRef.h"
-#include "Component/ColliderSphere.h"
+#include "Component/ColliderCapsule.h"
 #include "Stage.h"
 
 // ToDo:ƒRƒŠƒWƒ‡ƒ“
@@ -18,12 +18,13 @@ Ball::Ball()
 	m_Physics = Object3D::AddComponent<Physics>();
 	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
 
-	m_Collider = Object3D::AddComponent<ColliderSphere>();
+	m_Collider = Object3D::AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
 	param.trs.scale = V3::ONE * BALL_RADIUS * 2;
 	param.tag = ColDefine::Tag::tPlayerAtk;
 	param.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tTerrain };
+	m_Collider->SetOffset(V3::ZERO);
 
 	m_Collider->BaseInit(param);
 	m_Collider->SetDraw(true);

@@ -20,7 +20,8 @@ public:
 	/// 自分にくっついてるコンポーネントのポインタを保存
 	/// </summary>
 	void LoadAddedComponent();
-	virtual void Update() override;
+	void Update() override;
+	void Draw() override;
 
 	//=======================================================================================
 	// ▼当たり判定
@@ -90,6 +91,14 @@ public:
 	/// <returns></returns>
 	bool IsChargingBall() const { return not m_IsCharging; }
 
+	//=======================================================================================
+	// ▼キャッチ
+
+	/// <summary>
+	/// この関数を呼び出している間、吸引キャッチが行われる。
+	/// </summary>
+	void Catch();
+
 private:
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	float			m_BallChargeRate;		// ボールのチャージ加速度
@@ -99,4 +108,5 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
+	float			m_CatchTimer;			// キャッチ残り時間タイマー
 };

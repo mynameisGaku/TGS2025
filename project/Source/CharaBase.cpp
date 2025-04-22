@@ -12,13 +12,15 @@ using namespace KeyDefine;
 
 CharaBase::CharaBase()
 {
-	m_pStamina			= Instantiate<CharaStamina>();
-	m_pBall				= nullptr;
-	m_pPhysics			= nullptr;
-	m_BallChargeRate	= 0.0f;
-	m_IsCharging		= false;
-	m_MoveSpeed			= 0.0f;
-	m_RotSpeed			= 0.0f;
+	m_pStamina				= Instantiate<CharaStamina>();
+	m_pBall					= nullptr;
+	m_pPhysics				= nullptr;
+	m_BallChargeRate		= 0.0f;
+	m_IsCharging			= false;
+	m_MoveSpeed				= 0.0f;
+	m_RotSpeed				= 0.0f;
+	m_ChargeRateWatchDog	= 0.0f;
+	m_CatchTimer			= 0.0f;
 }
 
 CharaBase::~CharaBase()
@@ -34,7 +36,24 @@ void CharaBase::Update() {
 
 	HitGroundProcess();
 
+	if (m_CatchTimer > 0.0f)
+	{
+		m_CatchTimer -= Time::DeltaTimeLapseRate();
+		if (m_CatchTimer < 0.0f)
+			m_CatchTimer = 0.0f;
+	}
+
 	Object3D::Update();
+}
+
+void CharaBase::Draw()
+{
+	Object3D::Draw();
+
+	if (m_CatchTimer > 0)
+	{
+		DrawSphere3D(transform->position + transform->Forward() * 100.0f, 50.0f, 1, 0xFF00FF, 0x000000, true);
+	}
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -174,4 +193,9 @@ void CharaBase::GenerateBall()
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);
+}
+
+void CharaBase::Catch()
+{
+	m_CatchTimer = 0.1f;
 }

@@ -10,6 +10,13 @@
 
 using namespace KeyDefine;
 
+namespace
+{
+	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ（毎秒）
+	static const float CATCH_STAMINA_MIN = 20.0f;	// キャッチを開始するのに必要な残スタミナ
+	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
+}
+
 CharaBase::CharaBase()
 {
 	m_pStamina				= Instantiate<CharaStamina>();
@@ -41,6 +48,8 @@ void CharaBase::Update() {
 		m_CatchTimer -= Time::DeltaTimeLapseRate();
 		if (m_CatchTimer < 0.0f)
 			m_CatchTimer = 0.0f;
+
+		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
 	}
 
 	Object3D::Update();
@@ -197,5 +206,8 @@ void CharaBase::GenerateBall()
 
 void CharaBase::Catch()
 {
-	m_CatchTimer = 0.05f;
+	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
+	{
+		m_CatchTimer = CATCH_TIME;
+	}
 }

@@ -95,12 +95,12 @@ void CameraManager::ResetCamera(const int& number) {
 	(*cameras)[number]->Reset();
 }
 
-void CameraManager::ChangeStateCamera(const int& number, const State& state) {
+void CameraManager::ChangeStateCamera(const int& number, void(Camera::* state)(FSMSignal)) {
 
 	if (CheckNumber(number) == false)
 		return;
-	
-	//(*cameras)[number]->ChangeState(state);
+
+	(*cameras)[number]->ChangeState(state);
 }
 
 void CameraManager::SetCameraWork(const int& number, const std::string& type) {

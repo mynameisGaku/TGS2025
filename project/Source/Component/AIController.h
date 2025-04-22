@@ -33,6 +33,7 @@ public:
 	void IdleState(FSMSignal sig);
 	void MoveState(FSMSignal sig);
 	void AttackState(FSMSignal sig);
+	void CatchState(FSMSignal sig);
 
 	//=======================================================================================
 	// ▼セッター

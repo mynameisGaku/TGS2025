@@ -52,7 +52,7 @@ void CharaBase::Draw()
 
 	if (m_CatchTimer > 0)
 	{
-		DrawSphere3D(transform->position + transform->Forward() * 100.0f, 50.0f, 1, 0xFF00FF, 0x000000, true);
+		DrawSphere3D(transform->position + transform->Forward() * 100.0f + transform->Up() * 100.0f, 50.0f, 1, 0xFF00FF, 0x000000, true);
 	}
 }
 

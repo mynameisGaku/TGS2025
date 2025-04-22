@@ -8,7 +8,7 @@ BallManager::BallManager()
 {
 	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
 
-	BallRef::Inst().Load();
+	BALL_REF.Load();
 }
 
 BallManager::~BallManager()
@@ -20,6 +20,11 @@ BallManager::~BallManager()
 	m_Balls.clear();
 
 	ResourceLoader::MV1DeleteModel(m_Model);
+}
+
+void BallManager::Update()
+{
+	BALL_REF.Load();
 }
 
 Ball* BallManager::CreateBall(const Vector3& position)

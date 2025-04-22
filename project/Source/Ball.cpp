@@ -5,23 +5,25 @@
 #include "Component/ColliderCapsule.h"
 #include "Stage.h"
 
-// ToDo:ƒRƒŠƒWƒ‡ƒ“
 namespace
 {
-	static const float BALL_RADIUS = 83.951f;
+	static const float BALL_MODEL_RADIUS = 83.951f;
+	static const float BALL_RADIUS = 100.0f;
+	static const float BALL_SCALE = BALL_RADIUS / BALL_MODEL_RADIUS;
 }
 
 Ball::Ball()
 {
 	Object3D::SetModel(ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1"));
 
+	transform->scale = V3::ONE * BALL_SCALE;
 	m_Physics = Object3D::AddComponent<Physics>();
 	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
 
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
-	param.trs.scale = V3::ONE * BALL_RADIUS * 2;
+	param.trs.scale = V3::ONE * BALL_MODEL_RADIUS * 2;
 	param.tag = ColDefine::Tag::tPlayerAtk;
 	param.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tTerrain };
 	m_Collider->SetOffset(V3::ZERO);
@@ -30,6 +32,7 @@ Ball::Ball()
 	m_Collider->SetDraw(true);
 
 	m_State = S_OWNED;
+	m_Owner = nullptr;
 }
 
 Ball::~Ball()

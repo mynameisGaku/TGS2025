@@ -4,6 +4,7 @@
 class Physics;
 class ColliderSphere;
 class CharaBase;
+class Collider;
 
 /// <summary>
 /// キャラクターが投げるボール
@@ -25,6 +26,12 @@ public:
 
 	void Throw(const Vector3& velocity);
 	void Throw(const Vector3& velocity, CharaBase*owner);
+
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="colData">当たり判定情報</param>
+	void CollisionEvent(const CollisionData& colData) override;
 private:
 	Physics*		m_Physics;
 	ColliderSphere* m_Collider;

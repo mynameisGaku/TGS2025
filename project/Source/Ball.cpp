@@ -21,11 +21,12 @@ Ball::Ball()
 	m_Collider = Object3D::AddComponent<ColliderSphere>();
 
 	ColDefine::ColBaseParam param;
-	param.push = true;
-	param.trs.scale = V3::ONE * BALL_RADIUS;
-	// ToDo:tag•t‚¯‚é
+	param.trs.scale = V3::ONE * BALL_RADIUS * 2;
+	param.tag = ColDefine::Tag::tPlayerAtk;
+	param.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tTerrain };
 
 	m_Collider->BaseInit(param);
+	m_Collider->SetDraw(true);
 
 	m_State = S_OWNED;
 }
@@ -57,6 +58,11 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 {
 	Throw(velocity);
 	m_Owner = owner;
+}
+
+void Ball::CollisionEvent(const CollisionData& colData)
+{
+	m_Physics->velocity *= -1.0f;
 }
 
 void Ball::collisionToGround()

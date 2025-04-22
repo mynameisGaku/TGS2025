@@ -197,5 +197,5 @@ void CharaBase::GenerateBall()
 
 void CharaBase::Catch()
 {
-	m_CatchTimer = 0.1f;
+	m_CatchTimer = 0.05f;
 }

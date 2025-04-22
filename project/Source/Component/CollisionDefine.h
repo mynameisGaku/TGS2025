@@ -30,6 +30,7 @@ namespace ColDefine {
 		tEnemy,		// “G
 		tEnemyAtk,	// “G‚ÌUŒ‚
 		tTerrain,	// ’nŒ`
+		tBall,		// ƒ{[ƒ‹
 		tMax,
 	};
 

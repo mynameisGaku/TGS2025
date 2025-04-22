@@ -65,14 +65,14 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
 		colParamCap.tag = ColDefine::Tag::tPlayer;
-		colParamCap.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tEnemyAtk };
+		colParamCap.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tEnemyAtk, ColDefine::Tag::tBall };
 		break;
 
 	case CharaDefine::CharaTag::tEnemy:
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
 		colParamCap.tag = ColDefine::Tag::tEnemy;
-		colParamCap.targetTags = { ColDefine::Tag::tPlayer, ColDefine::Tag::tPlayerAtk };
+		colParamCap.targetTags = { ColDefine::Tag::tPlayer, ColDefine::Tag::tPlayerAtk, ColDefine::Tag::tBall };
 		break;
 	}
 

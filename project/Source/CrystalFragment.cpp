@@ -5,12 +5,13 @@
 #include "Util/Utils.h"
 #include <Library/time.h>
 
-CrystalFragment::CrystalFragment() :
+CrystalFragment::CrystalFragment(uint32_t index) :
     Object3D(),
     m_pPhysics(nullptr),
     m_Lifetime(0.0f),
     m_ElementPoint(0.0f),
-    m_Size(0.0f)
+    m_Size(0.0f),
+    m_Index(index)
 {
     m_pPhysics = AddComponent<Physics>();
     m_pPhysics->Init(V3::ZERO, FRICTION);
@@ -22,6 +23,12 @@ CrystalFragment::CrystalFragment() :
     m_Size              = ref.m_Size;
     m_RotSpeed          = ref.m_RotSpeed;
 
+    // フラグ立てる
+    m_IsActive = true;
+}
+
+void CrystalFragment::SetRandFirstVelocity()
+{
     // 初速をランダムで設定
     float rand_ = GetRand(INT_MAX) / (float)INT_MAX - 0.5f;
     float x = rand_;
@@ -38,13 +45,12 @@ CrystalFragment::CrystalFragment() :
     // 初速を設定
     m_FirstVelocity = Vector3(x, y, z);
     m_pPhysics->velocity += m_FirstVelocity;
-
-    // フラグ立てる
-    m_IsActive = true;
 }
 
 CrystalFragment::~CrystalFragment()
 {
+    std::string output = "cry delete : " + std::to_string(m_Index) + "\n";
+    OutputDebugString(output.c_str());
 }
 
 void CrystalFragment::Update()

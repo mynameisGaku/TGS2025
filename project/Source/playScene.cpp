@@ -15,13 +15,17 @@
 //=== ポストエフェクト ===
 #include "BloomManager.h"
 
+//=== 破片 ===
+#include "CrystalFragmentManager.h"
+#include "settings_json.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
 	CharaManager* charaM = Instantiate<CharaManager>();
-	CharaBase* player = charaM->Create(CharaDefine::CharaTag::tPlayer, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
-	CharaBase* enemy = charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	CharaBase* player = charaM->Create("tPlayer", Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	CharaBase* enemy = charaM->Create("tEnemy", Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 
 	player->SetMoveSpeed(500.0f);
 	player->SetRotSpeed(Math::DegToRad(10.0f));
@@ -34,6 +38,16 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	BallManager* ballM = Instantiate<BallManager>();
 	Ball* ball = ballM->CreateBall(Vector3(0.0f, 500.0f, -50.0f));
 	ball->Throw(Vector3(20.0f, 50.0f, 5.0f));
+
+	fragM = Instantiate<CrystalFragmentManager>();
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150));
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();
@@ -49,6 +63,9 @@ void PlayScene::Update()
 	if (InputManager::Push(KeyCode::T)) {
 		SceneManager::ChangeScene("TitleScene");
 	}
+	if (InputManager::Hold(KeyCode::N)) {
+		fragM->CreateFragment(Vector3(0, 0, -150));
+	}
 
 	SceneBase::Update();
 }
@@ -58,5 +75,6 @@ void PlayScene::Draw()
 {
 	SceneBase::Draw();
 
+	Settings_json::Inst()->RenderImGuiFileManager();
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 }

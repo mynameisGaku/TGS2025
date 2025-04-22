@@ -52,7 +52,7 @@ private:
     bool m_FileWatcherRunning = false; // ファイルウォッチャー実行フラグ。
 
     Settings_json() = default; // プライベートコンストラクタ (シングルトン用)。
-
+    ~Settings_json();
 public:
     using SettingChangeCallback = std::function<void(const std::string& key)>;
 

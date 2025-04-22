@@ -1,0 +1,26 @@
+#include "CharaDefineRef.h"
+#include "settings_json.h"
+
+void CharaDefineRef::Load(bool ForceLoad)
+{
+    if (not ForceLoad && m_WasLoad)
+    {
+        return;
+    }
+
+    // 諸々の初期化
+    auto jsonLoader = Settings_json::Inst();
+
+    // JSON 読み込み
+    jsonLoader->LoadSettingJson(FILEPATH, FILEKEY);
+
+    // 各種値取得
+    Max = jsonLoader->GetOrDefault<int>("Param.Max", 0, FILEKEY);
+    auto Tags_tmp = jsonLoader->Get<std::vector<std::string>>("Param.Tags", FILEKEY);
+    for (auto& tmp : Tags_tmp)
+    {
+        Tags.push_back(tmp);
+    }
+    // ロードしたよ
+    m_WasLoad = true;
+}

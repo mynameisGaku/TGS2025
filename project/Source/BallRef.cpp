@@ -3,8 +3,6 @@
 
 namespace
 {
-	static const std::string PATH = "data/Json/Ball.json";
-	static const std::string FILEKEY = "Ball";
 }
 
 void BallRef::Load()

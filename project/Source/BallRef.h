@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "Util/Vector3.h"
 
 /// <summary>
@@ -7,6 +8,9 @@
 /// <author>ç≤ì°çhìl</author>
 class BallRef
 {
+private:
+	const std::string PATH    = "data/Json/Ball.json";
+	const std::string FILEKEY = "Ball";
 public:
 	static BallRef& Inst()
 	{

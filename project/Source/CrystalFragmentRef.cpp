@@ -15,6 +15,7 @@ void CrystalFragmentRef::Load(bool _ForceLoad)
     jsonLoader->LoadSettingJson(FILEPATH, FILEKEY);
 
     // ŠeŽí’lŽæ“¾
+    m_LimitMax        = jsonLoader->GetOrDefault<int>(  "Param.LimitMax",     0,    FILEKEY);
     m_RotSpeed        = jsonLoader->GetOrDefault<float>("Param.RotSpeed",     0.0f, FILEKEY);
     m_ElementPoint    = jsonLoader->GetOrDefault<float>("Param.ElementPoint", 0.0f, FILEKEY);
     m_Size            = jsonLoader->GetOrDefault<float>("Param.Size",         0.0f, FILEKEY);

@@ -5,6 +5,8 @@
 //------------------------------------------------------------
 #include <vector>
 #include <functional>
+#include <stdexcept>
+#include <vendor/ImGui/imgui.h>
 
 /// <summary>
 /// オブジェクトプーリング用クラス
@@ -13,29 +15,39 @@
 template<typename T>
 class Pool
 {
+private:
+    //------------------------------------------------------------
+    // プライベートクラス
+    //------------------------------------------------------------
+
+    /// <summary>
+    /// オブジェクト管理用クラス
+    /// </summary>
+    class Item
+    {
+    public:
+        Item() : m_IsActive(false), m_pObject(nullptr), m_Index(-1) {}
+        ~Item() { /* DO NOTHING */ }
+        bool        m_IsActive; // アクティブ状態かどうか
+        uint32_t    m_Index;  // 自身のインデックス
+        T*          m_pObject; // オブジェクトのポインタ
+    };
+
 public:
+    
+    using POOL_INIT_FUNC = std::function<T*(uint32_t, T*)>;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
     /// <param name="capacity">どのくらいの容量を確保するか</param>
-    Pool(uint32_t capacity)
+    Pool(uint32_t capacity, POOL_INIT_FUNC func = nullptr)
     {
-        m_Capacity = capacity;
-        m_Items.reserve(capacity);
-        for (uint32_t i = 0; i < capacity; ++i)
-        {
-            Item* item = new Item();
-            m_Items.push_back(item);
-        }
+        reserve(capacity, func);
     }
     
     ~Pool()
     {
-        for (auto& item : m_Items)
-        {
-            delete item;
-        }
         m_Items.clear();
     }
 
@@ -47,15 +59,37 @@ public:
     /// 非アクティブオブジェクトを確保する
     /// </summary>
     /// <returns>確保したポインタ</returns>
-    T* GetDeActiveObject()
+    T* GetDeactiveObject()
     {
         int index = GetIndex();
         if (index == -1)
         {
-            return nullptr;
+            throw std::runtime_error("無効なインデックスを参照しています。");
         }
 
-        return m_Items[index]->m_Object;
+        auto ret = m_Items[index]->m_pObject;
+        return ret;
+    }
+
+    T* Alloc(POOL_INIT_FUNC func = nullptr)
+    {
+        T* obj = GetDeactiveObject();
+        uint32_t index = GetIndex();
+
+        if (obj == nullptr)
+        {
+            if (func)
+            {
+                obj = func(index, obj);
+            }
+            else
+            {
+                obj = new T;
+            }
+        }
+        m_Items[index]->m_IsActive = true;
+
+        return obj;
     }
 
     /// <summary>
@@ -66,13 +100,30 @@ public:
     {
         for (auto& obj : m_Items)
         {
-            if (obj->m_Object == object)
+            if (obj->m_pObject == object)
             {
-                obj->m_Active = false;
-                obj->m_Object = nullptr;
+                obj->m_IsActive = false;
+                obj->m_pObject = nullptr;
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// [インデックス版] オブジェクトを非アクティブ状態にする こっちのが軽い
+    /// </summary>
+    /// <param name="index">対象のインデックス</param>
+    void DeActive(uint32_t& index)
+    {
+        if (index >= m_Capacity)
+            return;
+
+        Item* item = m_Items[index];
+
+        if (item == nullptr)
+            return;
+
+        item->m_IsActive = false;
     }
 
     /// <summary>
@@ -85,13 +136,13 @@ public:
         int activeCount = 0;
         for (auto& item : m_Items)
         {
-            if (item->m_Active)
+            if (item->m_IsActive)
             {
                 ++activeCount;
             }
         }
 
-        if (activeCount >= count)
+        if ((uint32_t)activeCount >= count)
         {
             return true;
         }
@@ -113,20 +164,9 @@ public:
     /// めちゃくちゃ重いので、あまり使わない方が良い。
     /// </summary>
     /// <param name="capacity">再確保したい分の容量</param>
-    void ResetCapacity(uint32_t capacity)
+    void ResetCapacity(uint32_t capacity, POOL_INIT_FUNC func = nullptr)
     {
-        for (auto& item : m_Items)
-        {
-            delete item;
-        }
-        m_Items.clear();
-        m_Capacity = capacity;
-        m_Items.reserve(capacity);
-        for (uint32_t i = 0; i < capacity; ++i)
-        {
-            Item* item = new Item();
-            m_Items.push_back(item);
-        }
+        reserve(capacity, func);
     }
 
     /// <summary>
@@ -136,37 +176,40 @@ public:
     {
         for (auto& item : m_Items)
         {
-            if (item->m_Object != nullptr)
+            if (item->m_pObject != nullptr)
             {
-                delete item->m_Object;
-                item->m_Object = nullptr;
-                item->m_Active = false;
+                delete item->m_pObject;
+                item->m_pObject = nullptr;
+                item->m_IsActive = false;
             }
         }
     }
 
-private:
-
-    //------------------------------------------------------------
-    // プライベートクラス
-    //------------------------------------------------------------
-
-    /// <summary>
-    /// オブジェクト管理用クラス
-    /// </summary>
-    class Item
+    std::vector<Item*> GetAllItems() const
     {
-    public:
-        Item() : m_Active(false) {}
-        ~Item() { delete m_Object; }
-        bool    m_Active; // アクティブ状態かどうか
-        T*      m_Object; // オブジェクトのポインタ
-    };
+        return m_Items;
+    }
 
-    //------------------------------------------------------------
-    // プライベート関数
-    //------------------------------------------------------------
-    
+    Item* GetItem(uint32_t index) const
+    {
+        return m_Items[index];
+    }
+
+    void SetObjectPointer(uint32_t index, T* pObj)
+    {
+        m_Items[index]->m_pObject = pObj;
+    }
+
+    void PoolImGuiRendererBegin(const std::string& name = "PoolDebugger")
+    {
+        ImGui::Begin(name.c_str());
+    }
+
+    void PoolImguiRendererEnd()
+    {
+        ImGui::End();
+    }
+
     /// <summary>
     /// 使われてないインデックスを探して返す
     /// </summary>
@@ -176,14 +219,14 @@ private:
     /// </returns>
     uint32_t GetIndex()
     {
-        if (m_Items.size() >= m_Capacity)
+        if (m_Items.size() - 1 > m_Capacity)
         {
             return -1;
         }
 
         for (uint32_t i = 0; i < m_Items.size(); ++i)
         {
-            if (not m_Items[i]->m_Active)
+            if (not m_Items[i]->m_IsActive)
             {
                 return i;
             }
@@ -192,9 +235,52 @@ private:
         return -1;
     }
 
+    int GetActiveItemNum()
+    {
+        int ret = 0;
+        for (auto item : m_Items)
+        {
+            if (not item->m_IsActive)
+                continue;
+            ret++;
+        }
+        return ret;
+    }
+private:
+
+    //------------------------------------------------------------
+    // プライベート関数
+    //------------------------------------------------------------
+    
+    /// <summary>
+    /// キャパシティを更新・容量の再確保を行う。
+    /// めっちゃ重たい
+    /// </summary>
+    /// <param name="capacity">キャパ</param>
+    void reserve(uint32_t& capacity, POOL_INIT_FUNC func = nullptr)
+    {
+        for (auto& item : m_Items)
+        {
+            delete item;
+        }
+        m_Items.clear();
+        m_Capacity = capacity - 1;
+        m_Items.reserve(capacity);
+        for (uint32_t i = 0; i < capacity; ++i)
+        {
+            Item* item = new Item();
+            item->m_Index = i;
+            if (func)
+            {
+                func((uint32_t)i, item->m_pObject);
+            }
+            m_Items.push_back(item);
+        }
+    }
+
     //------------------------------------------------------------
     // メンバ変数
     //------------------------------------------------------------
-    std::vector<Item*>  m_Items;        // オブジェクトのリスト
-    uint32_t            m_Capacity;     // このプールの容量
+    std::vector<Item*>      m_Items;        // オブジェクトのリスト
+    uint32_t                m_Capacity;     // このプールの容量
 };

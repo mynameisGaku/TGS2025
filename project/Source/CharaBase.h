@@ -91,6 +91,7 @@ public:
 	bool IsChargingBall() const { return not m_IsCharging; }
 
 private:
+	friend class CharaManager;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_ChargeRateWatchDog;	// チャージ終了から何秒経ったかを監視する番犬
@@ -99,4 +100,5 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
+	int				m_Index;				// 自身のインデックス
 };

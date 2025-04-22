@@ -19,6 +19,8 @@
 #include "../Source/Util/Utils.h"
 #include "../Source/Font.h"
 #include "Source/WindowSetting.h"
+#include "Source/settings_json.h"
+#include "Source/settings_ini.h"
 #include "Library/FileUtil.h"
 
 #ifdef IMGUI
@@ -147,6 +149,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	ImGui::DestroyContext();
 
 #endif // IMGUI
+
+	Settings_json::Destroy();
 
 	Effkseer_End();
 	DxLib_End();				// ＤＸライブラリ使用の終了処理

@@ -1,0 +1,9 @@
+{
+  "Param": {
+    "Max": 6,
+    "Tags": [
+      "tPlayer",
+      "tEnemy"
+    ]
+  }
+}

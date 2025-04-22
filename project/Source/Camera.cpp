@@ -70,8 +70,6 @@ void Camera::Draw() {
 
 	Object3D::Draw();
 
-	if (fsm != nullptr)
-		fsm->ImGuiDebugRender();
 
 	MATRIX mShakeTrs = MGetIdent();	// U“®—ps—ñ
 

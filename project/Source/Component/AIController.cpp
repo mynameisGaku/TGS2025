@@ -39,6 +39,10 @@ void AIController::Update()
 {
 	m_FSM->Update();
 
+	if (m_FSM != nullptr)
+		m_FSM->ImGuiDebugRender();
+
+
 	// 行動切り替えタイマー
 	m_ActionTimer += Time::DeltaTimeLapseRate();
 	// 行動切り替え

@@ -23,6 +23,8 @@ CharaBase::CharaBase()
 
 CharaBase::~CharaBase()
 {
+	std::string output = "cha delete : " + std::to_string(m_Index) + "\n";
+	OutputDebugString(output.c_str());
 }
 
 void CharaBase::LoadAddedComponent()

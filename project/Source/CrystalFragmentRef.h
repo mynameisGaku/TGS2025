@@ -19,6 +19,7 @@ public:
 
     void Load(bool _ForceLoad = false);
 
+    int                 m_LimitMax;  // 生成される量の限度
     float               m_RotSpeed;     // 破片のY軸回転速度
     float               m_ElementPoint; // 属性ポイント
     float               m_Size;         // 大きさ
@@ -31,7 +32,8 @@ private:
         m_RotSpeed    (0.0f),
         m_ElementPoint(0.0f),
         m_Size        (0.0f),
-        m_LifeTime    (0.0f)
+        m_LifeTime    (0.0f),
+        m_LimitMax(0)
     { /*DO NOTHING*/ }
 
     ~CrystalFragmentRef()

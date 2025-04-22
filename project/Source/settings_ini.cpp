@@ -7,19 +7,28 @@
 #include <chrono>
 #include "../vendor/ImGui/imgui.h"
 
-Settings_ini& Settings_ini::Inst()
-{
-    static Settings_ini instance;
-    return instance;
-}
-
 Settings_ini::Settings_ini()
 {
 }
 
 Settings_ini::~Settings_ini()
 {
+    for (auto& f : iniFiles_)
+    {
+        f.second.clear();
+    }
+    iniFiles_.clear();  ///< ファイルごとのキーと値のマップ
+    modificationTimes_.clear();      ///< ファイルの最終変更時間の記録
+    listeners_.clear();                                                  ///< 設定変更リスナーのリスト
+    activeFile_.clear();                                                                  ///< 現在アクティブなファイルのキー
+    
     StopWatcher();
+}
+
+Settings_ini& Settings_ini::Inst()
+{
+    static Settings_ini instance;
+    return instance;
 }
 
 void Settings_ini::Load(const std::string& filepath, const std::string& key, bool setActive)

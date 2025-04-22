@@ -20,6 +20,17 @@ std::string WStringToString(const std::wstring& wstr)
 
 Settings_json* Settings_json::m_Inst = nullptr;
 
+Settings_json::~Settings_json()
+{
+    for (auto& json : m_JsonFiles)
+    {
+        json.second.jsonContent.clear();
+    }
+    m_JsonFiles.clear();
+    m_FileModificationTimes.clear(); // ファイル変更時間の管理用マップ。
+    m_ChangeListeners.clear();
+}
+
 Settings_json* Settings_json::Inst()
 {
     if (!m_Inst)

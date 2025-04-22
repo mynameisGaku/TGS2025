@@ -8,7 +8,8 @@
 class CrystalFragment : public Object3D
 {
 public:
-    CrystalFragment();
+    CrystalFragment(uint32_t index = -1);
+    void SetRandFirstVelocity();
     ~CrystalFragment();
 
     void Update() override;
@@ -19,6 +20,8 @@ public:
     /// </summary>
     /// <returns>有効ならtrue</returns>
     bool IsActive() const { return m_IsActive; }
+
+    void SetIsActive(bool flag) { m_IsActive = flag; }
 private:
     // お友達
     friend class CrystalFragmentManager;
@@ -29,5 +32,6 @@ private:
     float       m_ElementPoint;     // 属性ポイント
     float       m_Size;             // 大きさ
     float       m_RotSpeed;         // Y軸回転速度
+    uint32_t    m_Index;            // 自分のインデックス
     bool        m_IsActive;         // 有効かどうか
 };

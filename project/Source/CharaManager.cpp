@@ -6,20 +6,65 @@
 #include "Component/CollisionDefine.h"
 #include "Component/ColliderCapsule.h"
 
-using namespace CharaDefine;
+#include "CharaDefineRef.h"
 
 CharaManager::CharaManager()
 {
+	CHARADEFINE_REF.Load();
+	m_Max = CHARADEFINE_REF.Max;
+	m_Tags = CHARADEFINE_REF.Tags;
+
+#ifdef USE_POOL
+	m_pPool = new Pool<CharaBase>(m_Max);
+#else
 	m_Charas.clear();
+#endif
 }
 
 CharaManager::~CharaManager()
 {
+#ifdef USE_POOL
+	for (auto& item : m_pPool->GetAllItems())
+	{
+		if (item == nullptr)
+			continue;
+
+		if (item->m_pObject != nullptr)
+		{
+			item->m_pObject->DestroyMe();
+			item->m_pObject = nullptr;
+		}
+
+		delete item;
+		item = nullptr;
+	}
+	delete m_pPool;
+#else
 	Function::DeletePointerVector(m_Charas);
+#endif
 }
 
 void CharaManager::Update()
 {
+#ifdef USE_POOL
+	auto items = m_pPool->GetAllItems();
+	for (auto& item : items)
+	{
+		auto chara = item->m_pObject;
+
+		if (chara == nullptr)
+			continue;
+
+		if (chara->IsActive())
+		{
+			chara->Update();
+		}
+		else
+		{
+			m_pPool->DeActive(item->m_Index);
+		}
+	}
+#else
 	for (auto it = m_Charas.begin(); it != m_Charas.end();)
 	{
 		// 活動しているなら
@@ -33,10 +78,26 @@ void CharaManager::Update()
 		delete* it;
 		m_Charas.erase(it);
 	}
+#endif
 }
 
 void CharaManager::Draw()
 {
+#ifdef USE_POOL
+	auto items = m_pPool->GetAllItems();
+	for (auto& item : items)
+	{
+		auto chara = item->m_pObject;
+
+		if (chara == nullptr)
+			continue;
+
+		if (chara->IsActive())
+		{
+			chara->Draw();
+		}
+	}
+#else
 	for (const auto& it : m_Charas)
 	{
 		// 活動しているなら
@@ -45,35 +106,60 @@ void CharaManager::Draw()
 			it->Draw();
 		}
 	}
+#endif
 }
 
-CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs) {
+CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs) 
+{
+	//////////////////////////////////////////////////////////////
+	// 例外処理
 
+#ifdef USE_POOL
+	if (m_pPool->CheckActiveObjectByCount(m_pPool->GetCapacity()))
+	{
+		return nullptr;
+	}
+#else
 	if (m_Charas.size() >= CHARA_NUM)
 		return nullptr;
+#endif
+	CharaBase* newChara = nullptr;
 
-	CharaBase* newChara = new CharaBase();
+	//////////////////////////////////////////////////////////////
+	// インデックス取得・インスタンスの生成
+
+#ifdef USE_POOL
+	uint32_t index = m_pPool->GetIndex();
+
+	newChara = m_pPool->Alloc();
+#else
+	newChara = new CharaBase();
+#endif
+
+	//////////////////////////////////////////////////////////////
+	// 諸々の設定
+
+	*newChara->transform = trs;
+
 	int hModel = -1;
 	// 当たり判定の構築
 	ColDefine::ColBaseParam colParamCap;
 	colParamCap.trs.scale = Vector3(70.0f);
 	colParamCap.onlyOnce = false;
 
-	switch (tag)
+	if (tag == "tPlayer")
 	{
-	case CharaDefine::CharaTag::tPlayer:
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
 		colParamCap.tag = ColDefine::Tag::tPlayer;
 		colParamCap.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tEnemyAtk };
-		break;
-
-	case CharaDefine::CharaTag::tEnemy:
+	}
+	else if (tag == "tEnemy")
+	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
 		colParamCap.tag = ColDefine::Tag::tEnemy;
 		colParamCap.targetTags = { ColDefine::Tag::tPlayer, ColDefine::Tag::tPlayerAtk };
-		break;
 	}
 
 	// モデルが反転しているのを180度回転させて直す
@@ -93,16 +179,39 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 	colliderCap->SetDraw(true);
 
 	newChara->LoadAddedComponent();
+	newChara->m_Index = index;
 
+	//////////////////////////////////////////////////////////////
+	// リストへの登録
+
+#ifdef USE_POOL
+	m_pPool->SetObjectPointer(index, newChara);
+#else
 	m_Charas.push_back(newChara);
+#endif
 
 	return newChara;
 }
 
-const CharaBase* CharaManager::CharaInst(int index) {
+const CharaBase* CharaManager::CharaInst(int index) 
+{
+#ifdef USE_POOL
+	if ((uint32_t)index > m_pPool->GetCapacity())
+	{
+		return nullptr;
+	}
 
+	return m_pPool->GetItem((uint32_t)index)->m_pObject;
+
+#else
 	if (index < 0 || index > m_Charas.size())
 		return nullptr;
 
 	return m_Charas[index];
+#endif
+}
+
+CharaBase* CharaManager::initfunc(uint32_t index, CharaBase* pChara)
+{
+	return nullptr;
 }

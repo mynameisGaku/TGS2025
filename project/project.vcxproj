@@ -165,7 +165,7 @@
     <ClInclude Include="Source\CameraDefine.h" />
     <ClInclude Include="Source\CameraManager.h" />
     <ClInclude Include="Source\CharaBase.h" />
-    <ClInclude Include="Source\CharaDefine.h" />
+    <ClInclude Include="Source\CharaDefineRef.h" />
     <ClInclude Include="Source\CharaManager.h" />
     <ClInclude Include="Source\CharaStaminaRef.h" />
     <ClInclude Include="Source\Component\AnimationEvent.h" />
@@ -308,6 +308,7 @@
     <ClCompile Include="Source\CameraManager.cpp" />
     <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
+    <ClCompile Include="Source\CharaDefineRef.cpp" />
     <ClCompile Include="Source\CharaStaminaRef.cpp" />
     <ClCompile Include="Source\Component\AIController.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
@@ -407,6 +408,7 @@
   <ItemGroup>
     <None Include="data\Json\Ball.json" />
     <None Include="data\Json\Bloom\Bloom.json" />
+    <None Include="data\Json\Chara\CharaDefine.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />

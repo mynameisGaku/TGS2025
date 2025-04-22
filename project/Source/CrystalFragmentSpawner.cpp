@@ -57,5 +57,5 @@ void CrystalFragmentSpawner::Update()
 
 void CrystalFragmentSpawner::Draw()
 {
-    DrawCapsule3D(transform->position, transform->position + Vector3(0.0f, 5.0f, 0.0f), 32.0f, 32.0f, GetColor(255, 0, 255), 0x00ff00, true);
+    DrawCapsule3D(transform->position, transform->position + Vector3(0.0f, 5.0f, 0.0f), 32.0f, 32, GetColor(255, 0, 255), 0x00ff00, true);
 }

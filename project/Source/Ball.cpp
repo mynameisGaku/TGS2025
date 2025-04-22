@@ -10,6 +10,7 @@ namespace
 	static const float BALL_MODEL_RADIUS = 83.951f;
 	static const float BALL_RADIUS = 70.0f;
 	static const float BALL_SCALE = BALL_RADIUS / BALL_MODEL_RADIUS;
+	static const float BALL_COLOR_RADIUS = 90.0f;
 }
 
 Ball::Ball()
@@ -23,6 +24,7 @@ Ball::Ball()
 	m_State = S_OWNED;
 	m_Owner = nullptr;
 	m_Collider = nullptr;
+	m_CharaTag = CharaDefine::CharaTag::tRed;	// デフォルトは赤チーム
 }
 
 Ball::~Ball()
@@ -34,7 +36,7 @@ void Ball::Init(CharaDefine::CharaTag charaTag)
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
-	param.trs.scale = V3::ONE * BALL_MODEL_RADIUS * 2;
+	param.trs.scale = V3::ONE * BALL_COLOR_RADIUS / BALL_SCALE * 2;
 
 	switch (charaTag)
 	{
@@ -50,7 +52,6 @@ void Ball::Init(CharaDefine::CharaTag charaTag)
 	m_Collider->SetOffset(V3::ZERO);
 
 	m_Collider->BaseInit(param);
-	m_Collider->SetDraw(true);
 
 	m_CharaTag = charaTag;
 }
@@ -67,7 +68,7 @@ void Ball::Draw()
 	Object3D::Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
-	DrawSphere3D(transform->position, BALL_RADIUS + 30.0f, 1, m_CharaTag == CharaDefine::CharaTag::tBlue ? 0x0000FF : 0xFF0000, 0x000000, true);
+	DrawSphere3D(transform->position, BALL_COLOR_RADIUS, 1, m_CharaTag == CharaDefine::CharaTag::tBlue ? 0x0000FF : 0xFF0000, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 }
 
@@ -86,12 +87,11 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 
 void Ball::CollisionEvent(const CollisionData& colData)
 {
-	if (m_State == S_OWNED)
+	if (m_State == S_THROWN)
 	{
-		return;
+		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
+		m_State = S_LANDED;
 	}
-
-	m_Physics->velocity *= -1.0f;
 }
 
 void Ball::collisionToGround()

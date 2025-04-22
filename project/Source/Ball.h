@@ -17,7 +17,8 @@ public:
 	enum State
 	{
 		S_OWNED = 0,
-		S_THROWN
+		S_THROWN,
+		S_LANDED
 	};
 
 	Ball();

@@ -61,18 +61,18 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 
 	switch (tag)
 	{
-	case CharaDefine::CharaTag::tPlayer:
+	case CharaDefine::CharaTag::tRed:
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamCap.tag = ColDefine::Tag::tPlayer;
-		colParamCap.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tEnemyAtk, ColDefine::Tag::tBall };
+		colParamCap.tag = ColDefine::Tag::tCharaRed;
+		colParamCap.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue };
 		break;
 
-	case CharaDefine::CharaTag::tEnemy:
+	case CharaDefine::CharaTag::tBlue:
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamCap.tag = ColDefine::Tag::tEnemy;
-		colParamCap.targetTags = { ColDefine::Tag::tPlayer, ColDefine::Tag::tPlayerAtk, ColDefine::Tag::tBall };
+		colParamCap.tag = ColDefine::Tag::tCharaBlue;
+		colParamCap.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
 		break;
 	}
 
@@ -93,6 +93,7 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 	colliderCap->SetDraw(true);
 
 	newChara->LoadAddedComponent();
+	newChara->SetTeam(tag);
 
 	m_Charas.push_back(newChara);
 

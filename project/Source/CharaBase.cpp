@@ -28,6 +28,7 @@ CharaBase::CharaBase()
 	m_RotSpeed				= 0.0f;
 	m_ChargeRateWatchDog	= 0.0f;
 	m_CatchTimer			= 0.0f;
+	m_CharaTag				= CharaDefine::CharaTag::tRed;	// デフォルトは赤チーム
 }
 
 CharaBase::~CharaBase()
@@ -67,8 +68,8 @@ void CharaBase::Draw()
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
 
-	// 当たった相手がPlayerもしくはEnemyの場合
-	if (colData.Other()->Tag() == ColDefine::Tag::tPlayer || colData.Other()->Tag() == ColDefine::Tag::tEnemy) {
+	// 当たった相手がキャラクターの場合
+	if (colData.Other()->Tag() == ColDefine::Tag::tCharaRed || colData.Other()->Tag() == ColDefine::Tag::tBallBlue) {
 
 		// 相手の情報
 		CharaBase* chara = colData.Other()->Parent<CharaBase>();
@@ -202,6 +203,7 @@ void CharaBase::GenerateBall()
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);
+	m_pBall->Init(m_CharaTag);
 }
 
 void CharaBase::Catch()

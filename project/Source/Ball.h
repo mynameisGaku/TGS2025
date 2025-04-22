@@ -1,5 +1,6 @@
 #pragma once
 #include "Object3D.h"
+#include "CharaDefine.h"
 
 class Physics;
 class ColliderCapsule;
@@ -21,6 +22,7 @@ public:
 
 	Ball();
 	~Ball();
+	void Init(CharaDefine::CharaTag charaTag);
 	void Update() override;
 	void Draw() override;
 
@@ -37,6 +39,7 @@ private:
 	ColliderCapsule* m_Collider;
 	State			m_State;
 	CharaBase*		m_Owner;
+	CharaDefine::CharaTag m_CharaTag;
 
 	void collisionToGround();
 	void setVelocity(const Vector3& velocity);

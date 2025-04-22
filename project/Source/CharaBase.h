@@ -1,5 +1,6 @@
 #pragma once
 #include "Object3D.h"
+#include "CharaDefine.h"
 #include <Library/time.h>
 
 class CharaStamina;
@@ -22,6 +23,8 @@ public:
 	void LoadAddedComponent();
 	void Update() override;
 	void Draw() override;
+
+	void SetTeam(CharaDefine::CharaTag tag) { m_CharaTag = tag; }
 
 	//=======================================================================================
 	// ▼当たり判定
@@ -109,4 +112,5 @@ private:
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
 	float			m_CatchTimer;			// キャッチ残り時間タイマー
+	CharaDefine::CharaTag m_CharaTag;		// キャラクターのチームのタグ
 };

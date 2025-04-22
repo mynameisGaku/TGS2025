@@ -8,7 +8,7 @@
 namespace
 {
 	static const float BALL_MODEL_RADIUS = 83.951f;
-	static const float BALL_RADIUS = 100.0f;
+	static const float BALL_RADIUS = 70.0f;
 	static const float BALL_SCALE = BALL_RADIUS / BALL_MODEL_RADIUS;
 }
 
@@ -20,23 +20,39 @@ Ball::Ball()
 	m_Physics = Object3D::AddComponent<Physics>();
 	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
 
+	m_State = S_OWNED;
+	m_Owner = nullptr;
+	m_Collider = nullptr;
+}
+
+Ball::~Ball()
+{
+}
+
+void Ball::Init(CharaDefine::CharaTag charaTag)
+{
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
 	param.trs.scale = V3::ONE * BALL_MODEL_RADIUS * 2;
-	param.tag = ColDefine::Tag::tPlayerAtk;
-	param.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tTerrain };
+
+	switch (charaTag)
+	{
+	case CharaDefine::CharaTag::tRed:
+		param.tag = ColDefine::Tag::tBallRed;
+		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tTerrain };
+		break;
+	case CharaDefine::CharaTag::tBlue:
+		param.tag = ColDefine::Tag::tBallBlue;
+		param.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tTerrain };
+		break;
+	}
 	m_Collider->SetOffset(V3::ZERO);
 
 	m_Collider->BaseInit(param);
 	m_Collider->SetDraw(true);
 
-	m_State = S_OWNED;
-	m_Owner = nullptr;
-}
-
-Ball::~Ball()
-{
+	m_CharaTag = charaTag;
 }
 
 void Ball::Update()
@@ -49,6 +65,10 @@ void Ball::Update()
 void Ball::Draw()
 {
 	Object3D::Draw();
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	DrawSphere3D(transform->position, BALL_RADIUS + 30.0f, 1, m_CharaTag == CharaDefine::CharaTag::tBlue ? 0x0000FF : 0xFF0000, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 }
 
 void Ball::Throw(const Vector3& velocity)
@@ -66,6 +86,11 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 
 void Ball::CollisionEvent(const CollisionData& colData)
 {
+	if (m_State == S_OWNED)
+	{
+		return;
+	}
+
 	m_Physics->velocity *= -1.0f;
 }
 

@@ -24,8 +24,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	Instantiate<CollisionManager>();
 
 	CharaManager* charaM = Instantiate<CharaManager>();
-	CharaBase* player = charaM->Create(CharaDefine::CharaTag::tPlayer, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
-	CharaBase* enemy = charaM->Create(CharaDefine::CharaTag::tEnemy, Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	CharaBase* player = charaM->Create(CharaDefine::CharaTag::tRed, Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	CharaBase* enemy = charaM->Create(CharaDefine::CharaTag::tBlue, Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 
 	player->SetMoveSpeed(500.0f);
 	player->SetRotSpeed(Math::DegToRad(10.0f));

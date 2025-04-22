@@ -3,8 +3,8 @@
 namespace CharaDefine {
 
 	enum class CharaTag {
-		tPlayer,
-		tEnemy,
+		tRed,
+		tBlue,
 	};
 
 	static const int CHARA_NUM = 6;

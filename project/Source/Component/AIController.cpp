@@ -9,8 +9,6 @@ namespace
 
 AIController::AIController()
 {
-	m_Chara = Parent<CharaBase>();
-
 	m_FSM = new TinyFSM<AIController>(this);
 	m_FSM->RegisterStateName(&AIController::IdleState, "IdleState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&AIController::MoveState, "MoveState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
@@ -22,6 +20,11 @@ AIController::AIController()
 AIController::~AIController()
 {
 	Function::DeletePointer(m_FSM);
+}
+
+void AIController::Init()
+{
+	m_Chara = Parent<CharaBase>();
 }
 
 void AIController::Reset()
@@ -78,6 +81,7 @@ void AIController::IdleState(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
 	{
+		m_Chara->Move(Vector3(0, 2, 0));
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
@@ -105,7 +109,7 @@ void AIController::MoveState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
-		
+		m_Chara->Move(Vector3(0, 0, 1));
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
@@ -125,10 +129,12 @@ void AIController::AttackState(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
 	{
+		m_Chara->GenerateBall();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
+		m_Chara->Move(Vector3(0, 0, -1));
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
@@ -137,6 +143,7 @@ void AIController::AttackState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
+		m_Chara->ThrowBallForward();
 	}
 	break;
 	}

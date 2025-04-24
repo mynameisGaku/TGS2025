@@ -6,6 +6,7 @@
 Catcher::Catcher()
 {
 	m_Collider = nullptr;
+	m_Parent = nullptr;
 }
 
 Catcher::~Catcher()

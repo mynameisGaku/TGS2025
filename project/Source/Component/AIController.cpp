@@ -1,6 +1,7 @@
 #include "AIController.h"
 #include "../CharaBase.h"
 #include "../Util/Utils.h"
+#include "../InputManager.h"
 
 namespace
 {
@@ -39,6 +40,32 @@ void AIController::Reset()
 void AIController::Update()
 {
 	m_FSM->Update();
+
+	// デバッグ切り替え
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha1))
+	{
+		m_FSM->ChangeState(&AIController::IdleState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha2))
+	{
+		m_FSM->ChangeState(&AIController::MoveState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha3))
+	{
+		m_FSM->ChangeState(&AIController::AttackState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha4))
+	{
+		m_FSM->ChangeState(&AIController::CatchState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
 
 	// 行動切り替えタイマー
 	m_ActionTimer += Time::DeltaTimeLapseRate();

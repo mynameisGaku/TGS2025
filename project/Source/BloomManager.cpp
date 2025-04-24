@@ -1,5 +1,6 @@
 #include "BloomManager.h"
 #include "WindowSetting.h"
+#include "InputManager.h"
 
 void SetDrawScreenWithCamera(int screen)
 {
@@ -28,6 +29,7 @@ void BloomManager::Reset()
 	DeleteGraph(m_EmitterScreen);
 	m_EmitterScreen = MakeScreen((int)WindowSetting::width, (int)WindowSetting::height, FALSE);
 	SetParameter(BLOOM_REF.Param);
+	m_DoBloom = true;
 }
 
 void BloomManager::Update()
@@ -36,10 +38,16 @@ void BloomManager::Update()
 	{
 		Reset();
 	}
+	if (InputManager::Push(KeyDefine::KeyCode::F2))
+	{
+		m_DoBloom = !m_DoBloom;
+	}
 }
 
 void BloomManager::Draw()
 {
+	if (not m_DoBloom) return;
+
 	int highBrightScreen = MakeScreen((int)WindowSetting::width, (int)WindowSetting::height, FALSE);
 	int downScaleScreen = MakeScreen((int)WindowSetting::width / m_Parameter.DownScale, (int)WindowSetting::height / m_Parameter.DownScale, FALSE);
 

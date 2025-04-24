@@ -3,10 +3,10 @@
 
 #include "Component/Physics.h"
 #include "Component/CollisionDefine.h"
-#include "Component/ColliderCapsule.h"
 #include "Stage.h"
 #include "CharaStamina.h"
 #include "Ball.h"
+#include "Catcher.h"
 
 using namespace KeyDefine;
 
@@ -29,15 +29,24 @@ CharaBase::CharaBase()
 	m_ChargeRateWatchDog	= 0.0f;
 	m_CatchTimer			= 0.0f;
 	m_CharaTag				= CharaDefine::CharaTag::tRed;	// デフォルトは赤チーム
+	m_Catcher				= nullptr;
 }
 
 CharaBase::~CharaBase()
 {
+	m_Catcher->DestroyMe();
 }
 
-void CharaBase::LoadAddedComponent()
+void CharaBase::Init(CharaDefine::CharaTag tag)
 {
+	m_CharaTag = tag;
 	m_pPhysics = GetComponent<Physics>();
+	m_Catcher = Instantiate<Catcher>();
+	m_Catcher->transform->position = Vector3(0, CharaDefine::CATCH_RADIUS, CharaDefine::CATCH_RADIUS);
+	m_Catcher->transform->scale = V3::ONE * CharaDefine::CATCH_RADIUS * 2;
+	m_Catcher->transform->SetParent(transform);
+	m_Catcher->Init(tag);
+	m_Catcher->SetColliderActive(false);
 }
 
 void CharaBase::Update() {
@@ -48,7 +57,14 @@ void CharaBase::Update() {
 	{
 		m_CatchTimer -= Time::DeltaTimeLapseRate();
 		if (m_CatchTimer < 0.0f)
+		{
 			m_CatchTimer = 0.0f;
+			m_Catcher->SetColliderActive(false);
+		}
+		else
+		{
+			m_Catcher->SetColliderActive(true);
+		}
 
 		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
 	}
@@ -59,11 +75,6 @@ void CharaBase::Update() {
 void CharaBase::Draw()
 {
 	Object3D::Draw();
-
-	if (m_CatchTimer > 0)
-	{
-		DrawSphere3D(transform->position + transform->Forward() * 100.0f + transform->Up() * 100.0f, 50.0f, 1, 0xFF00FF, 0x000000, true);
-	}
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {

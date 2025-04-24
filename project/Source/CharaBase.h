@@ -1,11 +1,13 @@
 #pragma once
 #include "Object3D.h"
 #include "CharaDefine.h"
+#include "Component/ColliderCapsule.h"
 #include <Library/time.h>
 
 class CharaStamina;
 class Ball;
 class Physics;
+class Catcher;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -13,18 +15,12 @@ class Physics;
 class CharaBase : public Object3D
 {
 public:
-
 	CharaBase();
 	virtual ~CharaBase();
 
-	/// <summary>
-	/// 自分にくっついてるコンポーネントのポインタを保存
-	/// </summary>
-	void LoadAddedComponent();
+	void Init(CharaDefine::CharaTag tag);
 	void Update() override;
 	void Draw() override;
-
-	void SetTeam(CharaDefine::CharaTag tag) { m_CharaTag = tag; }
 
 	//=======================================================================================
 	// ▼当たり判定
@@ -113,4 +109,5 @@ private:
 	float			m_RotSpeed;				// 回転速度
 	float			m_CatchTimer;			// キャッチ残り時間タイマー
 	CharaDefine::CharaTag m_CharaTag;		// キャラクターのチームのタグ
+	Catcher*		m_Catcher;				// キャッチの当たり判定
 };

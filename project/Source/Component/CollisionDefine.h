@@ -29,6 +29,8 @@ namespace ColDefine {
 		tCharaBlue,	// 青チームキャラ
 		tBallRed,	// 赤チームボール
 		tBallBlue,	// 青チームボール
+		tCatchRed,	// 赤チームキャッチ
+		tCatchBlue,	// 青チームキャッチ
 		tTerrain,	// 地形
 		tMax,
 	};

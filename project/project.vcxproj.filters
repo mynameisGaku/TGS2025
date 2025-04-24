@@ -364,6 +364,9 @@
     <ClCompile Include="Source\CamState_Chase.cpp">
       <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Catcher.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -794,6 +797,9 @@
     </ClInclude>
     <ClInclude Include="Source\Component\AIController.h">
       <Filter>Framework\04_Component\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Catcher.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

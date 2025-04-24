@@ -55,24 +55,24 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 	CharaBase* newChara = new CharaBase();
 	int hModel = -1;
 	// “–‚½‚è”»’è‚Ì\’z
-	ColDefine::ColBaseParam colParamCap;
-	colParamCap.trs.scale = Vector3(70.0f);
-	colParamCap.onlyOnce = false;
+	ColDefine::ColBaseParam colParamChara;
+	colParamChara.trs.scale = Vector3(70.0f);
+	colParamChara.onlyOnce = false;
 
 	switch (tag)
 	{
 	case CharaDefine::CharaTag::tRed:
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamCap.tag = ColDefine::Tag::tCharaRed;
-		colParamCap.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue };
+		colParamChara.tag = ColDefine::Tag::tCharaRed;
+		colParamChara.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue };
 		break;
 
 	case CharaDefine::CharaTag::tBlue:
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamCap.tag = ColDefine::Tag::tCharaBlue;
-		colParamCap.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
+		colParamChara.tag = ColDefine::Tag::tCharaBlue;
+		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
 		break;
 	}
 
@@ -87,13 +87,12 @@ CharaBase* CharaManager::Create(CharaDefine::CharaTag tag, const Transform& trs)
 	newChara->AddComponent<Physics>()->Init(GRAVITY, FRICTION);
 
 	// “–‚½‚è”»’è‚ðÝ’è
-	ColliderCapsule* colliderCap = newChara->AddComponent<ColliderCapsule>();
-	colliderCap->BaseInit(colParamCap);
-	colliderCap->SetOffset(V3::SetY(130.0f));
-	colliderCap->SetDraw(true);
+	ColliderCapsule* colliderChara = newChara->AddComponent<ColliderCapsule>();
+	colliderChara->BaseInit(colParamChara);
+	colliderChara->SetOffset(V3::SetY(130.0f));
+	colliderChara->SetDraw(true);
 
-	newChara->LoadAddedComponent();
-	newChara->SetTeam(tag);
+	newChara->Init(tag);
 
 	m_Charas.push_back(newChara);
 

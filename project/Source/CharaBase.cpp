@@ -34,6 +34,7 @@ CharaBase::CharaBase()
 
 CharaBase::~CharaBase()
 {
+	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 }
 
@@ -47,6 +48,7 @@ void CharaBase::Init(CharaDefine::CharaTag tag)
 	m_Catcher->transform->SetParent(transform);
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
+	m_Catcher->SetParent(this);
 }
 
 void CharaBase::Update() {

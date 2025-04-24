@@ -1,5 +1,7 @@
 #include "Catcher.h"
 #include "Component/ColliderCapsule.h"
+#include "CharaBase.h"
+#include "Ball.h"
 
 Catcher::Catcher()
 {
@@ -29,7 +31,6 @@ void Catcher::Init(CharaDefine::CharaTag tag)
 	}
 
 	m_Collider->BaseInit(param);
-	m_Collider->SetDraw(true);
 }
 
 void Catcher::Update()
@@ -47,6 +48,16 @@ void Catcher::Draw()
 	{
 		DrawSphere3D(transform->Global().position, transform->Global().scale.x / 2, 4, 0xFF00FF, 0x000000, true);
 	}
+}
+
+void Catcher::CollisionEvent(const CollisionData& colData)
+{
+	Ball* ball = colData.Other()->Parent<Ball>();
+	if (ball->GetState() == Ball::S_OWNED) return;
+
+	ball->DestroyMe();	//ToDo:ƒ{[ƒ‹‹zŽû‚Ì‰‰o
+
+	m_Parent->GenerateBall();
 }
 
 void Catcher::SetColliderActive(bool isActive)

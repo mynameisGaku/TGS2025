@@ -30,6 +30,8 @@ public:
 	void Throw(const Vector3& velocity);
 	void Throw(const Vector3& velocity, CharaBase*owner);
 
+	State GetState() const { return m_State; }
+
 	/// <summary>
 	/// “–‚½‚è”»’èˆ—
 	/// </summary>

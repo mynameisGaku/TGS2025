@@ -42,11 +42,11 @@ void Ball::Init(CharaDefine::CharaTag charaTag)
 	{
 	case CharaDefine::CharaTag::tRed:
 		param.tag = ColDefine::Tag::tBallRed;
-		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tTerrain };
+		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain };
 		break;
 	case CharaDefine::CharaTag::tBlue:
 		param.tag = ColDefine::Tag::tBallBlue;
-		param.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tTerrain };
+		param.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tTerrain };
 		break;
 	}
 	m_Collider->SetOffset(V3::ZERO);

@@ -3,6 +3,7 @@
 #include "Component/ColliderCapsule.h"
 #include <string>
 #include <Library/time.h>
+#include "TinyFSM.h"
 
 class CharaStamina;
 class Ball;
@@ -98,6 +99,14 @@ public:
 	/// </summary>
 	void Catch();
 
+	//=======================================================================================
+	// ▼各ステート
+	
+	void IdleState(FSMSignal sig);
+	void MoveState(FSMSignal sig);
+	void ThrowState(FSMSignal sig);
+	void CatchState(FSMSignal sig);
+
 private:
 	friend class CharaManager;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
@@ -112,4 +121,5 @@ private:
 	float			m_CatchTimer;			// キャッチ残り時間タイマー
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
+	TinyFSM<AIController>* m_FSM;
 };

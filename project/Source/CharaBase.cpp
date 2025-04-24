@@ -31,6 +31,7 @@ CharaBase::CharaBase()
 	m_CatchTimer			= 0.0f;
 	m_CharaTag				= CHARADEFINE_REF.Tags[0];
 	m_Catcher				= nullptr;
+	m_Index					= 0;
 }
 
 CharaBase::~CharaBase()
@@ -228,5 +229,97 @@ void CharaBase::Catch()
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
 		m_CatchTimer = CATCH_TIME;
+	}
+}
+
+void CharaBase::IdleState(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::MoveState(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::ThrowState(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::CatchState(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
 	}
 }

@@ -8,6 +8,7 @@
 #include "Ball.h"
 #include "Catcher.h"
 #include "CharaDefineRef.h"
+#include "Component/Animator.h"
 
 using namespace KeyDefine;
 
@@ -32,6 +33,22 @@ CharaBase::CharaBase()
 	m_CharaTag				= CHARADEFINE_REF.Tags[0];
 	m_Catcher				= nullptr;
 	m_Index					= 0;
+	m_Animator				= nullptr;
+
+	m_FSM = new TinyFSM<CharaBase>(this);
+
+	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	m_FSM->RegisterStateName(&CharaBase::StateActionIdle, "StateActionIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateActionIdleEmote, "StateActionIdleEmote");
+	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToRun, "StateActionIdleToRun");
+	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToStandingIdle, "StateActionIdleToStandingIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateRun, "StateRun");
+	m_FSM->RegisterStateName(&CharaBase::StateRunToActionIdle, "StateRunToActionIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateStandingIdle, "StateStandingIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleEmote, "StateStandingIdleEmote");
+	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
+
+	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
 }
 
 CharaBase::~CharaBase()
@@ -54,6 +71,19 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	m_Animator = AddComponent<Animator>();
+	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.5f);
+	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
+	m_Animator->LoadAnim("data/Animation/ActionIdle", "ActionIdle", true);
+	m_Animator->LoadAnim("data/Animation/ActionIdleEmote", "ActionIdleEmote", false);
+	m_Animator->LoadAnim("data/Animation/ActionIdleToRun", "ActionIdleToRun", false, true);
+	m_Animator->LoadAnim("data/Animation/ActionIdleToStandingIdle", "ActionIdleToStandingIdle", false);
+	m_Animator->LoadAnim("data/Animation/Run", "Run", true);
+	m_Animator->LoadAnim("data/Animation/RunToActionIdle", "RunToActionIdle", false, true);
+	m_Animator->LoadAnim("data/Animation/StandingIdle", "StandingIdle", true);
+	m_Animator->LoadAnim("data/Animation/StandingIdleEmote", "StandingIdleEmote", false);
+	m_Animator->LoadAnim("data/Animation/StandingIdleToActionIdle", "StandingIdleToActionIdle", false);
 }
 
 void CharaBase::Update() {
@@ -75,6 +105,8 @@ void CharaBase::Update() {
 
 		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
 	}
+
+	m_FSM->Update();
 
 	Object3D::Update();
 }
@@ -232,12 +264,187 @@ void CharaBase::Catch()
 	}
 }
 
-void CharaBase::IdleState(FSMSignal sig)
+void CharaBase::StateActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		m_Animator->Play("ActionIdle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_pPhysics->FlatVelocity().SquareSize() > 0.0f)
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdleToRun); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateActionIdleEmote(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("ActionIdleEmote");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateActionIdleToRun(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("ActionIdleToRun");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateRun); // ステートを変更
+			m_Animator->Play("Run");
+			m_Animator->SetCurrentFrame(3.0f);
+		}
+		else if (m_pPhysics->FlatVelocity().SquareSize() <= 0.0f)
+		{
+			m_FSM->ChangeState(&CharaBase::StateRunToActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("ActionIdleToStandingIdle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateStandingIdleEmote); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateRun(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("Run");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_pPhysics->FlatVelocity().SquareSize() <= 0.0f)
+		{
+			m_FSM->ChangeState(&CharaBase::StateRunToActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateRunToActionIdle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("RunToActionIdle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateStandingIdle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("StandingIdle");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -255,16 +462,21 @@ void CharaBase::IdleState(FSMSignal sig)
 	}
 }
 
-void CharaBase::MoveState(FSMSignal sig)
+void CharaBase::StateStandingIdleEmote(FSMSignal sig)
 {
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		m_Animator->Play("StandingIdleEmote");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateStandingIdleToActionIdle); // ステートを変更
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -278,39 +490,21 @@ void CharaBase::MoveState(FSMSignal sig)
 	}
 }
 
-void CharaBase::ThrowState(FSMSignal sig)
+void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		m_Animator->Play("StandingIdleToActionIdle");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-	}
-	break;
-	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
-	{
-	}
-	break;
-	case FSMSignal::SIG_Exit: // 終了
-	{
-	}
-	break;
-	}
-}
-
-void CharaBase::CatchState(FSMSignal sig)
-{
-	switch (sig)
-	{
-	case FSMSignal::SIG_Enter: // 開始
-	{
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新
-	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新

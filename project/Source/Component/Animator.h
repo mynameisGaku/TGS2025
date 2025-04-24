@@ -85,6 +85,9 @@ public:
 	/// <param name="mergeTimeMax">何秒で補完しきるか</param>
 	void Init(std::string origin, float frameRate, float mergeTimeMax);
 
+	// 常に掛ける行列をセット
+	void SetOffsetMatrix(const MATRIX& matrix) { offsetMatrix = matrix; }
+
 	void Update() override;
 	void Draw() override {};
 
@@ -216,4 +219,6 @@ private:
 
 	std::string origin;	// モデルの原点の名前
 	std::string playingLabel;	// 再生中のアニメーションの名札
+
+	MATRIX offsetMatrix;	// ルートに常に掛ける行列
 };

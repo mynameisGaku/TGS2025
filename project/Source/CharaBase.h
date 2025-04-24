@@ -9,6 +9,7 @@ class CharaStamina;
 class Ball;
 class Physics;
 class Catcher;
+class Animator;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -101,11 +102,16 @@ public:
 
 	//=======================================================================================
 	// ▼各ステート
-	
-	void IdleState(FSMSignal sig);
-	void MoveState(FSMSignal sig);
-	void ThrowState(FSMSignal sig);
-	void CatchState(FSMSignal sig);
+
+	void StateActionIdle(FSMSignal sig);
+	void StateActionIdleEmote(FSMSignal sig);
+	void StateActionIdleToRun(FSMSignal sig);
+	void StateActionIdleToStandingIdle(FSMSignal sig);
+	void StateRun(FSMSignal sig);
+	void StateRunToActionIdle(FSMSignal sig);
+	void StateStandingIdle(FSMSignal sig);
+	void StateStandingIdleEmote(FSMSignal sig);
+	void StateStandingIdleToActionIdle(FSMSignal sig);
 
 private:
 	friend class CharaManager;
@@ -121,5 +127,6 @@ private:
 	float			m_CatchTimer;			// キャッチ残り時間タイマー
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
-	TinyFSM<AIController>* m_FSM;
+	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
+	Animator*		m_Animator;				// アニメーション
 };

@@ -24,6 +24,8 @@ Animator::Animator() {
 
 	origin = "";
 	playingLabel = "";
+
+	offsetMatrix = MGetIdent();
 }
 
 Animator::~Animator() {
@@ -205,6 +207,7 @@ void Animator::Update() {
 		// 現在の行列を取得
 		currentM = MV1GetFrameLocalMatrix(parentModel, hRoot);
 
+
 		// ◇ローカル座標の固定化が有効なら
 		if (anims[playingLabel].isFixedRoot)
 		{
@@ -228,6 +231,9 @@ void Animator::Update() {
 			// 最低値 + (最大値 - 最低値) * progress
 			currentM = MAdd(prevM, MAdd(currentM, prevM * MGetScale(V3::ONE * -1.0f)) * MGetScale(V3::ONE * progress));
 		}
+
+		// テスト
+		currentM *= offsetMatrix;
 
 		// セット
 		MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
@@ -285,7 +291,7 @@ void Animator::Play(std::string label, float speed)
 		current.attachName = label;
 
 		// 再生終了地点を設定する
-		if (anims[label].endFrame < 0)
+		if (anims[label].endFrame <= 0)
 			current.maxFrame = MV1GetAttachAnimTotalTime(parentModel, current.attachID);
 		else
 			current.maxFrame = anims[label].endFrame;

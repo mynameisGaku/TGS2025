@@ -3,11 +3,13 @@
 #include "Component/ColliderCapsule.h"
 #include <string>
 #include <Library/time.h>
+#include "TinyFSM.h"
 
 class CharaStamina;
 class Ball;
 class Physics;
 class Catcher;
+class Animator;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -98,6 +100,19 @@ public:
 	/// </summary>
 	void Catch();
 
+	//=======================================================================================
+	// ▼各ステート
+
+	void StateActionIdle(FSMSignal sig);
+	void StateActionIdleEmote(FSMSignal sig);
+	void StateActionIdleToRun(FSMSignal sig);
+	void StateActionIdleToStandingIdle(FSMSignal sig);
+	void StateRun(FSMSignal sig);
+	void StateRunToActionIdle(FSMSignal sig);
+	void StateStandingIdle(FSMSignal sig);
+	void StateStandingIdleEmote(FSMSignal sig);
+	void StateStandingIdleToActionIdle(FSMSignal sig);
+
 private:
 	friend class CharaManager;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
@@ -112,4 +127,6 @@ private:
 	float			m_CatchTimer;			// キャッチ残り時間タイマー
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
+	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
+	Animator*		m_Animator;				// アニメーション
 };

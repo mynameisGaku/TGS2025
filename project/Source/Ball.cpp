@@ -2,36 +2,63 @@
 #include "Library/resourceLoader.h"
 #include "Component/Physics.h"
 #include "BallRef.h"
-#include "Component/ColliderSphere.h"
+#include "Component/ColliderCapsule.h"
 #include "Stage.h"
+#include "BloomManager.h"
+#include "CharaDefineRef.h"
 
-// ToDo:ƒRƒŠƒWƒ‡ƒ“
 namespace
 {
-	static const float BALL_RADIUS = 83.951f;
+	static const float BALL_MODEL_RADIUS = 83.951f;
+	static const float BALL_RADIUS = 70.0f;
+	static const float BALL_SCALE = BALL_RADIUS / BALL_MODEL_RADIUS;
+	static const float BALL_COLOR_RADIUS = 90.0f;
 }
 
 Ball::Ball()
 {
 	Object3D::SetModel(ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1"));
 
+	transform->scale = V3::ONE * BALL_SCALE;
 	m_Physics = Object3D::AddComponent<Physics>();
 	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
 
-	m_Collider = Object3D::AddComponent<ColliderSphere>();
-
-	ColDefine::ColBaseParam param;
-	param.push = true;
-	param.trs.scale = V3::ONE * BALL_RADIUS;
-	// ToDo:tag•t‚¯‚é
-
-	m_Collider->BaseInit(param);
-
 	m_State = S_OWNED;
+	m_Owner = nullptr;
+	m_Collider = nullptr;
+	m_CharaTag = CHARADEFINE_REF.Tags[0];
 }
 
 Ball::~Ball()
 {
+}
+
+void Ball::Init(std::string charaTag)
+{
+	m_Collider = Object3D::AddComponent<ColliderCapsule>();
+
+	ColDefine::ColBaseParam param;
+	param.trs.scale = V3::ONE * BALL_COLOR_RADIUS / BALL_SCALE * 2;
+
+	if (charaTag == "Red")
+	{
+		param.tag = ColDefine::Tag::tBallRed;
+		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain };
+	}
+	else if (charaTag == "Blue")
+	{
+		param.tag = ColDefine::Tag::tBallBlue;
+		param.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tTerrain };
+	}
+	else
+	{
+		param.tag = ColDefine::Tag::tBallRed;
+		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain };
+	}
+
+	m_Collider->SetOffset(V3::ZERO);
+	m_Collider->BaseInit(param);
+	m_CharaTag = charaTag;
 }
 
 void Ball::Update()
@@ -43,7 +70,18 @@ void Ball::Update()
 
 void Ball::Draw()
 {
+	FindGameObject<BloomManager>()->SetDrawScreenToEmitter();
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	DrawSphere3D(transform->position, BALL_COLOR_RADIUS, 1, m_CharaTag == "Red" ? 0xFF0000 : 0x0000FF, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+
+	FindGameObject<BloomManager>()->SetDrawScreenToBack();
 	Object3D::Draw();
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	DrawSphere3D(transform->position, BALL_COLOR_RADIUS, 1, m_CharaTag == "Red" ? 0xFF0000 : 0x0000FF, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 }
 
 void Ball::Throw(const Vector3& velocity)
@@ -57,6 +95,15 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 {
 	Throw(velocity);
 	m_Owner = owner;
+}
+
+void Ball::CollisionEvent(const CollisionData& colData)
+{
+	if (m_State == S_THROWN)
+	{
+		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
+		m_State = S_LANDED;
+	}
 }
 
 void Ball::collisionToGround()

@@ -22,9 +22,10 @@ public:
 	void Draw() override;
 
 	void SetDrawScreenToEmitter();
+	void SetDrawScreenToBack();
 	void SetParameter(BloomRef::Parameter parameter);
 private:
 	int m_EmitterScreen;	// 個別で発光させたいやつを描画するためのスクリーン
-
+	bool m_DoBloom;		// ブルームをかけるかどうか
 	BloomRef::Parameter m_Parameter;	// ブルームのパラメータ
 };

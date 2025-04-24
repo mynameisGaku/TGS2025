@@ -1,10 +1,13 @@
 #pragma once
 #include "Object3D.h"
+#include "Component/ColliderCapsule.h"
+#include <string>
 #include <Library/time.h>
 
 class CharaStamina;
 class Ball;
 class Physics;
+class Catcher;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -12,15 +15,12 @@ class Physics;
 class CharaBase : public Object3D
 {
 public:
-
 	CharaBase();
 	virtual ~CharaBase();
 
-	/// <summary>
-	/// 自分にくっついてるコンポーネントのポインタを保存
-	/// </summary>
-	void LoadAddedComponent();
-	virtual void Update() override;
+	void Init(std::string tag);
+	void Update() override;
+	void Draw() override;
 
 	//=======================================================================================
 	// ▼当たり判定
@@ -90,6 +90,14 @@ public:
 	/// <returns></returns>
 	bool IsChargingBall() const { return not m_IsCharging; }
 
+	//=======================================================================================
+	// ▼キャッチ
+
+	/// <summary>
+	/// この関数を呼び出している間、吸引キャッチが行われる。
+	/// </summary>
+	void Catch();
+
 private:
 	friend class CharaManager;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
@@ -101,4 +109,7 @@ private:
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
 	int				m_Index;				// 自身のインデックス
+	float			m_CatchTimer;			// キャッチ残り時間タイマー
+	std::string		m_CharaTag;				// キャラクターのチームのタグ
+	Catcher*		m_Catcher;				// キャッチの当たり判定
 };

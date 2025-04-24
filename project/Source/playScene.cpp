@@ -8,6 +8,7 @@
 #include "CameraManager.h"
 #include "Component/PlayerController.h"
 #include "Component/AIController.h"
+#include "Component/CollisionManager.h"
 
 //=== É{Å[Éã ===
 #include "BallManager.h"
@@ -24,9 +25,12 @@ using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
+	Instantiate<CollisionManager>();
+
 	CharaManager* charaM = Instantiate<CharaManager>();
-	CharaBase* player = charaM->Create("tPlayer", Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
-	CharaBase* enemy = charaM->Create("tEnemy", Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+
+	CharaBase* player = charaM->Create("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
+	CharaBase* enemy = charaM->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 
 	player->SetMoveSpeed(500.0f);
 	player->SetRotSpeed(Math::DegToRad(10.0f));

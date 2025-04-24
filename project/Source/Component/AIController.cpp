@@ -1,6 +1,7 @@
 #include "AIController.h"
 #include "../CharaBase.h"
 #include "../Util/Utils.h"
+#include "../InputManager.h"
 
 namespace
 {
@@ -13,6 +14,7 @@ AIController::AIController()
 	m_FSM->RegisterStateName(&AIController::IdleState, "IdleState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&AIController::MoveState, "MoveState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&AIController::AttackState, "AttackState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	m_FSM->RegisterStateName(&AIController::CatchState, "CatchState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 
 	Reset();
 }
@@ -42,6 +44,31 @@ void AIController::Update()
 	if (m_FSM != nullptr)
 		m_FSM->ImGuiDebugRender();
 
+	// デバッグ切り替え
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha1))
+	{
+		m_FSM->ChangeState(&AIController::IdleState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha2))
+	{
+		m_FSM->ChangeState(&AIController::MoveState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha3))
+	{
+		m_FSM->ChangeState(&AIController::AttackState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
+	if (InputManager::Push(KeyDefine::KeyCode::Alpha4))
+	{
+		m_FSM->ChangeState(&AIController::CatchState);
+		m_ActionTimer = 0.0f; // タイマーリセット
+		return;
+	}
 
 	// 行動切り替えタイマー
 	m_ActionTimer += Time::DeltaTimeLapseRate();
@@ -49,20 +76,21 @@ void AIController::Update()
 	if (m_ActionTimer >= CHANGE_STATE_TIME)
 	{
 		float rand = GetRand(10000) / 10000.0f; // 乱数取得
+		if (rand < 0.25f)
+		{
+			ChangeState(&AIController::IdleState); // 移動
+		}
 		if (rand < 0.5f)
 		{
-			// 移動
-			m_FSM->ChangeState(&AIController::MoveState);
+			ChangeState(&AIController::MoveState); // 移動
 		}
-		else if (rand < 0.8f)
+		else if (rand < 0.75f)
 		{
-			// 攻撃
-			m_FSM->ChangeState(&AIController::AttackState);
+			ChangeState(&AIController::AttackState); // 攻撃
 		}
 		else
 		{
-			// 待機
-			m_FSM->ChangeState(&AIController::IdleState);
+			ChangeState(&AIController::CatchState); // 捕まえる
 		}
 
 		m_ActionTimer = 0.0f; // タイマーリセット
@@ -148,6 +176,30 @@ void AIController::AttackState(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
 		m_Chara->ThrowBallForward();
+	}
+	break;
+	}
+}
+
+void AIController::CatchState(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
+	{
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新 (Update)
+	{
+		m_Chara->Catch();
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了 (Exit)
+	{
 	}
 	break;
 	}

@@ -21,6 +21,7 @@ void CharaDefineRef::Load(bool ForceLoad)
     {
         Tags.push_back(tmp);
     }
+    CatchRadius = jsonLoader->GetOrDefault<float>("Param.CatchRadius", 0.0f, FILEKEY);
     // ƒ[ƒh‚µ‚½‚æ
     m_WasLoad = true;
 }

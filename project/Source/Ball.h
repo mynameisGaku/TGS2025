@@ -1,9 +1,11 @@
 #pragma once
 #include "Object3D.h"
+#include <string>
 
 class Physics;
-class ColliderSphere;
+class ColliderCapsule;
 class CharaBase;
+class Collider;
 
 /// <summary>
 /// キャラクターが投げるボール
@@ -15,21 +17,32 @@ public:
 	enum State
 	{
 		S_OWNED = 0,
-		S_THROWN
+		S_THROWN,
+		S_LANDED
 	};
 
 	Ball();
 	~Ball();
+	void Init(std::string charaTag);
 	void Update() override;
 	void Draw() override;
 
 	void Throw(const Vector3& velocity);
 	void Throw(const Vector3& velocity, CharaBase*owner);
+
+	State GetState() const { return m_State; }
+
+	/// <summary>
+	/// 当たり判定処理
+	/// </summary>
+	/// <param name="colData">当たり判定情報</param>
+	void CollisionEvent(const CollisionData& colData) override;
 private:
 	Physics*		m_Physics;
-	ColliderSphere* m_Collider;
+	ColliderCapsule* m_Collider;
 	State			m_State;
 	CharaBase*		m_Owner;
+	std::string		m_CharaTag;
 
 	void collisionToGround();
 	void setVelocity(const Vector3& velocity);

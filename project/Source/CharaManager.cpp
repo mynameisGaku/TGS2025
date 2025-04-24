@@ -143,23 +143,23 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 
 	int hModel = -1;
 	// “–‚½‚è”»’è‚Ì\’z
-	ColDefine::ColBaseParam colParamCap;
-	colParamCap.trs.scale = Vector3(70.0f);
-	colParamCap.onlyOnce = false;
+	ColDefine::ColBaseParam colParamChara;
+	colParamChara.trs.scale = Vector3(70.0f);
+	colParamChara.onlyOnce = false;
 
-	if (tag == "tPlayer")
+	if (tag == "Red")
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamCap.tag = ColDefine::Tag::tPlayer;
-		colParamCap.targetTags = { ColDefine::Tag::tEnemy, ColDefine::Tag::tEnemyAtk };
+		colParamChara.tag = ColDefine::Tag::tCharaRed;
+		colParamChara.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue };
 	}
-	else if (tag == "tEnemy")
+	else if (tag == "Blue")
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamCap.tag = ColDefine::Tag::tEnemy;
-		colParamCap.targetTags = { ColDefine::Tag::tPlayer, ColDefine::Tag::tPlayerAtk };
+		colParamChara.tag = ColDefine::Tag::tCharaBlue;
+		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
 	}
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
@@ -173,13 +173,13 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	newChara->AddComponent<Physics>()->Init(GRAVITY, FRICTION);
 
 	// “–‚½‚è”»’è‚ðÝ’è
-	ColliderCapsule* colliderCap = newChara->AddComponent<ColliderCapsule>();
-	colliderCap->BaseInit(colParamCap);
-	colliderCap->SetOffset(V3::SetY(130.0f));
-	colliderCap->SetDraw(true);
+	ColliderCapsule* colliderChara = newChara->AddComponent<ColliderCapsule>();
+	colliderChara->BaseInit(colParamChara);
+	colliderChara->SetOffset(V3::SetY(130.0f));
+	colliderChara->SetDraw(true);
 
-	newChara->LoadAddedComponent();
 	newChara->m_Index = index;
+	newChara->Init(tag);
 
 	//////////////////////////////////////////////////////////////
 	// ƒŠƒXƒg‚Ö‚Ì“o˜^

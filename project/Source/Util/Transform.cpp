@@ -33,9 +33,10 @@ const Transform Transform::Global() const {
 
 	// e‚ðŽ‚Âê‡
 	if (parent != nullptr) {
-		globalPosition += VTransform(position, parent->Global().Matrix());
-		globalRotation += parent->Global().rotation;
-		globalScale *= parent->Global().scale;
+		const Transform parentGlobal = parent->Global();
+		globalPosition = VTransform(position, parentGlobal.Matrix());
+		globalRotation += parentGlobal.rotation;
+		globalScale *= parentGlobal.scale;
 	}
 
 	return Transform(globalPosition, globalRotation, globalScale);

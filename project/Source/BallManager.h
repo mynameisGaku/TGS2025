@@ -14,6 +14,8 @@ public:
 	BallManager();
 	~BallManager();
 
+	void Update() override;
+
 	Ball* CreateBall(const Vector3& position);
 private:
 	int m_Model;

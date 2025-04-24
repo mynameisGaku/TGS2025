@@ -2,8 +2,9 @@
   "Param": {
     "Max": 6,
     "Tags": [
-      "tPlayer",
-      "tEnemy"
-    ]
+        "Red",
+        "Blue"
+    ],
+    "CatchRadius": 100
   }
 }

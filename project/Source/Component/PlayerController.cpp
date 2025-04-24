@@ -52,6 +52,13 @@ void PlayerController::Update() {
 	}
 
 	////////////////////////////////////////////////////
+	// 吸引キャッチ処理
+	if (IsPressButton(KeyDefine::KeyCode::X, KeyDefine::Stationary))
+	{
+		chara->Catch();
+	}
+
+	////////////////////////////////////////////////////
 	// キャラ移動操作処理
 	if (chara == nullptr || IsMoveButton() == false)
 		return;

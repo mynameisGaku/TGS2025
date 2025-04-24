@@ -113,9 +113,8 @@ public:
 	GameObject* GetParent() const { return m_pParent; }
 
 	/// <summary>
-	/// 親のオブジェクトを返す
+	/// 親のオブジェクトをセット
 	/// </summary>
-	/// <returns>親オブジェクトのポインター</returns>
 	void SetParent(GameObject* _parent) { m_pParent = _parent; }
 
 	//==========================================================================================

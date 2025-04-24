@@ -17,6 +17,7 @@ public:
 
     int                         Max;
     std::vector<std::string>    Tags;
+    float                       CatchRadius;
     
     void Load(bool ForceLoad = false);
 private:
@@ -25,7 +26,8 @@ private:
 
     CharaDefineRef() :
         Max(0),
-        Tags({})
+        Tags({}),
+        CatchRadius(0.0f)
     { /*DO NOTHING*/
     }
 

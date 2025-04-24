@@ -3,46 +3,90 @@
 
 #include "Component/Physics.h"
 #include "Component/CollisionDefine.h"
-#include "Component/ColliderCapsule.h"
 #include "Stage.h"
 #include "CharaStamina.h"
 #include "Ball.h"
+#include "Catcher.h"
+#include "CharaDefineRef.h"
 
 using namespace KeyDefine;
 
+namespace
+{
+	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ（毎秒）
+	static const float CATCH_STAMINA_MIN = 20.0f;	// キャッチを開始するのに必要な残スタミナ
+	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
+}
+
 CharaBase::CharaBase()
 {
-	m_pStamina			= Instantiate<CharaStamina>();
-	m_pBall				= nullptr;
-	m_pPhysics			= nullptr;
-	m_BallChargeRate	= 0.0f;
-	m_IsCharging		= false;
-	m_MoveSpeed			= 0.0f;
-	m_RotSpeed			= 0.0f;
+	m_pStamina				= Instantiate<CharaStamina>();
+	m_pBall					= nullptr;
+	m_pPhysics				= nullptr;
+	m_BallChargeRate		= 0.0f;
+	m_IsCharging			= false;
+	m_MoveSpeed				= 0.0f;
+	m_RotSpeed				= 0.0f;
+	m_ChargeRateWatchDog	= 0.0f;
+	m_CatchTimer			= 0.0f;
+	m_CharaTag				= CHARADEFINE_REF.Tags[0];
+	m_Catcher				= nullptr;
 }
 
 CharaBase::~CharaBase()
 {
 	std::string output = "cha delete : " + std::to_string(m_Index) + "\n";
 	OutputDebugString(output.c_str());
+
+	m_Catcher->SetParent(nullptr);
+	m_Catcher->DestroyMe();
 }
 
-void CharaBase::LoadAddedComponent()
+void CharaBase::Init(std::string tag)
 {
+	m_CharaTag = tag;
 	m_pPhysics = GetComponent<Physics>();
+	m_Catcher = Instantiate<Catcher>();
+	m_Catcher->transform->position = Vector3(0, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
+	m_Catcher->transform->scale = V3::ONE * CHARADEFINE_REF.CatchRadius * 2;
+	m_Catcher->transform->SetParent(transform);
+	m_Catcher->Init(tag);
+	m_Catcher->SetColliderActive(false);
+	m_Catcher->SetParent(this);
 }
 
 void CharaBase::Update() {
 
 	HitGroundProcess();
 
+	if (m_CatchTimer > 0.0f)
+	{
+		m_CatchTimer -= Time::DeltaTimeLapseRate();
+		if (m_CatchTimer < 0.0f)
+		{
+			m_CatchTimer = 0.0f;
+			m_Catcher->SetColliderActive(false);
+		}
+		else
+		{
+			m_Catcher->SetColliderActive(true);
+		}
+
+		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
+	}
+
 	Object3D::Update();
+}
+
+void CharaBase::Draw()
+{
+	Object3D::Draw();
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
 
-	// 当たった相手がPlayerもしくはEnemyの場合
-	if (colData.Other()->Tag() == ColDefine::Tag::tPlayer || colData.Other()->Tag() == ColDefine::Tag::tEnemy) {
+	// 当たった相手がキャラクターの場合
+	if (colData.Other()->Tag() == ColDefine::Tag::tCharaRed || colData.Other()->Tag() == ColDefine::Tag::tBallBlue) {
 
 		// 相手の情報
 		CharaBase* chara = colData.Other()->Parent<CharaBase>();
@@ -176,4 +220,13 @@ void CharaBase::GenerateBall()
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);
+	m_pBall->Init(m_CharaTag);
+}
+
+void CharaBase::Catch()
+{
+	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
+	{
+		m_CatchTimer = CATCH_TIME;
+	}
 }

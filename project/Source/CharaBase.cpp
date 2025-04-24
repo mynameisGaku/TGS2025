@@ -73,7 +73,7 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetParent(this);
 
 	m_Animator = AddComponent<Animator>();
-	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.5f);
+	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.1f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 	m_Animator->LoadAnim("data/Animation/ActionIdle", "ActionIdle", true);
 	m_Animator->LoadAnim("data/Animation/ActionIdleEmote", "ActionIdleEmote", false);
@@ -335,7 +335,7 @@ void CharaBase::StateActionIdleToRun(FSMSignal sig)
 		{
 			m_FSM->ChangeState(&CharaBase::StateRun); // ステートを変更
 			m_Animator->Play("Run");
-			m_Animator->SetCurrentFrame(3.0f);
+			//m_Animator->SetCurrentFrame(3.0f);
 		}
 		else if (m_pPhysics->FlatVelocity().SquareSize() <= 0.0f)
 		{
@@ -424,6 +424,10 @@ void CharaBase::StateRunToActionIdle(FSMSignal sig)
 		if (m_Animator->IsFinished())
 		{
 			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+		else if (m_pPhysics->FlatVelocity().SquareSize() > 0.0f)
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdleToRun); // ステートを変更
 		}
 	}
 	break;

@@ -6,6 +6,7 @@
 #include "Stage.h"
 #include "BloomManager.h"
 #include "CharaDefineRef.h"
+#include "CharaBase.h"
 
 namespace
 {
@@ -31,6 +32,10 @@ Ball::Ball()
 
 Ball::~Ball()
 {
+	if (m_Owner != nullptr && m_Owner->LastBall() == this)
+	{
+		m_Owner->SetLastBall(nullptr);
+	}
 }
 
 void Ball::Init(std::string charaTag)
@@ -103,6 +108,10 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	{
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 		m_State = S_LANDED;
+		if (m_Owner->LastBall() == this)
+		{
+			m_Owner->SetLastBall(nullptr);
+		}
 	}
 }
 

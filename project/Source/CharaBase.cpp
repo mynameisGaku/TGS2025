@@ -24,6 +24,7 @@ CharaBase::CharaBase()
 {
 	m_pStamina				= Instantiate<CharaStamina>();
 	m_pBall					= nullptr;
+	m_pLastBall				= nullptr;
 	m_pPhysics				= nullptr;
 	m_BallChargeRate		= 0.0f;
 	m_IsCharging			= false;
@@ -47,6 +48,8 @@ CharaBase::CharaBase()
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToJump, "StateActionIdleToJump");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToRun, "StateActionIdleToRun");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToStandingIdle, "StateActionIdleToStandingIdle");
+
+	m_FSM->RegisterStateName(&CharaBase::StateAirSpin, "StateAirSpin");
 
 	m_FSM->RegisterStateName(&CharaBase::StateCrouchToActionIdle, "StateCrouchToActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateCrouchToRun, "StateCrouchToRun");
@@ -94,7 +97,7 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetParent(this);
 
 	m_Animator = AddComponent<Animator>();
-	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.1f);
+	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
 	m_Animator->LoadAnim("data/Animation/ActionIdle", "ActionIdle", true);
@@ -102,6 +105,8 @@ void CharaBase::Init(std::string tag)
 	m_Animator->LoadAnim("data/Animation/ActionIdleToJump", "ActionIdleToJump", false);
 	m_Animator->LoadAnim("data/Animation/ActionIdleToRun", "ActionIdleToRun", false, true);
 	m_Animator->LoadAnim("data/Animation/ActionIdleToStandingIdle", "ActionIdleToStandingIdle", false, true);
+
+	m_Animator->LoadAnim("data/Animation/AirSpin", "AirSpin", false, true);
 
 	m_Animator->LoadAnim("data/Animation/CrouchToActionIdle", "CrouchToActionIdle", false, true);
 	m_Animator->LoadAnim("data/Animation/CrouchToRun", "CrouchToRun", false, true);
@@ -304,7 +309,7 @@ void CharaBase::ThrowBall(const Vector3& velocity)
 
 	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate), this);
 
-	// 投擲後は管理する義務を失う
+	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
 }
 
@@ -318,7 +323,7 @@ void CharaBase::ThrowBallForward()
 
 	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate), this);
 
-	// 投擲後は管理する義務を失う
+	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
 }
 
@@ -338,6 +343,21 @@ void CharaBase::GenerateBall()
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);
 	m_pBall->Init(m_CharaTag);
+}
+
+void CharaBase::TeleportToLastBall()
+{
+	if (m_pLastBall == nullptr) return;
+	transform->position = m_pLastBall->transform->position;
+
+	// ToDo:消える演出
+	m_pLastBall->DestroyMe();
+
+	GenerateBall();
+
+	m_pLastBall = nullptr;
+	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
+	m_FSM->ChangeState(&CharaBase::StateAirSpin);
 }
 
 void CharaBase::Catch()
@@ -493,6 +513,34 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 		if (m_Animator->IsFinished())
 		{
 			m_FSM->ChangeState(&CharaBase::StateStandingIdleEmote); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateAirSpin(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("AirSpin");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
 		}
 	}
 	break;

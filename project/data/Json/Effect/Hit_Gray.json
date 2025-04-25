@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 1.0,
+    "defMagnification": 1.0,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/Hit_Gray.efk",
+    "typeName": "Hit_Gray",
+    "dimension": "3D"
+  }
+}

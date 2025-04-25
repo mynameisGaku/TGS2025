@@ -18,6 +18,8 @@ public:
     int                         Max;
     std::vector<std::string>    Tags;
     float                       CatchRadius;
+    float                       EmoteInterval;
+    float                       JumpPower;
     
     void Load(bool ForceLoad = false);
 private:
@@ -27,7 +29,9 @@ private:
     CharaDefineRef() :
         Max(0),
         Tags({}),
-        CatchRadius(0.0f)
+        CatchRadius(0.0f),
+        EmoteInterval(0.0f),
+        JumpPower(0.0f)
     { /*DO NOTHING*/
     }
 

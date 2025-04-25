@@ -22,6 +22,8 @@ void CharaDefineRef::Load(bool ForceLoad)
         Tags.push_back(tmp);
     }
     CatchRadius = jsonLoader->GetOrDefault<float>("Param.CatchRadius", 0.0f, FILEKEY);
+    EmoteInterval = jsonLoader->GetOrDefault<float>("Param.EmoteInterval", 0.0f, FILEKEY);
+    JumpPower = jsonLoader->GetOrDefault<float>("Param.JumpPower", 0.0f, FILEKEY);
     // ƒ[ƒh‚µ‚½‚æ
     m_WasLoad = true;
 }

@@ -10,7 +10,7 @@
 
 CharaManager::CharaManager()
 {
-	CHARADEFINE_REF.Load();
+	CHARADEFINE_REF.Load(true);
 	m_Max = CHARADEFINE_REF.Max;
 	m_Tags = CHARADEFINE_REF.Tags;
 
@@ -79,6 +79,11 @@ void CharaManager::Update()
 		m_Charas.erase(it);
 	}
 #endif
+
+	if (CheckHitKey(KEY_INPUT_R))
+	{
+		CHARADEFINE_REF.Load(true);
+	}
 }
 
 void CharaManager::Draw()

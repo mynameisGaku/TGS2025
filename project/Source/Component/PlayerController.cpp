@@ -59,6 +59,22 @@ void PlayerController::Update() {
 	}
 
 	////////////////////////////////////////////////////
+	// ジャンプ処理処理
+	if (IsPressButton(KeyDefine::KeyCode::Space, KeyDefine::Begin))
+	{
+		chara->Jump();
+	}
+
+	////////////////////////////////////////////////////
+	// スライディング処理処理
+	if (IsPressButton(KeyDefine::KeyCode::LeftShift, KeyDefine::Stationary) ||
+		IsPressButton(KeyDefine::KeyCode::LeftControl, KeyDefine::Stationary) ||
+		IsPressButton(KeyDefine::KeyCode::C, KeyDefine::Stationary))
+	{
+		chara->Slide();
+	}
+
+	////////////////////////////////////////////////////
 	// キャラ移動操作処理
 	if (chara == nullptr || IsMoveButton() == false)
 		return;

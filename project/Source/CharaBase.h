@@ -59,6 +59,16 @@ public:
 	/// <param name="dir">移動方向</param>
 	void Move(const Vector3& dir);
 
+	/// <summary>
+	/// 一定の力でジャンプ
+	/// </summary>
+	void Jump();
+
+	/// <summary>
+	/// 呼び出し中スライディングする
+	/// </summary>
+	void Slide();
+
 	//=======================================================================================
 	// ▼ボール
 
@@ -105,10 +115,20 @@ public:
 
 	void StateActionIdle(FSMSignal sig);
 	void StateActionIdleEmote(FSMSignal sig);
+	void StateActionIdleToJump(FSMSignal sig);
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
+
+	void StateCrouchToRun(FSMSignal sig);
+
+	void StateFall(FSMSignal sig);
+	void StateFallToCrouch(FSMSignal sig);
+	void StateFallToRollToIdle(FSMSignal sig);
+
 	void StateRun(FSMSignal sig);
 	void StateRunToActionIdle(FSMSignal sig);
+	void StateRunToJump(FSMSignal sig);
+
 	void StateStandingIdle(FSMSignal sig);
 	void StateStandingIdleEmote(FSMSignal sig);
 	void StateStandingIdleToActionIdle(FSMSignal sig);
@@ -129,4 +149,10 @@ private:
 	Catcher*		m_Catcher;				// キャッチの当たり判定
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	Animator*		m_Animator;				// アニメーション
+	float			m_EmoteTimer;			// 放置アニメーションまでの時間
+	bool			m_IsLanding;			// 着地中
+	float			m_SlideTimer;			// スライディング残り時間タイマー
+
+	void idleUpdate();
+	void runUpdate();
 };

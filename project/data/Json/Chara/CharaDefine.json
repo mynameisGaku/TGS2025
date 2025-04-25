@@ -5,6 +5,8 @@
         "Red",
         "Blue"
     ],
-    "CatchRadius": 100
+    "CatchRadius": 100.0,
+    "EmoteInterval": 2.0,
+    "JumpPower": 30.0
   }
 }

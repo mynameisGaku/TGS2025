@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 0.1,
+    "defMagnification": 0.1,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/Catch_Ready.efk",
+    "typeName": "Catch_Ready",
+    "dimension": "3D"
+  }
+}

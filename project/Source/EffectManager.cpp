@@ -200,7 +200,7 @@ void EffectManager::LoadFromJson(const std::string& filename)
 	setting->LoadSettingJson(filename, filename, true);
 
 	EffectInfo desc = {};
-	desc.magnification		= setting->GetOrDefault<float>(		 "Param.magnificaiton",		0.0f,		filename);
+	desc.magnification		= setting->GetOrDefault<float>(		 "Param.magnification",		0.0f,		filename);
 	desc.defMagnification	= setting->GetOrDefault<float>(		 "Param.defMagnification",	0.0f,		filename);
 	desc.playingHandle		= setting->GetOrDefault<float>(		 "Param.playSpeed",			0.0f,		filename);
 	desc.defPlaySpeed		= setting->GetOrDefault<float>(		 "Param.defPlaySpeed",		0.0f,		filename);

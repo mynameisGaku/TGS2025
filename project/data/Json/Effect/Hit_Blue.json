@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 1.0,
+    "defMagnification": 1.0,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/Hit_Blue.efk",
+    "typeName": "Hit_Blue",
+    "dimension": "3D"
+  }
+}

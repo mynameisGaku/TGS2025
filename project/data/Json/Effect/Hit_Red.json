@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 1.0,
+    "defMagnification": 1.0,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/Hit_Red.efk",
+    "typeName": "Hit_Red",
+    "dimension": "3D"
+  }
+}

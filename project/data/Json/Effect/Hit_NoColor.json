@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 1.0,
+    "defMagnification": 1.0,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/Hit_NoColor.efk",
+    "typeName": "Hit_NoColor",
+    "dimension": "3D"
+  }
+}

@@ -6,6 +6,7 @@
 
 #include "../Library/csvReader.h"
 #include "Util/Utils.h"
+#include "settings_json.h"
 
 namespace {
 
@@ -191,6 +192,32 @@ void EffectManager::LoadToCsv(const std::string& filename) {
 	}
 
 	delete csv;
+}
+
+void EffectManager::LoadFromJson(const std::string& filename)
+{
+	auto setting = Settings_json::Inst();
+	setting->LoadSettingJson(filename, filename, true);
+
+	EffectInfo desc = {};
+	desc.magnification		= setting->GetOrDefault<float>(		 "Param.magnificaiton",		0.0f,		filename);
+	desc.defMagnification	= setting->GetOrDefault<float>(		 "Param.defMagnification",	0.0f,		filename);
+	desc.playingHandle		= setting->GetOrDefault<float>(		 "Param.playSpeed",			0.0f,		filename);
+	desc.defPlaySpeed		= setting->GetOrDefault<float>(		 "Param.defPlaySpeed",		0.0f,		filename);
+	desc.isLoop				= setting->GetOrDefault<bool>(		 "Param.isLoop",			false,		filename);
+	desc.fileName			= setting->GetOrDefault<std::string>("Param.fileName",			"NO INFO",	filename);
+	desc.typeName			= setting->GetOrDefault<std::string>("Param.typeName",			"NO INFO",	filename);
+	std::string dim			= setting->GetOrDefault<std::string>("Param.dimension",			"2D",		filename);
+	if (dim == "2D")
+	{
+		desc.dimension = Dimensional::_2D;
+	}
+	else
+	{
+		desc.dimension = Dimensional::_3D;
+	}
+
+	Load(desc);
 }
 
 EffectBase* EffectManager::Play3D(const std::string& typeName, const Transform& trs, const std::string& label, const bool& isLoop) {

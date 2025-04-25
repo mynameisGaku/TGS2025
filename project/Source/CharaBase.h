@@ -59,6 +59,16 @@ public:
 	/// <param name="dir">移動方向</param>
 	void Move(const Vector3& dir);
 
+	/// <summary>
+	/// 一定の力でジャンプ
+	/// </summary>
+	void Jump();
+
+	/// <summary>
+	/// 呼び出し中スライディングする
+	/// </summary>
+	void Slide();
+
 	//=======================================================================================
 	// ▼ボール
 
@@ -92,6 +102,14 @@ public:
 	/// <returns></returns>
 	bool IsChargingBall() const { return not m_IsCharging; }
 
+	Ball* LastBall() const { return m_pLastBall; }
+	void SetLastBall(Ball* ball) { m_pLastBall = ball; }
+
+	/// <summary>
+	/// 最後に投げたボールにテレポートし、それをキャッチする
+	/// </summary>
+	void TeleportToLastBall();
+
 	//=======================================================================================
 	// ▼キャッチ
 
@@ -105,10 +123,29 @@ public:
 
 	void StateActionIdle(FSMSignal sig);
 	void StateActionIdleEmote(FSMSignal sig);
+	void StateActionIdleToJump(FSMSignal sig);
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
+
+	void StateAirSpin(FSMSignal sig);
+
+	void StateCrouchToActionIdle(FSMSignal sig);
+	void StateCrouchToRun(FSMSignal sig);
+
+	void StateDamageToDown(FSMSignal sig);
+
+	void StateFall(FSMSignal sig);
+	void StateFallToCrouch(FSMSignal sig);
+	void StateFallToRollToIdle(FSMSignal sig);
+
 	void StateRun(FSMSignal sig);
 	void StateRunToActionIdle(FSMSignal sig);
+	void StateRunToJump(FSMSignal sig);
+	void StateRunToSlide(FSMSignal sig);
+
+	void StateSlide(FSMSignal sig);
+	void StateSlideToRun(FSMSignal sig);
+
 	void StateStandingIdle(FSMSignal sig);
 	void StateStandingIdleEmote(FSMSignal sig);
 	void StateStandingIdleToActionIdle(FSMSignal sig);
@@ -119,6 +156,7 @@ private:
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_ChargeRateWatchDog;	// チャージ終了から何秒経ったかを監視する番犬
 	Ball*			m_pBall;				// 所有しているボールのポインター
+	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	float			m_MoveSpeed;			// 移動速度
@@ -129,4 +167,11 @@ private:
 	Catcher*		m_Catcher;				// キャッチの当たり判定
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	Animator*		m_Animator;				// アニメーション
+	float			m_EmoteTimer;			// 放置アニメーションまでの時間
+	bool			m_IsLanding;			// 着地中
+	float			m_SlideTimer;			// スライディング残り時間タイマー
+
+	void idleUpdate();
+	void runUpdate();
+	void slideUpdate();
 };

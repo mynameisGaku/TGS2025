@@ -59,6 +59,29 @@ void PlayerController::Update() {
 	}
 
 	////////////////////////////////////////////////////
+	// ジャンプ処理
+	if (IsPressButton(KeyDefine::KeyCode::Space, KeyDefine::Begin))
+	{
+		chara->Jump();
+	}
+
+	////////////////////////////////////////////////////
+	// スライディング処理
+	if (IsPressButton(KeyDefine::KeyCode::LeftShift, KeyDefine::Stationary) ||
+		IsPressButton(KeyDefine::KeyCode::LeftControl, KeyDefine::Stationary) ||
+		IsPressButton(KeyDefine::KeyCode::C, KeyDefine::Stationary))
+	{
+		chara->Slide();
+	}
+
+	////////////////////////////////////////////////////
+	// テレポート処理
+	if (IsPressButton(KeyDefine::KeyCode::E, KeyDefine::Begin))
+	{
+		chara->TeleportToLastBall();
+	}
+
+	////////////////////////////////////////////////////
 	// キャラ移動操作処理
 	if (chara == nullptr || IsMoveButton() == false)
 		return;

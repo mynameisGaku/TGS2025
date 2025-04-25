@@ -119,7 +119,10 @@ public:
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
 
+	void StateCrouchToActionIdle(FSMSignal sig);
 	void StateCrouchToRun(FSMSignal sig);
+
+	void StateDamageToDown(FSMSignal sig);
 
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
@@ -128,6 +131,10 @@ public:
 	void StateRun(FSMSignal sig);
 	void StateRunToActionIdle(FSMSignal sig);
 	void StateRunToJump(FSMSignal sig);
+	void StateRunToSlide(FSMSignal sig);
+
+	void StateSlide(FSMSignal sig);
+	void StateSlideToRun(FSMSignal sig);
 
 	void StateStandingIdle(FSMSignal sig);
 	void StateStandingIdleEmote(FSMSignal sig);
@@ -155,4 +162,5 @@ private:
 
 	void idleUpdate();
 	void runUpdate();
+	void slideUpdate();
 };

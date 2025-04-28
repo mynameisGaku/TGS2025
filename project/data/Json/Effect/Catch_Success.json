@@ -1,12 +1,12 @@
 {
   "Param": {
-    "magnification": 1.0,
-    "defMagnification": 1.0,
+    "magnification": 25.0,
+    "defMagnification": 25.0,
     "playSpeed": 1.0,
     "defPlaySpeed": 1.0,
     "isLoop": false,
-    "fileName": "data/effect/Catch_Success.efk",
-    "typeName": "Catch_Success",
+    "fileName": "data/effect/",
+    "typeName": "Catch_Success.efk",
     "dimension": "3D"
   }
 }

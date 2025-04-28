@@ -61,7 +61,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
-	if (Effekseer_Init(8000) == -1)
+	if (Effekseer_Init(18000) == -1)
 	{
 		DxLib_End();
 		return -1;

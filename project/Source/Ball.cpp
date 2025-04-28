@@ -7,6 +7,7 @@
 #include "BloomManager.h"
 #include "CharaDefineRef.h"
 #include "CharaBase.h"
+#include "EffectManager.h"
 
 namespace
 {
@@ -110,6 +111,15 @@ void Ball::CollisionEvent(const CollisionData& colData)
 		m_State = S_LANDED;
 		if (m_Owner->LastBall() == this)
 		{
+			if (m_CharaTag == "Blue")
+			{
+				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
+			}
+			else
+			{
+				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
+			}
+
 			m_Owner->SetLastBall(nullptr);
 		}
 	}

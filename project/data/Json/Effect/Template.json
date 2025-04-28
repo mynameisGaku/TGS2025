@@ -5,8 +5,8 @@
     "playSpeed": 1.0,
     "defPlaySpeed": 1.0,
     "isLoop": false,
-    "fileName": "data/effect/name.efk",
-    "typeName": "name",
+    "fileName": "data/effect/",
+    "typeName": "name.efk",
     "dimension": "2d/3d"
   }
 }

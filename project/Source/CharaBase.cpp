@@ -1,5 +1,6 @@
 #include "CharaBase.h"
 #include "InputManager.h"
+#include "EffectManager.h"
 
 #include "Component/Physics.h"
 #include "Component/CollisionDefine.h"
@@ -80,6 +81,8 @@ CharaBase::~CharaBase()
 	std::string output = "cha delete : " + std::to_string(m_Index) + "\n";
 	OutputDebugString(output.c_str());
 
+	Function::DeletePointer(m_FSM);
+
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 }
@@ -145,10 +148,18 @@ void CharaBase::Update() {
 		else
 		{
 			m_Catcher->SetColliderActive(true);
+			EffectManager::Play3D("Catch_Ready_Single_Dust.efk", *transform, "Catch_Ready_Single_Dust" + m_CharaTag);
+			EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", *transform, "Catch_Ready_Single_Tornado" + m_CharaTag);
 		}
 
 		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
 	}
+	else
+	{
+		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
+		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
+	}
+
 	if (m_SlideTimer > 0.0f)
 	{
 		m_SlideTimer -= Time::DeltaTimeLapseRate();

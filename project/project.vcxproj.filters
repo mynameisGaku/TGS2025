@@ -364,6 +364,8 @@
     <ClCompile Include="Source\CharaDefineRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CamState_Chase.cpp" />
+    <ClCompile Include="Source\Catcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -795,6 +797,7 @@
     <ClInclude Include="Source\CharaDefineRef.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Catcher.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1145,6 +1148,9 @@
     <Filter Include="Framework\04_Component\Controller">
       <UniqueIdentifier>{b20eb0a5-bc2a-4ae9-be4d-f5c47f71d029}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Effect Json">
+      <UniqueIdentifier>{1c10eef4-390b-4b88-9463-bb50c53bbb94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball.json">
@@ -1164,6 +1170,33 @@
     </None>
     <None Include="data\Json\Chara\CharaDefine.json">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Success.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Blue.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Gray.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_NoColor.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Red.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Single_Tornado.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Single_Line.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
+      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
     </None>
   </ItemGroup>
 </Project>

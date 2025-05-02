@@ -3,15 +3,17 @@
 #include "Object3D.h"
 
 // ◇汎用
-#include "../Source/Util/Transform.h"
+#include "EasingUtils.h"
+#include "Util/Transform.h"
+#include "Util/RectTransform.h"
 
 // ◇個別で必要な物
-#include "effectDefine.h"
+#include "EffectDefine.h"
 
 /// <summary>
 /// エフェクトを再生するクラス
 /// </summary>
-class EffectBase  : public Object3D {
+class EffectBase : public Object3D {
 public:
 	//================================================================================
 	// ▼コンストラクタ・デストラクタ
@@ -25,24 +27,6 @@ public:
 	void Update() override;
 
 	/// <summary>
-	/// エフェクトを再生する(2D)
-	/// </summary>
-	/// <param name="_id">エフェクトの種類</param>
-	/// <param name="_handle">エフェクトのリソース</param>
-	/// <param name="_transform">座標・回転・拡縮の情報</param>
-	/// <param name="_distinction">判別ラベル</param>
-	/// <param name="_isLoop">ループさせるか</param>
-	
-	/// <summary>
-	/// 2Dエフェクトを再生する
-	/// </summary>
-	/// <param name="info">エフェクトの情報</param>
-	/// <param name="transform">座標・回転・拡縮の情報</param>
-	/// <param name="label">判別ラベル</param>
-	/// <param name="isLoop">ループ再生を行うか</param>
-	void Play2D(const EffectDefine::EffectInfo& info, const Transform& transform, const std::string& label = "", const bool& isLoop = false);
-
-	/// <summary>
 	/// 3Dエフェクトを再生する
 	/// </summary>
 	/// <param name="info">エフェクトの情報</param>
@@ -50,6 +34,15 @@ public:
 	/// <param name="label">判別ラベル</param>
 	/// <param name="isLoop">ループ再生を行うか</param>
 	void Play3D(const EffectDefine::EffectInfo& info, const Transform& transform, const std::string& label = "", const bool& isLoop = false);
+
+	/// <summary>
+	/// 2Dエフェクトを再生する
+	/// </summary>
+	/// <param name="info">エフェクトの情報</param>
+	/// <param name="transform">座標・回転・拡縮の情報</param>
+	/// <param name="label">判別ラベル</param>
+	/// <param name="isLoop">ループ再生を行うか</param>
+	void Play2D(const EffectDefine::EffectInfo& info, const RectTransform& transform, const std::string& label = "", const bool& isLoop = false);
 
 	/// <summary>
 	/// エフェクトの再生を止める
@@ -63,25 +56,29 @@ public:
 	/// 座標・回転・拡縮を設定する
 	/// </summary>
 	/// <param name="transform">座標・回転・拡縮の情報</param>
-	void SetTransform(const Transform& transform);
+	void SetTransform3D(const Transform& transform);
+	void SetTransform2D(const RectTransform& transform);
 
 	/// <summary>
 	/// 座標を設定する
 	/// </summary>
 	/// <param name="pos">座標の情報</param>
-	void SetPosition(const Vector3& pos);
+	void SetPosition3D(const Vector3& pos);
+	void SetPosition2D(const Vector2& pos);
 
 	/// <summary>
 	/// 回転を設定する
 	/// </summary>
 	/// <param name="rot">回転の情報</param>
-	void SetRotation(const Vector3& rot);
+	void SetRotation3D(const Vector3& rot);
+	void SetRotation2D(float rot);
 
 	/// <summary>
 	/// 拡縮を設定する
 	/// </summary>
 	/// <param name="scale">拡縮の情報</param>
-	void SetScale(const Vector3& scale);
+	void SetScale3D(const Vector3& scale);
+	void SetScale2D(const Vector2& scale);
 
 	/// <summary>
 	/// 再生速度を設定する
@@ -128,6 +125,8 @@ private:
 	//================================================================================
 	// ▼メンバ変数
 
-	EffectDefine::EffectInfo info;		// 自身のエフェクト情報
-	std::string label;	// 判別ラベル
+	EffectDefine::EffectInfo info;	// 自身のエフェクト情報
+	std::string label;				// 判別ラベル
+
+	EasingInt alphaEasing;
 };

@@ -2,7 +2,8 @@
 #include <EffekseerForDXLib.h>
 
 #include "../Library/time.h"
-#include "../Source/Util/Utils.h"
+#include "Util/Utils.h"
+#include "Util/Operations.h"
 
 using namespace EffectDefine;
 
@@ -22,32 +23,10 @@ void EffectBase::Update() {
 	if (IsActive() == false)
 		return;
 
-	SetTransform(*transform);
 	SetPlaySpeed(info.playSpeed);
 
 	if (IsPlaying() == false)
 		Stop();
-}
-
-void EffectBase::Play2D(const EffectDefine::EffectInfo& _info, const Transform& trs, const std::string& _label, const bool& loop) {
-
-	// Šù‚ÉÄ¶’†‚È‚çAÄ¶‚µ‚È‚¢
-	if (IsPlaying())
-		return;
-
-	info = _info;
-
-	Function::DeletePointer(transform);
-	transform = new Transform(trs);
-
-	info.dimension = Dimensional::_2D;
-	info.playingHandle = PlayEffekseer2DEffect(info.handle);
-	info.isLoop = loop;
-
-	SetTransform(*transform);
-	SetPlaySpeed(info.playSpeed);
-
-	label = _label;
 }
 
 void EffectBase::Play3D(const EffectDefine::EffectInfo& _info, const Transform& trs, const std::string& _label, const bool& loop) {
@@ -57,15 +36,29 @@ void EffectBase::Play3D(const EffectDefine::EffectInfo& _info, const Transform& 
 		return;
 
 	info = _info;
-
-	Function::DeletePointer(transform);
-	transform = new Transform(trs);
+	label = _label;
 
 	info.dimension = Dimensional::_3D;
 	info.playingHandle = PlayEffekseer3DEffect(info.handle);
 	info.isLoop = loop;
 
-	SetTransform(*transform);
+	SetTransform3D(trs);
+	SetPlaySpeed(info.playSpeed);
+}
+
+void EffectBase::Play2D(const EffectDefine::EffectInfo& _info, const RectTransform& rectTrs, const std::string& _label, const bool& loop) {
+
+	// Šù‚ÉÄ¶’†‚È‚çAÄ¶‚µ‚È‚¢
+	if (IsPlaying())
+		return;
+
+	info = _info;
+
+	info.dimension = Dimensional::_2D;
+	info.playingHandle = PlayEffekseer2DEffect(info.handle);
+	info.isLoop = loop;
+
+	SetTransform2D(rectTrs);
 	SetPlaySpeed(info.playSpeed);
 
 	label = _label;
@@ -83,18 +76,25 @@ void EffectBase::Stop() {
 	}
 }
 
-void EffectBase::SetTransform(const Transform& trs) {
+void EffectBase::SetTransform3D(const Transform& trs) {
 
-	transform->position = trs.position;
-	transform->rotation = trs.rotation;
-	transform->scale = trs.scale;
+	const Transform globalTrs = trs.Global();
 
-	SetPosition(transform->position);
-	SetRotation(transform->rotation);
-	SetScale(transform->scale);
+	SetPosition3D(globalTrs.position);
+	SetRotation3D(globalTrs.rotation);
+	SetScale3D(globalTrs.scale);
 }
 
-void EffectBase::SetPosition(const Vector3& pos) {
+void EffectBase::SetTransform2D(const RectTransform& trs) {
+
+	const RectTransform globalTrs = trs.Global();
+
+	SetPosition2D(globalTrs.position);
+	SetRotation2D(globalTrs.rotation);
+	SetScale2D(globalTrs.scale);
+}
+
+void EffectBase::SetPosition3D(const Vector3& pos) {
 
 	transform->position = pos;
 
@@ -106,7 +106,20 @@ void EffectBase::SetPosition(const Vector3& pos) {
 	}
 }
 
-void EffectBase::SetRotation(const Vector3& rot) {
+void EffectBase::SetPosition2D(const Vector2& pos) {
+
+	transform->position.x = pos.x;
+	transform->position.y = pos.y;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetPosPlayingEffekseer2DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
+	case Dimensional::_3D:	SetPosPlayingEffekseer3DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetRotation3D(const Vector3& rot) {
 
 	transform->rotation = rot;
 
@@ -118,9 +131,35 @@ void EffectBase::SetRotation(const Vector3& rot) {
 	}
 }
 
-void EffectBase::SetScale(const Vector3& scale) {
+void EffectBase::SetRotation2D(float rot) {
+
+	transform->rotation.y = rot;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetRotationPlayingEffekseer2DEffect(info.playingHandle, transform->rotation.x, transform->rotation.y, transform->rotation.z); break;
+	case Dimensional::_3D:	SetRotationPlayingEffekseer3DEffect(info.playingHandle, transform->rotation.x, transform->rotation.y, transform->rotation.z); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetScale3D(const Vector3& scale) {
 
 	transform->scale = scale;
+
+	switch (info.dimension) {
+	case Dimensional::_2D:	SetScalePlayingEffekseer2DEffect(info.playingHandle, transform->scale.x, transform->scale.y, transform->scale.z); break;
+	case Dimensional::_3D:	SetScalePlayingEffekseer3DEffect(info.playingHandle, transform->scale.x, transform->scale.y, transform->scale.z); break;
+	default:
+		break;
+	}
+}
+
+void EffectBase::SetScale2D(const Vector2& scale) {
+
+	transform->scale.x = scale.x;
+	transform->scale.y = scale.y;
+	transform->scale.z = scale.Average();
 
 	switch (info.dimension) {
 	case Dimensional::_2D:	SetScalePlayingEffekseer2DEffect(info.playingHandle, transform->scale.x, transform->scale.y, transform->scale.z); break;

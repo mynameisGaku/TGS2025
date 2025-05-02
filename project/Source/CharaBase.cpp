@@ -40,6 +40,7 @@ CharaBase::CharaBase()
 	m_EmoteTimer			= 0.0f;
 	m_IsLanding				= true;
 	m_SlideTimer			= 0.0f;
+	m_EffectTransform		= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 
@@ -98,6 +99,12 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	m_EffectTransform = new Transform();
+	m_EffectTransform->SetParent(transform);
+	m_EffectTransform->position.y = 100.0f;
+	m_EffectTransform->position.z = 100.0f;
+	m_EffectTransform->rotation.y = Math::DegToRad(180.0f);
 
 	m_Animator = AddComponent<Animator>();
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
@@ -159,8 +166,11 @@ void CharaBase::Update() {
 		else
 		{
 			m_Catcher->SetColliderActive(true);
-			EffectManager::Play3D("Catch_Ready_Single_Dust.efk", *transform, "Catch_Ready_Single_Dust" + m_CharaTag);
-			EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", *transform, "Catch_Ready_Single_Tornado" + m_CharaTag);
+			if (m_EffectTransform != nullptr)
+			{
+				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
+				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
+			}
 		}
 
 		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
@@ -333,6 +343,8 @@ void CharaBase::ThrowBall(const Vector3& velocity)
 
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
+
+	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::ThrowBallForward()
@@ -347,6 +359,8 @@ void CharaBase::ThrowBallForward()
 
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
+
+	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::GenerateBall()
@@ -365,6 +379,8 @@ void CharaBase::GenerateBall()
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);
 	m_pBall->Init(m_CharaTag);
+
+	m_FSM->ChangeState(&CharaBase::StateGetBall); // ステートを変更
 }
 
 void CharaBase::TeleportToLastBall()
@@ -387,6 +403,7 @@ void CharaBase::Catch()
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
 		m_CatchTimer = CATCH_TIME;
+		m_FSM->ChangeState(&CharaBase::StateCatch); // ステートを変更
 	}
 }
 
@@ -577,6 +594,34 @@ void CharaBase::StateAirSpin(FSMSignal sig)
 	}
 }
 
+void CharaBase::StateCatch(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("Catch");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_CatchTimer <= 0.0f)
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
 void CharaBase::StateCrouchToActionIdle(FSMSignal sig)
 {
 	switch (sig)
@@ -737,6 +782,34 @@ void CharaBase::StateFallToRollToIdle(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("FallToRollToIdle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateGetBall(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("GetBall");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -994,6 +1067,34 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	case FSMSignal::SIG_Update: // 更新
 	{
 		idleUpdate();
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateAimToThrow(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("AimToThrow");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
 		if (m_Animator->IsFinished())
 		{
 			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更

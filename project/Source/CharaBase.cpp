@@ -103,6 +103,15 @@ void CharaBase::Init(std::string tag)
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
+	//=== 腕アニメーション（ボールを持つ、投げる） ===
+	m_Animator->LoadAnim("data/Animation/ActionIdleToHold", "ActionIdleToHold", false);
+	m_Animator->LoadAnim("data/Animation/AimToThrow", "AimToThrow", false);
+	m_Animator->LoadAnim("data/Animation/Catch", "Catch", true);
+	m_Animator->LoadAnim("data/Animation/Hold", "Hold", true);
+	m_Animator->LoadAnim("data/Animation/HoldToAim", "HoldToAim", false);
+	m_Animator->LoadAnim("data/Animation/ThrowToActionIdle", "ThrowToActionIdle", false);
+
+	//=== メインアニメーション ===
 	m_Animator->LoadAnim("data/Animation/ActionIdle", "ActionIdle", true);
 	m_Animator->LoadAnim("data/Animation/ActionIdleEmote", "ActionIdleEmote", false);
 	m_Animator->LoadAnim("data/Animation/ActionIdleToJump", "ActionIdleToJump", false);
@@ -119,6 +128,8 @@ void CharaBase::Init(std::string tag)
 	m_Animator->LoadAnim("data/Animation/Fall", "Fall", true);
 	m_Animator->LoadAnim("data/Animation/FallToCrouch", "FallToCrouch", false, true);
 	m_Animator->LoadAnim("data/Animation/FallToRollToIdle", "FallToRollToIdle", false, true);
+
+	m_Animator->LoadAnim("data/Animation/GetBall", "GetBall", false);
 
 	m_Animator->LoadAnim("data/Animation/Run", "Run", true);
 	m_Animator->LoadAnim("data/Animation/RunToActionIdle", "RunToActionIdle", false, true);

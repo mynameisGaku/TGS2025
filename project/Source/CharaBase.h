@@ -120,7 +120,6 @@ public:
 
 	//=======================================================================================
 	// ▼各ステート
-
 	void StateActionIdle(FSMSignal sig);
 	void StateActionIdleEmote(FSMSignal sig);
 	void StateActionIdleToJump(FSMSignal sig);

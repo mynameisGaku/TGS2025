@@ -78,6 +78,13 @@ namespace ColDefine {
 		float raduis;	// 半径
 	};
 
+	// コーン
+	struct Cone {
+		Transform transform;// 座標・回転・拡縮
+		float range;		// 長さ
+		float angle;		// 角度
+	};
+
 	// AABB
 	struct AABB {
 		Vector3 p;	// 中心点

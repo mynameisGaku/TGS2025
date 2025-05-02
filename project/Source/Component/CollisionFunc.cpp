@@ -137,6 +137,25 @@ CollisionData ColFunction::ColCheck_SphereToModel(ColliderSphere* col1, Collider
 	}
 }
 
+const CollisionData& ColFunction::ColCheck_ConeToPoint(const Cone& cone, const Vector3& point) {
+
+	// コーンの位置からポイントまでの距離
+	const Vector3 dist = point - cone.transform.position;
+
+	// 範囲外の場合
+	if (dist.Size() >= cone.range)
+		return CollisionData(false);
+
+	// コーンの向く方向
+	const Vector3 forward = V3::FORWARD * cone.transform.RotationMatrix();
+
+	// 内積外の場合
+	if (VDot(VNorm(dist), forward) < cosf(Math::DegToRad(cone.angle)))
+		return CollisionData(false);
+	
+	return CollisionData(true);
+}
+
 CollisionData ColFunction::ColCheck3D_Circle(Vector3 p1, float r1, Vector3 p2, float r2) {
 
 	bool isCollision = false;

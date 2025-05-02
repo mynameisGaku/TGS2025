@@ -12,6 +12,8 @@
 #include "ColliderCapsule.h"
 #include "ColliderModel.h"
 
+using namespace ColDefine;
+
 /// <summary>
 /// 当たり判定の関数
 /// </summary>
@@ -81,6 +83,11 @@ namespace ColFunction {
 	/// <param name="_col2">当たり判定を行うColliderModelのポインタ</param>
 	/// <returns>当たった場合:True</returns>
 	CollisionData ColCheck_ModelToModel(ColliderModel* col1, ColliderModel* col2);
+
+	//==========================================================================================
+	// ▼コーン
+
+	const CollisionData& ColCheck_ConeToPoint(const Cone& cone, const Vector3& point);
 
 	//==========================================================================================
 	// ▼計算

@@ -74,6 +74,14 @@ namespace EffectManager {
 	EffectBase* Play3D(const std::string& typeName, const Transform& trs, const std::string& label, const bool& isLoop = false);
 
 	/// <summary>
+	/// 呼ばれている間、ループ再生を行う
+	/// </summary>
+	/// <param name="typeName">エフェクトの種類</param>
+	/// <param name="transform">座標・回転・拡縮の情報</param>
+	/// <param name="label">判別名</param>
+	EffectBase* Play3D_Loop(const std::string& typeName, const Transform& trs, const std::string& label);
+
+	/// <summary>
 	/// エフェクトを2D空間上に生成する
 	/// </summary>
 	/// <param name="typeName">エフェクトのデータ名</param>
@@ -81,7 +89,15 @@ namespace EffectManager {
 	/// <param name="label">判別名</param>
 	/// <param name="isLoop">ループ再生を行うか</param>
 	/// <returns>生成したエフェクトの実体</returns>
-	EffectBase* Play2D(const std::string& typeName, const Transform& trs, const std::string& label = "", const bool& isLoop = false);
+	EffectBase* Play2D(const std::string& typeName, const RectTransform& trs, const std::string& label = "", const bool& isLoop = false);
+
+	/// <summary>
+	/// 呼ばれている間、ループ再生を行う
+	/// </summary>
+	/// <param name="typeName">エフェクトの種類</param>
+	/// <param name="transform">座標・回転・拡縮の情報</param>
+	/// <param name="label">判別名</param>
+	EffectBase* Play2D_Loop(const std::string& typeName, const RectTransform& trs, const std::string& label);
 
 	/// <summary>
 	/// エフェクトが再生されているか

@@ -206,23 +206,15 @@ void InputManager::AdvancedEntryUpdate(const int& padNumber, const float& _advan
 		else
 			info++;
 	}
-
-	//// 直近の入力情報を取得する
-	//std::list<InputData> keyCodes = InputManager::LatestInput(padNumber);
-
-	//for (const auto& itr : keyCodes) {
-	//	if (itr.value == nullptr)
-	//		continue;
-
-	//	// 入力されていれば、その情報を保持
-	//	(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(itr, _advancedEntry));
-	//}
 }
 
 //====================================================================================================
 // ▼Push
 
 bool InputManager::Push(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
+
+	if (isInputs == nullptr)
+		return false;
 
 	// 入力情報
 	InputData inputData = (*isInputs)[keyCode];
@@ -283,6 +275,9 @@ bool InputManager::Push(const std::string& name, const int& padNumber) {
 
 bool InputManager::Hold(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
 
+	if (isInputs == nullptr)
+		return false;
+
 	// 入力情報
 	InputData inputData = (*isInputs)[keyCode];
 
@@ -341,6 +336,9 @@ bool InputManager::Hold(const std::string& name, const int& padNumber) {
 // ▼Release
 
 bool InputManager::Release(const KeyDefine::KeyCode& keyCode, const int& padNumber) {
+
+	if (isInputs == nullptr)
+		return false;
 
 	// 入力情報
 	InputData inputData = (*isInputs)[keyCode];
@@ -425,6 +423,9 @@ std::list<InputData> InputManager::LatestInput(const int& padNumber) {
 	// 直近に押されたキー情報を保持する
 	std::list<InputData> keyCodes;
 
+	if (isInputs == nullptr)
+		return keyCodes;
+
 	// 全ての入力状態を調べる。入力されていたら、その情報を保持する
 	for (const auto& itr : *isInputs) {
 		if (itr.second.isInput)
@@ -482,6 +483,9 @@ Vector3 InputManager::AnalogStick(int padNumber) {
 #include "../Library/magic_enum.hpp"
 
 void InputManager::DrawTest(const float& x, const float& y) {
+
+	if (isInputs == nullptr)
+		return;
 
 	std::list<InputData> inputData;
 

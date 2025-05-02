@@ -18,6 +18,7 @@
 #include "InputManager.h"
 #include "PadController.h"
 #include "MouseController.h"
+#include "CharaManager.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -37,6 +38,8 @@ Camera::Camera() {
 	fsm->ChangeState(&Camera::DebugState); // ステートを変更
 	
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
+
+	
 }
 
 Camera::~Camera() {
@@ -157,6 +160,9 @@ void Camera::OperationByStick() {
 	Vector2 addRot = V2::ZERO;	// 加算する回転量
 	Vector2 rightStick = PadController::NormalizedRightStick();
 
+	if (rightStick.SquareSize() < KeyDefine::STICK_DEADZONE)
+		return;
+
 	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);
 	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);
 
@@ -199,4 +205,106 @@ Vector3 Camera::TargetLay() const {
 	}
 
 	return targetPos - cameraPos;
+}
+
+///////////////////////////////////////////////////////////////////////////
+// 
+//			▼ステート
+//
+
+void Camera::ChaseState(FSMSignal sig)
+{
+	// 移動可能か
+	static bool canMove;
+
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
+	{
+		canMove = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新 (Update)
+	{
+		OperationByMouse();
+		OperationByStick();
+
+		CharaManager* charaM = FindGameObject<CharaManager>();
+		if (charaM == nullptr)
+			return;
+
+		const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
+		if (chara == nullptr)
+			return;
+
+		const Transform charaTrs = chara->transform->Global();
+
+		SetOffset(CAMERA_OFFSET_CHASE);
+		SetTarget(Vector3(0.0f, 100.0f, 0.0f) * charaTrs.Matrix());
+		transform->position = charaTrs.position;
+
+		ColCheckToTerrain();
+
+		transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERA_ROT_X_MIN, CAMERA_ROT_X_MAX);
+
+		if (transform->rotation.y < -Math::PI)
+			transform->rotation.y += Math::PI_TW;
+		else if (transform->rotation.y > Math::PI)
+			transform->rotation.y -= Math::PI_TW;
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
+	{
+
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了 (Exit)
+	{
+		canMove = true;
+	}
+	break;
+	}
+}
+
+void Camera::DebugState(FSMSignal sig)
+{
+	// 移動可能か
+	static bool canMove;
+
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
+	{
+		canMove = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新 (Update)
+	{
+		// 右クリックを検知
+		if (InputManager::Push(KeyCode::RightClick)) {
+			canMove = !canMove;
+
+			// 移動可能な場合、マウスカーソルを画面中央に固定する
+			if (canMove)
+				MouseController::SetMouseMovement(MouseMovement::Fixed);
+			// 移動不可能な場合、マウスカーソルを自由に操作できるようにする
+			else
+				MouseController::SetMouseMovement(MouseMovement::Free);
+		}
+
+		if (canMove)
+			MoveProcess();
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
+	{
+
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了 (Exit)
+	{
+		canMove = true;
+	}
+	break;
+	}
 }

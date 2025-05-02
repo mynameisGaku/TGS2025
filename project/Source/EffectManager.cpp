@@ -58,7 +58,7 @@ void EffectManager::Update() {
 
 	// 再生中のエフェクトのUpdateを呼び出す
 	for (auto itr = effects->begin(); itr != effects->end();) {
-		if ((*itr)->IsActive() && (*itr)->IsDestroy() == false) {
+		if ((*itr)->IsPlaying()) {
 			(*itr)->Update();
 			itr++;
 			continue;
@@ -238,7 +238,19 @@ EffectBase* EffectManager::Play3D(const std::string& typeName, const Transform& 
 	return effect;
 }
 
-EffectBase* EffectManager::Play2D(const std::string& typeName, const Transform& trs, const std::string& label, const bool& isLoop) {
+EffectBase* EffectManager::Play3D_Loop(const std::string& typeName, const Transform& trs, const std::string& label) {
+
+	EffectBase* effect = IsPlaying(typeName, label);
+
+	if (effect != nullptr)
+		effect->SetTransform3D(trs);
+	else
+		effect = Play3D(typeName, trs, label);
+
+	return effect;
+}
+
+EffectBase* EffectManager::Play2D(const std::string& typeName, const RectTransform& trs, const std::string& label, const bool& isLoop) {
 
 	// エフェクトデータが存在していないもしくは、再生中エフェクトの管理が出来ていない場合
 	if ((effectInfoDatas != nullptr && effects != nullptr) == false)
@@ -252,6 +264,18 @@ EffectBase* EffectManager::Play2D(const std::string& typeName, const Transform& 
 	
 	// 再生中エフェクトのリストに追加
 	effects->push_back(effect);
+
+	return effect;
+}
+
+EffectBase* EffectManager::Play2D_Loop(const std::string& typeName, const RectTransform& trs, const std::string& label) {
+
+	EffectBase* effect = IsPlaying(typeName, label);
+
+	if (effect != nullptr)
+		effect->SetTransform2D(trs);
+	else
+		effect = Play2D(typeName, trs, label);
 
 	return effect;
 }
@@ -345,7 +369,7 @@ void EffectManager::InitImGui() {
 		ImGuiRoot* item = effectTree->AddChild(new ImGuiRoot(itr.first));
 
 		// 再生する関数
-		std::function<void()> playFunc = std::bind(&Play2D, itr.first, Transform(Vector3(Screen::WIDTH_HALF, Screen::HEIGHT_HALF, 0.0f)), "Debug", false);
+		std::function<void()> playFunc = std::bind(&Play2D, itr.first, RectTransform(Anchor::Preset::Middle), "Debug", false);
 		
 		// 停止する関数
 		std::function<void()> stopFunc = std::bind(&Stop, itr.first, "Debug");

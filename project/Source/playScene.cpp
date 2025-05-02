@@ -8,6 +8,7 @@
 #include "CameraManager.h"
 #include "Component/PlayerController.h"
 #include "Component/AIController.h"
+#include "Component/DebugController.h"
 #include "Component/CollisionManager.h"
 
 //=== ƒ{[ƒ‹ ===
@@ -37,9 +38,10 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	player->SetRotSpeed(Math::DegToRad(10.0f));
 	player->AddComponent<PlayerController>()->Init(DX_INPUT_PAD1);
 
-	enemy->SetMoveSpeed(200.0f);
+	enemy->SetMoveSpeed(600.0f);
 	enemy->SetRotSpeed(Math::DegToRad(10.0f));
-	enemy->AddComponent<AIController>()->Init();
+	//enemy->AddComponent<AIController>()->Init();
+	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
 
 	BallManager* ballM = Instantiate<BallManager>();
 	Ball* ball = ballM->CreateBall(Vector3(0.0f, 500.0f, -50.0f));

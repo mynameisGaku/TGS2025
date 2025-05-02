@@ -91,9 +91,26 @@ void PlayerController::Update() {
 		return;
 
 	// カメラの向きに応じたスティックの傾き
-	Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
+	if (false)
+	{
+		Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
+		chara->Move(stick);
+	}
+	else
+	{
+		Vector3 dir;
+        if (IsPressButton(KeyDefine::KeyCode::W, KeyDefine::Stationary))
+            dir.z += 1.0f;
+        if (IsPressButton(KeyDefine::KeyCode::A, KeyDefine::Stationary))
+            dir.x -= 1.0f;
+        if (IsPressButton(KeyDefine::KeyCode::S, KeyDefine::Stationary))
+            dir.z -= 1.0f;
+        if (IsPressButton(KeyDefine::KeyCode::D, KeyDefine::Stationary))
+            dir.x += 1.0f;
 
-	chara->Move(stick);
+		chara->Move(dir * MGetRotY(camera->transform->rotation.y));
+	}
+
 }
 
 Vector3 PlayerController::AnalogStick() {

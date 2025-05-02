@@ -13,7 +13,7 @@ namespace KeyDefine {
 	static constexpr float ADVANCED_ENTRY_TIME = 0.2f;		// 先行入力の保持時間
 
 	static constexpr int PAD_NUMBER_MAX = 2;				// パッドの最大接続数
-	static constexpr float STICK_DEADZONE = 0.2f;			// スティックのデッドゾーン定義
+	static constexpr float STICK_DEADZONE = 0.1f;			// スティックのデッドゾーン定義
 	static constexpr float TRIGGER_DEADZONE = 0.2f;			// トリガーのデッドゾーン定義
 
 	static const Vector2 STICK_SENSI_MAX = Vector2(10.0f);	// 最大スティック感度

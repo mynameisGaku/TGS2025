@@ -182,6 +182,7 @@
     <ClInclude Include="Source\Component\CollisionObserver.h" />
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\Component\AIController.h" />
+    <ClInclude Include="Source\Component\DebugController.h" />
     <ClInclude Include="Source\Component\MaterialRenderer.h" />
     <ClInclude Include="Source\Component\MotionBlur.h" />
     <ClInclude Include="Source\Component\Physics.h" />
@@ -307,8 +308,6 @@
     <ClCompile Include="Source\bootScene.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
-    <ClCompile Include="Source\CamState_Chase.cpp" />
-    <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\Catcher.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\CharaDefineRef.cpp" />
@@ -324,6 +323,7 @@
     <ClCompile Include="Source\Component\CollisionFunc.cpp" />
     <ClCompile Include="Source\Component\CollisionManager.cpp" />
     <ClCompile Include="Source\Component\CollisionObserver.cpp" />
+    <ClCompile Include="Source\Component\DebugController.cpp" />
     <ClCompile Include="Source\Component\MaterialRenderer.cpp" />
     <ClCompile Include="Source\Component\MotionBlur.cpp" />
     <ClCompile Include="Source\Component\Physics.cpp" />

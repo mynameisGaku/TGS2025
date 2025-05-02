@@ -1,6 +1,7 @@
 #include "BloomManager.h"
 #include "WindowSetting.h"
 #include "InputManager.h"
+#include "Util/Utils.h"
 
 void SetDrawScreenWithCamera(int screen)
 {
@@ -8,6 +9,7 @@ void SetDrawScreenWithCamera(int screen)
 	Vector3 camTarget = GetCameraTarget();
 	SetDrawScreen(screen);
 	SetCameraPositionAndTarget_UpVecY(camPos, camTarget);
+	SetupCamera_Perspective(Math::DegToRad(90));
 }
 
 BloomManager::BloomManager()

@@ -58,7 +58,7 @@ void EffectManager::Update() {
 
 	// 再生中のエフェクトのUpdateを呼び出す
 	for (auto itr = effects->begin(); itr != effects->end();) {
-		if ((*itr)->IsActive() && (*itr)->IsDestroy() == false) {
+		if ((*itr)->IsPlaying()) {
 			(*itr)->Update();
 			itr++;
 			continue;

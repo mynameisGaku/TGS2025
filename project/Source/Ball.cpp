@@ -76,18 +76,7 @@ void Ball::Update()
 
 void Ball::Draw()
 {
-	FindGameObject<BloomManager>()->SetDrawScreenToEmitter();
-
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-	DrawSphere3D(transform->position, BALL_COLOR_RADIUS, 1, m_CharaTag == "Red" ? 0xFF0000 : 0x0000FF, 0x000000, true);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-
-	FindGameObject<BloomManager>()->SetDrawScreenToBack();
 	Object3D::Draw();
-
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
-	DrawSphere3D(transform->position, BALL_COLOR_RADIUS, 1, m_CharaTag == "Red" ? 0xFF0000 : 0x0000FF, 0x000000, true);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 }
 
 void Ball::Throw(const Vector3& velocity)

@@ -16,6 +16,7 @@
 
 //=== ポストエフェクト ===
 #include "BloomManager.h"
+#include "EffectManager.h"
 
 //=== 破片 ===
 #include "CrystalFragmentManager.h"
@@ -80,6 +81,11 @@ void PlayScene::Update()
 
 void PlayScene::Draw()
 {
+	// ToDo:レイヤー管理
+	m_BloomManager->SetDrawScreenToEmitter();
+	EffectManager::Draw();
+	m_BloomManager->SetDrawScreenToBack();
+
 	SceneBase::Draw();
 
 	Settings_json::Inst()->RenderImGuiFileManager();

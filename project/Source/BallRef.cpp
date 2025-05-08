@@ -16,4 +16,5 @@ void BallRef::Load()
 	FrictionDefault = settingsJson->GetOrDefault("FrictionDefault", Vector3(0, 0, 0), FILEKEY);
 	BouncinessDefault = settingsJson->GetOrDefault("BouncinessDefault", 0.0f, FILEKEY);
 	SpeedDefault = settingsJson->GetOrDefault("SpeedDefault", 0.0f, FILEKEY);
+    HomingTimeMax = settingsJson->GetOrDefault("HomingTimeMax", 0.0f, FILEKEY);
 }

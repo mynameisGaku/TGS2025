@@ -409,7 +409,7 @@
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\Json\Ball.json" />
+    <None Include="data\Json\Ball\Ball.json" />
     <None Include="data\Json\Bloom\Bloom.json" />
     <None Include="data\Json\Chara\CharaDefine.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />

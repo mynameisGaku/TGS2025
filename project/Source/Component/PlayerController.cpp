@@ -51,6 +51,12 @@ void PlayerController::Update() {
 		}
 	}
 
+	if (IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
+	{
+		chara->GenerateBall();
+		chara->ThrowHomingBall();
+	}
+
 	////////////////////////////////////////////////////
 	// ‹zˆøƒLƒƒƒbƒ`ˆ—
 	if (IsPressButton(KeyDefine::KeyCode::X, KeyDefine::Stationary))

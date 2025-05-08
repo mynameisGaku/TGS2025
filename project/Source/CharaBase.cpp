@@ -338,6 +338,19 @@ void CharaBase::ThrowBallForward()
 	m_pBall = nullptr;
 }
 
+void CharaBase::ThrowHomingBall()
+{
+    if (m_pBall == nullptr)
+        return;
+
+	Vector3 forward = transform->Forward();
+	Vector3 velocity = forward + V3::SetY(0.4f);
+    //m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate), this);
+    m_pBall->ThrowHoming(velocity * 3000.0f, this);
+    m_pLastBall = m_pBall;
+    m_pBall = nullptr;
+}
+
 void CharaBase::GenerateBall()
 {
 	m_ChargeRateWatchDog = 0.1f;

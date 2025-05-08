@@ -34,37 +34,17 @@ void DebugController::Update()
 
 	////////////////////////////////////////////////////
 	// ボール投げる処理
-
-	// ToDo : チャージ未対応なので対応させるｒ
-	if (not chara->IsHoldingBall())
+	if (PadController::NormalizedRightTrigger() > KeyDefine::TRIGGER_DEADZONE)
 	{
-		if (chara->IsChargingBall())
+		if (not isPush)
 		{
-			if (PadController::NormalizedRightTrigger() > KeyDefine::TRIGGER_DEADZONE)
-			{
-				if (not isPush)
-				{
-					chara->GenerateBall();
-					isPush = true;
-				}
-			}
-			else 
-				isPush = false;
+			chara->GenerateBall();
+			chara->ThrowHomingBall();
+			isPush = true;
 		}
 	}
-	else
-	{
-		if (PadController::NormalizedRightTrigger() > KeyDefine::TRIGGER_DEADZONE)
-		{
-			if (not isPush)
-			{
-				chara->ThrowBallForward();
-				isPush = true;
-			}
-		}
-		else isPush = false;
-	}
-
+	else isPush = false;
+	
 	////////////////////////////////////////////////////
 	// 吸引キャッチ処理
 	if (PadController::NormalizedLeftTrigger() > KeyDefine::TRIGGER_DEADZONE)

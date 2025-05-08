@@ -84,6 +84,12 @@ public:
 	/// <param name="speed"></param>
 	void ThrowBallForward();
 
+    /// <summary>
+    /// ホーミングボールを投げる
+    /// </summary>
+    /// <param name="param">ホーミング概要</param>
+    void ThrowHomingBall();
+
 	/// <summary>
 	/// ボールを生成する。
 	/// この関数を呼び出している間、ボールのチャージ率が上がる。

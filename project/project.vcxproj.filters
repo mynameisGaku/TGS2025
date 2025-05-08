@@ -1152,9 +1152,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\Json\Ball.json">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </None>
     <None Include="data\Json\Crystal\CrystalFragment.json">
       <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
     </None>
@@ -1196,6 +1193,9 @@
     </None>
     <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
       <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
+    </None>
+    <None Include="data\Json\Ball\Ball.json">
+      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
     </None>
   </ItemGroup>
 </Project>

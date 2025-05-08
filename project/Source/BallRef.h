@@ -9,7 +9,7 @@
 class BallRef
 {
 private:
-	const std::string PATH    = "data/Json/Ball.json";
+	const std::string PATH    = "data/Json/Ball/Ball.json";
 	const std::string FILEKEY = "Ball";
 public:
 	static BallRef& Inst()
@@ -24,6 +24,7 @@ public:
 	Vector3 FrictionDefault;	// デフォルトの摩擦係数
 	float BouncinessDefault = 0.0f;	// デフォルトの反発係数
 	float SpeedDefault = 0.0f;
+	float HomingTimeMax = 0.0f;
 };
 
 #define BALL_REF BallRef::Inst()

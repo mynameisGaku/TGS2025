@@ -357,4 +357,9 @@ namespace Function {
 		}
 
 	}
+
+	static float Lerp(float v1, float v2, float t)
+	{
+		return v1 + ((v2 - v1) * t);
+	}
 };

@@ -208,6 +208,17 @@ public:
 	// iの値によって要素にvalueをセット(0 -> x, 1 -> y, 2 -> z)
 	// ループ処理で使用
 	void Set(int i, float value);
+	
+	/**
+	@brief		2 つのベクトル間の線形補間を行います。
+	@param[in]	start	: 開始ベクトル (t = 0.0 のときの値)
+	@param[in]	end		: 終了ベクトル (t = 1.0 のときの値)
+	@param[in]	t		: 加重係数
+	@return		補間結果のベクトル
+	@details	t は通常、0.0～1.0 を指定します。
+	*/
+	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+
 };
 
 // Vector3を補助する定数、関数

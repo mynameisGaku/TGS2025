@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Utils.h"
 
 void Vector3::operator=(const Vector3& value) {
 
@@ -306,4 +307,12 @@ void Vector3::Set(int i, float value) {
 		z = value;
 		break;
 	}
+}
+
+Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t)
+{
+	return Vector3(
+		Function::Lerp(start.x, end.x, t),
+		Function::Lerp(start.y, end.y, t),
+		Function::Lerp(start.z, end.z, t));
 }

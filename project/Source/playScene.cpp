@@ -92,6 +92,8 @@ void PlayScene::Draw()
 
 	SceneBase::Draw();
 
+	DrawSphere3D(Vector3(0, 150, 1000), 50, 32, 0xffffff, 0x001fff, true);
+
 	Settings_json::Inst()->RenderImGuiFileManager();
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 }

@@ -49,7 +49,7 @@ void CrystalFragmentSpawner::Update()
         for (int i = 0; i < m_SpawnAmount; ++i)
         {
             Vector3 pos = transform->position;
-            m_pCrystalM->CreateFragment(pos);
+            m_pCrystalM->CreateFragment(pos, CrystalElement::eNONE, CrystalSize::sMIDDLE);
         }
         m_SpawnTimer = m_SpawnInterval;
     }

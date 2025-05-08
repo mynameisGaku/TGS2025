@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 /// <summary>
 /// CrystalFragment.jsonのパラメーターを保持するクラス
@@ -7,6 +8,15 @@
 /// </summary>
 class CrystalFragmentRef
 {
+private:
+    enum InfoType
+    {
+        NONE,
+        SMALL,
+        MEDIUM,
+        LARGE,
+        MAX
+    };
 private:
     const std::string   FILEPATH = "data/Json/Crystal/CrystalFragment.json";    // ファイルのパス
     const std::string   FILEKEY  = "CrystalFragment";                           // ファイル識別用キー
@@ -19,20 +29,21 @@ public:
 
     void Load(bool _ForceLoad = false);
 
-    int                 m_LimitMax;  // 生成される量の限度
-    float               m_RotSpeed;     // 破片のY軸回転速度
-    float               m_ElementPoint; // 属性ポイント
-    float               m_Size;         // 大きさ
-    float               m_LifeTime;     // 寿命
+    struct Info
+    {
+        float               RotSpeed;     // 破片のY軸回転速度
+        float               ElementPoint; // 属性ポイント
+        float               Size;         // 大きさ
+        float               LifeTime;     // 寿命
+    };
+
+    std::vector<Info>   m_Refs;       // 各サイズのパラメーター
+    int                 m_LimitMax;   // 生成される量の限度
 
 private:
     bool                m_WasLoad = false; // ロード済みか？ 重複回避用
 
-    CrystalFragmentRef() :
-        m_RotSpeed    (0.0f),
-        m_ElementPoint(0.0f),
-        m_Size        (0.0f),
-        m_LifeTime    (0.0f),
+    CrystalFragmentRef():
         m_LimitMax(0)
     { /*DO NOTHING*/ }
 

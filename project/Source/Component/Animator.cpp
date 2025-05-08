@@ -8,13 +8,14 @@
 #include "../Object3D.h"
 #include <assert.h>
 
+namespace {
+	static const float MERGE_TIME_MAX = 0.25f;
+	static const int ANIM_FRAMERATE = 60;
+	static const int BLEND_COUNT_MAX = 5;
+};
+
 Animator::Animator() {
-
-	parentObj = nullptr;
-	animCsv = nullptr;
-
-	current.attachID = -1;
-	prev.attachID = -1;
+	current = nullptr;
 
 	parentModel = -1;
 	mergeTime = 0.0f;
@@ -24,22 +25,18 @@ Animator::Animator() {
 
 	origin = "";
 	playingLabel = "";
-
-	offsetMatrix = MGetIdent();
 }
 
 Animator::~Animator() {
 
 	// アニメーションをデタッチする
-
-	if (current.attachID >= 1.0f)
-		MV1DetachAnim(parentModel, current.attachID);
-
-	if (prev.attachID >= 1.0f)
-		MV1DetachAnim(parentModel, prev.attachID);
-
-	// Csvデータを削除する
-	Function::DeletePointer(animCsv);
+	if (current != nullptr)
+		delete current;
+	for (AttachedAnimation* prev : prevs) {
+		if (prev != nullptr) {
+			delete prev;
+		}
+	}
 
 	// コマンドの実行権限を復活させる
 	for (auto& anim : anims) {
@@ -55,7 +52,7 @@ Animator::~Animator() {
 
 void Animator::Init(std::string _origin, float _frameRate, float _mergeTimeMax) {
 
-	parentObj = dynamic_cast<Object3D*>(parent);
+	Object3D* parentObj = dynamic_cast<Object3D*>(parent);
 
 	// 親のモデルを設定
 	if (parentObj != nullptr)
@@ -71,71 +68,7 @@ void Animator::Init(std::string _origin, float _frameRate, float _mergeTimeMax) 
 	mergeTimeMax = _mergeTimeMax;
 }
 
-void Animator::LoadAnim(std::string animFilePath, std::string label, bool loop, bool fixedRoot, std::string extension) {
-
-	anims[label].handle = ResourceLoader::MV1LoadModel((animFilePath + extension).c_str());
-	assert(anims[label].handle >= 0);
-
-	anims[label].animName = label;
-	anims[label].isLoop = loop;
-	anims[label].isFixedRoot = fixedRoot;
-}
-
-void Animator::LoadAnimCsv(std::string csvFilePath, std::string animFilePath) {
-
-	if (csvFilePath == "")
-		return;
-
-	Function::DeletePointer(animCsv);
-
-	animCsv = new CsvReader(csvFilePath);
-
-	for (int i = 1; i < animCsv->Column(); i++) {
-
-		std::string labelName = animCsv->GetString(i, LabelName);	// ラベル名
-
-		// ラベル名が設定されていないなら、次の要素へ
-		if (labelName == "")
-			continue;
-
-		std::string fileName = animFilePath + animCsv->GetString(i, ResourceName);	// データが実在する場所		
-		bool loop = animCsv->GetBool(i, IsLoop);			// ループ再生の有無
-		bool fixedRoot = animCsv->GetBool(i, IsFixedRoot);	// ローカル座標の固定化の有無
-
-		// データの読み込み
-		LoadAnim(fileName, labelName, loop, fixedRoot);
-
-		anims[labelName].startFrame		= animCsv->GetFloat(i, StartFrame);
-		anims[labelName].endFrame		= animCsv->GetFloat(i, EndFrame);
-		anims[labelName].defAnimSpeed	= animCsv->GetFloat(i, DefAnimSpeed);
-
-		// コマンドが設定されていないなら、次の要素へ
-		if (animCsv->GetString(i, Command) == "")
-			continue;
-
-		// 各コマンドを取得する
-		for (int j = i; j < animCsv->Column(); j++) {
-
-			std::string nextLabelName = animCsv->GetString(j, LabelName);	// 次の列のラベル名
-
-			// 次のラベル名が今のラベル名と一致していないかつ、
-			// 次のラベル名に名前が入っていたらforから抜ける
-			if (nextLabelName != labelName && nextLabelName != "")
-				break;
-
-			AnimationEvent* event = new AnimationEvent(this);
-
-			std::string  commandType = animCsv->GetString(j, Command);		// コマンド
-			std::string commandContents = animCsv->GetString(j, Details);	// 実行内容
-			float runFrame = animCsv->GetFloat(j, RunFrame);				// 実行フレーム
-
-			event->SetCommand(commandType, commandContents, runFrame);
-
-			anims[labelName].event.push_back(event);
-		}
-	}
-}
-
+#if FALSE
 void Animator::Update() {
 
 	// ①前姿勢を補正
@@ -176,7 +109,7 @@ void Animator::Update() {
 
 		// 座標移動を打ち消す
 		prevM *= MGetTranslate(framePos * -1.0f);
-		
+
 		// Yだけ維持、XZを原点
 		prevM *= MGetTranslate(Vector3(0.0f, framePos.y, 0.0f));
 	}
@@ -216,7 +149,7 @@ void Animator::Update() {
 
 			// 座標移動を打ち消す
 			currentM *= MGetTranslate(framePos * -1.0f);
-			
+
 			// Yだけ維持、XZを原点
 			currentM *= MGetTranslate(Vector3(0.0f, framePos.y, 0.0f));
 		}
@@ -239,6 +172,8 @@ void Animator::Update() {
 		MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
 	}
 
+
+#if FALSE
 	// ◇Csvデータが読み込まれていたら
 	if (animCsv != nullptr) {
 
@@ -246,10 +181,112 @@ void Animator::Update() {
 			event->Update();
 		}
 	}
+#endif // FALSE
 }
 
-void Animator::Play(std::string label, float speed)
-{
+#endif // FALSE
+
+void Animator::Update() {
+	if (current == nullptr) return;
+
+	// ルートフレーム取得
+	int hRoot = MV1SearchFrame(parentModel, "mixamorig:Hips");
+
+	// 一旦リセット
+	MV1ResetFrameUserLocalMatrix(parentModel, hRoot);
+
+	// 時間に応じてブレンド率を変える
+	float rate = 1.0f;
+
+	// ブレンド進行処理
+	if (prevs.size() > 0) {
+		// ブレンド時間を進める
+		mergeTime += Time::DeltaTime() * playSpeed;
+
+		// ブレンド終了時なら
+		if (mergeTime >= MERGE_TIME_MAX) {
+
+			// 前アニメーション終了処理
+			for (AttachedAnimation* prev : prevs) {
+				delete prev;
+				prev = nullptr;
+			}
+			prevs.clear();
+
+			mergeTime = MERGE_TIME_MAX;
+		}
+
+		// 時間に応じてブレンド率を変える
+		rate = mergeTime / MERGE_TIME_MAX;
+		// 全体が1になるようにブレンド
+		current->SetBlendRate(rate);
+
+		if (prevs.size() > 0) {
+			float prevRate = 1.0f - rate;
+			for (AttachedAnimation* prev : prevs) {
+				prev->SetBlendRate(prevRate);
+			}
+		}
+	}
+
+	// ルートの移動行列
+	MATRIX currentM = MGetIdent();
+	MATRIX prevM = MGetScale(V3::ZERO);
+
+	// アニメーションの更新
+	for (AttachedAnimation* prev : prevs) {
+		prev->Update();
+	}
+	current->Update();
+
+	// ルート補正の計算
+	for (AttachedAnimation* prev : prevs) {
+		prev->UpdateRootMatrix();
+	}
+	current->UpdateRootMatrix();
+
+	// ルートの移動行列を取得
+	currentM = MScale(current->RootMatrix(), current->BlendRate());
+	for (AttachedAnimation* prev : prevs) {
+		prevM += MScale(prev->RootMatrix(), prev->BlendRate());
+	}
+
+	// 現姿勢と前姿勢を合成
+	currentM += prevM;
+
+	// セット
+	MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
+
+	for (auto& item : frameMatrix)
+	{
+		int frame = MV1SearchFrame(parentModel, item.first.c_str());
+		MV1ResetFrameUserLocalMatrix(parentModel, frame);
+
+		MATRIX frameM = MV1GetFrameLocalMatrix(parentModel, frame);
+		frameM = item.second * frameM;
+
+		MV1SetFrameUserLocalMatrix(parentModel, frame, frameM);
+	}
+}
+
+void Animator::LoadAnim(std::string folder, std::string name, AnimOption option) {
+	std::string fullPath = folder + name;
+	if (name.find(".mv1") != std::string::npos)
+	{
+		fullPath += ".mv1";
+	}
+	anims[name].handle = ResourceLoader::MV1LoadModel(fullPath.c_str());
+	assert(anims[name].handle >= 0);
+
+	anims[name].animName = name;
+	anims[name].option = option;
+
+	// ToDo:start,endをどうしよう
+	anims[name].startFrame = 0.0;
+	anims[name].endFrame = MV1GetAnimTotalTime(anims[name].handle, 0);
+}
+
+void Animator::Play(std::string label, float speed) {
 	if (label == playingLabel) // 同じIDなら無視する
 		return;
 

@@ -39,6 +39,8 @@ public:
 	/// </summary>
 	/// <param name="colData">“–‚½‚è”»’èî•ñ</param>
 	void CollisionEvent(const CollisionData& colData) override;
+
+	std::string GetCharaTag() const { return m_CharaTag; }
 private:
 	Physics*		m_Physics;
 	ColliderCapsule* m_Collider;

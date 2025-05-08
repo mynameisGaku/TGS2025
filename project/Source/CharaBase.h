@@ -186,4 +186,6 @@ private:
 	void idleUpdate();
 	void runUpdate();
 	void slideUpdate();
+
+	void getHit(Ball* hit);
 };

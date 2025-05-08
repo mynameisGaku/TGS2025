@@ -181,7 +181,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	ColliderCapsule* colliderChara = newChara->AddComponent<ColliderCapsule>();
 	colliderChara->BaseInit(colParamChara);
 	colliderChara->SetOffset(V3::SetY(130.0f));
-	colliderChara->SetDraw(true);
+	//colliderChara->SetDraw(true);
 
 	newChara->m_Index = index;
 	newChara->Init(tag);

@@ -10,6 +10,7 @@
 #include "Catcher.h"
 #include "CharaDefineRef.h"
 #include "Component/Animator.h"
+#include "Util/Utils.h"
 
 using namespace KeyDefine;
 
@@ -121,8 +122,8 @@ void CharaBase::Init(std::string tag)
 	//=== メインアニメーション ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdle", AnimOption().SetIsLoop(true));
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleEmote", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToRun", AnimOption().SetIsFixedRoot({false, false, true}));
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption().SetIsFixedRoot({ false, true, false }).SetOffset(V3::SetY(100.0f)));
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToStandingIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 
 	m_Animator->LoadAnim("data/Animation/", "AirSpin", AnimOption().SetIsFixedRoot({ false, false, true }));
@@ -130,9 +131,9 @@ void CharaBase::Init(std::string tag)
 	m_Animator->LoadAnim("data/Animation/", "CrouchToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 	m_Animator->LoadAnim("data/Animation/", "CrouchToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/", "DamageToDown", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "DamageToDown", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/", "Fall", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "Fall", AnimOption().SetIsLoop(true).SetIsFixedRoot({ false, true, false }).SetOffset(V3::SetY(100.0f)));
 	m_Animator->LoadAnim("data/Animation/", "FallToCrouch", AnimOption().SetIsFixedRoot({ false, false, true }));
 	m_Animator->LoadAnim("data/Animation/", "FallToRollToIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 
@@ -140,7 +141,7 @@ void CharaBase::Init(std::string tag)
 
 	m_Animator->LoadAnim("data/Animation/", "Run", AnimOption().SetIsLoop(true));
 	m_Animator->LoadAnim("data/Animation/", "RunToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "RunToJump", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "RunToJump", AnimOption().SetIsFixedRoot({ false, true, true }).SetOffset(V3::SetY(100.0f)));
 	m_Animator->LoadAnim("data/Animation/", "RunToSlide", AnimOption().SetIsFixedRoot({ false, false, true }));
 
 	m_Animator->LoadAnim("data/Animation/", "Slide", AnimOption().SetIsFixedRoot({ false, false, true }));
@@ -208,7 +209,7 @@ void CharaBase::Draw()
 void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 	// 当たった相手がキャラクターの場合
-	if (colData.Other()->Tag() == ColDefine::Tag::tCharaRed || colData.Other()->Tag() == ColDefine::Tag::tBallBlue) {
+	if (colData.Other()->Tag() == ColDefine::Tag::tCharaRed) {
 
 		// 相手の情報
 		CharaBase* chara = colData.Other()->Parent<CharaBase>();
@@ -240,6 +241,17 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			// 反発力を加える
 			m_pPhysics->resistance -= repellentForce;
 			otherPhysics->velocity += repellentForce;
+		}
+	}
+	// ボールの場合
+	else if (colData.Other()->Tag() == ColDefine::Tag::tBallBlue || colData.Other()->Tag() == ColDefine::Tag::tBallRed)
+	{
+		// 相手の情報
+		Ball* ball = colData.Other()->Parent<Ball>();
+
+		if (ball->GetCharaTag() != m_CharaTag)
+		{
+			getHit(ball);
 		}
 	}
 }
@@ -1161,4 +1173,15 @@ void CharaBase::slideUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToJump); // ステートを変更
 	}
+}
+
+void CharaBase::getHit(Ball* hit)
+{
+	m_FSM->ChangeState(&CharaBase::StateDamageToDown);
+
+	Vector3 dif = hit->transform->position - transform->position;
+
+	float forwardRad = atan2f(dif.x, dif.z);
+	transform->rotation.y = forwardRad;
+	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:外部化
 }

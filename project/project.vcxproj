@@ -424,6 +424,7 @@
     <None Include="data\Json\Effect\Hit_Gray.json" />
     <None Include="data\Json\Effect\Hit_NoColor.json" />
     <None Include="data\Json\Effect\Hit_Red.json" />
+    <None Include="data\Json\Stage\Stage.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

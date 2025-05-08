@@ -67,17 +67,27 @@ namespace StageObjectManager {
 	/// <summary>
 	/// Csvファイルからステージのデータを読み込む
 	/// </summary>
-	void LoadToCsv(std::string filename);
+	void LoadToCsv(const std::string& filename);
+
+	/// <summary>
+    /// Jsonファイルからステージのデータを読み込む
+	/// </summary>
+	void LoadFromJson(const std::string& filename);
 
 	/// <summary>
 	/// Csvファイルにステージのデータを保存する
 	/// </summary>
 	void SaveToCsv();
 
+    /// <summary>
+    /// Jsonファイルにステージのデータを保存する
+    /// </summary>
+    void SaveToJson();
+
 	/// <summary>
 	/// Csvファイルにステージのデータを書き出す
 	/// </summary>
-	void OutPutToCsv(std::string filename);
+	void OutPutToCsv(const std::string& filename);
 
 	/// <summary>
 	/// データの保存と読み込みを一斉に行う
@@ -92,7 +102,7 @@ namespace StageObjectManager {
 	//==========================================================================================
 	// ▼セッター
 
-	void SetModelFilePath(std::string filename);
+	void SetModelFilePath(const std::string& filename);
 
 	//==========================================================================================
 	// ▼ゲッター

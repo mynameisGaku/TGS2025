@@ -12,6 +12,7 @@
 
 // ◇演出・機能
 #include "InputManager.h"
+#include "settings_json.h"
 
 using namespace StageDefine;
 
@@ -110,7 +111,8 @@ void StageObjectManager::Draw() {
 
 void StageObjectManager::Release() {
 
-	SaveToCsv();
+	//SaveToCsv();
+	SaveToJson();
 	EraseAll();
 
 	Function::DeletePointer(stageObjects);
@@ -162,7 +164,7 @@ bool StageObjectManager::CollCheckCapsule(Vector3 p1, Vector3 p2, float r, Vecto
 	return hitFlag;
 }
 
-void StageObjectManager::LoadToCsv(std::string filename) {
+void StageObjectManager::LoadToCsv(const std::string& filename) {
 
 	if (stageObjects == nullptr)
 		return;
@@ -205,6 +207,61 @@ void StageObjectManager::LoadToCsv(std::string filename) {
 	delete csv;
 }
 
+void StageObjectManager::LoadFromJson(const std::string& filename)
+{
+	if (stageObjects == nullptr)
+		return;
+
+	using namespace Math;
+
+	EraseAll();
+
+	if (*csvFilePath_StageObjData != filename)
+		*csvFilePath_StageObjData = filename;
+
+	// 読み込み
+	{
+		auto settings_json = Settings_json::Inst();
+		settings_json->LoadSettingJson(filename, filename, true);
+		std::vector<nlohmann::json> objects = Settings_json::Inst()->Get<std::vector<nlohmann::json>>("Objects", filename);
+
+		for (const auto& obj : objects) {
+
+			StageObjInfo info;		// ステージオブジェクトの情報
+			Transform tr;			// 座標・回転・拡縮の情報
+			bool isCollision = false;
+
+			std::string type = obj.at("Type").get<std::string>();
+
+			info.type = type;
+			info.hModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + ".mv1");
+			info.hHitModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + "_col.mv1");
+
+			auto pos = obj.at("Position");
+			float px = pos.at("x").get<float>();
+			float py = pos.at("y").get<float>();
+			float pz = pos.at("z").get<float>();
+			tr.position = Vector3(px, py, pz);
+
+			auto rot = obj.at("Rotation");
+			float rx = rot.at("x").get<float>();
+			float ry = rot.at("y").get<float>();
+			float rz = rot.at("z").get<float>();
+			tr.rotation = Vector3(rx, ry, rz);
+
+			auto sca = obj.at("Scale");
+			float sx = sca.at("x").get<float>();
+			float sy = sca.at("y").get<float>();
+			float sz = sca.at("z").get<float>();
+			tr.scale = Vector3(sx, sy, sz);
+
+			isCollision = obj.at("IsCollision").get<bool>();
+
+			Create(info, tr, isCollision);
+		}
+	}
+}
+
 void StageObjectManager::SaveToCsv() {
 
 	if (csvFilePath_StageObjData == nullptr || stageObjects == nullptr)
@@ -213,7 +270,19 @@ void StageObjectManager::SaveToCsv() {
 	OutPutToCsv(*csvFilePath_StageObjData);
 }
 
-void StageObjectManager::OutPutToCsv(std::string filename) {
+void StageObjectManager::SaveToJson()
+{
+	if (csvFilePath_StageObjData == nullptr || stageObjects == nullptr)
+		return;
+
+    // 書き込み
+    {
+        auto settings_json = Settings_json::Inst();
+		settings_json->Save(*csvFilePath_StageObjData);
+    }
+}
+
+void StageObjectManager::OutPutToCsv(const std::string& filename) {
 
 	if (stageObjects == nullptr)
 		return;
@@ -420,7 +489,7 @@ void StageObjectManager::HitModelDrawSwitch() {
 		itr->SetIsHitModelDraw(!itr->IsHitModelDraw());
 }
 
-void StageObjectManager::SetModelFilePath(std::string filename) {
+void StageObjectManager::SetModelFilePath(const std::string& filename) {
 
 	if (csvFilePath_StageObjModel == nullptr)
 		return;

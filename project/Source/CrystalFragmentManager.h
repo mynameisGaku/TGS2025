@@ -21,7 +21,7 @@ public:
     /// ¶¬‚³‚ê‚½”j•Ğ‚ÍAƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É”ò‚ñ‚Å‚¢‚«‚Ü‚·B
     /// </summary>
     /// <param name="pos">¶¬êŠ</param>
-    void CreateFragment(const Vector3& pos);
+    void CreateFragment(const Vector3& pos, const CrystalElement& elem, const CrystalSize& size);
 
 private:
     CrystalFragment* initfunc(uint32_t index, CrystalFragment* pFrag);

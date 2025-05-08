@@ -48,14 +48,14 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	ball->Throw(Vector3(20.0f, 50.0f, 5.0f));
 
 	fragM = Instantiate<CrystalFragmentManager>();
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
-	fragM->CreateFragment(Vector3(0, 0, -150));
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eFIRE, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eEARTH, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eICE, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eLIGHTNING, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eWIND, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eNONE, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eFIRE, CrystalSize::sSMALL);
+	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eFIRE, CrystalSize::sSMALL);
 
 	// ƒuƒ‹[ƒ€
 	m_BloomManager = Instantiate<BloomManager>();
@@ -74,7 +74,9 @@ void PlayScene::Update()
 		SceneManager::ChangeScene("TitleScene");
 	}
 	if (InputManager::Hold(KeyCode::N)) {
-		fragM->CreateFragment(Vector3(0, 0, -150));
+		int r = GetRand(3);
+		int r2 = GetRand(CrystalElement::eMAX);
+		fragM->CreateFragment(Vector3(0, 0, -150), (CrystalElement)r2, (CrystalSize)r);
 	}
 
 	SceneBase::Update();

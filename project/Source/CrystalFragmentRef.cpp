@@ -14,12 +14,38 @@ void CrystalFragmentRef::Load(bool _ForceLoad)
     // JSON 読み込み
     jsonLoader->LoadSettingJson(FILEPATH, FILEKEY);
 
-    // 各種値取得
-    m_LimitMax        = jsonLoader->GetOrDefault<int>(  "Param.LimitMax",     0,    FILEKEY);
-    m_RotSpeed        = jsonLoader->GetOrDefault<float>("Param.RotSpeed",     0.0f, FILEKEY);
-    m_ElementPoint    = jsonLoader->GetOrDefault<float>("Param.ElementPoint", 0.0f, FILEKEY);
-    m_Size            = jsonLoader->GetOrDefault<float>("Param.Size",         0.0f, FILEKEY);
-    m_LifeTime        = jsonLoader->GetOrDefault<float>("Param.LifeTime",     0.0f, FILEKEY);
+    // Has Element
+    {
+        for (int i = 0; i < InfoType::MAX; i++)
+        {
+            std::string infotype = "Param.";
+            switch (i)
+            {
+            case InfoType::NONE:
+                infotype += "NONE.";
+                break;
+            case InfoType::SMALL:
+                infotype += "ELEMENT.Small.";
+                break;
+            case InfoType::MEDIUM:
+                infotype += "ELEMENT.Medium.";
+                break;
+            case InfoType::LARGE:
+                infotype += "ELEMENT.Large.";
+                break;
+            }
+
+            // 各種値取得
+            Info info = {};
+            info.RotSpeed       = jsonLoader->GetOrDefault<float>(infotype + "RotSpeed", 0.0f, FILEKEY);
+            info.ElementPoint   = jsonLoader->GetOrDefault<float>(infotype + "ElementPoint", 0.0f, FILEKEY);
+            info.Size           = jsonLoader->GetOrDefault<float>(infotype + "Size", 0.0f, FILEKEY);
+            info.LifeTime       = jsonLoader->GetOrDefault<float>(infotype + "LifeTime", 0.0f, FILEKEY);
+            m_Refs.push_back(info);
+        }
+    }// End Has Element
+
+    m_LimitMax = jsonLoader->GetOrDefault<int>("Param.LimitMax", 0, FILEKEY);
 
     // ロードしたよ
     m_WasLoad = true;

@@ -93,7 +93,7 @@ void CrystalFragmentManager::Draw()
     m_pPool->PoolImguiRendererEnd();
 }
 
-void CrystalFragmentManager::CreateFragment(const Vector3& pos)
+void CrystalFragmentManager::CreateFragment(const Vector3& pos, const CrystalElement& elem, const CrystalSize& size)
 {
     auto& ref = CRYSTALFRAGMENT_REF;
     // 各種リファレンスを元に初期化
@@ -112,11 +112,13 @@ void CrystalFragmentManager::CreateFragment(const Vector3& pos)
 
     auto obj = m_pPool->Alloc([&](uint32_t i, CrystalFragment* p) { return initfunc(i, p); });
 
+    obj->Init(elem, size);
+
     obj->transform->position = pos;
-    obj->m_RotSpeed = ref.m_RotSpeed;
-    obj->m_ElementPoint = ref.m_ElementPoint;
-    obj->m_Size = ref.m_Size;
-    obj->m_Lifetime = ref.m_LifeTime;
+    obj->m_RotSpeed     = ref.m_Refs[size].RotSpeed;
+    obj->m_ElementPoint = ref.m_Refs[size].ElementPoint;
+    obj->m_Size         = ref.m_Refs[size].Size;
+    obj->m_Lifetime     = ref.m_Refs[size].LifeTime;
     obj->SetIsActive(true);
     obj->SetRandFirstVelocity();
 

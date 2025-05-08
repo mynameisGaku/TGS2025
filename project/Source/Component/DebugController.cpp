@@ -74,7 +74,7 @@ void DebugController::Update()
 
 	////////////////////////////////////////////////////
 	// ƒWƒƒƒ“ƒvˆ—
-	if (IsPressButton(KeyDefine::KeyCode::LeftShoulder, KeyDefine::Begin))
+	if (IsPressButton(KeyDefine::KeyCode::ButtonA, KeyDefine::Begin))
 	{
 		chara->Jump();
 	}

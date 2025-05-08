@@ -5,26 +5,15 @@
 #include "Util/Utils.h"
 #include <Library/time.h>
 
-CrystalFragment::CrystalFragment(uint32_t index) :
+CrystalFragment::CrystalFragment(uint32_t index, const Element& elem, const Size& size) :
     Object3D(),
     m_pPhysics(nullptr),
     m_Lifetime(0.0f),
     m_ElementPoint(0.0f),
     m_Size(0.0f),
-    m_Index(index)
+    m_Index(index),
+    m_Element(elem)
 {
-    m_pPhysics = AddComponent<Physics>();
-    m_pPhysics->Init(V3::ZERO, FRICTION);
-
-    // リファレンスを元に初期化
-    auto& ref = CRYSTALFRAGMENT_REF;
-    m_Lifetime          = ref.m_LifeTime;
-    m_ElementPoint      = ref.m_ElementPoint;
-    m_Size              = ref.m_Size;
-    m_RotSpeed          = ref.m_RotSpeed;
-
-    // フラグ立てる
-    m_IsActive = true;
 }
 
 void CrystalFragment::SetRandFirstVelocity()
@@ -51,6 +40,24 @@ CrystalFragment::~CrystalFragment()
 {
     std::string output = "cry delete : " + std::to_string(m_Index) + "\n";
     OutputDebugString(output.c_str());
+}
+
+void CrystalFragment::Init(const Element& elem, const Size& size)
+{
+    m_pPhysics = AddComponent<Physics>();
+    m_pPhysics->Init(V3::ZERO, FRICTION);
+
+    m_Element = elem;
+
+    // リファレンスを元に初期化
+    auto& ref = CRYSTALFRAGMENT_REF;
+    m_Lifetime = ref.m_Refs[size].LifeTime;
+    m_ElementPoint = ref.m_Refs[size].ElementPoint;
+    m_Size = ref.m_Refs[size].Size;
+    m_RotSpeed = ref.m_Refs[size].RotSpeed;
+
+    // フラグ立てる
+    m_IsActive = true;
 }
 
 void CrystalFragment::Update()
@@ -89,14 +96,41 @@ void CrystalFragment::Draw()
     if (m_Lifetime <= 0.0f)
         return;
 
+    int color = 0x000000;
+    switch (m_Element)
+    {
+    case eFIRE:
+        color = 0xff0000;
+        break;
+    case eICE:
+        color = 0x00ffff;
+        break;
+    case eLIGHTNING:
+        color = 0xffff00;
+        break;
+    case eWIND:
+        color = 0x00ff00;
+        break;
+    case eEARTH:
+        color = 0x0000ff;
+        break;
+    case eNONE:
+        color = 0xffffff;
+        break;
+    default:
+        color = 0xffffff;
+        break;
+    }
+
+
     // カプセルで仮描画
     DrawCapsule3D(
         transform->position,
-        transform->position + Vector3(0.0f, 100.0f, 0.0f),
+        transform->position + Vector3(0.0f, m_Size, 0.0f),
         m_Size,
         32,
-        0xffffff,
-        0xff0000,
+        color,
+        color,
         true
     );
 }

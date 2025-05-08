@@ -254,13 +254,16 @@ void Animator::Update() {
 	// 現姿勢と前姿勢を合成
 	currentM += prevM;
 
+	// オフセットを適用
+	currentM *= offsetMatrix;
+
 	// セット
 	MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
 
 	for (auto& item : frameMatrix)
 	{
 		int frame = MV1SearchFrame(parentModel, item.first.c_str());
-		//MV1ResetFrameUserLocalMatrix(parentModel, frame);
+		MV1ResetFrameUserLocalMatrix(parentModel, frame);
 
 		MATRIX frameM = MV1GetFrameLocalMatrix(parentModel, frame);
 		frameM = item.second * frameM;

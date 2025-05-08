@@ -85,10 +85,13 @@ public:
 	/// </summary>
 	/// <param name="frameName">対象のフレームの名前</param>
 	/// <param name="matrix"></param>
-	void SetFrameMatrix(std::string frameName, const MATRIX& matrix)
-	{
+	void SetFrameMatrix(std::string frameName, const MATRIX& matrix) {
 		assert(MV1SearchFrame(parentModel, frameName.c_str()) >= 0);
 		frameMatrix[frameName] = matrix;
+	}
+
+	void SetOffsetMatrix(const MATRIX& matrix) {
+		offsetMatrix = matrix;
 	}
 
 	//==========================================================================================
@@ -156,4 +159,5 @@ private:
 	std::string playingLabel;	// 再生中のアニメーションの名札
 
 	std::unordered_map<std::string, MATRIX> frameMatrix;
+	MATRIX offsetMatrix;
 };

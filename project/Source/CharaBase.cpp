@@ -108,7 +108,7 @@ void CharaBase::Init(std::string tag)
 
 	m_Animator = AddComponent<Animator>();
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
-	//m_Animator->SetFrameMatrix("mixamorig9:Hips", MGetRotY(DX_PI_F));
+	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
 	//=== 腕アニメーション（ボールを持つ、投げる） ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToHold", AnimOption());

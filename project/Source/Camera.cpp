@@ -138,28 +138,40 @@ void Camera::MoveProcess()
 	transform->position += velocity;
 }
 
-void Camera::OperationByMouse() {
+void Camera::OperationByMouse(int type) {
 
 	Vector2 addRot = V2::ZERO;	// 加算する回転量
 
 	MouseController::MouseInfo mouse = MouseController::Info();	// マウスの情報
 
-	addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);
-	addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);
+	switch (type) {
+	case 0:	addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);	break;
+	case 1:	addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);	break;
+
+	default:
+		addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);
+		addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);
+		break;
+	}
 
 	// 勢いがつき過ぎない様に、制限をかける
 	transform->rotation.x += min(max(addRot.x, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
 	transform->rotation.y += min(max(addRot.y, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
 }
 
-void Camera::OperationByStick() {
+void Camera::OperationByStick(int type) {
 
 	Vector2 addRot = V2::ZERO;	// 加算する回転量
 	Vector2 rightStick = PadController::NormalizedRightStick();
 
-	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);
-	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);
-
+	switch (type) {
+	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);break;
+	case 1:	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);	break;
+	default:
+		addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);
+		addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);
+		break;
+	}
 	// 勢いがつき過ぎない様に、制限をかける
 	addRot.x = min(max(addRot.x, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
 	addRot.y = min(max(addRot.y, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);

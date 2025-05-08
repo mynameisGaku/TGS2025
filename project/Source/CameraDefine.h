@@ -35,6 +35,7 @@ namespace CameraDefine {
 	static const Vector3 CAMERA_TARGET_DEF = Vector3(0.0f, 100.0f, 100.0f);		// カメラの既定注視座標
 
 	static const Vector3 CAMERA_OFFSET_CHASE = Vector3(0.0f, 170.0f, -320.0f);		// 追尾カメラの既定相対座標
+	static const Vector3 CAMERA_OFFSET_AIM = Vector3(80.0f, 220.0f, -30.0f);		// エイムカメラの既定相対座標
 	static const Vector3 CAMERA_OFFSET_GAME_END = Vector3(-150.0f, 100.0f, -150.0f);// ゲーム終了時のカメラの既定相対座標
 
 	static const float SHAKE_MIN = 4.0f;	// カメラ振動の最小値

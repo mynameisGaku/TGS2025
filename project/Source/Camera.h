@@ -67,12 +67,16 @@ public:
 	/// <summary>
 	/// マウスによるカメラ操作
 	/// </summary>
-	void OperationByMouse();
+	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
+	/// </param>
+	void OperationByMouse(int type = -1);
 
 	/// <summary>
 	/// スティックによるカメラ操作
 	/// </summary>
-	void OperationByStick();
+	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
+	/// </param>
+	void OperationByStick(int type = -1);
 
 	//================================================================================
 	// ▼セッター
@@ -195,6 +199,11 @@ public:
 	/// 追従ステート
 	/// </summary>
 	void ChaseState(FSMSignal sig);
+
+	/// <summary>
+	/// 狙うステート
+	/// </summary>
+	void AimState(FSMSignal sig);
 
 private:
 	//================================================================================

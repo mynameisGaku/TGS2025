@@ -13,6 +13,7 @@
 
 #include "CharaManager.h"
 
+using namespace KeyDefine;
 using namespace CameraDefine;
 
 void Camera::ChaseState(FSMSignal sig)
@@ -54,6 +55,11 @@ void Camera::ChaseState(FSMSignal sig)
             transform->rotation.y += Math::PI_TW;
         else if (transform->rotation.y > Math::PI)
             transform->rotation.y -= Math::PI_TW;
+
+        if (InputManager::Hold(KeyCode::RightClick))
+        {
+            ChangeState(&Camera::AimState);
+        }
     }
     break;
     case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)

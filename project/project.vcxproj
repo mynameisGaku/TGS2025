@@ -307,6 +307,7 @@
     <ClCompile Include="Source\bootScene.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
+    <ClCompile Include="Source\CamState_Aim.cpp" />
     <ClCompile Include="Source\CamState_Chase.cpp" />
     <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\Catcher.cpp" />

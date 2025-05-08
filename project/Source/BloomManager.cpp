@@ -2,6 +2,7 @@
 #include "WindowSetting.h"
 #include "InputManager.h"
 #include "Util/Utils.h"
+#include "CameraDefineRef.h"
 
 void SetDrawScreenWithCamera(int screen)
 {
@@ -9,7 +10,9 @@ void SetDrawScreenWithCamera(int screen)
 	Vector3 camTarget = GetCameraTarget();
 	SetDrawScreen(screen);
 	SetCameraPositionAndTarget_UpVecY(camPos, camTarget);
-	SetupCamera_Perspective(Math::DegToRad(90));
+
+	CAMERADEFINE_REF.Load();
+	SetupCamera_Perspective(CAMERADEFINE_REF.m_Perspective);
 }
 
 BloomManager::BloomManager()

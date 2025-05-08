@@ -163,6 +163,7 @@
     <ClInclude Include="Source\bootScene.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CameraDefine.h" />
+    <ClInclude Include="Source\CameraDefineRef.h" />
     <ClInclude Include="Source\CameraManager.h" />
     <ClInclude Include="Source\Catcher.h" />
     <ClInclude Include="Source\CharaBase.h" />
@@ -309,7 +310,11 @@
     <ClCompile Include="Source\BlurScreen.cpp" />
     <ClCompile Include="Source\bootScene.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\CameraDefineRef.cpp" />
     <ClCompile Include="Source\CameraManager.cpp" />
+    <ClCompile Include="Source\CamState_Aim.cpp" />
+    <ClCompile Include="Source\CamState_Chase.cpp" />
+    <ClCompile Include="Source\CamState_Debug.cpp" />
     <ClCompile Include="Source\Catcher.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\CharaDefineRef.cpp" />

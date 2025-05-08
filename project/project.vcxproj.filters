@@ -370,6 +370,18 @@
     <ClCompile Include="Source\Catcher.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CameraDefineRef.cpp">
+      <Filter>Framework\03_Object\Camera\00_Define</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CamState_Aim.cpp">
+      <Filter>Framework\03_Object\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CamState_Chase.cpp">
+      <Filter>Framework\03_Object\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CamState_Debug.cpp">
+      <Filter>Framework\03_Object\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -812,6 +824,9 @@
     </ClInclude>
     <ClInclude Include="Source\Catcher.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraDefineRef.h">
+      <Filter>Framework\03_Object\Camera\00_Define</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

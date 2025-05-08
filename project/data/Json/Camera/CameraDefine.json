@@ -1,7 +1,7 @@
 {
   "Near":10.0,
   "Far":100000.0,
-  "Perspective":60.0,
+  "Perspective":90.0,
   "RotX_Max":30.0,
   "RotX_Min":-85.0,
   "RotSpeedLimit":13.0,

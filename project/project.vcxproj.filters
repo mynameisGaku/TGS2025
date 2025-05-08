@@ -361,14 +361,9 @@
     <ClCompile Include="Source\CharaDefineRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Catcher.cpp" />
     <ClCompile Include="Source\Component\DebugController.cpp">
       <Filter>Framework\04_Component\Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\AttachedAnimation.cpp">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Catcher.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -801,17 +796,9 @@
     <ClInclude Include="Source\CharaDefineRef.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Catcher.h" />
     <ClInclude Include="Source\Component\DebugController.h">
       <Filter>Framework\04_Component\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AttachedAnimation.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AnimationDefine.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Catcher.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

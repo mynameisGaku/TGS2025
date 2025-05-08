@@ -5,7 +5,6 @@
 #include "../SoundManager.h"
 #include "../EffectManager.h"
 
-#if FALSE
 AnimationEvent::AnimationEvent(Animator* _animator) {
 
 	animator = _animator;
@@ -52,4 +51,3 @@ void AnimationEvent::SetCommand(std::string _commandType, std::string _commandCo
 	SetExecuteAnimFrame(_executeAnimFrame);
 	SetUseCommand(true);
 }
-#endif // FALSE

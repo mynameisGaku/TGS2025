@@ -40,7 +40,6 @@ CharaBase::CharaBase()
 	m_EmoteTimer			= 0.0f;
 	m_IsLanding				= true;
 	m_SlideTimer			= 0.0f;
-	m_EffectTransform		= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 
@@ -100,55 +99,38 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
 
-	m_EffectTransform = new Transform();
-	m_EffectTransform->SetParent(transform);
-	m_EffectTransform->position.y = 100.0f;
-	m_EffectTransform->position.z = 100.0f;
-	m_EffectTransform->rotation.y = Math::DegToRad(180.0f);
-
 	m_Animator = AddComponent<Animator>();
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
-	//=== 腕アニメーション（ボールを持つ、投げる） ===
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToHold", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "AimToThrow", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "Catch", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/", "Hold", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/", "HoldToAim", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "ThrowToActionIdle", AnimOption());
+	m_Animator->LoadAnim("data/Animation/ActionIdle", "ActionIdle", true);
+	m_Animator->LoadAnim("data/Animation/ActionIdleEmote", "ActionIdleEmote", false);
+	m_Animator->LoadAnim("data/Animation/ActionIdleToJump", "ActionIdleToJump", false);
+	m_Animator->LoadAnim("data/Animation/ActionIdleToRun", "ActionIdleToRun", false, true);
+	m_Animator->LoadAnim("data/Animation/ActionIdleToStandingIdle", "ActionIdleToStandingIdle", false, true);
 
-	//=== メインアニメーション ===
-	m_Animator->LoadAnim("data/Animation/", "ActionIdle", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleEmote", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToRun", AnimOption().SetIsFixedRoot({false, false, true}));
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToStandingIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/AirSpin", "AirSpin", false, true);
 
-	m_Animator->LoadAnim("data/Animation/", "AirSpin", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/CrouchToActionIdle", "CrouchToActionIdle", false, true);
+	m_Animator->LoadAnim("data/Animation/CrouchToRun", "CrouchToRun", false, true);
 
-	m_Animator->LoadAnim("data/Animation/", "CrouchToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "CrouchToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/DamageToDown", "DamageToDown", false);
 
-	m_Animator->LoadAnim("data/Animation/", "DamageToDown", AnimOption());
+	m_Animator->LoadAnim("data/Animation/Fall", "Fall", true);
+	m_Animator->LoadAnim("data/Animation/FallToCrouch", "FallToCrouch", false, true);
+	m_Animator->LoadAnim("data/Animation/FallToRollToIdle", "FallToRollToIdle", false, true);
 
-	m_Animator->LoadAnim("data/Animation/", "Fall", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/", "FallToCrouch", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "FallToRollToIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/Run", "Run", true);
+	m_Animator->LoadAnim("data/Animation/RunToActionIdle", "RunToActionIdle", false, true);
+	m_Animator->LoadAnim("data/Animation/RunToJump", "RunToJump", false, true);
+	m_Animator->LoadAnim("data/Animation/RunToSlide", "RunToSlide", false, true);
 
-	m_Animator->LoadAnim("data/Animation/", "GetBall", AnimOption());
+	m_Animator->LoadAnim("data/Animation/Slide", "Slide", false, true);
+	m_Animator->LoadAnim("data/Animation/SlideToRun", "SlideToRun", false, true);
 
-	m_Animator->LoadAnim("data/Animation/", "Run", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/", "RunToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "RunToJump", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "RunToSlide", AnimOption().SetIsFixedRoot({ false, false, true }));
-
-	m_Animator->LoadAnim("data/Animation/", "Slide", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "SlideToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
-
-	m_Animator->LoadAnim("data/Animation/", "StandingIdle", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/", "StandingIdleEmote", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "StandingIdleToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/StandingIdle", "StandingIdle", true);
+	m_Animator->LoadAnim("data/Animation/StandingIdleEmote", "StandingIdleEmote", false);
+	m_Animator->LoadAnim("data/Animation/StandingIdleToActionIdle", "StandingIdleToActionIdle", false, true);
 }
 
 void CharaBase::Update() {
@@ -166,11 +148,8 @@ void CharaBase::Update() {
 		else
 		{
 			m_Catcher->SetColliderActive(true);
-			if (m_EffectTransform != nullptr)
-			{
-				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
-				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
-			}
+			EffectManager::Play3D("Catch_Ready_Single_Dust.efk", *transform, "Catch_Ready_Single_Dust" + m_CharaTag);
+			EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", *transform, "Catch_Ready_Single_Tornado" + m_CharaTag);
 		}
 
 		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
@@ -343,8 +322,6 @@ void CharaBase::ThrowBall(const Vector3& velocity)
 
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
-
-	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::ThrowBallForward()
@@ -359,8 +336,6 @@ void CharaBase::ThrowBallForward()
 
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
-
-	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::ThrowHomingBall()
@@ -392,8 +367,6 @@ void CharaBase::GenerateBall()
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);
 	m_pBall->Init(m_CharaTag);
-
-	m_FSM->ChangeState(&CharaBase::StateGetBall); // ステートを変更
 }
 
 void CharaBase::TeleportToLastBall()
@@ -416,7 +389,6 @@ void CharaBase::Catch()
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
 		m_CatchTimer = CATCH_TIME;
-		m_FSM->ChangeState(&CharaBase::StateCatch); // ステートを変更
 	}
 }
 
@@ -607,34 +579,6 @@ void CharaBase::StateAirSpin(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateCatch(FSMSignal sig)
-{
-	switch (sig)
-	{
-	case FSMSignal::SIG_Enter: // 開始
-	{
-		m_Animator->Play("Catch");
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新
-	{
-		if (m_CatchTimer <= 0.0f)
-		{
-			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
-		}
-	}
-	break;
-	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
-	{
-	}
-	break;
-	case FSMSignal::SIG_Exit: // 終了
-	{
-	}
-	break;
-	}
-}
-
 void CharaBase::StateCrouchToActionIdle(FSMSignal sig)
 {
 	switch (sig)
@@ -795,34 +739,6 @@ void CharaBase::StateFallToRollToIdle(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("FallToRollToIdle");
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新
-	{
-		if (m_Animator->IsFinished())
-		{
-			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
-		}
-	}
-	break;
-	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
-	{
-	}
-	break;
-	case FSMSignal::SIG_Exit: // 終了
-	{
-	}
-	break;
-	}
-}
-
-void CharaBase::StateGetBall(FSMSignal sig)
-{
-	switch (sig)
-	{
-	case FSMSignal::SIG_Enter: // 開始
-	{
-		m_Animator->Play("GetBall");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1080,34 +996,6 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	case FSMSignal::SIG_Update: // 更新
 	{
 		idleUpdate();
-		if (m_Animator->IsFinished())
-		{
-			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
-		}
-	}
-	break;
-	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
-	{
-	}
-	break;
-	case FSMSignal::SIG_Exit: // 終了
-	{
-	}
-	break;
-	}
-}
-
-void CharaBase::StateAimToThrow(FSMSignal sig)
-{
-	switch (sig)
-	{
-	case FSMSignal::SIG_Enter: // 開始
-	{
-		m_Animator->Play("AimToThrow");
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新
-	{
 		if (m_Animator->IsFinished())
 		{
 			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更

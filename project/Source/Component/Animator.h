@@ -4,23 +4,69 @@
 #include "Component.h"
 
 // ◇汎用
+#include "../../Library/myDxLib.h"
+#include "../../Library/csvReader.h"
+#include <vector>
+#include <string>
 #include <unordered_map>
-#include <assert.h>
 
-// ◇個別に必要なもの
-#include "AnimationDefine.h"
-#include "AttachedAnimation.h"
+// ◇個別で必要な物
+#include "AnimationEvent.h"
 
 class Object3D;
 
 /// <summary>
 /// アニメーションの再生を行うコンポーネント
 /// </summary>
-/// <author>ミッチ、佐藤紘斗</author>
 class Animator : public Component {
 public:
 	//==========================================================================================
 	// ▼構造体
+
+	/// <summary>
+	/// アニメーションが持つ情報
+	/// </summary>
+	struct AnimInfo {
+		int handle;			// アニメーションのハンドル
+		bool isLoop;		// ループ再生の有無
+		bool isFixedRoot;	// ローカル座標の固定化の有無
+		float startFrame;	// 再生開始フレーム
+		float endFrame;		// 再生終了フレーム
+		float defAnimSpeed;	// 既定再生速度
+		std::vector<AnimationEvent*> event;	// アニメーションのコマンド
+		std::string animName;
+
+		AnimInfo() : 
+			handle(-1),
+			isLoop(false),
+			isFixedRoot(false),
+			startFrame(0.0f),
+			endFrame(0.0f),
+			defAnimSpeed(1.0f),
+			animName("")
+		{
+		}
+	};
+
+	/// <summary>
+	/// アタッチ(再生)しているアニメーションの情報 
+	/// </summary>
+	struct AttachInfo {
+		int attachID;		// アタッチID
+		std::string attachName;
+		float nowFrame;		// 現在の再生フレーム
+		float beforeFrame;	// 1フレーム前の再生フレーム
+		float maxFrame;		// 総再生フレーム
+
+		AttachInfo() :
+			attachID(0),
+			attachName(""),
+			nowFrame(0.0f),
+			beforeFrame(0.0f),
+			maxFrame(0.0f)
+		{
+		}
+	};
 
 	//==========================================================================================
 	// ▼コンストラクタ・デストラクタ
@@ -39,16 +85,28 @@ public:
 	/// <param name="mergeTimeMax">何秒で補完しきるか</param>
 	void Init(std::string origin, float frameRate, float mergeTimeMax);
 
+	// 常に掛ける行列をセット
+	void SetOffsetMatrix(const MATRIX& matrix) { offsetMatrix = matrix; }
+
 	void Update() override;
 	void Draw() override {};
 
 	/// <summary>
-	/// アニメーションをロード
+	/// アニメーションファイルをロードする
 	/// </summary>
-	/// <param name="folder">アニメーションがあるフォルダのパス</param>
-	/// <param name="name">アニメーション名</param>
-	/// <param name="option">設定項目</param>
-	void LoadAnim(std::string folder, std::string name, AnimOption option);
+	/// <param name="csvFilePath">CSVデータがあるファイル名</param>
+	/// <param name="animFilePath">アニメーションデータがあるファイル名</param>
+	void LoadAnimCsv(std::string csvFilePath, std::string animFilePath);
+
+	/// <summary>
+	/// アニメーションファイルをロードする
+	/// </summary>
+	/// <param name="filename">アニメーションデータがあるファイル名</param>
+	/// <param name="label">アニメーションのラベル名</param>
+	/// <param name="loop">ループアニメーションの場合はtrue</param>
+	/// <param name="fixedRoot">rootをその場固定する場合はtrue</param>
+	/// <param name="extension">拡張子</param>
+	void LoadAnim(std::string animFilePath, std::string label, bool loop = false, bool fixedRoot = false, std::string extension = ".mv1");
 
 	/// <summary>
 	/// アニメーションを再生する
@@ -72,27 +130,13 @@ public:
 	/// 今のアニメーションの進行度をセット
 	/// </summary>
 	/// <param name="ratio">進行度（0..1）</param>
-	inline void SetCurrentRatio(float ratio) { current->SetFrameByRatio(ratio); }
+	inline void SetCurrentRatio(float ratio) { current.nowFrame = current.maxFrame * max(min(ratio, 1.0f), 0.0f); }
 
 	/// <summary>
 	/// 現在のアニメーションのフレームを設定する
 	/// </summary>
 	/// <param name="frame">アニメーションのフレーム</param>
-	inline void SetCurrentFrame(float frame) { current->SetFrame(frame); }
-
-	/// <summary>
-	/// 指定フレームに行列をセット
-	/// </summary>
-	/// <param name="frameName">対象のフレームの名前</param>
-	/// <param name="matrix"></param>
-	void SetFrameMatrix(std::string frameName, const MATRIX& matrix) {
-		assert(MV1SearchFrame(parentModel, frameName.c_str()) >= 0);
-		frameMatrix[frameName] = matrix;
-	}
-
-	void SetOffsetMatrix(const MATRIX& matrix) {
-		offsetMatrix = matrix;
-	}
+	inline void SetCurrentFrame(float frame) { current.nowFrame = max(min(frame, current.maxFrame), 0.0f); }
 
 	//==========================================================================================
 	// ▼ゲッター
@@ -103,10 +147,10 @@ public:
 	/// <returns>最後にtrue</returns>
 	inline bool IsFinished() {
 
-		if (anims[playingLabel].option.isLoop)
+		if (anims[playingLabel].isLoop)
 			return false;
 
-		return (current->Frame() >= current->MaxFrame());
+		return (current.nowFrame >= current.maxFrame);
 	};
 
 	inline const std::unordered_map<std::string, AnimInfo> GetAllAnimInfo() const { return anims; }
@@ -120,16 +164,15 @@ public:
 	}
 
 	/// <summary>
-	/// 今のアニメーションの進行度をフレームで返す
+	/// 今のアニメーションの情報を取得する
 	/// </summary>
-	/// <returns>現在のフレーム</returns>
-	inline float CurrentFrame() const { return current->Frame(); }
+	inline const AttachInfo& CurrentAttach() const { return current; }
 
 	/// <summary>
 	/// 今のアニメーションの進行度を0..1で返す
 	/// </summary>
-	/// <returns>現在の進行度</returns>
-	inline float CurrentRatio() const { return current->FrameByRatio(); }
+	/// <returns>今の進行度</returns>
+	inline float CurrentRatio() const { return current.nowFrame / current.maxFrame; }
 
 	/// <summary>
 	/// 現在の再生速度を取得する
@@ -144,10 +187,29 @@ public:
 private:
 	//==========================================================================================
 	// ▼メンバ変数
+
+	enum AnimInfoElement {
+		None = -1,
+		MotionDescription,	// モーションの説明
+		ResourceName,		// リソース名
+		LabelName,			// ラベル名
+		IsLoop,				// ループ再生の有無
+		IsFixedRoot,		// 座標固定化の有無
+		StartFrame,			// 再生開始フレーム
+		EndFrame,			// 再生終了フレーム
+		DefAnimSpeed,		// 既定再生速度
+		Command,			// コマンド
+		Details,			// 実行内容
+		RunFrame,			// 実行フレーム
+		Max
+	};
+
+	Object3D* parentObj;
+	CsvReader* animCsv;	// アニメーションのCSVデータ
 	std::unordered_map<std::string, AnimInfo> anims;	// アニメーションの情報
 
-	std::list<AttachedAnimation*> prevs;
-	AttachedAnimation* current;
+	AttachInfo current;	// 現在アタッチ中のアニメーション情報
+	AttachInfo prev;	// 一つ前にアタッチしていたアニメーション情報
 
 	int parentModel;	// 親のモデル
 	float mergeTime;	// ブレンドの経過速度(1秒間で何フレーム進むか)
@@ -158,6 +220,5 @@ private:
 	std::string origin;	// モデルの原点の名前
 	std::string playingLabel;	// 再生中のアニメーションの名札
 
-	std::unordered_map<std::string, MATRIX> frameMatrix;
-	MATRIX offsetMatrix;
+	MATRIX offsetMatrix;	// ルートに常に掛ける行列
 };

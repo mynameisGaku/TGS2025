@@ -46,6 +46,13 @@ void Catcher::Update()
 void Catcher::Draw()
 {
 	Object3D::Draw();
+
+	if (m_Collider == nullptr) return;
+
+	if (m_Collider->IsActive())
+	{
+		DrawSphere3D(transform->Global().position, transform->Global().scale.x / 2, 4, 0xFF00FF, 0x000000, true);
+	}
 }
 
 void Catcher::CollisionEvent(const CollisionData& colData)

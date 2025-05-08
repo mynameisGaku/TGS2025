@@ -169,10 +169,8 @@
     <ClInclude Include="Source\CharaDefineRef.h" />
     <ClInclude Include="Source\CharaManager.h" />
     <ClInclude Include="Source\CharaStaminaRef.h" />
-    <ClInclude Include="Source\Component\AnimationDefine.h" />
     <ClInclude Include="Source\Component\AnimationEvent.h" />
     <ClInclude Include="Source\Component\Animator.h" />
-    <ClInclude Include="Source\Component\AttachedAnimation.h" />
     <ClInclude Include="Source\Component\ColliderBase.h" />
     <ClInclude Include="Source\Component\ColliderCapsule.h" />
     <ClInclude Include="Source\Component\ColliderModel.h" />
@@ -317,7 +315,6 @@
     <ClCompile Include="Source\Component\AIController.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
     <ClCompile Include="Source\Component\Animator.cpp" />
-    <ClCompile Include="Source\Component\AttachedAnimation.cpp" />
     <ClCompile Include="Source\Component\ColliderBase.cpp" />
     <ClCompile Include="Source\Component\ColliderCapsule.cpp" />
     <ClCompile Include="Source\Component\ColliderModel.cpp" />

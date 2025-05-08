@@ -30,6 +30,12 @@ public:
 	CharaBase* Create(const std::string& tag, const Transform& trs);
 	const CharaBase* CharaInst(int index);
 
+	/// <summary>
+	/// 指定したキャラに対して、最も近い敵キャラを取得する
+	/// </summary>
+	/// <param name="index">キャラID</param>
+	const CharaBase* TargetChara(int index);
+
 private:
 
 	CharaBase* initfunc(uint32_t index, CharaBase* pChara);

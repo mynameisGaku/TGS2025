@@ -12,6 +12,7 @@
 #include "MouseController.h"
 
 #include "CharaManager.h"
+#include "CameraDefineRef.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -30,33 +31,59 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
-		OperationByMouse();
-		OperationByStick();
-
+		// キャラクターの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
 		if (charaM == nullptr)
 			return;
 
+		// 追従するキャラ
 		const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
 		if (chara == nullptr)
 			return;
 
-		chara->transform->rotation.y = transform->rotation.y;
+		// 注視するキャラ
+		const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);
+		if (targetChara == nullptr)
+			return;
 
+		// 追従キャラのトランスフォーム
 		const Transform charaTrs = chara->transform->Global();
 
-		SetOffset(CAMERA_OFFSET_AIM);
-		SetTarget(Vector3(50.0f, 100.0f, 100.0f) * charaTrs.Matrix());
+		// 注視キャラのトランスフォーム
+		const Transform targetTrs = targetChara->transform->Global();
+
+		// 注視点の差異
+		const Vector3 targetDiff = targetTrs.position + V3::SetY(100.0f) - target;
+
 		transform->position = charaTrs.position;
 
-		ColCheckToTerrain();
+		// カメラの相対座標を設定
+		SetOffset(CAMERADEFINE_REF.m_OffsetChase);
 
-		transform->rotation.x = Math::Clamp(transform->rotation.x, Math::DegToRad(-135.0f), Math::DegToRad(20.0f));
+		// カメラの注視点を設定
+		SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
 
-		if (transform->rotation.y < -Math::PI)
-			transform->rotation.y += Math::PI_TW;
-		else if (transform->rotation.y > Math::PI)
-			transform->rotation.y -= Math::PI_TW;
+		// 注視キャラとカメラの座標の差異
+		const Vector3 diffPos = targetTrs.position - transform->Global().position;
+
+		// カメラから注視キャラへの角度
+		float targetRot = atan2f(diffPos.x, diffPos.z);
+
+		// 現在の向きと注視キャラへの角度の差異
+		float diffRot = targetRot - transform->rotation.y;
+
+		// カメラのX軸回転値
+		const float ROT_X = Math::DegToRad(-20.0f);
+
+		// 回転角度を適応
+		Function::RotLimit(&diffRot);
+		transform->rotation.x += (ROT_X - transform->rotation.x) * 0.1f;
+		transform->rotation.y += diffRot * 0.1f;
+		Function::RotLimit(&transform->rotation.y);
+
+		chara->transform->rotation.y = transform->rotation.y;
+
+		//ColCheckToTerrain();
 
 		if (not InputManager::Hold(KeyCode::RightClick))
 		{

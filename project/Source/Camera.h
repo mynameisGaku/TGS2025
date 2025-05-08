@@ -211,8 +211,10 @@ private:
 
 	TinyFSM<Camera>* fsm;
 
-	Vector3 offset;	// カメラの相対座標
-	Vector3 target;	// カメラの注視点
+	Vector3 offset;		// カメラの相対座標
+	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
+	Vector3 target;		// カメラの注視点
+	Vector3 targetPrev;	// 一つ前のカメラの注視点
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報

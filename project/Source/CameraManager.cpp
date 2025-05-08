@@ -8,6 +8,7 @@
 
 // ◇演出・機能
 #include "../Source/ImGuiTree/imGuiManager.h"
+#include "CameraDefineRef.h"
 
 using namespace CameraDefine;
 
@@ -18,14 +19,16 @@ namespace {
 
 void CameraManager::Init() {
 
+	CAMERADEFINE_REF.Load();
+
 	if (cameras == nullptr)
 		cameras = new std::vector<Camera*>();
 
 	// 視野角の設定
-	SetupCamera_Perspective(CAMERA_PERSPECTIVE);
+	SetupCamera_Perspective(CAMERADEFINE_REF.m_Perspective);
 
 	// カメラの描画範囲
-	SetCameraNearFar(CAMERA_NEAR, CAMERA_FAR);
+	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
 	cameras->push_back(new Camera());
 

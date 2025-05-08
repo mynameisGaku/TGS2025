@@ -282,6 +282,19 @@ namespace Function {
 	}
 
 	/// <summary>
+	/// 回転角度に制限をかける(-PI～PI)
+	/// </summary>
+	inline void RotLimit(float* rot) {
+		while (*rot > Math::PI || *rot < -Math::PI) {
+
+			if (*rot > Math::PI)
+				*rot -= Math::PI_TW;
+			else if (*rot < -Math::PI)
+				*rot += Math::PI_TW;
+		}
+	}
+
+	/// <summary>
 	/// フォーマットされた文字列をstd::string型に変換する
 	/// </summary>
 	inline std::string FormatToString(const char* format, ...) {

@@ -12,6 +12,7 @@
 #include "MouseController.h"
 
 #include "CharaManager.h"
+#include "CameraDefineRef.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -33,28 +34,34 @@ void Camera::ChaseState(FSMSignal sig)
         OperationByMouse();
         OperationByStick();
 
+        // キャラクターの管理者
         CharaManager* charaM = FindGameObject<CharaManager>();
         if (charaM == nullptr)
             return;
 
+        // 追従するキャラクター
         const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
         if (chara == nullptr)
             return;
 
+        // キャラクターのトランスフォーム
         const Transform charaTrs = chara->transform->Global();
 
-        SetOffset(CAMERA_OFFSET_CHASE);
-        SetTarget(Vector3(0.0f, 100.0f, 0.0f) * charaTrs.Matrix());
+        // 注視点の差異
+        const Vector3 targetDiff = (CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix()) - target;
+
+        // カメラの相対座標を設定
+        SetOffset(CAMERADEFINE_REF.m_OffsetChase);
+
+        // カメラの注視点を設定
+        SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
+        
         transform->position = charaTrs.position;
 
         ColCheckToTerrain();
 
-        transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERA_ROT_X_MIN, CAMERA_ROT_X_MAX);
-
-        if (transform->rotation.y < -Math::PI)
-            transform->rotation.y += Math::PI_TW;
-        else if (transform->rotation.y > Math::PI)
-            transform->rotation.y -= Math::PI_TW;
+        transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+        Function::RotLimit(&transform->rotation.y);
 
         if (InputManager::Hold(KeyCode::RightClick))
         {

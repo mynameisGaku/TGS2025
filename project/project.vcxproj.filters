@@ -371,6 +371,9 @@
     <ClCompile Include="Source\CamState_Chase.cpp">
       <Filter>Application\Scenes\02_PlayScene\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CameraDefineRef.cpp">
+      <Filter>Framework\03_Object\Camera\00_Define</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -803,6 +806,9 @@
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
     <ClInclude Include="Source\Catcher.h" />
+    <ClInclude Include="Source\CameraDefineRef.h">
+      <Filter>Framework\03_Object\Camera\00_Define</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">

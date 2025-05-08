@@ -18,6 +18,7 @@
 #include "InputManager.h"
 #include "PadController.h"
 #include "MouseController.h"
+#include "CameraDefineRef.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -53,8 +54,11 @@ void Camera::Reset() {
 	transform->position = Vector3(0.0f, 100.0f, -100.0f);
 	transform->rotation = V3::ZERO;
 
-	offset = CAMERA_OFFSET_DEF;
-	target = CAMERA_TARGET_DEF;
+	offset = CAMERADEFINE_REF.m_OffsetDef;
+	target = CAMERADEFINE_REF.m_TargetDef;
+	offsetPrev = offset;
+	targetPrev = target;
+
 	holder = nullptr;
 }
 
@@ -88,6 +92,8 @@ void Camera::Draw() {
 	}
 
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+
+	DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
@@ -120,9 +126,9 @@ void Camera::MoveProcess()
 	transform->rotation.y += (MouseController::Info().Move().x * Math::DegToRad(1.0f));
 
 	// X軸角度の制限
-	transform->rotation.x = min(max(transform->rotation.x, CAMERA_ROT_X_MIN), CAMERA_ROT_X_MAX);
+	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
 	
-    target = transform->position + CAMERA_TARGET_DEF * transform->RotationMatrix();
+    target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -155,8 +161,8 @@ void Camera::OperationByMouse(int type) {
 	}
 
 	// 勢いがつき過ぎない様に、制限をかける
-	transform->rotation.x += min(max(addRot.x, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
-	transform->rotation.y += min(max(addRot.y, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
+	transform->rotation.x += min(max(addRot.x, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
+	transform->rotation.y += min(max(addRot.y, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
 }
 
 void Camera::OperationByStick(int type) {
@@ -173,8 +179,8 @@ void Camera::OperationByStick(int type) {
 		break;
 	}
 	// 勢いがつき過ぎない様に、制限をかける
-	addRot.x = min(max(addRot.x, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
-	addRot.y = min(max(addRot.y, -ROT_SPEED_LIMIT), ROT_SPEED_LIMIT);
+	addRot.x = min(max(addRot.x, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
+	addRot.y = min(max(addRot.y, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
 
 	transform->rotation.x += addRot.x;
 	transform->rotation.y += addRot.y;

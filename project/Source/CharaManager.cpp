@@ -216,6 +216,25 @@ const CharaBase* CharaManager::CharaInst(int index)
 #endif
 }
 
+const CharaBase* CharaManager::TargetChara(int index) {
+
+	const CharaBase* chara = CharaInst(index);
+	if (chara == nullptr)
+		return nullptr;
+
+	for (const auto& it : m_pPool->GetAllItems()) {
+		// 番号が同じもしくは、チームが同じ場合
+		if (it->m_Index == index || it->m_pObject->m_CharaTag == chara->m_CharaTag)
+			continue;
+
+		// 距離計算や壁判定をいれる
+
+		return it->m_pObject;
+	}
+
+	return nullptr;
+}
+
 CharaBase* CharaManager::initfunc(uint32_t index, CharaBase* pChara)
 {
 	return nullptr;

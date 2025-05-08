@@ -57,7 +57,7 @@ void AttachedAnimation::Update()
 void AttachedAnimation::updateFrame()
 {
 	// 時間を進める
-	m_frame += Time::DeltaTime() * m_playSpeed * ANIM_FRAMERATE;
+	m_frame += Time::DeltaTimeLapseRate() * m_playSpeed * ANIM_FRAMERATE;
 
 	// アニメーション終了時間を超えたら
 	if (m_frame >= m_maxFrame) {

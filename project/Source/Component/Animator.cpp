@@ -8,9 +8,8 @@
 #include "../Object3D.h"
 #include <assert.h>
 
+//ToDo:外部化
 namespace {
-	static const float MERGE_TIME_MAX = 0.25f;
-	static const int ANIM_FRAMERATE = 60;
 	static const int BLEND_COUNT_MAX = 5;
 };
 
@@ -25,6 +24,8 @@ Animator::Animator() {
 
 	origin = "";
 	playingLabel = "";
+
+	offsetMatrix = MGetIdent();
 }
 
 Animator::~Animator() {
@@ -201,10 +202,10 @@ void Animator::Update() {
 	// ブレンド進行処理
 	if (prevs.size() > 0) {
 		// ブレンド時間を進める
-		mergeTime += Time::DeltaTime() * playSpeed;
+		mergeTime += Time::DeltaTimeLapseRate() * playSpeed;
 
 		// ブレンド終了時なら
-		if (mergeTime >= MERGE_TIME_MAX) {
+		if (mergeTime >= mergeTimeMax) {
 
 			// 前アニメーション終了処理
 			for (AttachedAnimation* prev : prevs) {
@@ -213,11 +214,11 @@ void Animator::Update() {
 			}
 			prevs.clear();
 
-			mergeTime = MERGE_TIME_MAX;
+			mergeTime = mergeTimeMax;
 		}
 
 		// 時間に応じてブレンド率を変える
-		rate = mergeTime / MERGE_TIME_MAX;
+		rate = mergeTime / mergeTimeMax;
 		// 全体が1になるようにブレンド
 		current->SetBlendRate(rate);
 

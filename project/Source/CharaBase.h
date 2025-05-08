@@ -126,7 +126,6 @@ public:
 
 	//=======================================================================================
 	// ▼各ステート
-
 	void StateActionIdle(FSMSignal sig);
 	void StateActionIdleEmote(FSMSignal sig);
 	void StateActionIdleToJump(FSMSignal sig);
@@ -134,6 +133,8 @@ public:
 	void StateActionIdleToStandingIdle(FSMSignal sig);
 
 	void StateAirSpin(FSMSignal sig);
+
+	void StateCatch(FSMSignal sig);
 
 	void StateCrouchToActionIdle(FSMSignal sig);
 	void StateCrouchToRun(FSMSignal sig);
@@ -143,6 +144,8 @@ public:
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
 	void StateFallToRollToIdle(FSMSignal sig);
+
+	void StateGetBall(FSMSignal sig);
 
 	void StateRun(FSMSignal sig);
 	void StateRunToActionIdle(FSMSignal sig);
@@ -155,6 +158,8 @@ public:
 	void StateStandingIdle(FSMSignal sig);
 	void StateStandingIdleEmote(FSMSignal sig);
 	void StateStandingIdleToActionIdle(FSMSignal sig);
+
+	void StateAimToThrow(FSMSignal sig);
 
 private:
 	friend class CharaManager;
@@ -176,6 +181,7 @@ private:
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	bool			m_IsLanding;			// 着地中
 	float			m_SlideTimer;			// スライディング残り時間タイマー
+	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 
 	void idleUpdate();
 	void runUpdate();

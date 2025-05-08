@@ -190,7 +190,7 @@ void Animator::Update() {
 	if (current == nullptr) return;
 
 	// ルートフレーム取得
-	int hRoot = MV1SearchFrame(parentModel, "mixamorig:Hips");
+	int hRoot = MV1SearchFrame(parentModel, origin.c_str());
 
 	// 一旦リセット
 	MV1ResetFrameUserLocalMatrix(parentModel, hRoot);
@@ -260,7 +260,7 @@ void Animator::Update() {
 	for (auto& item : frameMatrix)
 	{
 		int frame = MV1SearchFrame(parentModel, item.first.c_str());
-		MV1ResetFrameUserLocalMatrix(parentModel, frame);
+		//MV1ResetFrameUserLocalMatrix(parentModel, frame);
 
 		MATRIX frameM = MV1GetFrameLocalMatrix(parentModel, frame);
 		frameM = item.second * frameM;
@@ -271,7 +271,7 @@ void Animator::Update() {
 
 void Animator::LoadAnim(std::string folder, std::string name, AnimOption option) {
 	std::string fullPath = folder + name;
-	if (name.find(".mv1") != std::string::npos)
+	if (name.find(".mv1") == std::string::npos)
 	{
 		fullPath += ".mv1";
 	}
@@ -287,52 +287,63 @@ void Animator::LoadAnim(std::string folder, std::string name, AnimOption option)
 }
 
 void Animator::Play(std::string label, float speed) {
-	if (label == playingLabel) // 同じIDなら無視する
+	if (label == playingLabel) // 同じアニメーション名なら無視する
+		return;
+	if (not anims.contains(label))	// 存在しないアニメーション名なら無視する
 		return;
 
-	for (const auto& anim : anims) {
-		// 引数のラベル名と一致していない場合、次の要素へ
-		if (anim.first != label)
-			continue;
+	AnimInfo anim = anims.at(label);
 
-		// 前回のアニメーションを切り離す
-		if (prev.attachID >= 0)
-			MV1DetachAnim(parentModel, prev.attachID);
-
-		playingLabel = label;
-		prev = current;
-		mergeTime = 0.0f;
-
-		// 再生速度を設定する
-		if (speed < 0)
-			playSpeed = anims[label].defAnimSpeed;
-		else
-			playSpeed = speed;
-
-		// 再生開始地点を設定する
-		if (anims[label].startFrame < 0) {
-			current.nowFrame	= 0.0f;
-			current.beforeFrame = 0.0f;
-		}
-		else {
-			current.nowFrame	= anims[label].startFrame;
-			current.beforeFrame = anims[label].startFrame;
-		}
-
-		// コマンドの実行権限を復活させる
-		for (int i = 0; i < anims[playingLabel].event.size(); i++)
-			anims[playingLabel].event[i]->SetUseCommand(true);
-
-		// アニメーションを適応
-		current.attachID = MV1AttachAnim(parentModel, 0, anim.second.handle);
-		current.attachName = label;
-
-		// 再生終了地点を設定する
-		if (anims[label].endFrame <= 0)
-			current.maxFrame = MV1GetAttachAnimTotalTime(parentModel, current.attachID);
-		else
-			current.maxFrame = anims[label].endFrame;
-
-		break;
+	// 追加前に消すのか？
+	bool over = false;
+	float rate = 0.0f;
+	if (prevs.size() >= BLEND_COUNT_MAX) {
+		rate = prevs.front()->BlendRate();
+		delete prevs.front();
+		prevs.pop_front();
+		over = true;
 	}
+
+	if (current != nullptr) {
+		prevs.push_back(current);
+		mergeTime = 0.0f;
+	}
+
+	for (AttachedAnimation* prev : prevs) {
+		prev->RefreshDefaultBlendRate();
+	}
+
+	if (over)
+	{
+		for (AttachedAnimation* prev : prevs) {
+			prev->SetDefaultBlendRate(prev->DefaultBlendRate() + rate / prevs.size());
+		}
+	}
+
+	playingLabel = label;
+
+	current = new AttachedAnimation(parentModel, anim);
+	current->SetPlaySpeed(playSpeed);
+
+	if (prevs.empty())
+	{
+		mergeTime = 1.0f;
+		current->SetBlendRate(1.0f);
+	}
+
+#if FALSE
+	// 再生開始地点を設定する
+	if (anim.startFrame < 0) {
+		current->SetFrame(0.0f);
+	}
+	else {
+		current->SetFrame(anim.startFrame);
+	}
+
+	// 再生終了地点を設定する
+	if (anim.endFrame <= 0)
+		current.maxFrame = MV1GetAttachAnimTotalTime(parentModel, current.attachID);
+	else
+		current.maxFrame = anim.endFrame;
+#endif // FALSE
 }

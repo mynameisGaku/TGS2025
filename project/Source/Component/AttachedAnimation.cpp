@@ -5,7 +5,8 @@
 
 namespace
 {
-	static const std::string ROOT_NAME = "mixamorig:Hips";
+	//ToDo:アニメーターからもらうようにする
+	static const std::string ROOT_NAME = "mixamorig9:Hips";
 	static const int ANIM_FRAMERATE = 30;
 }
 
@@ -61,7 +62,7 @@ void AttachedAnimation::updateFrame()
 	// アニメーション終了時間を超えたら
 	if (m_frame >= m_maxFrame) {
 		// ループなら戻す
-		if (m_info.isLoop) {
+		if (m_info.option.isLoop) {
 			m_frame -= m_maxFrame;
 		}
 		// ループじゃなければ最大値で止める
@@ -72,7 +73,7 @@ void AttachedAnimation::updateFrame()
 	// 逆再生時のループ処理
 	else if (m_frame < 0) {
 		// ループなら戻す
-		if (m_info.isLoop) {
+		if (m_info.option.isLoop) {
 			m_frame += m_maxFrame;
 		}
 		// ループじゃなければ最小値で止める
@@ -96,13 +97,13 @@ void AttachedAnimation::UpdateRootMatrix()
 	// 固定ルートなら0にする
 	for (int i = 0; i < 3; i++)
 	{
-		if (m_info.isFixedRoot[i])
+		if (m_info.option.isFixedRoot[i])
 		{
 			matPos.Set(i, 0);
 		}
 	}
 	// オフセットを移動量に足して適用
-	matPos += m_info.offset;
+	matPos += m_info.option.offset;
 	m_rootMatrix *= MGetTranslate(matPos);
 }
 

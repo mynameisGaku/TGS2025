@@ -108,47 +108,47 @@ void CharaBase::Init(std::string tag)
 
 	m_Animator = AddComponent<Animator>();
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
-	m_Animator->SetFrameMatrix("mixamorig9:Hips", MGetRotY(DX_PI_F));
+	//m_Animator->SetFrameMatrix("mixamorig9:Hips", MGetRotY(DX_PI_F));
 
 	//=== 腕アニメーション（ボールを持つ、投げる） ===
-	m_Animator->LoadAnim("data/Animation/ActionIdleToHold", "ActionIdleToHold", AnimOption());
-	m_Animator->LoadAnim("data/Animation/AimToThrow", "AimToThrow", AnimOption());
-	m_Animator->LoadAnim("data/Animation/Catch", "Catch", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/Hold", "Hold", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/HoldToAim", "HoldToAim", AnimOption());
-	m_Animator->LoadAnim("data/Animation/ThrowToActionIdle", "ThrowToActionIdle", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToHold", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "AimToThrow", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "Catch", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "Hold", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "HoldToAim", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "ThrowToActionIdle", AnimOption());
 
 	//=== メインアニメーション ===
-	m_Animator->LoadAnim("data/Animation/ActionIdle", "ActionIdle", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/ActionIdleEmote", "ActionIdleEmote", AnimOption());
-	m_Animator->LoadAnim("data/Animation/ActionIdleToJump", "ActionIdleToJump", AnimOption());
-	m_Animator->LoadAnim("data/Animation/ActionIdleToRun", "ActionIdleToRun", AnimOption().SetIsFixedRoot({false, false, true}));
-	m_Animator->LoadAnim("data/Animation/ActionIdleToStandingIdle", "ActionIdleToStandingIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "ActionIdle", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleEmote", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToRun", AnimOption().SetIsFixedRoot({false, false, true}));
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToStandingIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/AirSpin", "AirSpin", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "AirSpin", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/CrouchToActionIdle", "CrouchToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/CrouchToRun", "CrouchToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "CrouchToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "CrouchToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/DamageToDown", "DamageToDown", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "DamageToDown", AnimOption());
 
-	m_Animator->LoadAnim("data/Animation/Fall", "Fall", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/FallToCrouch", "FallToCrouch", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/FallToRollToIdle", "FallToRollToIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "Fall", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "FallToCrouch", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "FallToRollToIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/GetBall", "GetBall", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "GetBall", AnimOption());
 
-	m_Animator->LoadAnim("data/Animation/Run", "Run", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/RunToActionIdle", "RunToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/RunToJump", "RunToJump", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/RunToSlide", "RunToSlide", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "Run", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "RunToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "RunToJump", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "RunToSlide", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/Slide", "Slide", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/SlideToRun", "SlideToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "Slide", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "SlideToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/StandingIdle", "StandingIdle", AnimOption().SetIsLoop(true));
-	m_Animator->LoadAnim("data/Animation/StandingIdleEmote", "StandingIdleEmote", AnimOption());
-	m_Animator->LoadAnim("data/Animation/StandingIdleToActionIdle", "StandingIdleToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+	m_Animator->LoadAnim("data/Animation/", "StandingIdle", AnimOption().SetIsLoop(true));
+	m_Animator->LoadAnim("data/Animation/", "StandingIdleEmote", AnimOption());
+	m_Animator->LoadAnim("data/Animation/", "StandingIdleToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 }
 
 void CharaBase::Update() {

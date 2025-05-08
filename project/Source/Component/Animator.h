@@ -141,7 +141,6 @@ public:
 private:
 	//==========================================================================================
 	// ▼メンバ変数
-
 	std::unordered_map<std::string, AnimInfo> anims;	// アニメーションの情報
 
 	std::list<AttachedAnimation*> prevs;

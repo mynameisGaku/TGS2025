@@ -44,7 +44,7 @@ void DebugController::Update()
 		}
 	}
 	else isPush = false;
-	
+
 	////////////////////////////////////////////////////
 	// ‹zˆøƒLƒƒƒbƒ`ˆ—
 	if (PadController::NormalizedLeftTrigger() > KeyDefine::TRIGGER_DEADZONE)

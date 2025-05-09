@@ -263,59 +263,46 @@ void CharaBase::HitGroundProcess() {
 	Physics* physics = m_pPhysics;
 	if (physics == nullptr)
 		return;
-	if (physics->velocity.y > 0)
+
+	// 地形(StageObject)と当たり判定する
 	{
-		physics->SetGravity(GRAVITY);
-		physics->SetFriction(V3::ZERO);
-		m_IsLanding = false;
-		return;
-	}
+		Vector3 p1, p2;
 
-	Vector3 colliderGlobalPos1 = V3::ZERO;
-	Vector3 colliderGlobalPos2 = transform->Global().position + V3::SetY(-0.5f);
-	Vector3 hitPos;	// 接地点
+		ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
 
-	// 当たり判定
-	ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
+		p1 = transform->Global().position + V3::SetY(37);
+		p2 = capsuleCol->OffsetWorld();
 
-	if (capsuleCol == nullptr)
-		colliderGlobalPos1 = physics->LastTransform()->Global().position;
-	else
-		colliderGlobalPos1 = capsuleCol->OffsetWorld();
+		const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
 
-	// 始点と終点の座標を渡して、地形と当たっているかを判定
-	if (Stage::ColCheckGround(colliderGlobalPos1, colliderGlobalPos2, &hitPos)) {
-		transform->position.y = hitPos.y;
-		physics->velocity.y = 0.0f;
-		physics->resistance.y = 0.0f;
-		physics->SetGravity(V3::ZERO);
-		physics->SetFriction(FRICTION);
-		m_IsLanding = true;
-	}
-	else
-	{
-		physics->SetGravity(GRAVITY);
-		physics->SetFriction(V3::ZERO);
-		m_IsLanding = false;
-	}
+		Vector3 pushVec;
+		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+		{
+			// 押し出しベクトルで位置を補正（UnityのRigidbodyと同様）
+			transform->position += pushVec;
 
-	// 
-	Vector3 push;
-	if (StageObjectManager::CollCheckCapsule(colliderGlobalPos1, colliderGlobalPos2, transform->scale.Size(), &push))
-	{
-        // 物理挙動
-        if (m_pPhysics)
-        {
-            m_pPhysics->resistance += push;
-            m_pPhysics->velocity += push;
-        }
-        // 自身の座標を更新
-        transform->position += push;
-    }
-    else
-    {
-        if (m_pPhysics)
-            m_pPhysics->resistance = V3::ZERO;
+			// Y成分が上方向なら接地とみなす（例：床に立ったとき）
+			if (pushVec.y > 0.1f)
+			{
+				m_IsLanding = true;
+				m_pPhysics->velocity.y = 0.0f;
+				m_pPhysics->resistance.y = 0.0f;
+				m_pPhysics->SetGravity(V3::ZERO);
+				m_pPhysics->SetFriction(FRICTION);
+			}
+			// Y成分が下方向なら頭上ヒット（天井にぶつかった）
+			else if (pushVec.y < -0.1f)
+			{
+				m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
+			}
+		}
+		else
+		{
+			// 衝突していなければ、通常の空中挙動へ
+			m_IsLanding = false;
+			m_pPhysics->SetGravity(GRAVITY);
+			m_pPhysics->SetFriction(V3::ZERO);
+		}
 	}
 
 	if (m_pBall)
@@ -329,6 +316,14 @@ void CharaBase::HitGroundProcess() {
 
 		m_pBall->transform->position = transform->Global().position;
 		m_pBall->transform->rotation = transform->Global().rotation;
+	}
+
+	if (physics->velocity.y > 0)
+	{
+		physics->SetGravity(GRAVITY);
+		physics->SetFriction(V3::ZERO);
+		m_IsLanding = false;
+		return;
 	}
 }
 

@@ -8,6 +8,7 @@
 #include "CharaDefineRef.h"
 #include "CharaBase.h"
 #include "EffectManager.h"
+#include "StageObjectManager.h"
 
 
 namespace
@@ -74,17 +75,50 @@ void Ball::Update()
 {
     if (m_IsHoming)
     {
-        // ホーミングでゴールまで線形補間 (物理未使用)
-        {
-            HomingProcess();
-        }
-
         m_Physics->SetIsActive(false);
+        HomingProcess();
     }
-    Object3D::Update();
+    else
+    {
+        if (m_Collider)
+        {
+            Vector3 p1 = transform->Global().position;
+            Vector3 p2 = m_Collider->OffsetWorld();
+            float radius = m_Collider->Radius();
 
-    collisionToGround();
+            Vector3 pushVec;
+            if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+            {
+                transform->position += pushVec;
+
+                // 押し出し方向
+                Vector3 normal = pushVec.Norm();
+
+                // 速度を反射させる
+                float bounciness = BALL_REF.BouncinessDefault;
+                Vector3 vel = m_Physics->velocity;
+
+                float dot = VDot(vel, normal);
+                if (dot < 0.0f) // 内側からの衝突のみ反射
+                {
+                    Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
+                    m_Physics->velocity = reflectVel;
+                }
+
+                // Y方向の反発時に転がり回転も発生
+                if (abs(normal.y) > 0.5f)
+                {
+                    float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
+                    transform->rotation.y = forwardRad;
+                    m_Physics->angularVelocity.x = m_Physics->FlatVelocity().Size() * 0.01f;
+                }
+            }
+        }
+    }
+
+    Object3D::Update();
 }
+
 
 void Ball::Draw()
 {
@@ -168,6 +202,7 @@ void Ball::collisionToGround()
 
 void Ball::HomingProcess()
 {
+    // ---- ホーミング補間 ----
     Vector3 acceleration = m_HomingTarget - transform->position;
     Vector3 diff = m_HomingTarget - m_HomingPosition;
 
@@ -177,10 +212,41 @@ void Ball::HomingProcess()
     if (m_HomingPeriod < 0.0f)
     {
         HomingDeactivate();
+        return;
     }
 
     m_Physics->velocity += acceleration * Time::DeltaTimeLapseRate();
     m_HomingPosition += m_Physics->velocity * Time::DeltaTimeLapseRate();
+
+    // ---- 押し出し + 跳ね返り処理 ----
+    if (m_Collider)
+    {
+        Vector3 p1 = m_HomingPosition;
+        Vector3 p2 = m_Collider->OffsetWorld();  // ホーミング中は本来位置からズレるが、近似可
+
+        float radius = m_Collider->Radius();
+        Vector3 pushVec;
+
+        if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+        {
+            HomingDeactivate();
+
+            m_HomingPosition += pushVec;
+
+            Vector3 normal = pushVec.Norm();
+            float dot = VDot(m_Physics->velocity, normal);
+
+            if (dot < 0.0f)
+            {
+                const float bounciness = BALL_REF.BouncinessDefault;
+                const float damping = 0.85f; // ホーミング中の減衰
+
+                Vector3 reflectVel = m_Physics->velocity - normal * (1.0f + bounciness) * dot;
+                m_Physics->velocity = reflectVel * damping;
+            }
+        }
+    }
+
     transform->position = m_HomingPosition;
 }
 

@@ -10,7 +10,7 @@ StageObject::StageObject(StageObjInfo _info, const Transform& _transform, int _i
 
 	id = _id;
 	isCollider = _collider;
-	isHitModelDraw = false;
+	isHitModelDraw = true;
 
 	// モデルのアルファ値が128以上の場合のみ描画する
 	//MV1SetMaterialDrawAlphaTestAll(hModel, true, DX_CMP_GREATER, 128);

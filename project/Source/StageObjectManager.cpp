@@ -112,7 +112,7 @@ void StageObjectManager::Draw() {
 void StageObjectManager::Release() {
 
 	//SaveToCsv();
-	SaveToJson();
+	//SaveToJson();
 	EraseAll();
 
 	Function::DeletePointer(stageObjects);
@@ -120,7 +120,7 @@ void StageObjectManager::Release() {
 	Function::DeletePointer(csvFilePath_StageObjModel);
 }
 
-bool StageObjectManager::CollCheckCapsule(Vector3 p1, Vector3 p2, float r, Vector3* push) {
+bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push) {
 
 	if (stageObjects == nullptr)
 		return false;
@@ -161,6 +161,59 @@ bool StageObjectManager::CollCheckCapsule(Vector3 p1, Vector3 p2, float r, Vecto
 
 	if (push != nullptr)
 		*push = pushVec;
+	return hitFlag;
+}
+
+bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos)
+{
+	for (const auto& obj : *stageObjects) {
+
+		MV1_COLL_RESULT_POLY hit;
+		hit = MV1CollCheck_Line(obj->Model(), 0, begin, end);
+		if (hit.HitFlag > 0) {
+			if (hitPos != nullptr)	// 引数にポインタが入っていたら、代入をする
+				*hitPos = hit.HitPosition;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool StageObjectManager::CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push)
+{
+	bool hitFlag = false;
+	VECTOR pushVec = VGet(0, 0, 0);
+	for (const auto& obj : *stageObjects) {
+
+		MV1SetupCollInfo(obj->Model(), -1, 8, 8, 8);
+		MV1_COLL_RESULT_POLY_DIM dim = MV1CollCheck_Capsule(obj->Model(), -1, begin, end, r);
+		for (int i = 0; i < dim.HitNum; i++) {
+			hitFlag = true;
+			// 当たり判定をしてpushVecを作る
+			// ポリゴンと線分の距離を求める
+			float len = Segment_Triangle_MinLength(begin, end, dim.Dim[i].Position[0], dim.Dim[i].Position[1], dim.Dim[i].Position[2]);
+			if (len > r)
+				continue;
+			// 押し返す量は、(r - len)になる
+			// ポリゴンの法線から押し返す量を乗算する
+			VECTOR newPush = dim.Dim[i].Normal * (r - len);
+			pushVec += newPush;
+			VECTOR pushVecNorm = VNorm(pushVec);
+			float pushIn = VDot(pushVecNorm, newPush);
+			// これが新しく押す量
+			if (pushIn < VSize(pushVec)) {
+				pushVec += newPush - pushIn * pushVecNorm;
+			}
+			else {
+				pushVec = newPush;
+			}
+		}
+		MV1CollResultPolyDimTerminate(dim);
+
+	}
+
+	if (push != nullptr)
+		*push = pushVec * -1.0f;
 	return hitFlag;
 }
 

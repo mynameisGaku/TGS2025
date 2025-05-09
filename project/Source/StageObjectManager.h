@@ -54,7 +54,10 @@ namespace StageObjectManager {
 	/// <param name="r">半径</param>
 	/// <param name="push">押し返すベクトル</param>
 	/// <returns>あたったらTrue</returns>
-	bool CollCheckCapsule(Vector3 p1, Vector3 p2, float r, Vector3* push);
+	bool CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push);
+
+	bool CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
+	bool CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push = nullptr);
 
 	/// <summary>
 	/// 描画用モデルと当たり判定用モデルを切り替える

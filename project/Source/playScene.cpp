@@ -34,11 +34,11 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	CharaBase* player = charaM->Create("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 	CharaBase* enemy = charaM->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), V3::ZERO, V3::ONE));
 
-	player->SetMoveSpeed(600.0f);
+	player->SetMoveSpeed(700.0f);
 	player->SetRotSpeed(Math::DegToRad(10.0f));
 	player->AddComponent<PlayerController>()->Init(DX_INPUT_PAD1);
 
-	enemy->SetMoveSpeed(600.0f);
+	enemy->SetMoveSpeed(700.0f);
 	enemy->SetRotSpeed(Math::DegToRad(10.0f));
 	//enemy->AddComponent<AIController>()->Init();
 	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);

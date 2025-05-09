@@ -5,6 +5,7 @@
 #include "Component/Physics.h"
 #include "Component/CollisionDefine.h"
 #include "Stage.h"
+#include "StageObjectManager.h"
 #include "CharaStamina.h"
 #include "Ball.h"
 #include "Catcher.h"
@@ -296,6 +297,25 @@ void CharaBase::HitGroundProcess() {
 		physics->SetGravity(GRAVITY);
 		physics->SetFriction(V3::ZERO);
 		m_IsLanding = false;
+	}
+
+	// 
+	Vector3 push;
+	if (StageObjectManager::CollCheckCapsule(colliderGlobalPos1, colliderGlobalPos2, transform->scale.Size(), &push))
+	{
+        // 物理挙動
+        if (m_pPhysics)
+        {
+            m_pPhysics->resistance += push;
+            m_pPhysics->velocity += push;
+        }
+        // 自身の座標を更新
+        transform->position += push;
+    }
+    else
+    {
+        if (m_pPhysics)
+            m_pPhysics->resistance = V3::ZERO;
 	}
 
 	if (m_pBall)

@@ -1225,5 +1225,8 @@
     <None Include="data\Json\Ball\Ball.json">
       <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
     </None>
+    <None Include="data\Json\Stage\Stage.json">
+      <Filter>Framework\03_Object\Stage</Filter>
+    </None>
   </ItemGroup>
 </Project>

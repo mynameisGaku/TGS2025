@@ -278,10 +278,10 @@ void CharaBase::HitGroundProcess() {
 		Vector3 pushVec;
 		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
 		{
-			// 押し出しベクトルで位置を補正（UnityのRigidbodyと同様）
+			// 押し出しベクトルで位置を補正
 			transform->position += pushVec;
 
-			// Y成分が上方向なら接地とみなす（例：床に立ったとき）
+			// Y成分が上方向なら接地とみなす
 			if (pushVec.y > 0.1f)
 			{
 				m_IsLanding = true;

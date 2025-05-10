@@ -29,7 +29,8 @@ private:
 
     CharaStaminaRef() :
         Max(0.0f),
-        RegenTakesTime(0.0f)
+        RegenTakesTime(0.0f),
+        RegenStartTime(0.0f)
     { /*DO NOTHING*/ }
 
     ~CharaStaminaRef()

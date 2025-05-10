@@ -7,6 +7,7 @@
 #include "Stage.h"
 #include "StageObjectManager.h"
 #include "CharaStamina.h"
+#include "CharaHP.h"
 #include "Ball.h"
 #include "Catcher.h"
 #include "CharaDefineRef.h"
@@ -26,6 +27,7 @@ namespace
 CharaBase::CharaBase()
 {
 	m_pStamina				= Instantiate<CharaStamina>();
+	m_pHP					= Instantiate<CharaHP>();
 	m_pBall					= nullptr;
 	m_pLastBall				= nullptr;
 	m_pPhysics				= nullptr;
@@ -205,6 +207,19 @@ void CharaBase::Update() {
 void CharaBase::Draw()
 {
 	Object3D::Draw();
+
+	if (m_pHP->IsDead())
+	{
+		DrawFormatString(300, 300, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 320, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 340, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 360, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 380, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 400, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 320, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 340, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 360, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+	}
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -253,6 +268,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
 			getHit(ball);
+			m_pHP->Damage_UseDefault();
 		}
 	}
 }

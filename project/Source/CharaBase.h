@@ -5,6 +5,7 @@
 #include <Library/time.h>
 #include "TinyFSM.h"
 
+class CharaHP;
 class CharaStamina;
 class Ball;
 class Physics;
@@ -169,6 +170,7 @@ private:
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
+	CharaHP*		m_pHP;					// HPのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度

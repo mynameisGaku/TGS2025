@@ -8,6 +8,7 @@ namespace {
 	LARGE_INTEGER freq;
 	LARGE_INTEGER current;
 	float deltaTime;
+	float totaltime;
 	float lapseRate;
 	int hitStop;
 }
@@ -19,6 +20,7 @@ void Time::Init() {
 	Refresh();
 	lapseRate = 1.0f;
 	hitStop = 0;
+	totaltime = 0.0f;
 
 #ifdef IMGUI
 	ImGuiManager::AddNode(new ImGuiNode_SliderFloat("Time", &lapseRate, 0.0f, 2.0f, "%.2f"));
@@ -30,6 +32,7 @@ void Time::Refresh() {
 	LARGE_INTEGER last = current;
 	QueryPerformanceCounter(&current);
 	deltaTime = static_cast<float>(current.QuadPart - last.QuadPart) / freq.QuadPart;
+	totaltime += deltaTime;
 
 	if (deltaTime >= FrameToSec(1.0f))
 		deltaTime = FrameToSec(1.0f);
@@ -71,4 +74,9 @@ int Time::HitStop() {
 bool Time::IsHitStop() {
 
 	return (hitStop > 0);
+}
+
+float Time::TotalTime()
+{
+	return totaltime;
 }

@@ -382,6 +382,12 @@
     <ClCompile Include="Source\CamState_Debug.cpp">
       <Filter>Framework\03_Object\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CharaHP.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CharaHPRef.cpp">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -828,6 +834,12 @@
     <ClInclude Include="Source\CameraDefineRef.h">
       <Filter>Framework\03_Object\Camera\00_Define</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CharaHP.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CharaHPRef.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1227,6 +1239,9 @@
     </None>
     <None Include="data\Json\Stage\Stage.json">
       <Filter>Framework\03_Object\Stage</Filter>
+    </None>
+    <None Include="data\Json\Chara\CharaHP.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </None>
   </ItemGroup>
 </Project>

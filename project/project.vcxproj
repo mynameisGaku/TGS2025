@@ -168,6 +168,8 @@
     <ClInclude Include="Source\Catcher.h" />
     <ClInclude Include="Source\CharaBase.h" />
     <ClInclude Include="Source\CharaDefineRef.h" />
+    <ClInclude Include="Source\CharaHP.h" />
+    <ClInclude Include="Source\CharaHPRef.h" />
     <ClInclude Include="Source\CharaManager.h" />
     <ClInclude Include="Source\CharaStaminaRef.h" />
     <ClInclude Include="Source\Component\AnimationDefine.h" />
@@ -318,6 +320,8 @@
     <ClCompile Include="Source\Catcher.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\CharaDefineRef.cpp" />
+    <ClCompile Include="Source\CharaHP.cpp" />
+    <ClCompile Include="Source\CharaHPRef.cpp" />
     <ClCompile Include="Source\CharaStaminaRef.cpp" />
     <ClCompile Include="Source\Component\AIController.cpp" />
     <ClCompile Include="Source\Component\AnimationEvent.cpp" />
@@ -420,6 +424,7 @@
     <None Include="data\Json\Ball\Ball.json" />
     <None Include="data\Json\Bloom\Bloom.json" />
     <None Include="data\Json\Chara\CharaDefine.json" />
+    <None Include="data\Json\Chara\CharaHP.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />

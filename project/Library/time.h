@@ -55,6 +55,12 @@ namespace Time {
 	/// <returns>ヒットストップ中ならtrue</returns>
 	bool IsHitStop();
 
+	/// <summary>
+	/// 起動から経過した時間を取得する
+	/// </summary>
+	/// <returns>起動から経過した時間</returns>
+	float TotalTime();
+
 	//==================================================
 	// ▼変換
 

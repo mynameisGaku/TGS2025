@@ -84,7 +84,7 @@ void Ball::Update()
         {
             Vector3 p1 = transform->Global().position;
             Vector3 p2 = m_Collider->OffsetWorld();
-            float radius = m_Collider->Radius();
+            float radius = BALL_RADIUS;
 
             Vector3 pushVec;
             if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
@@ -224,7 +224,7 @@ void Ball::HomingProcess()
         Vector3 p1 = m_HomingPosition;
         Vector3 p2 = m_Collider->OffsetWorld();  // ホーミング中は本来位置からズレるが、近似可
 
-        float radius = m_Collider->Radius();
+        float radius = BALL_RADIUS;
         Vector3 pushVec;
 
         if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))

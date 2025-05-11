@@ -9,6 +9,7 @@
 #include "CharaStamina.h"
 #include "CharaHP.h"
 #include "Ball.h"
+#include "BallManager.h"
 #include "Catcher.h"
 #include "CharaDefineRef.h"
 #include "Component/Animator.h"
@@ -430,7 +431,16 @@ void CharaBase::GenerateBall()
 		return;
 	}
 
-	m_pBall = Instantiate<Ball>();
+	if(m_pBallManager == nullptr)
+	{
+		m_pBallManager = FindGameObject<BallManager>();
+	}
+
+	m_pBall = m_pBallManager->CreateBall(transform->Global().position);
+
+	if (m_pBall == nullptr)
+		return;
+
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->SetParent(this);

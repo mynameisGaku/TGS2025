@@ -1,6 +1,9 @@
 #pragma once
 #include "Library/gameObject.h"
 #include <list>
+#include "Pool.h"
+
+#define USE_POOL
 
 class Ball;
 
@@ -15,9 +18,20 @@ public:
 	~BallManager();
 
 	void Update() override;
+	void Draw() override;
 
 	Ball* CreateBall(const Vector3& position);
+
+	Ball* GetBall(uint32_t index);
+
 private:
+	Ball* initfunc(uint32_t index, Ball* pBall);
+
 	int m_Model;
-	std::list<Ball*> m_Balls;
+
+#ifdef USE_POOL
+	Pool<Ball>* m_pPool;
+#else
+	std::list<Ball*> m_Balls; // ”j•ÐƒŠƒXƒg
+#endif
 };

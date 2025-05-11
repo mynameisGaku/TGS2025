@@ -33,8 +33,15 @@ ColliderBase::~ColliderBase() {
 
 void ColliderBase::BaseInit(const ColDefine::ColBaseParam& param) {
 
-	transform = new Transform(param.trs);
-	lastGlobal = new Transform(param.trs);
+	if (transform == nullptr)
+		transform = new Transform(param.trs);
+	else
+		*transform = param.trs;
+
+	if (lastGlobal == nullptr)
+		lastGlobal = new Transform(param.trs);
+	else
+        *lastGlobal = param.trs;
 
 	Object3D* obj = Parent<Object3D>();
 	if (obj != nullptr)
@@ -46,7 +53,10 @@ void ColliderBase::BaseInit(const ColDefine::ColBaseParam& param) {
 	isActive = true;
 
 	if (param.onlyOnce)
-		hittedData = new HittedData;
+	{
+		if (hittedData == nullptr)
+			hittedData = new HittedData;
+	}
 
 	CollisionManager* colM = FindGameObject<CollisionManager>();
 	if (colM != nullptr)

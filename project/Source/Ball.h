@@ -6,6 +6,7 @@ class Physics;
 class ColliderCapsule;
 class CharaBase;
 class Collider;
+class BallManager;
 
 /// <summary>
 /// キャラクターが投げるボール
@@ -25,12 +26,12 @@ public:
 	~Ball();
 	void Init(std::string charaTag);
 	void Update() override;
-	void HomingProcess();
 	void Draw() override;
 
 	void Throw(const Vector3& velocity);
 	void Throw(const Vector3& velocity, CharaBase*owner);
-    void ThrowHoming(const Vector3& velocity, CharaBase* owner);
+	void ThrowHoming(const Vector3& velocity, CharaBase* owner);
+	void HomingProcess();
 
 	State GetState() const { return m_State; }
 
@@ -41,19 +42,35 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 
 	std::string GetCharaTag() const { return m_CharaTag; }
+
+	/// <summary>
+	/// 有効か？
+	/// </summary>
+	/// <returns>有効ならtrue</returns>
+	bool IsActive() const { return m_IsActive; }
+
+	void SetIsActive(bool flag) { m_IsActive = flag; }
 private:
-	Physics*		m_Physics;
+	friend class BallManager;
+	BallManager*	 m_pManager;
+
+	Physics*		 m_Physics;
 	ColliderCapsule* m_Collider;
-	State			m_State;
-	CharaBase*		m_Owner;
-	std::string		m_CharaTag;
+	State			 m_State;
+	CharaBase*		 m_Owner;
+	std::string		 m_CharaTag;
+	uint32_t		 m_Index;
+	float			 m_LifeTime;
+	float			 m_LifeTimeMax;
+	float			 m_AlphaRate;
+	bool			 m_IsActive;
 
 	// ホーミング系
 	Vector3			m_HomingVelocity;
 	Vector3			m_HomingPosition;
 	Vector3			m_HomingTarget;
 	float			m_HomingPeriod;
-    bool			m_IsHoming;
+	bool			m_IsHoming;
 
 	void collisionToGround();
 	void HomingDeactivate();

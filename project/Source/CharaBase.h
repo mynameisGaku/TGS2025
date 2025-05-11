@@ -8,6 +8,7 @@
 class CharaHP;
 class CharaStamina;
 class Ball;
+class BallManager;
 class Physics;
 class Catcher;
 class Animator;
@@ -169,6 +170,7 @@ private:
 	float			m_ChargeRateWatchDog;	// チャージ終了から何秒経ったかを監視する番犬
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
+    BallManager*	m_pBallManager;			// ボールマネージャーのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
 	CharaHP*		m_pHP;					// HPのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター

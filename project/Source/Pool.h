@@ -88,6 +88,7 @@ public:
             }
         }
         m_Items[index]->m_IsActive = true;
+        m_ActiveObjectCount++;
 
         return obj;
     }
@@ -104,6 +105,7 @@ public:
             {
                 obj->m_IsActive = false;
                 obj->m_pObject = nullptr;
+                m_ActiveObjectCount--;
                 break;
             }
         }
@@ -123,7 +125,11 @@ public:
         if (item == nullptr)
             return;
 
-        item->m_IsActive = false;
+        if(item->m_IsActive == true)
+        {
+            m_ActiveObjectCount--;
+            item->m_IsActive = false;
+        }
     }
 
     /// <summary>
@@ -183,6 +189,7 @@ public:
                 item->m_IsActive = false;
             }
         }
+        m_ActiveObjectCount = 0;
     }
 
     std::vector<Item*> GetAllItems() const
@@ -237,14 +244,7 @@ public:
 
     int GetActiveItemNum()
     {
-        int ret = 0;
-        for (auto item : m_Items)
-        {
-            if (not item->m_IsActive)
-                continue;
-            ret++;
-        }
-        return ret;
+        return m_ActiveObjectCount;
     }
 private:
 
@@ -265,6 +265,7 @@ private:
         }
         m_Items.clear();
         m_Capacity = capacity - 1;
+        m_ActiveObjectCount = 0;
         m_Items.reserve(capacity);
         for (uint32_t i = 0; i < capacity; ++i)
         {
@@ -281,6 +282,7 @@ private:
     //------------------------------------------------------------
     // メンバ変数
     //------------------------------------------------------------
-    std::vector<Item*>      m_Items;        // オブジェクトのリスト
-    uint32_t                m_Capacity;     // このプールの容量
+    std::vector<Item*>      m_Items;                // オブジェクトのリスト
+    uint32_t                m_Capacity;             // このプールの容量
+    uint32_t                m_ActiveObjectCount;    // アクティブなオブジェクトの数
 };

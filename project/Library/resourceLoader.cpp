@@ -49,6 +49,8 @@ void ResourceLoader::DeleteGraph(int handle) {
 
 int ResourceLoader::MV1LoadModel(std::string filename) {
 
+	OutputDebugStringA(("LoadModel :" + filename + "\n").c_str());
+
 	if (files == nullptr)
 		files = new std::unordered_map<std::string, FILE_HANDLE>;
 

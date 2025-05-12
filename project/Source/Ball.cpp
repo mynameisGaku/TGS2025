@@ -35,6 +35,7 @@ Ball::Ball()
 
 	m_Collider->SetOffset(V3::ZERO);
 	m_Collider->BaseInit(param);
+	m_Collider->SetDraw(true);
 
 	Reset();
 }
@@ -56,6 +57,7 @@ void Ball::Reset()
 
 	m_HomingPeriod = 0.0f;
 
+	m_Physics->velocity = V3::ZERO;
 	m_Physics->SetGravity(V3::ZERO);
 	m_Physics->SetFriction(V3::ZERO);
 
@@ -92,6 +94,10 @@ void Ball::Init(std::string charaTag)
 		tag = ColDefine::Tag::tBallRed;
 		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
+	
+	m_Collider->SetTag(tag);
+	m_Collider->SetTargetTags(targets);
+	
 	m_CharaTag = charaTag;
 }
 

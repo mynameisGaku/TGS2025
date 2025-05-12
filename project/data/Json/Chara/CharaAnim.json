@@ -1,0 +1,132 @@
+{
+	"Folder": "data/Animation/",
+	"File": {
+		"ActionIdleToHold": {
+
+		},
+		"AimToThrow": {
+
+		},
+		"Catch": {
+			"IsLoop": true
+		},
+		"Hold": {
+			"IsLoop": true
+		},
+		"HoldToAim": {
+
+		},
+		"ThrowToActionIdle": {
+
+		},
+		"ActionIdle": {
+			"IsLoop": true
+		},
+		"ActionIdleEmote": {
+
+		},
+		"ActionIdleToJump": {
+			"IsFixedRoot": {
+				"Y": true
+			},
+			"Offset": {
+				"Y": 100.0
+			}
+		},
+		"ActionIdleToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"ActionIdleToStandingIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"AirSpin": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"CrouchToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"CrouchToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"DamageToDown": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"Fall": {
+			"IsLoop": true,
+			"IsFixedRoot": {
+				"Y": true
+			},
+			"Offset": {
+				"Y": 100.0
+			}
+		},
+		"FallToCrouch": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"FallToRollToIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"GetBall": {
+
+		},
+		"Run": {
+			"IsLoop": true
+		},
+		"RunToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"RunToJump": {
+			"IsFixedRoot": {
+				"Y": true,
+				"Z": true
+			},
+			"Offset": {
+				"Y": 100.0
+			}
+		},
+		"RunToSlide": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"Slide": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"SlideToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"StandingIdle": {
+			"IsLoop": true
+		},
+		"StandingIdleEmote": {
+
+		},
+		"StandingIdleToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		}
+	}
+}

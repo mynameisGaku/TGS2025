@@ -46,9 +46,11 @@ CharaBase::CharaBase()
 	m_IsLanding				= true;
 	m_SlideTimer			= 0.0f;
 	m_EffectTransform		= nullptr;
+	m_pBallManager			= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 
+#if FALSE
 	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdle, "StateActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleEmote, "StateActionIdleEmote");
@@ -78,6 +80,7 @@ CharaBase::CharaBase()
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdle, "StateStandingIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleEmote, "StateStandingIdleEmote");
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
+#endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
 }

@@ -21,25 +21,22 @@ namespace
 
 Ball::Ball()
 {
-	transform->scale = V3::ONE * BALL_SCALE;
 	m_Physics = Object3D::AddComponent<Physics>();
 	m_Physics->Init(V3::ZERO, V3::ZERO);
 
-	m_State = S_OWNED;
 	m_Owner = nullptr;
-	m_Collider = nullptr;
-	m_CharaTag = CHARADEFINE_REF.Tags[0];
-
-	m_LifeTimeMax = BALL_REF.LifeTimeMax;
-	m_LifeTime = m_LifeTimeMax;
-
-	m_IsHoming = false;
-	m_IsActive = true;
-
-	m_AlphaRate = 0.0f;
-	m_HomingPeriod = 0.0f;
 	m_pManager = nullptr;
 	m_Index = 0;
+
+	m_Collider = Object3D::AddComponent<ColliderCapsule>();
+
+	ColDefine::ColBaseParam param;
+	param.trs.scale = V3::ONE * BALL_RADIUS / BALL_SCALE * 2;
+
+	m_Collider->SetOffset(V3::ZERO);
+	m_Collider->BaseInit(param);
+
+	Reset();
 }
 
 Ball::~Ball()
@@ -50,33 +47,19 @@ Ball::~Ball()
 	}
 }
 
-void Ball::Init(std::string charaTag)
+void Ball::Reset()
 {
-	if (m_Collider == nullptr)
-		m_Collider = Object3D::AddComponent<ColliderCapsule>();
+	transform->scale = V3::ONE * BALL_SCALE;
 
-	ColDefine::ColBaseParam param;
-	param.trs.scale = V3::ONE * BALL_RADIUS / BALL_SCALE * 2;
+	m_State = S_OWNED;
+	m_CharaTag = CHARADEFINE_REF.Tags[0];
 
-	if (charaTag == "Red")
-	{
-		param.tag = ColDefine::Tag::tBallRed;
-		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed};
-	}
-	else if (charaTag == "Blue")
-	{
-		param.tag = ColDefine::Tag::tBallBlue;
-		param.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
-	}
-	else
-	{
-		param.tag = ColDefine::Tag::tBallRed;
-		param.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
-	}
+	m_HomingPeriod = 0.0f;
 
-	m_Collider->SetOffset(V3::ZERO);
-	m_Collider->BaseInit(param);
-	m_CharaTag = charaTag;
+	m_Physics->SetGravity(V3::ZERO);
+	m_Physics->SetFriction(V3::ZERO);
+
+	m_Collider->SetIsActive(false);
 
 	m_LifeTimeMax = BALL_REF.LifeTimeMax;
 	m_LifeTime = m_LifeTimeMax;
@@ -84,12 +67,38 @@ void Ball::Init(std::string charaTag)
 
 	m_IsHoming = false;
 	m_IsActive = true;
+}
 
-	m_Collider->SetIsActive(false);
+void Ball::Init(std::string charaTag)
+{
+	Reset();
+
+	ColDefine::Tag tag;
+	std::list<ColDefine::Tag> targets;
+
+	if (charaTag == "Red")
+	{
+		tag = ColDefine::Tag::tBallRed;
+		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+	}
+	else if (charaTag == "Blue")
+	{
+		tag = ColDefine::Tag::tBallBlue;
+		targets = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+	}
+	else
+	{
+		// tag‚ª•s³‚È‚çƒŒƒbƒh‚Á‚Ä‚±‚Æ‚É‚·‚é
+		tag = ColDefine::Tag::tBallRed;
+		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+	}
+	m_CharaTag = charaTag;
 }
 
 void Ball::Update()
 {
+	Object3D::Update();
+
 	if (not m_IsActive)
 		return;
 
@@ -100,7 +109,7 @@ void Ball::Update()
 	}
 	else
 	{
-		if (m_Collider)
+		if (m_Collider != nullptr && m_Collider->IsActive())
 		{
 			Vector3 p1 = transform->Global().position;
 			Vector3 p2 = m_Collider->OffsetWorld();
@@ -138,17 +147,18 @@ void Ball::Update()
 		}
 	}
 
-	Object3D::Update();
-
-	m_LifeTime -= Time::DeltaTimeLapseRate();
-	if (m_LifeTime <= 0.0f)
+	if (m_State != S_OWNED)
 	{
-		m_AlphaRate -= 255.0f * Time::DeltaTimeLapseRate();
-
-		if (m_AlphaRate <= 0.0f)
+		m_LifeTime -= Time::DeltaTimeLapseRate();
+		if (m_LifeTime <= 0.0f)
 		{
-			m_AlphaRate = 0.0f;
-			m_IsActive = false;
+			m_AlphaRate -= 255.0f * Time::DeltaTimeLapseRate();
+
+			if (m_AlphaRate <= 0.0f)
+			{
+				m_AlphaRate = 0.0f;
+				m_IsActive = false;
+			}
 		}
 	}
 }
@@ -217,47 +227,47 @@ void Ball::CollisionEvent(const CollisionData& colData)
 			}
 			m_Owner->SetLastBall(nullptr);
 		}
-	}
 
-	// === ‘¼‚Ìƒ{[ƒ‹‚Æ‚ÌÕ“Ë‘Î‰ž ===
-	Ball* otherBall = colData.Other()->Parent<Ball>();
-	if (otherBall != nullptr && otherBall != this)
-	{
-		// --- ‰Ÿ‚µo‚µˆ— ---
-		const float minDist = BALL_RADIUS * 2.0f;
-		Vector3 delta = transform->position - otherBall->transform->position;
-		float dist = delta.Size();
-
-		if (dist < minDist && dist > 0.0001f)
+		// === ‘¼‚Ìƒ{[ƒ‹‚Æ‚ÌÕ“Ë‘Î‰ž ===
+		Ball* otherBall = colData.Other()->Parent<Ball>();
+		if (otherBall != nullptr && otherBall != this)
 		{
-			Vector3 correction = delta.Norm() * (minDist - dist) * 0.5f;
-			transform->position += correction;
-			otherBall->transform->position -= correction;
-		}
+			// --- ‰Ÿ‚µo‚µˆ— ---
+			const float minDist = BALL_RADIUS * 2.0f;
+			Vector3 delta = transform->position - otherBall->transform->position;
+			float dist = delta.Size();
 
-		// --- ‰^“®—Ê•Û‘¶{”½”­ŒW”‚É‚æ‚é”½”­ ---
-		Vector3 normal = (transform->position - otherBall->transform->position).Norm();
-		Vector3 relVel = m_Physics->velocity - otherBall->m_Physics->velocity;
-		float relVelAlongNormal = VDot(relVel, normal);
+			if (dist < minDist && dist > 0.0001f)
+			{
+				Vector3 correction = delta.Norm() * (minDist - dist) * 0.5f;
+				transform->position += correction;
+				otherBall->transform->position -= correction;
+			}
 
-		if (relVelAlongNormal > 0.0f) return;
+			// --- ‰^“®—Ê•Û‘¶{”½”­ŒW”‚É‚æ‚é”½”­ ---
+			Vector3 normal = (transform->position - otherBall->transform->position).Norm();
+			Vector3 relVel = m_Physics->velocity - otherBall->m_Physics->velocity;
+			float relVelAlongNormal = VDot(relVel, normal);
 
-		float e = BALL_REF.BouncinessDefault;
-		float j = -(1.0f + e) * relVelAlongNormal / 2.0f;
-		Vector3 impulse = normal * j;
+			if (relVelAlongNormal > 0.0f) return;
 
-		m_Physics->velocity += impulse;
-		otherBall->m_Physics->velocity -= impulse;
+			float e = BALL_REF.BouncinessDefault;
+			float j = -(1.0f + e) * relVelAlongNormal / 2.0f;
+			Vector3 impulse = normal * j;
 
-		// --- ‰ñ“]‚Ìƒgƒ‹ƒN”½‰f ---
-		Vector3 tangent = relVel - normal * relVelAlongNormal;
-		if (tangent.Size() > 0.001f)
-		{
-			tangent = tangent.Norm();
-			float torque = VDot(relVel, tangent) * 0.1f;
+			m_Physics->velocity += impulse;
+			otherBall->m_Physics->velocity -= impulse;
 
-			m_Physics->angularVelocity.x += torque;
-			otherBall->m_Physics->angularVelocity.x -= torque;
+			// --- ‰ñ“]‚Ìƒgƒ‹ƒN”½‰f ---
+			Vector3 tangent = relVel - normal * relVelAlongNormal;
+			if (tangent.Size() > 0.001f)
+			{
+				tangent = tangent.Norm();
+				float torque = VDot(relVel, tangent) * 0.1f;
+
+				m_Physics->angularVelocity.x += torque;
+				otherBall->m_Physics->angularVelocity.x -= torque;
+			}
 		}
 	}
 }

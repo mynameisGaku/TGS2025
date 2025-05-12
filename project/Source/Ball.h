@@ -24,6 +24,7 @@ public:
 
 	Ball();
 	~Ball();
+	void Reset();
 	void Init(std::string charaTag);
 	void Update() override;
 	void Draw() override;

@@ -443,7 +443,7 @@ void CharaBase::GenerateBall()
 
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
-	m_pBall->SetParent(this);
+	//m_pBall->SetParent(this);
 	m_pBall->Init(m_CharaTag);
 
 	m_FSM->ChangeState(&CharaBase::StateGetBall); // ステートを変更

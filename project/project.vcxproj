@@ -439,6 +439,9 @@
     <None Include="data\Json\Effect\Hit_Red.json" />
     <None Include="data\Json\Stage\Stage.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\Json\Chara\CharaAnim.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1244,4 +1244,9 @@
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\Json\Chara\CharaAnim.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

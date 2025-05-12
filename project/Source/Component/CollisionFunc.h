@@ -87,7 +87,7 @@ namespace ColFunction {
 	//==========================================================================================
 	// Å•ÉRÅ[Éì
 
-	const CollisionData& ColCheck_ConeToPoint(const Cone& cone, const Vector3& point);
+	CollisionData ColCheck_ConeToPoint(const Cone& cone, const Vector3& point);
 
 	//==========================================================================================
 	// Å•åvéZ

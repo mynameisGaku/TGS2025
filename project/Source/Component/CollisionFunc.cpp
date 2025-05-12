@@ -42,8 +42,8 @@ CollisionData* ColFunction::ColCheck(ColliderBase* col1, ColliderBase* col2) {
 
 CollisionData ColFunction::ColCheck_SphereToSphere(ColliderSphere* col1, ColliderSphere* col2) {
 
-	const Transform col1GlobalTransform = col1->transform->Global();	// col1の絶対座標
-	const Transform col2GlobalTransform = col2->transform->Global();	// col2の絶対座標
+	const Transform col1GlobalTransform = col1->Global();	// col1の絶対座標
+	const Transform col2GlobalTransform = col2->Global();	// col2の絶対座標
 
 	const float squareDistance = (col2GlobalTransform.position - col1GlobalTransform.position).SquareSize();	// col1とcol2の差の長さ
 
@@ -56,8 +56,8 @@ CollisionData ColFunction::ColCheck_SphereToSphere(ColliderSphere* col1, Collide
 
 CollisionData ColFunction::ColCheck_SphereToCapsule(ColliderSphere* col1, ColliderCapsule* col2) {
 
-	const Transform col1_GlobalTrs = col1->transform->Global();	// col1の絶対座標
-	const Transform col2_GlobalTrs = col2->transform->Global();	// col2の絶対座標
+	const Transform col1_GlobalTrs = col1->Global();	// col1の絶対座標
+	const Transform col2_GlobalTrs = col2->Global();	// col2の絶対座標
 
 	Vector3 vecNear = V3::ZERO;		// 点と線分の最近傍点
 
@@ -93,8 +93,8 @@ CollisionData ColFunction::ColCheck_CapsuleToCapsule(ColliderCapsule* col1, Coll
 
 	using namespace ColDefine;
 
-	const Transform col1_GlobalTrs = col1->transform->Global();	// col1の絶対座標
-	const Transform col2_GlobalTrs = col2->transform->Global();	// col2の絶対座標
+	const Transform col1_GlobalTrs = col1->Global();	// col1の絶対座標
+	const Transform col2_GlobalTrs = col2->Global();	// col2の絶対座標
 
 	Segment s1, s2;
 	Vector3 p1, p2;
@@ -115,7 +115,7 @@ CollisionData ColFunction::ColCheck_CapsuleToCapsule(ColliderCapsule* col1, Coll
 
 CollisionData ColFunction::ColCheck_SphereToModel(ColliderSphere* col1, ColliderModel* col2) {
 
-	MV1_COLL_RESULT_POLY_DIM result = MV1CollCheck_Sphere(col2->Model(), -1, col1->transform->Global().position, col1->Radius());
+	MV1_COLL_RESULT_POLY_DIM result = MV1CollCheck_Sphere(col2->Model(), -1, col1->Global().position, col1->Radius());
 
 	if (result.HitNum == 0)
 	{
@@ -137,7 +137,7 @@ CollisionData ColFunction::ColCheck_SphereToModel(ColliderSphere* col1, Collider
 	}
 }
 
-const CollisionData& ColFunction::ColCheck_ConeToPoint(const Cone& cone, const Vector3& point) {
+CollisionData ColFunction::ColCheck_ConeToPoint(const Cone& cone, const Vector3& point) {
 
 	// コーンの位置からポイントまでの距離
 	const Vector3 dist = point - cone.transform.position;

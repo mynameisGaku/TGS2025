@@ -10,7 +10,7 @@
 ColliderBase::ColliderBase() {
 
 	transform = nullptr;
-	lastGlobal = nullptr;
+	global = nullptr;
 	hittedData = nullptr;
 
 	shape = ColDefine::Shape::sNone;
@@ -23,7 +23,7 @@ ColliderBase::ColliderBase() {
 ColliderBase::~ColliderBase() {
 
 	Function::DeletePointer(transform);
-	Function::DeletePointer(lastGlobal);
+	Function::DeletePointer(global);
 	Function::DeletePointer(hittedData);
 
 	CollisionManager* colM = FindGameObject<CollisionManager>();
@@ -38,10 +38,10 @@ void ColliderBase::BaseInit(const ColDefine::ColBaseParam& param) {
 	else
 		*transform = param.trs;
 
-	if (lastGlobal == nullptr)
-		lastGlobal = new Transform(param.trs);
+	if (global == nullptr)
+		global = new Transform(param.trs);
 	else
-        *lastGlobal = param.trs;
+        *global = param.trs;
 
 	Object3D* obj = Parent<Object3D>();
 	if (obj != nullptr)
@@ -64,9 +64,8 @@ void ColliderBase::BaseInit(const ColDefine::ColBaseParam& param) {
 }
 
 void ColliderBase::UpdateData() {
-
-	if (lastGlobal != nullptr) {
-		*lastGlobal = transform->Global();
+	if (global != nullptr) {
+		*global = transform->Global();
 	}
 }
 

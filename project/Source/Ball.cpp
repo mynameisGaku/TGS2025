@@ -23,7 +23,7 @@ Ball::Ball()
 {
 	transform->scale = V3::ONE * BALL_SCALE;
 	m_Physics = Object3D::AddComponent<Physics>();
-	m_Physics->Init(BALL_REF.GravityDefault, BALL_REF.FrictionDefault);
+	m_Physics->Init(V3::ZERO, V3::ZERO);
 
 	m_State = S_OWNED;
 	m_Owner = nullptr;
@@ -35,6 +35,11 @@ Ball::Ball()
 
 	m_IsHoming = false;
 	m_IsActive = true;
+
+	m_AlphaRate = 0.0f;
+	m_HomingPeriod = 0.0f;
+	m_pManager = nullptr;
+	m_Index = 0;
 }
 
 Ball::~Ball()
@@ -79,6 +84,8 @@ void Ball::Init(std::string charaTag)
 
 	m_IsHoming = false;
 	m_IsActive = true;
+
+	m_Collider->SetIsActive(false);
 }
 
 void Ball::Update()
@@ -159,6 +166,9 @@ void Ball::Throw(const Vector3& velocity)
 {
 	m_State = S_THROWN;
 	setVelocity(velocity * BALL_REF.SpeedDefault);
+	m_Physics->SetGravity(BALL_REF.GravityDefault);
+	m_Physics->SetFriction(BALL_REF.FrictionDefault);
+	m_Collider->SetIsActive(true);
 	m_Owner = nullptr;
 }
 
@@ -254,6 +264,8 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 void Ball::collisionToGround()
 {
+	if (m_State == S_OWNED) return;
+
 	Vector3 hitPos;
 	bool hit = Stage::ColCheckGround(transform->position + V3::SetY(BALL_RADIUS), transform->position - V3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)

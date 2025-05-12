@@ -44,8 +44,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
 
 	BallManager* ballM = Instantiate<BallManager>();
-	Ball* ball = ballM->CreateBall(Vector3(0.0f, 500.0f, -50.0f));
-	ball->Throw(Vector3(20.0f, 50.0f, 5.0f));
 
 	fragM = Instantiate<CrystalFragmentManager>();
 	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eFIRE, CrystalSize::sSMALL);

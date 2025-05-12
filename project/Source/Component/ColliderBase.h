@@ -56,8 +56,7 @@ public:
 
 	//==========================================================================================
 	// ▼ゲッター
-
-	inline Transform* LastTransform() const { return lastGlobal; }
+	inline const Transform Global() const { return *global; }
 
 	// 当たり判定の形を取得する
 	inline const ColDefine::Shape Shape() const { return shape; }
@@ -78,7 +77,7 @@ public:
 	inline HittedData* HittedDataPtr() const { return hittedData; }
 
 protected:
-	Transform* lastGlobal;	// 1フレーム前の当たり判定時のトランスフォーム
+	Transform* global;	// 当たり判定時のトランスフォーム
 
 	ColDefine::Shape shape;	// 当たり判定の形
 	ColDefine::Tag tag;		// 当たり判定の系統

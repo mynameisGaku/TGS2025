@@ -10,8 +10,8 @@
 struct TimelineEvent
 {
 	std::string Name;
-	float StartFrame;
-	float EndFrame;
+	float StartFrame = 0.0f;
+	float EndFrame = 0.0f;
 	nlohmann::json Argument;
 };
 
@@ -23,9 +23,9 @@ void to_json(nlohmann::json& j, const TimelineEvent& ev)
 void from_json(const nlohmann::json& j, TimelineEvent& ev)
 {
 	j.at("Name").get_to(ev.Name);
-	j.at("StartFrame").get_to(ev.StartFrame);
-	if (j.contains("EndFrame"))
-		j.at("EndFrame").get_to(ev.EndFrame);
+	j.at("Start").get_to(ev.StartFrame);
+	if (j.contains("End"))
+		j.at("End").get_to(ev.EndFrame);
 	else
 		ev.EndFrame = ev.StartFrame;
 	j.at("Argument").get_to(ev.Argument);
@@ -35,10 +35,10 @@ template <class T>
 class Timeline
 {
 public:
-	Timeline(T* owner)
+	Timeline(T* owner, Animator* animator)
 	{
 		m_Owner = owner;
-		m_Animator = nullptr;
+		m_Animator = animator;
 		m_LastFrame = 0.0f;
 	}
 
@@ -97,20 +97,20 @@ public:
 		m_LastFrame = 0.0f;
 	}
 
-	void SetFunction(std::string eventName, void(T::* function)(nlohmann::json))
+	void SetFunction(std::string eventName, void(T::* function)(const nlohmann::json&))
 	{
 		/*
 		イベント名を指定して関数ポインタを紐づける
 		*/
 
-		m_Functions.insert(eventName, function);
+		m_Functions.emplace(eventName, function);
 	}
 
 private:
 	T* m_Owner;
 	Animator* m_Animator;
 	std::unordered_map<std::string, nlohmann::json> m_Timelines;
-	std::unordered_map<std::string, void(T::*)(nlohmann::json)> m_Functions;
+	std::unordered_map<std::string, void(T::*)(const nlohmann::json&)> m_Functions;
 
 	std::list<TimelineEvent> m_Events;
 

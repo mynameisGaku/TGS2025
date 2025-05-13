@@ -4,6 +4,7 @@
 #include <string>
 #include <Library/time.h>
 #include "TinyFSM.h"
+#include "nlohmann/json_fwd.hpp"
 
 class CharaHP;
 class CharaStamina;
@@ -195,4 +196,7 @@ private:
 	void slideUpdate();
 
 	void getHit(Ball* hit);
+	
+	//=== タイムライン用 ===
+	void setAnimationSpeed(const nlohmann::json& argument);
 };

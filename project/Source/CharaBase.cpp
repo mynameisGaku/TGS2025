@@ -84,9 +84,6 @@ CharaBase::CharaBase()
 #endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
-
-	m_Timeline = new Timeline<CharaBase>(this);
-	m_Timeline->LoadJsons("data/Json/Chara/State");
 }
 
 CharaBase::~CharaBase()
@@ -124,6 +121,10 @@ void CharaBase::Init(std::string tag)
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
 	m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
+
+	m_Timeline = new Timeline<CharaBase>(this, m_Animator);
+	m_Timeline->SetFunction("SetAnimationSpeed", &CharaBase::setAnimationSpeed);
+	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
 
@@ -495,7 +496,7 @@ void CharaBase::StateActionIdle(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("ActionIdle");
+		m_Timeline->Play("ActionIdle");
 		m_EmoteTimer = CHARADEFINE_REF.EmoteInterval;
 	}
 	break;
@@ -1239,4 +1240,9 @@ void CharaBase::getHit(Ball* hit)
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
 	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:外部化
+}
+
+void CharaBase::setAnimationSpeed(const nlohmann::json& argument)
+{
+	m_Animator->SetPlaySpeed(argument.at("Speed").get<float>());
 }

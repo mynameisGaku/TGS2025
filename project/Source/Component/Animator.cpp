@@ -6,6 +6,7 @@
 #include "../../Library/magic_enum.hpp"
 #include "../Util/Utils.h"
 #include "../Object3D.h"
+#include "../settings_json.h"
 #include <assert.h>
 
 //ToDo:ŠO•”‰»
@@ -275,6 +276,7 @@ void Animator::Update() {
 
 void Animator::LoadAnim(std::string folder, std::string name, AnimOption option) {
 	std::string fullPath = folder + name;
+	// Šg’£Žq‚ð•âŠ®
 	if (name.find(".mv1") == std::string::npos)
 	{
 		fullPath += ".mv1";
@@ -288,6 +290,40 @@ void Animator::LoadAnim(std::string folder, std::string name, AnimOption option)
 	// ToDo:start,end‚ð‚Ç‚¤‚µ‚æ‚¤
 	anims[name].startFrame = 0.0;
 	anims[name].endFrame = MV1GetAnimTotalTime(anims[name].handle, 0);
+}
+
+void Animator::LoadAnimsFromJson(std::string path) {
+	// Šg’£Žq‚ð•âŠ®
+	if (path.find(".json") == std::string::npos) {
+		path += ".json";
+	}
+
+	std::string key = path;
+
+	// JSON “Ç‚Ýž‚Ý
+	auto jsonLoader = Settings_json::Inst();
+	jsonLoader->LoadSettingJson(path, key);
+
+	std::string folder = jsonLoader->GetOrDefault<std::string>("Folder", "", key);
+
+	std::unordered_map<std::string, nlohmann::json> files;
+	files = jsonLoader->GetOrDefault<std::unordered_map<std::string, nlohmann::json>>("Files", files, key);
+
+	for (auto itr = files.begin(); itr != files.end(); itr++) {
+		std::string name = (*itr).first;
+		AnimOption option;
+
+		option.defaultAnimSpeed = jsonLoader->GetOrDefault<float>("Files." + name + ".DefaultAnimSpeed", 1.0f, key);
+		option.isFixedRoot[0] = jsonLoader->GetOrDefault<bool>("Files." + name + ".IsFixedRoot.X", false, key);
+		option.isFixedRoot[1] = jsonLoader->GetOrDefault<bool>("Files." + name + ".IsFixedRoot.Y", false, key);
+		option.isFixedRoot[2] = jsonLoader->GetOrDefault<bool>("Files." + name + ".IsFixedRoot.Z", false, key);
+		option.isLoop = jsonLoader->GetOrDefault<bool>("Files." + name + ".IsLoop", false, key);
+		option.offset.x = jsonLoader->GetOrDefault<float>("Files." + name + ".Offset.X", 0.0f, key);
+		option.offset.y = jsonLoader->GetOrDefault<float>("Files." + name + ".Offset.Y", 0.0f, key);
+		option.offset.z = jsonLoader->GetOrDefault<float>("Files." + name + ".Offset.Z", 0.0f, key);
+
+		LoadAnim(folder, name, option);
+	}
 }
 
 void Animator::Play(std::string label, float speed) {

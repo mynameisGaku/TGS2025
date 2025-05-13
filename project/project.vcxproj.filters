@@ -388,6 +388,9 @@
     <ClCompile Include="Source\CharaHPRef.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\AnimatorJson.cpp">
+      <Filter>Framework\04_Component\Animator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\bootScene.h">
@@ -839,6 +842,9 @@
     </ClInclude>
     <ClInclude Include="Source\CharaHPRef.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\AnimatorJson.h">
+      <Filter>Framework\04_Component\Animator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

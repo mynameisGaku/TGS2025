@@ -51,6 +51,12 @@ public:
 	void LoadAnim(std::string folder, std::string name, AnimOption option);
 
 	/// <summary>
+	/// アニメーションをJsonを元に一括ロード
+	/// </summary>
+	/// <param name="path">Jsonファイルのパス</param>
+	void LoadAnimsFromJson(std::string path);
+
+	/// <summary>
 	/// アニメーションを再生する
 	/// 同じアニメーションの場合は、無視する
 	/// </summary>

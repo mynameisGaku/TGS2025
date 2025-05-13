@@ -118,6 +118,10 @@ void CharaBase::Init(std::string tag)
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
+	m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
+
+#if FALSE
+
 	//=== 腕アニメーション（ボールを持つ、投げる） ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToHold", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "AimToThrow", AnimOption());
@@ -157,6 +161,8 @@ void CharaBase::Init(std::string tag)
 	m_Animator->LoadAnim("data/Animation/", "StandingIdle", AnimOption().SetIsLoop(true));
 	m_Animator->LoadAnim("data/Animation/", "StandingIdleEmote", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "StandingIdleToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
+
+#endif // FALSE
 }
 
 void CharaBase::Update() {

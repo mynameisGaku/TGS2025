@@ -382,27 +382,6 @@ namespace Function {
 	{
 		std::list<std::string> fileNames;
 
-#if FALSE
-
-		HANDLE hFind;
-		WIN32_FIND_DATA win32fd;
-		hFind = FindFirstFile(folder.c_str(), &win32fd);
-		assert(hFind != INVALID_HANDLE_VALUE);
-		do {
-			std::string fname = win32fd.cFileName;
-			if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-				// ディレクトリ（フォルダ）
-				fileNames.merge(FindFileNames(folder + "/" + fname));
-				continue;
-			}
-			else {
-				// ファイル
-				fileNames.push_back(fname);
-			}
-		} while (FindNextFile(hFind, &win32fd) != 0);
-
-#endif // FALSE
-
 		std::string f;
 		for (const std::filesystem::directory_entry& i : std::filesystem::recursive_directory_iterator(folder))
 		{

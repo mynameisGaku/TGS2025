@@ -216,6 +216,7 @@ void CharaBase::Update() {
 	}
 
 	m_FSM->Update();
+	m_Timeline->Update();
 
 	Object3D::Update();
 }

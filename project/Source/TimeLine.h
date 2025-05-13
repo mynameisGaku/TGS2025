@@ -57,7 +57,15 @@ public:
 		float currentFrame = m_Animator->CurrentFrame();
 		bool looped = currentFrame < m_LastFrame;
 
+		for (const TimelineEvent& event : m_Events)
+		{
+			if (m_Functions.contains(event.Name))
+			{
+				(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+			}
+		}
 
+		m_LastFrame = currentFrame;
 	}
 
 	void LoadJsons(std::string folder)

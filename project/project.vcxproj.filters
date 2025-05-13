@@ -846,6 +846,9 @@
     <ClInclude Include="Source\Component\AnimatorJson.h">
       <Filter>Framework\04_Component\Animator</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Timeline.h">
+      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -1196,6 +1199,9 @@
     <Filter Include="Application\Scenes\02_PlayScene\Effect Json">
       <UniqueIdentifier>{1c10eef4-390b-4b88-9463-bb50c53bbb94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Scenes\02_PlayScene\Chara\State">
+      <UniqueIdentifier>{8d52e50b-1e57-4040-be87-e6d412a180e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Crystal\CrystalFragment.json">
@@ -1248,6 +1254,9 @@
     </None>
     <None Include="data\Json\Chara\CharaHP.json">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ActionIdle.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

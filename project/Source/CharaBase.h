@@ -12,6 +12,8 @@ class BallManager;
 class Physics;
 class Catcher;
 class Animator;
+template <class C>
+class Timeline;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -186,6 +188,7 @@ private:
 	bool			m_IsLanding;			// 着地中
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
+	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 
 	void idleUpdate();
 	void runUpdate();

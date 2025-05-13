@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include <filesystem>
 
 #define _OX_EPSILON_ 0.000001f // 誤差
 
@@ -374,5 +375,50 @@ namespace Function {
 	static float Lerp(float v1, float v2, float t)
 	{
 		return v1 + ((v2 - v1) * t);
+	}
+
+	// フォルダ内の全ファイルのファイル名を取得
+	inline std::list<std::string> FindFileNames(std::string folder, bool removeExtention)
+	{
+		std::list<std::string> fileNames;
+
+#if FALSE
+
+		HANDLE hFind;
+		WIN32_FIND_DATA win32fd;
+		hFind = FindFirstFile(folder.c_str(), &win32fd);
+		assert(hFind != INVALID_HANDLE_VALUE);
+		do {
+			std::string fname = win32fd.cFileName;
+			if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+				// ディレクトリ（フォルダ）
+				fileNames.merge(FindFileNames(folder + "/" + fname));
+				continue;
+			}
+			else {
+				// ファイル
+				fileNames.push_back(fname);
+			}
+		} while (FindNextFile(hFind, &win32fd) != 0);
+
+#endif // FALSE
+
+		std::string f;
+		for (const std::filesystem::directory_entry& i : std::filesystem::recursive_directory_iterator(folder))
+		{
+			std::filesystem::path p = i.path().filename();
+			f = p.string();
+
+			//拡張子の分を消す
+			if (removeExtention)
+			{
+				size_t sub_s = f.find_last_of(".");
+				f = f.substr(0, sub_s);
+			}
+
+			fileNames.push_back(f);
+		}
+
+		return fileNames;
 	}
 };

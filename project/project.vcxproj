@@ -256,6 +256,7 @@
     <ClInclude Include="Source\StateBase.h" />
     <ClInclude Include="Source\StateManager.h" />
     <ClInclude Include="Source\SystemManager.h" />
+    <ClInclude Include="Source\Timeline.h" />
     <ClInclude Include="Source\TinyFSM.h" />
     <ClInclude Include="Source\titleScene.h" />
     <ClInclude Include="Source\UI_Base.h" />
@@ -428,6 +429,7 @@
     <None Include="data\Json\Chara\CharaDefine.json" />
     <None Include="data\Json\Chara\CharaHP.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
+    <None Include="data\Json\Chara\State\ActionIdle.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
     <None Include="data\Json\Effect\Catch_Ready.json" />

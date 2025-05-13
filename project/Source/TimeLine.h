@@ -2,10 +2,12 @@
 #include <string>
 #include <list>
 #include <unordered_map>
+#include <fstream>
 #include "nlohmann/json.hpp"
 #include "Component/Animator.h"
+#include "Util/Utils.h"
 
-struct TimeLineEvent
+struct TimelineEvent
 {
 	std::string Name;
 	float StartFrame;
@@ -13,28 +15,34 @@ struct TimeLineEvent
 	nlohmann::json Argument;
 };
 
-void to_json(nlohmann::json& j, const TimeLineEvent& ev)
+void to_json(nlohmann::json& j, const TimelineEvent& ev)
 {
 
 }
 
-void from_json(const nlohmann::json& j, TimeLineEvent& ev)
+void from_json(const nlohmann::json& j, TimelineEvent& ev)
 {
-
+	j.at("Name").get_to(ev.Name);
+	j.at("StartFrame").get_to(ev.StartFrame);
+	if (j.contains("EndFrame"))
+		j.at("EndFrame").get_to(ev.EndFrame);
+	else
+		ev.EndFrame = ev.StartFrame;
+	j.at("Argument").get_to(ev.Argument);
 }
 
 template <class T>
-class TimeLine
+class Timeline
 {
 public:
-	TimeLine(T* owner)
+	Timeline(T* owner)
 	{
 		m_Owner = owner;
 		m_Animator = nullptr;
 		m_LastFrame = 0.0f;
 	}
 
-	~TimeLine()
+	~Timeline()
 	{
 
 	}
@@ -52,12 +60,41 @@ public:
 
 	}
 
-	void Play(nlohmann::json timeline)
+	void LoadJsons(std::string folder)
 	{
 		/*
-		Jsonを受け取って、イベント名、引数、開始時間、終了時間を取得、イベントリストに登録
+		Jsonを読み込んでJsonのまま保持
+		*/
+
+		// フォルダ内の全ファイルのファイル名を取得
+		std::list<std::string> fileNames = Function::FindFileNames(folder, true);
+
+		// 読み込み
+		for (std::string fileName : fileNames)
+		{
+			nlohmann::json json;
+
+			std::ifstream ifJson(folder + "/" + fileName + ".json");
+			ifJson >> json;
+
+			m_Timelines.emplace(fileName, json);
+		}
+	}
+
+	void Play(std::string name)
+	{
+		/*
+		名前からJsonを参照、イベント名、引数、開始時間、終了時間を取得、イベントリストに登録
 		アニメーション再生、タイムライン開始
 		*/
+
+		nlohmann::json timeline = m_Timelines.at(name);
+
+		std::string animName = timeline.at("Animation").get<std::string>();
+		m_Animator->Play(animName);
+
+		m_Events = timeline.at("Events");
+		m_LastFrame = 0.0f;
 	}
 
 	void SetFunction(std::string eventName, void(T::* function)(nlohmann::json))
@@ -65,12 +102,17 @@ public:
 		/*
 		イベント名を指定して関数ポインタを紐づける
 		*/
+
+		m_Functions.insert(eventName, function);
 	}
 
 private:
 	T* m_Owner;
 	Animator* m_Animator;
-	std::list<TimeLineEvent> m_Events;
-	std::unordered_map<std::string, void(T::* function)(nlohmann::json)> m_Functions;
+	std::unordered_map<std::string, nlohmann::json> m_Timelines;
+	std::unordered_map<std::string, void(T::*)(nlohmann::json)> m_Functions;
+
+	std::list<TimelineEvent> m_Events;
+
 	float m_LastFrame;
 };

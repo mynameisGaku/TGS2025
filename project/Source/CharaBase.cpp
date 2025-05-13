@@ -14,6 +14,7 @@
 #include "CharaDefineRef.h"
 #include "Component/Animator.h"
 #include "Util/Utils.h"
+#include "Timeline.h"
 
 using namespace KeyDefine;
 
@@ -83,6 +84,9 @@ CharaBase::CharaBase()
 #endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+
+	m_Timeline = new Timeline<CharaBase>(this);
+	m_Timeline->LoadJsons("data/Json/Chara/State");
 }
 
 CharaBase::~CharaBase()
@@ -91,6 +95,7 @@ CharaBase::~CharaBase()
 	OutputDebugString(output.c_str());
 
 	Function::DeletePointer(m_FSM);
+	Function::DeletePointer(m_Timeline);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();

@@ -59,9 +59,28 @@ public:
 
 		for (const TimelineEvent& event : m_Events)
 		{
-			if (m_Functions.contains(event.Name))
+			if (not m_Functions.contains(event.Name)) continue;
+
+			if (looped)
 			{
-				(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+				// 終了時まで
+				if (m_LastFrame <= event.StartFrame && event.StartFrame <= m_Animator->GetAnimInfo().endFrame)
+				{
+					(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+				}
+				// 開始時から
+				if (0 <= event.StartFrame && event.StartFrame <= currentFrame)
+				{
+					(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+				}
+			}
+			else
+			{
+				// 跨いだら
+				if (m_LastFrame <= event.StartFrame && event.StartFrame <= currentFrame)
+				{
+					(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+				}
 			}
 		}
 
@@ -74,6 +93,8 @@ public:
 		Jsonを読み込んでJsonのまま保持
 		*/
 
+		m_Timelines.clear();
+
 		// フォルダ内の全ファイルのファイル名を取得
 		std::list<std::string> fileNames = Function::FindFileNames(folder, true);
 
@@ -84,6 +105,7 @@ public:
 
 			std::ifstream ifJson(folder + "/" + fileName + ".json");
 			ifJson >> json;
+			ifJson.close();
 
 			m_Timelines.emplace(fileName, json);
 		}

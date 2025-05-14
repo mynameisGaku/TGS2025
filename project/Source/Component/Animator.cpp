@@ -387,3 +387,9 @@ void Animator::Play(std::string label, float speed) {
 		current.maxFrame = anim.endFrame;
 #endif // FALSE
 }
+
+void Animator::SetPlaySpeed(float speed)
+{
+	playSpeed = speed;
+	current->SetPlaySpeed(playSpeed);
+}

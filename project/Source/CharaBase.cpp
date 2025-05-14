@@ -48,6 +48,7 @@ CharaBase::CharaBase()
 	m_SlideTimer			= 0.0f;
 	m_EffectTransform		= nullptr;
 	m_pBallManager			= nullptr;
+	m_Timeline				= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 
@@ -213,6 +214,12 @@ void CharaBase::Update() {
 		{
 			m_pPhysics->SetFriction(FRICTION / 10.0f);
 		}
+	}
+
+	// デバッグ機能
+	if (CheckHitKey(KEY_INPUT_R))
+	{
+		m_Timeline->LoadJsons("data/Json/Chara/State");
 	}
 
 	m_FSM->Update();
@@ -796,7 +803,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("Fall");
+		m_Timeline->Play("Fall");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -919,7 +926,7 @@ void CharaBase::StateRun(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("Run");
+		m_Timeline->Play("Run");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新

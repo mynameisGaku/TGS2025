@@ -72,7 +72,7 @@ public:
 	/// 標準速度は1.0f
 	/// </summary>
 	/// <param name="speed">再生速度</param>
-	inline void SetPlaySpeed(float speed) { playSpeed = speed; }
+	void SetPlaySpeed(float speed);
 
 	/// <summary>
 	/// 今のアニメーションの進行度をセット
@@ -117,12 +117,16 @@ public:
 
 	inline const std::unordered_map<std::string, AnimInfo> GetAllAnimInfo() const { return anims; }
 
-	inline AnimInfo GetAnimInfo(std::string type) {
+	inline AnimInfo GetAnimInfo() const {
+		return GetAnimInfo(playingLabel);
+	}
+
+	inline AnimInfo GetAnimInfo(std::string type) const {
 
 		if (anims.contains(type) == false)
 			return AnimInfo();
 
-		return anims[type];
+		return anims.at(type);
 	}
 
 	/// <summary>

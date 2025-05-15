@@ -434,6 +434,10 @@
     <None Include="data\Json\Chara\State\ActionIdleToJump.json" />
     <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json" />
     <None Include="data\Json\Chara\State\Fall.json" />
+    <None Include="data\Json\Chara\State\FallToRoll.json" />
+    <None Include="data\Json\Chara\State\Roll.json" />
+    <None Include="data\Json\Chara\State\RollToActionIdle.json" />
+    <None Include="data\Json\Chara\State\RollToRun.json" />
     <None Include="data\Json\Chara\State\Run.json" />
     <None Include="data\Json\Chara\State\RunToActionIdle.json" />
     <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json" />

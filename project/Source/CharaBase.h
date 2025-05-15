@@ -194,6 +194,9 @@ private:
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
+	bool			m_CanMove;				// 移動可能か
+	bool			m_CanRot;				// 回転可能か
+	bool			m_IsMove;				// 移動しようとしているか
 
 	void idleUpdate();
 	void runUpdate();
@@ -203,6 +206,10 @@ private:
 	
 	//=== タイムライン用 ===
 	void setAnimationSpeed(const nlohmann::json& argument);
-
 	void moveToPosition(const nlohmann::json& argument);
+	void changeToRoll(const nlohmann::json& argument);
+	void endRoll(const nlohmann::json& argument);
+	void setCanMove(const nlohmann::json& argument);
+	void setCanRot(const nlohmann::json& argument);
+	void setVelocity(const nlohmann::json& argument);
 };

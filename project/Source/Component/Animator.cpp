@@ -40,16 +40,7 @@ Animator::~Animator() {
 		}
 	}
 
-	// コマンドの実行権限を復活させる
-	for (auto& anim : anims) {
-		for (auto& event : anim.second.event) {
-			Function::DeletePointer(event);
-		}
-		anim.second.event.clear();
-	}
-
-	// アニメーション情報を解放する
-	anims.clear();
+	DeleteAnimInfos();
 }
 
 void Animator::Init(std::string _origin, float _frameRate, float _mergeTimeMax) {
@@ -204,9 +195,10 @@ void Animator::Update() {
 	if (prevs.size() > 0) {
 		// ブレンド時間を進める
 		mergeTime += Time::DeltaTimeLapseRate() * playSpeed;
+		const float animMergeTimeMax = GetAnimInfo().mergeTimeMax;
 
 		// ブレンド終了時なら
-		if (mergeTime >= mergeTimeMax) {
+		if (mergeTime >= animMergeTimeMax) {
 
 			// 前アニメーション終了処理
 			for (AttachedAnimation* prev : prevs) {
@@ -215,11 +207,14 @@ void Animator::Update() {
 			}
 			prevs.clear();
 
-			mergeTime = mergeTimeMax;
+			mergeTime = animMergeTimeMax;
 		}
 
 		// 時間に応じてブレンド率を変える
-		rate = mergeTime / mergeTimeMax;
+		if (animMergeTimeMax > 0)
+			rate = mergeTime / animMergeTimeMax;
+		else
+			rate = 1.0f;
 		// 全体が1になるようにブレンド
 		current->SetBlendRate(rate);
 
@@ -287,7 +282,6 @@ void Animator::LoadAnim(std::string folder, std::string name, AnimOption option)
 	anims[name].animName = name;
 	anims[name].option = option;
 
-	// ToDo:start,endをどうしよう
 	anims[name].startFrame = 0.0;
 	anims[name].endFrame = MV1GetAnimTotalTime(anims[name].handle, 0);
 }
@@ -323,6 +317,10 @@ void Animator::LoadAnimsFromJson(std::string path) {
 		option.offset.z = jsonLoader->GetOrDefault<float>("Files." + name + ".Offset.Z", 0.0f, key);
 
 		LoadAnim(folder, name, option);
+
+		anims.at(name).startFrame = jsonLoader->GetOrDefault<float>("Files." + name + ".StartFrame", anims.at(name).startFrame, key);
+		anims.at(name).endFrame = jsonLoader->GetOrDefault<float>("Files." + name + ".EndFrame", anims.at(name).endFrame, key);
+		anims.at(name).mergeTimeMax = jsonLoader->GetOrDefault<float>("Files." + name + ".MergeTime", mergeTimeMax, key);
 	}
 }
 
@@ -367,7 +365,7 @@ void Animator::Play(std::string label, float speed) {
 
 	if (prevs.empty())
 	{
-		mergeTime = 1.0f;
+		mergeTime = anim.mergeTimeMax;
 		current->SetBlendRate(1.0f);
 	}
 
@@ -386,6 +384,20 @@ void Animator::Play(std::string label, float speed) {
 	else
 		current.maxFrame = anim.endFrame;
 #endif // FALSE
+}
+
+void Animator::DeleteAnimInfos()
+{
+	// アニメーション情報を解放する
+	for (auto& anim : anims) {
+		for (auto& event : anim.second.event) {
+			Function::DeletePointer(event);
+		}
+		anim.second.event.clear();
+		MV1DeleteModel(anim.second.handle);
+	}
+
+	anims.clear();
 }
 
 void Animator::SetPlaySpeed(float speed)

@@ -45,6 +45,8 @@ struct AnimInfo {
 	float startFrame;	// 再生開始フレーム
 	float endFrame;		// 再生終了フレーム
 
+	float mergeTimeMax;	// ブレンドにかかる時間
+
 	AnimOption option;	// 任意のオプション
 
 	std::vector<AnimationEvent*> event;	// アニメーションに合わせて行う処理
@@ -53,7 +55,8 @@ struct AnimInfo {
 		handle(-1),
 		animName(""),
 		startFrame(0.0f),
-		endFrame(0.0f)
+		endFrame(0.0f),
+		mergeTimeMax(0.0f)
 	{
 	}
 };

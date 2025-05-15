@@ -50,6 +50,9 @@ CharaBase::CharaBase()
 	m_EffectTransform		= nullptr;
 	m_pBallManager			= nullptr;
 	m_Timeline				= nullptr;
+	m_CanMove				= true;
+	m_CanRot				= true;
+	m_IsMove				= false;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 
@@ -127,6 +130,11 @@ void CharaBase::Init(std::string tag)
 	m_Timeline = new Timeline<CharaBase>(this, m_Animator);
 	m_Timeline->SetFunction("SetAnimationSpeed", &CharaBase::setAnimationSpeed);
 	m_Timeline->SetFunction("MoveToPosition", &CharaBase::moveToPosition);
+	m_Timeline->SetFunction("ChangeToRoll", &CharaBase::changeToRoll);
+	m_Timeline->SetFunction("EndRoll", &CharaBase::endRoll);
+	m_Timeline->SetFunction("SetCanMove", &CharaBase::setCanMove);
+	m_Timeline->SetFunction("SetCanRot", &CharaBase::setCanRot);
+	m_Timeline->SetFunction("SetVelocity", &CharaBase::setVelocity);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -222,10 +230,14 @@ void CharaBase::Update() {
 	if (CheckHitKey(KEY_INPUT_R))
 	{
 		m_Timeline->LoadJsons("data/Json/Chara/State");
+		m_Animator->DeleteAnimInfos();
+		m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 	}
 
 	m_FSM->Update();
 	m_Timeline->Update();
+
+	m_IsMove = false;
 
 	Object3D::Update();
 }
@@ -371,21 +383,27 @@ void CharaBase::HitGroundProcess() {
 
 void CharaBase::Move(const Vector3& dir)
 {
-	if (m_SlideTimer > 0.0f) return;
+	m_IsMove = dir.SquareSize() > 0;
 
-	float currentRot = transform->rotation.y;	// 現在の向き
-	float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
+	if (m_CanRot)
+	{
+		float currentRot = transform->rotation.y;	// 現在の向き
+		float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
 
-	// 徐々に終点の向きへ合わせる
-	transform->rotation.y = Function::RotAngle(currentRot, terminusRot, m_RotSpeed);
+		// 徐々に終点の向きへ合わせる
+		transform->rotation.y = Function::RotAngle(currentRot, terminusRot, m_RotSpeed);
+	}
 
-	float deltaTimeMoveSpeed = m_MoveSpeed * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
+	if (m_CanMove)
+	{
+		float deltaTimeMoveSpeed = m_MoveSpeed * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
 
-	Vector3 velocity = dir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
+		Vector3 velocity = dir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
 
-	// 速度を適応させる
-	m_pPhysics->velocity.x = velocity.x;
-	m_pPhysics->velocity.z = velocity.z;
+		// 速度を適応させる
+		m_pPhysics->velocity.x = velocity.x;
+		m_pPhysics->velocity.z = velocity.z;
+	}
 }
 
 void CharaBase::Jump()
@@ -434,15 +452,15 @@ void CharaBase::ThrowBallForward()
 
 void CharaBase::ThrowHomingBall()
 {
-    if (m_pBall == nullptr)
-        return;
+	if (m_pBall == nullptr)
+		return;
 
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = forward + V3::SetY(0.4f);
-    //m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate), this);
-    m_pBall->ThrowHoming(velocity * 3000.0f, this);
-    m_pLastBall = m_pBall;
-    m_pBall = nullptr;
+	//m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate), this);
+	m_pBall->ThrowHoming(velocity * 3000.0f, this);
+	m_pLastBall = m_pBall;
+	m_pBall = nullptr;
 }
 
 void CharaBase::GenerateBall()
@@ -878,15 +896,11 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("FallToRoll");
+		m_Timeline->Play("FallToRoll");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_Animator->IsFinished())
-		{
-			m_FSM->ChangeState(&CharaBase::StateRoll); // ステートを変更
-		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -895,6 +909,10 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
+
+		m_CanMove = true;
+		m_CanRot = true;
 	}
 	break;
 	}
@@ -934,22 +952,11 @@ void CharaBase::StateRoll(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("Roll");
+		m_Timeline->Play("Roll");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_Animator->IsFinished())
-		{
-			if (m_pPhysics->FlatVelocity().SquareSize() > 0)
-			{
-				m_FSM->ChangeState(&CharaBase::StateRollToRun); // ステートを変更
-			}
-			else
-			{
-				m_FSM->ChangeState(&CharaBase::StateRollToActionIdle); // ステートを変更
-			}
-		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -958,6 +965,9 @@ void CharaBase::StateRoll(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
+		m_CanMove = true;
+		m_CanRot = true;
 	}
 	break;
 	}
@@ -969,7 +979,9 @@ void CharaBase::StateRollToActionIdle(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("RollToActionIdle");
+		float frame = m_Animator->CurrentFrame();
+		m_Timeline->Play("RollToActionIdle");
+		m_Animator->SetCurrentFrame(frame);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -987,6 +999,7 @@ void CharaBase::StateRollToActionIdle(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -998,7 +1011,9 @@ void CharaBase::StateRollToRun(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("RollToRun");
+		float frame = m_Animator->CurrentFrame();
+		m_Timeline->Play("RollToRun");
+		m_Animator->SetCurrentFrame(frame);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1016,6 +1031,7 @@ void CharaBase::StateRollToRun(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -1142,6 +1158,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("Slide");
+		m_CanMove = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1159,6 +1176,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanMove = true;
 	}
 	break;
 	}
@@ -1371,4 +1389,37 @@ void CharaBase::moveToPosition(const nlohmann::json& argument)
 
 	transform->position += add;
 	transform->position -= sub;
+}
+
+void CharaBase::changeToRoll(const nlohmann::json& argument)
+{
+	m_FSM->ChangeState(&CharaBase::StateRoll); // ステートを変更
+}
+
+void CharaBase::endRoll(const nlohmann::json& argument)
+{
+	if (m_IsMove)
+	{
+		m_FSM->ChangeState(&CharaBase::StateRollToRun); // ステートを変更
+	}
+	else
+	{
+		m_FSM->ChangeState(&CharaBase::StateRollToActionIdle); // ステートを変更
+	}
+}
+
+void CharaBase::setCanMove(const nlohmann::json& argument)
+{
+	m_CanMove = argument.at("CanMove").get<bool>();
+	m_CanRot = m_CanMove;
+}
+
+void CharaBase::setCanRot(const nlohmann::json& argument)
+{
+	m_CanRot = argument.at("CanRot").get<bool>();
+}
+
+void CharaBase::setVelocity(const nlohmann::json& argument)
+{
+	m_pPhysics->velocity = argument.at("Velocity").get<Vector3>();
 }

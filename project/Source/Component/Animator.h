@@ -64,6 +64,8 @@ public:
 	/// <param name="speed">再生速度</param>
 	void Play(std::string label, float speed = -1.0f);
 
+	void DeleteAnimInfos();
+
 	//==========================================================================================
 	// ▼セッター
 

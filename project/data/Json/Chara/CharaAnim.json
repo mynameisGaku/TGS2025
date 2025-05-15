@@ -89,7 +89,9 @@
 
 		},
 		"Roll": {
-
+			"IsFixedRoot": {
+				"Z": true
+			}
 		},
 		"RollToActionIdle": {
 			"IsFixedRoot": {

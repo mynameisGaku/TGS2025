@@ -201,6 +201,7 @@ private:
 	void idleUpdate();
 	void runUpdate();
 	void slideUpdate();
+	void catchUpdate();
 
 	void getHit(Ball* hit);
 	

@@ -186,46 +186,6 @@ void CharaBase::Update() {
 
 	HitGroundProcess();
 
-	if (m_CatchTimer > 0.0f)
-	{
-		m_CatchTimer -= Time::DeltaTimeLapseRate();
-		if (m_CatchTimer < 0.0f)
-		{
-			m_CatchTimer = 0.0f;
-			m_Catcher->SetColliderActive(false);
-		}
-		else
-		{
-			m_Catcher->SetColliderActive(true);
-			if (m_EffectTransform != nullptr)
-			{
-				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
-				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
-			}
-		}
-
-		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
-	}
-	else
-	{
-		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
-		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
-	}
-
-	if (m_SlideTimer > 0.0f)
-	{
-		m_SlideTimer -= Time::DeltaTimeLapseRate();
-		if (m_SlideTimer < 0.0f)
-		{
-			m_SlideTimer = 0.0f;
-			m_pPhysics->SetFriction(FRICTION);
-		}
-		else
-		{
-			m_pPhysics->SetFriction(FRICTION / 10.0f);
-		}
-	}
-
 	// デバッグ機能
 	if (CheckHitKey(KEY_INPUT_R))
 	{
@@ -236,6 +196,20 @@ void CharaBase::Update() {
 
 	m_FSM->Update();
 	m_Timeline->Update();
+
+	// ボールの更新
+	if (m_pBall)
+	{
+		m_ChargeRateWatchDog -= Time::DeltaTime();
+		if (m_ChargeRateWatchDog < 0.0f)
+		{
+			m_ChargeRateWatchDog = 0.0f;
+			m_IsCharging = false;
+		}
+
+		m_pBall->transform->position = transform->Global().position;
+		m_pBall->transform->rotation = transform->Global().rotation;
+	}
 
 	m_IsMove = false;
 
@@ -357,19 +331,6 @@ void CharaBase::HitGroundProcess() {
 			m_pPhysics->SetGravity(GRAVITY);
 			m_pPhysics->SetFriction(V3::ZERO);
 		}
-	}
-
-	if (m_pBall)
-	{
-		m_ChargeRateWatchDog -= Time::DeltaTime();
-		if (m_ChargeRateWatchDog < 0.0f)
-		{
-			m_ChargeRateWatchDog = 0.0f;
-			m_IsCharging = false;
-		}
-
-		m_pBall->transform->position = transform->Global().position;
-		m_pBall->transform->rotation = transform->Global().rotation;
 	}
 
 	if (physics->velocity.y > 0)
@@ -719,6 +680,8 @@ void CharaBase::StateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		catchUpdate();
+
 		if (m_CatchTimer <= 0.0f)
 		{
 			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
@@ -1358,6 +1321,49 @@ void CharaBase::slideUpdate()
 	if (m_pPhysics->velocity.y > 0.0f)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToJump); // ステートを変更
+	}
+
+	if (m_SlideTimer > 0.0f)
+	{
+		m_SlideTimer -= Time::DeltaTimeLapseRate();
+		if (m_SlideTimer < 0.0f)
+		{
+			m_SlideTimer = 0.0f;
+			m_pPhysics->SetFriction(FRICTION);
+		}
+		else
+		{
+			m_pPhysics->SetFriction(FRICTION / 10.0f);
+		}
+	}
+}
+
+void CharaBase::catchUpdate()
+{
+	if (m_CatchTimer > 0.0f)
+	{
+		m_CatchTimer -= Time::DeltaTimeLapseRate();
+		if (m_CatchTimer < 0.0f)
+		{
+			m_CatchTimer = 0.0f;
+			m_Catcher->SetColliderActive(false);
+		}
+		else
+		{
+			m_Catcher->SetColliderActive(true);
+			if (m_EffectTransform != nullptr)
+			{
+				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
+				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
+			}
+		}
+
+		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
+	}
+	else
+	{
+		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
+		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
 	}
 }
 

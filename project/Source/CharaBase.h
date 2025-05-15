@@ -148,9 +148,13 @@ public:
 
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
-	void StateFallToRollToIdle(FSMSignal sig);
+	void StateFallToRoll(FSMSignal sig);
 
 	void StateGetBall(FSMSignal sig);
+
+	void StateRoll(FSMSignal sig);
+	void StateRollToActionIdle(FSMSignal sig);
+	void StateRollToRun(FSMSignal sig);
 
 	void StateRun(FSMSignal sig);
 	void StateRunToActionIdle(FSMSignal sig);
@@ -199,4 +203,6 @@ private:
 	
 	//=== タイムライン用 ===
 	void setAnimationSpeed(const nlohmann::json& argument);
+
+	void moveToPosition(const nlohmann::json& argument);
 };

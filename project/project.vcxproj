@@ -430,8 +430,13 @@
     <None Include="data\Json\Chara\CharaHP.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
     <None Include="data\Json\Chara\State\ActionIdle.json" />
+    <None Include="data\Json\Chara\State\ActionIdleEmote.json" />
+    <None Include="data\Json\Chara\State\ActionIdleToJump.json" />
+    <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json" />
     <None Include="data\Json\Chara\State\Fall.json" />
     <None Include="data\Json\Chara\State\Run.json" />
+    <None Include="data\Json\Chara\State\RunToActionIdle.json" />
+    <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
     <None Include="data\Json\Effect\Catch_Ready.json" />

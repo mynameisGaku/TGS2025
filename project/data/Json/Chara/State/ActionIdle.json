@@ -1,13 +1,13 @@
 {
-  "Animation": "ActionIdle",
-  "Events": [
-    {
-      "Name": "SetAnimationSpeed",
-      "Start": 0.0,
-      "End": 0.0,
-      "Argument": {
-        "Speed": 1.0
-      }
-    }
-  ]
+    "Animation": "ActionIdle",
+    "Events": [
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "End": 0.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        }
+    ]
 }

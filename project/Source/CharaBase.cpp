@@ -15,6 +15,7 @@
 #include "Component/Animator.h"
 #include "Util/Utils.h"
 #include "Timeline.h"
+#include "VectorJson.h"
 
 using namespace KeyDefine;
 
@@ -125,6 +126,7 @@ void CharaBase::Init(std::string tag)
 
 	m_Timeline = new Timeline<CharaBase>(this, m_Animator);
 	m_Timeline->SetFunction("SetAnimationSpeed", &CharaBase::setAnimationSpeed);
+	m_Timeline->SetFunction("MoveToPosition", &CharaBase::moveToPosition);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -515,7 +517,8 @@ void CharaBase::StateActionIdle(FSMSignal sig)
 		m_EmoteTimer -= Time::DeltaTimeLapseRate();
 		if (m_EmoteTimer < 0)
 		{
-			int rand = GetRand(99);
+			//int rand = GetRand(99);
+			int rand = 0;
 			if (rand < 50)
 			{
 				m_FSM->ChangeState(&CharaBase::StateActionIdleToStandingIdle); // ステートを変更
@@ -533,6 +536,7 @@ void CharaBase::StateActionIdle(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -544,7 +548,7 @@ void CharaBase::StateActionIdleEmote(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("ActionIdleEmote");
+		m_Timeline->Play("ActionIdleEmote");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -562,6 +566,7 @@ void CharaBase::StateActionIdleEmote(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -573,7 +578,7 @@ void CharaBase::StateActionIdleToJump(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("ActionIdleToJump");
+		m_Timeline->Play("ActionIdleToJump");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -590,6 +595,7 @@ void CharaBase::StateActionIdleToJump(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -632,7 +638,7 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("ActionIdleToStandingIdle");
+		m_Timeline->Play("ActionIdleToStandingIdle");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -650,6 +656,7 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -812,7 +819,7 @@ void CharaBase::StateFall(FSMSignal sig)
 		{
 			if (m_pPhysics->FlatVelocity().SquareSize() > 0)
 			{
-				m_FSM->ChangeState(&CharaBase::StateFallToRollToIdle); // ステートを変更
+				m_FSM->ChangeState(&CharaBase::StateFallToRoll); // ステートを変更
 			}
 			else
 			{
@@ -827,6 +834,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -864,20 +872,20 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateFallToRollToIdle(FSMSignal sig)
+void CharaBase::StateFallToRoll(FSMSignal sig)
 {
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("FallToRollToIdle");
+		m_Animator->Play("FallToRoll");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+			m_FSM->ChangeState(&CharaBase::StateRoll); // ステートを変更
 		}
 	}
 	break;
@@ -920,6 +928,99 @@ void CharaBase::StateGetBall(FSMSignal sig)
 	}
 }
 
+void CharaBase::StateRoll(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("Roll");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			if (m_pPhysics->FlatVelocity().SquareSize() > 0)
+			{
+				m_FSM->ChangeState(&CharaBase::StateRollToRun); // ステートを変更
+			}
+			else
+			{
+				m_FSM->ChangeState(&CharaBase::StateRollToActionIdle); // ステートを変更
+			}
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateRollToActionIdle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("RollToActionIdle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		idleUpdate();
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateRollToRun(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("RollToRun");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		runUpdate();
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateRun); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
 void CharaBase::StateRun(FSMSignal sig)
 {
 	switch (sig)
@@ -940,6 +1041,7 @@ void CharaBase::StateRun(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -951,7 +1053,7 @@ void CharaBase::StateRunToActionIdle(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("RunToActionIdle");
+		m_Timeline->Play("RunToActionIdle");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -969,6 +1071,7 @@ void CharaBase::StateRunToActionIdle(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -1150,7 +1253,7 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("StandingIdleToActionIdle");
+		m_Timeline->Play("StandingIdleToActionIdle");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1168,6 +1271,7 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -1253,4 +1357,18 @@ void CharaBase::getHit(Ball* hit)
 void CharaBase::setAnimationSpeed(const nlohmann::json& argument)
 {
 	m_Animator->SetPlaySpeed(argument.at("Speed").get<float>());
+}
+
+void CharaBase::moveToPosition(const nlohmann::json& argument)
+{
+	float progress = argument.at("Progress").get<float>();
+	float lastProgress = argument.at("LastProgress").get<float>();
+	Vector3 dest = argument.at("Position").get<Vector3>();
+	dest = VTransform(dest, transform->RotationMatrix());
+
+	Vector3 add = dest * progress;
+	Vector3 sub = dest * lastProgress;
+
+	transform->position += add;
+	transform->position -= sub;
 }

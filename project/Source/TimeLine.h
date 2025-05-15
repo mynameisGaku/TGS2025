@@ -61,26 +61,44 @@ public:
 		{
 			if (not m_Functions.contains(event.Name)) continue;
 
+			bool active = false;
+			float progress = 0.0f;
+
 			if (looped)
 			{
 				// I—¹‚Ü‚Å
-				if (m_LastFrame <= event.StartFrame && event.StartFrame <= m_Animator->GetAnimInfo().endFrame)
+				if (isInRange(m_Animator->GetAnimInfo().endFrame, m_LastFrame, event.StartFrame, event.EndFrame))
 				{
-					(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+					progress = (m_Animator->GetAnimInfo().endFrame - event.StartFrame) / (event.EndFrame - event.StartFrame);
+					active = true;
 				}
 				// ŠJn‚©‚ç
-				if (0 <= event.StartFrame && event.StartFrame <= currentFrame)
+				if (isInRange(currentFrame, m_Animator->GetAnimInfo().startFrame, event.StartFrame, event.EndFrame))
 				{
-					(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+					progress = (currentFrame - event.StartFrame) / (event.EndFrame - event.StartFrame);
+					active = true;
 				}
 			}
 			else
 			{
 				// Œ×‚¢‚¾‚ç
-				if (m_LastFrame <= event.StartFrame && event.StartFrame <= currentFrame)
+				if (isInRange(currentFrame, m_LastFrame, event.StartFrame, event.EndFrame))
 				{
-					(m_Owner->*m_Functions.at(event.Name))(event.Argument);
+					progress = (currentFrame - event.StartFrame) / (event.EndFrame - event.StartFrame);
+					active = true;
 				}
+			}
+
+			if (active)
+			{
+				progress = max(progress, 0.0f);
+				progress = min(progress, 1.0f);
+
+				float lastProgress = (m_LastFrame - event.StartFrame) / (event.EndFrame - event.StartFrame);
+				nlohmann::json argument = event.Argument;
+				argument.emplace(nlohmann::json{ "LastProgress", lastProgress });
+				argument.emplace(nlohmann::json{ "Progress", progress });
+				(m_Owner->*m_Functions.at(event.Name))(argument);
 			}
 		}
 
@@ -127,6 +145,11 @@ public:
 		m_LastFrame = 0.0f;
 	}
 
+	void Stop()
+	{
+		m_Events.clear();
+	}
+
 	void SetFunction(std::string eventName, void(T::* function)(const nlohmann::json&))
 	{
 		/*
@@ -145,4 +168,9 @@ private:
 	std::list<TimelineEvent> m_Events;
 
 	float m_LastFrame;
+
+	bool isInRange(float currentFrame, float lastFrame, float startFrame, float endFrame)
+	{
+		return lastFrame <= endFrame && startFrame <= currentFrame;
+	}
 };

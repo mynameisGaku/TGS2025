@@ -20,7 +20,10 @@
 
 		},
 		"ActionIdle": {
-			"IsLoop": true
+			"IsLoop": true,
+			"IsFixedRoot": {
+				"Z": true
+			}
 		},
 		"ActionIdleEmote": {
 
@@ -77,13 +80,26 @@
 				"Z": true
 			}
 		},
-		"FallToRollToIdle": {
+		"FallToRoll": {
 			"IsFixedRoot": {
 				"Z": true
 			}
 		},
 		"GetBall": {
 
+		},
+		"Roll": {
+
+		},
+		"RollToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+		"RollToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			}
 		},
 		"Run": {
 			"IsLoop": true

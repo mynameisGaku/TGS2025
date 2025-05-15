@@ -1264,6 +1264,21 @@
     <None Include="data\Json\Chara\State\Run.json">
       <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
     </None>
+    <None Include="data\Json\Chara\State\ActionIdleEmote.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\RunToActionIdle.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ActionIdleToJump.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

@@ -120,6 +120,22 @@ public:
 		return (current->Frame() >= current->MaxFrame());
 	};
 
+	/// <summary>
+	/// ループしないアニメーションが最後まで再生したか調べる
+	/// </summary>
+	/// <returns>最後にtrue</returns>
+	inline bool IsFinishedSub(std::string frame) {
+		if (not currentSubs.contains(frame))
+			return false;
+
+		AttachedAnimation_Sub* currentSub = currentSubs.at(frame);
+
+		if (currentSub->Info().option.isLoop)
+			return false;
+
+		return (currentSub->Frame() >= currentSub->MaxFrame());
+	};
+
 	inline const std::unordered_map<std::string, AnimInfo> GetAllAnimInfo() const { return anims; }
 
 	inline AnimInfo GetAnimInfo() const {

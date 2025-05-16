@@ -139,8 +139,6 @@ public:
 
 	void StateAirSpin(FSMSignal sig);
 
-	void StateCatch(FSMSignal sig);
-
 	void StateCrouchToActionIdle(FSMSignal sig);
 	void StateCrouchToRun(FSMSignal sig);
 
@@ -149,8 +147,6 @@ public:
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
 	void StateFallToRoll(FSMSignal sig);
-
-	void StateGetBall(FSMSignal sig);
 
 	void StateRoll(FSMSignal sig);
 	void StateRollToActionIdle(FSMSignal sig);
@@ -168,7 +164,12 @@ public:
 	void StateStandingIdleEmote(FSMSignal sig);
 	void StateStandingIdleToActionIdle(FSMSignal sig);
 
-	void StateAimToThrow(FSMSignal sig);
+	void SubStateNone(FSMSignal sig);
+	void SubStateGetBall(FSMSignal sig);
+	void SubStateHold(FSMSignal sig);
+	void SubStateHoldToAim(FSMSignal sig);
+	void SubStateAimToThrow(FSMSignal sig);
+	void SubStateCatch(FSMSignal sig);
 
 private:
 	friend class CharaManager;
@@ -188,6 +189,7 @@ private:
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
+	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	bool			m_IsLanding;			// 着地中

@@ -1,149 +1,26 @@
 {
 	"Folder": "data/Animation/",
 	"Files": {
-		"ActionIdleToHold": {
-
-		},
-		"AimToThrow": {
-		},
-		"Catch": {
+		"Idle": {
 			"IsLoop": true
 		},
-		"Hold": {
-			"IsLoop": true
+		"IdleEmote_CheckSword": {
+			"IsLoop": false
 		},
-		"HoldToAim": {
-
+		"IdleEmote_Stretch": {
+			"IsLoop": false
 		},
-		"ThrowToActionIdle": {
-
-		},
-		"ActionIdle": {
-			"IsLoop": true,
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"ActionIdleEmote": {
-
-		},
-		"ActionIdleToJump": {
-			"IsFixedRoot": {
-				"Y": true
-			},
-			"Offset": {
-				"Y": 100.0
-			}
-		},
-		"ActionIdleToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"ActionIdleToStandingIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"AirSpin": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"CrouchToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"CrouchToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"DamageToDown": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"Fall": {
-			"IsLoop": true,
-			"IsFixedRoot": {
-				"Y": true
-			},
-			"Offset": {
-				"Y": 100.0
-			}
-		},
-		"FallToCrouch": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"FallToRoll": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"GetBall": {
-
-		},
-		"Roll": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"RollToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"RollToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
+		"IdleToBlock": {
+			"IsLoop": false
 		},
 		"Run": {
 			"IsLoop": true
 		},
-		"RunToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"RunToJump": {
-			"IsFixedRoot": {
-				"Y": true,
-				"Z": true
-			},
-			"Offset": {
-				"Y": 100.0
-			}
-		},
-		"RunToSlide": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"Slide": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"SlideToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"StandingIdle": {
+		"StrafeWalk_A": {
 			"IsLoop": true
 		},
-		"StandingIdleEmote": {
-
-		},
-		"StandingIdleToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
+		"StrafeWalk_B": {
+			"IsLoop": true
 		}
 	}
 }

@@ -6,7 +6,7 @@
 namespace
 {
 	//ToDo:アニメーターからもらうようにする
-	static const std::string ROOT_NAME = "mixamorig9:Hips";
+	static const std::string ROOT_NAME = "mixamorig:Hips";
 	static const int ANIM_FRAMERATE = 30;
 }
 

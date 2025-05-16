@@ -11,10 +11,6 @@
 #include "Component/DebugController.h"
 #include "Component/CollisionManager.h"
 
-//=== ボール ===
-#include "BallManager.h"
-#include "Ball.h"
-
 //=== ポストエフェクト ===
 #include "BloomManager.h"
 #include "EffectManager.h"
@@ -42,8 +38,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	enemy->SetRotSpeed(Math::DegToRad(10.0f));
 	//enemy->AddComponent<AIController>()->Init();
 	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
-
-	BallManager* ballM = Instantiate<BallManager>();
 
 	fragM = Instantiate<CrystalFragmentManager>();
 	fragM->CreateFragment(Vector3(0, 0, -150), CrystalElement::eFIRE, CrystalSize::sSMALL);

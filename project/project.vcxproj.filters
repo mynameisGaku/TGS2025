@@ -304,15 +304,6 @@
     <ClCompile Include="Source\CharaManager.cpp">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Ball.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallAttribute.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallManager.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
     <ClCompile Include="Source\WindowSetting.cpp">
       <Filter>Framework\02_Common\System\Ini</Filter>
     </ClCompile>
@@ -321,9 +312,6 @@
     </ClCompile>
     <ClCompile Include="Source\VectorJson.cpp">
       <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\PlayerController.cpp">
       <Filter>Framework\04_Component\Controller</Filter>
@@ -366,9 +354,6 @@
     </ClCompile>
     <ClCompile Include="Source\Component\AttachedAnimation.cpp">
       <Filter>Framework\04_Component\Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Catcher.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClCompile>
     <ClCompile Include="Source\CameraDefineRef.cpp">
       <Filter>Framework\03_Object\Camera\00_Define</Filter>
@@ -762,15 +747,6 @@
     <ClInclude Include="Source\CharaManager.h">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Ball.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallAttribute.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallManager.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
     <ClInclude Include="Source\WindowSetting.h">
       <Filter>Framework\02_Common\System\Ini</Filter>
     </ClInclude>
@@ -779,9 +755,6 @@
     </ClInclude>
     <ClInclude Include="Source\Pool.h">
       <Filter>Framework\02_Common\System\Pool</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
     </ClInclude>
     <ClInclude Include="Source\VectorJson.h">
       <Filter>Framework\02_Common\Util</Filter>
@@ -830,9 +803,6 @@
     </ClInclude>
     <ClInclude Include="Source\Component\AnimationDefine.h">
       <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Catcher.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </ClInclude>
     <ClInclude Include="Source\CameraDefineRef.h">
       <Filter>Framework\03_Object\Camera\00_Define</Filter>
@@ -1181,9 +1151,6 @@
     <Filter Include="Application\Scenes\02_PlayScene\Chara">
       <UniqueIdentifier>{68c9b294-3a2a-4353-b029-15f527993dce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\Ball">
-      <UniqueIdentifier>{b0efc5a8-5b17-4781-bd72-62919c5ee6c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\02_Common\System\Pool">
       <UniqueIdentifier>{c45966fb-c2fc-423f-813a-8465f3229d87}</UniqueIdentifier>
     </Filter>
@@ -1246,49 +1213,13 @@
     <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
       <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
     </None>
-    <None Include="data\Json\Ball\Ball.json">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </None>
     <None Include="data\Json\Stage\Stage.json">
       <Filter>Framework\03_Object\Stage</Filter>
     </None>
     <None Include="data\Json\Chara\CharaHP.json">
       <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
     </None>
-    <None Include="data\Json\Chara\State\ActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\Fall.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
     <None Include="data\Json\Chara\State\Run.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\ActionIdleEmote.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\RunToActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\ActionIdleToJump.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\FallToRoll.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\Roll.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\RollToActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\RollToRun.json">
       <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
     </None>
   </ItemGroup>

@@ -148,10 +148,6 @@
     <ClInclude Include="Library\sceneBase.h" />
     <ClInclude Include="Library\sceneManager.h" />
     <ClInclude Include="Library\time.h" />
-    <ClInclude Include="Source\Ball.h" />
-    <ClInclude Include="Source\BallAttribute.h" />
-    <ClInclude Include="Source\BallManager.h" />
-    <ClInclude Include="Source\BallRef.h" />
     <ClInclude Include="Source\Behavior\BehaviorData.h" />
     <ClInclude Include="Source\Behavior\BehaviorDecorator.h" />
     <ClInclude Include="Source\Behavior\BehaviorNode.h" />
@@ -165,7 +161,6 @@
     <ClInclude Include="Source\CameraDefine.h" />
     <ClInclude Include="Source\CameraDefineRef.h" />
     <ClInclude Include="Source\CameraManager.h" />
-    <ClInclude Include="Source\Catcher.h" />
     <ClInclude Include="Source\CharaBase.h" />
     <ClInclude Include="Source\CharaDefineRef.h" />
     <ClInclude Include="Source\CharaHP.h" />
@@ -300,10 +295,6 @@
     <ClCompile Include="Library\sceneBase.cpp" />
     <ClCompile Include="Library\sceneManager.cpp" />
     <ClCompile Include="Library\time.cpp" />
-    <ClCompile Include="Source\Ball.cpp" />
-    <ClCompile Include="Source\BallAttribute.cpp" />
-    <ClCompile Include="Source\BallManager.cpp" />
-    <ClCompile Include="Source\BallRef.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorData.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorDecorator.cpp" />
     <ClCompile Include="Source\Behavior\BehaviorNode.cpp" />
@@ -319,7 +310,6 @@
     <ClCompile Include="Source\CamState_Aim.cpp" />
     <ClCompile Include="Source\CamState_Chase.cpp" />
     <ClCompile Include="Source\CamState_Debug.cpp" />
-    <ClCompile Include="Source\Catcher.cpp" />
     <ClCompile Include="Source\CharaBase.cpp" />
     <ClCompile Include="Source\CharaDefineRef.cpp" />
     <ClCompile Include="Source\CharaHP.cpp" />
@@ -424,23 +414,11 @@
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\Json\Ball\Ball.json" />
     <None Include="data\Json\Bloom\Bloom.json" />
     <None Include="data\Json\Chara\CharaDefine.json" />
     <None Include="data\Json\Chara\CharaHP.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
-    <None Include="data\Json\Chara\State\ActionIdle.json" />
-    <None Include="data\Json\Chara\State\ActionIdleEmote.json" />
-    <None Include="data\Json\Chara\State\ActionIdleToJump.json" />
-    <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json" />
-    <None Include="data\Json\Chara\State\Fall.json" />
-    <None Include="data\Json\Chara\State\FallToRoll.json" />
-    <None Include="data\Json\Chara\State\Roll.json" />
-    <None Include="data\Json\Chara\State\RollToActionIdle.json" />
-    <None Include="data\Json\Chara\State\RollToRun.json" />
     <None Include="data\Json\Chara\State\Run.json" />
-    <None Include="data\Json\Chara\State\RunToActionIdle.json" />
-    <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
     <None Include="data\Json\Effect\Catch_Ready.json" />

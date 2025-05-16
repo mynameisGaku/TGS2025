@@ -154,21 +154,21 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 
 	if (tag == "Red")
 	{
-		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
+		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Character.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tCharaRed;
 		colParamChara.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue };
 	}
 	else if (tag == "Blue")
 	{
-		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
+		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Character.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tCharaBlue;
 		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
 	}
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
-	int origin = MV1SearchFrame(hModel, "mixamorig9:Hips");
+	int origin = MV1SearchFrame(hModel, "mixamorig:Hips");
 	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(Math::PI) * MGetTranslate(Vector3(0.0f, 100.0f, 0.0f)));
 
 	newChara->SetModel(hModel);

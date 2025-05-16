@@ -30,41 +30,6 @@ void PlayerController::Init(int _padNumber) {
 void PlayerController::Update() {
 
 	////////////////////////////////////////////////////
-	// ボール投げる処理
-
-	// ToDo : チャージ未対応なので対応させるｒ
-	if (not chara->IsHoldingBall())
-	{
-		if (chara->IsChargingBall())
-		{
-			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
-			{
-				chara->GenerateBall();
-			}
-		}
-	}
-	else
-	{
-		if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
-		{
-			chara->ThrowBallForward();
-		}
-	}
-
-	if (IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
-	{
-		chara->GenerateBall();
-		chara->ThrowHomingBall();
-	}
-
-	////////////////////////////////////////////////////
-	// 吸引キャッチ処理
-	if (IsPressButton(KeyDefine::KeyCode::X, KeyDefine::Stationary))
-	{
-		chara->Catch();
-	}
-
-	////////////////////////////////////////////////////
 	// ジャンプ処理
 	if (IsPressButton(KeyDefine::KeyCode::Space, KeyDefine::Begin))
 	{
@@ -72,19 +37,10 @@ void PlayerController::Update() {
 	}
 
 	////////////////////////////////////////////////////
-	// スライディング処理
-	if (IsPressButton(KeyDefine::KeyCode::LeftShift, KeyDefine::Stationary) ||
-		IsPressButton(KeyDefine::KeyCode::LeftControl, KeyDefine::Stationary) ||
-		IsPressButton(KeyDefine::KeyCode::C, KeyDefine::Stationary))
+	// ジャンプ処理
+	if (IsPressButton(KeyDefine::KeyCode::C, KeyDefine::Stationary))
 	{
-		chara->Slide();
-	}
-
-	////////////////////////////////////////////////////
-	// テレポート処理
-	if (IsPressButton(KeyDefine::KeyCode::E, KeyDefine::Begin))
-	{
-		chara->TeleportToLastBall();
+		chara->Block();
 	}
 
 	////////////////////////////////////////////////////

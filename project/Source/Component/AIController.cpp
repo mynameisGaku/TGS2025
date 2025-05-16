@@ -161,7 +161,7 @@ void AIController::AttackState(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
 	{
-		m_Chara->GenerateBall();
+		//m_Chara->GenerateBall();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
@@ -175,7 +175,7 @@ void AIController::AttackState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
-		m_Chara->ThrowBallForward();
+		//m_Chara->ThrowBallForward();
 	}
 	break;
 	}
@@ -191,7 +191,7 @@ void AIController::CatchState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
-		m_Chara->Catch();
+		//m_Chara->Catch();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)

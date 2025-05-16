@@ -38,8 +38,8 @@ void DebugController::Update()
 	{
 		if (not isPush)
 		{
-			chara->GenerateBall();
-			chara->ThrowHomingBall();
+			//chara->GenerateBall();
+			//chara->ThrowHomingBall();
 			isPush = true;
 		}
 	}
@@ -49,7 +49,7 @@ void DebugController::Update()
 	// 吸引キャッチ処理
 	if (PadController::NormalizedLeftTrigger() > KeyDefine::TRIGGER_DEADZONE)
 	{
-		chara->Catch();
+		//chara->Catch();
 	}
 
 	////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ void DebugController::Update()
 	// スライディング処理
 	if (IsPressButton(KeyDefine::KeyCode::RightThumb, KeyDefine::Stationary))
 	{
-		chara->Slide();
+		//chara->Slide();
 	}
 
 	////////////////////////////////////////////////////

@@ -138,7 +138,6 @@ void AttachedAnimation_Sub::Update()
 	updateFrame();
 
 	// Ä¶ŠÔ‚ğ“K—p
-	MV1SetAttachAnimBlendRateToFrame(m_parentModel, 0, m_targetID, 0.0f);
-	MV1SetAttachAnimTimeToFrame(m_parentModel, m_attachID, m_targetID, m_frame);
+	MV1SetAttachAnimTime(m_parentModel, m_attachID, m_frame);
 	MV1SetAttachAnimBlendRateToFrame(m_parentModel, m_attachID, m_targetID, m_blendRate * m_defaultBlendRate);
 }

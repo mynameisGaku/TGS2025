@@ -65,7 +65,7 @@ public:
 	void Play(std::string label, float speed = -1.0f);
 
 	void PlaySub(std::string frameName, std::string label, float speed = -1.0f);
-	void StopSub();
+	void StopSub(std::string frameName);
 
 	void DeleteAnimInfos();
 
@@ -161,9 +161,10 @@ private:
 	// ▼メンバ変数
 	std::unordered_map<std::string, AnimInfo> anims;	// アニメーションの情報
 
-	std::list<AttachedAnimation*> prevs;
+	std::list<AttachedAnimation_Main*> prevs;
 	AttachedAnimation_Main* current;
-	AttachedAnimation_Sub* currentSub;
+
+	std::unordered_map<std::string, AttachedAnimation_Sub*> currentSubs;
 
 	int parentModel;	// 親のモデル
 	float mergeTime;	// ブレンドの経過速度(1秒間で何フレーム進むか)

@@ -11,14 +11,6 @@
 #include "StageObjectManager.h"
 #include "BallManager.h"
 
-namespace
-{
-	static const float BALL_MODEL_RADIUS = 83.951f;
-	static const float BALL_RADIUS = 30.0f;
-	static const float BALL_SCALE = BALL_RADIUS / BALL_MODEL_RADIUS;
-	static const float BALL_COLOR_RADIUS = 90.0f;
-}
-
 Ball::Ball()
 {
 	m_Physics = Object3D::AddComponent<Physics>();

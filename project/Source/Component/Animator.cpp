@@ -16,7 +16,6 @@ namespace {
 
 Animator::Animator() {
 	current = nullptr;
-	currentSub = nullptr;
 
 	parentModel = -1;
 	mergeTime = 0.0f;
@@ -35,8 +34,12 @@ Animator::~Animator() {
 	// アニメーションをデタッチする
 	if (current != nullptr)
 		delete current;
-	if (currentSub != nullptr)
-		delete currentSub;
+	for (auto item : currentSubs) {
+		AttachedAnimation_Sub* currentSub = item.second;
+		if (currentSub != nullptr) {
+			delete currentSub;
+		}
+	}
 	for (AttachedAnimation* prev : prevs) {
 		if (prev != nullptr) {
 			delete prev;
@@ -116,20 +119,20 @@ void Animator::Update() {
 	MATRIX prevM = MGetScale(V3::ZERO);
 
 	// アニメーションの更新
-	for (AttachedAnimation* prev : prevs) {
+	for (AttachedAnimation_Main* prev : prevs) {
 		prev->Update();
 	}
 	current->Update();
 
 	// ルート補正の計算
-	for (AttachedAnimation* prev : prevs) {
+	for (AttachedAnimation_Main* prev : prevs) {
 		prev->UpdateRootMatrix();
 	}
 	current->UpdateRootMatrix();
 
 	// ルートの移動行列を取得
 	currentM = MScale(current->RootMatrix(), current->BlendRate());
-	for (AttachedAnimation* prev : prevs) {
+	for (AttachedAnimation_Main* prev : prevs) {
 		prevM += MScale(prev->RootMatrix(), prev->BlendRate());
 	}
 
@@ -143,7 +146,12 @@ void Animator::Update() {
 	MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
 
 	// サブアニメーション更新
-	if (currentSub != nullptr) {
+	for (auto& item : currentSubs)
+	{
+		std::string frameName = item.first;
+		AttachedAnimation_Sub* currentSub = item.second;
+		MV1SetAttachAnimBlendRateToFrame(parentModel, current->AttachID(), MV1SearchFrame(parentModel, frameName.c_str()), 0.0f);
+
 		currentSub->Update();
 	}
 
@@ -280,10 +288,16 @@ void Animator::PlaySub(std::string frameName, std::string label, float speed) {
 	if (not anims.contains(label))	// 存在しないアニメーション名なら無視する
 		return;
 
+	// 同じアニメーションなら無視する
+	if (currentSubs.contains(frameName)) {
+		if (currentSubs.at(frameName)->Info().animName == label)
+			return;
+	}
+
 	AnimInfo anim = anims.at(label);
 
 	// 現在のサブアニメーションの終了処理
-	StopSub();
+	StopSub(frameName);
 
 	// 現在のメインアニメーションをframeNameでサブアニメーションにして、prevsに入れる
 	/*
@@ -294,10 +308,11 @@ void Animator::PlaySub(std::string frameName, std::string label, float speed) {
 	}
 	*/
 
-	currentSub = new AttachedAnimation_Sub(parentModel, anim, frameName);
-	currentSub->SetPlaySpeed(playSpeed);
+	AttachedAnimation_Sub* newSub = new AttachedAnimation_Sub(parentModel, anim, frameName);
 
-	currentSub->SetBlendRate(1.0f);
+	newSub->SetPlaySpeed(playSpeed);
+	newSub->SetBlendRate(1.0f);
+	currentSubs.emplace(frameName, newSub);
 
 	/*
 	if (prevs.empty())
@@ -308,12 +323,12 @@ void Animator::PlaySub(std::string frameName, std::string label, float speed) {
 	*/
 }
 
-void Animator::StopSub()
+void Animator::StopSub(std::string frameName)
 {
-	if (currentSub == nullptr) return;
+	if (not currentSubs.contains(frameName)) return;
 
-	delete currentSub;
-	currentSub = nullptr;
+	delete currentSubs.at(frameName);
+	currentSubs.erase(frameName);
 }
 
 void Animator::DeleteAnimInfos() {

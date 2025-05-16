@@ -207,11 +207,10 @@ void CharaBase::Update() {
 			m_IsCharging = false;
 		}
 
-		m_pBall->transform->position = transform->Global().position;
-		m_pBall->transform->rotation = transform->Global().rotation;
+		m_pBall->transform->position = VTransform(Vector3(0, BALL_RADIUS, -BALL_RADIUS), MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand")));
 
 		//テスト
-		m_Animator->PlaySub("mixamorig9:Spine", "Hold");
+		//m_Animator->PlaySub("mixamorig9:Spine", "Hold");
 	}
 
 	m_IsMove = false;
@@ -699,7 +698,7 @@ void CharaBase::StateCatch(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		//テスト
-		m_Animator->StopSub();
+		m_Animator->StopSub("mixamorig9:Spine");
 	}
 	break;
 	}
@@ -894,6 +893,7 @@ void CharaBase::StateGetBall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("GetBall");
+		m_Animator->PlaySub("mixamorig9:Spine", "Hold");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1027,6 +1027,7 @@ void CharaBase::StateRun(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+		m_Animator->SetPlaySpeed(1.0f);
 	}
 	break;
 	}
@@ -1270,14 +1271,17 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("AimToThrow");
+		//テスト
+		//m_Animator->Play("ActionIdle");
+		//m_Animator->StopSub("mixamorig9:Spine");
+		m_Animator->PlaySub("mixamorig9:Spine", "AimToThrow");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+			//m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
 		}
 	}
 	break;

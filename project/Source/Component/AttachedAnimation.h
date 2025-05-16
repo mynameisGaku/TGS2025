@@ -14,13 +14,10 @@ public:
 	~AttachedAnimation();
 
 	virtual void Update() = 0;
-	virtual void UpdateRootMatrix() {}
 	void RefreshDefaultBlendRate();
 
 	inline float MaxFrame() const { return m_maxFrame; }
 	inline bool IsLoop() const { return m_info.option.isLoop; }
-
-	inline virtual const MATRIX& RootMatrix() const { return MGetIdent(); }
 
 	/*=== アクセサ ===*/
 	// 現在の進行度（0..1）
@@ -41,6 +38,10 @@ public:
 	inline float DefaultBlendRate() const { return m_defaultBlendRate; }
 	// モデルに掛けるブレンド率
 	inline void SetDefaultBlendRate(float rate) { m_defaultBlendRate = rate; }
+	// アニメーション情報
+	inline const AnimInfo& Info() const { return m_info; }
+	// アタッチ済アニメーションのハンドル
+	inline int AttachID() const { return m_attachID; }
 protected:
 	// 再生を進める
 	void updateFrame();
@@ -69,9 +70,9 @@ public:
 	void Update() override;
 
 	// ルートフレームの行列を更新
-	void UpdateRootMatrix() override;
+	void UpdateRootMatrix();
 
-	inline const MATRIX& RootMatrix() const override { return m_rootMatrix; }
+	inline const MATRIX& RootMatrix() const { return m_rootMatrix; }
 private:
 	int m_hRoot;	// モデルのルートフレームのハンドル
 	MATRIX m_rootMatrix;	// ルートフレーム移動用の行列

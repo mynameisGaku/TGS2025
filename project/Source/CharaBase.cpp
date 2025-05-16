@@ -209,6 +209,9 @@ void CharaBase::Update() {
 
 		m_pBall->transform->position = transform->Global().position;
 		m_pBall->transform->rotation = transform->Global().rotation;
+
+		//テスト
+		m_Animator->PlaySub("mixamorig9:Spine", "Hold");
 	}
 
 	m_IsMove = false;
@@ -675,7 +678,8 @@ void CharaBase::StateCatch(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("Catch");
+		//テスト
+		m_Animator->PlaySub("mixamorig9:Spine", "Catch");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -694,6 +698,8 @@ void CharaBase::StateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		//テスト
+		m_Animator->StopSub();
 	}
 	break;
 	}

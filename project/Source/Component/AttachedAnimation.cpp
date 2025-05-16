@@ -18,7 +18,6 @@ AttachedAnimation::AttachedAnimation(int parentModel, const AnimInfo& info)
 
 	m_parentModel = parentModel;	// モデルハンドル
 	m_attachID = -1;	// アタッチ済アニメーションのハンドル
-	m_hRoot = MV1SearchFrame(m_parentModel, ROOT_NAME.c_str());	// モデルのルートフレームのハンドル
 
 	m_frame = 0.0f;	// 現在フレーム（小数もある）
 	m_maxFrame = MV1GetAnimTotalTime(info.handle, 0);	// 最大フレーム
@@ -27,31 +26,12 @@ AttachedAnimation::AttachedAnimation(int parentModel, const AnimInfo& info)
 	m_defaultBlendRate = 1.0f;	// 初期ブレンド率
 
 	m_first = true;	// 最初のアップデート時true
-
-	m_rootMatrix = MGetIdent();	// ルートフレーム移動用の行列
 }
 
 AttachedAnimation::~AttachedAnimation()
 {
 	if (m_attachID >= 0)
 		MV1DetachAnim(m_parentModel, m_attachID);
-}
-
-void AttachedAnimation::Update()
-{
-	if (m_first)
-	{
-		m_attachID = MV1AttachAnim(m_parentModel, 0, m_info.handle);
-
-		m_first = false;
-	}
-
-	// 時間を進める
-	updateFrame();
-
-	// 再生時間を適用
-	MV1SetAttachAnimTime(m_parentModel, m_attachID, m_frame);
-	MV1SetAttachAnimBlendRate(m_parentModel, m_attachID, m_blendRate * m_defaultBlendRate);
 }
 
 void AttachedAnimation::updateFrame()
@@ -83,7 +63,37 @@ void AttachedAnimation::updateFrame()
 	}
 }
 
-void AttachedAnimation::UpdateRootMatrix()
+void AttachedAnimation::RefreshDefaultBlendRate()
+{
+	m_defaultBlendRate = BlendRate();
+}
+
+//===============================================================================
+
+AttachedAnimation_Main::AttachedAnimation_Main(int parentModel, const AnimInfo& info) : AttachedAnimation(parentModel, info)
+{
+	m_hRoot = MV1SearchFrame(m_parentModel, ROOT_NAME.c_str());	// モデルのルートフレームのハンドル
+	m_rootMatrix = MGetIdent();	// ルートフレーム移動用の行列
+}
+
+void AttachedAnimation_Main::Update()
+{
+	if (m_first)
+	{
+		m_attachID = MV1AttachAnim(m_parentModel, 0, m_info.handle);
+
+		m_first = false;
+	}
+
+	// 時間を進める
+	updateFrame();
+
+	// 再生時間を適用
+	MV1SetAttachAnimTime(m_parentModel, m_attachID, m_frame);
+	MV1SetAttachAnimBlendRate(m_parentModel, m_attachID, m_blendRate * m_defaultBlendRate);
+}
+
+void AttachedAnimation_Main::UpdateRootMatrix()
 {
 	// ルートの移動行列を取得
 	m_rootMatrix = MV1GetFrameLocalMatrix(m_parentModel, m_hRoot);
@@ -107,7 +117,28 @@ void AttachedAnimation::UpdateRootMatrix()
 	m_rootMatrix *= MGetTranslate(matPos);
 }
 
-void AttachedAnimation::RefreshDefaultBlendRate()
+//===============================================================================
+
+AttachedAnimation_Sub::AttachedAnimation_Sub(int parentModel, const AnimInfo& info, std::string target) : AttachedAnimation(parentModel, info)
 {
-	m_defaultBlendRate = BlendRate();
+	m_targetID = MV1SearchFrame(parentModel, target.c_str());
+}
+
+void AttachedAnimation_Sub::Update()
+{
+	if (m_first)
+	{
+		m_attachID = MV1AttachAnim(m_parentModel, 0, m_info.handle);
+		MV1SetAttachAnimBlendRate(m_parentModel, m_attachID, 0.0f);
+
+		m_first = false;
+	}
+
+	// 時間を進める
+	updateFrame();
+
+	// 再生時間を適用
+	MV1SetAttachAnimBlendRateToFrame(m_parentModel, 0, m_targetID, 0.0f);
+	MV1SetAttachAnimTimeToFrame(m_parentModel, m_attachID, m_targetID, m_frame);
+	MV1SetAttachAnimBlendRateToFrame(m_parentModel, m_attachID, m_targetID, m_blendRate * m_defaultBlendRate);
 }

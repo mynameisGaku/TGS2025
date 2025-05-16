@@ -16,6 +16,7 @@ namespace {
 
 Animator::Animator() {
 	current = nullptr;
+	currentSub = nullptr;
 
 	parentModel = -1;
 	mergeTime = 0.0f;
@@ -34,6 +35,8 @@ Animator::~Animator() {
 	// アニメーションをデタッチする
 	if (current != nullptr)
 		delete current;
+	if (currentSub != nullptr)
+		delete currentSub;
 	for (AttachedAnimation* prev : prevs) {
 		if (prev != nullptr) {
 			delete prev;
@@ -60,124 +63,6 @@ void Animator::Init(std::string _origin, float _frameRate, float _mergeTimeMax) 
 	// 何秒で補完しきるか
 	mergeTimeMax = _mergeTimeMax;
 }
-
-#if FALSE
-void Animator::Update() {
-
-	// ①前姿勢を補正
-	// ②後姿勢を補正
-	// ③前姿勢と後姿勢を割合でブレンド
-
-	int hRoot = MV1SearchFrame(parentModel, origin.c_str());
-
-	// 一旦リセット
-	MV1ResetFrameUserLocalMatrix(parentModel, hRoot);
-
-	MATRIX currentM = MGetIdent();	// 現在のアニメーションの行列
-	MATRIX prevM = MGetIdent();		// 前回のアニメーションの行列
-
-	// ◇前回のアニメーションが再生中なら
-	if (prev.attachID >= 0) {
-		// ▽補間処理
-		{
-			mergeTime += Time::DeltaTimeLapseRate() * playSpeed;
-
-			if (mergeTime >= mergeTimeMax) {
-				MV1DetachAnim(parentModel, prev.attachID);
-				MV1SetAttachAnimBlendRate(parentModel, current.attachID, 1.0f);
-				prev.attachID = -1;
-			}
-			else {
-				float rate = mergeTime / mergeTimeMax;
-				MV1SetAttachAnimBlendRate(parentModel, prev.attachID, 1.0f - rate);
-				MV1SetAttachAnimBlendRate(parentModel, current.attachID, rate);
-			}
-		}
-
-		// 前回の行列を設定
-		prevM = MV1GetFrameLocalMatrix(parentModel, hRoot);
-
-		// 無補正時の座標を取得
-		const Vector3 framePos = MV1GetAttachAnimFrameLocalPosition(parentModel, prev.attachID, hRoot);
-
-		// 座標移動を打ち消す
-		prevM *= MGetTranslate(framePos * -1.0f);
-
-		// Yだけ維持、XZを原点
-		prevM *= MGetTranslate(Vector3(0.0f, framePos.y, 0.0f));
-	}
-
-	// ◇アニメーションが再生中なら
-	if (current.attachID >= 0) {
-
-		current.beforeFrame = current.nowFrame;
-		current.nowFrame += frameRate * Time::DeltaTimeLapseRate() * playSpeed;
-
-		// アニメーションが総再生フレームまで再生したら
-		if (current.nowFrame >= current.maxFrame) {
-
-			if (!anims[playingLabel].isLoop)
-				current.nowFrame = current.maxFrame;
-			else {
-				current.nowFrame -= current.maxFrame;
-
-				// コマンドの実行権限を復活させる
-				for (int i = 0; i < anims[playingLabel].event.size(); i++)
-					anims[playingLabel].event[i]->SetUseCommand(true);
-			}
-		}
-
-		// アニメーションを適応させる
-		MV1SetAttachAnimTime(parentModel, current.attachID, current.nowFrame);
-
-		// 現在の行列を取得
-		currentM = MV1GetFrameLocalMatrix(parentModel, hRoot);
-
-
-		// ◇ローカル座標の固定化が有効なら
-		if (anims[playingLabel].isFixedRoot)
-		{
-			// 無補正時の座標を取得
-			const Vector3 framePos = MV1GetAttachAnimFrameLocalPosition(parentModel, current.attachID, hRoot);
-
-			// 座標移動を打ち消す
-			currentM *= MGetTranslate(framePos * -1.0f);
-
-			// Yだけ維持、XZを原点
-			currentM *= MGetTranslate(Vector3(0.0f, framePos.y, 0.0f));
-		}
-
-		// ◇前回のアニメーションが再生中なら、ブレンドする
-		if (prev.attachID >= 0)
-		{
-			// root姿勢を滑らかに遷移
-			float progress = mergeTime / mergeTimeMax;
-
-			// 現姿勢と前姿勢を合成
-			// 最低値 + (最大値 - 最低値) * progress
-			currentM = MAdd(prevM, MAdd(currentM, prevM * MGetScale(V3::ONE * -1.0f)) * MGetScale(V3::ONE * progress));
-		}
-
-		// テスト
-		currentM *= offsetMatrix;
-
-		// セット
-		MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
-	}
-
-
-#if FALSE
-	// ◇Csvデータが読み込まれていたら
-	if (animCsv != nullptr) {
-
-		for (auto& event : anims[playingLabel].event) {
-			event->Update();
-		}
-	}
-#endif // FALSE
-}
-
-#endif // FALSE
 
 void Animator::Update() {
 	if (current == nullptr) return;
@@ -256,6 +141,11 @@ void Animator::Update() {
 
 	// セット
 	MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
+
+	// サブアニメーション更新
+	if (currentSub != nullptr) {
+		currentSub->Update();
+	}
 
 	for (auto& item : frameMatrix)
 	{
@@ -360,7 +250,7 @@ void Animator::Play(std::string label, float speed) {
 
 	playingLabel = label;
 
-	current = new AttachedAnimation(parentModel, anim);
+	current = new AttachedAnimation_Main(parentModel, anim);
 	current->SetPlaySpeed(playSpeed);
 
 	if (prevs.empty())
@@ -386,8 +276,47 @@ void Animator::Play(std::string label, float speed) {
 #endif // FALSE
 }
 
-void Animator::DeleteAnimInfos()
+void Animator::PlaySub(std::string frameName, std::string label, float speed) {
+	if (not anims.contains(label))	// 存在しないアニメーション名なら無視する
+		return;
+
+	AnimInfo anim = anims.at(label);
+
+	// 現在のサブアニメーションの終了処理
+	StopSub();
+
+	// 現在のメインアニメーションをframeNameでサブアニメーションにして、prevsに入れる
+	/*
+	if (current != nullptr)
+	{
+		AttachedAnimation_Sub* prevSub = new AttachedAnimation_Sub(parentModel, anims.at(playingLabel), frameName);
+		prevs.push_back(prevSub);
+	}
+	*/
+
+	currentSub = new AttachedAnimation_Sub(parentModel, anim, frameName);
+	currentSub->SetPlaySpeed(playSpeed);
+
+	currentSub->SetBlendRate(1.0f);
+
+	/*
+	if (prevs.empty())
+	{
+		mergeTime = anim.mergeTimeMax;
+		currentSub->SetBlendRate(1.0f);
+	}
+	*/
+}
+
+void Animator::StopSub()
 {
+	if (currentSub == nullptr) return;
+
+	delete currentSub;
+	currentSub = nullptr;
+}
+
+void Animator::DeleteAnimInfos() {
 	// アニメーション情報を解放する
 	for (auto& anim : anims) {
 		for (auto& event : anim.second.event) {
@@ -400,8 +329,7 @@ void Animator::DeleteAnimInfos()
 	anims.clear();
 }
 
-void Animator::SetPlaySpeed(float speed)
-{
+void Animator::SetPlaySpeed(float speed) {
 	playSpeed = speed;
 	current->SetPlaySpeed(playSpeed);
 }

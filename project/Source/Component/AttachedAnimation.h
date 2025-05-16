@@ -1,6 +1,7 @@
 #pragma once
 #include "AnimationDefine.h"
 #include <DxLib.h>
+#include <list>
 
 /// <summary>
 /// アタッチ中のアニメーションの管理クラス
@@ -11,13 +12,15 @@ class AttachedAnimation
 public:
 	AttachedAnimation(int parentModel, const AnimInfo& info);
 	~AttachedAnimation();
-	void Update();
-	inline const MATRIX& RootMatrix() const { return m_rootMatrix; }
+
+	virtual void Update() = 0;
+	virtual void UpdateRootMatrix() {}
+	void RefreshDefaultBlendRate();
+
 	inline float MaxFrame() const { return m_maxFrame; }
 	inline bool IsLoop() const { return m_info.option.isLoop; }
-	// ルートフレームの行列を更新
-	void UpdateRootMatrix();
-	void RefreshDefaultBlendRate();
+
+	inline virtual const MATRIX& RootMatrix() const { return MGetIdent(); }
 
 	/*=== アクセサ ===*/
 	// 現在の進行度（0..1）
@@ -38,7 +41,7 @@ public:
 	inline float DefaultBlendRate() const { return m_defaultBlendRate; }
 	// モデルに掛けるブレンド率
 	inline void SetDefaultBlendRate(float rate) { m_defaultBlendRate = rate; }
-private:
+protected:
 	// 再生を進める
 	void updateFrame();
 
@@ -46,7 +49,6 @@ private:
 
 	int m_parentModel;	// モデルハンドル
 	int m_attachID;	// アタッチ済アニメーションのハンドル
-	int m_hRoot;	// モデルのルートフレームのハンドル
 
 	float m_frame;	// 現在フレーム（小数もある）
 	float m_maxFrame;	// 最大フレーム
@@ -56,5 +58,32 @@ private:
 
 	bool m_first;	// 最初のアップデート時true
 
+};
+
+// 全体にかけるアニメーション
+class AttachedAnimation_Main : public AttachedAnimation
+{
+public:
+	AttachedAnimation_Main(int parentModel, const AnimInfo& info);
+
+	void Update() override;
+
+	// ルートフレームの行列を更新
+	void UpdateRootMatrix() override;
+
+	inline const MATRIX& RootMatrix() const override { return m_rootMatrix; }
+private:
+	int m_hRoot;	// モデルのルートフレームのハンドル
 	MATRIX m_rootMatrix;	// ルートフレーム移動用の行列
+};
+
+// メインアニメーションを一部上書きするサブアニメーション
+class AttachedAnimation_Sub : public AttachedAnimation
+{
+public:
+	AttachedAnimation_Sub(int parentModel, const AnimInfo& info, std::string target);
+
+	void Update() override;
+private:
+	int m_targetID;	// アニメーションを適用するフレームID
 };

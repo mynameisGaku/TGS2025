@@ -64,6 +64,9 @@ public:
 	/// <param name="speed">再生速度</param>
 	void Play(std::string label, float speed = -1.0f);
 
+	void PlaySub(std::string frameName, std::string label, float speed = -1.0f);
+	void StopSub();
+
 	void DeleteAnimInfos();
 
 	//==========================================================================================
@@ -159,7 +162,8 @@ private:
 	std::unordered_map<std::string, AnimInfo> anims;	// アニメーションの情報
 
 	std::list<AttachedAnimation*> prevs;
-	AttachedAnimation* current;
+	AttachedAnimation_Main* current;
+	AttachedAnimation_Sub* currentSub;
 
 	int parentModel;	// 親のモデル
 	float mergeTime;	// ブレンドの経過速度(1秒間で何フレーム進むか)

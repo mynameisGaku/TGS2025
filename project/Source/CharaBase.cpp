@@ -444,6 +444,7 @@ void CharaBase::StateIdleToBlock(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("IdleToBlock");
+		SetMoveSpeed(200.0f);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -474,6 +475,7 @@ void CharaBase::StateRun(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Run");
+		SetMoveSpeed(700.0f);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -564,8 +566,8 @@ void CharaBase::StateBlockWalk(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("StrafeWalk_A");
 		m_Animator->PlaySub("mixamorig:Spine", "Block");
+		m_Animator->Play("StrafeWalk_C");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新

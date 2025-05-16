@@ -1,6 +1,12 @@
 {
 	"Folder": "data/Animation/",
 	"Files": {
+		"Block": {
+			"IsLoop": true
+		},
+		"BlockToIdle": {
+			"IsLoop": false
+		},
 		"Idle": {
 			"IsLoop": true
 		},
@@ -20,6 +26,9 @@
 			"IsLoop": true
 		},
 		"StrafeWalk_B": {
+			"IsLoop": true
+		},
+		"StrafeWalk_C": {
 			"IsLoop": true
 		}
 	}

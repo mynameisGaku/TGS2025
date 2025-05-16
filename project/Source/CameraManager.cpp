@@ -106,14 +106,6 @@ void CameraManager::ChangeStateCamera(const int& number, void(Camera::* state)(F
 	(*cameras)[number]->ChangeState(state);
 }
 
-void CameraManager::SetCameraWork(const int& number, const std::string& type) {
-
-	if (CheckNumber(number) == false)
-		return;
-
-	(*cameras)[number]->SetPerformance(type);
-}
-
 void CameraManager::CameraChangeStateTheString(const std::string& state) {
 
 	for (int i = 0; i < State::sMax; i++) {
@@ -174,7 +166,6 @@ void CameraManager::InitImGuiNode() {
 
 		Vector3 cWorldPos = (*cameras)[i]->WorldPos();	// カメラの絶対座標
 		Vector3 cOffset = (*cameras)[i]->Offset();		// カメラの相対座標
-		Vector3 cTarget = (*cameras)[i]->Target();		// カメラの注視点
 
 		//==========================================================================================
 		// ▼情報閲覧
@@ -195,9 +186,6 @@ void CameraManager::InitImGuiNode() {
 
 		// ▽相対座標
 		CPTN->Add(new ImGuiNode_Text(cNumber + " Offset Preview",	FormatToString("Offset X % .1f Y % .1f Z % .1f", cOffset.x, cOffset.y, cOffset.z)));
-		
-		// ▽注視点
-		CPTN->Add(new ImGuiNode_Text(cNumber + " Target Preview",	FormatToString("Target X % .1f Y % .1f Z % .1f", cTarget.x, cTarget.y, cTarget.z)));
 		
 		CPTN->NodeEndChild();
 
@@ -223,16 +211,9 @@ void CameraManager::InitImGuiNode() {
 
 		// ▽相対座標
 		CSTN->NodeBeginChild(250.0f, 85.0f);
-		CSTN->Add(new ImGuiNode_SliderFloat("Offset X", &(*cameras)[i]->OffsetPtr().x, -2000.0f, 2000.0f));
-		CSTN->Add(new ImGuiNode_SliderFloat("Offset Y", &(*cameras)[i]->OffsetPtr().y, -2000.0f, 2000.0f));
-		CSTN->Add(new ImGuiNode_SliderFloat("Offset Z", &(*cameras)[i]->OffsetPtr().z, -2000.0f, 2000.0f));
-		CSTN->NodeEndChild();
-
-		// ▽注視点
-		CSTN->NodeBeginChild(250.0f, 85.0f);
-		CSTN->Add(new ImGuiNode_SliderFloat("Target X", &(*cameras)[i]->TargetPtr().x, -5000.0f, 5000.0f));
-		CSTN->Add(new ImGuiNode_SliderFloat("Target Y", &(*cameras)[i]->TargetPtr().y, -5000.0f, 5000.0f));
-		CSTN->Add(new ImGuiNode_SliderFloat("Target Z", &(*cameras)[i]->TargetPtr().z, -5000.0f, 5000.0f));
+		CSTN->Add(new ImGuiNode_SliderFloat("Offset X", &(*cameras)[i]->offset.x, -2000.0f, 2000.0f));
+		CSTN->Add(new ImGuiNode_SliderFloat("Offset Y", &(*cameras)[i]->offset.y, -2000.0f, 2000.0f));
+		CSTN->Add(new ImGuiNode_SliderFloat("Offset Z", &(*cameras)[i]->offset.z, -2000.0f, 2000.0f));
 		CSTN->NodeEndChild();
 
 		//==========================================================================================
@@ -247,20 +228,6 @@ void CameraManager::InitImGuiNode() {
 				stateName.push_back(static_cast<std::string>(magic_enum::enum_name(static_cast<State>(i))));
 
 			CSSTN->Add(new ImGuiNode_DropDown("State Change", stateName, [](std::string s) { CameraManager::CameraChangeStateTheString(s); }));
-		}
-
-		//==========================================================================================
-		// ▼演出変更
-		{
-			// ◆CPTN = CameraPerformanceTreeNumbering(カメラ一つ一つに対しての、演出変更するツリーを構築)
-			ImGuiRoot* CPTN = CameraSettingTree->AddChild(new ImGuiRoot(cNumber + " Performance"));
-
-			std::vector<std::string> cameraPerformanceName;
-
-			for (int i = 0; i < static_cast<int>(CameraWorkType::Max); i++)
-				cameraPerformanceName.push_back(static_cast<std::string>(magic_enum::enum_name(static_cast<CameraWorkType>(i))));
-
-			CPTN->Add(new ImGuiNode_DropDown("Camera Performance", cameraPerformanceName, [](std::string s) { CameraManager::SetCameraWork(0, s); }));
 		}
 
 		CSTN->Add(new ImGuiNode_Button("Reset", std::bind(ResetCamera, i)));
@@ -290,7 +257,6 @@ void CameraManager::UpdateImGuiNode() {
 
 		Vector3 cWorldPos = (*cameras)[i]->WorldPos();	// カメラの絶対座標
 		Vector3 cOffset = (*cameras)[i]->Offset();		// カメラの相対座標
-		Vector3 cTarget = (*cameras)[i]->Target();		// カメラの注視点
 
 		//==========================================================================================
 		// ▼情報閲覧
@@ -309,9 +275,6 @@ void CameraManager::UpdateImGuiNode() {
 		
 		// ▽相対座標
 		CPTN->Node<ImGuiNode_Text>(cNumber + " Offset Preview")->SetText(FormatToString("Offset X %.1f Y %.1f Z %.1f", cOffset.x, cOffset.y, cOffset.z));
-		
-		// ▽注視点
-		CPTN->Node<ImGuiNode_Text>(cNumber + " Target Preview")->SetText(FormatToString("Target X %.1f Y %.1f Z %.1f", cTarget.x, cTarget.y, cTarget.z));
 	}
 }
 

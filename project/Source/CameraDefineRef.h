@@ -25,10 +25,8 @@ public:
 	float m_RotSpeedLimit;	// カメラの回転速度の制限
 
 	Vector3 m_OffsetDef;	// カメラの既定相対座標
-	Vector3 m_TargetDef;	// カメラの既定注視座標
-
 	Vector3 m_OffsetChase;	// 追尾カメラの既定相対座標
-	Vector3 m_TargetChase;	// 追尾カメラの既定注視座標
+	Vector3 m_OffsetAim;	// エイムカメラの相対座標
 
 	void Load(bool ForceLoad = false);
 
@@ -44,9 +42,8 @@ private:
 		m_RotX_Min(0.0f),
 		m_RotSpeedLimit(0.0f),
 		m_OffsetDef(V3::ZERO),
-		m_TargetDef(V3::ZERO),
 		m_OffsetChase(V3::ZERO),
-		m_TargetChase(V3::ZERO)
+		m_OffsetAim(V3::ZERO)
 	{ /*DO NOTHING*/
 	}
 

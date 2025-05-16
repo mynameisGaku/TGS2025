@@ -26,25 +26,18 @@ using namespace CameraDefine;
 Camera::Camera() {
 
 	Reset();
-
-	cameraWork = nullptr;
 	
 	AddComponent<Shake>();
 
 	// fsmの初期化
 	fsm = new TinyFSM<Camera>(this);
-    fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-    //fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	fsm->ChangeState(&Camera::DebugState); // ステートを変更
-	
-	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 
 Camera::~Camera() {
 
 	holder = nullptr;
 	Function::DeletePointer(fsm);
-	Function::DeletePointer(cameraWork);
 
 	RemoveComponent<Shake>();
 }
@@ -55,9 +48,7 @@ void Camera::Reset() {
 	transform->rotation = V3::ZERO;
 
 	offset = CAMERADEFINE_REF.m_OffsetDef;
-	target = CAMERADEFINE_REF.m_TargetDef;
 	offsetPrev = offset;
-	targetPrev = target;
 
 	holder = nullptr;
 }
@@ -74,26 +65,27 @@ void Camera::Draw() {
 
 	Object3D::Draw();
 
+	const Transform globalTrs = transform->Global();
 
-	MATRIX mShakeTrs = MGetIdent();	// 振動用行列
+	Vector3 cameraPos = offset * globalTrs.RotationMatrix();
 
-	Shake* shake = GetComponent<Shake>();
-	if (shake != nullptr)
-		mShakeTrs = shake->Matrix();
-
-	Transform globalTrs = transform->Global();
-
-	Vector3 cameraPos = globalTrs.position + offset * globalTrs.RotationMatrix() * mShakeTrs;
-	Vector3 targetPos = target * mShakeTrs;
-
-	if (holder != nullptr) {
-		cameraPos += holder->Global().position;
-		targetPos += holder->Global().position;
+	// 振動を適用
+	const Shake* shake = GetComponent<Shake>();
+	if (shake != nullptr) {
+		MATRIX mShakeTrs = shake->Matrix();
+		cameraPos *= mShakeTrs;
 	}
 
-	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	// 親に追従
+	cameraPos += globalTrs.position;
 
-	DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
+	// 所有者に追従
+	if (holder != nullptr) {
+		cameraPos += holder->Global().position;
+	}
+
+	// カメラを適用
+	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraPos + Vector3(0, 0, 1) * globalTrs.RotationMatrix());
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
@@ -106,18 +98,40 @@ void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
 void Camera::ColCheckToTerrain() {
 
+	static const Vector3 PUSH_OFFSET = V3::SetY(10.0f);
+	const Vector3 cameraPosition = WorldPos();
+
 	Vector3 hitPos = V3::ZERO;
-	Vector3 cameraPosition = WorldPos();
+	//bool hit = Stage::ColCheckGround(target, cameraPosition - PUSH_OFFSET, &hitPos);
 
-	if (Stage::ColCheckGround(target, cameraPosition - V3::SetY(10.0f), &hitPos)) {
-		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * V3::UP;	// 地面との設置点
-		Vector3 targePos = target * V3::HORIZONTAL;
+	//if (hit) {
+	//	Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * V3::UP;	// 地面との設置点
+	//	Vector3 targePos = target * V3::HORIZONTAL;
 
-		transform->position = terrainPos + targePos + V3::SetY(10.0f);
-	}
+	//	transform->position = terrainPos + targePos + PUSH_OFFSET;
+	//}
 }
 
-void Camera::MoveProcess()
+Vector3 Camera::WorldPos() const {
+
+	Vector3 globalPos = transform->Global().position;	// カメラの絶対座標
+	Vector3 offsetRotAdap = OffsetRotAdaptor();			// 回転行列をかけた相対座標
+	Vector3 holderPos = V3::ZERO;	// 保有者の座標
+
+	if (holder != nullptr)
+		holderPos += holder->Global().position;
+
+	Vector3 pos = globalPos + offsetRotAdap + holderPos;
+
+	return pos;
+}
+
+Vector3 Camera::TargetLay() const {
+
+	return Vector3(0, 0, 1) * transform->Global().RotationMatrix();
+}
+
+void Camera::moveProcess()
 {
 	//====================================================================================================
 	// ▼マウスによるカメラの向き変更
@@ -127,8 +141,6 @@ void Camera::MoveProcess()
 
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
-	
-    target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -144,7 +156,7 @@ void Camera::MoveProcess()
 	transform->position += velocity;
 }
 
-void Camera::OperationByMouse(int type) {
+void Camera::operationByMouse(int type) {
 
 	Vector2 addRot = V2::ZERO;	// 加算する回転量
 
@@ -165,13 +177,13 @@ void Camera::OperationByMouse(int type) {
 	transform->rotation.y += min(max(addRot.y, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
 }
 
-void Camera::OperationByStick(int type) {
+void Camera::operationByStick(int type) {
 
 	Vector2 addRot = V2::ZERO;	// 加算する回転量
 	Vector2 rightStick = PadController::NormalizedRightStick();
 
 	switch (type) {
-	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);break;
+	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f); break;
 	case 1:	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);	break;
 	default:
 		addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);
@@ -184,37 +196,4 @@ void Camera::OperationByStick(int type) {
 
 	transform->rotation.x += addRot.x;
 	transform->rotation.y += addRot.y;
-}
-
-void Camera::SetPerformance(const std::string& perfType) {
-
-	//stateManager->ChangeState(State::sPerformance);
-	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
-}
-
-Vector3 Camera::WorldPos() const {
-
-	Vector3 globalPos = transform->Global().position;	// カメラの絶対座標
-	Vector3 offsetRotAdap = OffsetRotAdaptor();			// 回転行列をかけた相対座標
-	Vector3 holderPos = V3::ZERO;	// 保有者の座標
-
-	if (holder != nullptr)
-		holderPos += holder->Global().position;
-
-	Vector3 pos = globalPos + offsetRotAdap + holderPos;
-
-	return pos;
-}
-
-Vector3 Camera::TargetLay() const {
-
-	Vector3 cameraPos = offset * transform->Matrix();
-	Vector3 targetPos = target;
-
-	if (holder != nullptr) {
-		cameraPos += holder->Global().position;
-		targetPos += holder->Global().position;
-	}
-
-	return targetPos - cameraPos;
 }

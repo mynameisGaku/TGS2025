@@ -39,7 +39,7 @@ void Camera::DebugState(FSMSignal sig)
         }
 
         if (canMove)
-            MoveProcess();
+            moveProcess();
     }
         break;
     case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)

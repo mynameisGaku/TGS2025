@@ -32,19 +32,8 @@ public:
 	//================================================================================
 	// ▼各種関数
 
-	/// <summary>
-	/// 再初期化
-	/// </summary>
 	void Reset();
-
-	/// <summary>
-	/// 更新処理
-	/// </summary>
 	void Update() override;
-
-	/// <summary>
-	/// 描画処理
-	/// </summary>
 	void Draw() override;
 
 	/// <summary>
@@ -54,170 +43,74 @@ public:
 	/// <param name="state">ステートの関数ポインタ</param>
 	void ChangeState(void(Camera::*state)(FSMSignal));
 
-	/// <summary>
-	/// 地形とめり込まない様にする処理 
-	/// </summary>
+	// 地形とめり込まない様にする処理 
 	void ColCheckToTerrain();
 
-	/// <summary>
-	/// 移動処理
-	/// </summary>
-	void MoveProcess();
+	//================================================================================
+	// ▼セッター
+
+	// 相対座標を設定する
+	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
+
+	// 保有者を設定する
+	inline void SetHolderTrs(const Transform* trs) { holder = trs; }
+
+	// 追従するキャラクターの番号を設定する
+	inline void SetHolderCharaIndex(int index) { m_CharaIndex = index; }
+
+	//================================================================================
+	// ▼ゲッター
+
+	// ステートパターンの情報を取得する
+	inline TinyFSM<Camera>* State() const { return fsm; }
+
+	// 相対座標を取得する
+	inline Vector3 Offset() const { return offset; }
+
+	// 回転行列をかけた相対座標を取得する
+	inline Vector3 OffsetRotAdaptor() const { return offset * transform->Global().RotationMatrix(); } 
+
+	// カメラの保有者のトランスフォームを取得する
+	inline const Transform* HolderTrs() const { return holder; }
+
+	// カメラの位置(絶対座標)
+	Vector3 WorldPos() const;
+
+	// 注視点へ向かうベクトル
+	Vector3 TargetLay() const;
+
+	//================================================================================
+	// ▼ステート
+
+	void DebugState(FSMSignal sig);
+	void ChaseState(FSMSignal sig);
+	void AimState(FSMSignal sig);
+
+public:
+	Vector3 offset;		// カメラの相対座標
+private:
+
+	TinyFSM<Camera>* fsm;	// ステートマネージャー
+
+	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
+
+	const Transform* holder;	// カメラの保有者
+	int m_CharaIndex;			// キャラクターの番号
+
+	// 移動処理
+	void moveProcess();
 
 	/// <summary>
 	/// マウスによるカメラ操作
 	/// </summary>
 	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
 	/// </param>
-	void OperationByMouse(int type = -1);
+	void operationByMouse(int type = -1);
 
 	/// <summary>
 	/// スティックによるカメラ操作
 	/// </summary>
 	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
 	/// </param>
-	void OperationByStick(int type = -1);
-
-	//================================================================================
-	// ▼セッター
-
-	/// <summary>
-	/// 相対座標を設定する
-	/// </summary>
-	/// <param name="_offset">相対座標</param>
-	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
-
-	/// <summary>
-	/// 注視点を設定する
-	/// </summary>
-	/// <param name="_target">注視点を設定する</param>
-	inline void SetTarget(const Vector3& _target) { target = _target; }
-
-	/// <summary>
-	/// 保有者を設定する
-	/// </summary>
-	inline void SetHolderTrs(const Transform* trs) { holder = trs; }
-
-	/// <summary>
-	/// クラスを基に保有者を設定する
-	/// </summary>
-	/// <typeparam name="C">保有させたいクラス</typeparam>
-	template<class C>
-	inline void SetHolder() {
-
-		C* c = FindGameObject<C>();
-		if (c == nullptr) {
-			SetHolderTrs(nullptr);
-			return;
-		}
-
-		Object3D* obj = dynamic_cast<Object3D*>(c);
-		if (obj == nullptr) {
-			SetHolderTrs(nullptr);
-			return;
-		}
-
-		SetHolderTrs(obj->transform);
-	}
-
-	/// <summary>
-	/// 追従するキャラクターの番号を設定する
-	/// </summary>
-	/// <param name="index">キャラクターの番号</param>
-	inline void SetHolderCharaIndex(int index) { m_CharaIndex = index; }
-
-	/// <summary>
-	/// 演出を設定する
-	/// </summary>
-	/// <param name="perfType">演出の種類</param>
-	void SetPerformance(const std::string& perfType);
-
-	//================================================================================
-	// ▼ゲッター
-
-	/// <summary>
-	/// ステートパターンの情報を取得する
-	/// </summary>
-	inline TinyFSM<Camera>* State() const { return fsm; }
-
-	/// <summary>
-	/// 相対座標を取得する
-	/// </summary>
-	inline Vector3 Offset() const { return offset; }
-
-	/// <summary>
-	///相対座標のアドレスを取得する 
-	/// </summary>
-	inline Vector3& OffsetPtr() { return offset; }
-
-	/// <summary>
-	/// 回転行列をかけた相対座標を取得する
-	/// </summary>
-	inline Vector3 OffsetRotAdaptor() const { return offset * transform->Global().RotationMatrix(); } 
-
-	/// <summary>
-	/// 注視点を取得する
-	/// </summary>
-	inline Vector3 Target() const { return target; }
-
-	/// <summary>
-	/// 注視点のアドレスを取得する
-	/// </summary>
-	inline Vector3& TargetPtr() { return target; }
-
-	/// <summary>
-	/// カメラの保有者のトランスフォームを取得する
-	/// </summary>
-	/// <returns></returns>
-	inline const Transform* HolderTrs() const { return holder; }
-
-	/// <summary>
-	/// カメラワークの情報を取得する
-	/// </summary>
-	/// <returns>カメラワーク情報のCsvデータ</returns>
-	inline CsvReader* CameraWorkData() const { return cameraWork; }
-
-	/// <summary>
-	/// カメラの位置(絶対座標)
-	/// </summary>
-	Vector3 WorldPos() const;
-
-	/// <summary>
-	/// 注視点へ向かうベクトル
-	/// </summary>
-	Vector3 TargetLay() const;
-
-	//================================================================================
-	// ▼ステート
-
-	/// <summary>
-	/// デバッグステート
-	/// </summary>
-	void DebugState(FSMSignal sig);
-
-	/// <summary>
-	/// 追従ステート
-	/// </summary>
-	void ChaseState(FSMSignal sig);
-
-	/// <summary>
-	/// 狙うステート
-	/// </summary>
-	void AimState(FSMSignal sig);
-
-private:
-	//================================================================================
-	// ▼メンバ変数
-
-	TinyFSM<Camera>* fsm;
-
-	Vector3 offset;		// カメラの相対座標
-	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
-	Vector3 target;		// カメラの注視点
-	Vector3 targetPrev;	// 一つ前のカメラの注視点
-
-	const Transform* holder;	// カメラの保有者
-	CsvReader* cameraWork;		// カメラ演出情報
-	int m_CharaIndex;			// キャラクターの番号
-
+	void operationByStick(int type = -1);
 };

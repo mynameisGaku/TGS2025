@@ -52,16 +52,10 @@ void Camera::AimState(FSMSignal sig)
 		// 注視キャラのトランスフォーム
 		const Transform targetTrs = targetChara->transform->Global();
 
-		// 注視点の差異
-		const Vector3 targetDiff = targetTrs.position + V3::SetY(100.0f) - target;
-
 		transform->position = charaTrs.position;
 
 		// カメラの相対座標を設定
-		SetOffset(CAMERADEFINE_REF.m_OffsetChase);
-
-		// カメラの注視点を設定
-		SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
+		SetOffset(CAMERADEFINE_REF.m_OffsetAim);
 
 		// 注視キャラとカメラの座標の差異
 		const Vector3 diffPos = targetTrs.position - transform->Global().position;

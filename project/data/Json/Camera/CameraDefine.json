@@ -1,29 +1,24 @@
 {
-  "Near":10.0,
-  "Far":100000.0,
-  "Perspective":90.0,
-  "RotX_Max":30.0,
-  "RotX_Min":-85.0,
-  "RotSpeedLimit":13.0,
+    "Near": 10.0,
+    "Far": 100000.0,
+    "Perspective": 90.0,
+    "RotX_Max": 30.0,
+    "RotX_Min": -85.0,
+    "RotSpeedLimit": 13.0,
 
-  "OffsetDef":{
-    "X":0.0,
-    "Y":100.0,
-    "Z":-200.0
-  },
-  "TargetDef": {
-    "X":0.0,
-    "Y":100.0,
-    "Z":100.0
-  },
-  "OffsetChase": {
-    "X":200.0,
-    "Y":400.0,
-    "Z":-320.0
-  },
-  "TargetChase": {
-    "X":0.0,
-    "Y":200.0,
-    "Z":0.0
-  }
+    "OffsetDef": {
+        "X": 0.0,
+        "Y": 100.0,
+        "Z": -200.0
+    },
+    "OffsetChase": {
+        "X": 0.0,
+        "Y": 200.0,
+        "Z": -320.0
+    },
+    "OffsetAim": {
+        "X": 200.0,
+        "Y": 400.0,
+        "Z": -320.0
+    }
 }

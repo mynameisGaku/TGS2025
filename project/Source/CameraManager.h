@@ -39,16 +39,6 @@ namespace CameraManager {
 	void ChangeStateCamera(const int& number, void(Camera::* state)(FSMSignal));
 
 	//================================================================================
-	// ▼セッター
-
-	/// <summary>
-	/// カメラワークを設定する
-	/// </summary>
-	/// <param name="number">カメラの番号</param>
-	/// <param name="type">カメラワークの種類</param>
-	void SetCameraWork(const int& number, const std::string& type);
-
-	//================================================================================
 	// ▼ゲッター
 
 	/// <summary>

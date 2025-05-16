@@ -31,8 +31,8 @@ void Camera::ChaseState(FSMSignal sig)
     break;
     case FSMSignal::SIG_Update: // 更新 (Update)
     {
-        OperationByMouse();
-        OperationByStick();
+        operationByMouse();
+        operationByStick();
 
         // キャラクターの管理者
         CharaManager* charaM = FindGameObject<CharaManager>();
@@ -47,14 +47,8 @@ void Camera::ChaseState(FSMSignal sig)
         // キャラクターのトランスフォーム
         const Transform charaTrs = chara->transform->Global();
 
-        // 注視点の差異
-        const Vector3 targetDiff = (CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix()) - target;
-
         // カメラの相対座標を設定
         SetOffset(CAMERADEFINE_REF.m_OffsetChase);
-
-        // カメラの注視点を設定
-        SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
         
         transform->position = charaTrs.position;
 

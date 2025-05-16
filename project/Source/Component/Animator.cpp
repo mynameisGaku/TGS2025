@@ -150,7 +150,8 @@ void Animator::Update() {
 	{
 		std::string frameName = item.first;
 		AttachedAnimation_Sub* currentSub = item.second;
-		MV1SetAttachAnimBlendRateToFrame(parentModel, current->AttachID(), MV1SearchFrame(parentModel, frameName.c_str()), 0.0f);
+
+		currentSub->UpdateBrendRate(current->AttachID());
 
 		currentSub->Update();
 	}

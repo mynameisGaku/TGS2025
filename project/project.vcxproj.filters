@@ -1225,6 +1225,9 @@
     <None Include="data\Json\Camera\CameraDefine.json">
       <Filter>Framework\03_Object\Camera\00_Define</Filter>
     </None>
+    <None Include="data\Json\Chara\State\BlockWalk.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

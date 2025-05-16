@@ -1,25 +1,25 @@
 {
-  "Animation": "Run",
+    "Animation": "StrafeWalk_C",
     "Events": [
         {
             "Name": "SetAnimationSpeed",
             "Start": 0.0,
-            "Argument": {
-                "Speed": 1.5
-            }
-        },
-        {
-            "Name": "SetAnimationSpeed",
-            "Start": 4.0,
             "Argument": {
                 "Speed": 0.75
             }
         },
         {
             "Name": "SetAnimationSpeed",
-            "Start": 7.5,
+            "Start": 5.0,
             "Argument": {
                 "Speed": 1.5
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 8.0,
+            "Argument": {
+                "Speed": 0.75
             }
         },
         {
@@ -31,9 +31,16 @@
         },
         {
             "Name": "SetAnimationSpeed",
-            "Start": 16.5,
+            "Start": 23.0,
             "Argument": {
                 "Speed": 1.5
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 27.0,
+            "Argument": {
+                "Speed": 0.75
             }
         }
     ]

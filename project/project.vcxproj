@@ -419,6 +419,7 @@
     <None Include="data\Json\Chara\CharaDefine.json" />
     <None Include="data\Json\Chara\CharaHP.json" />
     <None Include="data\Json\Chara\CharaStamina.json" />
+    <None Include="data\Json\Chara\State\BlockWalk.json" />
     <None Include="data\Json\Chara\State\Run.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />

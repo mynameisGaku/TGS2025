@@ -80,7 +80,7 @@ CharaBase::CharaBase()
 #endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateIdle); // ステートを変更
-	m_FSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
+	m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 }
 
 CharaBase::~CharaBase()
@@ -182,6 +182,15 @@ void CharaBase::Update() {
 
 	m_IsMove = false;
 	m_IsBlocking = false;
+
+	if (m_pPhysics->velocity.y < -1.0f)
+	{
+		m_SubFSM->ChangeState(&CharaBase::SubStateFall); // ステートを変更
+	}
+	else
+	{
+		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
+	}
 
 	Object3D::Update();
 }
@@ -603,7 +612,6 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->StopSub("mixamorig:Spine");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -616,6 +624,33 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+	}
+	break;
+	}
+}
+
+void CharaBase::SubStateFall(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->PlaySub("mixamorig:LeftUpLeg", "Fall");
+		m_Animator->PlaySub("mixamorig:RightUpLeg", "Fall");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_Animator->StopSub("mixamorig:LeftUpLeg");
+		m_Animator->StopSub("mixamorig:RightUpLeg");
 	}
 	break;
 	}

@@ -79,6 +79,7 @@ public:
 	void StateIdleToBlock(FSMSignal sig);
 	void StateRun(FSMSignal sig);
 	void SubStateNone(FSMSignal sig);
+	void SubStateFall(FSMSignal sig);
 
 private:
 	friend class CharaManager;

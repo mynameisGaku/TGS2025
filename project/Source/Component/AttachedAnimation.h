@@ -85,6 +85,7 @@ public:
 	AttachedAnimation_Sub(int parentModel, const AnimInfo& info, std::string target);
 
 	void Update() override;
+	void UpdateBrendRate(int currentAttachID);
 private:
 	int m_targetID;	// アニメーションを適用するフレームID
 };

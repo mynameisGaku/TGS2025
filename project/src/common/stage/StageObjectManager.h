@@ -163,6 +163,12 @@ namespace StageObjectManager {
 	/// </summary>
 	void DrawEditMode();
 
+
+#ifdef _DEBUG
+#ifndef IMGUI
+#define IMGUI
+#endif
+#endif
 #ifdef IMGUI
 
 	/// <summary>

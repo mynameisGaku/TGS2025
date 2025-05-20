@@ -23,7 +23,7 @@ Ball::Ball()
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
-	param.trs.scale = Vector3::Ones * BALL_RADIUS / BALL_SCALE * 2;
+	param.trs.scale = Vector3::Ones * BALL_RADIUS / BALL_SCALE * 2.0f;
 
 	m_Collider->SetOffset(Vector3::Zero);
 	m_Collider->BaseInit(param);

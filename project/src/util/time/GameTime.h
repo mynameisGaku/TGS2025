@@ -103,6 +103,33 @@ public:
         return instance;
     }
 
+    //==================================================
+    // ▼変換
+
+    // フレームを秒に変換
+    template<typename Ty = float>
+    inline float FrameToSec(Ty frame) { return static_cast<float>(frame) / 60.0f; }
+
+    // フレームを分に変換
+    template<typename Ty = float>
+    inline float FrameToMin(Ty frame) { return static_cast<float>(frame) / 60.0f * 60.0f; }
+
+    // フレームを時間に変換
+    template<typename Ty = float>
+    inline float FrameToHour(Ty frame) { return static_cast<float>(frame) / 3600.0f * 60.0f; }
+
+    // 秒をフレームに変換
+    template<typename Ty = float>
+    inline float SecToFrame(Ty sec) { return static_cast<float>(sec) * 60.0f; }
+
+    // 分をフレームに変換
+    template<typename Ty = float>
+    inline float MinToFrame(Ty min) { return static_cast<float>(min) * 60.0f * 60.0f; }
+
+    // 時間をフレームに変換
+    template<typename Ty = float>
+    inline float HourToFrame(Ty hour) { return static_cast<float>(hour) * 60.0f * 60.0f * 60.0f; }
+
 private:
 
     GameTime() = default;

@@ -214,9 +214,11 @@ void SystemManager::Debug() {
 	if (IsLoadEnd() == false)
 		return;
 	
+#ifdef IMGUI
 	if (InputManager::Push(KeyDefine::KeyCode::F1)) {
 		ImGuiManager::SetIsActive(!ImGuiManager::IsActive());
 	}
+#endif
 	if (InputManager::Push(KeyDefine::KeyCode::Alpha9)) {
 		MouseController::SetMouseMovement(KeyDefine::MouseMovement::Free);
 	}

@@ -13,17 +13,9 @@
 #endif
 
 #include <DxLib.h>
-#include <EffekseerForDXLib.h>
-#include "framework/App.h"
-#include "src/Util/Utils.h"
-#include "src/util/font/Font.h"
-#include "src/common/setting/window/WindowSetting.h"
-#include "src/util/file/json/settings_json.h"
-#include "src/util/file/ini/settings_ini.h"
-#include "src/util/file/FileUtil.h"
 
+#define IMGUI
 #ifdef IMGUI
-
 #include "vendor/imgui/imgui.h"
 #include "vendor/imgui/imgui_impl_dx11.h"
 #include "vendor/imgui/imgui_impl_win32.h"
@@ -32,7 +24,18 @@
 extern IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+#include "src/util/debug/imgui/imGuiManager.h"
+
 #endif // IMGUI
+
+#include <EffekseerForDXLib.h>
+#include "framework/App.h"
+#include "src/Util/Utils.h"
+#include "src/util/font/Font.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/file/ini/settings_ini.h"
+#include "src/util/file/FileUtil.h"
 
 #define CoGVersion (2.2)
 
@@ -44,11 +47,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     SearchFilePath("window.ini", path);
     wSetting.Load(path);
 
-	SetGraphMode(wSetting.width, wSetting.height, 32);
+	SetGraphMode((int)wSetting.width, (int)wSetting.height, 32);
 	SetOutApplicationLogValidFlag(FALSE); // ログを出さない
 
 	SetMainWindowText(wSetting.name.c_str());
-	SetWindowSizeExtendRate(wSetting.extend);
+	SetWindowSizeExtendRate((double)wSetting.extend);
 	ChangeWindowMode(wSetting.isFull); // Windowモードの場合
 
 #ifdef IMGUI
@@ -96,7 +99,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
 	
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
-	Effekseer_Set2DSetting(wSetting.width, wSetting.height);
+	Effekseer_Set2DSetting((int)wSetting.width, (int)wSetting.height);
 
 	SetFontSize(32);
 	Font::Load("data/font/", "sazanami_mincho.ttf", "さざなみ明朝");

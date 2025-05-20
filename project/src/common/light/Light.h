@@ -57,6 +57,11 @@ public:
 
 private:
 
+#ifdef _DEBUG
+#ifndef IMGUI
+#define IMGUI
+#endif
+#endif
 #ifdef IMGUI
 
 	std::string imguiLabel;	// ImGui‚É“o˜^‚·‚é–¼‘O

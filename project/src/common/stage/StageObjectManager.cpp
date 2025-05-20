@@ -5,8 +5,8 @@
 #include <assert.h>
 
 #include "src/util/Utils.h"
-#include "../Source/ImGuiTree/imGuiManager.h"
-#include "../Library/csvReader.h"
+#include "src/util/debug/imgui/imGuiManager.h"
+#include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include <vendor/magic_enum/magic_enum.hpp>
 

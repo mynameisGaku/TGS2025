@@ -57,7 +57,7 @@ namespace PadController {
 	/// <param name="time">効果時間(-1の場合、StopVibration()が呼ばれるまでの間振動する)</param>
 	/// <param name="effectIndex">振動させるモーターの番号</param>
 	inline void SetVibration(int padNumber, int power, float time, int effectIndex = -1) {
-		StartJoypadVibration(padNumber, power, static_cast<int>(GTime::SecToFrame(time)), effectIndex);
+		StartJoypadVibration(padNumber, power, static_cast<int>(GTime.SecToFrame(time)), effectIndex);
 	}
 
 	/// <summary>

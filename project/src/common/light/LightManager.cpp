@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 // ◇演出・機能
-#include "../Source/ImGuiTree/imGuiManager.h"
+#include "src/util/debug/imgui/imGuiManager.h"
 
 // ◇個別で必要な物
 #include "Light.h"

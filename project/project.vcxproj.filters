@@ -599,120 +599,6 @@
     <ClCompile Include="src\scene\boot\bootScene.cpp">
       <Filter>src%28application%29\scene\boot</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\common\camera\Camera.cpp">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\camera\CameraDefineRef.cpp">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\camera\CameraManager.cpp">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\camera\CamState_Aim.cpp">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\camera\CamState_Chase.cpp">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\camera\CamState_Debug.cpp">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\controller\AIController.cpp">
-      <Filter>src%28application%29\scene\common\component\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\controller\DebugController.cpp">
-      <Filter>src%28application%29\scene\common\component\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\controller\PlayerController.cpp">
-      <Filter>src%28application%29\scene\common\component\controller</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\ColliderBase.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\ColliderCapsule.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\ColliderModel.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\ColliderSphere.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\CollisionData.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\CollisionFunc.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\CollisionManager.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\collider\CollisionObserver.cpp">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\animator\AnimationEvent.cpp">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\animator\Animator.cpp">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\animator\AnimatorJson.cpp">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\animator\AttachedAnimation.cpp">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\material_renderer\MaterialRenderer.cpp">
-      <Filter>src%28application%29\scene\common\component\material_renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\motion_blur\MotionBlur.cpp">
-      <Filter>src%28application%29\scene\common\component\motion_blur</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\physics\Physics.cpp">
-      <Filter>src%28application%29\scene\common\component\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\shake\Shake.cpp">
-      <Filter>src%28application%29\scene\common\component\shake</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\component\shadow_circle\ShadowCircle.cpp">
-      <Filter>src%28application%29\scene\common\component\shadow_circle</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\light\Light.cpp">
-      <Filter>src%28application%29\scene\common\light</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\light\LightManager.cpp">
-      <Filter>src%28application%29\scene\common\light</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\load_screen\LoadScreen.cpp">
-      <Filter>src%28application%29\scene\common\load_screen</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\setting\SettingBase.cpp">
-      <Filter>src%28application%29\scene\common\setting</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\setting\SettingManager.cpp">
-      <Filter>src%28application%29\scene\common\setting</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\setting\window\WindowSetting.cpp">
-      <Filter>src%28application%29\scene\common\setting\window</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\setting\volume\VolumeSetting.cpp">
-      <Filter>src%28application%29\scene\common\setting\volume</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\setting\sensi\SensiSetting.cpp">
-      <Filter>src%28application%29\scene\common\setting\sensi</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\stage\Stage.cpp">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\stage\StageObject.cpp">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\stage\StageObjectManager.cpp">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\common\system\SystemManager.cpp">
-      <Filter>src%28application%29\scene\common\system</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene\play\playScene.cpp">
       <Filter>src%28application%29\scene\play</Filter>
     </ClCompile>
@@ -770,42 +656,6 @@
     <ClCompile Include="src\util\blur_screen\BlurScreen.cpp">
       <Filter>src%28application%29\util\blur_screen</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\debug\debugScreen.cpp">
-      <Filter>src%28application%29\util\debug</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiFunc.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiManager.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_Button.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_CheckBox.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_ColorEdit4.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_DropDown.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_SliderFloat.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_SliderInt.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_Space.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiNode_Text.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\debug\imgui\imGuiRoot.cpp">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\fader\Fader.cpp">
       <Filter>src%28application%29\util\fader</Filter>
     </ClCompile>
@@ -839,9 +689,6 @@
     <ClCompile Include="src\util\fx\effect\EffectManager.cpp">
       <Filter>src%28application%29\util\fx\effect</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\bloom\BloomManager.cpp">
-      <Filter>src%28application%29\util\fx\post_effect\bloom</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\gauge\gauge.cpp">
       <Filter>src%28application%29\util\gauge</Filter>
     </ClCompile>
@@ -867,9 +714,6 @@
       <Filter>src%28application%29\util\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\util\ui\UI_BillBoard.cpp">
-      <Filter>src%28application%29\util\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\ui\UI_BillBorad_Numeric.cpp">
       <Filter>src%28application%29\util\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\util\ui\UI_Button.cpp">
@@ -998,6 +842,78 @@
     <ClCompile Include="src\util\time\GameTimeHelper.cpp">
       <Filter>src%28application%29\util\time</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\camera\Camera.cpp" />
+    <ClCompile Include="src\common\camera\CameraManager.cpp" />
+    <ClCompile Include="src\common\camera\CamState_Aim.cpp" />
+    <ClCompile Include="src\common\camera\CamState_Chase.cpp" />
+    <ClCompile Include="src\common\camera\CamState_Debug.cpp" />
+    <ClCompile Include="src\common\component\animator\AnimationEvent.cpp" />
+    <ClCompile Include="src\common\component\animator\Animator.cpp" />
+    <ClCompile Include="src\common\component\animator\AnimatorJson.cpp" />
+    <ClCompile Include="src\common\component\animator\AttachedAnimation.cpp" />
+    <ClCompile Include="src\common\component\collider\ColliderBase.cpp" />
+    <ClCompile Include="src\common\component\collider\ColliderCapsule.cpp" />
+    <ClCompile Include="src\common\component\collider\ColliderModel.cpp" />
+    <ClCompile Include="src\common\component\collider\ColliderSphere.cpp" />
+    <ClCompile Include="src\common\component\collider\CollisionData.cpp" />
+    <ClCompile Include="src\common\component\collider\CollisionFunc.cpp" />
+    <ClCompile Include="src\common\component\collider\CollisionManager.cpp" />
+    <ClCompile Include="src\common\component\collider\CollisionObserver.cpp" />
+    <ClCompile Include="src\common\component\controller\AIController.cpp" />
+    <ClCompile Include="src\common\component\controller\DebugController.cpp" />
+    <ClCompile Include="src\common\component\controller\PlayerController.cpp" />
+    <ClCompile Include="src\common\component\material_renderer\MaterialRenderer.cpp" />
+    <ClCompile Include="src\common\component\motion_blur\MotionBlur.cpp" />
+    <ClCompile Include="src\common\component\physics\Physics.cpp" />
+    <ClCompile Include="src\common\component\shadow_circle\ShadowCircle.cpp" />
+    <ClCompile Include="src\common\component\shake\Shake.cpp" />
+    <ClCompile Include="src\common\light\Light.cpp" />
+    <ClCompile Include="src\common\light\LightManager.cpp" />
+    <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
+    <ClCompile Include="src\common\setting\sensi\SensiSetting.cpp" />
+    <ClCompile Include="src\common\setting\SettingBase.cpp" />
+    <ClCompile Include="src\common\setting\SettingManager.cpp" />
+    <ClCompile Include="src\common\setting\volume\VolumeSetting.cpp" />
+    <ClCompile Include="src\common\setting\window\WindowSetting.cpp" />
+    <ClCompile Include="src\common\stage\Stage.cpp" />
+    <ClCompile Include="src\common\stage\StageObject.cpp" />
+    <ClCompile Include="src\common\stage\StageObjectManager.cpp" />
+    <ClCompile Include="src\common\system\SystemManager.cpp" />
+    <ClCompile Include="src\util\fx\post_effect\bloom\BloomManager.cpp" />
+    <ClCompile Include="src\util\ui\UI_BillBoard_Numeric.cpp" />
+    <ClCompile Include="src\util\debug\imgui\imGuiFunc.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiManager.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_Button.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_CheckBox.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_ColorEdit4.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_DropDown.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_SliderFloat.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_SliderInt.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_Space.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_Text.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiRoot.cpp">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1045,126 +961,6 @@
     <ClInclude Include="src\scene\boot\bootScene.h">
       <Filter>src%28application%29\scene\boot</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\common\camera\Camera.h">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\camera\CameraDefine.h">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\camera\CameraDefineRef.h">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\camera\CameraManager.h">
-      <Filter>src%28application%29\scene\common\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\controller\AIController.h">
-      <Filter>src%28application%29\scene\common\component\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\controller\DebugController.h">
-      <Filter>src%28application%29\scene\common\component\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\controller\PlayerController.h">
-      <Filter>src%28application%29\scene\common\component\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\ColliderBase.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\ColliderCapsule.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\ColliderModel.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\ColliderSphere.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\CollisionData.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\CollisionDefine.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\CollisionFunc.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\CollisionManager.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\collider\CollisionObserver.h">
-      <Filter>src%28application%29\scene\common\component\collider</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\animator\AnimationEvent.h">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\animator\Animator.h">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\animator\AnimatorJson.h">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\animator\AttachedAnimation.h">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\animator\AnimationDefine.h">
-      <Filter>src%28application%29\scene\common\component\animator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\material_renderer\MaterialRenderer.h">
-      <Filter>src%28application%29\scene\common\component\material_renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\motion_blur\MotionBlur.h">
-      <Filter>src%28application%29\scene\common\component\motion_blur</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\physics\Physics.h">
-      <Filter>src%28application%29\scene\common\component\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\shake\Shake.h">
-      <Filter>src%28application%29\scene\common\component\shake</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\component\shadow_circle\ShadowCircle.h">
-      <Filter>src%28application%29\scene\common\component\shadow_circle</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\light\Light.h">
-      <Filter>src%28application%29\scene\common\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\light\LightDefine.h">
-      <Filter>src%28application%29\scene\common\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\light\LightManager.h">
-      <Filter>src%28application%29\scene\common\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\load_screen\LoadScreen.h">
-      <Filter>src%28application%29\scene\common\load_screen</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\setting\SettingBase.h">
-      <Filter>src%28application%29\scene\common\setting</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\setting\SettingManager.h">
-      <Filter>src%28application%29\scene\common\setting</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\setting\window\WindowSetting.h">
-      <Filter>src%28application%29\scene\common\setting\window</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\setting\volume\VolumeSetting.h">
-      <Filter>src%28application%29\scene\common\setting\volume</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\setting\sensi\SensiSetting.h">
-      <Filter>src%28application%29\scene\common\setting\sensi</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\stage\Stage.h">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\stage\StageDefine.h">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\stage\StageObject.h">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\stage\StageObjectManager.h">
-      <Filter>src%28application%29\scene\common\stage</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\common\system\SystemManager.h">
-      <Filter>src%28application%29\scene\common\system</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\play\playScene.h">
       <Filter>src%28application%29\scene\play</Filter>
     </ClInclude>
@@ -1204,9 +1000,6 @@
     <ClInclude Include="src\scene\title\titleScene.h">
       <Filter>src%28application%29\scene\title</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\common\timeline\TimeLine.h">
-      <Filter>src%28application%29\scene\common\timeline</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h">
       <Filter>src%28application%29\util\behavior_tree</Filter>
     </ClInclude>
@@ -1225,55 +1018,7 @@
     <ClInclude Include="src\util\blur_screen\BlurScreen.h">
       <Filter>src%28application%29\util\blur_screen</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\debug\debugScreen.h">
-      <Filter>src%28application%29\util\debug</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiFunc.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiManager.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_BeginChildren.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_Button.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_CheckBox.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_ColorEdit4.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_DropDown.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_EndChildren.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_SliderFloat.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_SliderInt.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_Space.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiNode_Text.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\debug\imgui\imGuiRoot.h">
-      <Filter>src%28application%29\util\debug\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\easing\easing.h">
-      <Filter>src%28application%29\util\easing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\easing\EasingUtils.h">
       <Filter>src%28application%29\util\easing</Filter>
     </ClInclude>
     <ClInclude Include="src\util\fader\Fader.h">
@@ -1318,9 +1063,6 @@
     <ClInclude Include="src\util\fx\effect\EffectManager.h">
       <Filter>src%28application%29\util\fx\effect</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\bloom\BloomManager.h">
-      <Filter>src%28application%29\util\fx\post_effect\bloom</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\gauge\gauge.h">
       <Filter>src%28application%29\util\gauge</Filter>
     </ClInclude>
@@ -1349,9 +1091,6 @@
       <Filter>src%28application%29\util\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\util\ui\UI_BillBoard.h">
-      <Filter>src%28application%29\util\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\ui\UI_BillBorad_Numeric.h">
       <Filter>src%28application%29\util\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\util\ui\UI_Button.h">
@@ -1515,6 +1254,95 @@
     </ClInclude>
     <ClInclude Include="src\util\time\GameTimeHelper.h">
       <Filter>src%28application%29\util\time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\camera\Camera.h" />
+    <ClInclude Include="src\common\camera\CameraDefine.h" />
+    <ClInclude Include="src\common\camera\CameraManager.h" />
+    <ClInclude Include="src\common\component\animator\AnimationDefine.h" />
+    <ClInclude Include="src\common\component\animator\AnimationEvent.h" />
+    <ClInclude Include="src\common\component\animator\Animator.h" />
+    <ClInclude Include="src\common\component\animator\AnimatorJson.h" />
+    <ClInclude Include="src\common\component\animator\AttachedAnimation.h" />
+    <ClInclude Include="src\common\component\collider\ColliderBase.h" />
+    <ClInclude Include="src\common\component\collider\ColliderCapsule.h" />
+    <ClInclude Include="src\common\component\collider\ColliderModel.h" />
+    <ClInclude Include="src\common\component\collider\ColliderSphere.h" />
+    <ClInclude Include="src\common\component\collider\CollisionData.h" />
+    <ClInclude Include="src\common\component\collider\CollisionDefine.h" />
+    <ClInclude Include="src\common\component\collider\CollisionFunc.h" />
+    <ClInclude Include="src\common\component\collider\CollisionManager.h" />
+    <ClInclude Include="src\common\component\collider\CollisionObserver.h" />
+    <ClInclude Include="src\common\component\Component.h" />
+    <ClInclude Include="src\common\component\controller\AIController.h" />
+    <ClInclude Include="src\common\component\controller\DebugController.h" />
+    <ClInclude Include="src\common\component\controller\PlayerController.h" />
+    <ClInclude Include="src\common\component\material_renderer\MaterialRenderer.h" />
+    <ClInclude Include="src\common\component\motion_blur\MotionBlur.h" />
+    <ClInclude Include="src\common\component\physics\Physics.h" />
+    <ClInclude Include="src\common\component\shadow_circle\ShadowCircle.h" />
+    <ClInclude Include="src\common\component\shake\Shake.h" />
+    <ClInclude Include="src\common\light\Light.h" />
+    <ClInclude Include="src\common\light\LightDefine.h" />
+    <ClInclude Include="src\common\light\LightManager.h" />
+    <ClInclude Include="src\common\load_screen\LoadScreen.h" />
+    <ClInclude Include="src\common\setting\sensi\SensiSetting.h" />
+    <ClInclude Include="src\common\setting\SettingBase.h" />
+    <ClInclude Include="src\common\setting\SettingManager.h" />
+    <ClInclude Include="src\common\setting\volume\VolumeSetting.h" />
+    <ClInclude Include="src\common\setting\window\WindowSetting.h" />
+    <ClInclude Include="src\common\stage\Stage.h" />
+    <ClInclude Include="src\common\stage\StageDefine.h" />
+    <ClInclude Include="src\common\stage\StageObject.h" />
+    <ClInclude Include="src\common\stage\StageObjectManager.h" />
+    <ClInclude Include="src\common\system\SystemManager.h" />
+    <ClInclude Include="src\common\timeline\TimeLine.h" />
+    <ClInclude Include="src\util\easing\EasingType.h" />
+    <ClInclude Include="src\util\easing\EasingTypeMapper.h" />
+    <ClInclude Include="src\util\fx\post_effect\bloom\BloomManager.h" />
+    <ClInclude Include="src\util\ui\UI_BillBoard_Numeric.h" />
+    <ClInclude Include="vendor\nlohmann\json.hpp" />
+    <ClInclude Include="vendor\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="src\util\debug\imgui\imGuiFunc.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiManager.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_BeginChildren.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Button.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_CheckBox.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_ColorEdit4.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_DropDown.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_EndChildren.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_SliderFloat.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_SliderInt.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Space.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Text.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiRoot.h">
+      <Filter>src%28application%29\util\debug\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

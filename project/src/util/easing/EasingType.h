@@ -1,6 +1,7 @@
 #pragma once
 
 enum class EasingType {
+    None,
     Linear,
     InSine,
     OutSine,

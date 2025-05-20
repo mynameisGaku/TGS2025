@@ -198,7 +198,7 @@ namespace EasingFunc {
 		case EasingType::InOutBounce:	*value = EasingFunc::EaseInOutBounce(info->time, info->totaltime, _max, _min); break;
 		case EasingType::Linear:
 		default:
-			*value = EasingFunc::Apply(info->time, info->totaltime, _max, _min);
+			*value = EasingFunc::Apply(info->time, _max, _min);
 			break;
 		}
 	}

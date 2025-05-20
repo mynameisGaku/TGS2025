@@ -77,6 +77,12 @@ namespace CameraManager {
 	/// <param name="state">変更するステート名</param>
 	void CameraChangeStateTheString(const std::string& state);
 
+
+#ifdef _DEBUG
+#ifndef IMGUI
+#define IMGUI
+#endif
+#endif
 #ifdef IMGUI
 
 	/// <summary>

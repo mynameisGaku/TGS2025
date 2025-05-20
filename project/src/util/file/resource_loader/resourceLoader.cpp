@@ -1,9 +1,8 @@
-#include "resourceLoader.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
 #include <unordered_map>
 #include <DxLib.h>
 #include <windows.h>
 #include <assert.h>
-#include "ResourceLoader.h"
 
 namespace {
 

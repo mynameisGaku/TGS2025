@@ -1,5 +1,5 @@
 #pragma once
-#include "Object3D.h"
+#include "src/util/object3D/Object3D.h"
 #include <vector>
 
 class Locus : public Object3D {

@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <array>
-#include "../Util/Vector3.h"
+#include "src/util/math/vector3.h"
 
 class Animator;
 class AttachedAnimation;

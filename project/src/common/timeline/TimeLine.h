@@ -3,9 +3,9 @@
 #include <list>
 #include <unordered_map>
 #include <fstream>
-#include "nlohmann/json.hpp"
-#include "Component/Animator.h"
-#include "Util/Utils.h"
+#include <vendor/nlohmann/json.hpp>
+#include "src/common/component/animator/Animator.h"
+#include "src/util/Utils.h"
 
 struct TimelineEvent
 {

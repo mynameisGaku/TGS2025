@@ -1,13 +1,13 @@
-#include "UI_Slider.h"
-#include "UI_Manager.h"
+#include "src/util/ui/UI_Slider.h"
+#include "src/util/ui/UI_Manager.h"
 
 // ◇汎用
-#include "../Library/myDxLib.h"
-#include "../Source/Util/Utils.h"
+#include "framework/myDxLib.h"
+#include "src/util/Utils.h"
 
 // ◇演出・機能
-#include "InputManager.h"
-#include "MouseController.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/MouseController.h"
 
 using namespace KeyDefine;
 
@@ -147,8 +147,8 @@ void UI_Slider::DrawBack() {
 	DrawBoxAA(backBeginPos.x - 2.0f, backBeginPos.y - 4.0f, backEndPos.x + 2.0f, backEndPos.y + 4.0f, GetColor(0, 0, 0), true);
 	DrawBoxAA(backBeginPos.x, backBeginPos.y, backEndPos.x, backEndPos.y, colors.backColor, true);
 
-	Vector2 fillBeginPos = globalTrs.position - backSize + V2::ONE;
-	Vector2 fillEndPos	 = V2::ZERO;
+	Vector2 fillBeginPos = globalTrs.position - backSize + Vector2::Ones;
+	Vector2 fillEndPos	 = Vector2::Zero;
 	fillEndPos.x = pointPosition.x - 1;
 	fillEndPos.y = globalTrs.position.y + backSize.y - 1;
 
@@ -160,7 +160,7 @@ void UI_Slider::DrawDivisions() {
 
 	const float DivSpace = (backSize.x * 2.0f) / (max(divisions - 1, 1));
 
-	Vector2 glidLine = V2::ZERO;
+	Vector2 glidLine = Vector2::Zero;
 	Vector2 drawPos = rectTransform->Global().position - Vector2(backSize.x, 0.0f);
 
 	for (int i = 0; i < divisions; i++) {

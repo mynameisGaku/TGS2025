@@ -1,4 +1,4 @@
-#include "gauge.h"
+#include "src/util/gauge/gauge.h"
 
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 int Gauge::currentId = 0;

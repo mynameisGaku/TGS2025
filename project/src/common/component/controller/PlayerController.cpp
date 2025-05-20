@@ -1,14 +1,14 @@
-#include "PlayerController.h"
+#include "src/common/component/controller/PlayerController.h"
 
-#include "../../Library/time.h"
+#include "src/util/time/GameTime.h"
 
-#include "../InputManager.h"
-#include "../PadController.h"
-#include "../CameraManager.h"
-#include "../CharaBase.h"
-#include "../StateManager.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/PadController.h"
+#include "src/common/camera/CameraManager.h"
+#include "src/scene/play/chara/CharaBase.h"
+#include "src/util/fsm/StateManager.h"
 
-#include "Physics.h"
+#include "src/common/component/physics/Physics.h"
 
 PlayerController::PlayerController() {
 
@@ -190,7 +190,7 @@ bool PlayerController::IsMoveButton() const {
 		return false;
 
 	// スティックが傾いているか
-	bool isTiltStick = (InputManager::AnalogStick(padNumber).Size() >= KeyDefine::STICK_DEADZONE);
+	bool isTiltStick = (InputManager::AnalogStick(padNumber).GetLength() >= KeyDefine::STICK_DEADZONE);
 
 	// 移動キーが入力されているか
 	bool isPushKey = InputManager::Hold("Movement", padNumber);

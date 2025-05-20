@@ -1,11 +1,11 @@
 // settings_ini.cpp
-#include "settings_ini.h"
+#include "src/util/file/ini/settings_ini.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <thread>
 #include <chrono>
-#include "../vendor/ImGui/imgui.h"
+#include <vendor/imgui/ImGui.h>
 
 Settings_ini::Settings_ini()
 {

@@ -1,6 +1,6 @@
-#include "CharaHP.h"
-#include "CharaHPRef.h"
-#include <Library/time.h>
+#include "src/scene/play/chara/CharaHP.h"
+#include "src/reference/chara/CharaHPRef.h"
+#include "src/util/time/GameTime.h"
 #include <Windows.h>
 
 CharaHP::CharaHP()
@@ -132,7 +132,7 @@ void CharaHP::LogChange(float amount, const std::string& source)
     }
     HPChangeLog log;
     log.amount = amount;
-    log.time = Time::TotalTime();
+    log.time = GTime.TotalTime();
     log.source = source;
     m_Log.push_back(log);
 }

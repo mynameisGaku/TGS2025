@@ -1,5 +1,5 @@
 #pragma once
-#include "../Library/myDxLib.h"
+#include "framework/myDxLib.h"
 
 namespace UI_Define {
 

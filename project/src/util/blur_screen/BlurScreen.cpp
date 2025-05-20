@@ -1,6 +1,6 @@
-#include "BlurScreen.h"
-#include "../Library/time.h"
-#include "../Source/Util/Utils.h"
+#include "src/util/blur_screen/BlurScreen.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/Utils.h"
 
 //#include "settingManager.h"
 
@@ -59,12 +59,12 @@ void BlurScreen::Update() {
 	//if (SettingManager::IsActive())
 	//	return;
 
-	duration = max(duration - Time::DeltaTimeLapseRate(), 0.0f);
+	duration = max(duration - GTime.deltaTime, 0.0f);
 	if (!isFadeOut && duration <= 0.0f)
 		FadeOut(fadeDuration);
 
 	if (isFadeOut) {
-		fadeDuration = max(fadeDuration - Time::DeltaTimeLapseRate(), 0.0f);
+		fadeDuration = max(fadeDuration - GTime.deltaTime, 0.0f);
 
 		if (fadeTotalDuration != 0.0f)
 			alpha = defAlpha * min(max((fadeDuration / fadeTotalDuration), 0.0f), 1.0f);

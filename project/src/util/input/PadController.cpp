@@ -1,4 +1,4 @@
-#include "PadController.h"
+#include "src/util/input/PadController.h"
 
 using namespace KeyDefine;
 
@@ -104,7 +104,7 @@ Vector2 PadController::StickSensitivity() {
 Vector2 PadController::NormalizedLeftStick(int padNumber) {
 
 	if (CheckPadNumber(padNumber) == false || inputs == nullptr)
-		return V2::ZERO;
+		return Vector2::Zero;
 
 	float x = static_cast<float>((*inputs)[padNumber - 1].ThumbLX) / 32767.0f;
 	float y = static_cast<float>((*inputs)[padNumber - 1].ThumbLY) / 32767.0f;
@@ -115,7 +115,7 @@ Vector2 PadController::NormalizedLeftStick(int padNumber) {
 Vector2 PadController::NormalizedRightStick(int padNumber) {
 
 	if (CheckPadNumber(padNumber) == false || inputs == nullptr)
-		return V2::ZERO;
+		return Vector2::Zero;
 
 	float x = static_cast<float>((*inputs)[padNumber - 1].ThumbRX) / 32767.0f;
 	float y = static_cast<float>((*inputs)[padNumber - 1].ThumbRY) / 32767.0f;

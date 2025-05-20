@@ -1,27 +1,26 @@
 #include "playScene.h"
-#include "../Library/sceneManager.h"
-#include "DebugScreen.h"
-#include "Util/Utils.h"
+#include "framework/SceneManager.h"
+#include "src/util/Utils.h"
 
-#include "InputManager.h"
-#include "CharaManager.h"
-#include "CameraManager.h"
-#include "Component/PlayerController.h"
-#include "Component/AIController.h"
-#include "Component/DebugController.h"
-#include "Component/CollisionManager.h"
+#include "src/util/input/InputManager.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/common/camera/CameraManager.h"
+#include "src/common/component/controller/PlayerController.h"
+#include "src/common/component/controller/AIController.h"
+#include "src/common/component/controller/DebugController.h"
+#include "src/common/component/collider/CollisionManager.h"
 
 //=== ボール ===
-#include "BallManager.h"
-#include "Ball.h"
+#include "src/scene/play/ball/BallManager.h"
+#include "src/scene/play/ball/Ball.h"
 
 //=== ポストエフェクト ===
-#include "BloomManager.h"
-#include "EffectManager.h"
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+#include "src/util/fx/effect/EffectManager.h"
 
 //=== 破片 ===
-#include "CrystalFragmentManager.h"
-#include "settings_json.h"
+#include "src/scene/play/crystal/CrystalFragmentManager.h"
+#include "src/util/file/json/settings_json.h"
 
 using namespace KeyDefine;
 
@@ -31,8 +30,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	CharaManager* charaM = Instantiate<CharaManager>();
 
-	CharaBase* player = charaM->Create("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, V3::ONE));
-	CharaBase* enemy = charaM->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, V3::ONE));
+	CharaBase* player = charaM->Create("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
+	CharaBase* enemy = charaM->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
 
 	player->SetMoveSpeed(700.0f);
 	player->SetRotSpeed(Math::DegToRad(10.0f));

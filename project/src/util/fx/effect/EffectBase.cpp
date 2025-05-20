@@ -1,9 +1,9 @@
 #include "effectBase.h"
 #include <EffekseerForDXLib.h>
 
-#include "../Library/time.h"
-#include "Util/Utils.h"
-#include "Util/Operations.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/Utils.h"
+#include "src/util/math/Operations.h"
 
 using namespace EffectDefine;
 
@@ -174,8 +174,8 @@ void EffectBase::SetPlaySpeed(const float& speed) {
 	info.playSpeed = speed;
 
 	switch (info.dimension) {
-	case Dimensional::_2D:	SetSpeedPlayingEffekseer2DEffect(info.playingHandle, info.playSpeed * Time::LapseRate()); break;
-	case Dimensional::_3D:	SetSpeedPlayingEffekseer3DEffect(info.playingHandle, info.playSpeed * Time::LapseRate()); break;
+	case Dimensional::_2D:	SetSpeedPlayingEffekseer2DEffect(info.playingHandle, info.playSpeed * GTime.GetTimeScale()); break;
+	case Dimensional::_3D:	SetSpeedPlayingEffekseer3DEffect(info.playingHandle, info.playSpeed * GTime.GetTimeScale()); break;
 	default:
 		break;
 	}

@@ -1,8 +1,8 @@
-#include "ui_BillBoard.h"
+#include "src/util/ui/UI_BillBoard.h"
 
 UI_BillBoard::UI_BillBoard(const int& image, const Transform& trs, const Vector2& _center, const float& _clipSize) {
 
-	SetImage(image, V2::ZERO, Vector2(_clipSize), _center);
+	SetImage(image, Vector2::Zero, Vector2(_clipSize), _center);
 
 	transform = new Transform(trs);
 }

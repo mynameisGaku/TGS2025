@@ -1,5 +1,5 @@
 #pragma once
-#include "nlohmann/json_fwd.hpp"
+#include <vendor/nlohmann/json_fwd.hpp>
 
 class Vector2;
 class Vector3;

@@ -1,6 +1,6 @@
-#include "KeyController.h"
+#include "src/util/input/KeyController.h"
 
-#include "InputManager.h"
+#include "src/util/input/InputManager.h"
 
 using namespace KeyDefine;
 

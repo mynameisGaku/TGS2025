@@ -1,7 +1,7 @@
-#include "ui_BillBorad_Numeric.h"
+#include "src/util/ui/UI_BillBoard_Numeric.h"
 #include "ui_Manager.h"
 
-#include "cameraManager.h"
+#include "src/common/camera/cameraManager.h"
 
 UI_BillBorad_Numeric::UI_BillBorad_Numeric() {
 

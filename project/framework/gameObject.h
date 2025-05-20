@@ -1,7 +1,7 @@
 #pragma once
-#include "myDxLib.h"
+#include "framework/myDxLib.h"
 #include <string>
-#include "sceneBase.h"
+#include "framework/sceneBase.h"
 
 // ◇コンポーネント
 #include "src/common/component/Component.h"

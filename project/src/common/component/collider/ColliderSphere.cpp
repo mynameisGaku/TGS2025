@@ -1,4 +1,4 @@
-#include "colliderSphere.h"
+#include "src/common/component/collider/ColliderSphere.h"
 
 ColliderSphere::ColliderSphere() {
 

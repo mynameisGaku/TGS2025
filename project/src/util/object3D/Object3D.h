@@ -1,7 +1,7 @@
 #pragma once
-#include "../Library/gameObject.h"
-#include "../Library/myDxLib.h"
-#include "../Source/Util/Transform.h"
+#include "framework/gameObject.h"
+#include "framework/myDxLib.h"
+#include "src/util/transform/Transform.h"
 
 /// <summary>
 /// 3Dオブジェクトに関する既定クラス

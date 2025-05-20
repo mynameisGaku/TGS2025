@@ -4,14 +4,14 @@
 #include <vector>
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "UI_Base.h"
-#include "UI_Canvas.h"
-#include "UI_Text.h"
-#include "UI_Image.h"
-#include "UI_Button.h"
-#include "UI_Gauge.h"
-#include "UI_Slider.h"
-#include "UI_BillBoard.h"
+#include "src/util/ui/UI_Base.h"
+#include "src/util/ui/UI_Canvas.h"
+#include "src/util/ui/UI_Text.h"
+#include "src/util/ui/UI_Image.h"
+#include "src/util/ui/UI_Button.h"
+#include "src/util/ui/UI_Gauge.h"
+#include "src/util/ui/UI_Slider.h"
+#include "src/util/ui/UI_BillBoard.h"
 
 /// <summary>
 /// UI‚Ìî•ñ‚ğŠÇ—‚·‚é

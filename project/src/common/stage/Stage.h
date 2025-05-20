@@ -1,6 +1,6 @@
 #pragma once
 #include "stageDefine.h"
-#include "object3D.h"
+#include "src/util/object3D/Object3D.h"
 
 /// <summary>
 /// ステージのクラスを管理する(地形・空・壁)

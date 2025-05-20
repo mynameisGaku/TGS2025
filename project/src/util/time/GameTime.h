@@ -8,6 +8,16 @@
 class GameTime
 {
 public:
+
+    /// <summary>
+    /// 時間加算方法
+    /// </summary>
+    enum class AdditionMethod {
+        None = 0,	// 加算しない
+        Usual,		// 加算する(時間経過率を含まない)
+        Rate		// 加算する(時間経過率を含む)
+    };
+
     /// <summary>毎フレーム更新（通常Update用）</summary>
     static void Update();
 

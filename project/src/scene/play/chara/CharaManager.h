@@ -1,10 +1,10 @@
 #pragma once
-#include "Library/gameObject.h"
-#include "Util/Transform.h"
+#include "framework/gameObject.h"
+#include "src/util/transform/Transform.h"
 #include <vector>
 
-#include "CharaBase.h"
-#include "Pool.h"
+#include "src/scene/play/chara/CharaBase.h"
+#include "src/util/pool/Pool.h"
 
 #define USE_POOL
 

@@ -1,12 +1,12 @@
-#include "SoundBase.h"
+#include "src/util/sound/SoundBase.h"
 
 // ◇汎用
-#include "../Library/myDxLib.h"
-#include "../Library/time.h"
-#include "../Source/Util/Utils.h"
+#include "framework/myDxLib.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/Utils.h"
 
 // ◇演出・機能
-#include "cameraManager.h"
+#include "src/common/camera/cameraManager.h"
 
 using namespace SoundDefine;
 
@@ -147,10 +147,10 @@ void SoundBase::SetPan(Vector3* pos) {
 
 	const float range = 25.0f * fade.current;	// 聞こえなくなる距離
 
-	int vol = static_cast<int>((range - soundVec.Size()) / range * 255.0f);	// 距離減衰を反映した音量
+	int vol = static_cast<int>((range - soundVec.GetLength()) / range * 255.0f);	// 距離減衰を反映した音量
 	vol = min(max(vol, 0), 255);	// ストッパーを掛ける
 
-	Vector3 forward = V3::RIGHT * MGetRotY(camera->transform->rotation.y);
+	Vector3 forward = Vector3::UnitX * MGetRotY(camera->transform->rotation.y);
 	float pan = VDot(VNorm(soundVec), forward);
 
 	ChangeVolumeSoundMem(vol, info->handle);

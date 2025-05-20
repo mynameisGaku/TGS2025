@@ -1,7 +1,7 @@
-#include "colliderModel.h"
+#include "src/common/component/collider/ColliderModel.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "../Object3D.h"
+#include "src/util/object3D/Object3D.h"
 
 ColliderModel::ColliderModel() {
 

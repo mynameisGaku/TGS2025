@@ -1,12 +1,12 @@
 #include "ShadowCircle.h"
 
 // ”Ä—p
-#include "../../Library/myDxLib.h"
-#include "../../Library/resourceLoader.h"
+#include "framework/myDxLib.h"
+#include "src/util/file/resource_loader/resourceLoader.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "../Object3D.h"
-#include "../Stage.h"
+#include "src/util/object3D/Object3D.h"
+#include "src/common/stage/Stage.h"
 
 namespace {
 

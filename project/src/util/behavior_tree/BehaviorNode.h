@@ -2,10 +2,10 @@
 #include <list>
 #include <vector>
 #include <string>
-#include "../../Library/myDxLib.h"
+#include "framework/myDxLib.h"
 
-#include "BehaviorDecorator.h"
-#include "BehaviorTask.h"
+#include "src/util/behavior_tree/BehaviorDecorator.h"
+#include "src/util/behavior_tree/BehaviorTask.h"
 
 class GameObject;
 class BehaviorData;

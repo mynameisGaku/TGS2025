@@ -11,9 +11,9 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
-#include <nlohmann/json.hpp>
+#include <vendor/nlohmann/json.hpp>
 
-#include "../vendor/ImGui/imgui.h"
+#include <vendor/imgui/ImGui.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -21,7 +21,7 @@
 #endif
 
 //=== 追加のJson変換 ===
-#include "VectorJson.h"
+#include "src/util/file/json/VectorJson.h"
 
 /// <summary>
 /// JSON設定ファイルの読み込み、保存、取得、監視、及びインゲームでのImGuiによるリアルタイム変更を行うクラス。

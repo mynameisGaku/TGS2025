@@ -1,4 +1,4 @@
-#include "CollisionData.h"
+#include "src/common/component/collider/CollisionData.h"
 
 CollisionData::CollisionData() : 
 	CollisionData(false) {}

@@ -1,8 +1,8 @@
-#include "UI_Canvas.h"
-#include "UI_Manager.h"
+#include "src/util/ui/UI_Canvas.h"
+#include "src/util/ui/UI_Manager.h"
 
 // ”Ä—p
-#include "../Library/myDxLib.h"
+#include "framework/myDxLib.h"
 
 UI_Canvas::UI_Canvas() {
 
@@ -105,7 +105,7 @@ void UI_Canvas::BlinkUpdate() {
 	//================================================================================
 	// ŠÔ‰ÁZ
 	
-	blinkTime += Time::DeltaTimeLapseRate();
+	blinkTime += GTime.deltaTime;
 	if (blinkTime >= blinkTimeMax)
 		blinkTime = 0.0f;
 

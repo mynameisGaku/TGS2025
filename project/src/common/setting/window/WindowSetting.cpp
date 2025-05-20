@@ -1,5 +1,5 @@
-#include "WindowSetting.h"
-#include "settings_ini.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/file/ini/settings_ini.h"
 
 float WindowSetting::width = 100.0f;
 float WindowSetting::width_half = 50.0f;

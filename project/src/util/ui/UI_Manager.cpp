@@ -1,7 +1,7 @@
-#include "UI_Manager.h"
+#include "src/util/ui/UI_Manager.h"
 
 // ”Ä—p
-#include "../Source/Util/Utils.h"
+#include "src/util/Utils.h"
 
 namespace {
 

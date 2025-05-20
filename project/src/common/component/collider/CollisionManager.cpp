@@ -1,13 +1,13 @@
-#include "CollisionManager.h"
+#include "src/common/component/collider/CollisionManager.h"
 
 // ”Ä—p
-#include "../../Library/time.h"
+#include "src/util/time/GameTime.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "CollisionFunc.h"
-#include "ColliderSphere.h"
-#include "ColliderCapsule.h"
-#include "ColliderModel.h"
+#include "src/common/component/collider/CollisionFunc.h"
+#include "src/common/component/collider/ColliderSphere.h"
+#include "src/common/component/collider/ColliderCapsule.h"
+#include "src/common/component/collider/ColliderModel.h"
 
 CollisionManager::CollisionManager() {
 
@@ -27,7 +27,7 @@ CollisionManager::~CollisionManager() {
 
 void CollisionManager::Update() {
 
-	if (Time::LapseRate() == 0.0f)
+	if (GTime.GetTimeScale() == 0.0f)
 		return;
 
 	for (ColliderBase* col : colliders) {

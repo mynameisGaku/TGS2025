@@ -1,16 +1,16 @@
 #pragma once
 
 // ”Ä—p
-#include "../Util/Vector2.h"
-#include "../Util/Vector3.h"
+#include "src/util/math/vector2.h"
+#include "src/util/math/vector3.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "CollisionDefine.h"
-#include "CollisionData.h"
-#include "ColliderBase.h"
-#include "ColliderSphere.h"
-#include "ColliderCapsule.h"
-#include "ColliderModel.h"
+#include "src/common/component/collider/CollisionDefine.h"
+#include "src/common/component/collider/CollisionData.h"
+#include "src/common/component/collider/ColliderBase.h"
+#include "src/common/component/collider/ColliderSphere.h"
+#include "src/common/component/collider/ColliderCapsule.h"
+#include "src/common/component/collider/ColliderModel.h"
 
 using namespace ColDefine;
 

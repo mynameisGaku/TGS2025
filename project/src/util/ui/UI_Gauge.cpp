@@ -1,12 +1,12 @@
-#include "ui_Gauge.h"
+#include "src/util/ui/UI_Gauge.h"
 
 // ◇汎用
-#include "../Library/myDxLib.h"
-#include "../Library/resourceLoader.h"
-#include "../Source/Util/Utils.h"
+#include "framework/myDxLib.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/Utils.h"
 
 // ◇演出・機能
-#include "inputManager.h"
+#include "src/util/input/InputManager.h"
 
 UI_Gauge::UI_Gauge(const RectTransform& trs, float* _value, const float& _minValue, const float& _maxValue, const Vector2& _gaugeSize, const UI_Define::SliderColor& color, const float& _gaugeThickness, const float& _gaugeLateSpeed, const int& _innerEdgeColor, const int& _outerEdgeColor) {
 
@@ -47,7 +47,7 @@ UI_Gauge::UI_Gauge(const RectTransform& trs, float* _value, const float& _minVal
 	hIncreaseColor	= backGraph;
 	hBackColor		= backGraph;
 
-	gaugeSize		= V2::ZERO;
+	gaugeSize		= Vector2::Zero;
 	colors = UI_Define::SliderColor();
 
 	innerEdgeColor	= GetColor(0, 0, 0);

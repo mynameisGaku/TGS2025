@@ -1,7 +1,7 @@
 #include "stageObject.h"
 
 // ”Ä—p
-#include "../Library/resourceLoader.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
 
 StageObject::StageObject(StageObjInfo _info, const Transform& _transform, int _id, bool _collider) : 
 	Object3D(_info.hModel, _transform) {

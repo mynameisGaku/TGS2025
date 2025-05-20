@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include "Util/Vector3.h"
+#include "src/util/math/Vector3.h"
 
 class CameraDefineRef
 {

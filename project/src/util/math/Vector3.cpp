@@ -16,6 +16,7 @@ const Vector3   Vector3::UnitX = Vector3(1, 0, 0);
 const Vector3   Vector3::UnitY = Vector3(0, 1, 0);
 const Vector3   Vector3::UnitZ = Vector3(0, 0, 1);
 const Vector3   Vector3::Ones = Vector3(1, 1, 1);
+const Vector3   Vector3::Horizontal = Vector3(1, 0, 1);
 
 //-------------------------------------------------------------------------
 //
@@ -33,6 +34,13 @@ Vector3::Vector3(float x_, float y_, float z_)
 	x = x_;
 	y = y_;
 	z = z_;
+}
+
+Vector3::Vector3(int x_, int y_, int z_)
+{
+	x = (float)x_;
+	y = (float)y_;
+	z = (float)z_;
 }
 
 Vector3::Vector3(float xyz)
@@ -315,6 +323,22 @@ bool Vector3::operator == (const Vector3& v) const
 bool Vector3::operator != (const Vector3& v) const
 {
 	return (x != v.x || y != v.y || z != v.z);
+}
+
+//-------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------
+const Vector3 operator*(const Vector3& v, const MATRIX& m1)
+{
+	return Vector3::TransformCoord(v, m1);
+}
+
+//-------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------
+Vector3& operator*=(Vector3& v, const MATRIX& m1)
+{
+	return v = Vector3::TransformCoord(v, Matrix(m1));
 }
 
 //-------------------------------------------------------------------------
@@ -674,4 +698,34 @@ Vector3 Vector3::Unproject(const Vector3& point, const Matrix& worldViewProj, fl
 	v.z = (point.z - minZ) / (maxZ - minZ);
 
 	return Vector3::TransformCoord(v, inv);
+}
+
+Vector3 Vector3::SetX(float x)
+{
+	return Vector3(x, 0.0f, 0.0f);
+}
+
+Vector3 Vector3::SetX(int x)
+{
+	return Vector3(x, 0, 0);
+}
+
+Vector3 Vector3::SetY(float y)
+{
+	return Vector3(0.0f, y, 0.0f);
+}
+
+Vector3 Vector3::SetY(int y)
+{
+	return Vector3(0, y, 0);
+}
+
+Vector3 Vector3::SetZ(float z)
+{
+	return Vector3(0.0f, 0.0f, z);
+}
+
+Vector3 Vector3::SetZ(int z)
+{
+	return Vector3(0, 0, z);
 }

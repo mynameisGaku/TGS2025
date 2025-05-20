@@ -1,6 +1,6 @@
 #pragma once
 #include <list>
-#include "sceneManager.h"
+#include "framework/sceneManager.h"
 class GameObject;
 
 template <class C>

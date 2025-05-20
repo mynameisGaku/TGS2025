@@ -1,6 +1,6 @@
 #pragma once
 #include "mathCommon.h"
-#include "Vector3.h"
+#include "src/util/math/vector3.h"
 
 /**
 	@brief		•½–Ê‚ğ’è‹`‚µ‚Ü‚·B

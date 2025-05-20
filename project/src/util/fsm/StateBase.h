@@ -1,6 +1,6 @@
 #pragma once
-#include "../Library/GameObject.h"
-#include "StateManager.h"
+#include "framework/gameObject.h"
+#include "src/util/fsm/StateManager.h"
 
 class StateBase {
 public:

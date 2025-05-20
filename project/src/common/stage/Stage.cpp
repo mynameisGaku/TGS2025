@@ -1,7 +1,7 @@
 #include "stage.h"
 
 // ◇汎用
-#include "../Source/Util/Utils.h"
+#include "src/util/Utils.h"
 
 // ◇演出・機能
 //#include "effectManager.h"

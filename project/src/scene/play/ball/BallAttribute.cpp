@@ -1,4 +1,4 @@
-#include "BallAttribute.h"
+#include "src/scene/play/ball/BallAttribute.h"
 
 BallAttribute::BallAttribute()
 {

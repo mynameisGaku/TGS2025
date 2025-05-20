@@ -1,14 +1,14 @@
-#include "cameraManager.h"
+#include "src/common/camera/cameraManager.h"
 
 // ◇汎用
-#include "vendor/magic_enum/magic_enum.hpp"
+#include <vendor/magic_enum/magic_enum.hpp>
 #include "src/Util/Utils.h"
 #include <vector>
 #include <assert.h>
 
 // ◇演出・機能
-#include "../Source/ImGuiTree/imGuiManager.h"
-#include "CameraDefineRef.h"
+#include "src/util/debug/imgui/imGuiManager.h"
+#include "src/reference/camera/CameraDefineRef.h"
 
 using namespace CameraDefine;
 

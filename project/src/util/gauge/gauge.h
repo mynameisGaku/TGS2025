@@ -3,7 +3,7 @@
 
 #include <DxLib.h>
 #include <unordered_map>
-#include "../Source/Util/Vector2.h"
+#include "src/util/math/Vector2.h"
 
 //  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .-----------------.  .----------------.
 // | .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
@@ -119,7 +119,7 @@ public:
 	/// <param name="scrollType">ƒXƒNƒ[ƒ‹‚·‚é•ûŒü</param>
 	/// <param name="scale">‰æ‘œ‚ÌŠg‘å—¦</param>
 	template<typename Ty = float>
-	[[nodiscard]] inline void DrawGraphGauge(Vector2 pos, Ty current, Ty max, Ty min, int graph, int delayGraph, int increaseGraph, int backGraph, float scrollSpeed, Vector2 scale = V2::ONE) {
+	[[nodiscard]] inline void DrawGraphGauge(Vector2 pos, Ty current, Ty max, Ty min, int graph, int delayGraph, int increaseGraph, int backGraph, float scrollSpeed, Vector2 scale = Vector2::Ones) {
 
 		int srcWidth, srcHeight;
 		GetGraphSize(backGraph, &srcWidth, &srcHeight);
@@ -179,7 +179,7 @@ public:
 	/// <param name="scale">‰æ‘œ‚ÌŠg‘å—¦</param>
 	/// <param name="angle">‰æ‘œ‚Ì‰ñ“]</param>
 	template<typename Ty = float>
-	[[nodiscard]] inline void DrawRectRotaGraphGauge(Vector2 pos, Ty current, Ty max, Ty min, int graph, int delayGraph, int increaseGraph, int backGraph, float scrollSpeed, Vector2 scale = V2::ONE, float angle = 0.0f) {
+	[[nodiscard]] inline void DrawRectRotaGraphGauge(Vector2 pos, Ty current, Ty max, Ty min, int graph, int delayGraph, int increaseGraph, int backGraph, float scrollSpeed, Vector2 scale = Vector2::Ones, float angle = 0.0f) {
 
 		int srcWidth, srcHeight;
 		GetGraphSize(backGraph, &srcWidth, &srcHeight);

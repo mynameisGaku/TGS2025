@@ -1,5 +1,5 @@
 #pragma once
-#include "AnimationDefine.h"
+#include "src/common/component/animator/AnimationDefine.h"
 #include <DxLib.h>
 #include <list>
 

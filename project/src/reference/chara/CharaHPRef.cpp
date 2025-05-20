@@ -1,5 +1,5 @@
-#include "CharaHPRef.h"
-#include "settings_json.h"
+#include "src/reference/chara/CharaHPRef.h"
+#include "src/util/file/json/settings_json.h"
 
 void CharaHPRef::Load(bool ForceLoad)
 {

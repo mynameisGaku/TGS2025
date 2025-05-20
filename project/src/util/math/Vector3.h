@@ -27,6 +27,7 @@ public:
 	static const Vector3   UnitY;		///< Vector3(0, 1, 0)
 	static const Vector3   UnitZ;		///< Vector3(0, 0, 1)
 	static const Vector3   Ones;		///< Vector3(1, 1, 1)
+	static const Vector3   Horizontal;	///< Vector3(1, 0, 1)
 
 public:
 
@@ -39,6 +40,11 @@ public:
 		@brief	指定した値を使用してインスタンスを初期化します。
 	*/
 	Vector3(float x, float y, float z);
+
+	/**
+		@brief	指定した値を使用してインスタンスを初期化します。
+	*/
+	Vector3(int x, int y, int z);
 
 	/**
 		@brief	指定した値を使用してインスタンスを初期化します。
@@ -137,6 +143,42 @@ public:
 		@return		変換されたベクトル
 	*/
 	Vector3 Transform(const Matrix& mat);
+
+	/* トモミチゾーン */
+
+	// 引数との差を取得する
+	inline const Vector3 Distance(Vector3 value) { return Vector3(x - value.x, y - value.y, z - value.z); }
+
+	// 引数から自身の方へ向く角度を取得する
+	inline const float Direction(Vector3 value) {
+		Vector3 v = Distance(value);
+		return atan2f(v.x, v.z);
+	}
+
+	// ベクトルのサイズが0以上ならTrueを取得する
+	inline const bool IsValue() const { return (GetLengthSquared() != 0.0f); }
+
+	// 垂直関係にある？
+	inline const bool IsVertical(const Vector3& r) const {
+		float d = Dot(*this, r);
+		return (-0.000001f < d && d < 0.000001f);	// 誤差範囲内なら垂直と判定
+	}
+
+	// 平行関係にある？
+	inline const bool IsParallel(const Vector3& r) const {
+		Vector3 cross = VCross(*this, r);
+		float d = cross.GetLengthSquared();
+		return (-0.000001f < d && d < 0.000001f);	// 誤差範囲内なら平行と判定
+	}
+
+	// 鋭角関係？
+	inline const bool IsSharpAngle(const Vector3& r) const { return (Dot(*this, r) >= 0.0f); }
+
+	//　各要素の合算値を取得する
+	inline const float Total() const { return x + y + z; }
+
+	//　各要素の平均値を取得する
+	inline const float Average() const { return Total() / 3.0f; }
 
 public:
 
@@ -289,6 +331,39 @@ public:
 	*/
 	static Vector3 Unproject(const Vector3& point, const Matrix& worldViewProj, float x, float y, float width, float height, float minZ = 0.0f, float maxZ = 1.0f);
 
+	/**
+		@brief		x要素に値をセットし、そのベクトルを返す (x, 0, 0)
+		@param[in]	x				: x要素
+	*/
+	static Vector3 SetX(float x);
+	/**
+		@brief		x要素に値をセットし、そのベクトルを返す (x, 0, 0)
+		@param[in]	x				: x要素
+	*/
+	static Vector3 SetX(int x);
+
+	/**
+		@brief		y要素に値をセットし、そのベクトルを返す (0, y, 0)
+		@param[in]	y				: y要素
+	*/
+	static Vector3 SetY(float y);
+	/**
+		@brief		y要素に値をセットし、そのベクトルを返す (0, y, 0)
+		@param[in]	y				: y要素
+	*/
+	static Vector3 SetY(int y);
+
+	/**
+		@brief		z要素に値をセットし、そのベクトルを返す (0, 0, z)
+		@param[in]	z				: z要素
+	*/
+	static Vector3 SetZ(float z);
+	/**
+		@brief		z要素に値をセットし、そのベクトルを返す (0, 0, z)
+		@param[in]	z				: z要素
+	*/
+	static Vector3 SetZ(int z);
+
 public:
 
 	Vector3& operator += (const Vector3& v);
@@ -322,4 +397,6 @@ public:
 	operator const VECTOR() const;
 	operator bool() const;
 
+	const friend Vector3 operator *(const Vector3& v, const MATRIX& m1);
+	friend Vector3& operator *=(Vector3& v, const MATRIX& m1);
 };

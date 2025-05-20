@@ -1,8 +1,8 @@
-#include "MotionBlur.h"
+#include "src/common/component/motion_blur/MotionBlur.h"
 
 // ž”Ä—p
-#include "../../Library/time.h"
-#include "../Object3D.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/object3D/Object3D.h"
 
 namespace {
 
@@ -30,7 +30,7 @@ void MotionBlur::Init() {
 void MotionBlur::Update() {
 
 	for (auto itr = motionBlur.begin(); itr != motionBlur.end();) {
-		itr->duration -= Time::DeltaTimeLapseRate();
+		itr->duration -= GTime.deltaTime;
 		if (itr->duration <= 0.0f) {
 			itr = motionBlur.erase(itr);
 			if (itr == motionBlur.end()) break;
@@ -38,7 +38,7 @@ void MotionBlur::Update() {
 		itr++;
 	}
 
-	counter = max(counter - Time::DeltaTimeLapseRate(), 0.0f);
+	counter = max(counter - GTime.deltaTime, 0.0f);
 
 	if (!isActive || parent == nullptr)
 		return;

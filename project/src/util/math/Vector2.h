@@ -91,22 +91,28 @@ public:
 	// iの値によって要素を取得（0 -> x, 1 -> y）
 	// ループ処理で使用
 	/**
-		@brief		デバッグ用に文字列を標準出力します。
-		@param[in]	format	: 書式指定文字列
-		@param[in]	stream	: 出力先ストリーム
-		@details	format が NULL の場合、書式は "%f, %f\n" を使用します。
+		@brief		iの値によって要素を取得（0 -> x, 1 -> y）
+		@param[in]	i	: 取得したい要素番号
+		@details	ループ処理で使用
 	*/
 	float Get(int i) const;
 
 	// iの値によって要素にvalueをセット（0 -> x, 1 -> y）
 	// ループ処理で使用
 	/**
-		@brief		デバッグ用に文字列を標準出力します。
-		@param[in]	format	: 書式指定文字列
-		@param[in]	stream	: 出力先ストリーム
-		@details	format が NULL の場合、書式は "%f, %f\n" を使用します。
+		@brief		iの値によって要素にvalueをセット（0 -> x, 1 -> y）
+		@param[in]	i		: 何番目の要素にセットするか
+		@param[in]	value	: セットする値(float)
+		@details	ループ処理で使用
 	*/
 	void Set(int i, float value);
+
+	//　各要素の合算値を取得する
+	inline const float Total() const { return x + y; }
+
+	//　各要素の平均値を取得する
+	inline const float Average() const { return Total() / 2.0f; }
+
 public:
 
 	/**

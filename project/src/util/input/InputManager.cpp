@@ -1,16 +1,16 @@
-#include "inputManager.h"
+#include "src/util/input/InputManager.h"
 
 // ◇汎用
-#include "../Library/time.h"
-#include "../Library/magic_enum.hpp"
-#include "Util/Utils.h"
+#include "src/util/time/GameTime.h"
+#include <vendor/magic_enum/magic_enum.hpp>
+#include "src/util/Utils.h"
 
-#include "KeyController.h"
-#include "PadController.h"
-#include "MouseController.h"
+#include "src/util/input/KeyController.h"
+#include "src/util/input/PadController.h"
+#include "src/util/input/MouseController.h"
 
 // ◇デバッグ
-#include "ImGuiTree/imGuiManager.h"
+#include "src/util/debug/imgui/imGuiManager.h"
 
 using namespace KeyDefine;
 
@@ -175,7 +175,7 @@ void InputManager::InputDataUpdate() {
 	for (int i = DX_INPUT_PAD1; i <= PAD_NUMBER_MAX; i++) {
 		for (auto& itr : *isInputs) {
 			if (itr.second.isInput[i][TouchPhase::Moved])
-				itr.second.pushTime += Time::DeltaTime();
+				itr.second.pushTime += GTime.deltaTime;
 			else
 				itr.second.pushTime = 0.0f;
 		}
@@ -196,7 +196,7 @@ void InputManager::AdvancedEntryUpdate(const int& padNumber, const float& _advan
 	for (auto info = (*advancedEntry)[padNumber].begin(); info != (*advancedEntry)[padNumber].end();) {
 
 		// 保持時間の経過
-		info->saveTime = max(info->saveTime - Time::DeltaTimeLapseRate(), 0.0f);
+		info->saveTime = max(info->saveTime - GTime.deltaTime, 0.0f);
 
 		// 保持時間が0.0以下の場合、切り離す
 		if (info->saveTime <= 0.0f) {
@@ -473,14 +473,14 @@ Vector3 InputManager::AnalogStick(int padNumber) {
 	if (Hold("MoveRight"))	analog.x = 1.0f;
 	if (Hold("MoveLeft"))	analog.x = -1.0f;
 
-	if (analog.Size() > 1.0f) analog = analog.Norm();	// 1を超えないようにリミッターをかける
+	if (analog.GetLength() > 1.0f) analog = analog.Normalize();	// 1を超えないようにリミッターをかける
 
 	return analog;
 }
 
 #ifdef _DEBUG
 
-#include "../Library/magic_enum.hpp"
+#include <vendor/magic_enum/magic_enum.hpp>
 
 void InputManager::DrawTest(const float& x, const float& y) {
 

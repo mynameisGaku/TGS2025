@@ -1,8 +1,8 @@
 #pragma once
-#include "../Library/gameObject.h"
-#include "../Library/myDxLib.h"
-#include "../Library/time.h"
-#include "EasingUtils.h"
+#include "framework/gameObject.h"
+#include "framework/myDxLib.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/easing/Easing.h"
 
 /// <summary>
 /// フェードを管理する
@@ -28,7 +28,7 @@ namespace Fader {
 	/// <param name="begin">補間前の不透明度</param>
 	/// <param name="end">補間後の不透明度</param>
 	/// <param name="rate">時間経過率を適応させるか</param>
-	void FadeStart(float totalTime, EasingType easingType, float begin, float end, Time::AdditionMethod timeAddition);
+	void FadeStart(float totalTime, EasingType easingType, float begin, float end, GameTime::AdditionMethod timeAddition);
 
 	/// <summary>
 	/// フェードインする
@@ -36,7 +36,7 @@ namespace Fader {
 	/// <param name="time">フェード時間</param>
 	/// <param name="easingType">補間種類</param>
 	/// <param name="rate">時間経過率を適応させるか</param>
-	inline void FadeIn(float time, EasingType easingType = EasingType::Linear, Time::AdditionMethod timeAddition = Time::AdditionMethod::Rate) { FadeStart(time, easingType, 255.0f, 0.0f, timeAddition); }
+	inline void FadeIn(float time, EasingType easingType = EasingType::Linear, GameTime::AdditionMethod timeAddition = GameTime::AdditionMethod::Rate) { FadeStart(time, easingType, 255.0f, 0.0f, timeAddition); }
 
 	/// <summary>
 	/// フェードアウトする
@@ -44,7 +44,7 @@ namespace Fader {
 	/// <param name="time">フェード時間</param>
 	/// <param name="easingType">補間種類</param>
 	/// <param name="rate">時間経過率を適応させるか</param>
-	inline void FadeOut(float time, EasingType easingType = EasingType::Linear, Time::AdditionMethod timeAddition = Time::AdditionMethod::Rate) { FadeStart(time, easingType, 0.0f, 255.0f, timeAddition); }
+	inline void FadeOut(float time, EasingType easingType = EasingType::Linear, GameTime::AdditionMethod timeAddition = GameTime::AdditionMethod::Rate) { FadeStart(time, easingType, 0.0f, 255.0f, timeAddition); }
 
 	//================================================================================
 	// ▼レターボックス関連
@@ -57,7 +57,7 @@ namespace Fader {
 	/// <param name="easingType">補間種類</param>
 	/// <param name="rate">時間経過率を適応させるか</param>
 	/// <param name="fadeIn">フェード方法。Trueならイン、Falseならアウト</param>
-	void LetterBoxStart(float totalTime, float size, EasingType easingType, Time::AdditionMethod timeAddition, bool fadeIn);
+	void LetterBoxStart(float totalTime, float size, EasingType easingType, GameTime::AdditionMethod timeAddition, bool fadeIn);
 
 	/// <summary>
 	/// レターボックスの描画を終了する
@@ -66,8 +66,8 @@ namespace Fader {
 	/// <param name="size">幅の大きさ</param>
 	/// <param name="easingType">補間種類</param>
 	/// <param name="rate">時間経過率を適応させるか</param>
-	inline void LetterBoxFadeIn(float totalTime, float size, EasingType easingType = EasingType::Linear, Time::AdditionMethod timeAddition = Time::AdditionMethod::Rate) { LetterBoxStart(totalTime, size, easingType, timeAddition, true); }
-	inline void LetterBoxFadeOut(float totalTime, float size, EasingType easingType = EasingType::Linear, Time::AdditionMethod timeAddition = Time::AdditionMethod::Rate) { LetterBoxStart(totalTime, size, easingType, timeAddition, false); }
+	inline void LetterBoxFadeIn(float totalTime, float size, EasingType easingType = EasingType::Linear, GameTime::AdditionMethod timeAddition = GameTime::AdditionMethod::Rate) { LetterBoxStart(totalTime, size, easingType, timeAddition, true); }
+	inline void LetterBoxFadeOut(float totalTime, float size, EasingType easingType = EasingType::Linear, GameTime::AdditionMethod timeAddition = GameTime::AdditionMethod::Rate) { LetterBoxStart(totalTime, size, easingType, timeAddition, false); }
 
 	//================================================================================
 	// ▼ゲッター

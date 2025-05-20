@@ -1,4 +1,4 @@
-#include "SettingBase.h"
+#include "src/common/setting/SettingBase.h"
 
 SettingBase::SettingBase() {
 

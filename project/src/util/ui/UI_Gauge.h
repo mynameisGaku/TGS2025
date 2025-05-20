@@ -1,9 +1,9 @@
 #pragma once
 // Œp³Œ³
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
-#include "Font.h"
-#include "gauge.h"
+#include "src/util/font/Font.h"
+#include "src/util/gauge/gauge.h"
 
 class UI_Text;
 

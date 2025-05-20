@@ -1,6 +1,6 @@
-#include "RectTransform.h"
+#include "src/util/transform/RectTransform.h"
 
-RectTransform::RectTransform() : RectTransform(Anchor::Preset::None, V2::ZERO, 0.0f, V2::ONE, nullptr) {
+RectTransform::RectTransform() : RectTransform(Anchor::Preset::None, Vector2::Zero, 0.0f, Vector2::Ones, nullptr) {
 
 }
 
@@ -43,7 +43,7 @@ const RectTransform RectTransform::Global() const {
 	if (parent != nullptr) {
 		globalPosition += parent->Global().position;
 		globalRotation += parent->Global().rotation;
-		if (parent->Global().scale.Size() != 0.0f)
+		if (parent->Global().scale.GetLength() != 0.0f)
 			globalScale *= parent->Global().scale;
 	}
 
@@ -187,15 +187,15 @@ void RectTransform::DrawTest() {
 
 #ifdef _DEBUG
 
-	RectTransform rect0 = RectTransform(Anchor::Preset::LeftUp,		V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect1 = RectTransform(Anchor::Preset::LeftMiddle, V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect2 = RectTransform(Anchor::Preset::LeftDown,	V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect3 = RectTransform(Anchor::Preset::MiddleUp,	V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect4 = RectTransform(Anchor::Preset::Middle,		V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect5 = RectTransform(Anchor::Preset::MiddleDown, V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect6 = RectTransform(Anchor::Preset::RightUp,	V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect7 = RectTransform(Anchor::Preset::RightMiddle,V2::ZERO, 0.0f, V2::ONE, nullptr);
-	RectTransform rect8 = RectTransform(Anchor::Preset::RightDown,	V2::ZERO, 0.0f, V2::ONE, nullptr);
+	RectTransform rect0 = RectTransform(Anchor::Preset::LeftUp,		Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect1 = RectTransform(Anchor::Preset::LeftMiddle, Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect2 = RectTransform(Anchor::Preset::LeftDown,	Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect3 = RectTransform(Anchor::Preset::MiddleUp,	Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect4 = RectTransform(Anchor::Preset::Middle,		Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect5 = RectTransform(Anchor::Preset::MiddleDown, Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect6 = RectTransform(Anchor::Preset::RightUp,	Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect7 = RectTransform(Anchor::Preset::RightMiddle,Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
+	RectTransform rect8 = RectTransform(Anchor::Preset::RightDown,	Vector2::Zero, 0.0f, Vector2::Ones, nullptr);
 
 	DrawCircleAA(rect0.Global().position.x, rect0.Global().position.y, 32, 32, GetColor(255, 255, 255), true);
 	DrawCircleAA(rect1.Global().position.x, rect1.Global().position.y, 32, 32, GetColor(255, 255, 255), true);

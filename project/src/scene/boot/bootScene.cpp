@@ -1,16 +1,13 @@
-#include "bootScene.h"
-#include "../Library/sceneManager.h"
-#include "DebugScreen.h"
+#include "src/scene/boot/bootScene.h"
+#include "framework/sceneManager.h"
 
-#include "SystemManager.h"
-#include "LoadScreen.h"
+#include "src/common/system/SystemManager.h"
+#include "src/common/load_screen/LoadScreen.h"
 
 BootScene::BootScene(std::string name) : SceneBase(true, name)
 {
 	SceneBase* common = SceneManager::CommonScene();
-	DebugScreen* ds = common->Instantiate<DebugScreen>();
-	common->SetDrawOrder(ds, 10000);
-
+	
 	systemManager = common->Instantiate<SystemManager>();
 
 	LoadScreen* loadScreen = common->Instantiate<LoadScreen>();

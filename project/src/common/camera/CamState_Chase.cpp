@@ -1,18 +1,18 @@
-#include "Camera.h"
-#include "cameraDefine.h"
-#include "TinyFSM.h"
+#include "src/common/camera/Camera.h"
+#include "src/common/camera/CameraDefine.h"
+#include "src/util/fsm/TinyFSM.h"
 
 // ”Ä—p
-#include "../Library/time.h"
-#include "Util/Utils.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/Utils.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "InputManager.h"
-#include "PadController.h"
-#include "MouseController.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/PadController.h"
+#include "src/util/input/MouseController.h"
 
-#include "CharaManager.h"
-#include "CameraDefineRef.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/reference/camera/CameraDefineRef.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;

@@ -1,5 +1,5 @@
 #pragma once
-#include "nlohmann/json_fwd.hpp"
+#include <vendor/nlohmann/json_fwd.hpp>
 
 #if FALSE
 struct AnimOption;

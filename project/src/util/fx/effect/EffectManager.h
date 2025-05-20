@@ -1,8 +1,6 @@
 #pragma once
-#include "EffectBase.h"
-#include "EffectDefine.h"
-
-#include "config.h"
+#include "src/util/fx/effect/EffectBase.h"
+#include "src/util/fx/effect/EffectDefine.h"
 
 using namespace EffectDefine;
 

@@ -113,7 +113,7 @@ void LightManager::CreateLightPoint() {
 	lightInfo.colorAmb = GetColorF(1.0f, 1.0f, 1.0f, 1.0f);
 
 	Light* point = new Light(lightInfo);
-	point->transform->position = V3::SetY(1550.0f);
+	point->transform->position = Vector3::SetY(1550.0f);
 
 	(*lights)[LightType::Point] = point;
 }
@@ -139,8 +139,8 @@ void LightManager::CreateLightSpot() {
 	lightInfo.colorAmb = GetColorF(1.0f, 0.5f, 0.0f, 1.0f);
 
 	Light* spot = new Light(lightInfo);
-	spot->transform->position = V3::SetY(2000.0f);
-	spot->SetDegRotation(V3::SetY(-180.0f));
+	spot->transform->position = Vector3::SetY(2000.0f);
+	spot->SetDegRotation(Vector3::SetY(-180.0f));
 
 	(*lights)[LightType::Spot] = spot;
 }

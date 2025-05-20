@@ -1,5 +1,5 @@
-#include "BehaviorNode.h"
-#include "BehaviorData.h"
+#include "src/util/behavior_tree/BehaviorNode.h"
+#include "src/util/behavior_tree/BehaviorData.h"
 
 BehaviorNode::BehaviorNode(const std::string& _name, BehaviorNode* _parent, const int& _priority, const SELECT_RULE& rule, const int& number) {
 

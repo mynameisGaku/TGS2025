@@ -1,7 +1,7 @@
 #pragma once
-#include "../Library/gameObject.h"
-#include "../Library/myDxLib.h"
-#include "../Source/Util/RectTransform.h"
+#include "framework/gameObject.h"
+#include "framework/myDxLib.h"
+#include "src/util/transform/RectTransform.h"
 
 /// <summary>
 /// 2Dオブジェクトに関する既定クラス

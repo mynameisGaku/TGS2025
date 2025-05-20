@@ -1,7 +1,7 @@
-#include "SensiSetting.h"
+#include "src/common/setting/sensi/SensiSetting.h"
 
 #include "PadController.h"
-#include "MouseController.h"
+#include "src/util/input/MouseController.h"
 
 using namespace KeyDefine;
 

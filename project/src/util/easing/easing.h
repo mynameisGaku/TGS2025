@@ -1,440 +1,373 @@
+// easingFunctions.h
 #pragma once
-#include <math.h>
-#include <limits>
-#include <algorithm>
 #include <cmath>
-#include <assert.h>
+#include "src/util/easing/EasingType.h"
+#include "src/util/easing/EasingTypeMapper.h"
+// ◇汎用
+#include "src/util/time/GameTime.h"
+#include "src/util/math/vector2.h"
+#include "src/util/math/vector3.h"
 
-/*
-
-イージング関数
-
-チートシート:
-https://easings.net/ja  //ctrl + クリックでリンク先に飛ぶ
-
-*/
-
-/// <summary>
-/// イージングの種類
-/// </summary>
-enum class EasingType
+namespace EasingFunc 
 {
-	None = -1,
-	InQuad,
-	OutQuad,
-	InOutQuad,
-	InCubic,
-	OutCubic,
-	InOutCubic,
-	InQuart,
-	OutQuart,
-	InOutQuart,
-	InQuint,
-	OutQuint,
-	InOutQuint,
-	InSine,
-	OutSine,
-	InOutSine,
-	//InExpo,
-	//OutExpo,
-	//InOutExpo,
-	InCirc,
-	OutCirc,
-	InOutCirc,
-	InBack,
-	OutBack,
-	InOutBack,
-	InBounce,
-	OutBounce,
-	InOutBounce,
-	Linear,
-};
 
-namespace EasingFunc
-{
-	static constexpr float Pai = 3.141592653589793f;
+    inline float Apply(float x, float start, float end) 
+    {
+        return start + (end - start) * x;
+    }
 
-	template<typename Ty>
-	static constexpr Ty _0 = static_cast<Ty>(0);
-	template<typename Ty>
-	static constexpr Ty _0_5 = static_cast<Ty>(0.5);
-	template<typename Ty>
-	static constexpr Ty _0_75 = static_cast<Ty>(0.75);
-	template<typename Ty>
-	static constexpr Ty _0_9375 = static_cast<Ty>(0.9375);
-	template<typename Ty>
-	static constexpr Ty _0_984375 = static_cast<Ty>(0.984375);
+#define DEFINE_EASING(funcName, body) \
+inline float funcName##Raw(float x) body \
+inline float funcName(float t, float d, float end, float start) { \
+    return Apply(funcName##Raw(t / d), start, end); \
+}
 
-	template<typename Ty>
-	static constexpr Ty _1 = static_cast<Ty>(1);
-	template<typename Ty>
-	static constexpr Ty _1_5 = static_cast<Ty>(1.5);
-	template<typename Ty>
-	static constexpr Ty _1_525 = static_cast<Ty>(1.525);
+    DEFINE_EASING(EaseInSine, { return 1.0f - cosf((x * 3.14159265f) / 2.0f); })
+        DEFINE_EASING(EaseOutSine, { return sinf((x * 3.14159265f) / 2.0f); })
+        DEFINE_EASING(EaseInOutSine, { return -0.5f * (cosf(3.14159265f * x) - 1.0f); })
+        DEFINE_EASING(EaseInQuad, { return x * x; })
+        DEFINE_EASING(EaseOutQuad, { return 1.0f - (1.0f - x) * (1.0f - x); })
+        DEFINE_EASING(EaseInOutQuad, { return x < 0.5f ? 2.0f * x * x : 1.0f - powf(-2.0f * x + 2.0f, 2.0f) / 2.0f; })
+        DEFINE_EASING(EaseInCubic, { return x * x * x; })
+        DEFINE_EASING(EaseOutCubic, { return 1.0f - powf(1.0f - x, 3.0f); })
+        DEFINE_EASING(EaseInOutCubic, { return x < 0.5f ? 4.0f * x * x * x : 1.0f - powf(-2.0f * x + 2.0f, 3.0f) / 2.0f; })
+        DEFINE_EASING(EaseInQuart, { return x * x * x * x; })
+        DEFINE_EASING(EaseOutQuart, { return 1.0f - powf(1.0f - x, 4.0f); })
+        DEFINE_EASING(EaseInOutQuart, { return x < 0.5f ? 8.0f * x * x * x * x : 1.0f - powf(-2.0f * x + 2.0f, 4.0f) / 2.0f; })
+        DEFINE_EASING(EaseInQuint, { return x * x * x * x * x; })
+        DEFINE_EASING(EaseOutQuint, { return 1.0f - powf(1.0f - x, 5.0f); })
+        DEFINE_EASING(EaseInOutQuint, { return x < 0.5f ? 16.0f * x * x * x * x * x : 1.0f - powf(-2.0f * x + 2.0f, 5.0f) / 2.0f; })
+        DEFINE_EASING(EaseInExpo, { return x == 0.0f ? 0.0f : powf(2.0f, 10.0f * x - 10.0f); })
+        DEFINE_EASING(EaseOutExpo, { return x == 1.0f ? 1.0f : 1.0f - powf(2.0f, -10.0f * x); })
+        DEFINE_EASING(EaseInOutExpo, {
+            if (x == 0.0f) return 0.0f;
+            if (x == 1.0f) return 1.0f;
+            return x < 0.5f ? powf(2.0f, 20.0f * x - 10.0f) / 2.0f : (2.0f - powf(2.0f, -20.0f * x + 10.0f)) / 2.0f;
+            })
+        DEFINE_EASING(EaseInCirc, { return 1.0f - sqrtf(1.0f - x * x); })
+        DEFINE_EASING(EaseOutCirc, { return sqrtf(1.0f - powf(x - 1.0f, 2.0f)); })
+        DEFINE_EASING(EaseInOutCirc, {
+            return x < 0.5f
+                ? (1.0f - sqrtf(1.0f - 4.0f * x * x)) / 2.0f
+                : (sqrtf(1.0f - powf(-2.0f * x + 2.0f, 2.0f)) + 1.0f) / 2.0f;
+            })
+        DEFINE_EASING(EaseInBack, {
+            float c1 = 1.70158f;
+            return c1 * x * x * x - c1 * x * x;
+            })
+        DEFINE_EASING(EaseOutBack, {
+            float c1 = 1.70158f;
+            float c3 = c1 + 1.0f;
+            return 1.0f + c3 * powf(x - 1.0f, 3.0f) + c1 * powf(x - 1.0f, 2.0f);
+            })
+        DEFINE_EASING(EaseInOutBack, {
+            float c1 = 1.70158f;
+            float c2 = c1 * 1.525f;
+            return x < 0.5f
+                ? (powf(2.0f * x, 2.0f) * ((c2 + 1.0f) * 2.0f * x - c2)) / 2.0f
+                : (powf(2.0f * x - 2.0f, 2.0f) * ((c2 + 1.0f) * (x * 2.0f - 2.0f) + c2) + 2.0f) / 2.0f;
+            })
+        DEFINE_EASING(EaseInElastic, {
+            if (x == 0.0f) return 0.0f;
+            if (x == 1.0f) return 1.0f;
+            float c4 = (2.0f * 3.14159265f) / 3.0f;
+            return -powf(2.0f, 10.0f * x - 10.0f) * sinf((x * 10.0f - 10.75f) * c4);
+            })
+        DEFINE_EASING(EaseOutElastic, {
+            if (x == 0.0f) return 0.0f;
+            if (x == 1.0f) return 1.0f;
+            float c4 = (2.0f * 3.14159265f) / 3.0f;
+            return powf(2.0f, -10.0f * x) * sinf((x * 10.0f - 0.75f) * c4) + 1.0f;
+            })
+        DEFINE_EASING(EaseInOutElastic, {
+            if (x == 0.0f) return 0.0f;
+            if (x == 1.0f) return 1.0f;
+            float c5 = (2.0f * 3.14159265f) / 4.5f;
+            return x < 0.5f
+                ? -(powf(2.0f, 20.0f * x - 10.0f) * sinf((20.0f * x - 11.125f) * c5)) / 2.0f
+                : (powf(2.0f, -20.0f * x + 10.0f) * sinf((20.0f * x - 11.125f) * c5)) / 2.0f + 1.0f;
+            })
+        DEFINE_EASING(EaseOutBounce, {
+            if (x < 1.0f / 2.75f) {
+                return 7.5625f * x * x;
+            }
+         else if (x < 2.0f / 2.75f) {
+          x -= 1.5f / 2.75f;
+          return 7.5625f * x * x + 0.75f;
+      }
+   else if (x < 2.5f / 2.75f) {
+    x -= 2.25f / 2.75f;
+    return 7.5625f * x * x + 0.9375f;
+}
+else {
+ x -= 2.625f / 2.75f;
+ return 7.5625f * x * x + 0.984375f;
+}
+            })
+        DEFINE_EASING(EaseInBounce, { return 1.0f - EaseOutBounceRaw(1.0f - x); })
+        DEFINE_EASING(EaseInOutBounce, {
+            return x < 0.5f
+                ? (1.0f - EaseOutBounceRaw(1.0f - 2.0f * x)) / 2.0f
+                : (1.0f + EaseOutBounceRaw(2.0f * x - 1.0f)) / 2.0f;
+            })
 
-	template<typename Ty>
-	static constexpr Ty _2 = static_cast<Ty>(2);
-	template<typename Ty>
-	static constexpr Ty _2_25 = static_cast<Ty>(2.25);
-	template<typename Ty>
-	static constexpr Ty _2_5 = static_cast<Ty>(2.5);
-	template<typename Ty>
-	static constexpr Ty _2_625 = static_cast<Ty>(2.625);
-	template<typename Ty>
-	static constexpr Ty _2_75 = static_cast<Ty>(2.75);
+#undef DEFINE_EASING
 
-	template<typename Ty>
-	static constexpr Ty _7_5625 = static_cast<Ty>(7.5625);
-
-	template<typename Ty>
-	static constexpr Ty _10 = static_cast<Ty>(10);
-
-	template<typename Ty>
-	static constexpr Ty _180 = static_cast<Ty>(180);
-
-	template<typename Ty>
-	static constexpr Ty _90 = static_cast<Ty>(90);
-
-	template<class Ty>
-	[[nodiscard]] static inline Ty ToRadian(const Ty angle)
-	{
-		return static_cast<Ty>(angle * Pai / 180.0f);
-	}
-
-	// 二つの浮動小数点数がほぼ等しいかどうかを比較する
-	template<typename Ty>
-	[[nodiscard]] static inline bool AdjEqual(const float epsilon_num, const float num)
-	{
-		// 絶対値を計算するラムダ関数
-		constexpr auto Fabs{ [](const Ty num) constexpr {
-			// num が 0 より大きければそのまま返す。そうでなければ -num を返す。
-			if (num > 0.0f) return num; else return -num;
-		} };
-
-		// 型 Ty の最小の機械的な値を取得
-		static constexpr auto Epsilon{ std::numeric_limits<Ty>::epsilon() };
-
-		// 二つの数値の差の絶対値を計算
-		auto dis{ Fabs(epsilon_num - num) };
-
-		// 差の絶対値が Epsilon 以下であれば、二つの数はほぼ等しいと判断
-		return (dis <= Epsilon);
-	}
+} // namespace EasingFunc
 
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InQuad(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
 
-		return static_cast<Ty>(_max * time * time + _min);
-	}
+namespace EasingUtils {
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutQuad(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
+	struct EasingInfo {
+		float time;								// 効果時間
+		float totaltime;						// 効果時間
+		bool isActive;							// 機能しているか
+		GameTime::AdditionMethod additionMethod;	// 時間加算方法
+		EasingType type;						// 補間種類
 
-		return static_cast<Ty>(-_max * time * (time - 2.0f) + _min);
-	}
+		EasingInfo() :
+			time(0.0f),
+			totaltime(1.0f),
+			isActive(false),
+			additionMethod(GameTime::AdditionMethod::Rate),
+			type(EasingType::Linear) {
+		};
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutQuad(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
+		EasingInfo(float _time, float _totalTime, bool active, GameTime::AdditionMethod _additionMethod, EasingType _type) :
+			time(_time),
+			totaltime(_totalTime),
+			isActive(active),
+			additionMethod(_additionMethod),
+			type(_type) {
+		};
+	};
 
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(_max / 2.0f * time * time + _min);
 
-		--time;
+} // namespace EasingUtils
 
-		return static_cast<Ty>(-_max * (time * (time - 2.0f) - 1.0f) + _min);
-	}
+using namespace EasingUtils;
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InCubic(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		return static_cast<Ty>(_max * time * time * time + _min);
-	}
+namespace EasingFunc {
 
 	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutCubic(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
+	[[nodiscard]] static inline void Process(EasingInfo* info, Ty* value, Ty _max = 1.0f, Ty _min = 0.0f)
 	{
-		_max -= _min;
-		time = time / totaltime - 1.0f;
+		if (info->isActive == false)
+			return;
 
-		return static_cast<Ty>(_max * (time * time * time + 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutCubic(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(_max / 2.0f * time * time * time + _min);
-
-		time -= 2.0f;
-
-		return static_cast<Ty>(_max / 2.0f * (time * time * time + 2.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InQuart(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		return static_cast<Ty>(_max * time * time * time * time + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutQuart(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time = time / totaltime - 1.0f;
-
-		return static_cast<Ty>(_max * -1.0f * (time * time * time * time - 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutQuart(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(_max / 2.0f * time * time * time * time + _min);
-
-		time -= 2.0f;
-
-		return static_cast<Ty>(-_max / 2.0f * (time * time * time * time - 2.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InQuint(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		return static_cast<Ty>(_max * time * time * time * time * time + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutQuint(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time = time / totaltime - 1.0f;
-
-		return static_cast<Ty>(_max * (time * time * time * time * time + 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutQuint(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(_max / 2.0f * time * time * time * time * time + _min);
-
-		time -= 2.0f;
-
-		return static_cast<Ty>(_max / 2.0f * (time * time * time * time * time + 2.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InSine(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-
-		return static_cast<Ty>(-_max * cos(time * ToRadian(90.0f) / totaltime) + _max + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutSine(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-
-		return static_cast<Ty>(_max * sin(time * ToRadian(90.0f) / totaltime) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutSine(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-
-		return static_cast<Ty>(-_max / 2.0f * (cos(time * Pai / totaltime) - 1) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InExp(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-
-		return AdjEqual<Ty>(time, 0.0f) ?
-			static_cast<Ty>(_min) :
-			static_cast<Ty>(_max * std::pow(2.0f, 10.0f * (time / totaltime - 1.0f)) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutExp(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-
-		return AdjEqual<Ty>(time, totaltime) ?
-			static_cast<Ty>(_max + _min) :
-			static_cast<Ty>(_max * (-std::pow(2.0f, -10.0f * time / totaltime) + 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutExp(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		if (AdjEqual<Ty>(time, 0.0f))
-			return static_cast<Ty>(_min);
-
-		if (AdjEqual<Ty>(time, totaltime))
-			return static_cast<Ty>(_max);
-
-		_max -= _min;
-		time /= totaltime;
-
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(_max / 2.0f * std::pow(2.0f, 10.0f * (time - 1.0f)) + _min);
-
-		--time;
-
-		return static_cast<Ty>(_max / 2.0f * (-std::pow(2.0f, -10.0f * time) + 2.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InCirc(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-		time = (std::max)((std::min)(time, 1.0f), -1.0f);
-
-
-		return static_cast<Ty>(-_max * (std::pow(1.0f, -time * time) - 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutCirc(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= (totaltime - 1.0f);
-		time = (std::max)((std::min)(time, 1.0f), -1.0f);
-
-
-		return static_cast<Ty>(_max * std::pow(1.0f, -time * time) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutCirc(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-		time = (std::max)((std::min)(time, 1.0f), -1.0f);
-
-
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(-_max / 2.0f * (std::pow(1.0f, -time * time) - 1.0f) + _min);
-
-		time -= 2.0f;
-
-		return static_cast<Ty>(_max / 2.0f * (std::pow(1.0f, -time * time) + 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InBack(float time, float totaltime, Ty back, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		return static_cast<Ty>(_max * time * time * ((back + 1.0f) * time - back) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutBack(float time, float totaltime, Ty back, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time = time / totaltime - 1.0f;
-
-		return static_cast<Ty>(_max * (time * time * ((back + 1.0f) * time * back) + 1.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutBack(float time, float totaltime, Ty back, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		back *= static_cast<Ty>(1.525f);
-
-		if (time / 2.0f < 1.0f)
-			return static_cast<Ty>(_max * (time * time * ((back + 1.0f) * time - back)) + _min);
-
-		time -= 2.0f;
-
-		return static_cast<Ty>(_max / 2.0f * (time * time * ((back + 1.0f) * time + back) + 2.0f) + _min);
-	}
-
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty OutBounce(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		_max -= _min;
-		time /= totaltime;
-
-		if (time < 1.0f / 2.75f)
-			return static_cast<Ty>(_max * (7.5625f * time * time) + _min);
-
-		else if (time < 2.0f / 2.75f)
-		{
-			time -= 1.5f / 2.75f;
-
-			return static_cast<Ty>(_max * (7.5625f * time * time + 0.75f) + _min);
+		switch (info->additionMethod) {
+		case GameTime::AdditionMethod::Usual:		info->time += GTime.deltaTime;			break;
+		case GameTime::AdditionMethod::Rate:		info->time += GTime.deltaTime;			break;
+		default:
+			break;
 		}
-		else if (time < 2.5f / 2.75f)
-		{
-			time -= 2.25f / 2.75f;
 
-			return static_cast<Ty>(_max * (7.5625f * time * time + 0.9375f) + _min);
+		if (info->time >= info->totaltime) {
+			info->time = info->totaltime;
+			info->isActive = false;
+
+			if (info->totaltime == 0.0f) {
+				*value = _max;
+				return;
+			}
 		}
-		else
-		{
-			time -= 2.625f / 2.75f;
 
-			return static_cast<Ty>(_max * (7.5625f * time * time + 0.984375f) + _min);
+		switch (info->type) {
+		case EasingType::None:	break;
+		case EasingType::InQuad:		*value = EasingFunc::EaseInQuad(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutQuad:		*value = EasingFunc::EaseOutQuad(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutQuad:		*value = EasingFunc::EaseInOutQuad(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InCubic:		*value = EasingFunc::EaseInCubic(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutCubic:		*value = EasingFunc::EaseOutCubic(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutCubic:	*value = EasingFunc::EaseInOutCubic(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InQuart:		*value = EasingFunc::EaseInQuart(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutQuart:		*value = EasingFunc::EaseOutQuart(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutQuart:	*value = EasingFunc::EaseInOutQuart(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InQuint:		*value = EasingFunc::EaseInQuint(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutQuint:		*value = EasingFunc::EaseOutQuint(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutQuint:	*value = EasingFunc::EaseInOutQuint(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InSine:		*value = EasingFunc::EaseInSine(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutSine:		*value = EasingFunc::EaseOutSine(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutSine:		*value = EasingFunc::EaseInOutSine(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InCirc:		*value = EasingFunc::EaseInCirc(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutCirc:		*value = EasingFunc::EaseOutCirc(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutCirc:		*value = EasingFunc::EaseInOutCirc(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InBounce:		*value = EasingFunc::EaseInBounce(info->time, info->totaltime, _max, _min); break;
+		case EasingType::OutBounce:		*value = EasingFunc::EaseOutBounce(info->time, info->totaltime, _max, _min); break;
+		case EasingType::InOutBounce:	*value = EasingFunc::EaseInOutBounce(info->time, info->totaltime, _max, _min); break;
+		case EasingType::Linear:
+		default:
+			*value = EasingFunc::Apply(info->time, info->totaltime, _max, _min);
+			break;
 		}
 	}
+} // namespace EasingFunc
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InBounce(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		return _max - OutBounce<Ty>(totaltime - time, totaltime, _max - _min, static_cast<Ty>(0.0f)) + _min;
-	}
+namespace EasingUtils {
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty InOutBounce(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		if (time < totaltime / 2.0f)
-		{
-			return static_cast<Ty>(InBounce<Ty>(time * 2.0f, totaltime, _max - _min, _max) * 0.5f + _min);
+	struct EasingInt {
+		EasingInfo info;
+		int current;
+		int begin;
+		int end;
+
+		EasingInt() : info(EasingInfo()), current(0), begin(0), end(0) {};
+		EasingInt(EasingInfo _info, int _current, int _begin, int _end) : info(_info), current(_current), begin(_begin), end(_end) {};
+
+		void Update() {
+			if (info.isActive)
+				EasingFunc::Process(&this->info, &this->current, this->end, this->begin);
 		}
-		else
-		{
-			return static_cast<Ty>(OutBounce<Ty>(time * 2.0f - totaltime, totaltime, _max - _min, static_cast<Ty>(0.0f)) * 0.5f + _min + (_max - _min) * 0.5f);
-		}
-	}
 
-	template<typename Ty = float>
-	[[nodiscard]] static inline Ty Linear(float time, float totaltime, Ty _max = 1.0f, Ty _min = 0.0f)
-	{
-		return static_cast<Ty>((_max - _min) * time / totaltime + _min);
-	}
-};
+		/// <summary>
+		/// イージング挙動を設定する
+		/// </summary>
+		/// <param name="begin">始点</param>
+		/// <param name="end">終点</param>
+		/// <param name="sec">効果時間</param>
+		/// <param name="type">イージング種類</param>
+		/// <param name="active">設定後に起動するか</param>
+		void SetEasing(int _begin, int _end, float _sec, EasingType _type, bool active) {
+			current = _begin;
+			begin = _begin;
+			end = _end;
+			info.time = 0.0f;
+			info.totaltime = _sec;
+			info.type = _type;
+			info.isActive = active;
+		}
+	};
+
+	struct EasingDouble {
+		EasingInfo info;
+		double current;
+		double begin;
+		double end;
+
+		EasingDouble() : info(EasingInfo()), current(0.0), begin(0.0), end(0.0) {};
+		EasingDouble(EasingInfo _info, double _current, double _begin, double _end) : info(_info), current(_current), begin(_begin), end(_end) {};
+
+		void Update() {
+			if (info.isActive)
+				EasingFunc::Process(&this->info, &this->current, this->end, this->begin);
+		}
+
+		/// <summary>
+		/// イージング挙動を設定する
+		/// </summary>
+		/// <param name="begin">始点</param>
+		/// <param name="end">終点</param>
+		/// <param name="sec">効果時間</param>
+		/// <param name="type">イージング種類</param>
+		/// <param name="active">設定後に起動するか</param>
+		void SetEasing(double _begin, double _end, float _sec, EasingType _type, bool active) {
+			current = _begin;
+			begin = _begin;
+			end = _end;
+			info.time = 0.0f;
+			info.totaltime = _sec;
+			info.type = _type;
+			info.isActive = active;
+		}
+	};
+
+	struct EasingFloat {
+		EasingInfo info;
+		float current;
+		float begin;
+		float end;
+
+		EasingFloat() : info(EasingInfo()), current(0.0f), begin(0.0f), end(0.0f) {};
+		EasingFloat(EasingInfo _info, float _current, float _begin, float _end) : info(_info), current(_current), begin(_begin), end(_end) {};
+
+		void Update() {
+			if (info.isActive)
+				EasingFunc::Process(&this->info, &this->current, this->end, this->begin);
+		}
+
+		/// <summary>
+		/// イージング挙動を設定する
+		/// </summary>
+		/// <param name="begin">始点</param>
+		/// <param name="end">終点</param>
+		/// <param name="sec">効果時間</param>
+		/// <param name="type">イージング種類</param>
+		/// <param name="active">設定後に起動するか</param>
+		void SetEasing(float _begin, float _end, float _sec, EasingType _type, bool active) {
+			current = _begin;
+			begin = _begin;
+			end = _end;
+			info.time = 0.0f;
+			info.totaltime = _sec;
+			info.type = _type;
+			info.isActive = active;
+		}
+	};
+
+	struct EasingVec2 {
+		EasingInfo info;
+		Vector2 current;
+		Vector2 begin;
+		Vector2 end;
+
+		EasingVec2() : info(EasingInfo()), current(Vector2::Zero), begin(Vector2::Zero), end(Vector2::Zero) {};
+		EasingVec2(EasingInfo _info, Vector2 _current, Vector2 _begin, Vector2 _end) : info(_info), current(_current), begin(_begin), end(_end) {};
+
+		void Update() {
+			if (info.isActive)
+				EasingFunc::Process(&this->info, &this->current, this->end, this->begin);
+		}
+
+		/// <summary>
+		/// イージング挙動を設定する
+		/// </summary>
+		/// <param name="begin">始点</param>
+		/// <param name="end">終点</param>
+		/// <param name="sec">効果時間</param>
+		/// <param name="type">イージング種類</param>
+		/// <param name="active">設定後に起動するか</param>
+		void SetEasing(Vector2 _begin, Vector2 _end, float _sec, EasingType _type, bool active) {
+			current = _begin;
+			begin = _begin;
+			end = _end;
+			info.time = 0.0f;
+			info.totaltime = _sec;
+			info.type = _type;
+			info.isActive = active;
+		}
+	};
+
+	struct EasingVec3 {
+		EasingInfo info;
+		Vector3 current;
+		Vector3 begin;
+		Vector3 end;
+
+		EasingVec3() : info(EasingInfo()), current(Vector3::Zero), begin(Vector3::Zero), end(Vector3::Zero) {};
+		EasingVec3(EasingInfo _info, Vector3 _current, Vector3 _begin, Vector3 _end) : info(_info), current(_current), begin(_begin), end(_end) {};
+
+		void Update() {
+			if (info.isActive)
+				EasingFunc::Process(&this->info, &this->current, this->end, this->begin);
+		}
+
+		/// <summary>
+		/// イージング挙動を設定する
+		/// </summary>
+		/// <param name="begin">始点</param>
+		/// <param name="end">終点</param>
+		/// <param name="sec">効果時間</param>
+		/// <param name="type">イージング種類</param>
+		/// <param name="active">設定後に起動するか</param>
+		void SetEasing(Vector3 _begin, Vector3 _end, float _sec, EasingType _type, bool active) {
+			current = _begin;
+			begin = _begin;
+			end = _end;
+			info.time = 0.0f;
+			info.totaltime = _sec;
+			info.type = _type;
+			info.isActive = active;
+		}
+	};
+} // namespace EasingUtils

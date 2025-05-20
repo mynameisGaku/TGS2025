@@ -1,10 +1,10 @@
 #pragma once
 
 // Œp³Œ³
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 // ”Ä—p
-#include "../Util/Vector3.h"
+#include "src/util/math/vector3.h"
 #include <list>
 #include <string>
 #include <assert.h>

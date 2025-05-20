@@ -1,6 +1,6 @@
-#include "VolumeSetting.h"
+#include "src/common/setting/volume/VolumeSetting.h"
 
-#include "SoundManager.h"
+#include "src/util/sound/SoundManager.h"
 
 VolumeSetting::VolumeSetting() {
 

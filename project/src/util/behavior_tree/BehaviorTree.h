@@ -1,6 +1,6 @@
 #pragma once
-#include "BehaviorData.h"
-#include "BehaviorNode.h"
+#include "src/util/behavior_tree/BehaviorData.h"
+#include "src/util/behavior_tree/BehaviorNode.h"
 
 class BehaviorTree {
 public:

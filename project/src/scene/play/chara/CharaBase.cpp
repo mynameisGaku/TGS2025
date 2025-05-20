@@ -1,21 +1,21 @@
-#include "CharaBase.h"
-#include "InputManager.h"
-#include "EffectManager.h"
+#include "src/scene/play/chara/CharaBase.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/fx/effect/EffectManager.h"
 
-#include "Component/Physics.h"
-#include "Component/CollisionDefine.h"
-#include "Stage.h"
-#include "StageObjectManager.h"
-#include "CharaStamina.h"
-#include "CharaHP.h"
-#include "Ball.h"
-#include "BallManager.h"
-#include "Catcher.h"
-#include "CharaDefineRef.h"
-#include "Component/Animator.h"
-#include "Util/Utils.h"
-#include "Timeline.h"
-#include "VectorJson.h"
+#include "src/common/component/physics/Physics.h"
+#include "src/common/component/collider/CollisionDefine.h"
+#include "src/common/stage/Stage.h"
+#include "src/common/stage/StageObjectManager.h"
+#include "src/scene/play/chara/CharaStamina.h"
+#include "src/scene/play/chara/CharaHP.h"
+#include "src/scene/play/ball/Ball.h"
+#include "src/scene/play/ball/BallManager.h"
+#include "src/scene/play/catcher/Catcher.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/common/component/animator/Animator.h"
+#include "src/util/Utils.h"
+#include "src/common/timeline/Timeline.h"
+#include "src/util/file/json/VectorJson.h"
 
 using namespace KeyDefine;
 
@@ -111,8 +111,8 @@ void CharaBase::Init(std::string tag)
 	m_CharaTag = tag;
 	m_pPhysics = GetComponent<Physics>();
 	m_Catcher = Instantiate<Catcher>();
-	m_Catcher->transform->position = Vector3(0, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
-	m_Catcher->transform->scale = V3::ONE * CHARADEFINE_REF.CatchRadius * 2;
+	m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
+	m_Catcher->transform->scale = Vector3::Ones * CHARADEFINE_REF.CatchRadius * 2.0f;
 	m_Catcher->transform->SetParent(transform);
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
@@ -153,7 +153,7 @@ void CharaBase::Init(std::string tag)
 	//=== メインアニメーション ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdle", AnimOption().SetIsLoop(true));
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleEmote", AnimOption());
-	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption().SetIsFixedRoot({ false, true, false }).SetOffset(V3::SetY(100.0f)));
+	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption().SetIsFixedRoot({ false, true, false }).SetOffset(Vector3::SetY(100.0f)));
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToRun", AnimOption().SetIsFixedRoot({ false, false, true }));
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToStandingIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 
@@ -164,7 +164,7 @@ void CharaBase::Init(std::string tag)
 
 	m_Animator->LoadAnim("data/Animation/", "DamageToDown", AnimOption().SetIsFixedRoot({ false, false, true }));
 
-	m_Animator->LoadAnim("data/Animation/", "Fall", AnimOption().SetIsLoop(true).SetIsFixedRoot({ false, true, false }).SetOffset(V3::SetY(100.0f)));
+	m_Animator->LoadAnim("data/Animation/", "Fall", AnimOption().SetIsLoop(true).SetIsFixedRoot({ false, true, false }).SetOffset(Vector3::SetY(100.0f)));
 	m_Animator->LoadAnim("data/Animation/", "FallToCrouch", AnimOption().SetIsFixedRoot({ false, false, true }));
 	m_Animator->LoadAnim("data/Animation/", "FallToRollToIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
 
@@ -172,7 +172,7 @@ void CharaBase::Init(std::string tag)
 
 	m_Animator->LoadAnim("data/Animation/", "Run", AnimOption().SetIsLoop(true));
 	m_Animator->LoadAnim("data/Animation/", "RunToActionIdle", AnimOption().SetIsFixedRoot({ false, false, true }));
-	m_Animator->LoadAnim("data/Animation/", "RunToJump", AnimOption().SetIsFixedRoot({ false, true, true }).SetOffset(V3::SetY(100.0f)));
+	m_Animator->LoadAnim("data/Animation/", "RunToJump", AnimOption().SetIsFixedRoot({ false, true, true }).SetOffset(Vector3::SetY(100.0f)));
 	m_Animator->LoadAnim("data/Animation/", "RunToSlide", AnimOption().SetIsFixedRoot({ false, false, true }));
 
 	m_Animator->LoadAnim("data/Animation/", "Slide", AnimOption().SetIsFixedRoot({ false, false, true }));
@@ -204,14 +204,14 @@ void CharaBase::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		m_ChargeRateWatchDog -= Time::DeltaTime();
+		m_ChargeRateWatchDog -= GTime.deltaTime;
 		if (m_ChargeRateWatchDog < 0.0f)
 		{
 			m_ChargeRateWatchDog = 0.0f;
 			m_IsCharging = false;
 		}
 
-		m_pBall->transform->position = VTransform(Vector3(0, BALL_RADIUS, -BALL_RADIUS), MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand")));
+		m_pBall->transform->position = VTransform(Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS), MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand")));
 	}
 
 	static const float MOVE_ACCEL = 0.03f;
@@ -275,7 +275,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 			// 相手へ向かうベクトル
 			Vector3 toVec = otherPos - myPos;
-			if (toVec.SquareSize() == 0)
+			if (toVec.GetLengthSquared() == 0)
 				toVec = Vector3(0, 0, 1);
 
 			// 反発力の強さを定義
@@ -284,7 +284,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			const float REPELLENT_RADIUS = collider->Radius() * 4.0f;
 
 			// 反発力
-			const Vector3 repellentForce = toVec.Norm() * (REPELLENT_FORCE_SCALE_MIN + (REPELLENT_FORCE_SCALE_MAX - REPELLENT_FORCE_SCALE_MIN) * max(0.0f, 1.0f - toVec.Size() / REPELLENT_RADIUS));
+			const Vector3 repellentForce = toVec.Normalize() * (REPELLENT_FORCE_SCALE_MIN + (REPELLENT_FORCE_SCALE_MAX - REPELLENT_FORCE_SCALE_MIN) * max(0.0f, 1.0f - toVec.GetLength() / REPELLENT_RADIUS));
 
 			// 反発力を加える
 			m_pPhysics->resistance -= repellentForce;
@@ -318,7 +318,7 @@ void CharaBase::HitGroundProcess() {
 
 		ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
 
-		p1 = transform->Global().position + V3::SetY(37);
+		p1 = transform->Global().position + Vector3::SetY(37);
 		p2 = capsuleCol->OffsetWorld();
 
 		const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
@@ -364,7 +364,7 @@ void CharaBase::HitGroundProcess() {
 
 void CharaBase::Move(const Vector3& dir)
 {
-	m_IsMove = dir.SquareSize() > 0;
+	m_IsMove = dir.GetLengthSquared() > 0;
 
 	if (m_CanRot)
 	{
@@ -377,10 +377,10 @@ void CharaBase::Move(const Vector3& dir)
 
 	if (m_CanMove)
 	{
-		const Vector3 normDir = dir.Norm();
-		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
+		const Vector3 normDir = Vector3::Normalize(dir);
+		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * GTime.deltaTime;	// 時間経過率を適応した移動速度
 
-		Vector3 velocity = normDir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
+		Vector3 velocity = normDir * deltaTimeMoveSpeed * Vector3::Horizontal;	// スティックの傾きの方向への速度
 
 		// 速度を適応させる
 		m_pPhysics->velocity.x = velocity.x;
@@ -422,7 +422,7 @@ void CharaBase::ThrowBallForward()
 		return;
 
 	Vector3 forward = transform->Forward();
-	Vector3 velocity = forward + V3::SetY(0.4f);
+	Vector3 velocity = forward + Vector3::SetY(0.4f);
 
 	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate), this);
 
@@ -438,7 +438,7 @@ void CharaBase::ThrowHomingBall()
 		return;
 
 	Vector3 forward = transform->Forward();
-	Vector3 velocity = forward + V3::SetY(0.4f);
+	Vector3 velocity = forward + Vector3::SetY(0.4f);
 	//m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate), this);
 	m_pBall->ThrowHoming(velocity * 30.0f, this);
 	m_pLastBall = m_pBall;
@@ -454,7 +454,7 @@ void CharaBase::GenerateBall()
 	if (m_pBall != nullptr)
 	{
 		m_IsCharging = true;
-		m_BallChargeRate += Time::DeltaTime();
+		m_BallChargeRate += GTime.deltaTime;
 		return;
 	}
 
@@ -515,7 +515,7 @@ void CharaBase::StateActionIdle(FSMSignal sig)
 	{
 		idleUpdate();
 
-		m_EmoteTimer -= Time::DeltaTimeLapseRate();
+		m_EmoteTimer -= GTime.deltaTime;
 		if (m_EmoteTimer < 0)
 		{
 			int rand = GetRand(99);
@@ -789,7 +789,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	{
 		if (m_IsLanding)
 		{
-			if (m_pPhysics->FlatVelocity().SquareSize() > 0)
+			if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
 			{
 				m_FSM->ChangeState(&CharaBase::StateFallToRoll); // ステートを変更
 			}
@@ -823,7 +823,7 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_pPhysics->FlatVelocity().SquareSize() > 0)
+		if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
 		{
 			m_FSM->ChangeState(&CharaBase::StateCrouchToRun); // ステートを変更
 		}
@@ -1447,7 +1447,7 @@ void CharaBase::slideUpdate()
 
 	if (m_SlideTimer > 0.0f)
 	{
-		m_SlideTimer -= Time::DeltaTimeLapseRate();
+		m_SlideTimer -= GTime.deltaTime;
 		if (m_SlideTimer < 0.0f)
 		{
 			m_SlideTimer = 0.0f;
@@ -1464,7 +1464,7 @@ void CharaBase::catchUpdate()
 {
 	if (m_CatchTimer > 0.0f)
 	{
-		m_CatchTimer -= Time::DeltaTimeLapseRate();
+		m_CatchTimer -= GTime.deltaTime;
 		if (m_CatchTimer < 0.0f)
 		{
 			m_CatchTimer = 0.0f;
@@ -1480,7 +1480,7 @@ void CharaBase::catchUpdate()
 			}
 		}
 
-		m_pStamina->Use(CATCH_STAMINA_USE * Time::DeltaTimeLapseRate());
+		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
 	}
 	else
 	{

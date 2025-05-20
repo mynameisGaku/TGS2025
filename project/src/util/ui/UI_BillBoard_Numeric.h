@@ -1,13 +1,13 @@
 #pragma once
 
 // ◇継承元
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
 // ◇汎用
 #include <vector>
 
 // ◇個別で必要な物
-#include "UI_BillBoard.h"
+#include "src/util/ui/UI_BillBoard.h"
 
 /// <summary>
 /// 数値を描画するビルボード。0～9が書かれた画像を10分割した物を使用する。

@@ -1,16 +1,17 @@
 #pragma once
 
 // ◇継承元
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 // ◇汎用
-#include "../Util/Utils.h"
-#include "../Util/Transform.h"
+#include "src/util/utils.h"
+#include "src/util/transform/Transform.h"
+#include "src/util/math/Vector3.h"
 
 namespace {
 
 	// 既定の重力加速度
-	static const Vector3 GRAVITY = V3::SetY(Math::GRAVITY_3D);
+	static const Vector3 GRAVITY = Vector3::SetY(Math::GRAVITY_3D);
 
 	// 既定の摩擦係数
 	static const Vector3 FRICTION = Vector3(0.9f);
@@ -103,12 +104,12 @@ public:
 	/// <summary>
 	/// 水平方向の速度を取得する
 	/// </summary>
-	inline Vector3 const FlatVelocity() const { return Vector3(velocity.x, 0, velocity.z); }
+	inline Vector3 const FlatVelocity() const { return Vector3(velocity.x, 0.0f, velocity.z); }
 
 	/// <summary>
 	/// 垂直方向の速度を取得する
 	/// </summary>
-	inline Vector3 const UpVelocity() const { return Vector3(0, velocity.y, 0); }
+	inline Vector3 const UpVelocity() const { return Vector3(0.0f, velocity.y, 0.0f); }
 
 private:
 	//==========================================================================================

@@ -1,14 +1,14 @@
 #include "DebugController.h"
 
-#include "../../Library/time.h"
+#include "src/util/time/GameTime.h"
 
-#include "../InputManager.h"
-#include "../PadController.h"
-#include "../CameraManager.h"
-#include "../CharaBase.h"
-#include "../StateManager.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/PadController.h"
+#include "src/common/camera/CameraManager.h"
+#include "src/scene/play/chara/CharaBase.h"
+#include "src/util/fsm/StateManager.h"
 
-#include "Physics.h"
+#include "src/common/component/physics/Physics.h"
 
 DebugController::DebugController() 
 {
@@ -77,7 +77,7 @@ void DebugController::Update()
 
 	// カメラの向きに応じたスティックの傾き
     Vector2 leftStick = PadController::NormalizedLeftStick(padNumber);
-	Vector3 virtualStick = Vector3(leftStick.x, 0, leftStick.y);
+	Vector3 virtualStick = Vector3(leftStick.x, 0.0f, leftStick.y);
 	Vector3 stick = virtualStick * MGetRotY(camera->transform->rotation.y);
 
 	chara->Move(stick);
@@ -155,7 +155,7 @@ bool DebugController::IsMoveButton() const
 		return false;
 
 	// スティックが傾いているか
-	bool isTiltStick = (PadController::NormalizedLeftStick(padNumber).Size() >= KeyDefine::STICK_DEADZONE);
+	bool isTiltStick = (PadController::NormalizedLeftStick(padNumber).GetLength() >= KeyDefine::STICK_DEADZONE);
 
 	return (isTiltStick);
 }

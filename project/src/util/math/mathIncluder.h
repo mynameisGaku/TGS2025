@@ -12,7 +12,7 @@
 #include <DxLib.h>
 #include "matrix.h"
 #include "quaternion.h"
-#include "vector2.h"
+#include "Vector2.h"
 #include "vector3.h"
 #include "vector4.h"
 #include "random.h"

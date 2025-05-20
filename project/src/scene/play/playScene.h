@@ -1,6 +1,6 @@
 #pragma once
-#include "../Library/sceneBase.h"
-#include "BloomManager.h"
+#include "framework/SceneBase.h"
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
 
 class CrystalFragmentManager;
 

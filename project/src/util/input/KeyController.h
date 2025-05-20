@@ -4,7 +4,7 @@
 #include <string>
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "KeyDefine.h"
+#include "src/util/input/KeyDefine.h"
 
 namespace KeyController {
 

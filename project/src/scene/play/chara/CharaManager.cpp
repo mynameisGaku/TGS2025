@@ -1,12 +1,12 @@
-#include "CharaManager.h"
-#include "Library/resourceLoader.h"
-#include "Util/Utils.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/Utils.h"
 
-#include "Component/Physics.h"
-#include "Component/CollisionDefine.h"
-#include "Component/ColliderCapsule.h"
+#include "src/common/component/physics/Physics.h"
+#include "src/common/component/collider/CollisionDefine.h"
+#include "src/common/component/collider/ColliderCapsule.h"
 
-#include "CharaDefineRef.h"
+#include "src/reference/chara/CharaDefineRef.h"
 
 CharaManager::CharaManager()
 {
@@ -180,7 +180,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	// “–‚½‚è”»’è‚ðÝ’è
 	ColliderCapsule* colliderChara = newChara->AddComponent<ColliderCapsule>();
 	colliderChara->BaseInit(colParamChara);
-	colliderChara->SetOffset(V3::SetY(130.0f));
+	colliderChara->SetOffset(Vector3::SetY(130.0f));
 	//colliderChara->SetDraw(true);
 
 	newChara->m_Index = index;

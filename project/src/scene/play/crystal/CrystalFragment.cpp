@@ -1,9 +1,9 @@
-#include "CrystalFragment.h"
-#include "settings_json.h"
-#include "Library/FileUtil.h"
-#include "CrystalFragmentRef.h"
-#include "Util/Utils.h"
-#include <Library/time.h>
+#include "src/scene/play/crystal/CrystalFragment.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/file/FileUtil.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/util/Utils.h"
+#include "src/util/time/GameTime.h"
 
 CrystalFragment::CrystalFragment(uint32_t index, const Element& elem, const Size& size) :
     Object3D(),
@@ -70,7 +70,7 @@ void CrystalFragment::Update()
     }
 
     // Žõ–½Œ¸‚ç‚·
-    m_Lifetime -= Time::DeltaTime();
+    m_Lifetime -= GTime.deltaTime;
     
     // ‰ñ“]
     m_pPhysics->angularVelocity.y = m_RotSpeed;

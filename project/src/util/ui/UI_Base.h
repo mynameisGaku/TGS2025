@@ -1,9 +1,9 @@
 //#pragma once
-//#include "../Library/gameObject.h"
-//#include "../Source/Util/Utils.h"
-//#include "../Source/Util/Vector3.h"
-//#include "../Source/Util/Vector2.h"
-//#include "gauge.h"
+//#include "framework/gameObject.h"
+//#include "src/util/Utils.h"
+//#include "src/util/math/vector3.h"
+//#include "src/util/math/Vector2.h"
+//#include "src/util/gauge/gauge.h"
 //
 //#include <math.h>
 //#include <algorithm>
@@ -49,7 +49,7 @@
 //		ext = 1;
 //		angle = 0;
 //		bright = UI_Bright();
-//		pos = V2::ZERO;
+//		pos = Vector2::Zero;
 //	}
 //	int handle;
 //	int size_x;

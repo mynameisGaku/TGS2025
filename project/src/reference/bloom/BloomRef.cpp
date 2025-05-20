@@ -1,6 +1,6 @@
-#include "BloomRef.h"
-#include "nlohmann/json.hpp"
-#include "settings_json.h"
+#include <vendor/nlohmann/json.hpp>
+#include "src/util/file/json/settings_json.h"
+#include "src/reference/bloom/BloomRef.h"
 
 namespace
 {

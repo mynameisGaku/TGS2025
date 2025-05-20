@@ -29,7 +29,7 @@ public:
 #define BLOOM_REF BloomRef::Inst()
 
 // Jsonì«Ç›çûÇ›óp
-#include "nlohmann/json_fwd.hpp"
+#include <vendor/nlohmann/json_fwd.hpp>
 
 void to_json(nlohmann::json& j, const BloomRef::Parameter& param);
 void from_json(const nlohmann::json& j, BloomRef::Parameter& param);

@@ -1,6 +1,5 @@
 #pragma once
-#include "config.h"
-#include "camera.h"
+#include "src/common/camera/Camera.h"
 
 using namespace CameraDefine;
 

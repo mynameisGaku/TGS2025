@@ -1,5 +1,5 @@
-#include "CrystalFragmentSpawnerRef.h"
-#include "settings_json.h"
+#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+#include "src/util/file/json/settings_json.h"
 
 void CrystalFragmentSpawnerRef::Load(bool ForceLoad)
 {

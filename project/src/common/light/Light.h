@@ -1,10 +1,10 @@
 #pragma once
 // Œp³Œ³
-#include "object3D.h"
+#include "src/util/object3D/Object3D.h"
 
 // ”Ä—p
 #include <string>
-#include "config.h"
+
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
 #include "lightDefine.h"

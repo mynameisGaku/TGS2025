@@ -1,7 +1,7 @@
-#include "CrystalFragmentRef.h"
-#include <Library/FileUtil.h>
-#include "CrystalFragment.h"
-#include "settings_json.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/scene/play/crystal/CrystalFragment.h"
+#include "src/util/file/FileUtil.h"
+#include "src/util/file/json/settings_json.h"
 
 void CrystalFragmentRef::Load(bool _ForceLoad)
 {

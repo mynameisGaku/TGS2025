@@ -1,6 +1,6 @@
-#include "BehaviorDecorator.h"
-#include "../../Library/GameObject.h"
+#include "src/util/behavior_tree/BehaviorDecorator.h"
+#include "framework/gameObject.h"
 
-#include "../object3D.h"
+#include "src/util/object3D/Object3D.h"
 
-#include "../stageDefine.h"
+#include "src/common/stage/StageDefine.h"

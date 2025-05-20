@@ -1,5 +1,5 @@
-#include "object2D.h"
-#include "../Library/resourceLoader.h"
+#include "src/util/object2D/Object2D.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
 
 Object2D::Object2D() : Object2D(-1, RectTransform()) {}
 
@@ -89,7 +89,7 @@ void Object2D::SetImage(const int& handle, const Vector2& _clipStart, const Vect
 
 Vector2 Object2D::DisplacementByAnchorPoint() {
 
-	Vector2 offset = V2::ZERO;	// ·
+	Vector2 offset = Vector2::Zero;	// ·
 	const float adjust = 2.0f;	// ’²®’l
 
 	// …•½²‚ÌƒYƒŒ’²®

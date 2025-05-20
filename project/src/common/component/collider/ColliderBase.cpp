@@ -1,11 +1,11 @@
-#include "colliderBase.h"
+#include "src/common/component/collider/ColliderBase.h"
 
 // ◇汎用
-#include "../Util/Utils.h"
+#include "src/util/utils.h"
 
 // ◇演出・機能
-#include "CollisionManager.h"
-#include "../Object3D.h"
+#include "src/common/component/collider/CollisionManager.h"
+#include "src/util/object3D/Object3D.h"
 
 ColliderBase::ColliderBase() {
 

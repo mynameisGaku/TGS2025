@@ -1,9 +1,9 @@
 #pragma once
 // ◇継承元
-#include "Object2D.h"
+#include "src/util/object2D/Object2D.h"
 
 // ◇汎用
-#include "../Source/Util/Vector2.h"
+#include "src/util/math/Vector2.h"
 
 /// <summary>
 /// サブトーンの情報

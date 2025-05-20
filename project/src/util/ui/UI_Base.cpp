@@ -1,5 +1,5 @@
 //#include "ui_Base.h"
-//#include "../Library/sceneManager.h"
+//#include "framework/SceneManager.h"
 //
 //void UI_Base::Initialize()
 //{
@@ -87,7 +87,7 @@
 //}
 //
 ////ビルボードで必要なカメラのヘッダー
-////#include "camera.h"
+////#include "src/common/camera/Camera.h"
 //
 //void UI_Base::DrawBillGauge3D(Vector3 _pos, BillGaugeParam param, float current, float currentMax, int graph, bool transflag)
 //{

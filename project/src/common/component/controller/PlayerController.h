@@ -1,11 +1,11 @@
 #pragma once
 
 // Åûåpè≥å≥
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 #include <string>
-#include "../KeyDefine.h"
-#include "../Util/Vector3.h"
+#include "src/util/input/KeyDefine.h"
+#include "src/util/math/vector3.h"
 
 class CharaBase;
 

@@ -1,16 +1,16 @@
 #pragma once
 
 // Œp³Œ³
-#include "../Library/gameObject.h"
+#include "framework/gameObject.h"
 
 // ”Ä—p
 #include <fstream>
 #include <assert.h>
-#include "../Library/csvReader.h"
+#include "src/util/file/csv/CsvReader.h"
 
-#include "Util/Vector2.h"
-#include "UI_Manager.h"
-#include "EasingUtils.h"
+#include "src/util/math/vector2.h"
+#include "src/util/ui/UI_Manager.h"
+#include "src/util/easing/Easing.h"
 
 /// <summary>
 /// İ’è€–Ú‚ÌŠî’êƒNƒ‰ƒX

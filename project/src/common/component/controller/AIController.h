@@ -1,10 +1,10 @@
 #pragma once
 
 // Åûåpè≥å≥
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 #include <string>
-#include "../TinyFSM.h"
+#include "src/util/fsm/TinyFSM.h"
 
 class CharaBase;
 

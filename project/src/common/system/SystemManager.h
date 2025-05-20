@@ -1,5 +1,5 @@
 #pragma once
-#include "../Library/gameObject.h"
+#include "framework/gameObject.h"
 
 class LoadScreen;
 

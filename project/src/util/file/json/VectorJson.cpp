@@ -1,7 +1,7 @@
-#include "VectorJson.h"
-#include "Util/Vector2.h"
-#include "Util/Vector3.h"
-#include "nlohmann/json.hpp"
+#include "src/util/file/json/VectorJson.h"
+#include "src/util/math/vector2.h"
+#include "src/util/math/vector3.h"
+#include <vendor/nlohmann/json.hpp>
 
 void to_json(nlohmann::json& j, const Vector2& vec)
 {

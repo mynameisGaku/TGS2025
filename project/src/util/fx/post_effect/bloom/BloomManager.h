@@ -1,6 +1,6 @@
 #pragma once
-#include "Library/gameObject.h"
-#include "BloomRef.h"
+#include "framework/gameObject.h"
+#include "src/reference/bloom/BloomRef.h"
 
 /// <summary>
 /// ƒJƒƒ‰İ’è‚ğˆÛ‚µ‚Ä•`‰ææ‚ğ•ÏX‚·‚é

@@ -1,15 +1,16 @@
 #include "titleScene.h"
 
 // ◇汎用
-#include "../Library/sceneManager.h"
-#include "../Library/resourceLoader.h"
-#include "DebugScreen.h"
+#include "framework/SceneManager.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+
 
 // ◇演出・機能
-#include "InputManager.h"
-#include "Fader.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/fader/Fader.h"
 
-#include "SettingManager.h"
+#include "src/common/setting/SettingManager.h"
+#include "src/util/easing/easing.h"
 
 TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 

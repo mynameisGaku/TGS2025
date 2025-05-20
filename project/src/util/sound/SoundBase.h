@@ -1,11 +1,11 @@
 #pragma once
 
 // Œp³Œ³
-#include "../Library/gameObject.h"
+#include "framework/gameObject.h"
 
 // ”Ä—p
-#include "easing.h"
-#include "../Source/Util/Vector3.h"
+#include "src/util/easing/Easing.h"
+#include "src/util/math/vector3.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
 #include "soundDefine.h"

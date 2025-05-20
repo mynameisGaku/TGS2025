@@ -1,12 +1,12 @@
 #pragma once
 // Œp³Œ³
-#include "component.h"
+#include "src/common/component/Component.h"
 
 // ”Ä—p
 #include <list>
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "collisionDefine.h"
+#include "src/common/component/collider/CollisionDefine.h"
 
 class HittedData;
 class Transform;

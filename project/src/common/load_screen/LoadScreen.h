@@ -1,10 +1,10 @@
 #pragma once
-#include "../Library/gameObject.h"
+#include "framework/gameObject.h"
 
 // ”Ä—p
-#include "Util/Utils.h"
-#include "EasingUtils.h"
-#include "Font.h"
+#include "src/util/Utils.h"
+#include "src/util/easing/Easing.h"
+#include "src/util/font/Font.h"
 
 namespace {
 

@@ -1,9 +1,9 @@
 #pragma once
 
 // ◇継承元
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
-#include "../Source/Util/Transform.h"
+#include "src/util/transform/Transform.h"
 
 /// <summary>
 /// ビルボードの処理を行うクラス

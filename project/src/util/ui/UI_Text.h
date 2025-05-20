@@ -1,12 +1,12 @@
 #pragma once
 // ◇継承元
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
 // ◇汎用
-#include "../Source/Util/Utils.h"
+#include "src/util/Utils.h"
 
 // ◇演出・機能
-#include "Font.h"
+#include "src/util/font/Font.h"
 
 /// <summary>
 /// テキスト表示を行うUIクラス

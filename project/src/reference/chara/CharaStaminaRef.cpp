@@ -1,5 +1,5 @@
-#include "CharaStaminaRef.h"
-#include "settings_json.h"
+#include "src/reference/chara/CharaStaminaRef.h"
+#include "src/util/file/json/settings_json.h"
 
 void CharaStaminaRef::Load(bool ForceLoad)
 {

@@ -1,7 +1,6 @@
 #pragma once
-#include "SoundBase.h"
-#include "SoundDefine.h"
-#include "config.h"
+#include "src/util/sound/SoundBase.h"
+#include "src/util/sound/SoundDefine.h"
 
 #include <unordered_map>
 #include <vector>

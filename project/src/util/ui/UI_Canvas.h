@@ -1,13 +1,13 @@
 #pragma once
 // ◇継承元
-#include "Object2D.h"
+#include "src/util/object2D/Object2D.h"
 
 // ◇演出・機能
-#include "EasingUtils.h"
+#include "src/util/easing/Easing.h"
 
 // ◇個別で必要な物
-#include "UI_Subtone.h"
-#include "UI_Define.h"
+#include "src/util/ui/UI_Subtone.h"
+#include "src/util/ui/UI_Define.h"
 
 /// <summary>
 /// UIに関する基底クラス
@@ -248,28 +248,28 @@ inline void UI_Canvas::SetEasing(const EasingMovement& move, const Ty& begin, co
 	case EasingMovement::eMove:
 		easingMove.begin = begin;
 		easingMove.end = end;
-		easingMove.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingMove.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingMove.info, &rectTransform->position, easingMove.end, easingMove.begin);
 		break;
 
 	case EasingMovement::eRot:
 		easingRot.begin = static_cast<float>(begin);
 		easingRot.end = static_cast<float>(end);
-		easingRot.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingRot.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingRot.info, &rectTransform->rotation, easingRot.end, easingRot.begin);
 		break;
 
 	case EasingMovement::eScale:
 		easingScale.begin = begin;
 		easingScale.end = end;
-		easingScale.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingScale.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingScale.info, &rectTransform->scale, easingScale.end, easingScale.begin);
 		break;
 
 	case EasingMovement::eAlpha:
 		easingAlpha.begin = static_cast<int>(begin);
 		easingAlpha.end = static_cast<int>(end);
-		easingAlpha.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingAlpha.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingAlpha.info, &alpha, easingAlpha.end, easingAlpha.begin);
 		break;
 	}
@@ -290,28 +290,28 @@ inline void UI_Canvas::SetAfterImageEasing(const EasingMovement& move, const Ty&
 	case EasingMovement::eMove:
 		easingMoveAftImg.begin = begin;
 		easingMoveAftImg.end = end;
-		easingMoveAftImg.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingMoveAftImg.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingMoveAftImg.info, &easingMoveAftImg.current, easingMoveAftImg.end, easingMoveAftImg.begin);
 		break;
 
 	case EasingMovement::eRot:
 		easingRotAftImg.begin = static_cast<float>(begin);
 		easingRotAftImg.end = static_cast<float>(end);
-		easingRotAftImg.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingRotAftImg.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingRotAftImg.info, &easingRotAftImg.current, easingRotAftImg.end, easingRotAftImg.begin);
 		break;
 
 	case EasingMovement::eScale:
 		easingScaleAftImg.begin = begin;
 		easingScaleAftImg.end = end;
-		easingScaleAftImg.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingScaleAftImg.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingScaleAftImg.info, &easingScaleAftImg.current, easingScaleAftImg.end, easingScaleAftImg.begin);
 		break;
 
 	case EasingMovement::eAlpha:
 		easingAlphaAftImg.begin = static_cast<int>(begin);
 		easingAlphaAftImg.end = static_cast<int>(end);
-		easingAlphaAftImg.info = EasingInfo(0.0f, totalTime, true, Time::AdditionMethod::Rate, type);
+		easingAlphaAftImg.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingAlphaAftImg.info, &easingAlphaAftImg.current, easingAlphaAftImg.end, easingAlphaAftImg.begin);
 		break;
 	}

@@ -1,8 +1,8 @@
 // ÅüåvéZéÆä÷òAÅü
 #pragma once
 #include "Quaternion.h"
-#include "Transform.h"
-#include "RectTransform.h"
+#include "src/util/transform/Transform.h"
+#include "src/util/transform/RectTransform.h"
 
 namespace Operations {
 
@@ -394,7 +394,7 @@ namespace Operations {
 		Transform result;
 
 		result.position = trs.position + rtrs.position;
-		result.rotation = trs.rotation + V3::SetY(rtrs.rotation);
+		result.rotation = trs.rotation + Vector3::SetY(rtrs.rotation);
 		result.scale = trs.scale + rtrs.scale;
 
 		return result;
@@ -404,7 +404,7 @@ namespace Operations {
 	inline Transform& operator +=(Transform& trs, const RectTransform& rtrs) {
 
 		trs.position += rtrs.position;
-		trs.rotation += V3::SetY(rtrs.rotation);
+		trs.rotation += Vector3::SetY(rtrs.rotation);
 		trs.scale += rtrs.scale;
 
 		return trs;
@@ -416,7 +416,7 @@ namespace Operations {
 		Transform result;
 
 		result.position = trs.position - rtrs.position;
-		result.rotation = trs.rotation - V3::SetY(rtrs.rotation);
+		result.rotation = trs.rotation - Vector3::SetY(rtrs.rotation);
 		result.scale = trs.scale - rtrs.scale;
 
 		return result;
@@ -426,7 +426,7 @@ namespace Operations {
 	inline Transform& operator -=(Transform& trs, const RectTransform& rtrs) {
 
 		trs.position -= rtrs.position;
-		trs.rotation -= V3::SetY(rtrs.rotation);
+		trs.rotation -= Vector3::SetY(rtrs.rotation);
 		trs.scale -= rtrs.scale;
 
 		return trs;

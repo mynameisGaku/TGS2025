@@ -1,6 +1,6 @@
 #pragma once
-#include "crystalfragment.h"
-#include "Pool.h"
+#include "src/scene/play/crystal/CrystalFragment.h"
+#include "src/util/pool/Pool.h"
 
 #define USE_POOL
 

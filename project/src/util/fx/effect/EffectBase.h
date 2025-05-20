@@ -1,14 +1,14 @@
 #pragma once
 // ◇継承元
-#include "Object3D.h"
+#include "src/util/object3D/Object3D.h"
 
 // ◇汎用
-#include "EasingUtils.h"
-#include "Util/Transform.h"
-#include "Util/RectTransform.h"
+#include "src/util/easing/Easing.h"
+#include "src/util/transform/Transform.h"
+#include "src/util/transform/RectTransform.h"
 
 // ◇個別で必要な物
-#include "EffectDefine.h"
+#include "src/util/fx/effect/EffectDefine.h"
 
 /// <summary>
 /// エフェクトを再生するクラス

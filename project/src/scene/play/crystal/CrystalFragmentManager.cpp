@@ -1,8 +1,8 @@
-#include "CrystalFragmentManager.h"
-#include "CrystalFragmentRef.h"
-#include "CrystalFragment.h"
+#include "src/scene/play/crystal/CrystalFragmentManager.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/scene/play/crystal/CrystalFragment.h"
 
-#include "Pool.h" // Ensure Pool.h is explicitly included
+#include "src/util/pool/Pool.h" // Ensure Pool.h is explicitly included
 
 CrystalFragmentManager::CrystalFragmentManager()
 {

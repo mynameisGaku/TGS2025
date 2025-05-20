@@ -1,7 +1,7 @@
-#include "CrystalFragmentSpawner.h"
-#include "CrystalFragmentSpawnerRef.h"
-#include "CrystalFragmentManager.h"
-#include <Library/time.h>
+#include "src/scene/play/crystal/CrystalFragmentSpawner.h"
+#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+#include "src/scene/play/crystal/CrystalFragmentManager.h"
+#include "src/util/time/GameTime.h"
 
 CrystalFragmentSpawner::CrystalFragmentSpawner() : CrystalFragmentSpawner(Vector3::Zero)
 { /*DO NOTHING*/ }
@@ -42,7 +42,7 @@ void CrystalFragmentSpawner::Update()
     if (m_IsActive == false)
         return;
     // スポーン間隔を計測
-    m_SpawnTimer -= Time::DeltaTime();
+    m_SpawnTimer -= GTime.deltaTime;
     // スポーン間隔が経過したらスポーン
     if (m_SpawnTimer <= 0.0f)
     {

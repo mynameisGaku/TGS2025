@@ -1,8 +1,8 @@
-#include "ShadowMap.h"
+#include "src/util/shadow_map/ShadowMap.h"
 
 // ◇汎用
-#include "../Library/myDxLib.h"
-#include "../Library/resourceLoader.h"
+#include "framework/myDxLib.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
 
 namespace {
 
@@ -31,13 +31,13 @@ void ShadowMap::DrawBegin() {
 		return;
 
 	// カメラの座標
-	VECTOR camPos = GetCameraPosition();
+	Vector3 camPos = GetCameraPosition();
 
 	// Direct3Dで自動適用されるビューポート行列を取得する
 	MATRIX camM = GetCameraAPIViewportMatrix();
 
 	// 相対座標とビューボート行列で影計算範囲を求める
-	VECTOR offset = VTransform(SHADOW_MAP_DRAW_OFFSET, camM);
+	Vector3 offset = VTransform(SHADOW_MAP_DRAW_OFFSET, camM);
 
 	// 影計算をするエリア範囲
 	SetShadowMapDrawArea(hShadowMap, camPos + offset, camPos + SHADOW_MAP_DRAW_AREA);

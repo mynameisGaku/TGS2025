@@ -1,12 +1,12 @@
 #include "Animator.h"
 
 // ◇汎用
-#include "../../Library/time.h"
-#include "../../Library/resourceLoader.h"
-#include "../../Library/magic_enum.hpp"
-#include "../Util/Utils.h"
-#include "../Object3D.h"
-#include "../settings_json.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/file/resource_loader/resourceLoader.h"
+#include <vendor/magic_enum/magic_enum.hpp>
+#include "src/util/utils.h"
+#include "src/util/object3D/Object3D.h"
+#include "src/util/file/json/settings_json.h"
 #include <assert.h>
 
 //ToDo:外部化
@@ -82,7 +82,7 @@ void Animator::Update() {
 	// ブレンド進行処理
 	if (prevs.size() > 0) {
 		// ブレンド時間を進める
-		mergeTime += Time::DeltaTimeLapseRate() * playSpeed;
+		mergeTime += GTime.deltaTime * playSpeed;
 		const float animMergeTimeMax = GetAnimInfo().mergeTimeMax;
 
 		// ブレンド終了時なら

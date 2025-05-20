@@ -1,8 +1,8 @@
-#include "CollisionFunc.h"
-#include "CollisionData.h"
+#include "src/common/component/collider/CollisionFunc.h"
+#include "src/common/component/collider/CollisionData.h"
 
 // ◇汎用
-#include "../Util/Utils.h"
+#include "src/util/utils.h"
 
 using namespace ColDefine;
 
@@ -45,7 +45,7 @@ CollisionData ColFunction::ColCheck_SphereToSphere(ColliderSphere* col1, Collide
 	const Transform col1GlobalTransform = col1->Global();	// col1の絶対座標
 	const Transform col2GlobalTransform = col2->Global();	// col2の絶対座標
 
-	const float squareDistance = (col2GlobalTransform.position - col1GlobalTransform.position).SquareSize();	// col1とcol2の差の長さ
+	const float squareDistance = (col2GlobalTransform.position - col1GlobalTransform.position).GetLengthSquared();	// col1とcol2の差の長さ
 
 	const float sumRadius = col1->Radius() + col2->Radius();	// 当たり判定の範囲
 
@@ -65,23 +65,23 @@ CollisionData ColFunction::ColCheck_SphereToCapsule(ColliderSphere* col1, Collid
 	Vector3 end = begin + col2->OffsetWorld();	// カプセルコライダーの終点
 	Vector3 point = col1_GlobalTrs.position;// 球形コライダーの座標
 
-	Vector3 vecLine = (end - begin).Norm();	// カプセルコライダーの始点と終点の線分の方向を表すベクトル
+	Vector3 vecLine = (end - begin).Normalize();	// カプセルコライダーの始点と終点の線分の方向を表すベクトル
 	Vector3 vecFaceBeing = point - begin;	// 始点から点に向かうベクトル
 	Vector3 vecFaceEnd = point - end;		// 終点から点に向かうベクトル
 
 	// 線分の左側に居るか
-	if (V3::Dot(vecLine, vecFaceBeing) < 0)
+	if (Vector3::Dot(vecLine, vecFaceBeing) < 0)
 		vecNear = begin;
 	// 線分の右側に居るか
-	else if (V3::Dot(vecLine, vecFaceEnd) > 0)
+	else if (Vector3::Dot(vecLine, vecFaceEnd) > 0)
 		vecNear = end;
 	// 線分の内側に居るか
 	else
-		vecNear = vecLine * vecFaceBeing.Size();
+		vecNear = vecLine * vecFaceBeing.GetLength();
 
 	Vector3 distance = vecNear - point;	// 点から最近傍点との距離
 
-	const float squareDistance = distance.SquareSize();		// 差の長さ
+	const float squareDistance = distance.GetLengthSquared();		// 差の長さ
 	const float sumRadius = col1->Radius() + col2->Radius();// 当たり判定の範囲
 
 	bool isCollision = (sumRadius * sumRadius > squareDistance);
@@ -143,11 +143,11 @@ CollisionData ColFunction::ColCheck_ConeToPoint(const Cone& cone, const Vector3&
 	const Vector3 dist = point - cone.transform.position;
 
 	// 範囲外の場合
-	if (dist.Size() >= cone.range)
+	if (dist.GetLength() >= cone.range)
 		return CollisionData(false);
 
 	// コーンの向く方向
-	const Vector3 forward = V3::FORWARD * cone.transform.RotationMatrix();
+	const Vector3 forward = Vector3::UnitZ * cone.transform.RotationMatrix();
 
 	// 内積外の場合
 	if (VDot(VNorm(dist), forward) < cosf(Math::DegToRad(cone.angle)))
@@ -160,7 +160,7 @@ CollisionData ColFunction::ColCheck3D_Circle(Vector3 p1, float r1, Vector3 p2, f
 
 	bool isCollision = false;
 
-	float distance = (p1 - p2).Size();
+	float distance = (p1 - p2).GetLength();
 	float r = r1 + r2;
 
 	if (distance < r)
@@ -215,13 +215,13 @@ bool ColFunction::IsSharpAngle(const Vector3& p1, const Vector3& p2, const Vecto
 
 float ColFunction::CalcPointLineDist(const Vector3& p, const ColDefine::Lay& l, Vector3& h, float& t) {
 
-	float lenSqV = l.vec.SquareSize();
+	float lenSqV = l.vec.GetLengthSquared();
 	t = 0.0f;
 	if (lenSqV > 0.0f)
-		t = V3::Dot(l.vec, p - l.point) / lenSqV;
+		t = Vector3::Dot(l.vec, p - l.point) / lenSqV;
 
 	h = l.point + l.vec * t;
-	return (h - p).Size();
+	return (h - p).GetLength();
 }
 
 float ColFunction::CalcPointSegmentDist(const Vector3& p, const ColDefine::Segment& seg, Vector3& h, float& t) {
@@ -234,12 +234,12 @@ float ColFunction::CalcPointSegmentDist(const Vector3& p, const ColDefine::Segme
 	if (IsSharpAngle(p, seg.point, e) == false) {
 		// 始点側の外側
 		h = seg.point;
-		return (seg.point - p).Size();
+		return (seg.point - p).GetLength();
 	}
 	else if (IsSharpAngle(p, e, seg.point) == false) {
 		// 終点側の外側
 		h = e;
-		return (e - p).Size();
+		return (e - p).GetLength();
 	}
 
 	return len;
@@ -259,27 +259,27 @@ float ColFunction::CalcLineLineDist(const ColDefine::Lay& l1, const ColDefine::L
 	}
 
 	// 2直線はねじれ関係
-	float DV1V2 = V3::Dot(l1.vec, l2.vec);
-	float DV1V1 = l1.vec.SquareSize();
-	float DV2V2 = l2.vec.SquareSize();
+	float DV1V2 = Vector3::Dot(l1.vec, l2.vec);
+	float DV1V1 = l1.vec.GetLengthSquared();
+	float DV2V2 = l2.vec.GetLengthSquared();
 	Vector3 P21P11 = l1.point - l2.point;
 
-	t1 = (DV1V2 * V3::Dot(l2.vec, P21P11) - DV2V2 * V3::Dot(l1.vec, P21P11)) / (DV1V1 * DV2V2 - DV1V2 * DV1V2);
+	t1 = (DV1V2 * Vector3::Dot(l2.vec, P21P11) - DV2V2 * Vector3::Dot(l1.vec, P21P11)) / (DV1V1 * DV2V2 - DV1V2 * DV1V2);
 	p1 = l1.getPoint(t1);
-	t2 = V3::Dot(l2.vec, (p1 - l2.point)) / DV2V2;
+	t2 = Vector3::Dot(l2.vec, (p1 - l2.point)) / DV2V2;
 	p2 = l2.getPoint(t2);
 
-	return (p2 - p1).Size();
+	return (p2 - p1).GetLength();
 }
 
 float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const ColDefine::Segment& s2, Vector3& p1, Vector3& p2, float& t1, float& t2) {
 
 	// S1が縮退している？
-	if (s1.vec.SquareSize() < _OX_EPSILON_) {
+	if (s1.vec.GetLengthSquared() < _OX_EPSILON_) {
 		// S2も縮退？
-		if (s2.vec.SquareSize() < _OX_EPSILON_) {
+		if (s2.vec.GetLengthSquared() < _OX_EPSILON_) {
 			// 点と点の距離の問題に帰着
-			float len = (s2.point - s1.point).Size();
+			float len = (s2.point - s1.point).GetLength();
 			p1 = s1.point;
 			p2 = s2.point;
 			t1 = t2 = 0.0f;
@@ -296,7 +296,7 @@ float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const Co
 	}
 
 	// S2が縮退している？
-	else if (s2.vec.SquareSize() < _OX_EPSILON_) {
+	else if (s2.vec.GetLengthSquared() < _OX_EPSILON_) {
 		// S2の始点とS1の最短問題に帰着
 		float len = CalcPointSegmentDist(s2.point, s1, p1, t1);
 		p2 = s2.point;
@@ -345,5 +345,5 @@ float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const Co
 	// 双方の端点が最短と判明
 	t1 = Math::Clamp(t1, 0.0f, 1.0f);
 	p1 = s1.getPoint(t1);
-	return (p2 - p1).Size();
+	return (p2 - p1).GetLength();
 }

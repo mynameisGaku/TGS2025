@@ -1,9 +1,9 @@
 #pragma once
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "Font.h"
-#include "KeyDefine.h"
+#include "src/util/font/Font.h"
+#include "src/util/input/KeyDefine.h"
 
 class UI_Text;
 

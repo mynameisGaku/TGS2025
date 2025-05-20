@@ -1,6 +1,6 @@
-#include "Locus.h"
+#include "src/util/locus/Locus.h"
 #include <assert.h>
-#include "../Library/sceneManager.h"
+#include "framework/SceneManager.h"
 
 Locus::Locus() {
 

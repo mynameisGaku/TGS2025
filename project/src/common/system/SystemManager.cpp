@@ -1,25 +1,25 @@
 #include "systemManager.h"
 
 // ◇汎用
-#include "../Library/resourceLoader.h"
-#include "../Library/time.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/time/GameTime.h"
 
 // ◇演出・機能
-#include "LoadScreen.h"
+#include "src/common/load_screen/LoadScreen.h"
 
-#include "ImGuiTree/imGuiManager.h"
-#include "Font.h"
-#include "InputManager.h"
-#include "MouseController.h"
-#include "SoundManager.h"
-#include "EffectManager.h"
-#include "Fader.h"
-#include "CameraManager.h"
-#include "LightManager.h"
-#include "ShadowMap.h"
-#include "Stage.h"
-#include "StageObjectManager.h"
-#include "UI_Manager.h"
+#include "src/util/debug/imgui/imGuiManager.h"
+#include "src/util/font/Font.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/MouseController.h"
+#include "src/util/sound/SoundManager.h"
+#include "src/util/fx/effect/EffectManager.h"
+#include "src/util/fader/Fader.h"
+#include "src/common/camera/CameraManager.h"
+#include "src/common/light/LightManager.h"
+#include "src/util/shadow_map/ShadowMap.h"
+#include "src/common/stage/Stage.h"
+#include "src/common/stage/StageObjectManager.h"
+#include "src/util/ui/UI_Manager.h"
 
 // ◇個別で必要な物
 #include <iostream>

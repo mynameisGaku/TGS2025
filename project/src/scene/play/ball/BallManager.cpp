@@ -1,8 +1,8 @@
-#include "BallManager.h"
-#include "Library/resourceLoader.h"
-#include "Ball.h"
-#include "BallManager.h"
-#include "BallRef.h"
+#include "src/scene/play/ball/BallManager.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/scene/play/ball/Ball.h"
+#include "src/scene/play/ball/BallManager.h"
+#include "src/reference/ball/BallRef.h"
 
 BallManager::BallManager()
 {

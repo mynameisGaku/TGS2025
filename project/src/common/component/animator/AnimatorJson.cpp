@@ -1,6 +1,6 @@
-#include "AnimatorJson.h"
-#include "nlohmann/json.hpp"
-#include "AnimationDefine.h"
+#include <vendor/nlohmann/json.hpp>
+#include "src/common/component/animator/AnimatorJson.h"
+#include "src/common/component/animator/AnimationDefine.h"
 
 #if FALSE
 void to_json(nlohmann::json& j, const AnimOption& opt)

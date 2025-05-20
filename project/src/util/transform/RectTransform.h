@@ -1,7 +1,7 @@
 #pragma once
 
 // ◇汎用
-#include "Vector2.h"
+#include "src/util/math/Vector2.h"
 #include "Anchor.h"
 #include <list>
 
@@ -23,8 +23,8 @@ public:
 	// ▼コンストラクタ・デストラクタ
 
 	RectTransform();
-	RectTransform(const Vector2& position, const float& rotation = 0.0f, const Vector2& scale = V2::ONE, RectTransform* parent = nullptr);
-	RectTransform(Anchor::Preset preset, const Vector2& position = V2::ZERO, const float& rotation = 0.0f, const Vector2& scale = V2::ONE, RectTransform* _parent = nullptr);
+	RectTransform(const Vector2& position, const float& rotation = 0.0f, const Vector2& scale = Vector2::Ones, RectTransform* parent = nullptr);
+	RectTransform(Anchor::Preset preset, const Vector2& position = Vector2::Zero, const float& rotation = 0.0f, const Vector2& scale = Vector2::Ones, RectTransform* _parent = nullptr);
 
 	~RectTransform();
 

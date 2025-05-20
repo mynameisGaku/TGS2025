@@ -4,7 +4,7 @@
 #include <Dxlib.h>
 #include <unordered_map>
 
-#include "Util/Vector2.h"
+#include "src/util/math/vector2.h"
 
 namespace KeyDefine {
 

@@ -1,7 +1,7 @@
 #pragma once
-#include "Library/gameObject.h"
+#include "framework/gameObject.h"
 #include <list>
-#include "Pool.h"
+#include "src/util/pool/Pool.h"
 
 #define USE_POOL
 

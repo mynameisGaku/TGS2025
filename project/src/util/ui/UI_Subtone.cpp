@@ -1,7 +1,7 @@
-#include "UI_Subtone.h"
-#include "../Library/resourceLoader.h"
+#include "src/util/ui/UI_Subtone.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
 
-UI_Subtone::UI_Subtone() : UI_Subtone(-1, GetColor(0, 0, 0), 125, true, V2::ZERO, V2::ZERO) {}
+UI_Subtone::UI_Subtone() : UI_Subtone(-1, GetColor(0, 0, 0), 125, true, Vector2::Zero, Vector2::Zero) {}
 
 UI_Subtone::UI_Subtone(const int& image, const int& _color, const int& _alpha, const bool& active, const Vector2& _begin, const Vector2& _end) {
 

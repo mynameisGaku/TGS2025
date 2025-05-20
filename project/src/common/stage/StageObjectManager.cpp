@@ -4,15 +4,15 @@
 #include <fstream>
 #include <assert.h>
 
-#include "../Source/Util/Utils.h"
+#include "src/util/Utils.h"
 #include "../Source/ImGuiTree/imGuiManager.h"
 #include "../Library/csvReader.h"
-#include "../Library/resourceLoader.h"
-#include "../Library/magic_enum.hpp"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include <vendor/magic_enum/magic_enum.hpp>
 
 // ◇演出・機能
-#include "InputManager.h"
-#include "settings_json.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/file/json/settings_json.h"
 
 using namespace StageDefine;
 

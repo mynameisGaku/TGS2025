@@ -1,7 +1,7 @@
 #pragma once
 
 // Œp³Œ³
-#include "SettingBase.h"
+#include "src/common/setting/SettingBase.h"
 
 /// <summary>
 /// ‰¹—Êİ’è‰æ–Ê

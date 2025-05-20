@@ -1,6 +1,6 @@
 #pragma once
-#include "object3d.h"
-#include "Component/Physics.h"
+#include "src/util/object3D/Object3D.h"
+#include "src/common/component/physics/Physics.h"
 
 /// <summary>
 /// クリスタルから落ちる破片クラス

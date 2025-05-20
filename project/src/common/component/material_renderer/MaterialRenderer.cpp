@@ -1,7 +1,7 @@
-#include "MaterialRenderer.h"
+#include "src/common/component/material_renderer/MaterialRenderer.h"
 
 // ”Ä—p
-#include "../Object3D.h"
+#include "src/util/object3D/Object3D.h"
 
 MaterialRenderer::MaterialRenderer() {
 

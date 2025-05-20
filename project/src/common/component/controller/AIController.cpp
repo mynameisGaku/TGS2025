@@ -1,7 +1,7 @@
-#include "AIController.h"
-#include "../CharaBase.h"
-#include "../Util/Utils.h"
-#include "../InputManager.h"
+#include "src/common/component/controller/AIController.h"
+#include "src/scene/play/chara/CharaBase.h"
+#include "src/util/utils.h"
+#include "src/util/input/InputManager.h"
 
 namespace
 {
@@ -71,7 +71,7 @@ void AIController::Update()
 	}
 
 	// 行動切り替えタイマー
-	m_ActionTimer += Time::DeltaTimeLapseRate();
+	m_ActionTimer += GTime.deltaTime;
 	// 行動切り替え
 	if (m_ActionTimer >= CHANGE_STATE_TIME)
 	{

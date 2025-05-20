@@ -1,7 +1,6 @@
-#include "CameraDefineRef.h"
-#include "settings_json.h"
-
-#include "Util/Utils.h"
+#include "src/reference/camera/CameraDefineRef.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/Utils.h"
 
 void CameraDefineRef::Load(bool ForceLoad)
 {

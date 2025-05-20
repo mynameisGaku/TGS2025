@@ -7,7 +7,7 @@
 #include "src/util/fsm/TinyFSM.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "cameraDefine.h"
+#include "src/common/camera/CameraDefine.h"
 
 class StateManager;
 

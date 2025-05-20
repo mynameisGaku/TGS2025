@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "EasingUtils.h"
+#include "src/util/easing/Easing.h"
 
 namespace SoundDefine {
 

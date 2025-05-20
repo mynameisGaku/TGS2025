@@ -1,5 +1,5 @@
 #pragma once
-#include "colliderBase.h"
+#include "src/common/component/collider/ColliderBase.h"
 
 /// <summary>
 /// ƒ‚ƒfƒ‹‚ÌŒ`‚»‚Ì‚Ü‚Ü“–‚½‚è”»’è

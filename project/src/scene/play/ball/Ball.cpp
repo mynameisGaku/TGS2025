@@ -1,15 +1,15 @@
-#include "Ball.h"
-#include "Library/resourceLoader.h"
-#include "Component/Physics.h"
-#include "BallRef.h"
-#include "Component/ColliderCapsule.h"
-#include "Stage.h"
-#include "BloomManager.h"
-#include "CharaDefineRef.h"
-#include "CharaBase.h"
-#include "EffectManager.h"
-#include "StageObjectManager.h"
-#include "BallManager.h"
+#include "src/scene/play/ball/Ball.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/common/component/physics/Physics.h"
+#include "src/reference/ball/BallRef.h"
+#include "src/common/component/collider/ColliderCapsule.h"
+#include "src/common/stage/Stage.h"
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/scene/play/chara/CharaBase.h"
+#include "src/util/fx/effect/EffectManager.h"
+#include "src/common/stage/StageObjectManager.h"
+#include "src/scene/play/ball/BallManager.h"
 
 Ball::Ball()
 {
@@ -23,7 +23,7 @@ Ball::Ball()
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
-	param.trs.scale = V3::ONE * BALL_RADIUS / BALL_SCALE * 2;
+	param.trs.scale = Vector3::Ones * BALL_RADIUS / BALL_SCALE * 2;
 
 	m_Collider->SetOffset(Vector3::Zero);
 	m_Collider->BaseInit(param);
@@ -42,7 +42,7 @@ Ball::~Ball()
 
 void Ball::Reset()
 {
-	transform->scale = V3::ONE * BALL_SCALE;
+	transform->scale = Vector3::Ones * BALL_SCALE;
 
 	m_State = S_OWNED;
 	m_CharaTag = CHARADEFINE_REF.Tags[0];
@@ -119,7 +119,7 @@ void Ball::Update()
 				transform->position += pushVec;
 
 				// 押し出し方向
-				Vector3 normal = pushVec.Norm();
+				Vector3 normal = pushVec.Normalize();
 
 				// 速度を反射させる
 				float bounciness = BALL_REF.BouncinessDefault;
@@ -137,7 +137,7 @@ void Ball::Update()
 				{
 					float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
 					transform->rotation.y = forwardRad;
-					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().Size() * 0.01f;
+					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
 				}
 				m_Physics->velocity.x *= 0.99f;
 				m_Physics->velocity.z *= 0.99f;
@@ -147,10 +147,10 @@ void Ball::Update()
 
 	if (m_State != S_OWNED)
 	{
-		m_LifeTime -= Time::DeltaTimeLapseRate();
+		m_LifeTime -= GTime.deltaTime;
 		if (m_LifeTime <= 0.0f)
 		{
-			m_AlphaRate -= 255.0f * Time::DeltaTimeLapseRate();
+			m_AlphaRate -= 255.0f * GTime.deltaTime;
 
 			if (m_AlphaRate <= 0.0f)
 			{
@@ -192,13 +192,13 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner)
 
 	m_Physics->SetIsActive(false);
 
-	m_HomingPosition = transform->position + V3::SetY(100.0f);
+	m_HomingPosition = transform->position + Vector3::SetY(100.0f);
 	m_HomingTarget = Vector3(0, 0, 1000);
 	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算
 	Vector3 diff = m_HomingTarget - m_HomingPosition;
-	m_HomingPeriod = diff.Size() / m_Physics->velocity.Size();
+	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -232,17 +232,17 @@ void Ball::CollisionEvent(const CollisionData& colData)
 			// --- 押し出し処理 ---
 			const float minDist = BALL_RADIUS * 2.0f;
 			Vector3 delta = transform->position - otherBall->transform->position;
-			float dist = delta.Size();
+			float dist = delta.GetLength();
 
 			if (dist < minDist && dist > 0.0001f)
 			{
-				Vector3 correction = delta.Norm() * (minDist - dist) * 0.5f;
+				Vector3 correction = delta.Normalize() * (minDist - dist) * 0.5f;
 				transform->position += correction;
 				otherBall->transform->position -= correction;
 			}
 
 			// --- 運動量保存＋反発係数による反発 ---
-			Vector3 normal = (transform->position - otherBall->transform->position).Norm();
+			Vector3 normal = (transform->position - otherBall->transform->position).Normalize();
 			Vector3 relVel = m_Physics->velocity - otherBall->m_Physics->velocity;
 			float relVelAlongNormal = VDot(relVel, normal);
 
@@ -257,9 +257,9 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 			// --- 回転のトルク反映 ---
 			Vector3 tangent = relVel - normal * relVelAlongNormal;
-			if (tangent.Size() > 0.001f)
+			if (tangent.GetLength() > 0.001f)
 			{
-				tangent = tangent.Norm();
+				tangent = tangent.Normalize();
 				float torque = VDot(relVel, tangent) * 0.1f;
 
 				m_Physics->angularVelocity.x += torque;
@@ -274,13 +274,13 @@ void Ball::collisionToGround()
 	if (m_State == S_OWNED) return;
 
 	Vector3 hitPos;
-	bool hit = Stage::ColCheckGround(transform->position + V3::SetY(BALL_RADIUS), transform->position - V3::SetY(BALL_RADIUS), &hitPos);
+	bool hit = Stage::ColCheckGround(transform->position + Vector3::SetY(BALL_RADIUS), transform->position - Vector3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)
 	{
 		if (m_IsHoming) HomingDeactivate();
 
 		// Y方向に跳ね返る
-		transform->position = hitPos + V3::SetY(BALL_RADIUS);
+		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
 		m_Physics->velocity.y *= -BALL_REF.BouncinessDefault;
 
 		// 転がっていく処理
@@ -289,7 +289,7 @@ void Ball::collisionToGround()
 
 		m_Physics->velocity.x *= 0.99f;
 		m_Physics->velocity.z *= 0.99f;
-		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().Size() * 0.01f;
+		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
 	}
 }
 
@@ -301,15 +301,15 @@ void Ball::HomingProcess()
 
 	acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
 
-	m_HomingPeriod -= Time::DeltaTimeLapseRate();
+	m_HomingPeriod -= GTime.deltaTime;
 	if (m_HomingPeriod < 0.0f)
 	{
 		HomingDeactivate();
 		return;
 	}
 
-	m_Physics->velocity += acceleration * Time::DeltaTimeLapseRate();
-	m_HomingPosition += m_Physics->velocity * Time::DeltaTimeLapseRate();
+	m_Physics->velocity += acceleration * GTime.deltaTime;
+	m_HomingPosition += m_Physics->velocity * GTime.deltaTime;
 
 	// ---- 押し出し + 跳ね返り処理 ----
 	if (m_Collider)
@@ -326,7 +326,7 @@ void Ball::HomingProcess()
 
 			m_HomingPosition += pushVec;
 
-			Vector3 normal = pushVec.Norm();
+			Vector3 normal = pushVec.Normalize();
 			float dot = VDot(m_Physics->velocity, normal);
 
 			if (dot < 0.0f)
@@ -345,7 +345,7 @@ void Ball::HomingProcess()
 
 void Ball::HomingDeactivate()
 {
-	m_Physics->velocity *= Time::DeltaTimeLapseRate();
+	m_Physics->velocity *= GTime.deltaTime;
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.GravityDefault);
 	// 物理にホーミングの情報を引き継ぐ

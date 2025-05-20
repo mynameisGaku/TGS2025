@@ -1,7 +1,7 @@
-#include "UI_Text.h"
+#include "src/util/ui/UI_Text.h"
 
 // ◇演出・機能
-#include "soundManager.h"
+#include "src/util/sound/SoundManager.h"
 
 namespace {
 
@@ -103,7 +103,7 @@ void UI_Text::DrawTexts() {
 
 void UI_Text::ScrollTextProcess() {
 
-	scrollTime = max(scrollTime - Time::DeltaTimeLapseRate(), 0.0f);
+	scrollTime = max(scrollTime - GTime.deltaTime, 0.0f);
 
 	// スクロールが完了した文字数
 	const int textScroll = length - static_cast<int>(length * ScrollRate());
@@ -124,8 +124,8 @@ void UI_Text::ApplySubtone() {
 	RectTransform globalTrs = rectTransform->Global();	// グローバルな座標・回転・拡縮情報
 	Vector2 devi = DisplacementByAnchorPoint();	// アンカーポイントによる座標のズレ値
 
-	Vector2 begin = V2::ZERO;	// サブトーンの始点座標(左上)
-	Vector2 end = V2::ZERO;		// サブトーンの終点座標(右下)
+	Vector2 begin = Vector2::Zero;	// サブトーンの始点座標(左上)
+	Vector2 end = Vector2::Zero;		// サブトーンの終点座標(右下)
 
 	// サブトーンに画像が設定されている場合
 	if (subtone->Image() != -1) {
@@ -158,7 +158,7 @@ void UI_Text::SetText(const std::string& _text, const FontInfo& _font) {
 	textSize.y = fontInfo.size;
 
 	RectTransform globalTrs = rectTransform->Global();	// グローバルな座標・回転・拡縮情報
-	Vector2 diff = V2::ZERO;	// 原点から文字座標へのベクトル
+	Vector2 diff = Vector2::Zero;	// 原点から文字座標へのベクトル
 
 	letters.clear();	// 保存していた文字を初期化
 
@@ -198,7 +198,7 @@ void UI_Text::SetSubtone(const UI_Subtone& sub) {
 
 Vector2 UI_Text::DisplacementByAnchorPoint() {
 
-	Vector2 offset = V2::ZERO;	// 差
+	Vector2 offset = Vector2::Zero;	// 差
 
 	// アンカーポイントによって横の中心点をズラす
 	switch (Anchor::PlacementHorizontal(rectTransform->preset)) {

@@ -1,8 +1,8 @@
 #include "fader.h"
 
-#include "../Library/time.h"
-#include "../Source/Util/Utils.h"
-#include "../Source/EasingUtils.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/Utils.h"
+#include "src/util/easing/Easing.h"
 
 namespace {
 
@@ -73,7 +73,7 @@ void Fader::Release() {
 
 }
 
-void Fader::FadeStart(float totalTime, EasingType easingType, float begin, float end, Time::AdditionMethod timeAddition) {
+void Fader::FadeStart(float totalTime, EasingType easingType, float begin, float end, GameTime::AdditionMethod timeAddition) {
 
 	fadeEasing.current = begin;
 
@@ -88,7 +88,7 @@ void Fader::FadeStart(float totalTime, EasingType easingType, float begin, float
 	EasingFunc::Process(&fadeEasing.info, &fadeEasing.current, fadeEasing.end, fadeEasing.begin);
 }
 
-void Fader::LetterBoxStart(float totalTime, float size, EasingType easingType, Time::AdditionMethod timeAddition, bool fadeIn) {
+void Fader::LetterBoxStart(float totalTime, float size, EasingType easingType, GameTime::AdditionMethod timeAddition, bool fadeIn) {
 
 	for (int i = 0; i < LETTER_BOX_NUM; i++) {
 

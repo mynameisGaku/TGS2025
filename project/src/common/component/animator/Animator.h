@@ -1,15 +1,15 @@
 #pragma once
 
 // Œp³Œ³
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 // ”Ä—p
 #include <unordered_map>
 #include <assert.h>
 
 // ŒÂ•Ê‚É•K—v‚È‚à‚Ì
-#include "AnimationDefine.h"
-#include "AttachedAnimation.h"
+#include "src/common/component/animator/AnimationDefine.h"
+#include "src/common/component/animator/AttachedAnimation.h"
 
 class Object3D;
 

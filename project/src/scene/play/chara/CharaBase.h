@@ -1,10 +1,10 @@
 #pragma once
-#include "Object3D.h"
-#include "Component/ColliderCapsule.h"
+#include "src/util/object3D/Object3D.h"
+#include "src/common/component/collider/ColliderCapsule.h"
 #include <string>
-#include <Library/time.h>
-#include "TinyFSM.h"
-#include "nlohmann/json_fwd.hpp"
+#include "src/util/time/GameTime.h"
+#include "src/util/fsm/TinyFSM.h"
+#include <vendor/nlohmann/json_fwd.hpp>
 
 class CharaHP;
 class CharaStamina;

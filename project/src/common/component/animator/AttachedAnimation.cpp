@@ -1,6 +1,6 @@
-#include "AttachedAnimation.h"
-#include "Library/myDxLib.h"
-#include "Library/time.h"
+#include "src/common/component/animator/AttachedAnimation.h"
+#include "framework/myDxLib.h"
+#include "src/util/time/GameTime.h"
 #include <assert.h>
 
 namespace
@@ -37,7 +37,7 @@ AttachedAnimation::~AttachedAnimation()
 void AttachedAnimation::updateFrame()
 {
 	// 時間を進める
-	m_frame += Time::DeltaTimeLapseRate() * m_playSpeed * ANIM_FRAMERATE;
+	m_frame += GTime.deltaTime * m_playSpeed * ANIM_FRAMERATE;
 
 	// アニメーション終了時間を超えたら
 	if (m_frame >= m_maxFrame) {

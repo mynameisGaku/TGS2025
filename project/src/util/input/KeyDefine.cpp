@@ -1,5 +1,5 @@
-#include "keyDefine.h"
-#include "../Library/myDxLib.h"
+#include "src/util/input/keyDefine.h"
+#include "framework/myDxLib.h"
 
 namespace {
 

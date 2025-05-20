@@ -1,8 +1,8 @@
-#include "BloomManager.h"
-#include "WindowSetting.h"
-#include "InputManager.h"
-#include "Util/Utils.h"
-#include "CameraDefineRef.h"
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/Utils.h"
+#include "src/reference/camera/CameraDefineRef.h"
 
 void SetDrawScreenWithCamera(int screen)
 {

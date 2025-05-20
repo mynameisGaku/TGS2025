@@ -1,8 +1,8 @@
-#include "ui_Button.h"
+#include "src/util/ui/UI_Button.h"
 
 // ◇演出・機能
-#include "InputManager.h"
-#include "MouseController.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/MouseController.h"
 
 using namespace KeyDefine;
 
@@ -255,5 +255,5 @@ bool UI_Button::ColCheck_Mouse() {
 	RectTransform globalTrs = rectTransform->Global();	// グローバルな座標・回転・拡縮情報
 	Vector2 offset = DisplacementByAnchorPoint();
 
-	return MouseController::ColCheck_CursorToCircle(globalTrs.position + offset, imageSize.Size());
+	return MouseController::ColCheck_CursorToCircle(globalTrs.position + offset, imageSize.GetLength());
 }

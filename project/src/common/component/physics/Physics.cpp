@@ -1,8 +1,8 @@
-#include "physics.h"
+#include "src/common/component/physics/Physics.h"
 
 // ◇汎用
-#include "../../Library/time.h"
-#include "../Object3D.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/object3D/Object3D.h"
 
 Physics::Physics() {
 
@@ -42,7 +42,7 @@ void Physics::Update() {
 	if (IsActive() == false)
 		return;
 
-	float timeLapseRate = Time::LapseRate();
+	float timeLapseRate = GTime.GetTimeScale();
 
 	// 前トランスフォームを保存
 	*lastTransform = *pTransform;
@@ -55,7 +55,7 @@ void Physics::Update() {
 void Physics::GravityUpdate() {
 
 	// 時間経過率
-	const float timeLapseRate = Time::LapseRate();
+	const float timeLapseRate = GTime.GetTimeScale();
 
 	// 重力加速度を適応
 	velocity += gravity * timeLapseRate;
@@ -64,7 +64,7 @@ void Physics::GravityUpdate() {
 void Physics::VelocityUpdate() {
 
 	// 時間経過率
-	const float timeLapseRate = Time::LapseRate();
+	const float timeLapseRate = GTime.GetTimeScale();
 
 	// 座標に加速度を適用
 	pTransform->position += velocity * timeLapseRate;
@@ -76,7 +76,7 @@ void Physics::VelocityUpdate() {
 void Physics::ResistanceUpdate() {
 
 	// 時間経過率
-	const float timeLapseRate = Time::LapseRate();
+	const float timeLapseRate = GTime.GetTimeScale();
 
 	//==========================================================================================
 	// ▼加速度に落下時の空気抵抗を適応
@@ -85,13 +85,13 @@ void Physics::ResistanceUpdate() {
 	pTransform->position += resistance * timeLapseRate;
 
 	float airResistance = velocity.y - fallingAirResistance * timeLapseRate;	// 落下時の空気抵抗
-	float velSize = velocity.Size();	// 現在の速度の大きさ
-	float fricSize = friction.Size();	// 摩擦係数の大きさ
+	float velSize = velocity.GetLength();	// 現在の速度の大きさ
+	float fricSize = friction.GetLength();	// 摩擦係数の大きさ
 
 	// 摩擦係数を適応
 	velSize = max(velSize - fricSize * timeLapseRate, 0.0f);
 	
-	velocity = velocity.Norm() * velSize;
+	velocity = velocity.Normalize() * velSize;
 	velocity.y = airResistance;
 
 	airResistance = resistance.y - fallingAirResistance * timeLapseRate;	// 落下時の空気抵抗
@@ -99,11 +99,11 @@ void Physics::ResistanceUpdate() {
 	//==========================================================================================
 	// ▼抵抗力に落下時の空気抵抗を適応
 
-	float res = resistance.Size();	// 現在の速度の大きさ
+	float res = resistance.GetLength();	// 現在の速度の大きさ
 
 	// 空気抵抗を適応
 	res = max(res - fricSize * timeLapseRate, 0.0f);
 
-	resistance = resistance.Norm() * res;
+	resistance = resistance.Normalize() * res;
 	resistance.y = res;
 }

@@ -1,4 +1,4 @@
-#include "BehaviorTask.h"
-#include "../../Library/GameObject.h"
+#include "src/util/behavior_tree/BehaviorTask.h"
+#include "framework/gameObject.h"
 
-#include "../object3D.h"
+#include "src/util/object3D/Object3D.h"

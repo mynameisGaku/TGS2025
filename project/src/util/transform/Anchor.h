@@ -1,8 +1,8 @@
 #pragma once
 
 // ”Ä—p
-#include "Utils.h"
-#include "Vector2.h"
+#include "src/util/Utils.h"
+#include "src/util/math/Vector2.h"
 #include <vector>
 
 /// <summary>

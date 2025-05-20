@@ -1,5 +1,5 @@
-#include "CharaStamina.h"
-#include "CharaStaminaRef.h"
+#include "src/scene/play/chara/CharaStamina.h"
+#include "src/reference/chara/CharaStaminaRef.h"
 #include <algorithm>
 #include <cmath>
 
@@ -28,12 +28,12 @@ void CharaStamina::Update()
 
     if(m_RegenStartTimeCount > 0.0f)
     {
-        m_RegenStartTimeCount -= Time::DeltaTime();
+        m_RegenStartTimeCount -= GTime.deltaTime;
         return;
     }
 
     // RegenTakesTime•b‚©‚¯‚Ä‘S‰ñ•œ‚·‚é
-    m_RegenTimeCount += Time::DeltaTime();
+    m_RegenTimeCount += GTime.deltaTime;
     m_Current = std::lerp(m_Current, m_Max, m_RegenTimeCount);
 
     if (m_Current > m_Max)

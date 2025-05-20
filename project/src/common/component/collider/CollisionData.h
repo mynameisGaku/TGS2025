@@ -1,7 +1,7 @@
 #pragma once
 
 // ”Ä—p
-#include "../Util/Vector3.h"
+#include "src/util/math/vector3.h"
 #include <list>
 
 class ColliderBase;

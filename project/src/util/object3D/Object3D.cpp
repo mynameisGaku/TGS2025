@@ -1,6 +1,6 @@
-#include "object3D.h"
-#include "../Source/Util/Utils.h"
-#include "../Library/resourceLoader.h"
+#include "src/util/object3D/Object3D.h"
+#include "src/util/Utils.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
 
 Object3D::Object3D() : Object3D(-1, Transform()) {}
 
@@ -49,9 +49,9 @@ void Object3D::DrawAixs() {
 	Vector3 pos = transform->Global().position;
 	MATRIX mRot = transform->RotationMatrix();
 
-	Vector3 xAxis = pos + (V3::RIGHT * 50.0f);	// X軸
-	Vector3 yAxis = pos + (V3::UP * 50.0f);		// Y軸
-	Vector3 zAxis = pos + (V3::FORWARD * 50.0f);// Z軸
+	Vector3 xAxis = pos + (Vector3::UnitX * 50.0f);	// X軸
+	Vector3 yAxis = pos + (Vector3::UnitY * 50.0f);		// Y軸
+	Vector3 zAxis = pos + (Vector3::UnitZ * 50.0f);// Z軸
 
 	int xColor = GetColor(255, 0, 0);	// 各軸の色(赤)
 	int yColor = GetColor(0, 255, 0);	// 各軸の色(緑)

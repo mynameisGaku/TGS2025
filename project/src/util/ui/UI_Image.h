@@ -1,6 +1,6 @@
 #pragma once
 // ◇継承元
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
 /// <summary>
 /// 画像表示を行うクラス

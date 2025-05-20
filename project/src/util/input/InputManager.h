@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Util/Vector3.h"
+#include "src/util/math/vector3.h"
 #include <string>
 
-#include "KeyDefine.h"
+#include "src/util/input/KeyDefine.h"
 
 //==========================================================================================
 

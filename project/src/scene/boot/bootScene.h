@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Library/sceneBase.h"
+#include "framework/sceneBase.h"
 
 class SystemManager;
 

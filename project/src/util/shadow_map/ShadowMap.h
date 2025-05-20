@@ -1,8 +1,8 @@
 #pragma once
 
 // ”Ä—p
-#include "Util/Vector3.h"
-#include "Util/Vector2.h"
+#include "src/util/math/vector3.h"
+#include "src/util/math/vector2.h"
 
 namespace ShadowMap {
 

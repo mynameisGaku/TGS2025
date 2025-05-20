@@ -1,15 +1,15 @@
-#include "SettingManager.h"
+#include "src/common/setting/SettingManager.h"
 
 // ◇汎用
-#include "Util/Utils.h"
+#include "src/util/Utils.h"
 
 // ◇演出・機能
-#include "InputManager.h"
-#include "MouseController.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/MouseController.h"
 
 // ◇個別で必要な物
-#include "SensiSetting.h"
-#include "VolumeSetting.h"
+#include "src/common/setting/sensi/SensiSetting.h"
+#include "src/common/setting/volume/VolumeSetting.h"
 
 using namespace KeyDefine;
 

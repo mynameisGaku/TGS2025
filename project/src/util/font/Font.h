@@ -1,6 +1,6 @@
 #pragma once
-#include "../Library/myDxLib.h"
-#include "../Source/Util/Utils.h"
+#include "framework/myDxLib.h"
+#include "src/util/Utils.h"
 #include <string>
 
 class FontInfo;

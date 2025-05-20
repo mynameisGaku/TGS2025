@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include "KeyDefine.h"
-#include "Util/Vector2.h"
+#include "src/util/input/KeyDefine.h"
+#include "src/util/math/vector2.h"
 
 namespace MouseController {
 
@@ -22,12 +22,12 @@ namespace MouseController {
 		HWND hWnd;				// ウィンドウの情報
 
 		MouseInfo() :
-			position(V2::ZERO),
+			position(Vector2::Zero),
 			newX(0), newY(0),
 			oldX(0), oldY(0),
 			moveX(0), moveY(0),
 			wheelRot(GetMouseWheelRotVol()),
-			sensitivity(V2::ONE),
+			sensitivity(Vector2::Ones),
 			movement(KeyDefine::MouseMovement::Free),
 			point({ 0 }),
 			hWnd(0)

@@ -1,6 +1,6 @@
 #pragma once
-#include <Library/time.h>
-#include <Library/gameObject.h>
+#include "src/util/time/GameTime.h"
+#include "framework/gameObject.h"
 #include <algorithm>
 #include <functional>
 #include <deque>

@@ -1,9 +1,9 @@
 #include "AnimationEvent.h"
 #include "Animator.h"
 
-#include "../Object3D.h"
-#include "../SoundManager.h"
-#include "../EffectManager.h"
+#include "src/util/object3D/Object3D.h"
+#include "src/util/sound/SoundManager.h"
+#include "src/util/fx/effect/EffectManager.h"
 
 #if FALSE
 AnimationEvent::AnimationEvent(Animator* _animator) {

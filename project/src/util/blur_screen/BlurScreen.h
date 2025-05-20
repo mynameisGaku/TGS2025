@@ -1,6 +1,6 @@
 #pragma once
-#include "../Library/myDxLib.h"
-#include "../Source/Util/Vector2.h"
+#include "framework/myDxLib.h"
+#include "src/util/math/Vector2.h"
 #include <vector>
 
 /// <summary>

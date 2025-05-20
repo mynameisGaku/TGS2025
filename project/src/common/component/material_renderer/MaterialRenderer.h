@@ -1,7 +1,7 @@
 #pragma once
 
 // Œp³Œ³
-#include "component.h"
+#include "src/common/component/Component.h"
 
 // ”Ä—p
 #include <DxLib.h>

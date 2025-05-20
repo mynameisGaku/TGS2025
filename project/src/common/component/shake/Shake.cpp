@@ -1,8 +1,8 @@
-#include "shake.h"
+#include "src/common/component/shake/Shake.h"
 
 // ž”Ä—p
-#include "../../Library/time.h"
-#include "../Object3D.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/object3D/Object3D.h"
 
 Shake::Shake() {
 
@@ -24,7 +24,7 @@ void Shake::Init(Object3D* pObj) {
 void Shake::Update() {
 
 	if (duration > 0.0f) {
-		duration -= Time::DeltaTime();
+		duration -= GTime.deltaTime;
 
 		IntervalUpdate();
 
@@ -44,7 +44,7 @@ void Shake::Draw() {
 
 void Shake::IntervalUpdate() {
 
-	Vector3 vTime = Vector3(Time::DeltaTime());
+	Vector3 vTime = Vector3(GTime.deltaTime);
 	interval -= vTime;
 
 	if (interval.x <= 0.0f) {
@@ -65,7 +65,7 @@ void Shake::IntervalUpdate() {
 
 void Shake::SetParam(std::list<Type> type, float _power, Vector3 _interval, float _duration) {
 
-	if (this->duration > 0.0f && initPower.Size() > _power)
+	if (this->duration > 0.0f && initPower.GetLength() > _power)
 		return;
 
 	types = type;
@@ -110,7 +110,7 @@ void Shake::SetParam(std::list<Type> type, float _power, Vector3 _interval, floa
 	else
 		initDuration = duration;
 	
-	direction = V3::ONE;
+	direction = Vector3::Ones;
 }
 
 void Shake::ApplyShakeTrs(std::string frameName, float mag) {

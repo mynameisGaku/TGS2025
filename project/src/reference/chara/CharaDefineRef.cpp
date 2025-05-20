@@ -1,5 +1,5 @@
-#include "CharaDefineRef.h"
-#include "settings_json.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/util/file/json/settings_json.h"
 
 void CharaDefineRef::Load(bool ForceLoad)
 {

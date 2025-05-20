@@ -1,5 +1,5 @@
-#include "camera.h"
-#include "cameraManager.h"
+#include "src/common/camera/Camera.h"
+#include "src/common/camera/CameraManager.h"
 
 // ◇汎用
 #include "framework/myDxLib.h"
@@ -18,7 +18,7 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
-#include "src/common/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraDefineRef.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -109,11 +109,11 @@ void Camera::ColCheckToTerrain() {
 	Vector3 hitPos = Vector3::Zero;
 	Vector3 cameraPosition = WorldPos();
 
-	if (Stage::ColCheckGround(target, cameraPosition - V3::SetY(10.0f), &hitPos)) {
-		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * V3::UP;	// 地面との設置点
-		Vector3 targePos = target * V3::HORIZONTAL;
+	if (Stage::ColCheckGround(target, cameraPosition - Vector3::SetY(10.0f), &hitPos)) {
+		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * Vector3::UnitY;	// 地面との設置点
+		Vector3 targePos = target * Vector3::UnitY;
 
-		transform->position = terrainPos + targePos + V3::SetY(10.0f);
+		transform->position = terrainPos + targePos + Vector3::SetY(10.0f);
 	}
 }
 
@@ -146,7 +146,7 @@ void Camera::MoveProcess()
 
 void Camera::OperationByMouse(int type) {
 
-	Vector2 addRot = V2::ZERO;	// 加算する回転量
+	Vector2 addRot = Vector2::Zero;	// 加算する回転量
 
 	MouseController::MouseInfo mouse = MouseController::Info();	// マウスの情報
 
@@ -167,7 +167,7 @@ void Camera::OperationByMouse(int type) {
 
 void Camera::OperationByStick(int type) {
 
-	Vector2 addRot = V2::ZERO;	// 加算する回転量
+	Vector2 addRot = Vector2::Zero;	// 加算する回転量
 	Vector2 rightStick = PadController::NormalizedRightStick();
 
 	switch (type) {

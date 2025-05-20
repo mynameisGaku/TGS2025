@@ -1,10 +1,10 @@
 #pragma once
 
 // Œp³Œ³
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 // ”Ä—p
-#include "../Util/Transform.h"
+#include "src/util/transform/Transform.h"
 #include <vector>
 
 /// <summary>

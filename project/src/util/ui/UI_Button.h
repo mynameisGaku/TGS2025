@@ -1,9 +1,9 @@
 #pragma once
 // ◇継承元
-#include "UI_Canvas.h"
+#include "src/util/ui/UI_Canvas.h"
 
 // ◇演出・機能
-#include "KeyDefine.h"
+#include "src/util/input/KeyDefine.h"
 #include <functional>
 
 /// <summary>

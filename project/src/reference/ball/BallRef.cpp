@@ -1,5 +1,5 @@
-#include "BallRef.h"
-#include "settings_json.h"
+#include "src/reference/ball/BallRef.h"
+#include "src/util/file/json/settings_json.h"
 
 namespace
 {

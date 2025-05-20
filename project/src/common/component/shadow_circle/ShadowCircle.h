@@ -1,7 +1,7 @@
 #pragma once
 
 // Œp³Œ³
-#include "Component.h"
+#include "src/common/component/Component.h"
 
 /// <summary>
 /// ŠÛ‰e‚Ì•`‰æ‚ğs‚¤

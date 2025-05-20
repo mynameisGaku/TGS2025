@@ -1,12 +1,12 @@
-#include "EffectManager.h"
+#include "src/util/fx/effect/EffectManager.h"
 
 #include <EffekseerForDXLib.h>
 #include <unordered_map>
 #include <list>
 
-#include "../Library/csvReader.h"
-#include "Util/Utils.h"
-#include "settings_json.h"
+#include "src/util/file/csv/CsvReader.h"
+#include "src/util/Utils.h"
+#include "src/util/file/json/settings_json.h"
 
 namespace {
 
@@ -346,7 +346,7 @@ void EffectManager::AllReleaseInfo() {
 }
 #ifdef IMGUI
 
-#include "ImGuiTree/imGuiManager.h"
+#include "src/util/debug/imgui/imGuiManager.h"
 
 void EffectManager::InitImGui() {
 

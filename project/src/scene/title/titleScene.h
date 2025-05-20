@@ -1,6 +1,6 @@
 #pragma once
 // Œp³Œ³
-#include "../Library/sceneBase.h"
+#include "framework/SceneBase.h"
 
 // ”Ä—p
 #include <list>

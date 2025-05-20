@@ -1,6 +1,6 @@
-#include "LoadScreen.h"
-#include "../Library/resourceLoader.h"
-#include "Font.h"
+#include "src/common/load_screen/LoadScreen.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/font/Font.h"
 
 LoadScreen::LoadScreen() {
 

@@ -1,18 +1,18 @@
-#include "Camera.h"
-#include "CameraDefine.h"
-#include "TinyFSM.h"
+#include "src/common/camera/Camera.h"
+#include "src/common/camera/CameraDefine.h"
+#include "src/util/fsm/TinyFSM.h"
 
 // ◇汎用
-#include "../Library/time.h"
-#include "Util/Utils.h"
+#include "src/util/time/GameTime.h"
+#include "src/util/Utils.h"
 
 // ◇個別で必要な物
-#include "InputManager.h"
-#include "PadController.h"
-#include "MouseController.h"
+#include "src/util/input/InputManager.h"
+#include "src/util/input/PadController.h"
+#include "src/util/input/MouseController.h"
 
-#include "CharaManager.h"
-#include "CameraDefineRef.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/reference/camera/CameraDefineRef.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -53,7 +53,7 @@ void Camera::AimState(FSMSignal sig)
 		const Transform targetTrs = targetChara->transform->Global();
 
 		// 注視点の差異
-		const Vector3 targetDiff = targetTrs.position + V3::SetY(100.0f) - target;
+		const Vector3 targetDiff = targetTrs.position + Vector3::SetY(100.0f) - target;
 
 		transform->position = charaTrs.position;
 

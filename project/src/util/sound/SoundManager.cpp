@@ -1,9 +1,9 @@
-#include "SoundManager.h"
+#include "src/util/sound/SoundManager.h"
 
-#include "../Source/Util/Utils.h"
-#include "../Library/resourceLoader.h"
-#include "../Library/csvReader.h"
-#include "../Library/magic_enum.hpp"
+#include "src/util/Utils.h"
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/file/csv/CsvReader.h"
+#include <vendor/magic_enum/magic_enum.hpp>
 
 namespace {
 
@@ -489,7 +489,7 @@ void SoundManager::AllReleaseInfo() {
 
 #ifdef IMGUI
 
-#include "ImGuiTree/imGuiManager.h"
+#include "src/util/debug/imgui/imGuiManager.h"
 
 void SoundManager::InitImGui() {
 

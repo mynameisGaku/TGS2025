@@ -43,8 +43,10 @@ void Camera::AimState(FSMSignal sig)
 
 		// 注視するキャラ
 		const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);
-		if (targetChara == nullptr)
+		if (targetChara == nullptr) {
+			ChangeState(&Camera::ChaseState);
 			return;
+		}
 
 		// 追従キャラのトランスフォーム
 		const Transform charaTrs = chara->transform->Global();

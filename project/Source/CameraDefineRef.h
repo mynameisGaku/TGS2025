@@ -20,6 +20,9 @@ public:
 	float m_Far;		// 描画処理を行う遠方の位置
 	float m_Perspective;// 視野角
 
+	float m_ConeRange;	// コーンの長さ
+	float m_ConeAngle;	// コーンの角度
+
 	float m_RotX_Max;		// X回転の最大値
 	float m_RotX_Min;		// X回転の最小値
 	float m_RotSpeedLimit;	// カメラの回転速度の制限
@@ -40,6 +43,8 @@ private:
 		m_Near(0.0f),
 		m_Far(0.0f),
 		m_Perspective(0.0f),
+		m_ConeRange(0.0f),
+		m_ConeAngle(0.0f),
 		m_RotX_Max(0.0f),
 		m_RotX_Min(0.0f),
 		m_RotSpeedLimit(0.0f),

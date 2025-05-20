@@ -63,7 +63,10 @@ void Camera::ChaseState(FSMSignal sig)
         transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
         Function::RotLimit(&transform->rotation.y);
 
-        if (InputManager::Hold(KeyCode::RightClick))
+        // ’Ž‹‚·‚éƒLƒƒƒ‰
+        const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);
+
+        if (InputManager::Hold(KeyCode::RightClick) && targetChara != nullptr)
         {
             ChangeState(&Camera::AimState);
         }

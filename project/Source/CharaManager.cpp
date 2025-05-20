@@ -4,8 +4,10 @@
 
 #include "Component/Physics.h"
 #include "Component/CollisionDefine.h"
+#include "Component/CollisionFunc.h"
 #include "Component/ColliderCapsule.h"
 
+#include "CameraManager.h"
 #include "CharaDefineRef.h"
 
 CharaManager::CharaManager()
@@ -222,12 +224,26 @@ const CharaBase* CharaManager::TargetChara(int index) {
 	if (chara == nullptr)
 		return nullptr;
 
+	const Camera* mainCamera = CameraManager::MainCamera();
+
 	for (const auto& it : m_pPool->GetAllItems()) {
+
+		if (it->m_pObject == nullptr)
+			continue;
+
 		// 番号が同じもしくは、チームが同じ場合
 		if (it->m_Index == index || it->m_pObject->m_CharaTag == chara->m_CharaTag)
 			continue;
 
 		// 距離計算や壁判定をいれる
+
+		Cone cone = Cone();
+		cone.transform = *mainCamera->transform;
+		cone.range = 2000.0f;
+		cone.angle = 60.0f;
+
+		if (ColFunction::ColCheck_ConeToPoint(cone, it->m_pObject->transform->Global().position).IsCollision() == false)
+			continue;
 
 		return it->m_pObject;
 	}

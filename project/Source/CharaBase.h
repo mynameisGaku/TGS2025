@@ -67,9 +67,11 @@ public:
 	void Jump();
 
 	void Block();
+	void Attack();
 
 	//=======================================================================================
 	// ▼各ステート
+	void StateHeavyAttack1(FSMSignal sig);
 	void StateBlock(FSMSignal sig);
 	void StateBlockToIdle(FSMSignal sig);
 	void StateBlockWalk(FSMSignal sig);
@@ -103,10 +105,12 @@ private:
 	bool			m_CanRot;				// 回転可能か
 	bool			m_IsMove;				// 移動しようとしているか
 	bool			m_IsBlocking;			// ブロック中
+	bool			m_IsAttack;				// 攻撃する！
 
 	void idleUpdate();
 	void runUpdate();
 	void blockUpdate();
+	void canAttackUpdate();
 	
 	//=== タイムライン用 ===
 	void setAnimationSpeed(const nlohmann::json& argument);

@@ -44,6 +44,7 @@ CharaBase::CharaBase()
 	m_CanRot				= true;
 	m_IsMove				= false;
 	m_IsBlocking			= false;
+	m_IsAttack				= false;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -199,6 +200,7 @@ void CharaBase::Update() {
 
 	m_IsMove = false;
 	m_IsBlocking = false;
+	m_IsAttack = false;
 
 	if (m_pPhysics->velocity.y < -1.0f)
 	{
@@ -362,6 +364,11 @@ void CharaBase::Block()
 	m_IsBlocking = true;
 }
 
+void CharaBase::Attack()
+{
+	m_IsAttack = true;
+}
+
 //========================================================================
 
 void CharaBase::StateIdle(FSMSignal sig)
@@ -518,6 +525,40 @@ void CharaBase::StateRun(FSMSignal sig)
 	{
 		m_Timeline->Stop();
 		m_Animator->SetPlaySpeed(1.0f);
+	}
+	break;
+	}
+}
+
+void CharaBase::StateHeavyAttack1(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Animator->Play("Fall");
+		m_Animator->PlaySub("mixamorig:Spine", "Stab");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_IsAttack)
+		{
+			m_FSM->ChangeState(&CharaBase::StateIdleToBlock); // ステートを変更
+		}
+		else if (m_Animator->IsFinishedSub("mixamorig:Spine"))
+		{
+			m_FSM->ChangeState(&CharaBase::StateIdle);
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_Animator->StopSub("mixamorig:Spine");
 	}
 	break;
 	}
@@ -690,6 +731,7 @@ void CharaBase::idleUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateIdleToBlock);
 	}
+	canAttackUpdate();
 }
 
 void CharaBase::runUpdate()
@@ -710,10 +752,19 @@ void CharaBase::runUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateIdleToBlock);
 	}
+	canAttackUpdate();
 }
 
 void CharaBase::blockUpdate()
 {
+}
+
+void CharaBase::canAttackUpdate()
+{
+	if (m_IsAttack)
+	{
+		m_FSM->ChangeState(&CharaBase::StateHeavyAttack1);
+	}
 }
 
 void CharaBase::setAnimationSpeed(const nlohmann::json& argument)

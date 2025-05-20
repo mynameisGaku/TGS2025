@@ -29,15 +29,14 @@ void PlayerController::Init(int _padNumber) {
 
 void PlayerController::Update() {
 
-	////////////////////////////////////////////////////
-	// ジャンプ処理
 	if (IsPressButton(KeyDefine::KeyCode::Space, KeyDefine::Begin))
 	{
 		chara->Jump();
 	}
-
-	////////////////////////////////////////////////////
-	// ジャンプ処理
+	if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
+	{
+		chara->Attack();
+	}
 	if (IsPressButton(KeyDefine::KeyCode::C, KeyDefine::Stationary))
 	{
 		chara->Block();

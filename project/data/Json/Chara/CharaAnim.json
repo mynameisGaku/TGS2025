@@ -5,7 +5,6 @@
 			"IsLoop": true
 		},
 		"BlockToIdle": {
-			"IsLoop": false
 		},
 		"Fall": {
 			"IsLoop": true
@@ -14,13 +13,10 @@
 			"IsLoop": true
 		},
 		"IdleEmote_CheckSword": {
-			"IsLoop": false
 		},
 		"IdleEmote_Stretch": {
-			"IsLoop": false
 		},
 		"IdleToBlock": {
-			"IsLoop": false
 		},
 		"Run": {
 			"IsLoop": true
@@ -33,6 +29,8 @@
 		},
 		"StrafeWalk_C": {
 			"IsLoop": true
+		},
+		"Stab": {
 		}
 	}
 }

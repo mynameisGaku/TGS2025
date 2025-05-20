@@ -31,6 +31,7 @@ CharaBase::CharaBase()
 	m_pPhysics				= nullptr;
 	m_MoveSpeed				= 0.0f;
 	m_RotSpeed				= 0.0f;
+	m_SpeedScale			= 0.0f;
 	m_CharaTag				= CHARADEFINE_REF.Tags[0];
 	m_Index					= 0;
 	m_Animator				= nullptr;
@@ -180,6 +181,22 @@ void CharaBase::Update() {
 	m_SubFSM->Update();
 	m_Timeline->Update();
 
+	static const float MOVE_ACCEL = 0.03f;
+
+	// 移動速度倍率の更新
+	if (m_IsMove)
+	{
+		m_SpeedScale += MOVE_ACCEL;
+		if (m_SpeedScale > 1.0f)
+		{
+			m_SpeedScale = 1.0f;
+		}
+	}
+	else
+	{
+		m_SpeedScale = 0.0f;
+	}
+
 	m_IsMove = false;
 	m_IsBlocking = false;
 
@@ -324,9 +341,10 @@ void CharaBase::Move(const Vector3& dir)
 
 	if (m_CanMove)
 	{
-		float deltaTimeMoveSpeed = m_MoveSpeed * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
+		const Vector3 normDir = dir.Norm();
+		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
 
-		Vector3 velocity = dir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
+		Vector3 velocity = normDir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
 
 		// 速度を適応させる
 		m_pPhysics->velocity.x = velocity.x;
@@ -664,7 +682,7 @@ void CharaBase::idleUpdate()
 	{
 		//m_FSM->ChangeState(&CharaBase::StateActionIdleToJump); // ステートを変更
 	}
-	if (m_pPhysics->FlatVelocity().SquareSize() > 0.0f)
+	if (m_IsMove)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRun); // ステートを変更
 	}
@@ -680,7 +698,7 @@ void CharaBase::runUpdate()
 	{
 		//m_FSM->ChangeState(&CharaBase::StateRunToJump); // ステートを変更
 	}
-	if (m_pPhysics->FlatVelocity().SquareSize() <= 0.0f)
+	if (not m_IsMove)
 	{
 		m_FSM->ChangeState(&CharaBase::StateIdle); // ステートを変更
 	}

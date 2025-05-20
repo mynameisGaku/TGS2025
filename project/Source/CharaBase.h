@@ -88,6 +88,7 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
+	float			m_SpeedScale;			// 速度倍率
 	int				m_Index;				// 自身のインデックス
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン

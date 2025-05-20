@@ -1279,6 +1279,18 @@
     <None Include="data\Json\Chara\State\ActionIdleToJump.json">
       <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
     </None>
+    <None Include="data\Json\Chara\State\FallToRoll.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Roll.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\RollToActionIdle.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\RollToRun.json">
+      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

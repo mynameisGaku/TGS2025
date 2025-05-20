@@ -2,10 +2,10 @@
 #include "src/util/file/json/settings_json.h"
 #include "src/reference/bloom/BloomRef.h"
 
+BloomRef* BloomRef::instance = nullptr;
+
 namespace
 {
-	static const std::string PATH = "data/Json/Bloom/Bloom.json";
-	static const std::string FILEKEY = "Bloom";
 }
 
 void BloomRef::Load()

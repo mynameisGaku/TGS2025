@@ -1,6 +1,8 @@
 #include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
 #include "src/util/file/json/settings_json.h"
 
+CrystalFragmentSpawnerRef* CrystalFragmentSpawnerRef::instance = nullptr;
+
 void CrystalFragmentSpawnerRef::Load(bool ForceLoad)
 {
     if (m_WasLoad && !ForceLoad)

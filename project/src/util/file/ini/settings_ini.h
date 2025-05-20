@@ -13,6 +13,8 @@
 /// </summary>
 class Settings_ini
 {
+private:
+    static Settings_ini* instance;
 public:
     /// <summary>
     /// 設定変更時に呼び出されるコールバック関数型。
@@ -24,6 +26,11 @@ public:
     /// </summary>
     /// <returns>Settings_ini のインスタンス</returns>
     static Settings_ini& Inst();
+
+    /// <summary>
+    /// 破棄
+    /// </summary>
+    void Destroy();
 
     /// <summary>
     /// INI ファイルを読み込みます。

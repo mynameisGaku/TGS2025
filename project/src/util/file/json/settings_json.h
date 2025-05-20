@@ -64,7 +64,7 @@ public:
     /// <summary>
     /// インスタンスを破棄します。ウォッチャー停止とメモリ解放を実行。
     /// </summary>
-    static void Destroy();
+    void Destroy();
 
     /// <summary>
     /// 出力先ディレクトリを設定します。

@@ -1,6 +1,8 @@
 #include "src/common/setting/window/WindowSetting.h"
 #include "src/util/file/ini/settings_ini.h"
 
+WindowSetting* WindowSetting::instance = nullptr;
+
 float WindowSetting::width = 100.0f;
 float WindowSetting::width_half = 50.0f;
 float WindowSetting::height = 100.0f;
@@ -8,6 +10,15 @@ float WindowSetting::height_half = 50.0f;
 float WindowSetting::extend = 1.0f;
 std::string WindowSetting::name = "No Setting";
 bool WindowSetting::isFull = false;
+
+void WindowSetting::Destroy()
+{
+    if (instance)
+    {
+        delete instance;
+    }
+    instance = nullptr;
+}
 
 void WindowSetting::Load(const std::string& file)
 {

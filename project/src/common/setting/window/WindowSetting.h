@@ -3,12 +3,19 @@
 
 class WindowSetting
 {
+private:
+    static WindowSetting* instance;
 public:
     static WindowSetting& Inst()
     {
-        static WindowSetting instance;
-        return instance;
+        if (instance == nullptr)
+        {
+            instance = new WindowSetting();
+        }
+        return (*instance);
     }
+
+    void Destroy();
 
     static void Load(const std::string& file = "window.ini");
 

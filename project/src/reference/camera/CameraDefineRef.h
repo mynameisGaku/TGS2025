@@ -9,11 +9,27 @@ class CameraDefineRef
 private:
 	const std::string   FILEPATH = "data/Json/Camera/CameraDefine.json";// ファイルのパス
 	const std::string   FILEKEY = "CameraDefine";                   // ファイル識別用キー
+
+	static CameraDefineRef* instance;
 public:
-	static CameraDefineRef& Inst()
+	static CameraDefineRef* Inst()
 	{
-		static CameraDefineRef instance;
+		if (instance == nullptr)
+		{
+			instance = new CameraDefineRef;
+		}
 		return instance;
+	}
+
+	// " リファレンス解放 "
+	// ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+	void Destroy()
+	{
+		if (instance)
+		{
+			delete instance;
+		}
+		instance = nullptr;
 	}
 
 	float m_Near;		// 描画処理を行う近辺の位置
@@ -55,4 +71,4 @@ private:
 	}
 };
 
-#define CAMERADEFINE_REF CameraDefineRef::Inst()
+#define CAMERADEFINE_REF (*CameraDefineRef::Inst())

@@ -20,11 +20,27 @@ private:
 private:
     const std::string   FILEPATH = "data/Json/Crystal/CrystalFragment.json";    // ファイルのパス
     const std::string   FILEKEY  = "CrystalFragment";                           // ファイル識別用キー
+
+    static CrystalFragmentRef* instance;
 public:
-    static CrystalFragmentRef& Inst()
+    static CrystalFragmentRef* Inst()
     {
-        static CrystalFragmentRef instance;
+        if (instance == nullptr)
+        {
+            instance = new CrystalFragmentRef;
+        }
         return instance;
+    }
+
+    // " リファレンス解放 "
+    // ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+    void Destroy()
+    {
+        if (instance)
+        {
+            delete instance;
+        }
+        instance = nullptr;
     }
 
     void Load(bool _ForceLoad = false);
@@ -52,4 +68,4 @@ private:
 
 };
 
-#define CRYSTALFRAGMENT_REF CrystalFragmentRef::Inst()
+#define CRYSTALFRAGMENT_REF (*CrystalFragmentRef::Inst())

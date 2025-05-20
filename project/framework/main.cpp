@@ -37,6 +37,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/util/file/ini/settings_ini.h"
 #include "src/util/file/FileUtil.h"
 
+#include "src/reference/ball/BallRef.h"
+#include "src/reference/bloom/BloomRef.h"
+#include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/reference/chara/CharaHPRef.h"
+#include "src/reference/chara/CharaStaminaRef.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+
 #define CoGVersion (2.2)
 
 // プログラムは WinMain から始まります
@@ -144,7 +153,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #endif // IMGUI
 
 	}
+
 	AppRelease();
+
+	/*
+	リファレンス解放
+
+	明示的に解放する必要があります。
+	*/
+	Settings_json::Inst()->Destroy();
+	Settings_ini::Inst().Destroy();
+	BALL_REF.Destroy();
+	BLOOM_REF.Destroy();
+	CAMERADEFINE_REF.Destroy();
+	CHARADEFINE_REF.Destroy();
+	CHARAHP_REF.Destroy();
+	CHARASTAMINA_REF.Destroy();
+	CRYSTALFRAGMENT_REF.Destroy();
+	CRYSTALFRAGMENTSPAWNER_REF.Destroy();
+	wSetting.Destroy();
 
 #ifdef IMGUI
 
@@ -154,8 +181,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	ImGui::DestroyContext();
 
 #endif // IMGUI
-
-	Settings_json::Destroy();
 
 	Effkseer_End();
 	DxLib_End();				// ＤＸライブラリ使用の終了処理

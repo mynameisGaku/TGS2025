@@ -6,6 +6,11 @@
 /// <author>佐藤紘斗</author>
 class BloomRef
 {
+private:
+	const std::string PATH = "data/Json/Bloom/Bloom.json";
+	const std::string FILEKEY = "Bloom";
+
+	static BloomRef* instance;
 public:
 	struct Parameter
 	{
@@ -15,10 +20,24 @@ public:
 		int AddRate;	// 加算する強さ（0..255）
 	};
 
-	static BloomRef& Inst()
+	static BloomRef* Inst()
 	{
-		static BloomRef instance;
+		if (instance == nullptr)
+		{
+			instance = new BloomRef;
+		}
 		return instance;
+	}
+
+	// " リファレンス解放 "
+	// ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+	void Destroy()
+	{
+		if (instance)
+		{
+			delete instance;
+		}
+		instance = nullptr;
 	}
 
 	void Load();
@@ -26,7 +45,7 @@ public:
 	Parameter Param;	// ブルームのパラメータ
 };
 
-#define BLOOM_REF BloomRef::Inst()
+#define BLOOM_REF (*BloomRef::Inst())
 
 // Json読み込み用
 #include <vendor/nlohmann/json_fwd.hpp>

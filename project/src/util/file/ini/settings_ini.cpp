@@ -7,6 +7,8 @@
 #include <chrono>
 #include <vendor/imgui/ImGui.h>
 
+Settings_ini* Settings_ini::instance = nullptr;
+
 Settings_ini::Settings_ini()
 {
 }
@@ -27,8 +29,20 @@ Settings_ini::~Settings_ini()
 
 Settings_ini& Settings_ini::Inst()
 {
-    static Settings_ini instance;
-    return instance;
+    if (instance == nullptr)
+    {
+        instance = new Settings_ini;
+    }
+    return (*instance);
+}
+
+void Settings_ini::Destroy()
+{
+    if (instance)
+    {
+        delete instance;
+    }
+    instance = nullptr;
 }
 
 void Settings_ini::Load(const std::string& filepath, const std::string& key, bool setActive)

@@ -1,6 +1,8 @@
 #include "src/reference/ball/BallRef.h"
 #include "src/util/file/json/settings_json.h"
 
+BallRef* BallRef::instance = nullptr;
+
 namespace
 {
 }

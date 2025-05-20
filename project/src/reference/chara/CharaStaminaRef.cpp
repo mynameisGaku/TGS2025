@@ -1,6 +1,8 @@
 #include "src/reference/chara/CharaStaminaRef.h"
 #include "src/util/file/json/settings_json.h"
 
+CharaStaminaRef* CharaStaminaRef::instance = nullptr;
+
 void CharaStaminaRef::Load(bool ForceLoad)
 {
     if (not ForceLoad && m_WasLoad)

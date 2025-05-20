@@ -10,12 +10,28 @@ class CharaStaminaRef
 private:
     const std::string   FILEPATH = "data/Json/Chara/CharaStamina.json";         // ファイルのパス
     const std::string   FILEKEY  = "CharaStaminaRef";                           // ファイル識別用キー
+
+    static CharaStaminaRef* instance;
 public:
 
-    static CharaStaminaRef& Inst()
+    static CharaStaminaRef* Inst()
     {
-        static CharaStaminaRef instance;
+        if (instance == nullptr)
+        {
+            instance = new CharaStaminaRef;
+        }
         return instance;
+    }
+
+    // " リファレンス解放 "
+    // ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+    void Destroy()
+    {
+        if (instance)
+        {
+            delete instance;
+        }
+        instance = nullptr;
     }
 
     float Max;              // 最大スタミナ
@@ -38,4 +54,4 @@ private:
 
 };
 
-#define CHARASTAMINA_REF CharaStaminaRef::Inst()
+#define CHARASTAMINA_REF (*CharaStaminaRef::Inst())

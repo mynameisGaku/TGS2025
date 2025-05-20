@@ -5,6 +5,7 @@
 #include "src/util/Utils.h"
 #include "src/util/easing/Easing.h"
 #include "src/util/font/Font.h"
+#include "src/util/math/Vector2.h"
 
 namespace {
 

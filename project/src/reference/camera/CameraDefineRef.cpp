@@ -2,6 +2,8 @@
 #include "src/util/file/json/settings_json.h"
 #include "src/util/Utils.h"
 
+CameraDefineRef* CameraDefineRef::instance = nullptr;
+
 void CameraDefineRef::Load(bool ForceLoad)
 {
 	if (not ForceLoad && m_WasLoad)

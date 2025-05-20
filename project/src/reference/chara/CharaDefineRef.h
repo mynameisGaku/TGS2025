@@ -8,11 +8,27 @@ class CharaDefineRef
 private:
     const std::string   FILEPATH = "data/Json/Chara/CharaDefine.json";         // ファイルのパス
     const std::string   FILEKEY  = "CharaDefineRef";                           // ファイル識別用キー
+
+    static CharaDefineRef* instance;
 public:
-    static CharaDefineRef& Inst()
+    static CharaDefineRef* Inst()
     {
-        static CharaDefineRef instance;
+        if (instance == nullptr)
+        {
+            instance = new CharaDefineRef;
+        }
         return instance;
+    }
+
+    // " リファレンス解放 "
+    // ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+    void Destroy()
+    {
+        if (instance)
+        {
+            delete instance;
+        }
+        instance = nullptr;
     }
 
     int                         Max;
@@ -40,4 +56,4 @@ private:
     }
 };
 
-#define CHARADEFINE_REF CharaDefineRef::Inst()
+#define CHARADEFINE_REF (*CharaDefineRef::Inst())

@@ -3,6 +3,8 @@
 #include "src/util/file/FileUtil.h"
 #include "src/util/file/json/settings_json.h"
 
+CrystalFragmentRef* CrystalFragmentRef::instance = nullptr;
+
 void CrystalFragmentRef::Load(bool _ForceLoad)
 {
     if (not _ForceLoad && m_WasLoad)

@@ -1,6 +1,8 @@
 #include "src/reference/chara/CharaHPRef.h"
 #include "src/util/file/json/settings_json.h"
 
+CharaHPRef* CharaHPRef::instance = nullptr;
+
 void CharaHPRef::Load(bool ForceLoad)
 {
     if (not ForceLoad && m_WasLoad)

@@ -6,12 +6,28 @@ class CrystalFragmentSpawnerRef
 private:
     const std::string   FILEPATH = "data/Json/Crystal/CrystalFragmentSpawner.json"; // ファイルのパス
     const std::string   FILEKEY = "CrystalFragmentSpawner";                         // ファイル識別用キー
+
+    static CrystalFragmentSpawnerRef* instance;
 public:
-    static CrystalFragmentSpawnerRef& Inst()
+    static CrystalFragmentSpawnerRef* Inst()
     {
-        static CrystalFragmentSpawnerRef instance;
+        if (instance == nullptr)
+        {
+            instance = new CrystalFragmentSpawnerRef;
+        }
         return instance;
-    };
+    }
+
+    // " リファレンス解放 "
+    // ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+    void Destroy()
+    {
+        if (instance)
+        {
+            delete instance;
+        }
+        instance = nullptr;
+    }
 
     void Load(bool ForceLoad = false);
 
@@ -29,4 +45,4 @@ private:
     { /*DO NOTHING*/ };
 };
 
-#define CRYSTALFRAGMENTSPAWNER_REF CrystalFragmentSpawnerRef::Inst()
+#define CRYSTALFRAGMENTSPAWNER_REF (*CrystalFragmentSpawnerRef::Inst())

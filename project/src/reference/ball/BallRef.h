@@ -11,11 +11,27 @@ class BallRef
 private:
 	const std::string PATH    = "data/Json/Ball/Ball.json";
 	const std::string FILEKEY = "Ball";
+
+	static BallRef* instance;
 public:
-	static BallRef& Inst()
+	static BallRef* Inst()
 	{
-		static BallRef instance;
+		if (instance == nullptr)
+		{
+			instance = new BallRef;
+		}
 		return instance;
+	}
+
+	// " リファレンス解放 "
+	// ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
+	void Destroy()
+	{
+		if (instance)
+		{
+			delete instance;
+		}
+		instance = nullptr;
 	}
 
 	void Load();
@@ -29,4 +45,4 @@ public:
 	int		Max = 0;
 };
 
-#define BALL_REF BallRef::Inst()
+#define BALL_REF (*BallRef::Inst())

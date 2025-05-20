@@ -1,19 +1,18 @@
-#include "App.h"
-#include "sceneManager.h"
-#include "time.h"
+#include "framework/App.h"
+#include "framework/sceneManager.h"
+#include "src/util/time/GameTime.h"
 
 bool exitFlag = false;
 
 void AppInit()
 {
-	Time::Init();
 	SceneManager::Start();
 	exitFlag = false;
 }
 
 void AppUpdate()
 {
-	Time::Refresh();
+	GTime.Update();
 	SceneManager::Update();
 }
 

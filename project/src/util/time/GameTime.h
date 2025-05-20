@@ -1,0 +1,119 @@
+#pragma once
+#include <chrono>
+
+/// <summary>
+/// UnityのTimeクラスに基づいた時間管理クラス。
+/// ゲーム時間・固定時間・実時間・スケール制御・各種補助値などを提供。
+/// </summary>
+class GameTime
+{
+public:
+    /// <summary>毎フレーム更新（通常Update用）</summary>
+    static void Update();
+
+    /// <summary>FixedUpdate開始時に呼び出す</summary>
+    static void BeginFixedUpdate();
+
+    /// <summary>FixedUpdate終了時に呼び出す</summary>
+    static void EndFixedUpdate();
+
+    /// <summary>シーン切り替え時に呼び出す</summary>
+    static void SetLevelLoaded();
+
+    /// <summary>DeltaTime（timeScaleの影響あり）</summary>
+    static float DeltaTime();
+
+    /// <summary>UnscaledDeltaTime（timeScaleの影響なし）</summary>
+    static float UnscaledDeltaTime();
+
+    /// <summary>FixedDeltaTime（timeScaleの影響あり）</summary>
+    static float FixedDeltaTime();
+
+    /// <summary>FixedUnscaledDeltaTime（常に固定値）</summary>
+    static float FixedUnscaledDeltaTime();
+
+    /// <summary>起動からの累計時間（timeScaleの影響あり）</summary>
+    static float TotalTime();
+
+    /// <summary>起動からの累計時間（timeScaleの影響なし）</summary>
+    static float UnscaledTime();
+
+    /// <summary>起動からのリアル時間（UnscaledTimeと同等）</summary>
+    static float RealtimeSinceStartup();
+
+    /// <summary>シーン読み込みからの経過時間（timeScaleの影響あり）</summary>
+    static float TimeSinceLevelLoad();
+
+    /// <summary>現在のフレーム数</summary>
+    static int FrameCount();
+
+    /// <summary>FixedUpdate中かどうか</summary>
+    static bool InFixedTimeStep();
+
+    /// <summary>滑らかに補間されたDeltaTime</summary>
+    static float SmoothDeltaTime();
+
+    /// <summary>DeltaTimeの上限値</summary>
+    static float MaximumDeltaTime();
+
+    /// <summary>時間倍率を設定</summary>
+    static void SetTimeScale(float scale);
+
+    /// <summary>現在の時間倍率を取得</summary>
+    static float GetTimeScale();
+
+    /// <summary>FixedDeltaTimeを設定</summary>
+    static void SetFixedDeltaTime(float fixedDelta);
+
+    /// <summary>DeltaTimeの最大値を設定</summary>
+    static void SetMaximumDeltaTime(float maxDelta);
+
+    /// <summary>
+    /// ヒットストップを設定する
+    /// </summary>
+    /// <param name="frame">フレーム数</param>
+    static void SetHitStop(int frame);
+
+    /// <summary>
+    /// 現在のヒットストップのフレーム数を取得する
+    /// </summary>
+    static int HitStop();
+
+    /// <summary>
+    /// ヒットストップ中か
+    /// </summary>
+    /// <returns>ヒットストップ中ならtrue</returns>
+    static bool IsHitStop();
+
+    static float deltaTime;
+
+    static GameTime& instance()
+    {
+        static GameTime instance;
+        return instance;
+    }
+
+private:
+
+    GameTime() = default;
+    ~GameTime() = default;
+
+    static void initialize();
+    static bool m_Initialized;
+
+    static std::chrono::high_resolution_clock::time_point m_StartTime;
+    static std::chrono::high_resolution_clock::time_point m_LastTime;
+    static std::chrono::high_resolution_clock::time_point m_LevelLoadTime;
+
+    static float m_DeltaTime;
+    static float m_UnscaledDeltaTime;
+    static float m_SmoothDeltaTime;
+    static float m_FixedDeltaTime;
+    static float m_TimeScale;
+    static float m_MaximumDeltaTime;
+    static int m_FrameCount;
+    static int m_HitStop;
+    static bool m_InFixedTimeStep;
+};
+
+#define GTime GameTime::instance()

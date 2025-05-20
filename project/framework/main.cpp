@@ -15,20 +15,19 @@
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
 #include "App.h"
-#include "../Source/config.h"
-#include "../Source/Util/Utils.h"
-#include "../Source/Font.h"
-#include "Source/WindowSetting.h"
-#include "Source/settings_json.h"
-#include "Source/settings_ini.h"
-#include "Library/FileUtil.h"
+#include "src/Util/Utils.h"
+#include "src/util/font/Font.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/file/ini/settings_ini.h"
+#include "src/util/file/FileUtil.h"
 
 #ifdef IMGUI
 
-#include "../vendor/ImGui/imgui.h"
-#include "../vendor/ImGui/imgui_impl_dx11.h"
-#include "../vendor/ImGui/imgui_impl_win32.h"
-#include "../vendor/ImGui/imgui_ja_gryph_ranges.cpp"
+#include "vendor/imgui/imgui.h"
+#include "vendor/imgui/imgui_impl_dx11.h"
+#include "vendor/imgui/imgui_impl_win32.h"
+#include "vendor/imgui/imgui_ja_gryph_ranges.cpp"
 
 extern IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -52,7 +51,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetWindowSizeExtendRate(wSetting.extend);
 	ChangeWindowMode(wSetting.isFull); // Windowモードの場合
 
+#ifdef IMGUI
 	SetHookWinProc(WndProc);	//プロシージャの設定
+#endif // IMGUI
+
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 	SetZBufferBitDepth(32);
 

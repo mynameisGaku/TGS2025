@@ -4,10 +4,10 @@
 #include "sceneBase.h"
 
 // ◇コンポーネント
-#include "../Source/Component/Component.h"
+#include "src/common/component/Component.h"
 
 // ◇当たり判定
-#include "../Source/Component/CollisionData.h"
+#include "src/common/component/collider/CollisionData.h"
 
 class GameObject {
 public:

@@ -45,7 +45,7 @@ CrystalFragment::~CrystalFragment()
 void CrystalFragment::Init(const Element& elem, const Size& size)
 {
     m_pPhysics = AddComponent<Physics>();
-    m_pPhysics->Init(V3::ZERO, FRICTION);
+    m_pPhysics->Init(Vector3::Zero, FRICTION);
 
     m_Element = elem;
 

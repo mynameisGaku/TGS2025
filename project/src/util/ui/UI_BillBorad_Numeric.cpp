@@ -22,7 +22,7 @@ void UI_BillBorad_Numeric::Update() {
 	if (camera == nullptr)
 		return;
 
-	Vector3 offset = V3::ZERO;	// 桁数ごとに描画位置をズラす為の相対座標
+	Vector3 offset = Vector3::Zero;	// 桁数ごとに描画位置をズラす為の相対座標
 	int index = 0;				// 要素数
 
 	for (auto itr = numbers.begin(); itr != numbers.end();) {

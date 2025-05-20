@@ -233,7 +233,7 @@ namespace EasingUtils {
 		Vector3 begin;
 		Vector3 end;
 
-		EasingVec3() : info(EasingInfo()), current(V3::ZERO), begin(V3::ZERO), end(V3::ZERO) {};
+		EasingVec3() : info(EasingInfo()), current(Vector3::Zero), begin(Vector3::Zero), end(Vector3::Zero) {};
 		EasingVec3(EasingInfo _info, Vector3 _current, Vector3 _begin, Vector3 _end) : info(_info), current(_current), begin(_begin), end(_end) {};
 
 		void Update() {

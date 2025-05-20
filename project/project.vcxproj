@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)/;$(ProjectDir)/../;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/;$(ProjectDir)/../;$(ProjectDir)/../src/;$(ProjectDir)/../vendor/imgui/;$(ProjectDir)/../vendor/magic_enum/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)/;$(ProjectDir)/../;$(IncludePath)</IncludePath>
@@ -196,6 +196,9 @@
     <None Include="data\Model\Stage\Cube_col.mv1" />
     <None Include="data\Model\Stage\Ground_000.mv1" />
     <None Include="data\Model\Stage\Sky_000.mv1" />
+    <None Include="vendor\imgui\imgui_bezier_math.inl" />
+    <None Include="vendor\imgui\imgui_extra_math.inl" />
+    <None Include="vendor\imgui\imgui_node_editor_internal.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json" />
@@ -331,9 +334,23 @@
     <ClCompile Include="src\util\input\MouseController.cpp" />
     <ClCompile Include="src\util\input\PadController.cpp" />
     <ClCompile Include="src\util\locus\Locus.cpp" />
-    <ClCompile Include="src\util\math\Quaternion.cpp" />
-    <ClCompile Include="src\util\math\Vector2.cpp" />
-    <ClCompile Include="src\util\math\Vector3.cpp" />
+    <ClCompile Include="src\util\math\mathUtils.cpp" />
+    <ClCompile Include="src\util\math\matrix.cpp" />
+    <ClCompile Include="src\util\math\plane.cpp" />
+    <ClCompile Include="src\util\math\quaternion.cpp" />
+    <ClCompile Include="src\util\math\random.cpp" />
+    <ClCompile Include="src\util\math\vector2.cpp" />
+    <ClCompile Include="src\util\math\vector3.cpp" />
+    <ClCompile Include="src\util\math\vector4.cpp" />
+    <ClCompile Include="src\util\object2D\Object2D.cpp" />
+    <ClCompile Include="src\util\object3D\Object3D.cpp" />
+    <ClCompile Include="src\util\shadow_map\ShadowMap.cpp" />
+    <ClCompile Include="src\util\sound\SoundBase.cpp" />
+    <ClCompile Include="src\util\sound\SoundManager.cpp" />
+    <ClCompile Include="src\util\time\GameTime.cpp" />
+    <ClCompile Include="src\util\time\GameTimeHelper.cpp" />
+    <ClCompile Include="src\util\transform\RectTransform.cpp" />
+    <ClCompile Include="src\util\transform\Transform.cpp" />
     <ClCompile Include="src\util\ui\UI_Base.cpp" />
     <ClCompile Include="src\util\ui\UI_BillBoard.cpp" />
     <ClCompile Include="src\util\ui\UI_BillBorad_Numeric.cpp" />
@@ -345,6 +362,23 @@
     <ClCompile Include="src\util\ui\UI_Slider.cpp" />
     <ClCompile Include="src\util\ui\UI_Subtone.cpp" />
     <ClCompile Include="src\util\ui\UI_Text.cpp" />
+    <ClCompile Include="vendor\imgui\crude_json.cpp" />
+    <ClCompile Include="vendor\imgui\GraphEditor.cpp" />
+    <ClCompile Include="vendor\imgui\ImCurveEdit.cpp" />
+    <ClCompile Include="vendor\imgui\ImGradient.cpp" />
+    <ClCompile Include="vendor\imgui\imgui.cpp" />
+    <ClCompile Include="vendor\imgui\ImGuizmo.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_canvas.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_ja_gryph_ranges.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_node_editor.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_node_editor_api.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\imgui\ImSequencer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h" />
@@ -461,10 +495,30 @@
     <ClInclude Include="src\util\input\MouseController.h" />
     <ClInclude Include="src\util\input\PadController.h" />
     <ClInclude Include="src\util\locus\Locus.h" />
+    <ClInclude Include="src\util\math\asm.h" />
+    <ClInclude Include="src\util\math\mathCommon.h" />
+    <ClInclude Include="src\util\math\mathIncluder.h" />
+    <ClInclude Include="src\util\math\mathUtils.h" />
+    <ClInclude Include="src\util\math\matrix.h" />
     <ClInclude Include="src\util\math\Operations.h" />
-    <ClInclude Include="src\util\math\Quaternion.h" />
-    <ClInclude Include="src\util\math\Vector2.h" />
-    <ClInclude Include="src\util\math\Vector3.h" />
+    <ClInclude Include="src\util\math\plane.h" />
+    <ClInclude Include="src\util\math\quaternion.h" />
+    <ClInclude Include="src\util\math\random.h" />
+    <ClInclude Include="src\util\math\vector2.h" />
+    <ClInclude Include="src\util\math\vector3.h" />
+    <ClInclude Include="src\util\math\vector4.h" />
+    <ClInclude Include="src\util\object2D\Object2D.h" />
+    <ClInclude Include="src\util\object3D\Object3D.h" />
+    <ClInclude Include="src\util\pool\Pool.h" />
+    <ClInclude Include="src\util\shadow_map\ShadowMap.h" />
+    <ClInclude Include="src\util\sound\SoundBase.h" />
+    <ClInclude Include="src\util\sound\SoundDefine.h" />
+    <ClInclude Include="src\util\sound\SoundManager.h" />
+    <ClInclude Include="src\util\time\GameTime.h" />
+    <ClInclude Include="src\util\time\GameTimeHelper.h" />
+    <ClInclude Include="src\util\transform\Anchor.h" />
+    <ClInclude Include="src\util\transform\RectTransform.h" />
+    <ClInclude Include="src\util\transform\Transform.h" />
     <ClInclude Include="src\util\ui\UI_Base.h" />
     <ClInclude Include="src\util\ui\UI_BillBoard.h" />
     <ClInclude Include="src\util\ui\UI_BillBorad_Numeric.h" />
@@ -477,6 +531,28 @@
     <ClInclude Include="src\util\ui\UI_Slider.h" />
     <ClInclude Include="src\util\ui\UI_Subtone.h" />
     <ClInclude Include="src\util\ui\UI_Text.h" />
+    <ClInclude Include="vendor\imgui\crude_json.h" />
+    <ClInclude Include="vendor\imgui\GraphEditor.h" />
+    <ClInclude Include="vendor\imgui\imconfig.h" />
+    <ClInclude Include="vendor\imgui\ImCurveEdit.h" />
+    <ClInclude Include="vendor\imgui\ImGradient.h" />
+    <ClInclude Include="vendor\imgui\imgui.h" />
+    <ClInclude Include="vendor\imgui\ImGuizmo.h" />
+    <ClInclude Include="vendor\imgui\imgui_bezier_math.h" />
+    <ClInclude Include="vendor\imgui\imgui_canvas.h" />
+    <ClInclude Include="vendor\imgui\imgui_extra_math.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\imgui\imgui_node_editor.h" />
+    <ClInclude Include="vendor\imgui\imgui_node_editor_internal.h" />
+    <ClInclude Include="vendor\imgui\imgui_stdlib.h" />
+    <ClInclude Include="vendor\imgui\ImSequencer.h" />
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="vendor\imgui\ImZoomSlider.h" />
+    <ClInclude Include="vendor\magic_enum\magic_enum.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

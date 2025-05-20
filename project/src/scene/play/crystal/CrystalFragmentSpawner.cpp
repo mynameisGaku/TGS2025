@@ -3,7 +3,7 @@
 #include "CrystalFragmentManager.h"
 #include <Library/time.h>
 
-CrystalFragmentSpawner::CrystalFragmentSpawner() : CrystalFragmentSpawner(V3::ZERO)
+CrystalFragmentSpawner::CrystalFragmentSpawner() : CrystalFragmentSpawner(Vector3::Zero)
 { /*DO NOTHING*/ }
 
 CrystalFragmentSpawner::CrystalFragmentSpawner(const Vector3& pos):

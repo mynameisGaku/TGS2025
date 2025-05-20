@@ -93,7 +93,7 @@ const Vector3 Transform::LimitedRotation() const {
 
 	using namespace Math;
 
-	Vector3 limitedRot = V3::ZERO;
+	Vector3 limitedRot = Vector3::Zero;
 
 	// x,y,z‚»‚ê‚¼‚êŒvŽZ
 	for (int i = 0; i < 3; i++) {

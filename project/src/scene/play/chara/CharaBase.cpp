@@ -335,7 +335,7 @@ void CharaBase::HitGroundProcess() {
 				m_IsLanding = true;
 				m_pPhysics->velocity.y = 0.0f;
 				m_pPhysics->resistance.y = 0.0f;
-				m_pPhysics->SetGravity(V3::ZERO);
+				m_pPhysics->SetGravity(Vector3::Zero);
 				m_pPhysics->SetFriction(FRICTION);
 			}
 			// Y成分が下方向なら頭上ヒット（天井にぶつかった）
@@ -349,14 +349,14 @@ void CharaBase::HitGroundProcess() {
 			// 衝突していなければ、通常の空中挙動へ
 			m_IsLanding = false;
 			m_pPhysics->SetGravity(GRAVITY);
-			m_pPhysics->SetFriction(V3::ZERO);
+			m_pPhysics->SetFriction(Vector3::Zero);
 		}
 	}
 
 	if (physics->velocity.y > 0)
 	{
 		physics->SetGravity(GRAVITY);
-		physics->SetFriction(V3::ZERO);
+		physics->SetFriction(Vector3::Zero);
 		m_IsLanding = false;
 		return;
 	}

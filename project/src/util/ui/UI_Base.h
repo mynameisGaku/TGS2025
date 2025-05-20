@@ -108,8 +108,8 @@
 //	{
 //		for (int i = 0; i < VERT_INDEX; i++)
 //		{
-//			m_vert[i].pos = V3::ZERO;				//左下 0, 1
-//			m_vert[i].norm = V3::ZERO;
+//			m_vert[i].pos = Vector3::Zero;				//左下 0, 1
+//			m_vert[i].norm = Vector3::Zero;
 //			m_vert[i].dif = GetColorU8(255, 255, 255, 255);
 //			m_vert[i].spc = GetColorU8(255, 255, 255, 255);
 //			m_vert[i].u = 0.0f;
@@ -119,7 +119,7 @@
 //		}
 //		m_polygonNum = 2;
 //		m_graphHandle = -1;
-//		m_pos = V3::ZERO;
+//		m_pos = Vector3::Zero;
 //		m_pRawVertexNorm = VGet(0, 0, 1);
 //	}
 //	VERTEX3D m_vert[VERT_INDEX];             //ビルボード描画用頂点座標  このクラスはゲージの為のクラスなので基本頂点は4個。

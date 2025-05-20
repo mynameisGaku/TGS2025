@@ -43,10 +43,10 @@ private:
 		m_RotX_Max(0.0f),
 		m_RotX_Min(0.0f),
 		m_RotSpeedLimit(0.0f),
-		m_OffsetDef(V3::ZERO),
-		m_TargetDef(V3::ZERO),
-		m_OffsetChase(V3::ZERO),
-		m_TargetChase(V3::ZERO)
+		m_OffsetDef(Vector3::Zero),
+		m_TargetDef(Vector3::Zero),
+		m_OffsetChase(Vector3::Zero),
+		m_TargetChase(Vector3::Zero)
 	{ /*DO NOTHING*/
 	}
 

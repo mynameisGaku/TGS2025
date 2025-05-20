@@ -3,9 +3,9 @@
 #include <assert.h>
 
 // ƒV[ƒ“ŠÖ˜A
-#include "bootScene.h"
-#include "titleScene.h"
-#include "playScene.h"
+#include "src/scene/boot/bootScene.h"
+#include "src/scene/title/titleScene.h"
+#include "src/scene/play/playScene.h"
 
 SceneBase* SceneFactory::CreateFirst()
 {

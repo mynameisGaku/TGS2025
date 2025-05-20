@@ -1,9 +1,7 @@
-#include "sceneManager.h"
-#include "sceneBase.h"
-#include "../Source/sceneFactory.h"
-#include <DxLib.h>
-
-#include "../Source/SystemManager.h"
+#include "framework/sceneManager.h"
+#include "framework/sceneBase.h"
+#include "framework/sceneFactory.h"
+#include "src/common/system/SystemManager.h"
 
 namespace {
 

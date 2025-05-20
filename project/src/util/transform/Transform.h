@@ -31,7 +31,7 @@ public:
 	// ▼コンストラクタ・デストラクタ
 
 	// トランスフォームの初期化
-	Transform() : Transform(V3::ZERO, V3::ZERO, V3::ONE, nullptr) {}
+	Transform() : Transform(Vector3::Zero, Vector3::Zero, V3::ONE, nullptr) {}
 
 	/// <summary>
 	/// トランスフォームの初期化
@@ -40,7 +40,7 @@ public:
 	/// <param name="rotation">回転</param>
 	/// <param name="scale">拡縮</param>
 	/// <param name="parent">親のトランスフォーム</param>
-	Transform(const Vector3& position, const Vector3& rotation = V3::ZERO, const Vector3& scale = V3::ONE, Transform* parent = nullptr);
+	Transform(const Vector3& position, const Vector3& rotation = Vector3::Zero, const Vector3& scale = V3::ONE, Transform* parent = nullptr);
 
 	~Transform();
 

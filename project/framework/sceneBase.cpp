@@ -1,5 +1,5 @@
-#include "sceneBase.h"
-#include "gameObject.h"
+#include "framework/sceneBase.h"
+#include "framework/gameObject.h"
 
 SceneBase::SceneBase() : SceneBase(true, "") {}
 

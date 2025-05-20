@@ -14,7 +14,7 @@
 Ball::Ball()
 {
 	m_Physics = Object3D::AddComponent<Physics>();
-	m_Physics->Init(V3::ZERO, V3::ZERO);
+	m_Physics->Init(Vector3::Zero, Vector3::Zero);
 
 	m_Owner = nullptr;
 	m_pManager = nullptr;
@@ -25,7 +25,7 @@ Ball::Ball()
 	ColDefine::ColBaseParam param;
 	param.trs.scale = V3::ONE * BALL_RADIUS / BALL_SCALE * 2;
 
-	m_Collider->SetOffset(V3::ZERO);
+	m_Collider->SetOffset(Vector3::Zero);
 	m_Collider->BaseInit(param);
 	m_Collider->SetDraw(true);
 
@@ -49,9 +49,9 @@ void Ball::Reset()
 
 	m_HomingPeriod = 0.0f;
 
-	m_Physics->velocity = V3::ZERO;
-	m_Physics->SetGravity(V3::ZERO);
-	m_Physics->SetFriction(V3::ZERO);
+	m_Physics->velocity = Vector3::Zero;
+	m_Physics->SetGravity(Vector3::Zero);
+	m_Physics->SetFriction(Vector3::Zero);
 
 	m_Collider->SetIsActive(false);
 

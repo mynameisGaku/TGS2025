@@ -24,10 +24,10 @@ void CameraDefineRef::Load(bool ForceLoad)
 	m_RotX_Min		= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotX_Min", 0.0f, FILEKEY));
 	m_RotSpeedLimit	= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotSpeedLimit", 0.0f, FILEKEY));
 
-	m_OffsetDef = jsonLoader->GetOrDefault<Vector3>("OffsetDef", V3::ZERO, FILEKEY);
-	m_TargetDef = jsonLoader->GetOrDefault<Vector3>("TargetDef", V3::ZERO, FILEKEY);
-	m_OffsetChase = jsonLoader->GetOrDefault<Vector3>("OffsetChase", V3::ZERO, FILEKEY);
-	m_TargetChase = jsonLoader->GetOrDefault<Vector3>("TargetChase", V3::ZERO, FILEKEY);
+	m_OffsetDef = jsonLoader->GetOrDefault<Vector3>("OffsetDef", Vector3::Zero, FILEKEY);
+	m_TargetDef = jsonLoader->GetOrDefault<Vector3>("TargetDef", Vector3::Zero, FILEKEY);
+	m_OffsetChase = jsonLoader->GetOrDefault<Vector3>("OffsetChase", Vector3::Zero, FILEKEY);
+	m_TargetChase = jsonLoader->GetOrDefault<Vector3>("TargetChase", Vector3::Zero, FILEKEY);
 
 	// ÉçÅ[ÉhÇµÇΩÇÊ
 	m_WasLoad = true;

@@ -1,4 +1,4 @@
-#include "stageObject.h"
+#include "src/common/stage/StageObject.h"
 
 // ”Ä—p
 #include "src/util/file/resource_loader/ResourceLoader.h"

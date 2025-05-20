@@ -7,8 +7,8 @@
 #include <vector>
 
 // ◇個別で必要な物
-#include "stageDefine.h"
-#include "stageObject.h"
+#include "src/common/stage/StageDefine.h"
+#include "src/common/stage/StageObject.h"
 
 /// <summary>
 /// ステージオブジェクトを管理するクラス

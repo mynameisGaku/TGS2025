@@ -6,7 +6,7 @@
 #include <string>
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
-#include "stageDefine.h"
+#include "src/common/stage/stageDefine.h"
 
 using namespace StageDefine;
 

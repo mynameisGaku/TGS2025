@@ -1,5 +1,5 @@
 #pragma once
-#include "stageDefine.h"
+#include "src/common/stage/stageDefine.h"
 #include "src/util/object3D/Object3D.h"
 
 /// <summary>

@@ -1,4 +1,4 @@
-#include "stageObjectManager.h"
+#include "src/common/stage/StageObjectManager.h"
 
 // ”Ä—p
 #include <fstream>

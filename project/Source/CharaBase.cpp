@@ -38,6 +38,7 @@ CharaBase::CharaBase()
 	m_IsCharging			= false;
 	m_MoveSpeed				= 0.0f;
 	m_RotSpeed				= 0.0f;
+	m_SpeedScale			= 0.0f;
 	m_ChargeRateWatchDog	= 0.0f;
 	m_CatchTimer			= 0.0f;
 	m_CharaTag				= CHARADEFINE_REF.Tags[0];
@@ -213,6 +214,23 @@ void CharaBase::Update() {
 		m_pBall->transform->position = VTransform(Vector3(0, BALL_RADIUS, -BALL_RADIUS), MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand")));
 	}
 
+	static const float MOVE_ACCEL = 0.03f;
+
+	// 移動速度倍率の更新
+	if (m_IsMove)
+	{
+		m_SpeedScale += MOVE_ACCEL;
+		if (m_SpeedScale > 1.0f)
+		{
+			m_SpeedScale = 1.0f;
+		}
+	}
+	else
+	{
+		m_SpeedScale = 0.0f;
+	}
+
+
 	m_IsMove = false;
 
 	Object3D::Update();
@@ -359,7 +377,7 @@ void CharaBase::Move(const Vector3& dir)
 
 	if (m_CanMove)
 	{
-		float deltaTimeMoveSpeed = m_MoveSpeed * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
+		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
 
 		Vector3 velocity = dir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
 
@@ -1390,7 +1408,7 @@ void CharaBase::idleUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateActionIdleToJump); // ステートを変更
 	}
-	else if (m_pPhysics->FlatVelocity().SquareSize() > 0.0f)
+	else if (m_IsMove)
 	{
 		m_FSM->ChangeState(&CharaBase::StateActionIdleToRun); // ステートを変更
 	}
@@ -1402,7 +1420,7 @@ void CharaBase::runUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToJump); // ステートを変更
 	}
-	if (m_pPhysics->FlatVelocity().SquareSize() <= 0.0f)
+	if (not m_IsMove)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToActionIdle); // ステートを変更
 	}

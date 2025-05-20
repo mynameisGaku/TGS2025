@@ -1,1300 +1,1283 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\bootScene.cpp">
-      <Filter>Application\Scenes\00_BootScene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\titleScene.cpp">
-      <Filter>Application\Scenes\01_TitleScene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\playScene.cpp">
-      <Filter>Application\Scenes\02_PlayScene</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\main.cpp">
-      <Filter>Framework\01_Library</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\app.cpp">
-      <Filter>Framework\01_Library</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\sceneBase.cpp">
-      <Filter>Framework\00_Scene\99_Etc\00_Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\sceneFactory.cpp">
-      <Filter>Framework\00_Scene\99_Etc\01_Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\sceneManager.cpp">
-      <Filter>Framework\00_Scene\99_Etc\02_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\csvReader.cpp">
-      <Filter>Framework\02_Common\System\CsvReader</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\resourceLoader.cpp">
-      <Filter>Framework\02_Common\System\ResourceLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\debugScreen.cpp">
-      <Filter>Framework\02_Common\Debug\DebugScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\time.cpp">
-      <Filter>Framework\02_Common\Time</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SystemManager.cpp">
-      <Filter>Framework\02_Common\System\SystemManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadScreen.cpp">
-      <Filter>Framework\02_Common\System\LoadScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_Text.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\01_Text</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_SliderInt.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\02_SliderInt</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_SliderFloat.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\03_SliderFloat</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_Button.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\04_Button</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_CheckBox.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\05_CheckBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_DropDown.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\06_DropDown</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_Space.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\07_Space</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiNode_ColorEdit4.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\08_ColorEdit4</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui_demo.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui_draw.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui_impl_dx11.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui_impl_win32.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui_tables.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\ImGui\imgui_widgets.cpp">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiRoot.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\01_Root</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiManager.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\00_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ImGuiTree\imGuiFunc.cpp">
-      <Filter>Framework\02_Common\Debug\ImGui\03_Func</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\KeyDefine.cpp">
-      <Filter>Framework\02_Common\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\InputManager.cpp">
-      <Filter>Framework\02_Common\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\KeyController.cpp">
-      <Filter>Framework\02_Common\System\Input\00_KeyController</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PadController.cpp">
-      <Filter>Framework\02_Common\System\Input\01_PadController</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MouseController.cpp">
-      <Filter>Framework\02_Common\System\Input\02_MouseController</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SettingManager.cpp">
-      <Filter>Framework\02_Common\System\SettingManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\Quaternion.cpp">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\RectTransform.cpp">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\Transform.cpp">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\Vector2.cpp">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\Vector3.cpp">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Fader.cpp">
-      <Filter>Framework\06_Decoration\Fader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object3D.cpp">
-      <Filter>Framework\03_Object\Object3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object2D.cpp">
-      <Filter>Framework\03_Object\Object2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Camera.cpp">
-      <Filter>Framework\03_Object\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CameraManager.cpp">
-      <Filter>Framework\03_Object\Camera\01_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StateManager.cpp">
-      <Filter>Framework\02_Common\DesignPattern\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Light.cpp">
-      <Filter>Framework\03_Object\Light\02_Instance</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LightManager.cpp">
-      <Filter>Framework\03_Object\Light\01_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Stage.cpp">
-      <Filter>Framework\03_Object\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EffectBase.cpp">
-      <Filter>Framework\05_Resource\Effect\01_Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EffectManager.cpp">
-      <Filter>Framework\05_Resource\Effect\02_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SoundBase.cpp">
-      <Filter>Framework\05_Resource\Sound\01_Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SoundManager.cpp">
-      <Filter>Framework\05_Resource\Sound\02_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Font.cpp">
-      <Filter>Framework\05_Resource\Font</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StageObject.cpp">
-      <Filter>Framework\03_Object\Stage\02_Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\StageObjectManager.cpp">
-      <Filter>Framework\03_Object\Stage\01_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Base.cpp">
-      <Filter>Framework\06_Decoration\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Canvas.cpp">
-      <Filter>Framework\06_Decoration\UI\00_Canvas</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Manager.cpp">
-      <Filter>Framework\06_Decoration\UI\02_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Text.cpp">
-      <Filter>Framework\06_Decoration\UI\03_Text</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Image.cpp">
-      <Filter>Framework\06_Decoration\UI\04_Image</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Button.cpp">
-      <Filter>Framework\06_Decoration\UI\05_Button</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Slider.cpp">
-      <Filter>Framework\06_Decoration\UI\07_Slider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Gauge.cpp">
-      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_BillBoard.cpp">
-      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_BillBorad_Numeric.cpp">
-      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI_Subtone.cpp">
-      <Filter>Framework\06_Decoration\UI\01_Subtone</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\gauge.cpp">
-      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BlurScreen.cpp">
-      <Filter>Framework\06_Decoration\BlurScren</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Locus.cpp">
-      <Filter>Framework\06_Decoration\Locus</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Animator.cpp">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\CollisionObserver.cpp">
-      <Filter>Framework\04_Component\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ColliderBase.cpp">
-      <Filter>Framework\04_Component\Collider\04_Shape\00_Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ColliderSphere.cpp">
-      <Filter>Framework\04_Component\Collider\04_Shape\01_Sphere</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\CollisionData.cpp">
-      <Filter>Framework\04_Component\Collider\01_Data</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\CollisionFunc.cpp">
-      <Filter>Framework\04_Component\Collider\03_Function</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\CollisionManager.cpp">
-      <Filter>Framework\04_Component\Collider\02_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ColliderModel.cpp">
-      <Filter>Framework\04_Component\Collider\04_Shape\02_Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ColliderCapsule.cpp">
-      <Filter>Framework\04_Component\Collider\04_Shape\03_Capsule</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\MaterialRenderer.cpp">
-      <Filter>Framework\04_Component\MaterialRender</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\MotionBlur.cpp">
-      <Filter>Framework\04_Component\MotionBlur</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Physics.cpp">
-      <Filter>Framework\04_Component\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\ShadowCircle.cpp">
-      <Filter>Framework\04_Component\ShadowCircle</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ShadowMap.cpp">
-      <Filter>Framework\06_Decoration\ShadowMap</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Shake.cpp">
-      <Filter>Framework\04_Component\Shake</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behavior\BehaviorData.cpp">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behavior\BehaviorDecorator.cpp">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behavior\BehaviorNode.cpp">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behavior\BehaviorTask.cpp">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behavior\BehaviorTree.cpp">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SensiSetting.cpp">
-      <Filter>Framework\02_Common\System\SettingManager\01_SensiSetting</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VolumeSetting.cpp">
-      <Filter>Framework\02_Common\System\SettingManager\02_VolumeSetting</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SettingBase.cpp">
-      <Filter>Framework\02_Common\System\SettingManager\00_SettingBase</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\AnimationEvent.cpp">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\settings_json.cpp">
-      <Filter>Framework\02_Common\System\Json</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\settings_ini.cpp">
-      <Filter>Framework\02_Common\System\Ini</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaBase.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaManager.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Ball.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallAttribute.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallManager.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\WindowSetting.cpp">
-      <Filter>Framework\02_Common\System\Ini</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\FileUtil.cpp">
-      <Filter>Framework\02_Common\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\VectorJson.cpp">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BallRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\PlayerController.cpp">
-      <Filter>Framework\04_Component\Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CrystalFragment.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CrystalFragmentManager.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CrystalFragmentRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CrystalFragmentSpawner.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CrystalFragmentSpawnerRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaStamina.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaStaminaRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BloomManager.cpp">
-      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BloomRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\AIController.cpp">
-      <Filter>Framework\04_Component\Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaDefineRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\DebugController.cpp">
-      <Filter>Framework\04_Component\Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\AttachedAnimation.cpp">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Catcher.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CameraDefineRef.cpp">
-      <Filter>Framework\03_Object\Camera\00_Define</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CamState_Aim.cpp">
-      <Filter>Framework\03_Object\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CamState_Chase.cpp">
-      <Filter>Framework\03_Object\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CamState_Debug.cpp">
-      <Filter>Framework\03_Object\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaHP.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharaHPRef.cpp">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\AnimatorJson.cpp">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\bootScene.h">
-      <Filter>Application\Scenes\00_BootScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\titleScene.h">
-      <Filter>Application\Scenes\01_TitleScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\playScene.h">
-      <Filter>Application\Scenes\02_PlayScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\config.h">
-      <Filter>Framework\01_Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\app.h">
-      <Filter>Framework\01_Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\sceneBase.h">
-      <Filter>Framework\00_Scene\99_Etc\00_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\sceneFactory.h">
-      <Filter>Framework\00_Scene\99_Etc\01_Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\sceneManager.h">
-      <Filter>Framework\00_Scene\99_Etc\02_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\csvReader.h">
-      <Filter>Framework\02_Common\System\CsvReader</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\resourceLoader.h">
-      <Filter>Framework\02_Common\System\ResourceLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\debugScreen.h">
-      <Filter>Framework\02_Common\Debug\DebugScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\time.h">
-      <Filter>Framework\02_Common\Time</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\myDxLib.h">
-      <Filter>Framework\02_Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SystemManager.h">
-      <Filter>Framework\02_Common\System\SystemManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LoadScreen.h">
-      <Filter>Framework\02_Common\System\LoadScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\easing.h">
-      <Filter>Framework\02_Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EasingUtils.h">
-      <Filter>Framework\02_Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_Base.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\00_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_Text.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\01_Text</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_SliderInt.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\02_SliderInt</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_SliderFloat.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\03_SliderFloat</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_Button.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\04_Button</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_CheckBox.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\05_CheckBox</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_DropDown.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\06_DropDown</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_Space.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\07_Space</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_ColorEdit4.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\08_ColorEdit4</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_BeginChildren.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\09_Children</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiNode_EndChildren.h">
-      <Filter>Framework\02_Common\Debug\ImGui\02_Node\09_Children</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imconfig.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_impl_win32.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_internal.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imstb_rectpack.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imstb_textedit.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\ImGui\imstb_truetype.h">
-      <Filter>Framework\01_Library\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiRoot.h">
-      <Filter>Framework\02_Common\Debug\ImGui\01_Root</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiManager.h">
-      <Filter>Framework\02_Common\Debug\ImGui\00_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ImGuiTree\imGuiFunc.h">
-      <Filter>Framework\02_Common\Debug\ImGui\03_Func</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\KeyDefine.h">
-      <Filter>Framework\02_Common\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\InputManager.h">
-      <Filter>Framework\02_Common\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\KeyController.h">
-      <Filter>Framework\02_Common\System\Input\00_KeyController</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PadController.h">
-      <Filter>Framework\02_Common\System\Input\01_PadController</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MouseController.h">
-      <Filter>Framework\02_Common\System\Input\02_MouseController</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SettingManager.h">
-      <Filter>Framework\02_Common\System\SettingManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Anchor.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Operations.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Quaternion.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\RectTransform.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Transform.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Utils.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Vector2.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Util\Vector3.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Fader.h">
-      <Filter>Framework\06_Decoration\Fader</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\magic_enum.hpp">
-      <Filter>Framework\01_Library\MagicEnum</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Object3D.h">
-      <Filter>Framework\03_Object\Object3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Object2D.h">
-      <Filter>Framework\03_Object\Object2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Camera.h">
-      <Filter>Framework\03_Object\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CameraDefine.h">
-      <Filter>Framework\03_Object\Camera\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CameraManager.h">
-      <Filter>Framework\03_Object\Camera\01_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StateBase.h">
-      <Filter>Framework\02_Common\DesignPattern\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StateManager.h">
-      <Filter>Framework\02_Common\DesignPattern\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LightDefine.h">
-      <Filter>Framework\03_Object\Light\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Light.h">
-      <Filter>Framework\03_Object\Light\02_Instance</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LightManager.h">
-      <Filter>Framework\03_Object\Light\01_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Stage.h">
-      <Filter>Framework\03_Object\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EffectDefine.h">
-      <Filter>Framework\05_Resource\Effect\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EffectBase.h">
-      <Filter>Framework\05_Resource\Effect\01_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EffectManager.h">
-      <Filter>Framework\05_Resource\Effect\02_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SoundDefine.h">
-      <Filter>Framework\05_Resource\Sound\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SoundBase.h">
-      <Filter>Framework\05_Resource\Sound\01_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SoundManager.h">
-      <Filter>Framework\05_Resource\Sound\02_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Font.h">
-      <Filter>Framework\05_Resource\Font</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StageDefine.h">
-      <Filter>Framework\03_Object\Stage\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StageObject.h">
-      <Filter>Framework\03_Object\Stage\02_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StageObjectManager.h">
-      <Filter>Framework\03_Object\Stage\01_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Base.h">
-      <Filter>Framework\06_Decoration\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Canvas.h">
-      <Filter>Framework\06_Decoration\UI\00_Canvas</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Manager.h">
-      <Filter>Framework\06_Decoration\UI\02_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Text.h">
-      <Filter>Framework\06_Decoration\UI\03_Text</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Image.h">
-      <Filter>Framework\06_Decoration\UI\04_Image</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Button.h">
-      <Filter>Framework\06_Decoration\UI\05_Button</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Slider.h">
-      <Filter>Framework\06_Decoration\UI\07_Slider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Gauge.h">
-      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_BillBoard.h">
-      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_BillBorad_Numeric.h">
-      <Filter>Framework\06_Decoration\UI\08_BillBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Subtone.h">
-      <Filter>Framework\06_Decoration\UI\01_Subtone</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\gauge.h">
-      <Filter>Framework\06_Decoration\UI\06_Gauge</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI_Define.h">
-      <Filter>Framework\06_Decoration\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BlurScreen.h">
-      <Filter>Framework\06_Decoration\BlurScren</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Locus.h">
-      <Filter>Framework\06_Decoration\Locus</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Component.h">
-      <Filter>Framework\04_Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Animator.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\CollisionObserver.h">
-      <Filter>Framework\04_Component\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ColliderBase.h">
-      <Filter>Framework\04_Component\Collider\04_Shape\00_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ColliderSphere.h">
-      <Filter>Framework\04_Component\Collider\04_Shape\01_Sphere</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\CollisionData.h">
-      <Filter>Framework\04_Component\Collider\01_Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\CollisionDefine.h">
-      <Filter>Framework\04_Component\Collider\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\CollisionFunc.h">
-      <Filter>Framework\04_Component\Collider\03_Function</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\CollisionManager.h">
-      <Filter>Framework\04_Component\Collider\02_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ColliderModel.h">
-      <Filter>Framework\04_Component\Collider\04_Shape\02_Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ColliderCapsule.h">
-      <Filter>Framework\04_Component\Collider\04_Shape\03_Capsule</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\MaterialRenderer.h">
-      <Filter>Framework\04_Component\MaterialRender</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\MotionBlur.h">
-      <Filter>Framework\04_Component\MotionBlur</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Physics.h">
-      <Filter>Framework\04_Component\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ShadowCircle.h">
-      <Filter>Framework\04_Component\ShadowCircle</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ShadowMap.h">
-      <Filter>Framework\06_Decoration\ShadowMap</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Shake.h">
-      <Filter>Framework\04_Component\Shake</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behavior\BehaviorData.h">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behavior\BehaviorDecorator.h">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behavior\BehaviorNode.h">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behavior\BehaviorTask.h">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behavior\BehaviorTree.h">
-      <Filter>Framework\02_Common\DesignPattern\Behavior</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\gameObject.h">
-      <Filter>Framework\01_Library</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SensiSetting.h">
-      <Filter>Framework\02_Common\System\SettingManager\01_SensiSetting</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VolumeSetting.h">
-      <Filter>Framework\02_Common\System\SettingManager\02_VolumeSetting</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SettingBase.h">
-      <Filter>Framework\02_Common\System\SettingManager\00_SettingBase</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AnimationEvent.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\settings_json.h">
-      <Filter>Framework\02_Common\System\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\settings_ini.h">
-      <Filter>Framework\02_Common\System\Ini</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TinyFSM.h">
-      <Filter>Framework\02_Common\DesignPattern\TinyFSM</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaBase.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaManager.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Ball.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallAttribute.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallManager.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\WindowSetting.h">
-      <Filter>Framework\02_Common\System\Ini</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\FileUtil.h">
-      <Filter>Framework\02_Common\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Pool.h">
-      <Filter>Framework\02_Common\System\Pool</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BallRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\VectorJson.h">
-      <Filter>Framework\02_Common\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\PlayerController.h">
-      <Filter>Framework\04_Component\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CrystalFragment.h">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CrystalFragmentManager.h">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CrystalFragmentRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CrystalFragmentSpawner.h">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CrystalFragmentSpawnerRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaStamina.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaStaminaRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BloomManager.h">
-      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BloomRef.h">
-      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AIController.h">
-      <Filter>Framework\04_Component\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaDefineRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\DebugController.h">
-      <Filter>Framework\04_Component\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AttachedAnimation.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AnimationDefine.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Catcher.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CameraDefineRef.h">
-      <Filter>Framework\03_Object\Camera\00_Define</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaHP.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharaHPRef.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\AnimatorJson.h">
-      <Filter>Framework\04_Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Timeline.h">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Application">
-      <UniqueIdentifier>{4ccb7ab2-57ea-481a-8063-766de6f97404}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework">
-      <UniqueIdentifier>{93264608-86b6-4a8c-8ea2-9e6ae93daf11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration">
-      <UniqueIdentifier>{63ea5cd5-8bc1-42e4-934a-6c6187afa597}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\Fader">
-      <UniqueIdentifier>{d29f5f92-b96e-4472-9355-0d54896fc040}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\BlurScren">
-      <UniqueIdentifier>{2e3c961d-22fc-46d3-851a-e2845562c935}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI">
-      <UniqueIdentifier>{6c2d5fd0-1240-4556-847e-279aa8cf766f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\00_Canvas">
-      <UniqueIdentifier>{edfba44d-264a-4191-8569-619d6783f9a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\01_Subtone">
-      <UniqueIdentifier>{2b8daf66-30a9-4e93-a24a-738659ae5641}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\02_Manager">
-      <UniqueIdentifier>{f3ab863a-de38-4562-92a6-7c7e5ce70837}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\03_Text">
-      <UniqueIdentifier>{a49ab870-fafc-463a-aaef-1a3942d73e51}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\04_Image">
-      <UniqueIdentifier>{0ceabaf4-9db6-431f-9475-244cee0c3fa9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\05_Button">
-      <UniqueIdentifier>{faa71f62-7e25-46ab-b907-74760cea3f24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\06_Gauge">
-      <UniqueIdentifier>{2353c545-7d40-4a4b-80e0-29a23cf89e64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\07_Slider">
-      <UniqueIdentifier>{39d1a70e-f546-4537-b906-1019efc3781c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\UI\08_BillBoard">
-      <UniqueIdentifier>{fdb938d2-6a26-484a-a999-8c8fa643600a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\Locus">
-      <UniqueIdentifier>{eb5973f8-8734-4b7e-80c0-785393ebde2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\06_Decoration\ShadowMap">
-      <UniqueIdentifier>{b7d55271-683e-45f0-9531-5c3e23e20486}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\00_Scene">
-      <UniqueIdentifier>{fdfa1d2d-a98a-480e-95ed-8954d1c9392b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\00_Scene\99_Etc">
-      <UniqueIdentifier>{5dddece6-8bd3-459e-8675-ccfe468f0dc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\00_Scene\99_Etc\00_Base">
-      <UniqueIdentifier>{70952c0a-402e-4436-9f25-62d15a4623ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\00_Scene\99_Etc\01_Factory">
-      <UniqueIdentifier>{1a92ad38-68f0-4647-96af-64be0fe77666}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\00_Scene\99_Etc\02_Manager">
-      <UniqueIdentifier>{ff6ff7ce-1f1b-4db8-8eab-9d10fcbb33fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\01_Library">
-      <UniqueIdentifier>{e6de0a0e-a84b-4a11-836c-68c0991a4c3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\01_Library\ImGui">
-      <UniqueIdentifier>{2a55ea4b-2fd2-4005-86d3-70fc4d595c2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\01_Library\MagicEnum">
-      <UniqueIdentifier>{fb312d9e-2d0c-481b-b25d-05ea7e7c78fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common">
-      <UniqueIdentifier>{2dc1ccd8-1a67-4a8b-b509-3e4eec2d426e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Time">
-      <UniqueIdentifier>{fc3a04e8-f1c5-4424-8af9-1809edb95c1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\DesignPattern">
-      <UniqueIdentifier>{f9f584ad-3a75-4655-9db5-c1247dae32d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\DesignPattern\StateMachine">
-      <UniqueIdentifier>{6abc0e31-dfe2-4dec-ba6d-ae4b790dbcec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\DesignPattern\Behavior">
-      <UniqueIdentifier>{4695b629-51aa-4eb9-a04c-eb9ca096e222}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\DesignPattern\TinyFSM">
-      <UniqueIdentifier>{68720444-f829-43fb-a413-61c93727d781}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System">
-      <UniqueIdentifier>{3ff7a959-2e87-4b5e-946e-75ba96a8c0ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\ResourceLoader">
-      <UniqueIdentifier>{6f17a64d-cb86-4a5a-a530-d35e093980e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\CsvReader">
-      <UniqueIdentifier>{7a89a4bf-348f-4925-b185-33c499268f90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\LoadScreen">
-      <UniqueIdentifier>{e5cf3a1b-7ff3-4098-9819-1cba40836813}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\SystemManager">
-      <UniqueIdentifier>{c9487f0f-4d0f-471e-9549-b0287f824d0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Input">
-      <UniqueIdentifier>{9815e6a4-ccff-484b-b238-3dc93761e16f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Input\01_PadController">
-      <UniqueIdentifier>{aed03f8b-43fa-4f28-9bfa-d22ce4499511}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Input\00_KeyController">
-      <UniqueIdentifier>{891e4d4e-10b5-4e60-a2da-0f311e966c09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Input\02_MouseController">
-      <UniqueIdentifier>{eb8983fb-95a0-4284-a45f-c93d767a558b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\SettingManager">
-      <UniqueIdentifier>{e955fcc9-28f0-48a3-857e-0e5671500fca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\SettingManager\00_SettingBase">
-      <UniqueIdentifier>{36bddec0-e412-4eff-b9ec-96d248f19921}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\SettingManager\01_SensiSetting">
-      <UniqueIdentifier>{da95223e-c616-406c-8153-2049069af81b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\SettingManager\02_VolumeSetting">
-      <UniqueIdentifier>{e81781c8-7ab1-47b0-ad24-2703517e0466}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Json">
-      <UniqueIdentifier>{f9cc9a35-2f5e-4aec-9bed-612b70668d90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Ini">
-      <UniqueIdentifier>{fba1957b-1467-4d28-9dfe-f47de500b818}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug">
-      <UniqueIdentifier>{089131b8-7f82-4af5-acd8-cd774b8bc764}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui">
-      <UniqueIdentifier>{61d177ba-6331-4abf-825e-1471dd65820e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\00_Manager">
-      <UniqueIdentifier>{9b28f1b5-8cfb-4ce2-8b33-e5e9dab17957}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\01_Root">
-      <UniqueIdentifier>{141535fa-5d3d-4961-9e99-5089b1e30b6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node">
-      <UniqueIdentifier>{fd50d0e2-559d-4c8d-b58e-6e2410cecec0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\00_Base">
-      <UniqueIdentifier>{002b8872-87af-4937-81c9-4351eb8695e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\01_Text">
-      <UniqueIdentifier>{109375b8-61cd-4729-bd34-48a7daa92bb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\02_SliderInt">
-      <UniqueIdentifier>{76b7f8d6-8528-4171-b08c-c0bf16a62876}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\03_SliderFloat">
-      <UniqueIdentifier>{14be2261-3482-433c-acaf-6c38cdc54f41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\04_Button">
-      <UniqueIdentifier>{65ce08fa-8e61-4013-85d5-52d3fc5e3395}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\05_CheckBox">
-      <UniqueIdentifier>{28bb3be3-caa3-467b-8e9f-08aad5c2655e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\06_DropDown">
-      <UniqueIdentifier>{19149207-2c8c-4daf-9b86-f8f7ee09c749}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\07_Space">
-      <UniqueIdentifier>{f1281586-0dae-4993-a61d-48ea28ce0988}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\08_ColorEdit4">
-      <UniqueIdentifier>{1ff0525c-22ed-4381-af56-8a5069cd80d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\02_Node\09_Children">
-      <UniqueIdentifier>{15848ab7-675a-4304-8180-37f55ae5ea40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\ImGui\03_Func">
-      <UniqueIdentifier>{d5b461c6-ae19-49c7-934e-56773b00ef21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Debug\DebugScreen">
-      <UniqueIdentifier>{259a0b0b-c3b8-4691-9857-1196de8dbb62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\Util">
-      <UniqueIdentifier>{e495948d-dc34-4eae-8fb7-6b903585d9aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object">
-      <UniqueIdentifier>{53e2f9d1-a09b-421e-bc7f-f7a3e2732549}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Camera">
-      <UniqueIdentifier>{2ffb8276-8822-44ec-afd3-7797ec172dc1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Camera\00_Define">
-      <UniqueIdentifier>{ff0677f9-60ca-41f4-896e-69414c4c8b7d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Camera\01_Manager">
-      <UniqueIdentifier>{2a9ea63a-39a7-410d-b26d-99853998ab9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Light">
-      <UniqueIdentifier>{4336ddff-c523-42dd-a27e-6a8d2fa5047b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Light\00_Define">
-      <UniqueIdentifier>{cbfce82f-b372-4fe3-b27c-081669fd870a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Light\01_Manager">
-      <UniqueIdentifier>{395c6887-9d27-4f85-86c4-6e44147a410e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Light\02_Instance">
-      <UniqueIdentifier>{62d28d0e-1b5a-418d-af60-7e4cc101bf3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Object3D">
-      <UniqueIdentifier>{61033f1c-888b-4699-879c-adb569a29e76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Object2D">
-      <UniqueIdentifier>{1d658d49-d878-431f-b7ed-602bfc247155}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Stage">
-      <UniqueIdentifier>{46e86fe6-62d3-4087-8516-662511aea65c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Stage\00_Define">
-      <UniqueIdentifier>{98accd05-5796-41c0-be2f-95b773c383ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Stage\01_Manager">
-      <UniqueIdentifier>{b10e8a95-4dd0-4c23-8693-95720177080c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\03_Object\Stage\02_Base">
-      <UniqueIdentifier>{4a62c368-ab7d-4d81-8fd0-75c2dbb61861}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component">
-      <UniqueIdentifier>{a476a6ff-2298-4863-bcfa-f5eeb7f008b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Animator">
-      <UniqueIdentifier>{0aeacd9f-c985-43f7-acef-5025da07204a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider">
-      <UniqueIdentifier>{4ede321b-41e4-478d-9a9d-8512984277df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\00_Define">
-      <UniqueIdentifier>{970a72b2-153b-4e4b-ab07-92cc697f6df9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\01_Data">
-      <UniqueIdentifier>{fc168818-2480-4313-aaa4-94aaf48205c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\02_Manager">
-      <UniqueIdentifier>{e5eee45a-3ff5-4a3e-affb-4bdae5e298df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\03_Function">
-      <UniqueIdentifier>{b15b64d0-b2b8-48db-975a-0c360ec5b79a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\04_Shape">
-      <UniqueIdentifier>{490245fe-2ee6-4066-b303-407823628928}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\04_Shape\00_Base">
-      <UniqueIdentifier>{e7b6d32f-17a4-463c-9b63-e6a7062a79a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\04_Shape\01_Sphere">
-      <UniqueIdentifier>{10c32150-b7a2-4ea5-907b-bb78ddf4a7b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\04_Shape\02_Model">
-      <UniqueIdentifier>{1eee7873-6c6b-432b-85e5-8e9628473c50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Collider\04_Shape\03_Capsule">
-      <UniqueIdentifier>{cb6b5ba9-7516-45c2-a259-5d44ee47a317}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\MaterialRender">
-      <UniqueIdentifier>{4b10e910-6714-443c-85c3-bd19dadbb895}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\MotionBlur">
-      <UniqueIdentifier>{ec5b622a-8689-4201-b4a5-346e126af727}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Physics">
-      <UniqueIdentifier>{74088bb6-c15d-4a32-90f8-584c82fa2578}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Shake">
-      <UniqueIdentifier>{21d85508-00bd-42bd-8969-5dceee51d109}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\ShadowCircle">
-      <UniqueIdentifier>{8b2fd2de-94d7-4145-93c7-8ab09dd108c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource">
-      <UniqueIdentifier>{1bf50d38-780b-4f12-ac7e-2a9f0a85eecd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Effect">
-      <UniqueIdentifier>{6da4e546-cbd6-45af-958d-b94e2e878bfa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Effect\00_Define">
-      <UniqueIdentifier>{60c7598d-a483-4333-b665-c35e72a29bf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Effect\01_Base">
-      <UniqueIdentifier>{2fe73c11-3bf4-4519-a368-db7a7f4b5395}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Effect\02_Manager">
-      <UniqueIdentifier>{af136e36-d096-4ff6-92c4-ba8c88b309fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Sound">
-      <UniqueIdentifier>{4413976e-9512-45b7-b090-e5e8af095587}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Sound\00_Define">
-      <UniqueIdentifier>{268e7d79-78c3-46a1-a064-3cacf2c4ba13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Sound\01_Base">
-      <UniqueIdentifier>{06d1f00f-97b2-4a0b-9e27-1d6feebb3ac0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Sound\02_Manager">
-      <UniqueIdentifier>{27603a83-df47-4fcc-ae00-7a606afb4906}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\05_Resource\Font">
-      <UniqueIdentifier>{c3a2bcf1-bb84-4680-8f4e-c382257405e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes">
-      <UniqueIdentifier>{2ea6c927-ee62-411c-bc2f-accc1345d832}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene">
-      <UniqueIdentifier>{8123ada4-16d1-40da-a8f3-3f9e93aafb30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\00_BootScene">
-      <UniqueIdentifier>{4e7a122b-01b5-4a1f-bdd8-381c4cb2403d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\01_TitleScene">
-      <UniqueIdentifier>{a52f9c67-9c6c-4376-8f4c-07a10ecbc3db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\Chara">
-      <UniqueIdentifier>{68c9b294-3a2a-4353-b029-15f527993dce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\Ball">
-      <UniqueIdentifier>{b0efc5a8-5b17-4781-bd72-62919c5ee6c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\02_Common\System\Pool">
-      <UniqueIdentifier>{c45966fb-c2fc-423f-813a-8465f3229d87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\Crystal">
-      <UniqueIdentifier>{1a34abd5-72cd-44b7-9da8-d4df3fde1fa8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\PostEffect">
-      <UniqueIdentifier>{52c6bece-26c4-4d14-bf01-a287ceb90477}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\04_Component\Controller">
-      <UniqueIdentifier>{b20eb0a5-bc2a-4ae9-be4d-f5c47f71d029}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\Effect Json">
-      <UniqueIdentifier>{1c10eef4-390b-4b88-9463-bb50c53bbb94}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Application\Scenes\02_PlayScene\Chara\State">
-      <UniqueIdentifier>{8d52e50b-1e57-4040-be87-e6d412a180e9}</UniqueIdentifier>
+    <Filter Include="framework">
+      <UniqueIdentifier>{e683f13b-0a82-4520-b32d-53f870386cd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{20c30c82-bcde-45e8-ad9c-b70ab8a005da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json">
+      <UniqueIdentifier>{84cfafdb-40b7-45b9-ba17-f3b65ddf3c06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Ball">
+      <UniqueIdentifier>{742e9f08-383e-4875-8da3-2e9233fa7dc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Bloom">
+      <UniqueIdentifier>{8cdd50b2-0a77-419b-b61f-ccdcc686113a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Camera">
+      <UniqueIdentifier>{8d11bf74-b7d4-4b5e-96b8-a786b57146e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Chara">
+      <UniqueIdentifier>{ceaf7719-c9a4-446f-9fbf-c3451849e37b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Chara\State">
+      <UniqueIdentifier>{3a06e524-baf4-4aec-83f0-a6cfc8284ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Crystal">
+      <UniqueIdentifier>{65ac9693-e90e-4129-8e17-3e76c7338b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Effect">
+      <UniqueIdentifier>{ababca26-d96a-4dfa-a6ca-718606a18993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Stage">
+      <UniqueIdentifier>{0ccdbc49-f032-4694-8b26-0abde1fb6eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Img">
+      <UniqueIdentifier>{b62837c5-2aad-4478-9e5b-e992181220de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model">
+      <UniqueIdentifier>{d2849bcd-c292-4ff7-bbf4-bd4e661f1df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Ball">
+      <UniqueIdentifier>{0229f953-608b-45e5-b149-f9aa15b9193b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Ball\Texture">
+      <UniqueIdentifier>{4336f6e6-9b46-4331-8d79-51da4db6ef03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Chara">
+      <UniqueIdentifier>{0c584d27-b2aa-4418-926f-91b087680596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Chara\Textures">
+      <UniqueIdentifier>{32d647a5-3846-45a1-8bbd-a65212301fc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm">
+      <UniqueIdentifier>{9876de8e-0625-4352-9586-c09d3a9f64b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Stage">
+      <UniqueIdentifier>{e887aa77-bea1-4937-9d5e-7b434631d9c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Stage\Textures">
+      <UniqueIdentifier>{a995b368-c2c5-41e5-88de-9350969cbc94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Model\Stage\Normal">
+      <UniqueIdentifier>{97daf1a1-5b09-472a-83be-479d5b7ff688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Font">
+      <UniqueIdentifier>{99edc5d5-a4ea-4555-ab55-2118479572e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Effect">
+      <UniqueIdentifier>{2deb72ca-f43b-4bf5-aac9-da3afd93da19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Effect\images">
+      <UniqueIdentifier>{22055fc8-bf2d-4ae0-94c0-fb9648598b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Effect\materials">
+      <UniqueIdentifier>{cf7b0025-8c56-4a76-87e5-51c468f94807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Effect\models">
+      <UniqueIdentifier>{38516dc3-c5e8-4202-a3b2-70c1ff3778bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{3b647c42-2ea4-41e9-8a82-c6b5adc84730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\config">
+      <UniqueIdentifier>{f1c5cf1d-f587-42f9-9b8a-f324e61e203a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\reference">
+      <UniqueIdentifier>{cd153d6c-f528-4448-b924-1331f2914475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene">
+      <UniqueIdentifier>{69e2088c-b18c-4546-85bb-e7a122e06a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{444c5665-b81c-4ac2-842b-8f3dd7d07aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\reference\ball">
+      <UniqueIdentifier>{29484c4d-669d-46c2-9039-f3093202884b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\reference\bloom">
+      <UniqueIdentifier>{161bd572-c42d-4639-a418-b45b2723ea89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\reference\camera">
+      <UniqueIdentifier>{e58df279-e115-4fe6-8a5f-8da233f035f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\reference\chara">
+      <UniqueIdentifier>{99cf0f09-8583-4e45-84d1-f75511df35f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\reference\crystal">
+      <UniqueIdentifier>{9d847106-f2df-4609-9551-a3d4bb9330bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\boot">
+      <UniqueIdentifier>{c0b131bb-543a-4c78-8b25-c9c30ddd3100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common">
+      <UniqueIdentifier>{68f7722b-286d-47f0-80c4-f846dda2bdf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\play">
+      <UniqueIdentifier>{b405a94e-393f-4ffd-8e89-78982bd80453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\result">
+      <UniqueIdentifier>{973ef84f-fb75-4cc1-8ffc-d8ddaeb7d857}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\title">
+      <UniqueIdentifier>{d0709ba3-e5dc-461c-8c69-7cb2b1a8ac92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\camera">
+      <UniqueIdentifier>{f47c2a56-3375-4bc5-b88e-6bf2e480a1ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component">
+      <UniqueIdentifier>{12a6eac9-9833-4e86-8862-f3d27001fd58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\light">
+      <UniqueIdentifier>{95657954-cde5-489d-bd08-3c16e18a739a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\load_screen">
+      <UniqueIdentifier>{92fb5222-770d-4553-9e67-a32687f40070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\setting">
+      <UniqueIdentifier>{c90fc744-22f3-4ec3-b023-77f1a25d98e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\stage">
+      <UniqueIdentifier>{e2a2d00d-fdaa-4fec-815c-aec02038f31a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\system">
+      <UniqueIdentifier>{08dc3773-6735-4182-81f5-fb3629a236a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\animator">
+      <UniqueIdentifier>{20e9763a-c3ac-41a9-93c1-80c335cbde93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\collider">
+      <UniqueIdentifier>{2eb0b07d-0740-4f81-bb8a-14a7ee61dd6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\controller">
+      <UniqueIdentifier>{6bbe5dd0-d4bf-4578-8235-ecd9c4d5d58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\material_renderer">
+      <UniqueIdentifier>{583ea3de-17f1-430a-8912-3d2509bd4095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\motion_blur">
+      <UniqueIdentifier>{a432ae43-f5ef-4b5f-a029-714098d17a4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\physics">
+      <UniqueIdentifier>{f9e08051-c152-466d-a594-f365535c6b0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\shadow_circle">
+      <UniqueIdentifier>{0b1cdd87-4e2f-442d-aa58-7992b57718b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\component\shake">
+      <UniqueIdentifier>{3c62286f-c2dc-44c2-b858-f0ddfdc62da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\setting\sensi">
+      <UniqueIdentifier>{be42af5e-5323-4e6d-9395-6921636e15a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\setting\volume">
+      <UniqueIdentifier>{32a7d674-a243-4b8a-b493-58b84b7f1cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\setting\window">
+      <UniqueIdentifier>{53d42aaf-f22c-4fb7-9986-0479e47a4f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\play\ball">
+      <UniqueIdentifier>{5fc18a84-21ac-4f49-ae10-096d49843adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\play\catcher">
+      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\play\chara">
+      <UniqueIdentifier>{ba273b49-bf53-422e-8406-b5fe6f399fa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\play\crystal">
+      <UniqueIdentifier>{0068d998-e214-4429-a3f6-6c1a1149118f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\common\timeline">
+      <UniqueIdentifier>{7c6336b6-4a59-4049-a452-466774528beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\behavior_tree">
+      <UniqueIdentifier>{4f3324ab-fedb-4d08-b558-9b825ef6655e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\blur_screen">
+      <UniqueIdentifier>{03ecdd95-e1a1-4791-afb4-4a551217f1aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\debug">
+      <UniqueIdentifier>{8fc6aa50-77a1-4fd0-85f7-767628346dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\easing">
+      <UniqueIdentifier>{4b740f6b-3b95-4a8c-ab0d-ad5289f8309c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\fader">
+      <UniqueIdentifier>{d92449af-ba01-4b41-aea3-9e12c68ce9a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\file">
+      <UniqueIdentifier>{5c336293-689a-4a3b-a03a-728d0f7c4a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\font">
+      <UniqueIdentifier>{4c8e2f4e-703f-414f-a0b2-b0089e9a8c46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\fsm">
+      <UniqueIdentifier>{124d2723-de75-457d-9ae8-72867e6fddf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\fx">
+      <UniqueIdentifier>{fcaf01c9-2fab-4775-8c35-14639297f68b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\gauge">
+      <UniqueIdentifier>{08e58f87-8361-423d-b5cc-8affac38bf7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\input">
+      <UniqueIdentifier>{0e6b6ea9-d3b6-4835-a646-cd98d486695a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\locus">
+      <UniqueIdentifier>{5d40e210-e778-4497-bcb5-51fe486f656b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\math">
+      <UniqueIdentifier>{6d08f5bd-bf81-44be-9f82-89cbbb388c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\object2D">
+      <UniqueIdentifier>{f71aeffb-a267-41ef-93f1-7611f87b24c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\object3D">
+      <UniqueIdentifier>{72499c55-1dc3-41b4-b483-d44fd159805c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\pool">
+      <UniqueIdentifier>{a5cbf15c-e5c0-478f-addf-33d8cd856ffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\shadow_map">
+      <UniqueIdentifier>{1d1fb41d-4a3d-41ab-86a2-f5443c2be4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\sound">
+      <UniqueIdentifier>{a6849175-4842-4d27-8e07-9f67063ec337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\time">
+      <UniqueIdentifier>{5cd8abfb-5906-4be0-af6f-8fc949563de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\transform">
+      <UniqueIdentifier>{c2183fad-53af-4b8d-89c2-bc1048616ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\ui">
+      <UniqueIdentifier>{5905341f-27d0-4be3-8fb1-7bb9ed55d6a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\debug\imgui">
+      <UniqueIdentifier>{8cd09555-fb39-4971-8b9b-00551ef0015e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\file\csv">
+      <UniqueIdentifier>{6b21bb3b-5b9d-440a-bedb-12e85d4fb26a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\file\ini">
+      <UniqueIdentifier>{9c4f0b68-1596-42de-8f78-050f80108b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\file\json">
+      <UniqueIdentifier>{d4e01d01-a013-4f65-a8e0-9c0448b8926e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\file\resource_loader">
+      <UniqueIdentifier>{441aa548-bbdc-43bd-8df0-c66ecbbb8efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\fx\effect">
+      <UniqueIdentifier>{f1a47700-102c-462a-a4ad-05806d3384d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\fx\post_effect">
+      <UniqueIdentifier>{c2cbd526-937b-48d9-8ffe-2d6454a59af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\fx\post_effect\bloom">
+      <UniqueIdentifier>{8593c316-a1fc-4673-aa38-7f89bfce73a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\Json\Crystal\CrystalFragment.json">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </None>
-    <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
-      <Filter>Application\Scenes\02_PlayScene\Crystal</Filter>
-    </None>
-    <None Include="data\Json\Chara\CharaStamina.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    <None Include="data\Json\Ball\Ball.json">
+      <Filter>data\Json\Ball</Filter>
     </None>
     <None Include="data\Json\Bloom\Bloom.json">
-      <Filter>Application\Scenes\02_PlayScene\PostEffect</Filter>
+      <Filter>data\Json\Bloom</Filter>
     </None>
-    <None Include="data\Json\Chara\CharaDefine.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Success.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Blue.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Gray.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_NoColor.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Red.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Tornado.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Line.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
-      <Filter>Application\Scenes\02_PlayScene\Effect Json</Filter>
-    </None>
-    <None Include="data\Json\Ball\Ball.json">
-      <Filter>Application\Scenes\02_PlayScene\Ball</Filter>
-    </None>
-    <None Include="data\Json\Stage\Stage.json">
-      <Filter>Framework\03_Object\Stage</Filter>
-    </None>
-    <None Include="data\Json\Chara\CharaHP.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+    <None Include="data\Json\Camera\CameraDefine.json">
+      <Filter>data\Json\Camera</Filter>
     </None>
     <None Include="data\Json\Chara\State\ActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\Fall.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\Run.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
     </None>
     <None Include="data\Json\Chara\State\ActionIdleEmote.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\RunToActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
     </None>
     <None Include="data\Json\Chara\State\ActionIdleToJump.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Fall.json">
+      <Filter>data\Json\Chara\State</Filter>
     </None>
     <None Include="data\Json\Chara\State\FallToRoll.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
     </None>
     <None Include="data\Json\Chara\State\Roll.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
     </None>
     <None Include="data\Json\Chara\State\RollToActionIdle.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
     </None>
     <None Include="data\Json\Chara\State\RollToRun.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara\State</Filter>
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Run.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\RunToActionIdle.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\CharaDefine.json">
+      <Filter>data\Json\Chara</Filter>
+    </None>
+    <None Include="data\Json\Chara\CharaHP.json">
+      <Filter>data\Json\Chara</Filter>
+    </None>
+    <None Include="data\Json\Chara\CharaStamina.json">
+      <Filter>data\Json\Chara</Filter>
+    </None>
+    <None Include="data\Json\Crystal\CrystalFragment.json">
+      <Filter>data\Json\Crystal</Filter>
+    </None>
+    <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
+      <Filter>data\Json\Crystal</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Single_Line.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Single_Tornado.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Success.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Gray.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_NoColor.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Model\Ball\Ball.mv1">
+      <Filter>data\Model\Ball</Filter>
+    </None>
+    <None Include="data\Model\Chara\Ch06_nonPBR.mv1">
+      <Filter>data\Model\Chara</Filter>
+    </None>
+    <None Include="data\Model\Stage\Cube.mv1">
+      <Filter>data\Model\Stage</Filter>
+    </None>
+    <None Include="data\Model\Stage\Cube_col.mv1">
+      <Filter>data\Model\Stage</Filter>
+    </None>
+    <None Include="data\Model\Stage\Ground_000.mv1">
+      <Filter>data\Model\Stage</Filter>
+    </None>
+    <None Include="data\Model\Stage\Sky_000.mv1">
+      <Filter>data\Model\Stage</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready_Single_Dust.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready_Single_Dust.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready_Single_Line.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready_Single_Line.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready_Single_Tornado.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Ready_Single_Tornado.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Success.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Catch_Success.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_Blue.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_Blue.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_Gray.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_Gray.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_NoColor.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_NoColor.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_Red.efk">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\Hit_Red.efkefc">
+      <Filter>data\Effect</Filter>
+    </None>
+    <None Include="data\effect\models\Sphare.efkmodel">
+      <Filter>data\Effect\models</Filter>
+    </None>
+    <None Include="data\effect\models\Torus.efkmodel">
+      <Filter>data\Effect\models</Filter>
+    </None>
+    <None Include="data\effect\materials\Dissolve.efkmat">
+      <Filter>data\Effect\materials</Filter>
+    </None>
+    <None Include="data\effect\materials\Dissolve.efkmatd">
+      <Filter>data\Effect\materials</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
-      <Filter>Application\Scenes\02_PlayScene\Chara</Filter>
+      <Filter>data\Json\Chara</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\font\sazanami_mincho.ttf">
+      <Filter>data\Font</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\Model\Ball\texture\lizard.png">
+      <Filter>data\Model\Ball\Texture</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Diffuse.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Glossiness.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Normal.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Specular.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1002_Diffuse.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1002_Glossiness.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1002_Normal.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1002_Specular.png">
+      <Filter>data\Model\Chara\Textures\Ch06_nonPBR.fbm</Filter>
+    </Image>
+    <Image Include="data\Model\Stage\Textures\marble_1_basecolor.png">
+      <Filter>data\Model\Stage\Textures</Filter>
+    </Image>
+    <Image Include="data\Model\Stage\Textures\TX_SampleGame_Sky001_D.jpg">
+      <Filter>data\Model\Stage\Textures</Filter>
+    </Image>
+    <Image Include="data\Model\Stage\Normal\normal_mapping_normal_map.png">
+      <Filter>data\Model\Stage\Normal</Filter>
+    </Image>
+    <Image Include="data\effect\images\Distortion_wind.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\Distortion01.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\LaserMain02.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\NA_ball of light_001.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\NA_ball_002.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\NA_Barrier_003.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\NA_Basic hit_001.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\NA_Explosion_005.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\Particle_Hard.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\sq.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\effect\images\star.png">
+      <Filter>data\Effect\images</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="framework\app.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\main.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\sceneBase.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\sceneFactory.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\sceneManager.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\ball\BallRef.cpp">
+      <Filter>src\reference\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\bloom\BloomRef.cpp">
+      <Filter>src\reference\bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\camera\CameraDefineRef.cpp">
+      <Filter>src\reference\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\chara\CharaDefineRef.cpp">
+      <Filter>src\reference\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\chara\CharaHPRef.cpp">
+      <Filter>src\reference\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\chara\CharaStaminaRef.cpp">
+      <Filter>src\reference\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\crystal\CrystalFragmentRef.cpp">
+      <Filter>src\reference\crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\crystal\CrystalFragmentSpawnerRef.cpp">
+      <Filter>src\reference\crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\boot\bootScene.cpp">
+      <Filter>src\scene\boot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\camera\Camera.cpp">
+      <Filter>src\scene\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\camera\CameraDefineRef.cpp">
+      <Filter>src\scene\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\camera\CameraManager.cpp">
+      <Filter>src\scene\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\camera\CamState_Aim.cpp">
+      <Filter>src\scene\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\camera\CamState_Chase.cpp">
+      <Filter>src\scene\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\camera\CamState_Debug.cpp">
+      <Filter>src\scene\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\controller\AIController.cpp">
+      <Filter>src\scene\common\component\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\controller\DebugController.cpp">
+      <Filter>src\scene\common\component\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\controller\PlayerController.cpp">
+      <Filter>src\scene\common\component\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\ColliderBase.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\ColliderCapsule.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\ColliderModel.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\ColliderSphere.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\CollisionData.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\CollisionFunc.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\CollisionManager.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\collider\CollisionObserver.cpp">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\animator\AnimationEvent.cpp">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\animator\Animator.cpp">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\animator\AnimatorJson.cpp">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\animator\AttachedAnimation.cpp">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\material_renderer\MaterialRenderer.cpp">
+      <Filter>src\scene\common\component\material_renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\motion_blur\MotionBlur.cpp">
+      <Filter>src\scene\common\component\motion_blur</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\physics\Physics.cpp">
+      <Filter>src\scene\common\component\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\shake\Shake.cpp">
+      <Filter>src\scene\common\component\shake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\component\shadow_circle\ShadowCircle.cpp">
+      <Filter>src\scene\common\component\shadow_circle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\light\Light.cpp">
+      <Filter>src\scene\common\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\light\LightManager.cpp">
+      <Filter>src\scene\common\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\load_screen\LoadScreen.cpp">
+      <Filter>src\scene\common\load_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\setting\SettingBase.cpp">
+      <Filter>src\scene\common\setting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\setting\SettingManager.cpp">
+      <Filter>src\scene\common\setting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\setting\window\WindowSetting.cpp">
+      <Filter>src\scene\common\setting\window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\setting\volume\VolumeSetting.cpp">
+      <Filter>src\scene\common\setting\volume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\setting\sensi\SensiSetting.cpp">
+      <Filter>src\scene\common\setting\sensi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\stage\Stage.cpp">
+      <Filter>src\scene\common\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\stage\StageObject.cpp">
+      <Filter>src\scene\common\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\stage\StageObjectManager.cpp">
+      <Filter>src\scene\common\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\common\system\SystemManager.cpp">
+      <Filter>src\scene\common\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\playScene.cpp">
+      <Filter>src\scene\play</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\Ball.cpp">
+      <Filter>src\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\BallAttribute.cpp">
+      <Filter>src\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\BallManager.cpp">
+      <Filter>src\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\catcher\Catcher.cpp">
+      <Filter>src\scene\play\catcher</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaBase.cpp">
+      <Filter>src\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaHP.cpp">
+      <Filter>src\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaManager.cpp">
+      <Filter>src\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaStamina.cpp">
+      <Filter>src\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\crystal\CrystalFragment.cpp">
+      <Filter>src\scene\play\crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\crystal\CrystalFragmentManager.cpp">
+      <Filter>src\scene\play\crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp">
+      <Filter>src\scene\play\crystal</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\titleScene.cpp">
+      <Filter>src\scene\title</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\behavior_tree\BehaviorDecorator.cpp">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\behavior_tree\BehaviorNode.cpp">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\behavior_tree\BehaviorTask.cpp">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\behavior_tree\BehaviorTree.cpp">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\blur_screen\BlurScreen.cpp">
+      <Filter>src\util\blur_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\debugScreen.cpp">
+      <Filter>src\util\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiFunc.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiManager.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_Button.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_CheckBox.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_ColorEdit4.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_DropDown.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_SliderFloat.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_SliderInt.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_Space.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiNode_Text.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\debug\imgui\imGuiRoot.cpp">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\fader\Fader.cpp">
+      <Filter>src\util\fader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\FileUtil.cpp">
+      <Filter>src\util\file</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\resource_loader\resourceLoader.cpp">
+      <Filter>src\util\file\resource_loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\json\settings_json.cpp">
+      <Filter>src\util\file\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\json\VectorJson.cpp">
+      <Filter>src\util\file\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\ini\settings_ini.cpp">
+      <Filter>src\util\file\ini</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\csv\csvReader.cpp">
+      <Filter>src\util\file\csv</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\font\Font.cpp">
+      <Filter>src\util\font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\fsm\StateManager.cpp">
+      <Filter>src\util\fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\fx\effect\EffectBase.cpp">
+      <Filter>src\util\fx\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\fx\effect\EffectManager.cpp">
+      <Filter>src\util\fx\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\bloom\BloomManager.cpp">
+      <Filter>src\util\fx\post_effect\bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\gauge\gauge.cpp">
+      <Filter>src\util\gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\input\InputManager.cpp">
+      <Filter>src\util\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\input\KeyController.cpp">
+      <Filter>src\util\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\input\KeyDefine.cpp">
+      <Filter>src\util\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\input\MouseController.cpp">
+      <Filter>src\util\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\input\PadController.cpp">
+      <Filter>src\util\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\locus\Locus.cpp">
+      <Filter>src\util\locus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\math\Quaternion.cpp">
+      <Filter>src\util\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\math\Vector2.cpp">
+      <Filter>src\util\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\math\Vector3.cpp">
+      <Filter>src\util\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Base.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_BillBoard.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_BillBorad_Numeric.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Button.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Canvas.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Gauge.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Image.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Manager.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Slider.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Subtone.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\ui\UI_Text.cpp">
+      <Filter>src\util\ui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework\app.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\gameObject.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\myDxLib.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\sceneBase.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\sceneFactory.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\sceneManager.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\ball\BallRef.h">
+      <Filter>src\reference\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\bloom\BloomRef.h">
+      <Filter>src\reference\bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\camera\CameraDefineRef.h">
+      <Filter>src\reference\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\chara\CharaDefineRef.h">
+      <Filter>src\reference\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\chara\CharaHPRef.h">
+      <Filter>src\reference\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\chara\CharaStaminaRef.h">
+      <Filter>src\reference\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\crystal\CrystalFragmentRef.h">
+      <Filter>src\reference\crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\crystal\CrystalFragmentSpawnerRef.h">
+      <Filter>src\reference\crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\boot\bootScene.h">
+      <Filter>src\scene\boot</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\camera\Camera.h">
+      <Filter>src\scene\common\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\camera\CameraDefine.h">
+      <Filter>src\scene\common\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\camera\CameraDefineRef.h">
+      <Filter>src\scene\common\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\camera\CameraManager.h">
+      <Filter>src\scene\common\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\controller\AIController.h">
+      <Filter>src\scene\common\component\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\controller\DebugController.h">
+      <Filter>src\scene\common\component\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\controller\PlayerController.h">
+      <Filter>src\scene\common\component\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\ColliderBase.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\ColliderCapsule.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\ColliderModel.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\ColliderSphere.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\CollisionData.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\CollisionDefine.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\CollisionFunc.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\CollisionManager.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\collider\CollisionObserver.h">
+      <Filter>src\scene\common\component\collider</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\animator\AnimationEvent.h">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\animator\Animator.h">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\animator\AnimatorJson.h">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\animator\AttachedAnimation.h">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\animator\AnimationDefine.h">
+      <Filter>src\scene\common\component\animator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\material_renderer\MaterialRenderer.h">
+      <Filter>src\scene\common\component\material_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\motion_blur\MotionBlur.h">
+      <Filter>src\scene\common\component\motion_blur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\physics\Physics.h">
+      <Filter>src\scene\common\component\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\shake\Shake.h">
+      <Filter>src\scene\common\component\shake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\component\shadow_circle\ShadowCircle.h">
+      <Filter>src\scene\common\component\shadow_circle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\light\Light.h">
+      <Filter>src\scene\common\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\light\LightDefine.h">
+      <Filter>src\scene\common\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\light\LightManager.h">
+      <Filter>src\scene\common\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\load_screen\LoadScreen.h">
+      <Filter>src\scene\common\load_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\setting\SettingBase.h">
+      <Filter>src\scene\common\setting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\setting\SettingManager.h">
+      <Filter>src\scene\common\setting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\setting\window\WindowSetting.h">
+      <Filter>src\scene\common\setting\window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\setting\volume\VolumeSetting.h">
+      <Filter>src\scene\common\setting\volume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\setting\sensi\SensiSetting.h">
+      <Filter>src\scene\common\setting\sensi</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\stage\Stage.h">
+      <Filter>src\scene\common\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\stage\StageDefine.h">
+      <Filter>src\scene\common\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\stage\StageObject.h">
+      <Filter>src\scene\common\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\stage\StageObjectManager.h">
+      <Filter>src\scene\common\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\system\SystemManager.h">
+      <Filter>src\scene\common\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\playScene.h">
+      <Filter>src\scene\play</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\Ball.h">
+      <Filter>src\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\BallAttribute.h">
+      <Filter>src\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\BallManager.h">
+      <Filter>src\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\catcher\Catcher.h">
+      <Filter>src\scene\play\catcher</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaBase.h">
+      <Filter>src\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaHP.h">
+      <Filter>src\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaManager.h">
+      <Filter>src\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaStamina.h">
+      <Filter>src\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\crystal\CrystalFragment.h">
+      <Filter>src\scene\play\crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\crystal\CrystalFragmentManager.h">
+      <Filter>src\scene\play\crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h">
+      <Filter>src\scene\play\crystal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\titleScene.h">
+      <Filter>src\scene\title</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\common\timeline\TimeLine.h">
+      <Filter>src\scene\common\timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\behavior_tree\BehaviorData.h">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\behavior_tree\BehaviorDecorator.h">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\behavior_tree\BehaviorNode.h">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\behavior_tree\BehaviorTask.h">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\behavior_tree\BehaviorTree.h">
+      <Filter>src\util\behavior_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\blur_screen\BlurScreen.h">
+      <Filter>src\util\blur_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\debugScreen.h">
+      <Filter>src\util\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiFunc.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiManager.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_BeginChildren.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Button.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_CheckBox.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_ColorEdit4.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_DropDown.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_EndChildren.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_SliderFloat.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_SliderInt.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Space.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiNode_Text.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\debug\imgui\imGuiRoot.h">
+      <Filter>src\util\debug\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\easing\easing.h">
+      <Filter>src\util\easing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\easing\EasingUtils.h">
+      <Filter>src\util\easing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fader\Fader.h">
+      <Filter>src\util\fader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\FileUtil.h">
+      <Filter>src\util\file</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\resource_loader\resourceLoader.h">
+      <Filter>src\util\file\resource_loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\settings_json.h">
+      <Filter>src\util\file\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\VectorJson.h">
+      <Filter>src\util\file\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\ini\settings_ini.h">
+      <Filter>src\util\file\ini</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\csv\csvReader.h">
+      <Filter>src\util\file\csv</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\font\Font.h">
+      <Filter>src\util\font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fsm\StateBase.h">
+      <Filter>src\util\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fsm\StateManager.h">
+      <Filter>src\util\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fsm\TinyFSM.h">
+      <Filter>src\util\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\effect\EffectBase.h">
+      <Filter>src\util\fx\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\effect\EffectDefine.h">
+      <Filter>src\util\fx\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\effect\EffectManager.h">
+      <Filter>src\util\fx\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\bloom\BloomManager.h">
+      <Filter>src\util\fx\post_effect\bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\gauge\gauge.h">
+      <Filter>src\util\gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\input\InputManager.h">
+      <Filter>src\util\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\input\KeyController.h">
+      <Filter>src\util\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\input\KeyDefine.h">
+      <Filter>src\util\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\input\MouseController.h">
+      <Filter>src\util\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\input\PadController.h">
+      <Filter>src\util\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\locus\Locus.h">
+      <Filter>src\util\locus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Operations.h">
+      <Filter>src\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Quaternion.h">
+      <Filter>src\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Vector2.h">
+      <Filter>src\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Vector3.h">
+      <Filter>src\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Base.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_BillBoard.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_BillBorad_Numeric.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Button.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Canvas.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Define.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Gauge.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Image.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Manager.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Slider.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Subtone.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ui\UI_Text.h">
+      <Filter>src\util\ui</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

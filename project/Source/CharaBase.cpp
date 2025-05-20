@@ -377,9 +377,10 @@ void CharaBase::Move(const Vector3& dir)
 
 	if (m_CanMove)
 	{
+		const Vector3 normDir = dir.Norm();
 		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * Time::DeltaTimeLapseRate();	// 時間経過率を適応した移動速度
 
-		Vector3 velocity = dir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
+		Vector3 velocity = normDir * deltaTimeMoveSpeed * V3::HORIZONTAL;	// スティックの傾きの方向への速度
 
 		// 速度を適応させる
 		m_pPhysics->velocity.x = velocity.x;
@@ -439,9 +440,11 @@ void CharaBase::ThrowHomingBall()
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = forward + V3::SetY(0.4f);
 	//m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate), this);
-	m_pBall->ThrowHoming(velocity * 3000.0f, this);
+	m_pBall->ThrowHoming(velocity * 30.0f, this);
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
+
+	m_SubFSM->ChangeState(&CharaBase::SubStateAimToThrow); // ステートを変更
 }
 
 void CharaBase::GenerateBall()
@@ -945,6 +948,11 @@ void CharaBase::StateRollToRun(FSMSignal sig)
 		if (m_Animator->IsFinished())
 		{
 			m_FSM->ChangeState(&CharaBase::StateRun); // ステートを変更
+
+			m_Animator->Play("Run");
+
+			static const float RUN_FROM_ROLL_START = 10.0f;
+			m_Animator->SetCurrentFrame(RUN_FROM_ROLL_START);
 		}
 	}
 	break;

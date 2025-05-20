@@ -53,7 +53,6 @@ void PlayerController::Update() {
 
 	if (IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
 	{
-		chara->GenerateBall();
 		chara->ThrowHomingBall();
 	}
 

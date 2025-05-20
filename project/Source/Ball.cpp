@@ -188,18 +188,17 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 
 void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner)
 {
-	m_State = S_THROWN;
-	m_Owner = owner;
+	Throw(velocity, owner);
+
+	m_Physics->SetIsActive(false);
+
 	m_HomingPosition = transform->position + V3::SetY(100.0f);
 	m_HomingTarget = Vector3(0, 0, 1000);
-	m_Physics->velocity = velocity;
+	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算
 	Vector3 diff = m_HomingTarget - m_HomingPosition;
 	m_HomingPeriod = diff.Size() / m_Physics->velocity.Size();
-	m_Physics->SetGravity(V3::ZERO);
-	m_Physics->SetIsActive(false);
-	m_IsHoming = true;
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)

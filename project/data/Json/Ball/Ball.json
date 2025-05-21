@@ -9,6 +9,8 @@
     "Y": 0.0,
     "Z": 0.0
   },
-  "BouncinessDefault": 0.8,
-  "SpeedDefault": 100.0
+  "BouncinessDefault": 0.5,
+  "SpeedDefault": 100.0,
+  "Max": 50,
+  "LifeTimeMax": 2.5
 }

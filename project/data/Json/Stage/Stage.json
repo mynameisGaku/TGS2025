@@ -1,0 +1,403 @@
+{
+  "Objects": [
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 1600.0,
+        "y": 200.0,
+        "z": -1500.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.497787,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 1700.0,
+        "z": -4200.0
+      },
+      "Rotation": {
+        "x": 0.7853982,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 120.0,
+        "y": 1.0,
+        "z": 50.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": -800.0,
+        "y": 300.0,
+        "z": -800.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.785398066,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 5.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 1700.0,
+        "z": 4200.0
+      },
+      "Rotation": {
+        "x": 5.497787,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 120.0,
+        "y": 1.0,
+        "z": 50.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 800.0,
+        "y": 700.0,
+        "z": -800.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.497787,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 13.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": -1500.0,
+        "y": 200.0,
+        "z": -1400.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.785398066,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 4200.0,
+        "y": 1700.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.785398066
+      },
+      "Scale": {
+        "x": 50.0,
+        "y": 1.0,
+        "z": 120.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": -1500.0,
+        "y": 200.0,
+        "z": 1600.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.497787,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 1600.0,
+        "y": 200.0,
+        "z": 1500.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.785398066,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 1300.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.497787,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 1.0,
+        "z": 24.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 800.0,
+        "y": 300.0,
+        "z": 800.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.785398066,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 5.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 1800.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.57079637,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 5.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": -800.0,
+        "y": 700.0,
+        "z": 800.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.497787,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 13.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 300.0,
+        "z": -1800.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 5.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 1500.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.497787,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 50.0,
+        "y": 1.0,
+        "z": 50.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.785398066,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 1.0,
+        "z": 24.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": -1800.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.57079637,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 5.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 300.0,
+        "z": 1800.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 5.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": -4200.0,
+        "y": 1700.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.497787
+      },
+      "Scale": {
+        "x": 50.0,
+        "y": 1.0,
+        "z": 120.0
+      },
+      "IsCollision": true
+    },
+    {
+      "Type": "Cube",
+      "Position": {
+        "x": 0.0,
+        "y": 700.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.785398066,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.0,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "IsCollision": true
+    }
+  ]
+}

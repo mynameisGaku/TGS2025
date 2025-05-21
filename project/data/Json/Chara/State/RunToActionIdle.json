@@ -1,0 +1,73 @@
+{
+    "Animation": "RunToActionIdle",
+    "Events": [
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "End": 0.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 0.0,
+            "End": 5.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 50
+                }
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 5.0,
+            "End": 10.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 22
+                }
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 10.0,
+            "End": 17.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 8
+                }
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 17.0,
+            "End": 22.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 2
+                }
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 22.0,
+            "End": 27.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": -3
+                }
+            }
+        }
+    ]
+}

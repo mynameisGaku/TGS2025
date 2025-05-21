@@ -1,0 +1,28 @@
+{
+  "TeamNames": [
+    {
+      "Name": "Red"
+    },
+    {
+      "Name": "Blue"
+    }
+  ],
+
+  "GameModeDescs": [
+    {
+      "GameModeName": "1v1",
+      "PlayTimeMaxSec": 300,
+      "WinPointMax": 10
+    },
+    {
+      "GameModeName": "2v2",
+      "PlayTimeMaxSec": 450,
+      "WinPointMax": 10
+    },
+    {
+      "GameModeName": "FreeForAll",
+      "PlayTimeMaxSec": 600,
+      "WinPointMax": 10
+    }
+  ]
+}

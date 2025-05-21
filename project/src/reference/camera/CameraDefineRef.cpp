@@ -25,6 +25,9 @@ void CameraDefineRef::Load(bool ForceLoad)
 	m_RotX_Min		= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotX_Min", 0.0f, FILEKEY));
 	m_RotSpeedLimit	= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotSpeedLimit", 0.0f, FILEKEY));
 
+	m_ConeAngle = jsonLoader->GetOrDefault<float>("ConeAngle", 0.0f, FILEKEY);
+	m_ConeRange = jsonLoader->GetOrDefault<float>("ConeRange", 0.0f, FILEKEY);
+
 	m_OffsetDef = jsonLoader->GetOrDefault<Vector3>("OffsetDef", Vector3::Zero, FILEKEY);
 	m_TargetDef = jsonLoader->GetOrDefault<Vector3>("TargetDef", Vector3::Zero, FILEKEY);
 

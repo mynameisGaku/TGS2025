@@ -13,6 +13,7 @@
 
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/common/component/collider/CollisionFunc.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -47,6 +48,9 @@ void Camera::AimState(FSMSignal sig)
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
+
+		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision())
+			ChangeState(&Camera::ChaseState);
 
 		// 追従キャラのトランスフォーム
 		const Transform charaTrs = chara->transform->Global();

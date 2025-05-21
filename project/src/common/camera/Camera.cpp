@@ -68,6 +68,8 @@ void Camera::Reset() {
 
 void Camera::Update() {
 
+	cameraCone.transform = *transform;
+
 	if (fsm != nullptr)
 		fsm->Update();
 

@@ -6,6 +6,9 @@
     "RotX_Min": -85.0,
     "RotSpeedLimit": 13.0,
 
+    "ConeAngle": 60.0,
+    "ConeRange": 2000.0,
+
     "OffsetDef": {
         "X": 0.0,
         "Y": 100.0,

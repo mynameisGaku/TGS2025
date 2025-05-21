@@ -12,5 +12,4 @@ public:
 	void Draw() override;
 private:
 	BloomManager* m_BloomManager;
-	CrystalFragmentManager* fragM;
 };

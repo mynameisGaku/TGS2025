@@ -189,6 +189,7 @@
     <None Include="data\Json\Effect\Hit_Gray.json" />
     <None Include="data\Json\Effect\Hit_NoColor.json" />
     <None Include="data\Json\Effect\Hit_Red.json" />
+    <None Include="data\Json\Game\Game.json" />
     <None Include="data\Json\Stage\Stage.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
@@ -262,6 +263,7 @@
     <ClCompile Include="src\common\component\physics\Physics.cpp" />
     <ClCompile Include="src\common\component\shadow_circle\ShadowCircle.cpp" />
     <ClCompile Include="src\common\component\shake\Shake.cpp" />
+    <ClCompile Include="src\common\game\GameManager.cpp" />
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
@@ -282,6 +284,7 @@
     <ClCompile Include="src\reference\chara\CharaStaminaRef.cpp" />
     <ClCompile Include="src\reference\crystal\CrystalFragmentRef.cpp" />
     <ClCompile Include="src\reference\crystal\CrystalFragmentSpawnerRef.cpp" />
+    <ClCompile Include="src\reference\game\GameRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
@@ -411,6 +414,7 @@
     <ClInclude Include="src\common\component\physics\Physics.h" />
     <ClInclude Include="src\common\component\shadow_circle\ShadowCircle.h" />
     <ClInclude Include="src\common\component\shake\Shake.h" />
+    <ClInclude Include="src\common\game\GameManager.h" />
     <ClInclude Include="src\common\light\Light.h" />
     <ClInclude Include="src\common\light\LightDefine.h" />
     <ClInclude Include="src\common\light\LightManager.h" />
@@ -426,7 +430,7 @@
     <ClInclude Include="src\common\stage\StageObjectManager.h" />
     <ClInclude Include="src\common\system\SystemManager.h" />
     <ClInclude Include="src\common\timeline\TimeLine.h" />
-    <ClInclude Include="src\config\imgui\imguiConfig.h" />
+    <ClInclude Include="src\config\imgui\ImGuiConfig.h" />
     <ClInclude Include="src\reference\ball\BallRef.h" />
     <ClInclude Include="src\reference\bloom\BloomRef.h" />
     <ClInclude Include="src\reference\camera\CameraDefineRef.h" />
@@ -435,6 +439,7 @@
     <ClInclude Include="src\reference\chara\CharaStaminaRef.h" />
     <ClInclude Include="src\reference\crystal\CrystalFragmentRef.h" />
     <ClInclude Include="src\reference\crystal\CrystalFragmentSpawnerRef.h" />
+    <ClInclude Include="src\reference\game\GameRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ball\Ball.h" />
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />

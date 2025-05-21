@@ -29,23 +29,3 @@ void GameManager::init()
 
     m_pFsm->ChangeState(&GameManager::StateBegin);
 }
-
-void GameManager::StateBegin(FSMSignal sig)
-{
-}
-
-void GameManager::StateReady(FSMSignal sig)
-{
-}
-
-void GameManager::StatePlay(FSMSignal sig)
-{
-}
-
-void GameManager::StateGameOver(FSMSignal sig)
-{
-}
-
-void GameManager::StateEnd(FSMSignal sig)
-{
-}

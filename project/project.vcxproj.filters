@@ -292,23 +292,23 @@
     <Filter Include="vendor\nlohmann">
       <UniqueIdentifier>{018e2cbb-5005-487d-88ee-76377a6c0e95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\game">
-      <UniqueIdentifier>{76c973a3-226a-4422-afc6-48431de8b9d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\reference\game">
       <UniqueIdentifier>{809d120c-3dc6-485d-a933-b713b0f16263}</UniqueIdentifier>
     </Filter>
     <Filter Include="data\Json\Game">
       <UniqueIdentifier>{3e1dc93a-bc1c-467b-b8fd-9a21cf5d348b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\config\imgui">
+      <UniqueIdentifier>{65c66b3d-6e6c-4eab-bb4d-9a4550f22061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\game">
+      <UniqueIdentifier>{76c973a3-226a-4422-afc6-48431de8b9d8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src%28application%29\common\game\State Update">
       <UniqueIdentifier>{26a6f9b5-75e5-42d9-9e0d-18576e611248}</UniqueIdentifier>
     </Filter>
     <Filter Include="src%28application%29\common\game\State Draw">
       <UniqueIdentifier>{cca5ba3d-ef04-4150-bd1b-ba6f57ecc961}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src%28application%29\config\imgui">
-      <UniqueIdentifier>{65c66b3d-6e6c-4eab-bb4d-9a4550f22061}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1021,6 +1021,12 @@
     </ClCompile>
     <ClCompile Include="src\reference\game\GameRef.cpp">
       <Filter>src%28application%29\reference\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\game\state_draw\GameManager_StateDraw.cpp">
+      <Filter>src%28application%29\common\game\State Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\game\state_draw\GameManager_StateUpdate.cpp">
+      <Filter>src%28application%29\common\game\State Update</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

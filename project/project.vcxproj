@@ -264,6 +264,8 @@
     <ClCompile Include="src\common\component\shadow_circle\ShadowCircle.cpp" />
     <ClCompile Include="src\common\component\shake\Shake.cpp" />
     <ClCompile Include="src\common\game\GameManager.cpp" />
+    <ClCompile Include="src\common\game\state_draw\GameManager_StateDraw.cpp" />
+    <ClCompile Include="src\common\game\state_draw\GameManager_StateUpdate.cpp" />
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />

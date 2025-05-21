@@ -45,6 +45,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/reference/chara/CharaStaminaRef.h"
 #include "src/reference/crystal/CrystalFragmentRef.h"
 #include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+#include <src/reference/game/GameRef.h>
 
 #define CoGVersion (2.2)
 
@@ -171,6 +172,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	CHARASTAMINA_REF.Destroy();
 	CRYSTALFRAGMENT_REF.Destroy();
 	CRYSTALFRAGMENTSPAWNER_REF.Destroy();
+	GAME_REF.Destroy();
 	wSetting.Destroy();
 
 #ifdef IMGUI

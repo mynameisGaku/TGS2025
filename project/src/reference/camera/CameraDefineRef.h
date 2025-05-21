@@ -59,6 +59,7 @@ private:
 	bool                m_WasLoad = false; // ロード済みか？ 重複回避用
 
 	CameraDefineRef() :
+		m_WasLoad(false),
 		m_Near(0.0f),
 		m_Far(0.0f),
 		m_Perspective(0.0f),
@@ -70,7 +71,9 @@ private:
 		m_OffsetDef(Vector3::Zero),
 		m_TargetDef(Vector3::Zero),
 		m_OffsetChase(Vector3::Zero),
-		m_TargetChase(Vector3::Zero)
+		m_TargetChase(Vector3::Zero),
+		m_OffsetAim(Vector3::Zero),
+		m_TargetAim(Vector3::Zero)
 	{ /*DO NOTHING*/
 	}
 

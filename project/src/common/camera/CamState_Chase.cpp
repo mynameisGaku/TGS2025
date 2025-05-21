@@ -58,7 +58,7 @@ void Camera::ChaseState(FSMSignal sig)
         
         transform->position = charaTrs.position;
 
-        ColCheckToTerrain();
+        //ColCheckToTerrain();
 
         transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
         Function::RotLimit(&transform->rotation.y);

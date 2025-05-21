@@ -27,8 +27,12 @@ void CameraDefineRef::Load(bool ForceLoad)
 
 	m_OffsetDef = jsonLoader->GetOrDefault<Vector3>("OffsetDef", Vector3::Zero, FILEKEY);
 	m_TargetDef = jsonLoader->GetOrDefault<Vector3>("TargetDef", Vector3::Zero, FILEKEY);
+
 	m_OffsetChase = jsonLoader->GetOrDefault<Vector3>("OffsetChase", Vector3::Zero, FILEKEY);
 	m_TargetChase = jsonLoader->GetOrDefault<Vector3>("TargetChase", Vector3::Zero, FILEKEY);
+
+	m_OffsetAim = jsonLoader->GetOrDefault<Vector3>("OffsetAim", Vector3::Zero, FILEKEY);
+	m_TargetAim = jsonLoader->GetOrDefault<Vector3>("TargetAim", Vector3::Zero, FILEKEY);
 
 	// ƒ[ƒh‚µ‚½‚æ
 	m_WasLoad = true;

@@ -426,6 +426,7 @@
     <ClInclude Include="src\common\stage\StageObjectManager.h" />
     <ClInclude Include="src\common\system\SystemManager.h" />
     <ClInclude Include="src\common\timeline\TimeLine.h" />
+    <ClInclude Include="src\config\imgui\imguiConfig.h" />
     <ClInclude Include="src\reference\ball\BallRef.h" />
     <ClInclude Include="src\reference\bloom\BloomRef.h" />
     <ClInclude Include="src\reference\camera\CameraDefineRef.h" />

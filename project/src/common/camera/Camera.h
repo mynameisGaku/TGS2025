@@ -8,6 +8,7 @@
 
 // ◇個別で必要な物
 #include "src/common/camera/CameraDefine.h"
+#include "src/common/component/collider/CollisionDefine.h"
 
 class StateManager;
 
@@ -215,6 +216,7 @@ private:
 	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
 	Vector3 target;		// カメラの注視点
 	Vector3 targetPrev;	// 一つ前のカメラの注視点
+	ColDefine::Cone cameraCone;
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報

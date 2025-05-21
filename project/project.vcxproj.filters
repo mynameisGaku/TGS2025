@@ -292,6 +292,9 @@
     <Filter Include="vendor\nlohmann">
       <UniqueIdentifier>{018e2cbb-5005-487d-88ee-76377a6c0e95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\config\imgui">
+      <UniqueIdentifier>{b5f00c9c-38a4-4eee-8cca-74da49e11c70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1518,6 +1521,9 @@
     </ClInclude>
     <ClInclude Include="src\util\easing\EasingUtils.h">
       <Filter>src%28application%29\util\easing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\config\imgui\imguiConfig.h">
+      <Filter>src%28application%29\config\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

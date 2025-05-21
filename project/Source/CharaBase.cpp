@@ -536,7 +536,7 @@ void CharaBase::StateHeavyAttack1(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->Play("Fall");
+		m_Animator->Play("AirSpin");// ダウンロードし直す！
 		m_Animator->PlaySub("mixamorig:Spine", "Stab");
 	}
 	break;

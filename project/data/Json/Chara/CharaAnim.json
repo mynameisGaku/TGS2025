@@ -1,6 +1,9 @@
 {
 	"Folder": "data/Animation/",
 	"Files": {
+		"AirSpin": {
+			"IsLoop": false
+		},
 		"Block": {
 			"IsLoop": true
 		},

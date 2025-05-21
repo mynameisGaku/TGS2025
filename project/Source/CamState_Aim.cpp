@@ -60,7 +60,7 @@ void Camera::AimState(FSMSignal sig)
 		transform->position = charaTrs.position;
 
 		// カメラの相対座標を設定
-		SetOffset(CAMERADEFINE_REF.m_OffsetChase);
+		SetOffset(CAMERADEFINE_REF.m_OffsetAim);
 
 		// カメラの注視点を設定
 		SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));

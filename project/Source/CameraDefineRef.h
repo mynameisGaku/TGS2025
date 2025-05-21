@@ -33,6 +33,9 @@ public:
 	Vector3 m_OffsetChase;	// 追尾カメラの既定相対座標
 	Vector3 m_TargetChase;	// 追尾カメラの既定注視座標
 
+	Vector3 m_OffsetAim;	// エイムカメラの既定相対座標
+	Vector3 m_TargetAim;	// エイムカメラの既定注視座標
+
 	void Load(bool ForceLoad = false);
 
 private:

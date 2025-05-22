@@ -13,6 +13,7 @@
 
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/common/component/collider/CollisionFunc.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -68,7 +69,8 @@ void Camera::ChaseState(FSMSignal sig)
 
         if (InputManager::Hold(KeyCode::RightClick) && targetChara != nullptr)
         {
-            ChangeState(&Camera::AimState);
+            if (ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision())
+                ChangeState(&Camera::AimState);
         }
     }
     break;

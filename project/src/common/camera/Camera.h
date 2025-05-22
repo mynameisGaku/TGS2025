@@ -11,6 +11,7 @@
 #include "src/common/component/collider/CollisionDefine.h"
 
 class StateManager;
+class CharaBase;
 
 namespace
 {
@@ -188,6 +189,8 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
+	const CharaBase* TargetChara() const { return targetChara; }
+
 	//================================================================================
 	// ▼ステート
 
@@ -222,4 +225,5 @@ private:
 	CsvReader* cameraWork;		// カメラ演出情報
 	int m_CharaIndex;			// キャラクターの番号
 
+	const CharaBase* targetChara;
 };

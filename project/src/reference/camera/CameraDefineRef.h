@@ -56,7 +56,7 @@ public:
 
 private:
 
-	bool                m_WasLoad = false; // ロード済みか？ 重複回避用
+	bool                m_WasLoad; // ロード済みか？ 重複回避用
 
 	CameraDefineRef() :
 		m_WasLoad(false),

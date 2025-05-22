@@ -41,6 +41,8 @@ Camera::Camera() {
 	cameraCone.range = CAMERADEFINE_REF.m_ConeRange;
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
+	targetChara = nullptr;
+
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 
@@ -68,6 +70,8 @@ void Camera::Reset() {
 
 void Camera::Update() {
 
+	cameraCone.transform = *transform;
+
 	if (fsm != nullptr)
 		fsm->Update();
 
@@ -77,7 +81,6 @@ void Camera::Update() {
 void Camera::Draw() {
 
 	Object3D::Draw();
-
 
 	MATRIX mShakeTrs = MGetIdent();	// êUìÆópçsóÒ
 
@@ -97,7 +100,13 @@ void Camera::Draw() {
 
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 
-	DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
+	//Vector3 coneLineL = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(Math::DegToRad(cameraCone.angle * 0.5f)) * globalTrs.RotationMatrix();
+	//Vector3 coneLineR = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(Math::DegToRad(cameraCone.angle * -0.5f)) * globalTrs.RotationMatrix();
+	//DrawLine3D(cameraPos, cameraPos + coneLineL, 0xFF0000);
+	//DrawLine3D(cameraPos, cameraPos + coneLineR, 0xFF0000);
+	//DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
+	//DrawCapsule3D(cameraPos, cameraPos + coneLineL, 8.0f, 16, 0xFFFF00, 0xFFFFFF, false);
+	//DrawCapsule3D(cameraPos, cameraPos + coneLineR, 8.0f, 16, 0x00FFFF, 0xFFFFFF, false);
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {

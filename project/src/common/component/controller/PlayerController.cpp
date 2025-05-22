@@ -35,25 +35,33 @@ void PlayerController::Update() {
 	// ToDo : ƒ`ƒƒ[ƒW–¢‘Î‰ž‚È‚Ì‚Å‘Î‰ž‚³‚¹‚é‚’
 	if (not chara->IsHoldingBall())
 	{
-		if (chara->IsChargingBall())
+		if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin) or
+			IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
 		{
-			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
-			{
-				chara->GenerateBall();
-			}
+			chara->GenerateBall();
 		}
 	}
 	else
 	{
-		if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin))
+		if (not chara->IsChargingBall())
 		{
-			chara->ThrowBallForward();
+			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin) or
+				IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
+			{
+				chara->StartBallCharge();
+			}
 		}
-	}
-
-	if (IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
-	{
-		chara->ThrowHomingBall();
+		else
+		{
+			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Ended))
+			{
+				chara->ThrowBallForward();
+			}
+			if (IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Ended))
+			{
+				chara->ThrowHomingBall();
+			}
+		}
 	}
 
 	////////////////////////////////////////////////////

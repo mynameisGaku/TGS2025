@@ -47,6 +47,7 @@
 		},
 		"AirSpin": {
 			"IsFixedRoot": {
+				"X": true,
 				"Z": true
 			}
 		},

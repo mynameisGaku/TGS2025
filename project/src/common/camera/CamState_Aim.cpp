@@ -13,6 +13,7 @@
 
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/common/component/collider/CollisionFunc.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -43,8 +44,13 @@ void Camera::AimState(FSMSignal sig)
 
 		// 注視するキャラ
 		const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);
-		if (targetChara == nullptr)
+		if (targetChara == nullptr) {
+			ChangeState(&Camera::ChaseState);
 			return;
+		}
+
+		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision())
+			ChangeState(&Camera::ChaseState);
 
 		// 追従キャラのトランスフォーム
 		const Transform charaTrs = chara->transform->Global();
@@ -58,7 +64,7 @@ void Camera::AimState(FSMSignal sig)
 		transform->position = charaTrs.position;
 
 		// カメラの相対座標を設定
-		SetOffset(CAMERADEFINE_REF.m_OffsetChase);
+		SetOffset(CAMERADEFINE_REF.m_OffsetAim);
 
 		// カメラの注視点を設定
 		SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));

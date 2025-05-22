@@ -2,6 +2,7 @@
 
 GameManager::GameManager()
 {
+    init();
 }
 
 GameManager::~GameManager()
@@ -23,9 +24,4 @@ void GameManager::init()
     m_GameModeDescs = GAME_REF.GameModeDescs;
     m_GameModeNames = GAME_REF.GameModeNames;
     m_TeamNames     = GAME_REF.TeamNames;
-
-    m_pFsm = new TinyFSM<GameManager>(this);
-    m_pFsmDraw = new TinyFSM<GameManager>(this);
-
-    m_pFsm->ChangeState(&GameManager::StateBegin);
 }

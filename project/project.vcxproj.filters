@@ -304,10 +304,10 @@
     <Filter Include="src%28application%29\common\game">
       <UniqueIdentifier>{76c973a3-226a-4422-afc6-48431de8b9d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\game\State Update">
-      <UniqueIdentifier>{26a6f9b5-75e5-42d9-9e0d-18576e611248}</UniqueIdentifier>
+    <Filter Include="src%28application%29\common\game\user_data">
+      <UniqueIdentifier>{0cf628b4-6331-4377-b7a6-4875d0e2ed22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\game\State Draw">
+    <Filter Include="src%28application%29\common\game\state">
       <UniqueIdentifier>{cca5ba3d-ef04-4150-bd1b-ba6f57ecc961}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1022,11 +1022,11 @@
     <ClCompile Include="src\reference\game\GameRef.cpp">
       <Filter>src%28application%29\reference\game</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\game\state_draw\GameManager_StateDraw.cpp">
-      <Filter>src%28application%29\common\game\State Draw</Filter>
+    <ClCompile Include="src\common\game\state\GameManager_StateDraw.cpp">
+      <Filter>src%28application%29\common\game\state</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\game\state_draw\GameManager_StateUpdate.cpp">
-      <Filter>src%28application%29\common\game\State Update</Filter>
+    <ClCompile Include="src\common\game\state\GameManager_StateUpdate.cpp">
+      <Filter>src%28application%29\common\game\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1686,6 +1686,9 @@
     </ClInclude>
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp">
       <Filter>vendor\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\game\user_data\UserData.h">
+      <Filter>src%28application%29\common\game\user_data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

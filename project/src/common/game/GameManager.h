@@ -7,6 +7,9 @@
 #include "src/util/fsm/TinyFSM.h"
 #include "src/reference/game/GameRef.h"
 
+/// <summary>
+/// ゲームの進行を管理するマネージャー
+/// </summary>
 class GameManager : public GameObject
 {
 public:
@@ -20,22 +23,13 @@ private:
 
     void init();
 
-    void StateBegin(FSMSignal sig);
-    void StateReady(FSMSignal sig);
-    void StatePlay(FSMSignal sig);
-    void StateGameOver(FSMSignal sig);
-    void StateEnd(FSMSignal sig);
-
-    void StateDrawBegin(FSMSignal sig);
-    void StateDrawReady(FSMSignal sig);
-    void StateDrawPlay(FSMSignal sig);
-    void StateDrawGameOver(FSMSignal sig);
-    void StateDrawEnd(FSMSignal sig);
-
-    TinyFSM<GameManager>* m_pFsm;
-    TinyFSM<GameManager>* m_pFsmDraw;
+    // 今後使いそう
+    //std::list<class UserData*> m_UserDatas;
 
     std::unordered_map<std::string, GAME_MODE_DESC> m_GameModeDescs;
     std::vector<std::string>                        m_GameModeNames;
     std::vector<std::string>                        m_TeamNames;
+
+    std::string                                     m_CurrentGameMode;
+
 };

@@ -16,6 +16,7 @@
 #include "src/util/Utils.h"
 #include "src/common/timeline/Timeline.h"
 #include "src/util/file/json/VectorJson.h"
+#include "src/common/camera/CameraManager.h"
 
 using namespace KeyDefine;
 
@@ -440,7 +441,8 @@ void CharaBase::ThrowHomingBall()
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = forward + Vector3::SetY(0.4f);
 	//m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate), this);
-	m_pBall->ThrowHoming(velocity * 30.0f, this);
+	const CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
+	m_pBall->ThrowHoming(velocity * 30.0f, this, targetChara);
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
 

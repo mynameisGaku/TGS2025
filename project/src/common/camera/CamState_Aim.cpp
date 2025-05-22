@@ -43,43 +43,38 @@ void Camera::AimState(FSMSignal sig)
 			return;
 
 		// 注視するキャラ
-		const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);
+		targetChara = charaM->TargetChara(m_CharaIndex);
 		if (targetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
-		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision())
+		// コーンの範囲に入って居ない場合
+		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision()) {
+			bool inCone = ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision();
+			targetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
+			return;
+		}
 
-		// 追従キャラのトランスフォーム
-		const Transform charaTrs = chara->transform->Global();
+		const Transform charaTrs = chara->transform->Global();			// 追従キャラのトランスフォーム
+		const Transform targetTrs = targetChara->transform->Global();	// 注視キャラのトランスフォーム
 
-		// 注視キャラのトランスフォーム
-		const Transform targetTrs = targetChara->transform->Global();
-
-		// 注視点の差異
-		const Vector3 targetDiff = targetTrs.position + Vector3::SetY(100.0f) - target;
-
+		// カメラ座標と追従キャラ座標を一致させる
 		transform->position = charaTrs.position;
 
 		// カメラの相対座標を設定
 		SetOffset(CAMERADEFINE_REF.m_OffsetAim);
 
+		const Vector3 targetDiff = targetTrs.position + Vector3::SetY(100.0f) - target;	// 注視点の差異
+
 		// カメラの注視点を設定
 		SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
 
-		// 注視キャラとカメラの座標の差異
-		const Vector3 diffPos = targetTrs.position - transform->Global().position;
-
-		// カメラから注視キャラへの角度
-		float targetRot = atan2f(diffPos.x, diffPos.z);
-
-		// 現在の向きと注視キャラへの角度の差異
-		float diffRot = targetRot - transform->rotation.y;
-
-		// カメラのX軸回転値
-		const float ROT_X = Math::DegToRad(-20.0f);
+		const Vector3 diffPos = targetTrs.position - transform->Global().position;	// 注視キャラとカメラの座標の差異
+		float targetRot = atan2f(diffPos.x, diffPos.z);		// カメラから注視キャラへの角度
+		float diffRot = targetRot - transform->rotation.y;	// 現在の向きと注視キャラへの角度の差異
+		const float ROT_X = Math::DegToRad(-20.0f);			// カメラのX軸回転値
 
 		// 回転角度を適応
 		Function::RotLimit(&diffRot);
@@ -87,12 +82,14 @@ void Camera::AimState(FSMSignal sig)
 		transform->rotation.y += diffRot * 0.1f;
 		Function::RotLimit(&transform->rotation.y);
 
+		// カメラとキャラの向きを揃える
 		chara->transform->rotation.y = transform->rotation.y;
 
 		//ColCheckToTerrain();
 
 		if (not InputManager::Hold(KeyCode::RightClick))
 		{
+			targetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 	}
@@ -104,6 +101,7 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
+		targetChara = nullptr;
 		canMove = true;
 	}
 	break;

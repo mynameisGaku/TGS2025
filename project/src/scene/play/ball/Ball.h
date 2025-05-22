@@ -39,7 +39,7 @@ public:
 
 	void Throw(const Vector3& velocity);
 	void Throw(const Vector3& velocity, CharaBase*owner);
-	void ThrowHoming(const Vector3& velocity, CharaBase* owner);
+	void ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target);
 	void HomingProcess();
 
 	State GetState() const { return m_State; }

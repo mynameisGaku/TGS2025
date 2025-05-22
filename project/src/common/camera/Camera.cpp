@@ -41,6 +41,8 @@ Camera::Camera() {
 	cameraCone.range = CAMERADEFINE_REF.m_ConeRange;
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
+	targetChara = nullptr;
+
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 

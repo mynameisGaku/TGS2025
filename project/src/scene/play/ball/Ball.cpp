@@ -186,14 +186,14 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 	m_Owner = owner;
 }
 
-void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner)
+void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target)
 {
 	Throw(velocity, owner);
 
 	m_Physics->SetIsActive(false);
 
 	m_HomingPosition = transform->position + Vector3::SetY(100.0f);
-	m_HomingTarget = Vector3(0, 0, 1000);
+	m_HomingTarget = (target == nullptr) ? Vector3(0, 0, 1000) : target->transform->position;
 	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算

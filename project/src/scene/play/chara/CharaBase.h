@@ -78,6 +78,13 @@ public:
 	// ▼ボール
 
 	/// <summary>
+	/// ボールを生成する。デバッグ用。
+	/// </summary>
+	void GenerateBall();
+
+	void StartBallCharge();
+
+	/// <summary>
 	/// ボールを投げる
 	/// </summary>
 	/// <param name="velocity"></param>
@@ -96,12 +103,6 @@ public:
     void ThrowHomingBall();
 
 	/// <summary>
-	/// ボールを生成する。
-	/// この関数を呼び出している間、ボールのチャージ率が上がる。
-	/// </summary>
-	void GenerateBall();
-
-	/// <summary>
 	/// ボールを持っているか？
 	/// </summary>
 	/// <returns></returns>
@@ -111,7 +112,7 @@ public:
 	/// チャージ中か？
 	/// </summary>
 	/// <returns></returns>
-	bool IsChargingBall() const { return not m_IsCharging; }
+	bool IsChargingBall() const { return m_IsCharging; }
 
 	Ball* LastBall() const { return m_pLastBall; }
 	void SetLastBall(Ball* ball) { m_pLastBall = ball; }
@@ -175,7 +176,6 @@ private:
 	friend class CharaManager;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	float			m_BallChargeRate;		// ボールのチャージ加速度
-	float			m_ChargeRateWatchDog;	// チャージ終了から何秒経ったかを監視する番犬
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
     BallManager*	m_pBallManager;			// ボールマネージャーのポインター

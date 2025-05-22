@@ -7,7 +7,7 @@
     "RotSpeedLimit": 13.0,
 
     "ConeAngle": 60.0,
-    "ConeRange": 2000.0,
+    "ConeRange": 3000.0,
 
     "OffsetDef": {
         "X": 0.0,

@@ -54,6 +54,7 @@ CharaBase::CharaBase()
 	m_CanMove				= true;
 	m_CanRot				= true;
 	m_IsMove				= false;
+	m_IsJumping				= false;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -100,10 +101,13 @@ CharaBase::~CharaBase()
 	OutputDebugString(output.c_str());
 
 	Function::DeletePointer(m_FSM);
+	Function::DeletePointer(m_SubFSM);
 	Function::DeletePointer(m_Timeline);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
+
+	Function::DeletePointer(m_EffectTransform);
 }
 
 void CharaBase::Init(std::string tag)
@@ -186,7 +190,6 @@ void CharaBase::Init(std::string tag)
 }
 
 void CharaBase::Update() {
-
 	HitGroundProcess();
 
 	// デバッグ機能
@@ -318,8 +321,10 @@ void CharaBase::HitGroundProcess() {
 
 		ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
 
+		static const float DOWN_OFFSET = 10.0f;
+
 		p1 = transform->Global().position + Vector3::SetY(37);
-		p2 = capsuleCol->OffsetWorld();
+		p2 = capsuleCol->OffsetWorld() - Vector3::SetY(DOWN_OFFSET);
 
 		const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
 
@@ -330,35 +335,36 @@ void CharaBase::HitGroundProcess() {
 			transform->position += pushVec;
 
 			// Y成分が上方向なら接地とみなす
-			if (pushVec.y > 0.1f)
+			if ((m_pPhysics->velocity.y <= 0.0f) and (pushVec.y > 0))
 			{
-				m_IsLanding = true;
+				land();
+				transform->position -= pushVec.Normalize() * DOWN_OFFSET;
 				m_pPhysics->velocity.y = 0.0f;
 				m_pPhysics->resistance.y = 0.0f;
-				m_pPhysics->SetGravity(Vector3::Zero);
-				m_pPhysics->SetFriction(FRICTION);
 			}
-			// Y成分が下方向なら頭上ヒット（天井にぶつかった）
-			else if (pushVec.y < -0.1f)
+			else
 			{
-				m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
+				m_IsLanding = false;
+
+				// Y成分が下方向なら頭上ヒット（天井にぶつかった）
+				if (pushVec.y < -0.1f)
+				{
+					m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
+					m_IsJumping = false;
+				}
 			}
 		}
 		else
 		{
-			// 衝突していなければ、通常の空中挙動へ
 			m_IsLanding = false;
+		}
+
+		// 衝突していなければ、通常の空中挙動へ
+		if (not m_IsLanding)
+		{
 			m_pPhysics->SetGravity(GRAVITY);
 			m_pPhysics->SetFriction(Vector3::Zero);
 		}
-	}
-
-	if (physics->velocity.y > 0)
-	{
-		physics->SetGravity(GRAVITY);
-		physics->SetFriction(Vector3::Zero);
-		m_IsLanding = false;
-		return;
 	}
 }
 
@@ -391,6 +397,7 @@ void CharaBase::Move(const Vector3& dir)
 void CharaBase::Jump()
 {
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
+	m_IsJumping = true;
 }
 
 void CharaBase::Slide()
@@ -583,10 +590,7 @@ void CharaBase::StateActionIdleToJump(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_Animator->IsFinished())
-		{
-			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
-		}
+		jumpUpdate();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -789,7 +793,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	{
 		if (m_IsLanding)
 		{
-			if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
+			if (m_IsMove)
 			{
 				m_FSM->ChangeState(&CharaBase::StateFallToRoll); // ステートを変更
 			}
@@ -1036,10 +1040,7 @@ void CharaBase::StateRunToJump(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_Animator->IsFinished())
-		{
-			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
-		}
+		jumpUpdate();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1410,11 +1411,23 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 
 //========================================================================
 
+void CharaBase::land()
+{
+	m_IsLanding = true;
+	m_IsJumping = false;
+	m_pPhysics->SetGravity(Vector3::Zero);
+	m_pPhysics->SetFriction(FRICTION);
+}
+
 void CharaBase::idleUpdate()
 {
-	if (m_pPhysics->velocity.y > 0.0f)
+	if (m_IsJumping)
 	{
 		m_FSM->ChangeState(&CharaBase::StateActionIdleToJump); // ステートを変更
+	}
+	else if (not m_IsLanding)
+	{
+		m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
 	}
 	else if (m_IsMove)
 	{
@@ -1424,15 +1437,19 @@ void CharaBase::idleUpdate()
 
 void CharaBase::runUpdate()
 {
-	if (m_pPhysics->velocity.y > 0.0f)
+	if (m_IsJumping)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToJump); // ステートを変更
 	}
-	if (not m_IsMove)
+	else if (not m_IsLanding)
+	{
+		m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+	}
+	else if (not m_IsMove)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToActionIdle); // ステートを変更
 	}
-	if (m_SlideTimer > 0.0f)
+	else if (m_SlideTimer > 0.0f)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToSlide); // ステートを変更
 	}
@@ -1486,6 +1503,19 @@ void CharaBase::catchUpdate()
 	{
 		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
 		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
+	}
+}
+
+void CharaBase::jumpUpdate()
+{
+	if (m_Animator->IsFinished())
+	{
+		m_IsJumping = false;
+	}
+
+	if (not m_IsJumping)
+	{
+		m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
 	}
 }
 

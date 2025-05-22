@@ -200,11 +200,15 @@ private:
 	bool			m_CanMove;				// 移動可能か
 	bool			m_CanRot;				// 回転可能か
 	bool			m_IsMove;				// 移動しようとしているか
+	bool			m_IsJumping;			// ジャンプ中か
+
+	void land();
 
 	void idleUpdate();
 	void runUpdate();
 	void slideUpdate();
 	void catchUpdate();
+	void jumpUpdate();
 
 	void getHit(Ball* hit);
 	

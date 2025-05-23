@@ -43,9 +43,9 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	// デバッグによってコントローラーを変える。
 #if FALSE
 	enemy->AddComponent<AIController>()->Init();
-#elif FALSE
-	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
 #elif TRUE
+	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
+#elif FALSE
 	enemy->AddComponent<PlayerController>()->Init(DX_INPUT_PAD2);
 #endif
 

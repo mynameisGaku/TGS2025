@@ -54,6 +54,10 @@ void PlayerController::Update() {
 			{
 				chara->ThrowHomingBall();
 			}
+			else if (InputManager::Push("Feint", padNumber))
+			{
+				chara->Feint();
+			}
 		}
 	}
 
@@ -93,7 +97,10 @@ void PlayerController::Update() {
 
 	// カメラの向きに応じたスティックの傾き
 	Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
-	chara->Move(stick);
+	if (stick.GetLengthSquared() > 0.0f)
+	{
+		chara->Move(stick);
+	}
 }
 
 Vector3 PlayerController::AnalogStick() {

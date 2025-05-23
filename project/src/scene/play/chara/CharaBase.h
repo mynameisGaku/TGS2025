@@ -103,6 +103,11 @@ public:
     void ThrowHomingBall();
 
 	/// <summary>
+	/// 投げるモーションだけ再生
+	/// </summary>
+	void Feint();
+
+	/// <summary>
 	/// ボールを持っているか？
 	/// </summary>
 	/// <returns></returns>
@@ -170,6 +175,7 @@ public:
 	void SubStateHold(FSMSignal sig);
 	void SubStateHoldToAim(FSMSignal sig);
 	void SubStateAimToThrow(FSMSignal sig);
+	void SubStateFeint(FSMSignal sig);
 	void SubStateCatch(FSMSignal sig);
 
 private:

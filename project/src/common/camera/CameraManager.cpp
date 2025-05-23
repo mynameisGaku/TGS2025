@@ -31,7 +31,8 @@ void CameraManager::Init() {
 	// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ
 	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
-	cameras->push_back(new Camera());
+	CreateCamera(true);
+	CreateCamera(false);
 
 #ifdef IMGUI
 	InitImGuiNode();
@@ -78,6 +79,14 @@ void CameraManager::Release() {
 	}
 
 	PtrUtil::SafeDelete(cameras);
+}
+
+void CameraManager::CreateCamera(bool view) {
+
+	if (cameras == nullptr)
+		return;
+
+	cameras->push_back(new Camera(view));
 }
 
 bool CameraManager::CheckNumber(const int& number) {

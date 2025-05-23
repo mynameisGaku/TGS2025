@@ -138,6 +138,11 @@ public:
 	/// </summary>
 	inline const CharaHP* GetHP() const { return m_pHP; }
 
+	/// <summary>
+	/// 
+	/// </summary>
+	inline const int CharaIndex() const { return m_Index; }
+
 	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);

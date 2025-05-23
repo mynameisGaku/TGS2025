@@ -55,7 +55,11 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
+	CameraManager::MainCamera()->SetHolderCharaIndex(player->CharaIndex());
+	CameraManager::GetCamera(1)->SetHolderCharaIndex(enemy->CharaIndex());
+
 	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
+	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
 }
 
 PlayScene::~PlayScene()

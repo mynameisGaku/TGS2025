@@ -54,11 +54,11 @@ void InputManager::Init() {
 		key["Left"] = { KeyCode::Left, KeyCode::LeftArrow };
 		key["Right"] = { KeyCode::Right, KeyCode::RightArrow };
 
-		key["Attack"] = { KeyCode::LeftClick, KeyCode::ButtonX };
-		key["Strong"] = { KeyCode::RightClick, KeyCode::ButtonY };
-		key["Special"] = { KeyCode::Z, KeyCode::ButtonB };
-		key["Avoid"] = { KeyCode::Space, KeyCode::ButtonA };
-		key["Run"] = { KeyCode::LeftShift, KeyCode::LeftThumb };
+		key["Throw"] = { KeyCode::LeftClick, KeyCode::RightShoulder };
+		key["Catch"] = { KeyCode::RightClick, KeyCode::LeftShoulder };
+		key["Jump"] = { KeyCode::Space, KeyCode::ButtonA };
+		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftControl, KeyCode::ButtonB };
+		key["Teleport"] = { KeyCode::E, KeyCode::ButtonY };
 
 		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
 		key["MoveUp"] = { KeyCode::W };
@@ -465,7 +465,7 @@ bool InputManager::AdvancedEntry(const std::string& name, const int& padNumber) 
 
 Vector3 InputManager::AnalogStick(int padNumber) {
 
-	Vector3 analog = Vector3(PadController::NormalizedLeftStick().x, 0.0f, PadController::NormalizedLeftStick().y);
+	Vector3 analog = Vector3(PadController::NormalizedLeftStick(padNumber).x, 0.0f, PadController::NormalizedLeftStick(padNumber).y);
 
 	if (Hold("MoveUp"))		analog.z = 1.0f;
 	if (Hold("MoveDown"))	analog.z = -1.0f;

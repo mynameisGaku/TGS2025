@@ -13,7 +13,7 @@
 PlayerController::PlayerController() {
 
 	chara = nullptr;
-	padNumber = -1;
+	padNumber = 1;
 }
 
 PlayerController::~PlayerController() {
@@ -32,11 +32,9 @@ void PlayerController::Update() {
 	////////////////////////////////////////////////////
 	// ボール投げる処理
 
-	// ToDo : チャージ未対応なので対応させるｒ
 	if (not chara->IsHoldingBall())
 	{
-		if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin) or
-			IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
+		if (InputManager::Push("Throw", padNumber))
 		{
 			chara->GenerateBall();
 		}
@@ -45,19 +43,14 @@ void PlayerController::Update() {
 	{
 		if (not chara->IsChargingBall())
 		{
-			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Begin) or
-				IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Begin))
+			if (InputManager::Push("Throw", padNumber))
 			{
 				chara->StartBallCharge();
 			}
 		}
 		else
 		{
-			if (IsPressButton(KeyDefine::KeyCode::Z, KeyDefine::Ended))
-			{
-				chara->ThrowBallForward();
-			}
-			if (IsPressButton(KeyDefine::KeyCode::G, KeyDefine::Ended))
+			if (InputManager::Release("Throw", padNumber))
 			{
 				chara->ThrowHomingBall();
 			}
@@ -66,64 +59,41 @@ void PlayerController::Update() {
 
 	////////////////////////////////////////////////////
 	// 吸引キャッチ処理
-	if (IsPressButton(KeyDefine::KeyCode::X, KeyDefine::Stationary))
+	if (InputManager::Hold("Catch", padNumber))
 	{
 		chara->Catch();
 	}
 
 	////////////////////////////////////////////////////
 	// ジャンプ処理
-	if (IsPressButton(KeyDefine::KeyCode::Space, KeyDefine::Begin))
+	if (InputManager::Push("Jump", padNumber))
 	{
 		chara->Jump();
 	}
 
 	////////////////////////////////////////////////////
 	// スライディング処理
-	if (IsPressButton(KeyDefine::KeyCode::LeftShift, KeyDefine::Stationary) ||
-		IsPressButton(KeyDefine::KeyCode::LeftControl, KeyDefine::Stationary) ||
-		IsPressButton(KeyDefine::KeyCode::C, KeyDefine::Stationary))
+	if (InputManager::Hold("Slide", padNumber))
 	{
 		chara->Slide();
 	}
 
 	////////////////////////////////////////////////////
 	// テレポート処理
-	if (IsPressButton(KeyDefine::KeyCode::E, KeyDefine::Begin))
+	if (InputManager::Push("Teleport", padNumber))
 	{
 		chara->TeleportToLastBall();
 	}
 
 	////////////////////////////////////////////////////
 	// キャラ移動操作処理
-	if (chara == nullptr || IsMoveButton() == false)
-		return;
-
 	Camera* camera = CameraManager::MainCamera();
 	if (camera == nullptr)
 		return;
 
 	// カメラの向きに応じたスティックの傾き
-	if (false)
-	{
-		Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
-		chara->Move(stick);
-	}
-	else
-	{
-		Vector3 dir;
-        if (IsPressButton(KeyDefine::KeyCode::W, KeyDefine::Stationary))
-            dir.z += 1.0f;
-        if (IsPressButton(KeyDefine::KeyCode::A, KeyDefine::Stationary))
-            dir.x -= 1.0f;
-        if (IsPressButton(KeyDefine::KeyCode::S, KeyDefine::Stationary))
-            dir.z -= 1.0f;
-        if (IsPressButton(KeyDefine::KeyCode::D, KeyDefine::Stationary))
-            dir.x += 1.0f;
-
-		chara->Move(dir * MGetRotY(camera->transform->rotation.y));
-	}
-
+	Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
+	chara->Move(stick);
 }
 
 Vector3 PlayerController::AnalogStick() {

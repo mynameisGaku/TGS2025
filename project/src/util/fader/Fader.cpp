@@ -1,8 +1,8 @@
 #include "fader.h"
 
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
 #include "src/util/easing/Easing.h"
+#include "src/common/setting/window/WindowSetting.h"
 
 namespace {
 
@@ -22,10 +22,10 @@ namespace {
 	static const int LETTER_BOX_NUM = 2;
 
 	// レターボックスの開始地点(左上)
-	static const Vector2 LETTER_BOX_BIGIN_POS[LETTER_BOX_NUM] = { Vector2(0, 0), Vector2(0, Screen::HEIGHT - 50) };
+	static const Vector2 LETTER_BOX_BIGIN_POS[LETTER_BOX_NUM] = { Vector2(0, 0), Vector2(0, static_cast<int>(WindowSetting::Inst().height) - 50) };
 
 	// レターボックスの終了地点(右下)
-	static const Vector2 LETTER_BOX_END_POS[LETTER_BOX_NUM] = { Vector2(Screen::WIDTH, 50), Vector2(Screen::WIDTH, Screen::HEIGHT) };
+	static const Vector2 LETTER_BOX_END_POS[LETTER_BOX_NUM] = { Vector2(static_cast<int>(WindowSetting::Inst().width), 50), Vector2(static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height)) };
 
 	// レターボックス
 	struct LetterBox {
@@ -59,7 +59,7 @@ void Fader::Draw() {
 
 	if (fadeEasing.current > 0) {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(fadeEasing.current));
-		DrawBox(0, 0, Screen::WIDTH, Screen::HEIGHT, color, TRUE);
+		DrawBox(0, 0, static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height), color, TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 

@@ -1,6 +1,6 @@
 #include "src/common/component/controller/AIController.h"
 #include "src/scene/play/chara/CharaBase.h"
-#include "src/util/utils.h"
+#include "src/util/ptr/PtrUtil.h"
 #include "src/util/input/InputManager.h"
 
 namespace
@@ -21,7 +21,7 @@ AIController::AIController()
 
 AIController::~AIController()
 {
-	Function::DeletePointer(m_FSM);
+	PtrUtil::SafeDelete(m_FSM);
 }
 
 void AIController::Init()

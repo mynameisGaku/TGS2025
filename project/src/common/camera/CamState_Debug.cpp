@@ -3,7 +3,6 @@
 
 // ”Ä—p
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
 #include "src/util/input/InputManager.h"

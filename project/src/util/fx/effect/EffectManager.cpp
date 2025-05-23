@@ -5,8 +5,8 @@
 #include <list>
 
 #include "src/util/file/csv/CsvReader.h"
-#include "src/util/Utils.h"
 #include "src/util/file/json/settings_json.h"
+#include <src/util/ptr/PtrUtil.h>
 
 namespace {
 
@@ -106,11 +106,11 @@ void EffectManager::Release() {
 		}
 
 		effects->clear();
-		Function::DeletePointer(effects);
+		PtrUtil::SafeDelete(effects);
 	}
 
 	// 保持していた読み込み用Csvファイルのパスを削除する
-	Function::DeletePointer(csvFilePath);
+	PtrUtil::SafeDelete(csvFilePath);
 
 	// 読み込んだ全てのエフェクトデータを解放する
 	AllReleaseInfo();
@@ -202,7 +202,7 @@ void EffectManager::LoadFromJson(const std::string& filename)
 	EffectInfo desc = {};
 	desc.magnification		= setting->GetOrDefault<float>(		 "Param.magnification",		0.0f,		filename);
 	desc.defMagnification	= setting->GetOrDefault<float>(		 "Param.defMagnification",	0.0f,		filename);
-	desc.playingHandle		= setting->GetOrDefault<float>(		 "Param.playSpeed",			0.0f,		filename);
+	desc.playingHandle		= setting->GetOrDefault<int>(		 "Param.playSpeed",			0,			filename);
 	desc.defPlaySpeed		= setting->GetOrDefault<float>(		 "Param.defPlaySpeed",		0.0f,		filename);
 	desc.isLoop				= setting->GetOrDefault<bool>(		 "Param.isLoop",			false,		filename);
 	desc.fileName			= setting->GetOrDefault<std::string>("Param.fileName",			"NO INFO",	filename);
@@ -342,7 +342,7 @@ void EffectManager::AllReleaseInfo() {
 		DeleteEffekseerEffect(itr.second.handle);
 	}
 
-	Function::DeletePointer(effectInfoDatas);
+	PtrUtil::SafeDelete(effectInfoDatas);
 }
 #ifdef IMGUI
 

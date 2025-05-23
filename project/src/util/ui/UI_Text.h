@@ -3,7 +3,7 @@
 #include "src/util/ui/UI_Canvas.h"
 
 // ◇汎用
-#include "src/util/Utils.h"
+#include "src/util/string/StringUtil.h"
 
 // ◇演出・機能
 #include "src/util/font/Font.h"
@@ -135,7 +135,7 @@ private:
 	//================================================================================
 	// ▼文字送り関連
 
-	std::vector<String::Letter> letters;	// 文字列を一文字ずつ保存する
+	std::vector<StringUtil::Letter> letters;	// 文字列を一文字ずつ保存する
 	std::string scrollSE;	// 文字送りする際のサウンド
 
 	int afterScrollText;	// 1フレーム前のスクロール済の文字数

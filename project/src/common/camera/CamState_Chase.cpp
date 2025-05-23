@@ -4,7 +4,6 @@
 
 // ◇汎用
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
@@ -61,8 +60,8 @@ void Camera::ChaseState(FSMSignal sig)
 
         //ColCheckToTerrain();
 
-        transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
-        Function::RotLimit(&transform->rotation.y);
+        transform->rotation.x = MathUtil::Clamp(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+        MathUtil::RotLimit(&transform->rotation.y);
 
         // 注視するキャラ
         const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);

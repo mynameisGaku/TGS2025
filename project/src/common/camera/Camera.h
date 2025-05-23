@@ -5,6 +5,7 @@
 // ◇汎用
 #include "src/util/file/csv/csvReader.h"
 #include "src/util/fsm/TinyFSM.h"
+#include <src/util/math/mathUtils.h>
 
 // ◇個別で必要な物
 #include "src/common/camera/CameraDefine.h"
@@ -17,7 +18,7 @@ namespace
 {
 	static const float MOVE_SPEED = 12.0f;	// 横移動速度
 	static const float SHIFT_SPEED = 6.0f;	// 縦移動速度
-	static const float ROT_SPEED = Math::DegToRad(3.0f);	// 回転速度
+	static const float ROT_SPEED = MathUtil::ToRadians(3.0f);	// 回転速度
 }
 
 /// <summary>

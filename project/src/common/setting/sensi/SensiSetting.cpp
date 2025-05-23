@@ -2,6 +2,8 @@
 
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
+#include <src/util/ptr/PtrUtil.h>
+#include <src/util/math/mathUtils.h>
 
 using namespace KeyDefine;
 
@@ -26,7 +28,7 @@ SensiSetting::~SensiSetting() {
 		UI_Manager::Detach(itr);
 
 		// 実体を削除する
-		Function::DeletePointer(itr);
+		PtrUtil::SafeDelete(itr);
 	}
 
 	sliders.clear();
@@ -68,18 +70,16 @@ void SensiSetting::LoadCsv(std::string filename) {
 
 void SensiSetting::SaveCsv(std::string filename) {
 
-	using namespace Function;
-
 	std::ofstream file(filename, std::ios::app);
 
 	file << "感度設定,マウス感度 X軸,マウス感度 Y軸,スティック感度 X軸,スティック感度 Y軸\n";	// Csvに定型文を書き込む
 	std::vector<std::string> data;	// ファイルに書き出す情報を行ごとにまとめる
 
 	data.push_back("");
-	data.push_back(std::to_string(Rounding(mouseSensitivity.x, 1)));
-	data.push_back(std::to_string(Rounding(mouseSensitivity.y, 1)));
-	data.push_back(std::to_string(Rounding(stickSensitivity.x, 1)));
-	data.push_back(std::to_string(Rounding(stickSensitivity.y, 1)));
+	data.push_back(std::to_string(MathUtil::Rounding(mouseSensitivity.x, 1)));
+	data.push_back(std::to_string(MathUtil::Rounding(mouseSensitivity.y, 1)));
+	data.push_back(std::to_string(MathUtil::Rounding(stickSensitivity.x, 1)));
+	data.push_back(std::to_string(MathUtil::Rounding(stickSensitivity.y, 1)));
 
 	bool newLine = false;	// 行の最後の文字に改行が付いているか
 
@@ -109,10 +109,10 @@ void SensiSetting::SaveCsv(std::string filename) {
 
 void SensiSetting::Apply() {
 
-	mouseSensitivity.x = Function::Rounding(mouseSensitivity.x, 2);
-	mouseSensitivity.y = Function::Rounding(mouseSensitivity.y, 2);
-	stickSensitivity.x = Function::Rounding(stickSensitivity.x, 2);
-	stickSensitivity.y = Function::Rounding(stickSensitivity.y, 2);
+	mouseSensitivity.x = MathUtil::Rounding(mouseSensitivity.x, 2);
+	mouseSensitivity.y = MathUtil::Rounding(mouseSensitivity.y, 2);
+	stickSensitivity.x = MathUtil::Rounding(stickSensitivity.x, 2);
+	stickSensitivity.y = MathUtil::Rounding(stickSensitivity.y, 2);
 
 	MouseController::SetMouseSensitivity(mouseSensitivity);
 	PadController::SetStickSensitivity(stickSensitivity);

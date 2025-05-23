@@ -1,8 +1,8 @@
 #pragma once
 
 // ◇汎用
-#include "src/util/Utils.h"
 #include "src/util/math/Vector2.h"
+#include "src/common/setting/window/WindowSetting.h"
 #include <vector>
 
 /// <summary>
@@ -73,18 +73,16 @@ namespace Anchor {
 	// アンカーポイントごとの基準座標
 	inline const Vector2 Point(Preset preset) {
 
-		using namespace Screen;
-
 		switch (preset) {
-		case Anchor::Preset::LeftUp:		return Vector2(0.0f,		0.0f);			break;
-		case Anchor::Preset::LeftMiddle:	return Vector2(0.0f,		HEIGHT_HALF);	break;
-		case Anchor::Preset::LeftDown:		return Vector2(0.0f,		HEIGHT_F);		break;
-		case Anchor::Preset::MiddleUp:		return Vector2(WIDTH_HALF,	0.0f);			break;
-		case Anchor::Preset::Middle:		return Vector2(WIDTH_HALF,	HEIGHT_HALF);	break;
-		case Anchor::Preset::MiddleDown:	return Vector2(WIDTH_HALF,	HEIGHT_F);		break;
-		case Anchor::Preset::RightUp:		return Vector2(WIDTH_F,		0.0f);			break;
-		case Anchor::Preset::RightMiddle:	return Vector2(WIDTH_F,		HEIGHT_HALF);	break;
-		case Anchor::Preset::RightDown:		return Vector2(WIDTH_F,		HEIGHT_F);		break;
+		case Anchor::Preset::LeftUp:		return Vector2(0.0f,								0.0f);								break;
+		case Anchor::Preset::LeftMiddle:	return Vector2(0.0f,								WindowSetting::Inst().height_half);	break;
+		case Anchor::Preset::LeftDown:		return Vector2(0.0f,								WindowSetting::Inst().height);		break;
+		case Anchor::Preset::MiddleUp:		return Vector2(WindowSetting::Inst().width_half,	0.0f);								break;
+		case Anchor::Preset::Middle:		return Vector2(WindowSetting::Inst().width_half,	WindowSetting::Inst().height_half);	break;
+		case Anchor::Preset::MiddleDown:	return Vector2(WindowSetting::Inst().width_half,	WindowSetting::Inst().height);		break;
+		case Anchor::Preset::RightUp:		return Vector2(WindowSetting::Inst().width,			0.0f);								break;
+		case Anchor::Preset::RightMiddle:	return Vector2(WindowSetting::Inst().width,			WindowSetting::Inst().height_half);	break;
+		case Anchor::Preset::RightDown:		return Vector2(WindowSetting::Inst().width,			WindowSetting::Inst().height);		break;
 		default:
 			return Vector2(0.0f, 0.0f);
 			break;

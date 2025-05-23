@@ -1,5 +1,6 @@
 #include "src/util/object2D/Object2D.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/ptr/PtrUtil.h"
 
 Object2D::Object2D() : Object2D(-1, RectTransform()) {}
 
@@ -18,7 +19,7 @@ Object2D::~Object2D() {
 		hImage = -1;
 	}
 
-	Function::DeletePointer(rectTransform);
+	PtrUtil::SafeDelete(rectTransform);
 }
 
 void Object2D::Draw() {
@@ -52,7 +53,7 @@ void Object2D::Draw() {
 
 void Object2D::SetTransform(const RectTransform& trs) {
 
-	Function::DeletePointer(rectTransform);
+	PtrUtil::SafeDelete(rectTransform);
 	rectTransform = new RectTransform(trs);
 }
 

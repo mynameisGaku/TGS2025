@@ -3,13 +3,17 @@
 /**
 	@brief	一般的な数学関数と定数をまとめたモジュールです。
 */
-class Math
+class MathUtil
 {
 public:
 
 	static const float PI;			///< 円周率	(3.14159265...)
 	static const float PIOver2;		///< 円周率 / 2
 	static const float EPSILON;		///< 浮動小数点の誤差
+	static const float PI_TW;		///< 円周率の２倍
+	static const float PI_SQ;		///< 円周率の２乗
+	static const float GRAVITY_2D;	///< 重力(2D)
+	static const float GRAVITY_3D;	///< 重力(3D)
 
 public:
 
@@ -93,4 +97,46 @@ public:
 	*/
 	static float CatmullRom(float v1, float v2, float v3, float v4, float t);
 
+	// 半分にする
+	static float Half(float value);
+
+	// 四半にする
+	static float Quarter(float value);
+
+	/// <summary>
+	/// 確率の計算
+	/// </summary>
+	/// <param name="probability">確率(※百分率)</param>
+	/// <returns>命中した場合、True</returns>
+	static bool Probability(int probability);
+
+	static float RateDecrease(float start, float rate);
+
+	/// <summary>
+	/// 桁数を取得する
+	/// </summary>
+	/// <param name="value">桁数を取得する値</param>
+	static int Digit(int value);
+
+	/// <summary>
+	/// 四捨五入を行う
+	/// </summary>
+	/// <param name="value">四捨五入を行う値</param>
+	/// <param name="decimalPoint">小数点何位まで四捨五入するか</param>
+	/// <returns>四捨五入を行った値を取得する</returns>
+	static float Rounding(float value, int decimalPoint);
+
+	/// <summary>
+	/// 角度を徐々に変化させる処理。
+	/// 現在の値が終点角度になるまで、回転速度を加算し続ける。
+	/// </summary>
+	/// <param name="current">現在の値</param>
+	/// <param name="terminus">終点角度</param>
+	/// <param name="rotSpeed">回転速度</param>
+	static float RotAngle(float current, float terminus, float rotSpeed);
+
+	/// <summary>
+	/// 回転角度に制限をかける(-PI～PI)
+	/// </summary>
+	static void RotLimit(float* rot);
 };

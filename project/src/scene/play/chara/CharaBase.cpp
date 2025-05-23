@@ -13,10 +13,11 @@
 #include "src/scene/play/catcher/Catcher.h"
 #include "src/reference/chara/CharaDefineRef.h"
 #include "src/common/component/animator/Animator.h"
-#include "src/util/Utils.h"
 #include "src/common/timeline/Timeline.h"
 #include "src/util/file/json/VectorJson.h"
 #include "src/common/camera/CameraManager.h"
+#include "src/util/ptr/PtrUtil.h"
+#include "src/util/math/mathUtils.h"
 
 using namespace KeyDefine;
 
@@ -102,14 +103,14 @@ CharaBase::~CharaBase()
 	std::string output = "cha delete : " + std::to_string(m_Index) + "\n";
 	OutputDebugString(output.c_str());
 
-	Function::DeletePointer(m_FSM);
-	Function::DeletePointer(m_SubFSM);
-	Function::DeletePointer(m_Timeline);
+	PtrUtil::SafeDelete(m_FSM);
+	PtrUtil::SafeDelete(m_SubFSM);
+	PtrUtil::SafeDelete(m_Timeline);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
-	Function::DeletePointer(m_EffectTransform);
+	PtrUtil::SafeDelete(m_EffectTransform);
 }
 
 void CharaBase::Init(std::string tag)
@@ -128,7 +129,7 @@ void CharaBase::Init(std::string tag)
 	m_EffectTransform->SetParent(transform);
 	m_EffectTransform->position.y = 100.0f;
 	m_EffectTransform->position.z = 100.0f;
-	m_EffectTransform->rotation.y = Math::DegToRad(180.0f);
+	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
 	m_Animator = AddComponent<Animator>();
 	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
@@ -373,7 +374,7 @@ void CharaBase::Move(const Vector3& dir)
 		float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
 
 		// 徐々に終点の向きへ合わせる
-		transform->rotation.y = Function::RotAngle(currentRot, terminusRot, m_RotSpeed);
+		transform->rotation.y = MathUtil::RotAngle(currentRot, terminusRot, m_RotSpeed);
 	}
 
 	if (m_CanMove)

@@ -1,6 +1,8 @@
 #include "src/common/load_screen/LoadScreen.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/util/font/Font.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/string/StringUtil.h"
 
 LoadScreen::LoadScreen() {
 
@@ -57,14 +59,14 @@ void LoadScreen::DrawBackGround() {
 	if (hBackground != -1) {
 
 		Vector2 begin = bgPos;	// 描画始点座標
-		Vector2 end	  = bgPos + Vector2(Screen::WIDTH_F, Screen::HEIGHT_F);	// 描画終点座標
+		Vector2 end	  = bgPos + Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);	// 描画終点座標
 
 		switch (scrollType) {
 		case LoadScreen::ScrollType::stUp:		// ▼上スクロール処理
 
 			bgPos.y -= SCROOL_SPEED;
-			begin = Vector2(bgPos.x,					bgPos.y + Screen::HEIGHT_F);
-			end	  = Vector2(bgPos.x + Screen::WIDTH_F,	bgPos.y + Screen::HEIGHT_F * 2.0f);
+			begin = Vector2(bgPos.x,					bgPos.y + WindowSetting::Inst().height);
+			end	  = Vector2(bgPos.x + WindowSetting::Inst().width,	bgPos.y + WindowSetting::Inst().height * 2.0f);
 
 			DrawExtendGraphF(begin.x, begin.y, end.x, end.y, hBackground, false);
 			break;
@@ -72,8 +74,8 @@ void LoadScreen::DrawBackGround() {
 		case LoadScreen::ScrollType::stDown:	// ▼下スクロール処理
 
 			bgPos.y += SCROOL_SPEED;
-			begin = Vector2(bgPos.x,					bgPos.y - Screen::HEIGHT_F);
-			end	  = Vector2(bgPos.x + Screen::WIDTH_F,	bgPos.y);
+			begin = Vector2(bgPos.x,					bgPos.y - WindowSetting::Inst().height);
+			end	  = Vector2(bgPos.x + WindowSetting::Inst().width,	bgPos.y);
 
 			DrawExtendGraphF(begin.x, begin.y, end.x, end.y, hBackground, false);
 			break;
@@ -81,8 +83,8 @@ void LoadScreen::DrawBackGround() {
 		case LoadScreen::ScrollType::stLeft:	// ▼左スクロール処理
 
 			bgPos.x -= SCROOL_SPEED;
-			begin = Vector2(bgPos.x + Screen::WIDTH_F,			bgPos.y);
-			end	  = Vector2(bgPos.x + Screen::WIDTH_F * 2.0f,	bgPos.y + Screen::HEIGHT_F);
+			begin = Vector2(bgPos.x + WindowSetting::Inst().width,			bgPos.y);
+			end	  = Vector2(bgPos.x + WindowSetting::Inst().width * 2.0f,	bgPos.y + WindowSetting::Inst().height);
 
 			DrawExtendGraphF(begin.x, begin.y, end.x, end.y, hBackground, false);
 			break;
@@ -90,8 +92,8 @@ void LoadScreen::DrawBackGround() {
 		case LoadScreen::ScrollType::stRight:	// ▼右スクロール処理
 			
 			bgPos.x += SCROOL_SPEED;
-			begin = Vector2(bgPos.x - Screen::WIDTH_F,	bgPos.y);
-			end	  = Vector2(bgPos.x,					bgPos.y + Screen::HEIGHT_F);
+			begin = Vector2(bgPos.x - WindowSetting::Inst().width,	bgPos.y);
+			end	  = Vector2(bgPos.x,					bgPos.y + WindowSetting::Inst().height);
 
 			DrawExtendGraphF(begin.x, begin.y, end.x, end.y, hBackground, false);
 			break;
@@ -100,18 +102,18 @@ void LoadScreen::DrawBackGround() {
 			break;
 		}
 
-		if (bgPos.x >= Screen::WIDTH_F)
-			bgPos.x -= Screen::WIDTH_F;
-		else if (bgPos.x <= Screen::WIDTH_F * -1.0f)
-			bgPos.x += Screen::WIDTH_F;
+		if (bgPos.x >= WindowSetting::Inst().width)
+			bgPos.x -= WindowSetting::Inst().width;
+		else if (bgPos.x <= WindowSetting::Inst().width * -1.0f)
+			bgPos.x += WindowSetting::Inst().width;
 
-		if (bgPos.y >= Screen::HEIGHT_F)
-			bgPos.y -= Screen::HEIGHT_F;
-		else if (bgPos.y <= Screen::HEIGHT_F * -1.0f)
-			bgPos.y += Screen::HEIGHT_F;
+		if (bgPos.y >= WindowSetting::Inst().height)
+			bgPos.y -= WindowSetting::Inst().height;
+		else if (bgPos.y <= WindowSetting::Inst().height * -1.0f)
+			bgPos.y += WindowSetting::Inst().height;
 
 		begin = bgPos;
-		end = bgPos + Vector2(Screen::WIDTH_F, Screen::HEIGHT_F);
+		end = bgPos + Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);
 		
 		DrawExtendGraphF(begin.x, begin.y, end.x, end.y, hBackground, false);
 	}
@@ -119,7 +121,7 @@ void LoadScreen::DrawBackGround() {
 	else {
 		int r, g, b;
 		GetBackgroundColor(&r, &g, &b);
-		DrawBox(0, 0, Screen::WIDTH, Screen::HEIGHT, GetColor(r, g, b), true);
+		DrawBox(0, 0, static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height), GetColor(r, g, b), true);
 	}
 }
 
@@ -163,7 +165,7 @@ void LoadScreen::DrawButtonTip() {
 	// ▼ロード終了時にボタンヒントを表示する
 	if (isPushFadeOut && rate >= 1.0f) {
 		int width = GetDrawStringWidthToHandle(BUTTON_TIP.c_str(), static_cast<int>(BUTTON_TIP.length()), useFont.handle);
-		DrawFormatStringToHandle(Screen::WIDTH - width - 12, Screen::HEIGHT - 32, TEXT_COLOR, useFont.handle, BUTTON_TIP.c_str());
+		DrawFormatStringToHandle(static_cast<int>(WindowSetting::Inst().width) - width - 12, static_cast<int>(WindowSetting::Inst().height) - 32, TEXT_COLOR, useFont.handle, BUTTON_TIP.c_str());
 	}
 }
 
@@ -172,7 +174,7 @@ void LoadScreen::SetRate(const float& _rate) {
 	rate = _rate;
 	
 	if (rate < 1.0f) {
-		loadText = Function::FormatToString(LOADING_TEXT.c_str(), rate * 100.0f);
+		loadText = StringUtil::FormatToString(LOADING_TEXT.c_str(), rate * 100.0f);
 		const int len = static_cast<int>(loadText.length());
 		textWidth = static_cast<float>(GetDrawStringWidth(loadText.c_str(), len));
 	}

@@ -292,23 +292,29 @@
     <Filter Include="vendor\nlohmann">
       <UniqueIdentifier>{018e2cbb-5005-487d-88ee-76377a6c0e95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\game">
-      <UniqueIdentifier>{76c973a3-226a-4422-afc6-48431de8b9d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\reference\game">
       <UniqueIdentifier>{809d120c-3dc6-485d-a933-b713b0f16263}</UniqueIdentifier>
     </Filter>
     <Filter Include="data\Json\Game">
       <UniqueIdentifier>{3e1dc93a-bc1c-467b-b8fd-9a21cf5d348b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\game\State Update">
-      <UniqueIdentifier>{26a6f9b5-75e5-42d9-9e0d-18576e611248}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src%28application%29\common\game\State Draw">
-      <UniqueIdentifier>{cca5ba3d-ef04-4150-bd1b-ba6f57ecc961}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\config\imgui">
       <UniqueIdentifier>{65c66b3d-6e6c-4eab-bb4d-9a4550f22061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\game">
+      <UniqueIdentifier>{76c973a3-226a-4422-afc6-48431de8b9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\match">
+      <UniqueIdentifier>{a8750fb4-407a-4ec3-aec3-cb8b5b9121ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\string">
+      <UniqueIdentifier>{1980daec-10c3-4303-930d-132ccdd253c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\ptr">
+      <UniqueIdentifier>{5330e165-a6f0-4dba-8d46-b2755c3533eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Ini">
+      <UniqueIdentifier>{f4a1c136-f6dd-4eb0-9524-1bf26c00d24f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -495,7 +501,7 @@
     <None Include="vendor\imgui\imgui_node_editor_internal.inl">
       <Filter>vendor\imgui</Filter>
     </None>
-    <None Include="data\Json\Game\Game.json">
+    <None Include="data\Json\Game\GameRef.json">
       <Filter>data\Json\Game</Filter>
     </None>
   </ItemGroup>
@@ -785,28 +791,28 @@
     <ClCompile Include="src\util\transform\Transform.cpp">
       <Filter>src%28application%29\util\transform</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\plane.cpp">
+    <ClCompile Include="src\util\math\Plane.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\quaternion.cpp">
+    <ClCompile Include="src\util\math\Quaternion.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\random.cpp">
+    <ClCompile Include="src\util\math\Random.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\vector2.cpp">
+    <ClCompile Include="src\util\math\Vector2.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\vector3.cpp">
+    <ClCompile Include="src\util\math\Vector3.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\vector4.cpp">
+    <ClCompile Include="src\util\math\Vector4.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\mathUtils.cpp">
+    <ClCompile Include="src\util\math\MathUtils.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\matrix.cpp">
+    <ClCompile Include="src\util\math\Matrix.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui\crude_json.cpp">
@@ -1021,6 +1027,9 @@
     </ClCompile>
     <ClCompile Include="src\reference\game\GameRef.cpp">
       <Filter>src%28application%29\reference\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\match\MatchManager.cpp">
+      <Filter>src%28application%29\scene\play\match</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1258,37 +1267,37 @@
     <ClInclude Include="src\util\transform\Transform.h">
       <Filter>src%28application%29\util\transform</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\plane.h">
+    <ClInclude Include="src\util\math\Plane.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\quaternion.h">
+    <ClInclude Include="src\util\math\Quaternion.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\random.h">
+    <ClInclude Include="src\util\math\Random.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\vector2.h">
+    <ClInclude Include="src\util\math\Vector2.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\vector3.h">
+    <ClInclude Include="src\util\math\Vector3.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\vector4.h">
+    <ClInclude Include="src\util\math\Vector4.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\asm.h">
+    <ClInclude Include="src\util\math\Asm.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\mathCommon.h">
+    <ClInclude Include="src\util\math\MathCommon.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\mathIncluder.h">
+    <ClInclude Include="src\util\math\MathIncluder.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\mathUtils.h">
+    <ClInclude Include="src\util\math\MathUtils.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\matrix.h">
+    <ClInclude Include="src\util\math\Matrix.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui\crude_json.h">
@@ -1680,6 +1689,15 @@
     </ClInclude>
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp">
       <Filter>vendor\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\match\MatchManager.h">
+      <Filter>src%28application%29\scene\play\match</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\string\StringUtil.h">
+      <Filter>src%28application%29\util\string</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ptr\PtrUtil.h">
+      <Filter>src%28application%29\util\ptr</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

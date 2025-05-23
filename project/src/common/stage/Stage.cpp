@@ -1,7 +1,7 @@
 #include "src/common/stage/Stage.h"
 
 // ◇汎用
-#include "src/util/Utils.h"
+#include "src/util/ptr/PtrUtil.h"
 
 // ◇演出・機能
 //#include "effectManager.h"
@@ -61,9 +61,9 @@ void Stage::Draw() {
 
 void Stage::Release() {
 
-	Function::DeletePointer(ground);
-	Function::DeletePointer(sky);
-	Function::DeletePointer(wall);
+	PtrUtil::SafeDelete(ground);
+	PtrUtil::SafeDelete(sky);
+	PtrUtil::SafeDelete(wall);
 }
 
 bool Stage::ColCheckGround(Vector3 begin, Vector3 end, Vector3* hitPos) {

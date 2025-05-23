@@ -1,6 +1,7 @@
 #include "framework/App.h"
 #include "framework/sceneManager.h"
 #include "src/util/time/GameTime.h"
+#include "src/util/input/InputManager.h"
 
 bool exitFlag = false;
 
@@ -12,6 +13,9 @@ void AppInit()
 
 void AppUpdate()
 {
+	if (InputManager::Push(KeyDefine::KeyCode::Escape))
+		exitFlag = true;
+
 	GTime.Update();
 	SceneManager::Update();
 }

@@ -12,6 +12,10 @@ public:
         {
             instance = new WindowSetting();
         }
+
+        if (instance->m_WasLoad == false)
+            instance->Load();
+
         return (*instance);
     }
 
@@ -25,7 +29,7 @@ public:
     static float height_half;
     static float extend;
     static std::string name;
-    static bool isFull;
+    static bool isWindow;
 private:
-
+    bool m_WasLoad = false;
 };

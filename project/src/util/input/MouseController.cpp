@@ -1,6 +1,6 @@
 #include "src/util/input/MouseController.h"
 
-#include "src/util/Utils.h"
+#include "src/common/setting/window/WindowSetting.h"
 
 using namespace KeyDefine;
 
@@ -64,8 +64,8 @@ void MouseController::Update() {
 	// ƒ}ƒEƒXƒzƒC[ƒ‹‚ÌˆÚ“®—Ê‚ğæ“¾
 	mouse.wheelRot = GetMouseWheelRotVol();
 
-	int iScreenWidthHalf = Screen::WIDTH / 2;	// ‰æ–Ê‚Ì‰¡•‚Ì”¼•ª(intŒ^)
-	int iScreenHeightHalf = Screen::HEIGHT / 2;	// ‰æ–Ê‚Ìc•‚Ì”¼•ª(intŒ^)
+	int iScreenWidthHalf = static_cast<int>(WindowSetting::Inst().width) / 2;	// ‰æ–Ê‚Ì‰¡•‚Ì”¼•ª(intŒ^)
+	int iScreenHeightHalf = static_cast<int>(WindowSetting::Inst().height) / 2;	// ‰æ–Ê‚Ìc•‚Ì”¼•ª(intŒ^)
 
 	switch (mouse.movement) {
 	case MouseMovement::Free:
@@ -128,8 +128,8 @@ bool MouseController::CheckRelease(KeyDefine::KeyCode keyCode) {
 
 void MouseController::SetMouseMovement(MouseMovement move) {
 
-	int iScreenWidthHalf = static_cast<int>(Screen::WIDTH_HALF);
-	int iScreenHeightHalf = static_cast<int>(Screen::HEIGHT_HALF);
+	int iScreenWidthHalf = static_cast<int>(WindowSetting::Inst().width_half);
+	int iScreenHeightHalf = static_cast<int>(WindowSetting::Inst().height_half);
 
 	switch (move) {
 	case MouseMovement::Free:		SetValidMousePointerWindowOutClientAreaMoveFlag(true);	break;

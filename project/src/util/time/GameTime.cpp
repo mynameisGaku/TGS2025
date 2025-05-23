@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <deque>
 
+GameTime* GameTime::instance = nullptr;
+
 bool GameTime::m_Initialized = false;
 std::chrono::high_resolution_clock::time_point GameTime::m_StartTime;
 std::chrono::high_resolution_clock::time_point GameTime::m_LastTime;

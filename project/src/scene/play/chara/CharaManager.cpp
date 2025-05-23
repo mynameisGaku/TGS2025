@@ -1,6 +1,9 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/util/Utils.h"
+
+#ifndef USE_POOL
+#include "src/util/ptr/PtrUtil.h"
+#endif
 
 #include "src/common/component/physics/Physics.h"
 #include "src/common/component/collider/CollisionDefine.h"
@@ -40,7 +43,7 @@ CharaManager::~CharaManager()
 	}
 	delete m_pPool;
 #else
-	Function::DeletePointerVector(m_Charas);
+	PtrUtil::SafeDeleteVector(m_Charas);
 #endif
 }
 
@@ -169,7 +172,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
 	int origin = MV1SearchFrame(hModel, "mixamorig9:Hips");
-	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(Math::PI) * MGetTranslate(Vector3(0.0f, 100.0f, 0.0f)));
+	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(MathUtil::PI) * MGetTranslate(Vector3(0.0f, 100.0f, 0.0f)));
 
 	newChara->SetModel(hModel);
 	newChara->SetTransform(trs);

@@ -1269,7 +1269,6 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-		m_Animator->StopSub("mixamorig9:Spine");
 	}
 	break;
 	}
@@ -1298,7 +1297,6 @@ void CharaBase::SubStateHold(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-		m_Animator->StopSub("mixamorig9:Spine");
 	}
 	break;
 	}
@@ -1328,7 +1326,6 @@ void CharaBase::SubStateHoldToAim(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-		m_Animator->StopSub("mixamorig9:Spine");
 		m_IsCharging = false;
 		m_BallChargeRate = 0.0f;
 	}
@@ -1359,7 +1356,6 @@ void CharaBase::SubStateAimToThrow(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-		m_Animator->StopSub("mixamorig9:Spine");
 	}
 	break;
 	}
@@ -1371,7 +1367,6 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		//テスト
 		m_Animator->PlaySub("mixamorig9:Spine", "Catch");
 	}
 	break;
@@ -1391,8 +1386,6 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-		//テスト
-		m_Animator->StopSub("mixamorig9:Spine");
 	}
 	break;
 	}

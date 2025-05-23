@@ -144,5 +144,6 @@ void AttachedAnimation_Sub::Update()
 
 void AttachedAnimation_Sub::UpdateBrendRate(int currentAttachID)
 {
-	MV1SetAttachAnimBlendRateToFrame(m_parentModel, currentAttachID, m_targetID, 1.0f - m_blendRate * m_defaultBlendRate);
+	MV1SetAttachAnimBlendRateToFrame(m_parentModel, currentAttachID, m_targetID, 0.0f);
+	//MV1SetAttachAnimBlendRateToFrame(m_parentModel, currentAttachID, m_targetID, 1.0f - m_blendRate * m_defaultBlendRate);
 }

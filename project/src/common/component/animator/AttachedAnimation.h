@@ -11,7 +11,7 @@ class AttachedAnimation
 {
 public:
 	AttachedAnimation(int parentModel, const AnimInfo& info);
-	~AttachedAnimation();
+	virtual ~AttachedAnimation();
 
 	virtual void Update() = 0;
 	void RefreshDefaultBlendRate();
@@ -66,6 +66,7 @@ class AttachedAnimation_Main : public AttachedAnimation
 {
 public:
 	AttachedAnimation_Main(int parentModel, const AnimInfo& info);
+	~AttachedAnimation_Main(){}
 
 	void Update() override;
 
@@ -83,6 +84,7 @@ class AttachedAnimation_Sub : public AttachedAnimation
 {
 public:
 	AttachedAnimation_Sub(int parentModel, const AnimInfo& info, std::string target);
+	~AttachedAnimation_Sub() {}
 
 	void Update() override;
 	void UpdateBrendRate(int currentAttachID);

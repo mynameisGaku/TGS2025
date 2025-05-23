@@ -180,7 +180,9 @@ private:
 	std::list<AttachedAnimation_Main*> prevs;
 	AttachedAnimation_Main* current;
 
+	std::unordered_map<std::string, std::list<AttachedAnimation_Sub*>> prevSubs;
 	std::unordered_map<std::string, AttachedAnimation_Sub*> currentSubs;
+	std::unordered_map<std::string, float> mergeTimeSubs;
 
 	int parentModel;	// 親のモデル
 	float mergeTime;	// ブレンドの経過速度(1秒間で何フレーム進むか)

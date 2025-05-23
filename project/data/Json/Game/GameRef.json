@@ -23,6 +23,11 @@
       "GameModeName": "FreeForAll",
       "PlayTimeMaxSec": 600,
       "WinPointMax": 10
+    },
+    {
+      "GameModeName": "Debug",
+      "PlayTimeMaxSec": 9999,
+      "WinPointMax": 9999
     }
   ],
 

@@ -24,6 +24,7 @@ public:
 
     void Update() override;
     void Draw() override;
+
 private:
 
     void init();
@@ -50,5 +51,8 @@ private:
 
     CurrentGameData m_GameData;
     TinyFSM<MatchManager>* m_pFsm;
+
+    class CharaManager* m_pCharaManager;
+    class BallManager* m_pBallManager;
 
 };

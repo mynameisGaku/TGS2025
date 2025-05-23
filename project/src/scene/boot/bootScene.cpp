@@ -15,7 +15,7 @@ BootScene::BootScene(std::string name) : SceneBase(true, name)
 	common->SetDrawOrder(loadScreen, 10000);
 
 	GameManager* gameM = common->Instantiate<GameManager>();
-	gameM->SetGameModeName("FreeForAll");
+	gameM->SetGameModeName("Debug");
 }
 
 BootScene::~BootScene()

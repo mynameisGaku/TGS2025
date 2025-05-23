@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
-#include <vendor/ImGui/imgui.h>
+#include <vendor/imgui/imgui.h>
 
 /// <summary>
 /// <para> 実行されているステートへ送る信号。 </para>
@@ -43,7 +43,7 @@ public:
 		m_signal(SIG_Enter),
 		m_needChange(false),
 		m_owner(owner),
-		m_name(""),
+		m_name("No Setting"),
 		m_transitCounters(nullptr)
 	{
 #if _DEBUG
@@ -133,7 +133,8 @@ public:
 	void ImGuiDebugRender()
 	{
 #if _DEBUG
-		if (ImGui::TreeNode("TinyFSM Debug"))
+		std::string name = "TinyFSM [" + m_name + "] Debug";
+		if (ImGui::TreeNode(name.c_str()))
 		{
 			auto GetStateName = [this](void(T::* state)(FSMSignal)) -> const char*
 				{
@@ -188,7 +189,7 @@ public:
 	/// ステートの変更を予約する
 	/// </summary>
 	/// <param name="state">変更したいステートの関数ポインタ</param>
-	void ChangeState(void(T::*state)(FSMSignal)) 
+	void ChangeState(void(T::* state)(FSMSignal))
 	{
 		// すでにステート変更予約が入っている場合は無視
 		if (not m_needChange)
@@ -217,11 +218,11 @@ public:
 	}
 
 	// 現在のステート
-	void(T::*GetCurrentState())(FSMSignal) { return m_state; }
+	void(T::* GetCurrentState())(FSMSignal) { return m_state; }
 	// 一つ前のステート
-	void(T::*GetPrevState())(FSMSignal) { return m_statePrev; }
+	void(T::* GetPrevState())(FSMSignal) { return m_statePrev; }
 	// 予約されたステート
-	void(T::*GetNextState())(FSMSignal) { return m_stateNext; }
+	void(T::* GetNextState())(FSMSignal) { return m_stateNext; }
 	// 特定のステートに対する遷移回数を取得 (統計が無効になっている場合は0が返る)
 	int GetTransitCount(void(T::* state)(FSMSignal))
 	{
@@ -241,21 +242,26 @@ public:
 	void DisableStatistics() { m_isStatistics = false; }
 	// 統計を取っているかどうか
 	bool IsStatistics() const { return m_isStatistics; }
-    // 指定のステートに名前を設定する (デバッグ用)
+	// 指定のステートに名前を設定する (デバッグ用)
 	void RegisterStateName(void(T::* state)(FSMSignal), const std::string& name)
 	{
 		m_stateNameMap[state] = name;
+	}
+	// ステートマシンに名前を付ける
+	void SetName(const std::string& name)
+	{
+		m_name = name;
 	}
 
 private:
 	// 現在、どの段階の処理を行っているか
 	FSMSignal m_signal;
 	// 前回のステート
-	void(T::*m_statePrev)(FSMSignal);
+	void(T::* m_statePrev)(FSMSignal);
 	// 現在のステート
-	void(T::*m_state)(FSMSignal);
+	void(T::* m_state)(FSMSignal);
 	// 次のステート
-	void(T::*m_stateNext)(FSMSignal);
+	void(T::* m_stateNext)(FSMSignal);
 	// ステート変更が必要か
 	bool m_needChange;
 	// 所有者

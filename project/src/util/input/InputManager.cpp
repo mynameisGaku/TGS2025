@@ -466,7 +466,7 @@ bool InputManager::AdvancedEntry(const std::string& name, const int& padNumber) 
 
 Vector3 InputManager::AnalogStick(int padNumber) {
 
-	Vector3 analog = Vector3(PadController::NormalizedLeftStick().x, 0.0f, PadController::NormalizedLeftStick().y);
+	Vector3 analog = Vector3(PadController::NormalizedLeftStick(padNumber).x, 0.0f, PadController::NormalizedLeftStick(padNumber).y);
 
 	if (Hold("MoveUp"))		analog.z = 1.0f;
 	if (Hold("MoveDown"))	analog.z = -1.0f;

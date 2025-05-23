@@ -146,8 +146,6 @@ void Animator::Update() {
 	MV1SetFrameUserLocalMatrix(parentModel, hRoot, currentM);
 
 #if TRUE
-
-	// 時間に応じてブレンド率を変える
 	float rateSub = 1.0f;
 
 	// ブレンド進行処理
@@ -155,12 +153,12 @@ void Animator::Update() {
 		const std::string& frameName = item.first;
 		std::list<AttachedAnimation_Sub*>& prevSubList = item.second;
 		float& mergeTimeSub = mergeTimeSubs.at(frameName);
-		AttachedAnimation_Sub* currentSub = currentSubs.at(frameName);
+		AttachedAnimation_Sub* currentSub = currentSubs.contains(frameName) ? currentSubs.at(frameName) : nullptr;
 
 		if (not prevSubList.empty()) {
 			// ブレンド時間を進める
 			mergeTimeSub += GTime.deltaTime * playSpeed;
-			const float animMergeTimeMax = currentSub->Info().mergeTimeMax;
+			const float animMergeTimeMax = currentSub == nullptr ? current->Info().mergeTimeMax : currentSub->Info().mergeTimeMax;
 
 			// ブレンド終了時なら
 			if (mergeTimeSub >= animMergeTimeMax) {
@@ -180,26 +178,37 @@ void Animator::Update() {
 				rateSub = mergeTimeSub / animMergeTimeMax;
 			else
 				rateSub = 1.0f;
-			// 全体が1になるようにブレンド
-			currentSub->SetBlendRate(rateSub);
+			const float prevRate = 1.0f - rateSub;
 
-			float prevRate = 1.0f - rateSub;
+			// 全体が1になるようにブレンド
+			if (currentSub == nullptr)
+			{
+				MV1SetAttachAnimBlendRateToFrame(parentModel, current->AttachID(), MV1SearchFrame(parentModel, frameName.c_str()), current->BlendRate() * rateSub);
+				for (AttachedAnimation_Main* prev : prevs) {
+					MV1SetAttachAnimBlendRateToFrame(parentModel, prev->AttachID(), MV1SearchFrame(parentModel, frameName.c_str()), prev->BlendRate() * rateSub);
+				}
+			}
+			else
+			{
+				currentSub->SetBlendRate(rateSub);
+			}
+
 			for (AttachedAnimation_Sub* prevSub : prevSubList) {
 				prevSub->SetBlendRate(prevRate);
 			}
 		}
-
 	}
-
-#endif 
-
+#endif
 	// サブアニメーション更新
 	for (auto& item : currentSubs)
 	{
 		std::string frameName = item.first;
 		AttachedAnimation_Sub* currentSub = item.second;
 
-		currentSub->UpdateBrendRate(current->AttachID());
+		MV1SetAttachAnimBlendRateToFrame(parentModel, current->AttachID(), MV1SearchFrame(parentModel, frameName.c_str()), 0.0f);
+		for (AttachedAnimation_Main* prev : prevs) {
+			MV1SetAttachAnimBlendRateToFrame(parentModel, prev->AttachID(), MV1SearchFrame(parentModel, frameName.c_str()), 0.0f);
+		}
 
 		currentSub->Update();
 	}
@@ -210,8 +219,6 @@ void Animator::Update() {
 		std::list<AttachedAnimation_Sub*> prevSubList = item.second;
 		for (AttachedAnimation_Sub* prevSub : prevSubList)
 		{
-			//prevSub->UpdateBrendRate(current->AttachID());
-
 			prevSub->Update();
 		}
 	}
@@ -396,10 +403,17 @@ void Animator::PlaySub(std::string frameName, std::string label, float speed) {
 
 void Animator::StopSub(std::string frameName)
 {
-	// ブレンドを使う
 	if (not currentSubs.contains(frameName)) return;
 
-	PlaySub(frameName, anims.at(playingLabel).animName, playSpeed);
+	AttachedAnimation_Sub* currentSub = currentSubs.at(frameName);
+	currentSubs.erase(frameName);
+	prevSubs.at(frameName).push_back(currentSub);
+
+	for (AttachedAnimation_Sub* prevSub : prevSubs[frameName]) {
+		prevSub->RefreshDefaultBlendRate();
+	}
+
+	mergeTimeSubs[frameName] = 0.0f;
 }
 
 void Animator::DeleteAnimInfos() {

@@ -10,6 +10,9 @@
 #include "src/common/component/controller/DebugController.h"
 #include "src/common/component/collider/CollisionManager.h"
 
+//=== 進行役 ===
+#include "src/scene/play/match/MatchManager.h"
+
 //=== ボール ===
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
@@ -27,6 +30,8 @@ using namespace KeyDefine;
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
 	Instantiate<CollisionManager>();
+
+	//MatchManager* matchM = Instantiate<MatchManager>();
 
 	CharaManager* charaM = Instantiate<CharaManager>();
 

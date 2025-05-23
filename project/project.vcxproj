@@ -189,7 +189,7 @@
     <None Include="data\Json\Effect\Hit_Gray.json" />
     <None Include="data\Json\Effect\Hit_NoColor.json" />
     <None Include="data\Json\Effect\Hit_Red.json" />
-    <None Include="data\Json\Game\Game.json" />
+    <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Stage\Stage.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
@@ -264,8 +264,6 @@
     <ClCompile Include="src\common\component\shadow_circle\ShadowCircle.cpp" />
     <ClCompile Include="src\common\component\shake\Shake.cpp" />
     <ClCompile Include="src\common\game\GameManager.cpp" />
-    <ClCompile Include="src\common\game\state\GameManager_StateDraw.cpp" />
-    <ClCompile Include="src\common\game\state\GameManager_StateUpdate.cpp" />
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
@@ -299,6 +297,7 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragment.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentManager.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
+    <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
@@ -417,7 +416,6 @@
     <ClInclude Include="src\common\component\shadow_circle\ShadowCircle.h" />
     <ClInclude Include="src\common\component\shake\Shake.h" />
     <ClInclude Include="src\common\game\GameManager.h" />
-    <ClInclude Include="src\common\game\user_data\UserData.h" />
     <ClInclude Include="src\common\light\Light.h" />
     <ClInclude Include="src\common\light\LightDefine.h" />
     <ClInclude Include="src\common\light\LightManager.h" />
@@ -455,6 +453,7 @@
     <ClInclude Include="src\scene\play\crystal\CrystalFragment.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentManager.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h" />
+    <ClInclude Include="src\scene\play\match\MatchManager.h" />
     <ClInclude Include="src\scene\play\playScene.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />

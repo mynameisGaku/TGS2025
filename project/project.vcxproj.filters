@@ -304,11 +304,8 @@
     <Filter Include="src%28application%29\common\game">
       <UniqueIdentifier>{76c973a3-226a-4422-afc6-48431de8b9d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\game\user_data">
-      <UniqueIdentifier>{0cf628b4-6331-4377-b7a6-4875d0e2ed22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src%28application%29\common\game\state">
-      <UniqueIdentifier>{cca5ba3d-ef04-4150-bd1b-ba6f57ecc961}</UniqueIdentifier>
+    <Filter Include="src%28application%29\scene\play\match">
+      <UniqueIdentifier>{a8750fb4-407a-4ec3-aec3-cb8b5b9121ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -495,7 +492,7 @@
     <None Include="vendor\imgui\imgui_node_editor_internal.inl">
       <Filter>vendor\imgui</Filter>
     </None>
-    <None Include="data\Json\Game\Game.json">
+    <None Include="data\Json\Game\GameRef.json">
       <Filter>data\Json\Game</Filter>
     </None>
   </ItemGroup>
@@ -1022,11 +1019,8 @@
     <ClCompile Include="src\reference\game\GameRef.cpp">
       <Filter>src%28application%29\reference\game</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\game\state\GameManager_StateDraw.cpp">
-      <Filter>src%28application%29\common\game\state</Filter>
-    </ClCompile>
-    <ClCompile Include="src\common\game\state\GameManager_StateUpdate.cpp">
-      <Filter>src%28application%29\common\game\state</Filter>
+    <ClCompile Include="src\scene\play\match\MatchManager.cpp">
+      <Filter>src%28application%29\scene\play\match</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1687,8 +1681,8 @@
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp">
       <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\game\user_data\UserData.h">
-      <Filter>src%28application%29\common\game\user_data</Filter>
+    <ClInclude Include="src\scene\play\match\MatchManager.h">
+      <Filter>src%28application%29\scene\play\match</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

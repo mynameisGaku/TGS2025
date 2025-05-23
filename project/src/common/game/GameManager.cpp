@@ -9,12 +9,9 @@ GameManager::~GameManager()
 {
 }
 
-void GameManager::Update()
+GAME_MODE_DESC GameManager::GetCurrentGameModeData()
 {
-}
-
-void GameManager::Draw()
-{
+    return m_GameModeDescs[m_CurrentGameMode];
 }
 
 void GameManager::init()

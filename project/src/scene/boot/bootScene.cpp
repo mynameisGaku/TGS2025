@@ -3,6 +3,7 @@
 
 #include "src/common/system/SystemManager.h"
 #include "src/common/load_screen/LoadScreen.h"
+#include "src/common/game/GameManager.h"
 
 BootScene::BootScene(std::string name) : SceneBase(true, name)
 {
@@ -12,6 +13,9 @@ BootScene::BootScene(std::string name) : SceneBase(true, name)
 
 	LoadScreen* loadScreen = common->Instantiate<LoadScreen>();
 	common->SetDrawOrder(loadScreen, 10000);
+
+	//GameManager* gameM = common->Instantiate<GameManager>();
+	
 }
 
 BootScene::~BootScene()

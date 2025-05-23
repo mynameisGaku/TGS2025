@@ -16,8 +16,9 @@ public:
     GameManager();
     ~GameManager();
 
-    void Update() override;
-    void Draw() override;
+    void SetGameModeName(const std::string& name) { m_CurrentGameMode = name; }
+
+    GAME_MODE_DESC GetCurrentGameModeData();
 
 private:
 
@@ -31,5 +32,5 @@ private:
     std::vector<std::string>                        m_TeamNames;
 
     std::string                                     m_CurrentGameMode;
-
+    std::string                                     m_WinnerTeamName;
 };

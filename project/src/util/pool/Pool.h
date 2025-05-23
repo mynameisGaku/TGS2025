@@ -285,4 +285,9 @@ private:
     std::vector<Item*>      m_Items;                // オブジェクトのリスト
     uint32_t                m_Capacity;             // このプールの容量
     uint32_t                m_ActiveObjectCount;    // アクティブなオブジェクトの数
+
+    Item* operator[](int index)
+    {
+        return m_Items[index]->m_pObject;;
+    }
 };

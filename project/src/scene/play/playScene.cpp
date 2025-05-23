@@ -1,6 +1,6 @@
 #include "playScene.h"
 #include "framework/SceneManager.h"
-#include "src/util/Utils.h"
+#include "src/util/math/mathUtils.h"
 
 #include "src/util/input/InputManager.h"
 #include "src/scene/play/chara/CharaManager.h"
@@ -34,11 +34,11 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	CharaBase* enemy = charaM->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
 
 	player->SetMoveSpeed(700.0f);
-	player->SetRotSpeed(Math::DegToRad(10.0f));
+	player->SetRotSpeed(MathUtil::ToRadians(10.0f));
 	player->AddComponent<PlayerController>()->Init(DX_INPUT_PAD1);
 
 	enemy->SetMoveSpeed(700.0f);
-	enemy->SetRotSpeed(Math::DegToRad(10.0f));
+	enemy->SetRotSpeed(MathUtil::ToRadians(10.0f));
 
 	// デバッグによってコントローラーを変える。
 #if FALSE

@@ -1,4 +1,5 @@
 #include "src/common/setting/SettingBase.h"
+#include <src/util/ptr/PtrUtil.h>
 
 SettingBase::SettingBase() {
 
@@ -18,7 +19,7 @@ SettingBase::~SettingBase() {
 		UI_Manager::Detach(itr);
 
 		// À‘Ì‚ğíœ‚·‚é
-		Function::DeletePointer(itr);
+		PtrUtil::SafeDelete(itr);
 	}
 
 	sliders.clear();

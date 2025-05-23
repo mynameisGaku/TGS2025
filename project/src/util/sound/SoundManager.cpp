@@ -1,6 +1,7 @@
 #include "src/util/sound/SoundManager.h"
 
-#include "src/util/Utils.h"
+#include "src/util/math/mathUtils.h"
+#include "src/util/ptr/PtrUtil.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/util/file/csv/CsvReader.h"
 #include <vendor/magic_enum/magic_enum.hpp>
@@ -57,7 +58,7 @@ void SoundManager::Update() {
 
 	if (categoryVolumeRate != nullptr) {
 		for (auto& itr : *categoryVolumeRate) {
-			itr.second = Function::Rounding(itr.second, 2);
+			itr.second = MathUtil::Rounding(itr.second, 2);
 		}
 	}
 
@@ -97,14 +98,14 @@ void SoundManager::Release() {
 		}
 
 		sounds->clear();
-		Function::DeletePointer(sounds);
+		PtrUtil::SafeDelete(sounds);
 	}
 
 	// カテゴリー別の音量倍率を削除する
-	Function::DeletePointer(categoryVolumeRate);
+	PtrUtil::SafeDelete(categoryVolumeRate);
 
 	// 保持していた読み込み用Csvファイルのパスを削除する
-	Function::DeletePointer(csvFilePath);
+	PtrUtil::SafeDelete(csvFilePath);
 
 	// 読み込んだ全てのサウンドデータを解放する
 	AllReleaseInfo();
@@ -484,7 +485,7 @@ void SoundManager::AllReleaseInfo() {
 		itr = soundInfoDatas->erase(itr);
 	}
 
-	Function::DeletePointer(soundInfoDatas);
+	PtrUtil::SafeDelete(soundInfoDatas);
 }
 
 #ifdef IMGUI

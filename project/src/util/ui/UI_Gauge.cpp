@@ -3,7 +3,6 @@
 // ◇汎用
 #include "framework/myDxLib.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/util/Utils.h"
 
 // ◇演出・機能
 #include "src/util/input/InputManager.h"

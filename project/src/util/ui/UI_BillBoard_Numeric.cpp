@@ -2,6 +2,7 @@
 #include "ui_Manager.h"
 
 #include "src/common/camera/cameraManager.h"
+#include <src/util/ptr/PtrUtil.h>
 
 UI_BillBorad_Numeric::UI_BillBorad_Numeric() {
 
@@ -10,7 +11,7 @@ UI_BillBorad_Numeric::UI_BillBorad_Numeric() {
 
 UI_BillBorad_Numeric::~UI_BillBorad_Numeric() {
 
-	Function::DeletePointerVector(numbers);
+	PtrUtil::SafeDeleteVector(numbers);
 }
 
 void UI_BillBorad_Numeric::Update() {
@@ -64,7 +65,7 @@ void UI_BillBorad_Numeric::Draw() {
 void UI_BillBorad_Numeric::Add(const int numberGraph[10], const Transform& trs, const Vector2& center, const float& _clipSize, const int& value) {
 
 	int digit = 1;	// åªç›ÇÃåÖêî
-	int digitMax = Function::Digit(value);	// åÖêî
+	int digitMax = MathUtil::Digit(value);	// åÖêî
 
 	clipSize = _clipSize;
 

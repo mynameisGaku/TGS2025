@@ -3,7 +3,6 @@
 // ◇汎用
 #include "src/util/time/GameTime.h"
 #include <vendor/magic_enum/magic_enum.hpp>
-#include "src/util/Utils.h"
 
 #include "src/util/input/KeyController.h"
 #include "src/util/input/PadController.h"
@@ -478,6 +477,7 @@ Vector3 InputManager::AnalogStick(int padNumber) {
 #ifdef _DEBUG
 
 #include <vendor/magic_enum/magic_enum.hpp>
+#include "src/util/string/StringUtil.h"
 
 void InputManager::DrawTest(const float& x, const float& y) {
 
@@ -498,7 +498,7 @@ void InputManager::DrawTest(const float& x, const float& y) {
 	// 入力データを画面に表示
 	for (const auto& itr : inputData) {
 		std::string sKeyName = magic_enum::enum_name(itr.keyCode).data();
-		std::string sPushTime = Function::FormatToString("time %.2f", itr.pushTime);
+		std::string sPushTime = StringUtil::FormatToString("time %.2f", itr.pushTime);
 
 		DrawFormatStringF(x, y + 25.0f * pushNum, GetColor(255, 255, 255), (sKeyName + ":" + sPushTime).c_str());
 		pushNum++;

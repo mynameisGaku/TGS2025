@@ -2,7 +2,6 @@
 #include <EffekseerForDXLib.h>
 
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
 #include "src/util/math/Operations.h"
 
 using namespace EffectDefine;

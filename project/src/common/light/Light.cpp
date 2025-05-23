@@ -1,10 +1,8 @@
 #include "Light.h"
 
 // ◇演出・機能
-#include "src/util/Utils.h"
+#include "src/util/math/mathUtils.h"
 #include "src/util/debug/imgui/imGuiManager.h"
-
-using namespace Math;
 
 Light::Light(const LightInfo& _info) {
 
@@ -49,9 +47,9 @@ void Light::LightUpdate() {
 		return;
 
 	// 角度の設定。度数法を弧度法に変換
-	info.outAngle = DegToRad(m_outAngle);
-	info.inAngle = DegToRad(m_inAngle);
-	transform->rotation = Vector3(DegToRad(m_rotation.x), DegToRad(m_rotation.y), DegToRad(m_rotation.z));
+	info.outAngle = MathUtil::ToRadians(m_outAngle);
+	info.inAngle = MathUtil::ToRadians(m_inAngle);
+	transform->rotation = Vector3(MathUtil::ToRadians(m_rotation.x), MathUtil::ToRadians(m_rotation.y), MathUtil::ToRadians(m_rotation.z));
 
 	// 拡散色を設定
 	SetLightDifColorHandle(info.handle, info.colorDif);

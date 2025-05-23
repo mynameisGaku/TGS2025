@@ -24,5 +24,8 @@
       "PlayTimeMaxSec": 600,
       "WinPointMax": 10
     }
-  ]
+  ],
+
+  "GameStartCountMaxSec": 5.0,
+  "GameEndCountMaxSec": 5.0
 }

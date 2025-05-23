@@ -1,8 +1,11 @@
 #include "src/util/ui/UI_Canvas.h"
 #include "src/util/ui/UI_Manager.h"
+#include "src/common/setting/window/WindowSetting.h"
 
 // ◇汎用
 #include "framework/myDxLib.h"
+#include <src/util/math/mathUtils.h>
+#include <src/util/ptr/PtrUtil.h>
 
 UI_Canvas::UI_Canvas() {
 
@@ -24,7 +27,7 @@ UI_Canvas::UI_Canvas() {
 
 	blinkTime = 0.0f;
 	blinkCounter = 0.0f;
-	blinkSpeed = Math::DegToRad(1.0f);
+	blinkSpeed = MathUtil::ToRadians(1.0f);
 
 	needBlink = false;
 
@@ -56,7 +59,7 @@ UI_Canvas::UI_Canvas() {
 UI_Canvas::~UI_Canvas() {
 
 	UI_Manager::Detach(this);
-	Function::DeletePointer(subtone);
+	PtrUtil::SafeDelete(subtone);
 }
 
 void UI_Canvas::Update() {
@@ -154,12 +157,12 @@ void UI_Canvas::ScaleWithScreenSize() {
 	GetScreenState(&screenX, &screenY, &colorBitDepth);
 
 	// 取得した画面情報と、既定の画面サイズで拡縮倍率を変化させる
-	scaleWithScreenSize = Vector2(static_cast<float>(screenX) / Screen::WIDTH, static_cast<float>(screenY) / Screen::HEIGHT);
+	scaleWithScreenSize = Vector2(static_cast<float>(screenX) / static_cast<int>(WindowSetting::Inst().width), static_cast<float>(screenY) / static_cast<int>(WindowSetting::Inst().height));
 }
 
 void UI_Canvas::SubtoneAdaptation(const UI_Subtone& sub) {
 
-	Function::DeletePointer(subtone);
+	PtrUtil::SafeDelete(subtone);
 	subtone = new UI_Subtone(sub);
 
 	RectTransform globalTrs = rectTransform->Global();
@@ -176,7 +179,7 @@ void UI_Canvas::SetPriority(const int& value) {
 
 void UI_Canvas::SetSubtone(const UI_Subtone& sub) {
 
-	Function::DeletePointer(subtone);
+	PtrUtil::SafeDelete(subtone);
 	subtone = new UI_Subtone(sub);
 }
 

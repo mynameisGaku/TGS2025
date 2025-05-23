@@ -6,8 +6,8 @@
 class GameRef
 {
 private:
-    const std::string FILEPATH = "";
-    const std::string FILEKEY = "";
+    const std::string FILEPATH  = "data/json/game/GameRef.json";
+    const std::string FILEKEY   = "GameRef";
 
     static GameRef* instance;
 public:
@@ -20,13 +20,17 @@ public:
 
     struct GameModeDesc
     {
-        int     WinPointMax;
-        float   PlayTimeMaxSec;
+        std::string GameModeName;
+        int         WinPointMax;
+        float       PlayTimeMaxSec;
     };
 
     std::unordered_map<std::string, GameModeDesc>   GameModeDescs;
     std::vector<std::string>                        GameModeNames;
     std::vector<std::string>                        TeamNames;
+
+    float GameStartCountMaxSec;
+    float GameEndCountMaxSec;
 
 private:
     bool m_WasLoad = false;

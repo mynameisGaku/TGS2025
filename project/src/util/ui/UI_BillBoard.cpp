@@ -1,4 +1,5 @@
 #include "src/util/ui/UI_BillBoard.h"
+#include "src/util/ptr/PtrUtil.h"
 
 UI_BillBoard::UI_BillBoard(const int& image, const Transform& trs, const Vector2& _center, const float& _clipSize) {
 
@@ -9,7 +10,7 @@ UI_BillBoard::UI_BillBoard(const int& image, const Transform& trs, const Vector2
 
 UI_BillBoard::~UI_BillBoard() {
 
-	Function::DeletePointer(transform);
+	PtrUtil::SafeDelete(transform);
 }
 
 void UI_BillBoard::Update() {

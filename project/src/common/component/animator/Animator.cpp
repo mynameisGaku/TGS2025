@@ -4,10 +4,10 @@
 #include "src/util/time/GameTime.h"
 #include "src/util/file/resource_loader/resourceLoader.h"
 #include <vendor/magic_enum/magic_enum.hpp>
-#include "src/util/utils.h"
 #include "src/util/object3D/Object3D.h"
 #include "src/util/file/json/settings_json.h"
 #include <assert.h>
+#include <src/util/ptr/PtrUtil.h>
 
 //ToDo:外部化
 namespace {
@@ -406,7 +406,7 @@ void Animator::DeleteAnimInfos() {
 	// アニメーション情報を解放する
 	for (auto& anim : anims) {
 		for (auto& event : anim.second.event) {
-			Function::DeletePointer(event);
+			PtrUtil::SafeDelete(event);
 		}
 		anim.second.event.clear();
 		MV1DeleteModel(anim.second.handle);

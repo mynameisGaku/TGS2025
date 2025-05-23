@@ -1,6 +1,6 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/util/file/json/settings_json.h"
-#include "src/util/Utils.h"
+#include "src/util/math/mathUtils.h"
 
 CameraDefineRef* CameraDefineRef::instance = nullptr;
 
@@ -20,10 +20,10 @@ void CameraDefineRef::Load(bool ForceLoad)
 	// ŠeŽí’lŽæ“¾
 	m_Near			= jsonLoader->GetOrDefault<float>("Near", 0.0f, FILEKEY);
 	m_Far			= jsonLoader->GetOrDefault<float>("Far", 0.0f, FILEKEY);
-	m_Perspective	= Math::DegToRad(jsonLoader->GetOrDefault<float>("Perspective", 0.0f, FILEKEY));
-	m_RotX_Max		= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotX_Max", 0.0f, FILEKEY));
-	m_RotX_Min		= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotX_Min", 0.0f, FILEKEY));
-	m_RotSpeedLimit	= Math::DegToRad(jsonLoader->GetOrDefault<float>("RotSpeedLimit", 0.0f, FILEKEY));
+	m_Perspective	= MathUtil::ToRadians(jsonLoader->GetOrDefault<float>("Perspective", 0.0f, FILEKEY));
+	m_RotX_Max		= MathUtil::ToRadians(jsonLoader->GetOrDefault<float>("RotX_Max", 0.0f, FILEKEY));
+	m_RotX_Min		= MathUtil::ToRadians(jsonLoader->GetOrDefault<float>("RotX_Min", 0.0f, FILEKEY));
+	m_RotSpeedLimit	= MathUtil::ToRadians(jsonLoader->GetOrDefault<float>("RotSpeedLimit", 0.0f, FILEKEY));
 
 	m_ConeAngle = jsonLoader->GetOrDefault<float>("ConeAngle", 0.0f, FILEKEY);
 	m_ConeRange = jsonLoader->GetOrDefault<float>("ConeRange", 0.0f, FILEKEY);

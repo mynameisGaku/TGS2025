@@ -1,6 +1,6 @@
 #include "src/util/object3D/Object3D.h"
-#include "src/util/Utils.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/ptr/PtrUtil.h"
 
 Object3D::Object3D() : Object3D(-1, Transform()) {}
 
@@ -22,7 +22,7 @@ Object3D::~Object3D() {
 		hModel = -1;
 	}
 
-	Function::DeletePointer(transform);
+	PtrUtil::SafeDelete(transform);
 }
 
 void Object3D::Draw() {
@@ -68,7 +68,7 @@ void Object3D::DrawAixs() {
 
 void Object3D::SetTransform(const Transform& trs) {
 
-	Function::DeletePointer(transform);
+	PtrUtil::SafeDelete(transform);
 	transform = new Transform(trs);
 }
 

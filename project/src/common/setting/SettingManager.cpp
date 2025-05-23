@@ -1,7 +1,7 @@
 #include "src/common/setting/SettingManager.h"
 
 // ◇汎用
-#include "src/util/Utils.h"
+#include "src/util/ptr/PtrUtil.h"
 
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
@@ -36,7 +36,7 @@ SettingManager::~SettingManager() {
 	for (auto& itr : setting) {
 		itr.second->SaveCsv(CSV_FILE_NAME);
 		itr.second->Apply();
-		Function::DeletePointer(itr.second);
+		PtrUtil::SafeDelete(itr.second);
 	}
 
 	setting.clear();

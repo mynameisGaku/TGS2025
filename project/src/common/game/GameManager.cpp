@@ -2,18 +2,16 @@
 
 GameManager::GameManager()
 {
+    init();
 }
 
 GameManager::~GameManager()
 {
 }
 
-void GameManager::Update()
+GAME_MODE_DESC GameManager::GetCurrentGameModeData()
 {
-}
-
-void GameManager::Draw()
-{
+    return m_GameModeDescs[m_CurrentGameMode];
 }
 
 void GameManager::init()
@@ -23,29 +21,4 @@ void GameManager::init()
     m_GameModeDescs = GAME_REF.GameModeDescs;
     m_GameModeNames = GAME_REF.GameModeNames;
     m_TeamNames     = GAME_REF.TeamNames;
-
-    m_pFsm = new TinyFSM<GameManager>(this);
-    m_pFsmDraw = new TinyFSM<GameManager>(this);
-
-    m_pFsm->ChangeState(&GameManager::StateBegin);
-}
-
-void GameManager::StateBegin(FSMSignal sig)
-{
-}
-
-void GameManager::StateReady(FSMSignal sig)
-{
-}
-
-void GameManager::StatePlay(FSMSignal sig)
-{
-}
-
-void GameManager::StateGameOver(FSMSignal sig)
-{
-}
-
-void GameManager::StateEnd(FSMSignal sig)
-{
 }

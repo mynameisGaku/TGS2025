@@ -34,15 +34,20 @@ void GameRef::Load(bool forceLoad)
     // JSON “Ç‚Ýž‚Ý
     jsonLoader->LoadSettingJson(FILEPATH, FILEKEY);
 
-    TeamNames       = jsonLoader->GetOrDefault<std::vector<std::string>>("TeamNames", std::vector<std::string>(0), FILEKEY);
-
     auto& rawJson = jsonLoader->GetJson(FILEKEY);
     
+    for (const auto& data : rawJson["TeamNames"])
+    {
+        std::string name = data.value<std::string>("Name", "No Information.");
+        TeamNames.push_back(name);
+    }
+
     for (const auto& data : rawJson["GameModeDescs"])
     {
         GameModeDesc desc = {};
         
         std::string name = data.value<std::string>("GameModeName", "No Infomation.");
+        desc.GameModeName = name;
         desc.PlayTimeMaxSec = data.value<float>("PlayTimeMaxSec", 0.0f);
         desc.WinPointMax = data.value<int>("WinPointMax", 0);
         GameModeDescs[name] = desc;
@@ -52,6 +57,9 @@ void GameRef::Load(bool forceLoad)
     {
         GameModeNames.push_back(desc.first);
     }
+
+    GameStartCountMaxSec = jsonLoader->GetOrDefault<float>("GameStartCountMaxSec", 0.0f, FILEKEY);
+    GameEndCountMaxSec   = jsonLoader->GetOrDefault<float>("GameEndCountMaxSec", 0.0f, FILEKEY);
 
     m_WasLoad = true;
 }

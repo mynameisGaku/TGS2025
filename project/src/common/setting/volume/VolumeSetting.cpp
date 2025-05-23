@@ -1,6 +1,8 @@
 #include "src/common/setting/volume/VolumeSetting.h"
 
 #include "src/util/sound/SoundManager.h"
+#include <src/util/ptr/PtrUtil.h>
+#include <src/util/math/mathUtils.h>
 
 VolumeSetting::VolumeSetting() {
 
@@ -24,7 +26,7 @@ VolumeSetting::~VolumeSetting() {
 		UI_Manager::Detach(itr);
 
 		// 実体を削除する
-		Function::DeletePointer(itr);
+		PtrUtil::SafeDelete(itr);
 	}
 
 	sliders.clear();
@@ -71,8 +73,6 @@ void VolumeSetting::LoadCsv(std::string filename) {
 
 void VolumeSetting::SaveCsv(std::string filename) {
 
-	using namespace Function;
-
 	auto volumes = SoundManager::CategoryVolumeRate();
 	if (volumes == nullptr)
 		return;
@@ -83,11 +83,11 @@ void VolumeSetting::SaveCsv(std::string filename) {
 	std::vector<std::string> data;	// ファイルに書き出す情報を行ごとにまとめる
 
 	data.push_back("");
-	data.push_back(std::to_string(Rounding((*volumes)[SoundCategory::cMaster],	1)));
-	data.push_back(std::to_string(Rounding((*volumes)[SoundCategory::cBGM],		1)));
-	data.push_back(std::to_string(Rounding((*volumes)[SoundCategory::cSE],		1)));
-	data.push_back(std::to_string(Rounding((*volumes)[SoundCategory::cVoice],	1)));
-	data.push_back(std::to_string(Rounding((*volumes)[SoundCategory::cENV],		1)));
+	data.push_back(std::to_string(MathUtil::Rounding((*volumes)[SoundCategory::cMaster],	1)));
+	data.push_back(std::to_string(MathUtil::Rounding((*volumes)[SoundCategory::cBGM],		1)));
+	data.push_back(std::to_string(MathUtil::Rounding((*volumes)[SoundCategory::cSE],		1)));
+	data.push_back(std::to_string(MathUtil::Rounding((*volumes)[SoundCategory::cVoice],	1)));
+	data.push_back(std::to_string(MathUtil::Rounding((*volumes)[SoundCategory::cENV],		1)));
 
 	bool newLine = false;	// 行の最後の文字に改行が付いているか
 

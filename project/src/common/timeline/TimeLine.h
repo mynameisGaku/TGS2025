@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vendor/nlohmann/json.hpp>
 #include "src/common/component/animator/Animator.h"
-#include "src/util/Utils.h"
+#include "src/util/file/FileUtil.h"
 
 struct TimelineEvent
 {
@@ -114,7 +114,7 @@ public:
 		m_Timelines.clear();
 
 		// フォルダ内の全ファイルのファイル名を取得
-		std::list<std::string> fileNames = Function::FindFileNames(folder, true);
+		std::list<std::string> fileNames = FileUtil::FindFileNames(folder, true);
 
 		// 読み込み
 		for (std::string fileName : fileNames)

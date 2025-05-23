@@ -10,7 +10,7 @@
 #include "src/util/file/FileUtil.h"
 
 
-namespace {
+namespace FileUtil{
 
 //-----------------------------------------------------------------------------
 //      文字列を置換します.
@@ -53,8 +53,6 @@ std::wstring Replace
 
     return result;
 }
-
-} // namespace
 
 //-----------------------------------------------------------------------------
 //      ファイルパスを検索します.
@@ -273,3 +271,5 @@ std::wstring GetDirectoryPathW( const wchar_t* filePath )
 
     return std::wstring();
 }
+
+} // namespace

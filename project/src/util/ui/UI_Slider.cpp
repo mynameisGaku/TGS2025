@@ -3,7 +3,7 @@
 
 // ◇汎用
 #include "framework/myDxLib.h"
-#include "src/util/Utils.h"
+#include "src/util/ptr/PtrUtil.h"
 
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
@@ -46,8 +46,8 @@ UI_Slider::UI_Slider(const std::string& _label, const RectTransform& trs, float*
 
 UI_Slider::~UI_Slider() {
 
-	Function::DeletePointer(labelText);
-	Function::DeletePointer(formatText);
+	PtrUtil::SafeDelete(labelText);
+	PtrUtil::SafeDelete(formatText);
 }
 
 void UI_Slider::Update() {
@@ -64,7 +64,7 @@ void UI_Slider::Update() {
 	}
 
 	if (formatText != nullptr) {
-		formatText->SetText(Function::FormatToString(format.c_str(), *value));
+		formatText->SetText(StringUtil::FormatToString(format.c_str(), *value));
 		formatText->Update();
 	}
 
@@ -195,9 +195,9 @@ void UI_Slider::SetFormatStr(const std::string& _format, const FontInfo& font) {
 	formatTrs.position.x = rectTransform->Global().position.x - ADJUST - (labelWidth * 0.5f);
 	formatTrs.position.y = rectTransform->Global().position.y - ADJUST;
 
-	Function::DeletePointer(formatText);
+	PtrUtil::SafeDelete(formatText);
 
-	formatText = new UI_Text(Function::FormatToString(format.c_str(), *value), formatTrs, font);
+	formatText = new UI_Text(StringUtil::FormatToString(format.c_str(), *value), formatTrs, font);
 	formatText->SetParent(this);
 	formatText->SetPriority(100);
 
@@ -214,9 +214,9 @@ void UI_Slider::SetLabelText(const std::string& _label, const FontInfo& font) {
 	labelTrs.position.x = rectTransform->Global().position.x - (backSize.x + labelWidth + ADJUST + 40.0f);
 	labelTrs.position.y = rectTransform->Global().position.y;
 
-	Function::DeletePointer(labelText);
+	PtrUtil::SafeDelete(labelText);
 	
-	labelText = new UI_Text(Function::FormatToString(label.c_str(), *value), labelTrs, font);
+	labelText = new UI_Text(StringUtil::FormatToString(label.c_str(), *value), labelTrs, font);
 	labelText->SetParent(this);
 	labelText->SetPriority(100);
 

@@ -3,10 +3,13 @@
 #include <vector>
 #include <unordered_map>
 
+#include <list>
+#include "src/util/ptr/PtrUtil.h"
+
 namespace {
 
 	std::unordered_map<std::string, std::unordered_map<int, FontInfo>>* fonts;	// フォントデータ [フォントの名前][サイズ] フォント情報
-	std::list<String::Folder>* folderStrDatas;	// 読み込み済のフォント情報
+	std::list<FileUtil::Folder>* folderStrDatas;	// 読み込み済のフォント情報
 }
 
 void Font::Init() {
@@ -15,7 +18,7 @@ void Font::Init() {
 		fonts = new std::unordered_map<std::string, std::unordered_map<int, FontInfo>>;
 
 	if (folderStrDatas == nullptr)
-		folderStrDatas = new std::list<String::Folder>;
+		folderStrDatas = new std::list<FileUtil::Folder>;
 }
 
 void Font::Release() {
@@ -31,10 +34,10 @@ void Font::Release() {
 			type = fonts->erase(type);
 		}
 
-		Function::DeletePointer(fonts);
+		PtrUtil::SafeDelete(fonts);
 	}
 
-	Function::DeletePointer(folderStrDatas);
+	PtrUtil::SafeDelete(folderStrDatas);
 }
 
 void Font::Load(const std::string& filePath, const std::string& resourceName, const std::string& fontName) {
@@ -57,9 +60,9 @@ void Font::Load(const std::string& filePath, const std::string& resourceName, co
 	// ◇文字列を格納
 
 	if (folderStrDatas == nullptr)
-		folderStrDatas = new std::list<String::Folder>;
+		folderStrDatas = new std::list<FileUtil::Folder>;
 
-	folderStrDatas->push_back(String::Folder(filePath, resourceName, fontName));
+	folderStrDatas->push_back(FileUtil::Folder(filePath, resourceName, fontName));
 }
 
 int Font::CreateFontToHandle(FontInfo* info) {

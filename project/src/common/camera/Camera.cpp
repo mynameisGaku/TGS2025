@@ -4,7 +4,7 @@
 // ◇汎用
 #include "framework/myDxLib.h"
 #include "src/util/time/GameTime.h"
-#include "src/Util/Utils.h"
+#include "src/Util/ptr/PtrUtil.h"
 #include "src/common/stage/Stage.h"
 #include "src/util/easing/EasingUtils.h"
 #include <assert.h>
@@ -50,8 +50,8 @@ Camera::Camera() {
 Camera::~Camera() {
 
 	holder = nullptr;
-	Function::DeletePointer(fsm);
-	Function::DeletePointer(cameraWork);
+	PtrUtil::SafeDelete(fsm);
+	PtrUtil::SafeDelete(cameraWork);
 
 	RemoveComponent<Shake>();
 }
@@ -108,8 +108,8 @@ void Camera::Draw() {
 
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 
-	//Vector3 coneLineL = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(Math::DegToRad(cameraCone.angle * 0.5f)) * globalTrs.RotationMatrix();
-	//Vector3 coneLineR = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(Math::DegToRad(cameraCone.angle * -0.5f)) * globalTrs.RotationMatrix();
+	//Vector3 coneLineL = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(MathUtil::ToRadians(cameraCone.angle * 0.5f)) * globalTrs.RotationMatrix();
+	//Vector3 coneLineR = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(MathUtil::ToRadians(cameraCone.angle * -0.5f)) * globalTrs.RotationMatrix();
 	//DrawLine3D(cameraPos, cameraPos + coneLineL, 0xFF0000);
 	//DrawLine3D(cameraPos, cameraPos + coneLineR, 0xFF0000);
 	//DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
@@ -144,8 +144,8 @@ void Camera::MoveProcess()
 	//====================================================================================================
 	// ▼マウスによるカメラの向き変更
 
-	transform->rotation.x += (MouseController::Info().Move().y * Math::DegToRad(1.0f));
-	transform->rotation.y += (MouseController::Info().Move().x * Math::DegToRad(1.0f));
+	transform->rotation.x += (MouseController::Info().Move().y * MathUtil::ToRadians(1.0f));
+	transform->rotation.y += (MouseController::Info().Move().x * MathUtil::ToRadians(1.0f));
 
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
@@ -173,12 +173,12 @@ void Camera::OperationByMouse(int type) {
 	MouseController::MouseInfo mouse = MouseController::Info();	// マウスの情報
 
 	switch (type) {
-	case 0:	addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);	break;
-	case 1:	addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);	break;
+	case 0:	addRot.x = (mouse.moveY * mouse.sensitivity.y) * MathUtil::ToRadians(0.1f);	break;
+	case 1:	addRot.y = (mouse.moveX * mouse.sensitivity.x) * MathUtil::ToRadians(0.1f);	break;
 
 	default:
-		addRot.x = (mouse.moveY * mouse.sensitivity.y) * Math::DegToRad(0.1f);
-		addRot.y = (mouse.moveX * mouse.sensitivity.x) * Math::DegToRad(0.1f);
+		addRot.x = (mouse.moveY * mouse.sensitivity.y) * MathUtil::ToRadians(0.1f);
+		addRot.y = (mouse.moveX * mouse.sensitivity.x) * MathUtil::ToRadians(0.1f);
 		break;
 	}
 
@@ -193,11 +193,11 @@ void Camera::OperationByStick(int type) {
 	Vector2 rightStick = PadController::NormalizedRightStick();
 
 	switch (type) {
-	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);break;
-	case 1:	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);	break;
+	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * MathUtil::ToRadians(-1.0f);break;
+	case 1:	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * MathUtil::ToRadians(1.0f);	break;
 	default:
-		addRot.x = (rightStick.y * PadController::StickSensitivity().y) * Math::DegToRad(-1.0f);
-		addRot.y = (rightStick.x * PadController::StickSensitivity().x) * Math::DegToRad(1.0f);
+		addRot.x = (rightStick.y * PadController::StickSensitivity().y) * MathUtil::ToRadians(-1.0f);
+		addRot.y = (rightStick.x * PadController::StickSensitivity().x) * MathUtil::ToRadians(1.0f);
 		break;
 	}
 	// 勢いがつき過ぎない様に、制限をかける

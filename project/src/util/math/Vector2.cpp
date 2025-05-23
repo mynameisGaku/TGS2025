@@ -330,7 +330,7 @@ void Vector2::TransformCoord(const Matrix& mat)
 //------------------------------------------------------------------------------
 bool Vector2::IsNaNOrInf() const
 {
-	return Math::IsNaNOrInf(x) || Math::IsNaNOrInf(y);
+	return MathUtil::IsNaNOrInf(x) || MathUtil::IsNaNOrInf(y);
 }
 
 //------------------------------------------------------------------------------
@@ -444,8 +444,8 @@ Vector2 Vector2::TransformCoord(const Vector2& vec, const Matrix& mat)
 Vector2 Vector2::Lerp(const Vector2& start, const Vector2& end, float t)
 {
 	return Vector2(
-		Math::Lerp(start.x, end.x, t),
-		Math::Lerp(start.y, end.y, t));
+		MathUtil::Lerp(start.x, end.x, t),
+		MathUtil::Lerp(start.y, end.y, t));
 }
 
 //------------------------------------------------------------------------------
@@ -454,8 +454,8 @@ Vector2 Vector2::Lerp(const Vector2& start, const Vector2& end, float t)
 Vector2 Vector2::Hermite(const Vector2& v1, const Vector2& a1, const Vector2& v2, const Vector2& a2, float t)
 {
 	return Vector2(
-		Math::Hermite(v1.x, a1.x, v2.x, a2.x, t),
-		Math::Hermite(v1.y, a1.y, v2.y, a2.y, t));
+		MathUtil::Hermite(v1.x, a1.x, v2.x, a2.x, t),
+		MathUtil::Hermite(v1.y, a1.y, v2.y, a2.y, t));
 }
 
 //------------------------------------------------------------------------------
@@ -464,6 +464,6 @@ Vector2 Vector2::Hermite(const Vector2& v1, const Vector2& a1, const Vector2& v2
 Vector2 Vector2::CatmullRom(const Vector2& vec1, const Vector2& vec2, const Vector2& vec3, const Vector2& vec4, float t)
 {
 	return Vector2(
-		Math::CatmullRom(vec1.x, vec2.x, vec3.x, vec4.x, t),
-		Math::CatmullRom(vec1.y, vec2.y, vec3.y, vec4.y, t));
+		MathUtil::CatmullRom(vec1.x, vec2.x, vec3.x, vec4.x, t),
+		MathUtil::CatmullRom(vec1.y, vec2.y, vec3.y, vec4.y, t));
 }

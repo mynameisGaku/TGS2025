@@ -6,6 +6,7 @@
 #include "src/util/time/GameTime.h"
 #include "src/Util/ptr/PtrUtil.h"
 #include "src/common/stage/Stage.h"
+#include "src/util/easing/EasingUtils.h"
 #include <assert.h>
 
 // ◇ステート関連
@@ -41,7 +42,7 @@ Camera::Camera() {
 	cameraCone.range = CAMERADEFINE_REF.m_ConeRange;
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
-	targetChara = nullptr;
+	m_TargetChara = nullptr;
 
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
@@ -64,6 +65,10 @@ void Camera::Reset() {
 	target = CAMERADEFINE_REF.m_TargetDef;
 	offsetPrev = offset;
 	targetPrev = target;
+	offsetAfter = offset;
+	targetAfter = target;
+
+	m_TargetTransitionTime = 0.0f;
 
 	holder = nullptr;
 }
@@ -75,6 +80,9 @@ void Camera::Update() {
 	if (fsm != nullptr)
 		fsm->Update();
 
+	UpdateOffsetLeap();
+	UpdateTargetLeap();
+
 	Object3D::Update();
 }
 
@@ -82,16 +90,16 @@ void Camera::Draw() {
 
 	Object3D::Draw();
 
-	MATRIX mShakeTrs = MGetIdent();	// 振動用行列
+	MATRIX mShake = MGetIdent();	// 振動用行列
 
 	Shake* shake = GetComponent<Shake>();
 	if (shake != nullptr)
-		mShakeTrs = shake->Matrix();
+		mShake = shake->Matrix();
 
 	Transform globalTrs = transform->Global();
 
-	Vector3 cameraPos = globalTrs.position + offset * globalTrs.RotationMatrix() * mShakeTrs;
-	Vector3 targetPos = target * mShakeTrs;
+	Vector3 cameraPos = (globalTrs.position + OffsetRotAdaptor()) * mShake;
+	Vector3 targetPos = target * mShake;
 
 	if (holder != nullptr) {
 		cameraPos += holder->Global().position;
@@ -119,14 +127,15 @@ void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
 void Camera::ColCheckToTerrain() {
 
-	Vector3 hitPos = Vector3::Zero;
-	Vector3 cameraPosition = WorldPos();
+	Vector3 hitPos = Vector3::Zero;	// 当たった座標
+	Vector3 cameraPos = WorldPos();	// カメラの座標
+	Vector3 lay = Vector3::SetY(-10.0f);
 
-	if (Stage::ColCheckGround(target, cameraPosition - Vector3::SetY(10.0f), &hitPos)) {
+	if (Stage::ColCheckGround(target, cameraPos + lay, &hitPos)) {
 		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * Vector3::UnitY;	// 地面との設置点
 		Vector3 targePos = target * Vector3::UnitY;
 
-		transform->position = terrainPos + targePos + Vector3::SetY(10.0f);
+		transform->position = terrainPos + targePos - lay;
 	}
 }
 
@@ -197,6 +206,16 @@ void Camera::OperationByStick(int type) {
 
 	transform->rotation.x += addRot.x;
 	transform->rotation.y += addRot.y;
+}
+
+void Camera::UpdateOffsetLeap() {
+
+	offset += (offsetAfter - offset) * CAMERADEFINE_REF.m_Interpolation;
+}
+
+void Camera::UpdateTargetLeap() {
+
+	target += (targetAfter - target) * CAMERADEFINE_REF.m_Interpolation;
 }
 
 void Camera::SetPerformance(const std::string& perfType) {

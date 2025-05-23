@@ -36,6 +36,8 @@ void CameraDefineRef::Load(bool ForceLoad)
 
 	m_OffsetAim = jsonLoader->GetOrDefault<Vector3>("OffsetAim", Vector3::Zero, FILEKEY);
 	m_TargetAim = jsonLoader->GetOrDefault<Vector3>("TargetAim", Vector3::Zero, FILEKEY);
+	
+	m_Interpolation = jsonLoader->GetOrDefault<Vector3>("Interpolation", Vector3::Zero, FILEKEY);
 
 	// ƒ[ƒh‚µ‚½‚æ
 	m_WasLoad = true;

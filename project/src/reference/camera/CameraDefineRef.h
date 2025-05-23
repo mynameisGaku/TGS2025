@@ -52,11 +52,13 @@ public:
 	Vector3 m_OffsetAim;	// エイムカメラの既定相対座標
 	Vector3 m_TargetAim;	// エイムカメラの既定注視座標
 
+	Vector3 m_Interpolation;// カメラの補間係数
+
 	void Load(bool ForceLoad = false);
 
 private:
 
-	bool                m_WasLoad; // ロード済みか？ 重複回避用
+	bool m_WasLoad; // ロード済みか？ 重複回避用
 
 	CameraDefineRef() :
 		m_WasLoad(false),
@@ -73,7 +75,8 @@ private:
 		m_OffsetChase(Vector3::Zero),
 		m_TargetChase(Vector3::Zero),
 		m_OffsetAim(Vector3::Zero),
-		m_TargetAim(Vector3::Zero)
+		m_TargetAim(Vector3::Zero),
+		m_Interpolation(Vector3::Zero)
 	{ /*DO NOTHING*/
 	}
 

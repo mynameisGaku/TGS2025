@@ -55,11 +55,11 @@ void InputManager::Init() {
 		key["Left"] = { KeyCode::Left, KeyCode::LeftArrow };
 		key["Right"] = { KeyCode::Right, KeyCode::RightArrow };
 
-		key["Attack"] = { KeyCode::LeftClick, KeyCode::ButtonX };
-		key["Strong"] = { KeyCode::RightClick, KeyCode::ButtonY };
-		key["Special"] = { KeyCode::Z, KeyCode::ButtonB };
-		key["Avoid"] = { KeyCode::Space, KeyCode::ButtonA };
-		key["Run"] = { KeyCode::LeftShift, KeyCode::LeftThumb };
+		key["Throw"] = { KeyCode::LeftClick, KeyCode::RightShoulder };
+		key["Catch"] = { KeyCode::RightClick, KeyCode::LeftShoulder };
+		key["Jump"] = { KeyCode::Space, KeyCode::ButtonA };
+		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftControl, KeyCode::ButtonB };
+		key["Teleport"] = { KeyCode::E, KeyCode::Y };
 
 		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
 		key["MoveUp"] = { KeyCode::W };

@@ -87,7 +87,6 @@ public:
 	~AttachedAnimation_Sub() {}
 
 	void Update() override;
-	void UpdateBrendRate(int currentAttachID);
 private:
 	int m_targetID;	// アニメーションを適用するフレームID
 };

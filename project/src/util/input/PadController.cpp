@@ -109,6 +109,11 @@ Vector2 PadController::NormalizedLeftStick(int padNumber) {
 	float x = static_cast<float>((*inputs)[padNumber - 1].ThumbLX) / 32767.0f;
 	float y = static_cast<float>((*inputs)[padNumber - 1].ThumbLY) / 32767.0f;
 
+	if (fabsf(x) <= STICK_DEADZONE)
+		x = 0.0f;
+	if (fabsf(y) <= STICK_DEADZONE)
+		y = 0.0f;
+
 	return Vector2(x, y);
 }
 
@@ -119,6 +124,11 @@ Vector2 PadController::NormalizedRightStick(int padNumber) {
 
 	float x = static_cast<float>((*inputs)[padNumber - 1].ThumbRX) / 32767.0f;
 	float y = static_cast<float>((*inputs)[padNumber - 1].ThumbRY) / 32767.0f;
+
+	if (fabsf(x) <= STICK_DEADZONE)
+		x = 0.0f;
+	if (fabsf(y) <= STICK_DEADZONE)
+		y = 0.0f;
 
 	return Vector2(x, y);
 }

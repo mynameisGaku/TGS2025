@@ -69,6 +69,20 @@ namespace Math {
 		return v;
 	}
 
+	/// <summary>
+	/// 指定した最小値と最大値の間に制限する
+	/// </summary>
+	/// <param name="v">現在値</param>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	template<typename T = float>
+	inline void Clamp_Assing(T* v, T min, T max) {
+		if (*v < min)
+			*v = min;
+		else if (*v > max)
+			*v = max;
+	}
+
 	inline float RateDecrease(float start, float rate) {
 
 		if (rate >= 1.0f || rate <= 0.0f)

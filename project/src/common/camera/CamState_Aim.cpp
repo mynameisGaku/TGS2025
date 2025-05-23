@@ -43,53 +43,53 @@ void Camera::AimState(FSMSignal sig)
 			return;
 
 		// 注視するキャラ
-		targetChara = charaM->TargetChara(m_CharaIndex);
-		if (targetChara == nullptr) {
+		m_TargetChara = charaM->TargetChara(m_CharaIndex);
+		if (m_TargetChara == nullptr || MouseController::Info().Move().GetLengthSquared() > 5.0f) {
+			m_TargetTransitionTime = 0.5f;
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
 		// コーンの範囲に入って居ない場合
-		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision()) {
-			bool inCone = ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision();
-			targetChara = nullptr;
+		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, m_TargetChara->transform->position).IsCollision()) {
+			m_TargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
 		const Transform charaTrs = chara->transform->Global();			// 追従キャラのトランスフォーム
-		const Transform targetTrs = targetChara->transform->Global();	// 注視キャラのトランスフォーム
+		const Transform targetTrs = m_TargetChara->transform->Global();	// 注視キャラのトランスフォーム
+		Vector3 targetOffset = Vector3::SetY(100.0f);					// 注視点の相対座標
+		Vector3 targetPos = targetTrs.position + targetOffset;
 
-		// カメラ座標と追従キャラ座標を一致させる
+		// カメラ座標と追従するキャラの座標を一致させる
 		transform->position = charaTrs.position;
 
 		// カメラの相対座標を設定
-		SetOffset(CAMERADEFINE_REF.m_OffsetAim);
-
-		const Vector3 targetDiff = targetTrs.position + Vector3::SetY(100.0f) - target;	// 注視点の差異
+		SetOffset_Leap(CAMERADEFINE_REF.m_OffsetAim);
 
 		// カメラの注視点を設定
-		SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
+		SetTarget_Leap(targetPos);
 
-		const Vector3 diffPos = targetTrs.position - transform->Global().position;	// 注視キャラとカメラの座標の差異
-		float targetRot = atan2f(diffPos.x, diffPos.z);		// カメラから注視キャラへの角度
-		float diffRot = targetRot - transform->rotation.y;	// 現在の向きと注視キャラへの角度の差異
+		const float TARGET_DIR = targetPos.Direction(transform->Global().position);	// カメラから注視キャラへの角度
 		const float ROT_X = Math::DegToRad(-20.0f);			// カメラのX軸回転値
+		float diffRot = TARGET_DIR - transform->rotation.y;	// 現在の向きと注視キャラへの角度の差異
 
-		// 回転角度を適応
+		// 回転角度に制限をかける
 		Function::RotLimit(&diffRot);
+
 		transform->rotation.x += (ROT_X - transform->rotation.x) * 0.1f;
 		transform->rotation.y += diffRot * 0.1f;
+
+		// 回転角度に制限をかける
 		Function::RotLimit(&transform->rotation.y);
 
 		// カメラとキャラの向きを揃える
-		chara->transform->rotation.y = transform->rotation.y;
+		//chara->transform->rotation.y = transform->rotation.y;
 
-		//ColCheckToTerrain();
-
-		if (not InputManager::Hold(KeyCode::RightClick))
+		if (not InputManager::Hold("TargetCamera"))
 		{
-			targetChara = nullptr;
+			m_TargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 	}
@@ -101,7 +101,7 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
-		targetChara = nullptr;
+		m_TargetChara = nullptr;
 		canMove = true;
 	}
 	break;

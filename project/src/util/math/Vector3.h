@@ -147,10 +147,10 @@ public:
 	/* トモミチゾーン */
 
 	// 引数との差を取得する
-	inline const Vector3 Distance(Vector3 value) { return Vector3(x - value.x, y - value.y, z - value.z); }
+	inline const Vector3 Distance(const Vector3& value) { return Vector3(x - value.x, y - value.y, z - value.z); }
 
 	// 引数から自身の方へ向く角度を取得する
-	inline const float Direction(Vector3 value) {
+	inline const float Direction(const Vector3& value) {
 		Vector3 v = Distance(value);
 		return atan2f(v.x, v.z);
 	}

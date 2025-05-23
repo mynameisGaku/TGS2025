@@ -2,7 +2,7 @@
     "Near": 10.0,
     "Far": 100000.0,
     "Perspective": 90.0,
-    "RotX_Max": 25.0,
+    "RotX_Max": 10.0,
     "RotX_Min": -85.0,
     "RotSpeedLimit": 13.0,
 
@@ -38,5 +38,10 @@
         "X": 0.0,
         "Y": 100.0,
         "Z": 0.0
+    },
+    "Interpolation": {
+        "X": 0.1,
+        "Y": 0.25,
+        "Z": 0.1
     }
 }

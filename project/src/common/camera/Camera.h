@@ -5,6 +5,7 @@
 // ◇汎用
 #include "src/util/file/csv/csvReader.h"
 #include "src/util/fsm/TinyFSM.h"
+#include "src/util/easing/EasingUtils.h"
 
 // ◇個別で必要な物
 #include "src/common/camera/CameraDefine.h"
@@ -80,6 +81,16 @@ public:
 	/// </param>
 	void OperationByStick(int type = -1);
 
+	/// <summary>
+	/// 補間先の座標に相対座標を合わせる
+	/// </summary>
+	void UpdateOffsetLeap();
+
+	/// <summary>
+	/// 補間先の座標に注視点を合わせる
+	/// </summary>
+	void UpdateTargetLeap();
+
 	//================================================================================
 	// ▼セッター
 
@@ -87,13 +98,23 @@ public:
 	/// 相対座標を設定する
 	/// </summary>
 	/// <param name="_offset">相対座標</param>
-	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
+	inline void SetOffset(const Vector3& _offset) { offset = offsetAfter = _offset; }
+
+	/// <summary>
+	/// 相対座標を設定する(補間挙動有)
+	/// </summary>
+	inline void SetOffset_Leap(const Vector3& _offset) { offsetAfter = _offset; }
 
 	/// <summary>
 	/// 注視点を設定する
 	/// </summary>
 	/// <param name="_target">注視点を設定する</param>
-	inline void SetTarget(const Vector3& _target) { target = _target; }
+	inline void SetTarget(const Vector3& _target) { target = targetAfter = _target; }
+
+	/// <summary>
+	/// 注視点を設定する(補間挙動有)
+	/// </summary>
+	inline void SetTarget_Leap(const Vector3& _target) { targetAfter = _target; }
 
 	/// <summary>
 	/// 保有者を設定する
@@ -189,7 +210,7 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
-	const CharaBase* TargetChara() const { return targetChara; }
+	const CharaBase* TargetChara() const { return m_TargetChara; }
 
 	//================================================================================
 	// ▼ステート
@@ -217,13 +238,19 @@ private:
 
 	Vector3 offset;		// カメラの相対座標
 	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
+	Vector3 offsetAfter;// 補間先のカメラの相対座標
+
 	Vector3 target;		// カメラの注視点
 	Vector3 targetPrev;	// 一つ前のカメラの注視点
+	Vector3 targetAfter;// 補間先のカメラの注視点
+
 	ColDefine::Cone cameraCone;
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報
 	int m_CharaIndex;			// キャラクターの番号
+	float m_TargetTransitionTime;// カメラが注視キャラに注視点を移動させる時間
+	bool m_IsTargeting;			// 注視しているか
 
-	const CharaBase* targetChara;
+	const CharaBase* m_TargetChara;	// 注視しているキャラ
 };

@@ -20,69 +20,78 @@ using namespace CameraDefine;
 
 void Camera::ChaseState(FSMSignal sig)
 {
-    // 移動可能か
-    static bool canMove;
+	// 移動可能か
+	static bool canMove;
 
-    switch (sig)
-    {
-    case FSMSignal::SIG_Enter: // 初期化 (Constractor)
-    {
-        canMove = true;
-    }
-    break;
-    case FSMSignal::SIG_Update: // 更新 (Update)
-    {
-        OperationByMouse();
-        OperationByStick();
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
+	{
+		canMove = true;
 
-        // キャラクターの管理者
-        CharaManager* charaM = FindGameObject<CharaManager>();
-        if (charaM == nullptr)
-            return;
+		m_TargetTransitionTime = 0.0f;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新 (Update)
+	{
+		if (m_TargetTransitionTime > 0.0f)
+			m_TargetTransitionTime -= GTime.DeltaTime();
+		else
+			m_TargetTransitionTime = 0.0f;
 
-        // 追従するキャラクター
-        const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
-        if (chara == nullptr)
-            return;
+		OperationByMouse();
+		OperationByStick();
 
-        // キャラクターのトランスフォーム
-        const Transform charaTrs = chara->transform->Global();
+		// キャラクターの管理者
+		CharaManager* charaM = FindGameObject<CharaManager>();
+		if (charaM == nullptr)
+			return;
 
-        // 注視点の差異
-        const Vector3 targetDiff = (CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix()) - target;
+		// 追従するキャラクター
+		const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
+		if (chara == nullptr)
+			return;
 
-        // カメラの相対座標を設定
-        SetOffset(CAMERADEFINE_REF.m_OffsetChase);
+		// キャラクターのトランスフォーム
+		const Transform charaTrs = chara->transform->Global();
 
-        // カメラの注視点を設定
-        SetTarget(target + targetDiff * Vector3(0.1f, 0.25f, 0.1f));
-        
-        transform->position = charaTrs.position;
+		// カメラの相対座標を設定
+		SetOffset_Leap(CAMERADEFINE_REF.m_OffsetChase);
 
-        //ColCheckToTerrain();
+		// カメラの注視点を設定
+		SetTarget_Leap(CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix());
+		
+		// カメラ座標と追従するキャラの座標を一致させる
+		transform->position = charaTrs.position;
 
-        transform->rotation.x = Math::Clamp(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
-        Function::RotLimit(&transform->rotation.y);
+		Math::Clamp_Assing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		Function::RotLimit(&transform->rotation.y);
 
-        // 注視するキャラ
-        const CharaBase* targetChara = charaM->TargetChara(m_CharaIndex);
+		// 注視するキャラ
+		m_TargetChara = charaM->TargetChara(m_CharaIndex);
 
-        if (InputManager::Hold(KeyCode::RightClick) && targetChara != nullptr)
-        {
-            if (ColFunction::ColCheck_ConeToPoint(cameraCone, targetChara->transform->position).IsCollision())
-                ChangeState(&Camera::AimState);
-        }
-    }
-    break;
-    case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
-    {
+		// 注視するキャラが存在、ボタン入力がされた場合
+		if (m_TargetChara != nullptr && InputManager::Hold("TargetCamera"))
+		{
+			// マウスの移動検知
+			if (MouseController::Info().Move().GetLengthSquared() > 5.0f)
+				m_TargetTransitionTime = 0.5f;
 
-    }
-    break;
-    case FSMSignal::SIG_Exit: // 終了 (Exit)
-    {
-        canMove = true;
-    }
-    break;
-    }
+			// コーン形状の判定内に注視するキャラが居る場合
+			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(cameraCone, m_TargetChara->transform->position).IsCollision())
+				ChangeState(&Camera::AimState);
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
+	{
+
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了 (Exit)
+	{
+		canMove = true;
+	}
+	break;
+	}
 }

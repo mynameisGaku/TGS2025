@@ -143,6 +143,8 @@ public:
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
 
+	void StateAimToThrow(FSMSignal sig);
+
 	void StateAirSpin(FSMSignal sig);
 
 	void StateCrouchToActionIdle(FSMSignal sig);
@@ -153,6 +155,8 @@ public:
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
 	void StateFallToRoll(FSMSignal sig);
+
+	void StateFeint(FSMSignal sig);
 
 	void StateRoll(FSMSignal sig);
 	void StateRollToActionIdle(FSMSignal sig);
@@ -174,8 +178,6 @@ public:
 	void SubStateGetBall(FSMSignal sig);
 	void SubStateHold(FSMSignal sig);
 	void SubStateHoldToAim(FSMSignal sig);
-	void SubStateAimToThrow(FSMSignal sig);
-	void SubStateFeint(FSMSignal sig);
 	void SubStateCatch(FSMSignal sig);
 
 private:

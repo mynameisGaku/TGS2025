@@ -445,7 +445,7 @@ void CharaBase::ThrowBall(const Vector3& velocity)
 
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
-	m_SubFSM->ChangeState(&CharaBase::SubStateAimToThrow); // ステートを変更
+	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::ThrowBallForward()
@@ -470,12 +470,12 @@ void CharaBase::ThrowHomingBall()
 
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
-	m_SubFSM->ChangeState(&CharaBase::SubStateAimToThrow); // ステートを変更
+	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::Feint()
 {
-	m_SubFSM->ChangeState(&CharaBase::SubStateFeint); // ステートを変更
+	m_FSM->ChangeState(&CharaBase::StateFeint); // ステートを変更
 }
 
 void CharaBase::TeleportToLastBall()
@@ -656,6 +656,35 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
+void CharaBase::StateAimToThrow(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
+		m_Animator->Play("AimToThrow");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
 	}
 	break;
 	}
@@ -866,6 +895,36 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 
 		m_CanMove = true;
 		m_CanRot = true;
+	}
+	break;
+	}
+}
+
+void CharaBase::StateFeint(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
+		m_Animator->Play("AimToThrow");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_SubFSM->ChangeState(&CharaBase::SubStateHoldToAim); // ステートを変更
 	}
 	break;
 	}
@@ -1335,63 +1394,6 @@ void CharaBase::SubStateHoldToAim(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-	}
-	break;
-	}
-}
-
-void CharaBase::SubStateAimToThrow(FSMSignal sig)
-{
-	switch (sig)
-	{
-	case FSMSignal::SIG_Enter: // 開始
-	{
-		m_Animator->PlaySub("mixamorig9:Spine", "AimToThrow");
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新
-	{
-		if (m_Animator->IsFinishedSub("mixamorig9:Spine"))
-		{
-			m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
-		}
-	}
-	break;
-	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
-	{
-	}
-	break;
-	case FSMSignal::SIG_Exit: // 終了
-	{
-	}
-	break;
-	}
-}
-
-void CharaBase::SubStateFeint(FSMSignal sig)
-{
-	switch (sig)
-	{
-	case FSMSignal::SIG_Enter: // 開始
-	{
-		m_Animator->PlaySub("mixamorig9:Spine", "AimToThrow");
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新
-	{
-		if (m_Animator->IsFinishedSub("mixamorig9:Spine"))
-		{
-			m_SubFSM->ChangeState(&CharaBase::SubStateHoldToAim); // ステートを変更
-		}
-	}
-	break;
-	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
-	{
-	}
-	break;
-	case FSMSignal::SIG_Exit: // 終了
-	{
-		m_Animator->PlaySub("mixamorig9:Spine", "Hold");
 	}
 	break;
 	}

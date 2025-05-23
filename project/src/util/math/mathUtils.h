@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 
 /**
 	@brief	一般的な数学関数と定数をまとめたモジュールです。
@@ -139,4 +140,6 @@ public:
 	/// 回転角度に制限をかける(-PI～PI)
 	/// </summary>
 	static void RotLimit(float* rot);
+
+	static int CalcList(const std::list<int>& list);
 };

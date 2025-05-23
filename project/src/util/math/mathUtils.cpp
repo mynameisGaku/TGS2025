@@ -211,3 +211,13 @@ void MathUtil::RotLimit(float* rot)
 	else if (*rot < -MathUtil::PI)
 		*rot += MathUtil::PI_TW;
 }
+
+int MathUtil::CalcList(const std::list<int>& list)
+{
+	int result = 0;
+	for (auto& it : list)
+	{
+		result += it;
+	}
+	return result;
+}

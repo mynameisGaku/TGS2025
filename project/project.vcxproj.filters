@@ -316,6 +316,9 @@
     <Filter Include="data\Ini">
       <UniqueIdentifier>{f4a1c136-f6dd-4eb0-9524-1bf26c00d24f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\team">
+      <UniqueIdentifier>{30b4e835-5a21-40b6-b28f-63ddb027a118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1031,6 +1034,12 @@
     <ClCompile Include="src\scene\play\match\MatchManager.cpp">
       <Filter>src%28application%29\scene\play\match</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\team\TeamManager.cpp">
+      <Filter>src%28application%29\scene\play\team</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\team\Team.cpp">
+      <Filter>src%28application%29\scene\play\team</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1698,6 +1707,12 @@
     </ClInclude>
     <ClInclude Include="src\util\ptr\PtrUtil.h">
       <Filter>src%28application%29\util\ptr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\team\TeamManager.h">
+      <Filter>src%28application%29\scene\play\team</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\team\Team.h">
+      <Filter>src%28application%29\scene\play\team</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

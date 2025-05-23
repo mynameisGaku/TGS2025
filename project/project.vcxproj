@@ -299,6 +299,8 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
+    <ClCompile Include="src\scene\play\team\Team.cpp" />
+    <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorDecorator.cpp" />
@@ -455,6 +457,8 @@
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h" />
     <ClInclude Include="src\scene\play\match\MatchManager.h" />
     <ClInclude Include="src\scene\play\playScene.h" />
+    <ClInclude Include="src\scene\play\team\Team.h" />
+    <ClInclude Include="src\scene\play\team\TeamManager.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorDecorator.h" />

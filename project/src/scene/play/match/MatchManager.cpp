@@ -5,6 +5,7 @@
 //=== ƒLƒƒƒ‰ ===
 #include "src/util/math/mathUtils.h"
 #include "src/scene/play/chara/CharaManager.h"
+#include "src/scene/play/chara/CharaHP.h"
 #include "src/common/component/controller/PlayerController.h"
 #include "src/common/component/controller/AIController.h"
 #include "src/common/component/controller/DebugController.h"
@@ -144,7 +145,10 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
                 continue;
             auto chara = item->m_pObject;
 
-            
+            if (chara->GetHP()->IsDead())
+            {
+
+            }
         }
     }
     break;

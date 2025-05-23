@@ -316,11 +316,12 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 }
 
 void StageObjectManager::SaveToCsv() {
-
+#if FALSE
 	if (csvFilePath_StageObjData == nullptr || stageObjects == nullptr)
 		return;
 
 	OutPutToCsv(*csvFilePath_StageObjData);
+#endif // FALSE
 }
 
 void StageObjectManager::SaveToJson()

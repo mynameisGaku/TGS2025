@@ -57,6 +57,7 @@ CharaBase::CharaBase()
 	m_CanRot				= true;
 	m_IsMove				= false;
 	m_IsJumping				= false;
+	m_CanCatch				= true;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -94,7 +95,7 @@ CharaBase::CharaBase()
 #endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
-	m_FSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
+	m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 }
 
 CharaBase::~CharaBase()
@@ -407,6 +408,8 @@ void CharaBase::Slide()
 
 void CharaBase::GenerateBall()
 {
+	if (not m_CanCatch) return;
+
 	if (m_pBall != nullptr)
 		return;
 
@@ -495,6 +498,8 @@ void CharaBase::TeleportToLastBall()
 
 void CharaBase::Catch()
 {
+	if (not m_CanCatch) return;
+
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
 		m_CatchTimer = CATCH_TIME;
@@ -502,6 +507,7 @@ void CharaBase::Catch()
 }
 
 //========================================================================
+// メインステート
 
 void CharaBase::StateActionIdle(FSMSignal sig)
 {
@@ -669,6 +675,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	{
 		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 		m_Animator->Play("AimToThrow");
+		m_CanCatch = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -685,6 +692,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanCatch = true;
 	}
 	break;
 	}
@@ -908,6 +916,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 	{
 		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 		m_Animator->Play("AimToThrow");
+		m_CanCatch = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -925,6 +934,8 @@ void CharaBase::StateFeint(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_SubFSM->ChangeState(&CharaBase::SubStateHoldToAim); // ステートを変更
+
+		m_CanCatch = true;
 	}
 	break;
 	}
@@ -1282,6 +1293,9 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	}
 }
 
+//========================================================================
+// サブステート
+
 void CharaBase::SubStateNone(FSMSignal sig)
 {
 	switch (sig)
@@ -1430,6 +1444,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 }
 
 //========================================================================
+// private関数
 
 void CharaBase::land()
 {

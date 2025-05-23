@@ -209,6 +209,7 @@ private:
 	bool			m_CanRot;				// 回転可能か
 	bool			m_IsMove;				// 移動しようとしているか
 	bool			m_IsJumping;			// ジャンプ中か
+	bool			m_CanCatch;				// キャッチ可能か
 
 	void land();
 

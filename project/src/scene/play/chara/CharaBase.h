@@ -131,6 +131,14 @@ public:
 	void Catch();
 
 	//=======================================================================================
+	// ▼ゲッター
+
+	/// <summary>
+	/// HPを取得する
+	/// </summary>
+	inline const CharaHP* GetHP() const { return m_pHP; }
+
+	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);
 	void StateActionIdleEmote(FSMSignal sig);

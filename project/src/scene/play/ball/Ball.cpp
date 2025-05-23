@@ -9,7 +9,7 @@
 #include "src/scene/play/chara/CharaBase.h"
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/common/stage/StageObjectManager.h"
-#include "src/scene/play/ball/BallManager.h""
+#include "src/scene/play/ball/BallManager.h"
 
 Ball::Ball()
 {

@@ -396,9 +396,9 @@ Vector3 Vector3::Normalize()
 //------------------------------------------------------------------------------
 Vector3 Vector3::Clamp(const Vector3& minVec, const Vector3& maxVec)
 {
-	x = Math::Clamp(x, minVec.x, maxVec.x);
-	y = Math::Clamp(y, minVec.y, maxVec.y);
-	z = Math::Clamp(z, minVec.z, maxVec.z);
+	x = MathUtil::Clamp(x, minVec.x, maxVec.x);
+	y = MathUtil::Clamp(y, minVec.y, maxVec.y);
+	z = MathUtil::Clamp(z, minVec.z, maxVec.z);
 	return *this;
 }
 
@@ -418,7 +418,7 @@ Vector3 Vector3::TransformCoord(const Matrix& mat)
 //------------------------------------------------------------------------------
 bool Vector3::IsNaNOrInf() const
 {
-	return Math::IsNaNOrInf(x) || Math::IsNaNOrInf(y) || Math::IsNaNOrInf(z);
+	return MathUtil::IsNaNOrInf(x) || MathUtil::IsNaNOrInf(y) || MathUtil::IsNaNOrInf(z);
 }
 
 //------------------------------------------------------------------------------
@@ -646,9 +646,9 @@ Vector3 Vector3::TransformCoord(const Vector3& vec, const Matrix& mat)
 Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t)
 {
 	return Vector3(
-		Math::Lerp(start.x, end.x, t),
-		Math::Lerp(start.y, end.y, t),
-		Math::Lerp(start.z, end.z, t));
+		MathUtil::Lerp(start.x, end.x, t),
+		MathUtil::Lerp(start.y, end.y, t),
+		MathUtil::Lerp(start.z, end.z, t));
 }
 
 //------------------------------------------------------------------------------
@@ -657,9 +657,9 @@ Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t)
 Vector3 Vector3::Hermite(const Vector3& v1, const Vector3& a1, const Vector3& v2, const Vector3& a2, float t)
 {
 	return Vector3(
-		Math::Hermite(v1.x, a1.x, v2.x, a2.x, t),
-		Math::Hermite(v1.y, a1.y, v2.y, a2.y, t),
-		Math::Hermite(v1.z, a1.z, v2.z, a2.z, t));
+		MathUtil::Hermite(v1.x, a1.x, v2.x, a2.x, t),
+		MathUtil::Hermite(v1.y, a1.y, v2.y, a2.y, t),
+		MathUtil::Hermite(v1.z, a1.z, v2.z, a2.z, t));
 }
 
 //------------------------------------------------------------------------------
@@ -668,9 +668,9 @@ Vector3 Vector3::Hermite(const Vector3& v1, const Vector3& a1, const Vector3& v2
 Vector3 Vector3::CatmullRom(const Vector3& vec1, const Vector3& vec2, const Vector3& vec3, const Vector3& vec4, float t)
 {
 	return Vector3(
-		Math::CatmullRom(vec1.x, vec2.x, vec3.x, vec4.x, t),
-		Math::CatmullRom(vec1.y, vec2.y, vec3.y, vec4.y, t),
-		Math::CatmullRom(vec1.z, vec2.z, vec3.z, vec4.z, t));
+		MathUtil::CatmullRom(vec1.x, vec2.x, vec3.x, vec4.x, t),
+		MathUtil::CatmullRom(vec1.y, vec2.y, vec3.y, vec4.y, t),
+		MathUtil::CatmullRom(vec1.z, vec2.z, vec3.z, vec4.z, t));
 }
 
 //------------------------------------------------------------------------------

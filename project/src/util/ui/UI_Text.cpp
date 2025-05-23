@@ -176,7 +176,7 @@ void UI_Text::SetText(const std::string& _text, const FontInfo& _font) {
 			letter = text.substr(i, 1);		// ”¼Šp‚È‚ç1•¶š•Û‘¶
 		}
 
-		letters.push_back(String::Letter(letter, globalTrs.position.x + diff.x, globalTrs.position.y + diff.y));
+		letters.push_back(StringUtil::Letter(letter, globalTrs.position.x + diff.x, globalTrs.position.y + diff.y));
 
 		// Ÿ‚Ì•¶š‚Ì•`‰æÀ•W‚ğ‚¸‚ç‚·
 		diff.x += GetDrawStringWidthToHandle(letter.c_str(), static_cast<int>(letter.length()), fontInfo.handle);

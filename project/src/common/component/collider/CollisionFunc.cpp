@@ -2,7 +2,7 @@
 #include "src/common/component/collider/CollisionData.h"
 
 // ◇汎用
-#include "src/util/utils.h"
+#include "src/util/math/mathUtils.h"
 
 using namespace ColDefine;
 
@@ -150,7 +150,7 @@ CollisionData ColFunction::ColCheck_ConeToPoint(const Cone& cone, const Vector3&
 	const Vector3 forward = Vector3::UnitZ * cone.transform.RotationMatrix();
 
 	// 内積外の場合
-	if (VDot(VNorm(dist), forward) < cosf(Math::DegToRad(cone.angle)))
+	if (VDot(VNorm(dist), forward) < cosf(MathUtil::ToRadians(cone.angle)))
 		return CollisionData(false);
 	
 	return CollisionData(true);
@@ -275,9 +275,9 @@ float ColFunction::CalcLineLineDist(const ColDefine::Lay& l1, const ColDefine::L
 float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const ColDefine::Segment& s2, Vector3& p1, Vector3& p2, float& t1, float& t2) {
 
 	// S1が縮退している？
-	if (s1.vec.GetLengthSquared() < _OX_EPSILON_) {
+	if (s1.vec.GetLengthSquared() < MathUtil::EPSILON) {
 		// S2も縮退？
-		if (s2.vec.GetLengthSquared() < _OX_EPSILON_) {
+		if (s2.vec.GetLengthSquared() < MathUtil::EPSILON) {
 			// 点と点の距離の問題に帰着
 			float len = (s2.point - s1.point).GetLength();
 			p1 = s1.point;
@@ -290,17 +290,17 @@ float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const Co
 			float len = CalcPointSegmentDist(s1.point, s2, p2, t2);
 			p1 = s1.point;
 			t1 = 0.0f;
-			t2 = Math::Clamp(t2, 0.0f, 1.0f);
+			t2 = MathUtil::Clamp(t2, 0.0f, 1.0f);
 			return len;
 		}
 	}
 
 	// S2が縮退している？
-	else if (s2.vec.GetLengthSquared() < _OX_EPSILON_) {
+	else if (s2.vec.GetLengthSquared() < MathUtil::EPSILON) {
 		// S2の始点とS1の最短問題に帰着
 		float len = CalcPointSegmentDist(s2.point, s1, p1, t1);
 		p2 = s2.point;
-		t1 = Math::Clamp(t1, 0.0f, 1.0f);
+		t1 = MathUtil::Clamp(t1, 0.0f, 1.0f);
 		t2 = 0.0f;
 		return len;
 	}
@@ -329,21 +329,21 @@ float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const Co
 
 	// 垂線の足が外にある事が判明
 	// S1側のt1を0～1の間にクランプして垂線を降ろす
-	t1 = Math::Clamp(t1, 0.0f, 1.0f);
+	t1 = MathUtil::Clamp(t1, 0.0f, 1.0f);
 	p1 = s1.getPoint(t1);
 	float len = CalcPointSegmentDist(p1, s2, p2, t2);
 	if (0.0f <= t2 && t2 <= 1.0f)
 		return len;
 
 	// S2側が外だったのでS2側をクランプ、S1に垂線を降ろす
-	t2 = Math::Clamp(t2, 0.0f, 1.0f);
+	t2 = MathUtil::Clamp(t2, 0.0f, 1.0f);
 	p2 = s2.getPoint(t2);
 	len = CalcPointSegmentDist(p2, s1, p1, t1);
 	if (0.0f <= t1 && t1 <= 1.0f)
 		return len;
 
 	// 双方の端点が最短と判明
-	t1 = Math::Clamp(t1, 0.0f, 1.0f);
+	t1 = MathUtil::Clamp(t1, 0.0f, 1.0f);
 	p1 = s1.getPoint(t1);
 	return (p2 - p1).GetLength();
 }

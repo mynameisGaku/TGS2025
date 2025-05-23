@@ -5,8 +5,8 @@
 #include <list>
 
 #include "src/util/file/csv/CsvReader.h"
-#include "src/util/Utils.h"
 #include "src/util/file/json/settings_json.h"
+#include <src/util/ptr/PtrUtil.h>
 
 namespace {
 
@@ -106,11 +106,11 @@ void EffectManager::Release() {
 		}
 
 		effects->clear();
-		Function::DeletePointer(effects);
+		PtrUtil::SafeDelete(effects);
 	}
 
 	// 保持していた読み込み用Csvファイルのパスを削除する
-	Function::DeletePointer(csvFilePath);
+	PtrUtil::SafeDelete(csvFilePath);
 
 	// 読み込んだ全てのエフェクトデータを解放する
 	AllReleaseInfo();
@@ -342,7 +342,7 @@ void EffectManager::AllReleaseInfo() {
 		DeleteEffekseerEffect(itr.second.handle);
 	}
 
-	Function::DeletePointer(effectInfoDatas);
+	PtrUtil::SafeDelete(effectInfoDatas);
 }
 #ifdef IMGUI
 

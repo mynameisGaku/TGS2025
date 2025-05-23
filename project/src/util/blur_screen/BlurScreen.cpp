@@ -1,6 +1,6 @@
 #include "src/util/blur_screen/BlurScreen.h"
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
+#include "src/common/setting/window/WindowSetting.h"
 
 //#include "settingManager.h"
 
@@ -23,7 +23,7 @@ namespace {
 void BlurScreen::Init(float _alpha) {
 
 	for (int i = 0; i < NUMBER_OF_DRAWINGS; i++) {
-		screen[i] = MakeScreen(Screen::WIDTH, Screen::HEIGHT, TRUE);
+		screen[i] = MakeScreen(static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height), TRUE);
 	}
 
 	Reset();
@@ -40,7 +40,7 @@ void BlurScreen::ReplayInit(float _duration, float _fadeDuration) {
 		if (screen[i] != -1)
 			DeleteGraph(screen[i]);
 
-		screen[i] = MakeScreen(Screen::WIDTH, Screen::HEIGHT, TRUE);
+		screen[i] = MakeScreen(static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height), TRUE);
 	}
 
 	alpha = defAlpha;
@@ -132,7 +132,7 @@ void BlurScreen::PostRenderBlurScreen() {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(alpha));
 
 	if (notBlendDraw++ > 2)
-		DrawExtendGraphF(0.0f, 0.0f, Screen::WIDTH, Screen::HEIGHT, screen[1 - current], false);
+		DrawExtendGraphF(0.0f, 0.0f, static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height), screen[1 - current], false);
 
 	SetDrawBlendMode(blendMode, param);
 	SetDrawMode(drawMode);

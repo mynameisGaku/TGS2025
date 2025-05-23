@@ -30,7 +30,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #include <EffekseerForDXLib.h>
 #include "framework/App.h"
-#include "src/Util/Utils.h"
 #include "src/util/font/Font.h"
 #include "src/common/setting/window/WindowSetting.h"
 #include "src/util/file/json/settings_json.h"
@@ -46,6 +45,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/reference/crystal/CrystalFragmentRef.h"
 #include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
 #include <src/reference/game/GameRef.h>
+#include <src/util/time/GameTime.h>
 
 #define CoGVersion (2.2)
 
@@ -62,7 +62,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	SetMainWindowText(wSetting.name.c_str());
 	SetWindowSizeExtendRate((double)wSetting.extend);
-	ChangeWindowMode(wSetting.isFull); // Windowモードの場合
+	ChangeWindowMode(wSetting.isWindow); // Windowモードの場合
 
 #ifdef IMGUI
 	SetHookWinProc(WndProc);	//プロシージャの設定
@@ -174,6 +174,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	CRYSTALFRAGMENTSPAWNER_REF.Destroy();
 	GAME_REF.Destroy();
 	wSetting.Destroy();
+	GTime.Destroy();
 
 #ifdef IMGUI
 

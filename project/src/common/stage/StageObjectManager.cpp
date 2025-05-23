@@ -4,7 +4,8 @@
 #include <fstream>
 #include <assert.h>
 
-#include "src/util/Utils.h"
+#include "src/util/ptr/PtrUtil.h"
+#include "src/util/math/mathUtils.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
@@ -115,9 +116,9 @@ void StageObjectManager::Release() {
 	//SaveToJson();
 	EraseAll();
 
-	Function::DeletePointer(stageObjects);
-	Function::DeletePointer(csvFilePath_StageObjData);
-	Function::DeletePointer(csvFilePath_StageObjModel);
+	PtrUtil::SafeDelete(stageObjects);
+	PtrUtil::SafeDelete(csvFilePath_StageObjData);
+	PtrUtil::SafeDelete(csvFilePath_StageObjModel);
 }
 
 bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push) {
@@ -222,8 +223,6 @@ void StageObjectManager::LoadToCsv(const std::string& filename) {
 	if (stageObjects == nullptr)
 		return;
 
-	using namespace Math;
-
 	EraseAll();
 
 	if (*csvFilePath_StageObjData != filename)
@@ -249,7 +248,7 @@ void StageObjectManager::LoadToCsv(const std::string& filename) {
 		info.hHitModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + objName + "_col.mv1");
 
 		tr.position = Vector3(csv->GetFloat(i, 1), csv->GetFloat(i, 2), csv->GetFloat(i, 3));
-		tr.rotation = Vector3(DegToRad(csv->GetFloat(i, 4)), DegToRad(csv->GetFloat(i, 5)), DegToRad(csv->GetFloat(i, 6)));
+		tr.rotation = Vector3(MathUtil::ToRadians(csv->GetFloat(i, 4)), MathUtil::ToRadians(csv->GetFloat(i, 5)), MathUtil::ToRadians(csv->GetFloat(i, 6)));
 		tr.scale	= Vector3(csv->GetFloat(i, 7), csv->GetFloat(i, 8), csv->GetFloat(i, 9));
 
 		collider = csv->GetBool(i, 10);
@@ -264,8 +263,6 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 {
 	if (stageObjects == nullptr)
 		return;
-
-	using namespace Math;
 
 	EraseAll();
 
@@ -354,9 +351,9 @@ void StageObjectManager::OutPutToCsv(const std::string& filename) {
 		data.push_back(std::to_string(itr->transform->position.x));
 		data.push_back(std::to_string(itr->transform->position.y));
 		data.push_back(std::to_string(itr->transform->position.z));
-		data.push_back(std::to_string(Math::RadToDeg(itr->transform->rotation.x)));
-		data.push_back(std::to_string(Math::RadToDeg(itr->transform->rotation.y)));
-		data.push_back(std::to_string(Math::RadToDeg(itr->transform->rotation.z)));
+		data.push_back(std::to_string(MathUtil::ToDegrees(itr->transform->rotation.x)));
+		data.push_back(std::to_string(MathUtil::ToDegrees(itr->transform->rotation.y)));
+		data.push_back(std::to_string(MathUtil::ToDegrees(itr->transform->rotation.z)));
 		data.push_back(std::to_string(itr->transform->scale.x));
 		data.push_back(std::to_string(itr->transform->scale.y));
 		data.push_back(std::to_string(itr->transform->scale.z));
@@ -634,9 +631,9 @@ void StageObjectManager::InitImGui() {
 		editTree->NodeEndChild();
 
 		editTree->NodeBeginChild(250.0f, 85.0f);
-		editTree->Add(new ImGuiNode_SliderFloat("Rotation X StageObject Edit", &(*itr)->transform->rotation.x, Math::DegToRad(-360), Math::DegToRad(360)));
-		editTree->Add(new ImGuiNode_SliderFloat("Rotation Y StageObject Edit", &(*itr)->transform->rotation.y, Math::DegToRad(-360), Math::DegToRad(360)));
-		editTree->Add(new ImGuiNode_SliderFloat("Rotation Z StageObject Edit", &(*itr)->transform->rotation.z, Math::DegToRad(-360), Math::DegToRad(360)));
+		editTree->Add(new ImGuiNode_SliderFloat("Rotation X StageObject Edit", &(*itr)->transform->rotation.x, MathUtil::ToRadians(-360), MathUtil::ToRadians(360)));
+		editTree->Add(new ImGuiNode_SliderFloat("Rotation Y StageObject Edit", &(*itr)->transform->rotation.y, MathUtil::ToRadians(-360), MathUtil::ToRadians(360)));
+		editTree->Add(new ImGuiNode_SliderFloat("Rotation Z StageObject Edit", &(*itr)->transform->rotation.z, MathUtil::ToRadians(-360), MathUtil::ToRadians(360)));
 		editTree->NodeEndChild();
 
 		editTree->NodeBeginChild(250.0f, 85.0f);

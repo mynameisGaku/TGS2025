@@ -3,6 +3,7 @@
 // Åûîƒóp
 #include "src/util/time/GameTime.h"
 #include "src/util/object3D/Object3D.h"
+#include "src/util/ptr/PtrUtil.h"
 
 Physics::Physics() {
 
@@ -21,7 +22,7 @@ Physics::Physics() {
 
 Physics::~Physics() {
 
-	Function::DeletePointer(lastTransform);
+	PtrUtil::SafeDelete(lastTransform);
 }
 
 void Physics::Init(const Vector3& _gravity, const Vector3& _friction) {

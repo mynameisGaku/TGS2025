@@ -97,10 +97,22 @@ public:
 
     static float deltaTime;
 
-    static GameTime& instance()
+    static GameTime& Instance()
     {
-        static GameTime instance;
-        return instance;
+        if(instance == nullptr)
+        {
+            instance = new GameTime();
+        }
+        return (*instance);
+    }
+
+    void Destroy()
+    {
+        if (instance)
+        {
+            delete instance;
+        }
+        instance = nullptr;
     }
 
     //==================================================
@@ -135,6 +147,8 @@ private:
     GameTime() = default;
     ~GameTime() = default;
 
+    static GameTime* instance;
+
     static void initialize();
     static bool m_Initialized;
 
@@ -153,4 +167,4 @@ private:
     static bool m_InFixedTimeStep;
 };
 
-#define GTime GameTime::instance()
+#define GTime GameTime::Instance()

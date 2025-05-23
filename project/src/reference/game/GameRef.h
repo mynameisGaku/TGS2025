@@ -29,6 +29,9 @@ public:
     std::vector<std::string>                        GameModeNames;
     std::vector<std::string>                        TeamNames;
 
+    float GameStartCountMaxSec;
+    float GameEndCountMaxSec;
+
 private:
     bool m_WasLoad = false;
 };

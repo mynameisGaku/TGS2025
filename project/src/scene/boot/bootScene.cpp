@@ -14,8 +14,8 @@ BootScene::BootScene(std::string name) : SceneBase(true, name)
 	LoadScreen* loadScreen = common->Instantiate<LoadScreen>();
 	common->SetDrawOrder(loadScreen, 10000);
 
-	//GameManager* gameM = common->Instantiate<GameManager>();
-	
+	GameManager* gameM = common->Instantiate<GameManager>();
+	gameM->SetGameModeName("FreeForAll");
 }
 
 BootScene::~BootScene()

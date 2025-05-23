@@ -977,7 +977,7 @@ static bool EulerAnglesXYZ(const Matrix& mat, float* xRot, float* yRot, float* z
 	if (mat.m[0][2] > 1.0f - Threshold || mat.m[0][2] < -1.0f + Threshold)	// ジンバルロック判定
 	{
 		*xRot = 0.0f;
-		*yRot = (mat.m[0][2] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*yRot = (mat.m[0][2] < 0 ? MathUtil::PIOver2 : -MathUtil::PIOver2);
 		*zRot = -atan2f(-mat.m[1][0], mat.m[1][1]);
 		return false;
 	}
@@ -985,16 +985,16 @@ static bool EulerAnglesXYZ(const Matrix& mat, float* xRot, float* yRot, float* z
 	*yRot = -asinf(mat.m[0][2]);
 	*xRot = asinf(mat.m[1][2] / cosf(*yRot));
 
-	if (Math::IsNaN(*xRot))	// ジンバルロック判定
+	if (MathUtil::IsNaN(*xRot))	// ジンバルロック判定
 	{
 		*xRot = 0.0f;
-		*yRot = (mat.m[0][2] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*yRot = (mat.m[0][2] < 0 ? MathUtil::PIOver2 : -MathUtil::PIOver2);
 		*zRot = -atan2f(-mat.m[1][0], mat.m[1][1]);
 		return false;
 	}
 
 	if (mat.m[2][2] < 0.0f) {
-		*xRot = Math::PI - (*xRot);
+		*xRot = MathUtil::PI - (*xRot);
 	}
 
 	*zRot = atan2f(mat.m[0][1], mat.m[0][0]);
@@ -1009,23 +1009,23 @@ static bool EulerAnglesYZX(const Matrix& mat, float* xRot, float* yRot, float* z
 	{
 		*xRot = -atan2f(-mat.m[2][1], mat.m[2][2]);
 		*yRot = 0.0f;
-		*zRot = (mat.m[1][0] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*zRot = (mat.m[1][0] < 0 ? MathUtil::PIOver2 : -MathUtil::PIOver2);
 		return false;
 	}
 
 	*zRot = -asinf(mat.m[1][0]);
 	*yRot = asinf(mat.m[2][0] / cosf(*zRot));
 
-	if (Math::IsNaN(*yRot))	// ジンバルロック判定
+	if (MathUtil::IsNaN(*yRot))	// ジンバルロック判定
 	{
 		*xRot = -atan2f(-mat.m[2][1], mat.m[2][2]);
 		*yRot = 0.0f;
-		*zRot = (mat.m[1][0] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*zRot = (mat.m[1][0] < 0 ? MathUtil::PIOver2 : -MathUtil::PIOver2);
 		return false;
 	}
 
 	if (mat.m[0][0] < 0.0f) {
-		*yRot = Math::PI - (*yRot);
+		*yRot = MathUtil::PI - (*yRot);
 	}
 
 	*xRot = atan2f(mat.m[1][2], mat.m[1][1]);
@@ -1039,7 +1039,7 @@ static bool EulerAnglesZXY(const Matrix& mat, float* xRot, float* yRot, float* z
 
 	if (mat.m[2][1] > 1.0f - Threshold || mat.m[2][1] < -1.0f + Threshold)	// ジンバルロック判定
 	{
-		*xRot = (mat.m[2][1] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*xRot = (mat.m[2][1] < 0 ? MathUtil::PIOver2 : -MathUtil::PIOver2);
 		*yRot = (float)atan2f(-mat.m[0][2], mat.m[0][0]);
 		*zRot = 0.0f;
 		return false;
@@ -1048,15 +1048,15 @@ static bool EulerAnglesZXY(const Matrix& mat, float* xRot, float* yRot, float* z
 	*xRot = -(float)asinf(mat.m[2][1]);
 	*zRot = (float)asinf(mat.m[0][1] / cosf(*xRot));
 
-	if (Math::IsNaN(*zRot))	// ジンバルロック判定
+	if (MathUtil::IsNaN(*zRot))	// ジンバルロック判定
 	{
-		*xRot = (mat.m[2][1] < 0 ? Math::PIOver2 : -Math::PIOver2);
+		*xRot = (mat.m[2][1] < 0 ? MathUtil::PIOver2 : -MathUtil::PIOver2);
 		*yRot = (float)atan2f(-mat.m[0][2], mat.m[0][0]);
 		*zRot = 0.0f;
 		return false;
 	}
 	if (mat.m[1][1] < 0.0f) {
-		*zRot = Math::PI - (*zRot);
+		*zRot = MathUtil::PI - (*zRot);
 	}
 
 	*yRot = (float)atan2f(mat.m[2][0], mat.m[2][2]);
@@ -1107,10 +1107,10 @@ Matrix Matrix::GetRotationMatrix() const
 bool Matrix::IsNaNOrInf() const
 {
 	return
-		Math::IsNaNOrInf(m[0][0]) || Math::IsNaNOrInf(m[0][1]) || Math::IsNaNOrInf(m[0][2]) || Math::IsNaNOrInf(m[0][3]) ||
-		Math::IsNaNOrInf(m[1][0]) || Math::IsNaNOrInf(m[1][1]) || Math::IsNaNOrInf(m[1][2]) || Math::IsNaNOrInf(m[1][3]) ||
-		Math::IsNaNOrInf(m[2][0]) || Math::IsNaNOrInf(m[2][1]) || Math::IsNaNOrInf(m[2][2]) || Math::IsNaNOrInf(m[2][3]) ||
-		Math::IsNaNOrInf(m[3][0]) || Math::IsNaNOrInf(m[3][1]) || Math::IsNaNOrInf(m[3][2]) || Math::IsNaNOrInf(m[3][3]);
+		MathUtil::IsNaNOrInf(m[0][0]) || MathUtil::IsNaNOrInf(m[0][1]) || MathUtil::IsNaNOrInf(m[0][2]) || MathUtil::IsNaNOrInf(m[0][3]) ||
+		MathUtil::IsNaNOrInf(m[1][0]) || MathUtil::IsNaNOrInf(m[1][1]) || MathUtil::IsNaNOrInf(m[1][2]) || MathUtil::IsNaNOrInf(m[1][3]) ||
+		MathUtil::IsNaNOrInf(m[2][0]) || MathUtil::IsNaNOrInf(m[2][1]) || MathUtil::IsNaNOrInf(m[2][2]) || MathUtil::IsNaNOrInf(m[2][3]) ||
+		MathUtil::IsNaNOrInf(m[3][0]) || MathUtil::IsNaNOrInf(m[3][1]) || MathUtil::IsNaNOrInf(m[3][2]) || MathUtil::IsNaNOrInf(m[3][3]);
 }
 
 //------------------------------------------------------------------------------

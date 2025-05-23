@@ -2,7 +2,6 @@
 #include "src/util/file/json/settings_json.h"
 #include "src/util/file/FileUtil.h"
 #include "src/reference/crystal/CrystalFragmentRef.h"
-#include "src/util/Utils.h"
 #include "src/util/time/GameTime.h"
 
 CrystalFragment::CrystalFragment(uint32_t index, const Element& elem, const Size& size) :

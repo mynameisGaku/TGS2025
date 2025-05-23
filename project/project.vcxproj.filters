@@ -307,6 +307,15 @@
     <Filter Include="src%28application%29\scene\play\match">
       <UniqueIdentifier>{a8750fb4-407a-4ec3-aec3-cb8b5b9121ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\string">
+      <UniqueIdentifier>{1980daec-10c3-4303-930d-132ccdd253c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\ptr">
+      <UniqueIdentifier>{5330e165-a6f0-4dba-8d46-b2755c3533eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Ini">
+      <UniqueIdentifier>{f4a1c136-f6dd-4eb0-9524-1bf26c00d24f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -782,28 +791,28 @@
     <ClCompile Include="src\util\transform\Transform.cpp">
       <Filter>src%28application%29\util\transform</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\plane.cpp">
+    <ClCompile Include="src\util\math\Plane.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\quaternion.cpp">
+    <ClCompile Include="src\util\math\Quaternion.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\random.cpp">
+    <ClCompile Include="src\util\math\Random.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\vector2.cpp">
+    <ClCompile Include="src\util\math\Vector2.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\vector3.cpp">
+    <ClCompile Include="src\util\math\Vector3.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\vector4.cpp">
+    <ClCompile Include="src\util\math\Vector4.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\mathUtils.cpp">
+    <ClCompile Include="src\util\math\MathUtils.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\matrix.cpp">
+    <ClCompile Include="src\util\math\Matrix.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui\crude_json.cpp">
@@ -1258,37 +1267,37 @@
     <ClInclude Include="src\util\transform\Transform.h">
       <Filter>src%28application%29\util\transform</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\plane.h">
+    <ClInclude Include="src\util\math\Plane.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\quaternion.h">
+    <ClInclude Include="src\util\math\Quaternion.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\random.h">
+    <ClInclude Include="src\util\math\Random.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\vector2.h">
+    <ClInclude Include="src\util\math\Vector2.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\vector3.h">
+    <ClInclude Include="src\util\math\Vector3.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\vector4.h">
+    <ClInclude Include="src\util\math\Vector4.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\asm.h">
+    <ClInclude Include="src\util\math\Asm.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\mathCommon.h">
+    <ClInclude Include="src\util\math\MathCommon.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\mathIncluder.h">
+    <ClInclude Include="src\util\math\MathIncluder.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\mathUtils.h">
+    <ClInclude Include="src\util\math\MathUtils.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\matrix.h">
+    <ClInclude Include="src\util\math\Matrix.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui\crude_json.h">
@@ -1683,6 +1692,12 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\match\MatchManager.h">
       <Filter>src%28application%29\scene\play\match</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\string\StringUtil.h">
+      <Filter>src%28application%29\util\string</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ptr\PtrUtil.h">
+      <Filter>src%28application%29\util\ptr</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

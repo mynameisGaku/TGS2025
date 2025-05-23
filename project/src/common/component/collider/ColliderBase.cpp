@@ -1,7 +1,7 @@
 #include "src/common/component/collider/ColliderBase.h"
 
 // ◇汎用
-#include "src/util/utils.h"
+#include <src/util/ptr/PtrUtil.h>
 
 // ◇演出・機能
 #include "src/common/component/collider/CollisionManager.h"
@@ -22,9 +22,9 @@ ColliderBase::ColliderBase() {
 
 ColliderBase::~ColliderBase() {
 
-	Function::DeletePointer(transform);
-	Function::DeletePointer(global);
-	Function::DeletePointer(hittedData);
+	PtrUtil::SafeDelete(transform);
+	PtrUtil::SafeDelete(global);
+	PtrUtil::SafeDelete(hittedData);
 
 	CollisionManager* colM = FindGameObject<CollisionManager>();
 	if (colM != nullptr)

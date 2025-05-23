@@ -9,13 +9,18 @@
 // Includes
 //-----------------------------------------------------------------------------
 #include <string>
+#include <list>
 #include <Shlwapi.h>
+#include <filesystem>
 
 
 //-----------------------------------------------------------------------------
 // Linker
 //-----------------------------------------------------------------------------
 #pragma comment( lib, "shlwapi.lib ")
+
+namespace FileUtil
+{
 
 
 //-----------------------------------------------------------------------------
@@ -108,3 +113,80 @@ std::wstring GetDirectoryPathW(const wchar_t* path);
     inline std::string GetDirectoryPath(const char* path)
     { return GetDirectoryPathA(path); }
 #endif//defined(UNICODE) || defined(_UNICODE)
+
+	/// <summary>
+	/// フォルダパスの情報を持つ
+	/// </summary>
+	struct Folder {
+		std::string filePath;		// ファイルパス
+		std::string resourceName;	// リソース名
+		std::string tag;			// タグ
+
+		Folder() :
+			filePath(""),
+			resourceName(""),
+			tag("")
+		{
+		}
+
+		/// <summary>
+		/// フォルダパスの情報を設定する
+		/// </summary>
+		/// <param name="_filePath">ファイルパス</param>
+		/// <param name="resource">リソース名</param>
+		/// <param name="_tag">タグ</param>
+		Folder(const std::string& _filePath, const std::string& resource, const std::string& _tag) :
+			filePath(_filePath),
+			resourceName(resource),
+			tag(_tag)
+		{
+		}
+
+		/// <summary>
+		/// 指定されたファイルパスと一致しているか
+		/// </summary>
+		/// <param name="file">ファイルパス</param>
+		/// <returns>一致している場合true</returns>
+		inline bool IsFilePath(const std::string& file) const { return filePath == file; }
+
+		/// <summary>
+		/// 指定されたリソース名と一致しているか
+		/// </summary>
+		/// <param name="resource">リソース名</param>
+		/// <returns>一致している場合true</returns>
+		inline bool IsResourceName(const std::string& resource) const { return resourceName == resource; }
+
+		/// <summary>
+		/// 指定されたタグと一致しているか
+		/// </summary>
+		/// <param name="_tag">ファイルパス</param>
+		/// <returns>一致している場合true</returns>
+		inline bool IsTag(const std::string& _tag) const { return tag == _tag; }
+	};
+
+	// フォルダ内の全ファイルのファイル名を取得
+	inline std::list<std::string> FindFileNames(std::string folder, bool removeExtention)
+	{
+		std::list<std::string> fileNames;
+
+		std::string f;
+		for (const std::filesystem::directory_entry& i : std::filesystem::recursive_directory_iterator(folder))
+		{
+			std::filesystem::path p = i.path().filename();
+			f = p.string();
+
+			//拡張子の分を消す
+			if (removeExtention)
+			{
+				size_t sub_s = f.find_last_of(".");
+				f = f.substr(0, sub_s);
+			}
+
+			fileNames.push_back(f);
+		}
+
+		return fileNames;
+	}
+}
+
+using namespace FileUtil;

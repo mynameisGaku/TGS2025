@@ -58,5 +58,8 @@ void GameRef::Load(bool forceLoad)
         GameModeNames.push_back(desc.first);
     }
 
+    GameStartCountMaxSec = jsonLoader->GetOrDefault<float>("GameStartCountMaxSec", 0.0f, FILEKEY);
+    GameEndCountMaxSec   = jsonLoader->GetOrDefault<float>("GameEndCountMaxSec", 0.0f, FILEKEY);
+
     m_WasLoad = true;
 }

@@ -476,7 +476,7 @@ void Quaternion::ToAxisAngle(Vector3* axis, float* angle) const
 //------------------------------------------------------------------------------
 bool Quaternion::IsNaNOrInf() const
 {
-	return Math::IsNaNOrInf(x) || Math::IsNaNOrInf(y) || Math::IsNaNOrInf(z) || Math::IsNaNOrInf(w);
+	return MathUtil::IsNaNOrInf(x) || MathUtil::IsNaNOrInf(y) || MathUtil::IsNaNOrInf(z) || MathUtil::IsNaNOrInf(w);
 }
 
 //------------------------------------------------------------------------------

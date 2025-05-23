@@ -2,18 +2,18 @@
 #include "framework/gameObject.h"
 
 // ◇汎用
-#include "src/util/Utils.h"
 #include "src/util/easing/Easing.h"
 #include "src/util/font/Font.h"
 #include "src/util/math/Vector2.h"
+#include <src/common/setting/window/WindowSetting.h>
 
 namespace {
 
-	static const Vector2 DRAW_TEXT_POS = Vector2(4.0f, Screen::HEIGHT_F - 64.0f);	// 文字の表示位置
+	static const Vector2 DRAW_TEXT_POS = Vector2(4.0f, WindowSetting::Inst().height - 64.0f);	// 文字の表示位置
 	static const int TEXT_COLOR = GetColor(255, 255, 255);
 
-	static const Vector2 GAUGE_POS = Vector2(4.0f, Screen::HEIGHT_F - 24.0f);		// ゲージの表示位置
-	static const Vector2 GAUGE_SIZE = Vector2(Screen::WIDTH_HALF - 4.0f, 20.0f);	// ゲージの表示サイズ
+	static const Vector2 GAUGE_POS = Vector2(4.0f, WindowSetting::Inst().height - 24.0f);		// ゲージの表示位置
+	static const Vector2 GAUGE_SIZE = Vector2(WindowSetting::Inst().width_half - 4.0f, 20.0f);	// ゲージの表示サイズ
 	static const int GAUGE_COLOR = GetColor(220, 0, 220);	// ゲージの色
 }
 

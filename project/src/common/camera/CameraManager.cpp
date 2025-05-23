@@ -2,13 +2,14 @@
 
 // ◇汎用
 #include <vendor/magic_enum/magic_enum.hpp>
-#include "src/Util/Utils.h"
 #include <vector>
 #include <assert.h>
+#include <src/util/ptr/PtrUtil.h>
 
 // ◇演出・機能
 #include "src/util/debug/imgui/imGuiManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/util/string/StringUtil.h"
 
 using namespace CameraDefine;
 
@@ -76,7 +77,7 @@ void CameraManager::Release() {
 		itr = cameras->erase(itr);
 	}
 
-	Function::DeletePointer(cameras);
+	PtrUtil::SafeDelete(cameras);
 }
 
 bool CameraManager::CheckNumber(const int& number) {
@@ -151,9 +152,6 @@ void CameraManager::InitImGuiNode() {
 	if (cameras == nullptr)
 		return;
 
-	using namespace Math;
-	using namespace Function;
-
 	ImGuiRoot* CameraTree = ImGuiManager::AddRoot(new ImGuiRoot("Camera"));	// カメラのツリー
 
 	ImGuiRoot* CameraPreviewTree = CameraTree->AddChild(new ImGuiRoot("Preview"));	// カメラの情報を閲覧するツリー
@@ -164,13 +162,13 @@ void CameraManager::InitImGuiNode() {
 		//==========================================================================================
 		// ▼変数
 
-		std::string cNumber = FormatToString("Camera %dP", i + 1);
+		std::string cNumber = StringUtil::FormatToString("Camera %dP", i + 1);
 
 		Vector3 cPos = (*cameras)[i]->transform->Global().position;	// カメラの座標
 		Vector3 cRot = (*cameras)[i]->transform->Global().rotation;	// カメラの回転
 
 		// 回転を弧度法に変換
-		cRot = Vector3(RadToDeg(cRot.x), RadToDeg(cRot.y), RadToDeg(cRot.z));
+		cRot = Vector3(MathUtil::ToDegrees(cRot.x), MathUtil::ToDegrees(cRot.y), MathUtil::ToDegrees(cRot.z));
 
 		Vector3 cWorldPos = (*cameras)[i]->WorldPos();	// カメラの絶対座標
 		Vector3 cOffset = (*cameras)[i]->Offset();		// カメラの相対座標
@@ -185,19 +183,19 @@ void CameraManager::InitImGuiNode() {
 		CPTN->NodeBeginChild(250.0f, 100.0f);
 
 		// ▽座標
-		CPTN->Add(new ImGuiNode_Text(cNumber + " Position Preview",	FormatToString("Position X %.1f Y %.1f Z %.1f", cPos.x, cPos.y, cPos.z)));
+		CPTN->Add(new ImGuiNode_Text(cNumber + " Position Preview",	StringUtil::FormatToString("Position X %.1f Y %.1f Z %.1f", cPos.x, cPos.y, cPos.z)));
 
 		// ▽回転
-		CPTN->Add(new ImGuiNode_Text(cNumber + " Rotation Preview",	FormatToString("Rotation X %.1f Y %.1f Z %.1f", cRot.x, cRot.y, cRot.z)));
+		CPTN->Add(new ImGuiNode_Text(cNumber + " Rotation Preview",	StringUtil::FormatToString("Rotation X %.1f Y %.1f Z %.1f", cRot.x, cRot.y, cRot.z)));
 		
 		// ▽絶対座標
-		CPTN->Add(new ImGuiNode_Text(cNumber + " WorldPos Preview", FormatToString("cWorldPos X %.1f Y %.1f Z %.1f", cWorldPos.x, cWorldPos.y, cWorldPos.z)));
+		CPTN->Add(new ImGuiNode_Text(cNumber + " WorldPos Preview", StringUtil::FormatToString("cWorldPos X %.1f Y %.1f Z %.1f", cWorldPos.x, cWorldPos.y, cWorldPos.z)));
 
 		// ▽相対座標
-		CPTN->Add(new ImGuiNode_Text(cNumber + " Offset Preview",	FormatToString("Offset X % .1f Y % .1f Z % .1f", cOffset.x, cOffset.y, cOffset.z)));
+		CPTN->Add(new ImGuiNode_Text(cNumber + " Offset Preview",	StringUtil::FormatToString("Offset X % .1f Y % .1f Z % .1f", cOffset.x, cOffset.y, cOffset.z)));
 		
 		// ▽注視点
-		CPTN->Add(new ImGuiNode_Text(cNumber + " Target Preview",	FormatToString("Target X % .1f Y % .1f Z % .1f", cTarget.x, cTarget.y, cTarget.z)));
+		CPTN->Add(new ImGuiNode_Text(cNumber + " Target Preview",	StringUtil::FormatToString("Target X % .1f Y % .1f Z % .1f", cTarget.x, cTarget.y, cTarget.z)));
 		
 		CPTN->NodeEndChild();
 
@@ -216,9 +214,9 @@ void CameraManager::InitImGuiNode() {
 
 		// ▽回転
 		CSTN->NodeBeginChild(250.0f, 85.0f);
-		CSTN->Add(new ImGuiNode_SliderFloat("Rotation X", &(*cameras)[i]->transform->rotation.x, RadToDeg(-360.0f), RadToDeg(360.0f)));
-		CSTN->Add(new ImGuiNode_SliderFloat("Rotation Y", &(*cameras)[i]->transform->rotation.y, RadToDeg(-360.0f), RadToDeg(360.0f)));
-		CSTN->Add(new ImGuiNode_SliderFloat("Rotation Z", &(*cameras)[i]->transform->rotation.z, RadToDeg(-360.0f), RadToDeg(360.0f)));
+		CSTN->Add(new ImGuiNode_SliderFloat("Rotation X", &(*cameras)[i]->transform->rotation.x, MathUtil::ToDegrees(-360.0f), MathUtil::ToDegrees(360.0f)));
+		CSTN->Add(new ImGuiNode_SliderFloat("Rotation Y", &(*cameras)[i]->transform->rotation.y, MathUtil::ToDegrees(-360.0f), MathUtil::ToDegrees(360.0f)));
+		CSTN->Add(new ImGuiNode_SliderFloat("Rotation Z", &(*cameras)[i]->transform->rotation.z, MathUtil::ToDegrees(-360.0f), MathUtil::ToDegrees(360.0f)));
 		CSTN->NodeEndChild();
 
 		// ▽相対座標
@@ -272,21 +270,19 @@ void CameraManager::UpdateImGuiNode() {
 	if (cameras == nullptr)
 		return;
 
-	using namespace Math;
-	using namespace Function;
 
 	for (int i = 0; i < cameras->size(); i++) {
 
 		//==========================================================================================
 		// ▼変数
 
-		std::string cNumber = FormatToString("Camera %dP", i + 1);
+		std::string cNumber = StringUtil::FormatToString("Camera %dP", i + 1);
 
 		Vector3 cPos = (*cameras)[i]->transform->Global().position;	// カメラの座標
 		Vector3 cRot = (*cameras)[i]->transform->Global().rotation;	// カメラの回転
 
 		// 回転を弧度法に変換
-		cRot = Vector3(RadToDeg(cRot.x), RadToDeg(cRot.y), RadToDeg(cRot.z));
+		cRot = Vector3(MathUtil::ToDegrees(cRot.x), MathUtil::ToDegrees(cRot.y), MathUtil::ToDegrees(cRot.z));
 
 		Vector3 cWorldPos = (*cameras)[i]->WorldPos();	// カメラの絶対座標
 		Vector3 cOffset = (*cameras)[i]->Offset();		// カメラの相対座標
@@ -299,19 +295,19 @@ void CameraManager::UpdateImGuiNode() {
 		ImGuiRoot* CPTN = ImGuiManager::FindRoot("Camera")->SearchChildren(cNumber + " Preview");
 
 		// ▽座標
-		CPTN->Node<ImGuiNode_Text>(cNumber + " Position Preview")->SetText(FormatToString("Position X %.1f Y %.1f Z %.1f", cPos.x, cPos.y, cPos.z));
+		CPTN->Node<ImGuiNode_Text>(cNumber + " Position Preview")->SetText(StringUtil::FormatToString("Position X %.1f Y %.1f Z %.1f", cPos.x, cPos.y, cPos.z));
 		
 		// ▽回転
-		CPTN->Node<ImGuiNode_Text>(cNumber + " Rotation Preview")->SetText(FormatToString("Rotation X %.1f Y %.1f Z %.1f", cRot.x, cRot.y, cRot.z));
+		CPTN->Node<ImGuiNode_Text>(cNumber + " Rotation Preview")->SetText(StringUtil::FormatToString("Rotation X %.1f Y %.1f Z %.1f", cRot.x, cRot.y, cRot.z));
 		
 		// ▽絶対座標
-		CPTN->Node<ImGuiNode_Text>(cNumber + " WorldPos Preview")->SetText(FormatToString("WorldPos X %.1f Y %.1f Z %.1f", cWorldPos.x, cWorldPos.y, cWorldPos.z));
+		CPTN->Node<ImGuiNode_Text>(cNumber + " WorldPos Preview")->SetText(StringUtil::FormatToString("WorldPos X %.1f Y %.1f Z %.1f", cWorldPos.x, cWorldPos.y, cWorldPos.z));
 		
 		// ▽相対座標
-		CPTN->Node<ImGuiNode_Text>(cNumber + " Offset Preview")->SetText(FormatToString("Offset X %.1f Y %.1f Z %.1f", cOffset.x, cOffset.y, cOffset.z));
+		CPTN->Node<ImGuiNode_Text>(cNumber + " Offset Preview")->SetText(StringUtil::FormatToString("Offset X %.1f Y %.1f Z %.1f", cOffset.x, cOffset.y, cOffset.z));
 		
 		// ▽注視点
-		CPTN->Node<ImGuiNode_Text>(cNumber + " Target Preview")->SetText(FormatToString("Target X %.1f Y %.1f Z %.1f", cTarget.x, cTarget.y, cTarget.z));
+		CPTN->Node<ImGuiNode_Text>(cNumber + " Target Preview")->SetText(StringUtil::FormatToString("Target X %.1f Y %.1f Z %.1f", cTarget.x, cTarget.y, cTarget.z));
 	}
 }
 

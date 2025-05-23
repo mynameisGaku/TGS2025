@@ -1,7 +1,7 @@
 #include "src/util/transform/Transform.h"
 
 // ◇汎用
-#include "src/util/Utils.h"
+#include "src/util/math/mathUtils.h"
 
 Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scl, Transform* p) {
 
@@ -91,8 +91,6 @@ const Vector3 Transform::Forward() const {
 
 const Vector3 Transform::LimitedRotation() const {
 
-	using namespace Math;
-
 	Vector3 limitedRot = Vector3::Zero;
 
 	// x,y,zそれぞれ計算
@@ -101,11 +99,11 @@ const Vector3 Transform::LimitedRotation() const {
 
 		// 0より小さい場合、2π(一周)足し続ける
 		while (angle < 0)
-			angle += PI_TW;
+			angle += MathUtil::PI_TW;
 
 		// 2π以上の場合、2π(一周)引き続ける
-		while (angle >= PI_TW)
-			angle -= PI_TW;
+		while (angle >= MathUtil::PI_TW)
+			angle -= MathUtil::PI_TW;
 
 		limitedRot.Set(i, angle);
 	}

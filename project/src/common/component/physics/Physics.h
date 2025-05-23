@@ -4,14 +4,14 @@
 #include "src/common/component/Component.h"
 
 // ”Ä—p
-#include "src/util/utils.h"
+#include "src/util/math/mathUtils.h"
 #include "src/util/transform/Transform.h"
 #include "src/util/math/Vector3.h"
 
 namespace {
 
 	// Šù’è‚Ìd—Í‰Á‘¬“x
-	static const Vector3 GRAVITY = Vector3::SetY(Math::GRAVITY_3D);
+	static const Vector3 GRAVITY = Vector3::SetY(MathUtil::GRAVITY_3D);
 
 	// Šù’è‚Ì–€CŒW”
 	static const Vector3 FRICTION = Vector3(0.9f);

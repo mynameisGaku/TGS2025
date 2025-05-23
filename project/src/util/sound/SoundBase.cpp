@@ -3,7 +3,6 @@
 // ◇汎用
 #include "framework/myDxLib.h"
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
 
 // ◇演出・機能
 #include "src/common/camera/cameraManager.h"

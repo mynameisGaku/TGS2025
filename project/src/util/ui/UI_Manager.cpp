@@ -1,7 +1,7 @@
 #include "src/util/ui/UI_Manager.h"
 
 // ž”Ä—p
-#include "src/util/Utils.h"
+#include "src/util/ptr/PtrUtil.h"
 
 namespace {
 
@@ -85,7 +85,7 @@ void UI_Manager::Release() {
 		}
 
 		backCanvases->clear();
-		Function::DeletePointer(backCanvases);
+		PtrUtil::SafeDelete(backCanvases);
 	}
 
 	if (frontCanvases != nullptr) {
@@ -102,7 +102,7 @@ void UI_Manager::Release() {
 		}
 
 		frontCanvases->clear();
-		Function::DeletePointer(frontCanvases);
+		PtrUtil::SafeDelete(frontCanvases);
 	}
 }
 

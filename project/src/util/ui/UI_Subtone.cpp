@@ -1,5 +1,6 @@
 #include "src/util/ui/UI_Subtone.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
+#include <src/util/ptr/PtrUtil.h>
 
 UI_Subtone::UI_Subtone() : UI_Subtone(-1, GetColor(0, 0, 0), 125, true, Vector2::Zero, Vector2::Zero) {}
 
@@ -10,7 +11,7 @@ UI_Subtone::UI_Subtone(const int& image, const int& _color, const int& _alpha, c
 	alpha = _alpha;
 	SetIsActive(active);
 
-	Function::DeletePointer(rectTransform);
+	PtrUtil::SafeDelete(rectTransform);
 
 	SetPoint(_begin, _end);
 }

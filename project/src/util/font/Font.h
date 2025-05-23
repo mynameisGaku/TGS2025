@@ -1,6 +1,6 @@
 #pragma once
 #include "framework/myDxLib.h"
-#include "src/util/Utils.h"
+#include "src/util/file/FileUtil.h"
 #include <string>
 
 class FontInfo;
@@ -50,7 +50,7 @@ public:
 	int edgeSize;	// 縁の大きさ
 	int italic;		// 斜め
 	int color;		// 色
-	String::Folder strData;// フォントで使用する文字列情報
+	FileUtil::Folder strData;// フォントで使用する文字列情報
 
 	FontInfo() :
 		handle(-1),

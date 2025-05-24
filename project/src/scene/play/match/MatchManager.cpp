@@ -10,6 +10,10 @@
 #include "src/common/component/controller/AIController.h"
 #include "src/common/component/controller/DebugController.h"
 
+//=== チーム ===
+#include "src/scene/play/team/Team.h"
+#include "src/scene/play/team/TeamManager.h"
+
 //=== ボール ===
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
@@ -70,27 +74,12 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
     case FSMSignal::SIG_Enter:
     {
         /* ここで準備を行う */
-
         m_pCharaManager = Instantiate<CharaManager>();
 
-        CharaBase* player = m_pCharaManager->Create("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
-        CharaBase* enemy = m_pCharaManager->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
+        m_pTeamManager = Instantiate<TeamManager>();
 
-        player->SetMoveSpeed(700.0f);
-        player->SetRotSpeed(MathUtil::ToRadians(10.0f));
-        player->AddComponent<PlayerController>()->Init(DX_INPUT_PAD1);
-
-        enemy->SetMoveSpeed(700.0f);
-        enemy->SetRotSpeed(MathUtil::ToRadians(10.0f));
-
-        // デバッグによってコントローラーを変える。
-#if FALSE
-        enemy->AddComponent<AIController>()->Init();
-#elif FALSE
-        enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
-#elif TRUE
-        enemy->AddComponent<PlayerController>()->Init(DX_INPUT_PAD2);
-#endif
+        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();
 
@@ -145,16 +134,26 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
                 continue;
             auto chara = item->m_pObject;
 
+            // 今は死んだかどうかでポイントを加算していますが、本来はここでは行わず、
+            // TeamManager内で、チームに所属しているキャラのキル数を参照し、それらを足し合わせたものを
+            // ポイントとして扱います。なので、このループは将来的に消滅します
             if (chara->GetHP()->IsDead())
             {
-
+                m_pTeamManager->AddPoint(chara->HitBall()->GetCharaTag());
             }
+        }
+
+        for (auto& teamName : GAME_REF.TeamNames)
+        {
+            if (m_pTeamManager->GetTeam(teamName)->GetPoint() < m_GameData.m_WinPointMax)
+                continue;
+
+            m_pFsm->ChangeState(&MatchManager::StatePhaseGameOver);
         }
     }
     break;
     case FSMSignal::SIG_AfterUpdate:
     {
-
     }
     break;
     case FSMSignal::SIG_Exit:
@@ -176,7 +175,7 @@ void MatchManager::StatePhaseGameOver(FSMSignal sig)
     break;
     case FSMSignal::SIG_Update:
     {
-
+        m_pFsm->ChangeState(&MatchManager::StatePhaseEnd);
     }
     break;
     case FSMSignal::SIG_AfterUpdate:
@@ -198,7 +197,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
     {
     case FSMSignal::SIG_Enter:
     {
-
+        SceneManager::ChangeScene("TitleScene");
     }
     break;
     case FSMSignal::SIG_Update:
@@ -218,3 +217,34 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
     break;
     }
 }
+
+void MatchManager::addCharacter(const std::string& team, const Transform& trs, bool isAI)
+{
+    CharaBase* chara = m_pCharaManager->Create(team, trs);
+
+    chara->SetMoveSpeed(700.0f);
+    chara->SetRotSpeed(MathUtil::ToRadians(10.0f));
+
+    std::unordered_map<int, int> padNumMap =
+    {
+        {0, DX_INPUT_PAD1},
+        {1, DX_INPUT_PAD2},
+        {2, DX_INPUT_PAD3},
+        {3, DX_INPUT_PAD4},
+        {4, DX_INPUT_PAD5},
+        {5, DX_INPUT_PAD6},
+        {6, DX_INPUT_PAD7},
+        {7, DX_INPUT_PAD8},
+        {8, DX_INPUT_PAD9},
+        {9, DX_INPUT_PAD10},
+        {10, DX_INPUT_PAD11},
+    };
+
+    if (not isAI)
+        chara->AddComponent<PlayerController>()->Init(padNumMap[chara->GetIndex()]);
+    else
+        chara->AddComponent<AIController>()->Init();
+
+    m_pTeamManager->RegisterCharaToTeam(chara);
+}
+

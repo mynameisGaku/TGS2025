@@ -116,6 +116,7 @@ public:
 
 	Ball* LastBall() const { return m_pLastBall; }
 	void SetLastBall(Ball* ball) { m_pLastBall = ball; }
+	Ball* HitBall() const { return m_pHitBall; }
 
 	/// <summary>
 	/// 最後に投げたボールにテレポートし、それをキャッチする
@@ -142,6 +143,11 @@ public:
 	/// インデックスを取得
 	/// </summary>
 	inline const int GetIndex() const { return m_Index; }
+
+	/// <summary>
+	/// キャラタグ(所属チーム名)を取得
+	/// </summary>
+	inline const std::string GetCharaTag() const { return m_CharaTag; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -187,29 +193,32 @@ public:
 
 private:
 	friend class CharaManager;
-	bool			m_IsCharging;			// ボールをチャージしているかどうか
-	float			m_BallChargeRate;		// ボールのチャージ加速度
+
+
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
+	Ball*			m_pHitBall;				// あてられたボールのポインター
     BallManager*	m_pBallManager;			// ボールマネージャーのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
 	CharaHP*		m_pHP;					// HPのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター
+	std::string		m_CharaTag;				// キャラクターのチームのタグ
+	Catcher* m_Catcher;						// キャッチの当たり判定
+	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
+	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
+	Animator* m_Animator;					// アニメーション
+	Transform* m_EffectTransform;			// エフェクト出すトランスフォーム
+	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
+	int				m_Index;				// 自身のインデックス
+	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
 	float			m_SpeedScale;			// 速度倍率
-	int				m_Index;				// 自身のインデックス
 	float			m_CatchTimer;			// キャッチ残り時間タイマー
-	std::string		m_CharaTag;				// キャラクターのチームのタグ
-	Catcher*		m_Catcher;				// キャッチの当たり判定
-	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
-	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
-	Animator*		m_Animator;				// アニメーション
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
-	bool			m_IsLanding;			// 着地中
 	float			m_SlideTimer;			// スライディング残り時間タイマー
-	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
-	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
+	bool			m_IsCharging;			// ボールをチャージしているかどうか
+	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
 	bool			m_CanRot;				// 回転可能か
 	bool			m_IsMove;				// 移動しようとしているか

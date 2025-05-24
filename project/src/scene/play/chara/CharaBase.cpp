@@ -1508,6 +1508,8 @@ void CharaBase::getHit(Ball* hit)
 
 	Vector3 dif = hit->transform->position - transform->position;
 
+	m_pHitBall = hit;
+
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
 	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:ŠO•”‰»

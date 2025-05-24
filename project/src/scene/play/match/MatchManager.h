@@ -3,6 +3,7 @@
 #include "framework/gameObject.h"
 #include "src/common/game/GameManager.h"
 #include "src/util/fsm/TinyFSM.h"
+#include <src/util/transform/Transform.h>
 
 class CurrentGameData
 {
@@ -54,5 +55,7 @@ private:
 
     class CharaManager* m_pCharaManager;
     class BallManager* m_pBallManager;
+    class TeamManager* m_pTeamManager;
 
+    void addCharacter(const std::string& team, const Transform& trs, bool isAI);
 };

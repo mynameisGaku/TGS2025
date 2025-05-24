@@ -84,6 +84,7 @@ float GameTime::UnscaledDeltaTime() { return m_UnscaledDeltaTime; }
 float GameTime::FixedDeltaTime() { return m_FixedDeltaTime; }
 float GameTime::FixedUnscaledDeltaTime() { return m_FixedDeltaTime; }
 float GameTime::TotalTime() { return UnscaledTime() * m_TimeScale; }
+int GameTime::TotalTimeInt() { return static_cast<int>(TotalTime()); }
 
 float GameTime::UnscaledTime()
 {

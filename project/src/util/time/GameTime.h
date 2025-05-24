@@ -45,6 +45,9 @@ public:
     /// <summary>起動からの累計時間（timeScaleの影響あり）</summary>
     static float TotalTime();
 
+    /// <summary>起動からの累計時間 int版（timeScaleの影響あり）</summary>
+    static int   TotalTimeInt();
+
     /// <summary>起動からの累計時間（timeScaleの影響なし）</summary>
     static float UnscaledTime();
 

@@ -26,8 +26,8 @@
     },
     {
       "GameModeName": "Debug",
-      "PlayTimeMaxSec": 9999,
-      "WinPointMax": 9999
+      "PlayTimeMaxSec": 99999999,
+      "WinPointMax": 99999999
     }
   ],
 

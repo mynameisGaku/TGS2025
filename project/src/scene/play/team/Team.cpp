@@ -1,7 +1,15 @@
 #include "src/scene/play/team/Team.h"
 #include "src/util/math/mathUtils.h"
 #include "src/scene/play/chara/CharaManager.h"
+#include "src/util/time/GameTime.h"
 #include <algorithm>
+
+Team::Team(const std::string& name)
+{
+    m_CharaIDs = {};
+    m_TeamName = name;
+    m_pCharaManager = FindGameObject<CharaManager>();
+}
 
 void Team::AddCharaID(int id)
 {
@@ -79,6 +87,22 @@ std::vector<std::pair<int, int>> Team::GetTeamRanking()
    });  
 
    return ranking;  
+}
+
+std::string Team::GetTeamName() const
+{
+    return m_TeamName;
+}
+
+void Team::AddPoint(int p)
+{
+    m_PointLog.push_back({ GTime.TotalTimeInt(), p });
+    m_Points.push_back(p);
+}
+
+int Team::GetPoint() const
+{
+    return MathUtil::CalcList(m_Points);
 }
 
 bool Team::queryIsRegistered(int _id)

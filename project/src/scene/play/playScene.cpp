@@ -20,6 +20,11 @@ using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
+	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
+	// gameM->SetGameModeName("FreeForAll");
+	// ゲームモードは GameRef.json 内を参照してください
+	gameM->SetGameModeName("Debug");
+	
 	Instantiate<CollisionManager>();
 
 	Instantiate<MatchManager>();

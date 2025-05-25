@@ -20,7 +20,7 @@ AttachedAnimation::AttachedAnimation(int parentModel, const AnimInfo& info)
 	m_attachID = -1;	// アタッチ済アニメーションのハンドル
 
 	m_frame = 0.0f;	// 現在フレーム（小数もある）
-	m_maxFrame = MV1GetAnimTotalTime(info.handle, 0);	// 最大フレーム
+	m_maxFrame = info.endFrame;	// 最大フレーム
 	m_playSpeed = 1.0f;	// 再生速度倍率
 	m_blendRate = 0.0f;	// ブレンド率
 	m_defaultBlendRate = 1.0f;	// 初期ブレンド率
@@ -140,10 +140,4 @@ void AttachedAnimation_Sub::Update()
 	// 再生時間を適用
 	MV1SetAttachAnimTime(m_parentModel, m_attachID, m_frame);
 	MV1SetAttachAnimBlendRateToFrame(m_parentModel, m_attachID, m_targetID, m_blendRate * m_defaultBlendRate);
-}
-
-void AttachedAnimation_Sub::UpdateBrendRate(int currentAttachID)
-{
-	MV1SetAttachAnimBlendRateToFrame(m_parentModel, currentAttachID, m_targetID, 0.0f);
-	//MV1SetAttachAnimBlendRateToFrame(m_parentModel, currentAttachID, m_targetID, 1.0f - m_blendRate * m_defaultBlendRate);
 }

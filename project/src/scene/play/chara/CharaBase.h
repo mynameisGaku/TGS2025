@@ -84,6 +84,8 @@ public:
 
 	void StartBallCharge();
 
+	void StartThrow();
+
 	/// <summary>
 	/// ボールを投げる
 	/// </summary>
@@ -101,6 +103,11 @@ public:
     /// </summary>
     /// <param name="param">ホーミング概要</param>
     void ThrowHomingBall();
+
+	/// <summary>
+	/// 投げるモーションだけ再生
+	/// </summary>
+	void Feint();
 
 	/// <summary>
 	/// ボールを持っているか？
@@ -157,6 +164,8 @@ public:
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
 
+	void StateAimToThrow(FSMSignal sig);
+
 	void StateAirSpin(FSMSignal sig);
 
 	void StateCrouchToActionIdle(FSMSignal sig);
@@ -167,6 +176,8 @@ public:
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
 	void StateFallToRoll(FSMSignal sig);
+
+	void StateFeint(FSMSignal sig);
 
 	void StateRoll(FSMSignal sig);
 	void StateRollToActionIdle(FSMSignal sig);
@@ -188,7 +199,6 @@ public:
 	void SubStateGetBall(FSMSignal sig);
 	void SubStateHold(FSMSignal sig);
 	void SubStateHoldToAim(FSMSignal sig);
-	void SubStateAimToThrow(FSMSignal sig);
 	void SubStateCatch(FSMSignal sig);
 
 private:
@@ -223,6 +233,9 @@ private:
 	bool			m_CanRot;				// 回転可能か
 	bool			m_IsMove;				// 移動しようとしているか
 	bool			m_IsJumping;			// ジャンプ中か
+	bool			m_CanCatch;				// キャッチ可能か
+	bool			m_CanHold;				// ボールを持てるか
+	bool			m_CanThrow;				// ボールを投げられるか
 
 	void land();
 
@@ -242,4 +255,5 @@ private:
 	void setCanMove(const nlohmann::json& argument);
 	void setCanRot(const nlohmann::json& argument);
 	void setVelocity(const nlohmann::json& argument);
+	void throwBall(const nlohmann::json& argument);
 };

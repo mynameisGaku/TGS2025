@@ -96,6 +96,7 @@ public:
     static bool IsHitStop();
 
     static float deltaTime;
+    static float timeScale;
 
     static GameTime& instance()
     {
@@ -146,7 +147,6 @@ private:
     static float m_UnscaledDeltaTime;
     static float m_SmoothDeltaTime;
     static float m_FixedDeltaTime;
-    static float m_TimeScale;
     static float m_MaximumDeltaTime;
     static int m_FrameCount;
     static int m_HitStop;

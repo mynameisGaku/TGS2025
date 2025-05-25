@@ -84,6 +84,8 @@ public:
 
 	void StartBallCharge();
 
+	void StartThrow();
+
 	/// <summary>
 	/// ボールを投げる
 	/// </summary>
@@ -210,6 +212,8 @@ private:
 	bool			m_IsMove;				// 移動しようとしているか
 	bool			m_IsJumping;			// ジャンプ中か
 	bool			m_CanCatch;				// キャッチ可能か
+	bool			m_CanHold;				// ボールを持てるか
+	bool			m_CanThrow;				// ボールを投げられるか
 
 	void land();
 
@@ -229,4 +233,5 @@ private:
 	void setCanMove(const nlohmann::json& argument);
 	void setCanRot(const nlohmann::json& argument);
 	void setVelocity(const nlohmann::json& argument);
+	void throwBall(const nlohmann::json& argument);
 };

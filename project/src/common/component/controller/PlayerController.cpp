@@ -50,9 +50,9 @@ void PlayerController::Update() {
 		}
 		else
 		{
-			if (InputManager::Release("Throw", padNumber))
+			if (not InputManager::Hold("Throw", padNumber))
 			{
-				chara->ThrowHomingBall();
+				chara->StartThrow();
 			}
 			else if (InputManager::Push("Feint", padNumber))
 			{

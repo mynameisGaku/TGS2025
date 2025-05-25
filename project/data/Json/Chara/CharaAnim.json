@@ -5,6 +5,10 @@
 
 		},
 		"AimToThrow": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"EndFrame": 25.0
 		},
 		"Catch": {
 			"IsLoop": true

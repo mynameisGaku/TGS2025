@@ -13,7 +13,7 @@ float GameTime::m_DeltaTime = 0.0f;
 float GameTime::m_UnscaledDeltaTime = 0.0f;
 float GameTime::m_SmoothDeltaTime = 0.0f;
 float GameTime::m_FixedDeltaTime = 1.0f / 60.0f;
-float GameTime::m_TimeScale = 1.0f;
+float GameTime::timeScale = 1.0f;
 float GameTime::m_MaximumDeltaTime = 0.3333f;
 int GameTime::m_FrameCount = 0;
 int GameTime::m_HitStop = 0;
@@ -42,7 +42,7 @@ void GameTime::Update()
 
     // deltaTimeêßå¿Åiç≈ëÂílï‚ê≥Åj
     m_UnscaledDeltaTime = std::min(delta.count(), m_MaximumDeltaTime);
-    m_DeltaTime = m_UnscaledDeltaTime * m_TimeScale;
+    m_DeltaTime = m_UnscaledDeltaTime * timeScale;
     deltaTime = m_DeltaTime;
     m_LastTime = currentTime;
     m_FrameCount++;
@@ -81,7 +81,7 @@ float GameTime::DeltaTime() { return m_DeltaTime; }
 float GameTime::UnscaledDeltaTime() { return m_UnscaledDeltaTime; }
 float GameTime::FixedDeltaTime() { return m_FixedDeltaTime; }
 float GameTime::FixedUnscaledDeltaTime() { return m_FixedDeltaTime; }
-float GameTime::TotalTime() { return UnscaledTime() * m_TimeScale; }
+float GameTime::TotalTime() { return UnscaledTime() * timeScale; }
 
 float GameTime::UnscaledTime()
 {
@@ -98,7 +98,7 @@ float GameTime::TimeSinceLevelLoad()
     if (!m_Initialized) initialize();
     auto now = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> elapsed = now - m_LevelLoadTime;
-    return elapsed.count() * m_TimeScale;
+    return elapsed.count() * timeScale;
 }
 
 int GameTime::FrameCount() { return m_FrameCount; }
@@ -106,8 +106,8 @@ bool GameTime::InFixedTimeStep() { return m_InFixedTimeStep; }
 float GameTime::SmoothDeltaTime() { return m_SmoothDeltaTime; }
 float GameTime::MaximumDeltaTime() { return m_MaximumDeltaTime; }
 
-void GameTime::SetTimeScale(float scale) { m_TimeScale = scale; }
-float GameTime::GetTimeScale() { return m_TimeScale; }
+void GameTime::SetTimeScale(float scale) { timeScale = scale; }
+float GameTime::GetTimeScale() { return timeScale; }
 void GameTime::SetFixedDeltaTime(float fixed) { m_FixedDeltaTime = fixed; }
 void GameTime::SetMaximumDeltaTime(float max) { m_MaximumDeltaTime = max; }
 

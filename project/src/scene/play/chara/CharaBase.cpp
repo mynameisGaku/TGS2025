@@ -58,6 +58,7 @@ CharaBase::CharaBase()
 	m_IsMove				= false;
 	m_IsJumping				= false;
 	m_CanCatch				= true;
+	m_CanThrow				= true;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -145,6 +146,7 @@ void CharaBase::Init(std::string tag)
 	m_Timeline->SetFunction("SetCanMove", &CharaBase::setCanMove);
 	m_Timeline->SetFunction("SetCanRot", &CharaBase::setCanRot);
 	m_Timeline->SetFunction("SetVelocity", &CharaBase::setVelocity);
+	m_Timeline->SetFunction("ThrowBall", &CharaBase::throwBall);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -436,6 +438,16 @@ void CharaBase::StartBallCharge()
 	m_SubFSM->ChangeState(&CharaBase::SubStateHoldToAim); // ステートを変更
 }
 
+void CharaBase::StartThrow()
+{
+	if (m_pBall == nullptr)
+		return;
+	if (not m_CanThrow)
+		return;
+
+	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
+}
+
 void CharaBase::ThrowBall(const Vector3& velocity)
 {
 	if (m_pBall == nullptr)
@@ -448,7 +460,6 @@ void CharaBase::ThrowBall(const Vector3& velocity)
 
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
-	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::ThrowBallForward()
@@ -473,11 +484,12 @@ void CharaBase::ThrowHomingBall()
 
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
-	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
 void CharaBase::Feint()
 {
+	if (not m_CanThrow)
+		return;
 	m_FSM->ChangeState(&CharaBase::StateFeint); // ステートを変更
 }
 
@@ -674,8 +686,10 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
-		m_Animator->Play("AimToThrow");
+		m_Timeline->Play("AimToThrow");
 		m_CanCatch = false;
+		m_CanHold = false;
+		m_CanThrow = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -693,6 +707,9 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_CanCatch = true;
+		m_CanHold = true;
+		m_CanThrow = true;
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -915,8 +932,10 @@ void CharaBase::StateFeint(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
-		m_Animator->Play("AimToThrow");
+		m_Timeline->Play("AimToThrow");
 		m_CanCatch = false;
+		m_CanHold = false;
+		m_CanThrow = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -936,6 +955,10 @@ void CharaBase::StateFeint(FSMSignal sig)
 		m_SubFSM->ChangeState(&CharaBase::SubStateHoldToAim); // ステートを変更
 
 		m_CanCatch = true;
+		m_CanHold = true;
+		m_CanThrow = true;
+
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -1307,11 +1330,11 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_CatchTimer > 0.0f)
+		if (m_CanCatch && m_CatchTimer > 0.0f)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateCatch); // ステートを変更
 		}
-		else if (m_pBall != nullptr)
+		else if (m_CanHold && m_pBall != nullptr)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateHold); // ステートを変更
 		}
@@ -1615,4 +1638,12 @@ void CharaBase::setCanRot(const nlohmann::json& argument)
 void CharaBase::setVelocity(const nlohmann::json& argument)
 {
 	m_pPhysics->velocity = argument.at("Velocity").get<Vector3>();
+}
+
+void CharaBase::throwBall(const nlohmann::json& argument)
+{
+	if (m_FSM->GetCurrentState() == &CharaBase::StateAimToThrow)
+	{
+		ThrowHomingBall();
+	}
 }

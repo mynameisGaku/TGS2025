@@ -10,6 +10,7 @@
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/ball/BallManager.h"
+#include "src/common/component/renderer/BallRenderer.h"
 
 Ball::Ball()
 {
@@ -21,6 +22,8 @@ Ball::Ball()
 	m_Index = 0;
 
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
+	BallRenderer* ballRenderer = Object3D::AddComponent<BallRenderer>();
+	ballRenderer->Init();
 
 	ColDefine::ColBaseParam param;
 	param.trs.scale = Vector3::Ones * BALL_RADIUS / BALL_SCALE * 2.0f;

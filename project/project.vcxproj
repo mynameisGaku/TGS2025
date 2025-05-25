@@ -220,6 +220,7 @@
     <Image Include="data\effect\images\Particle_Hard.png" />
     <Image Include="data\effect\images\sq.png" />
     <Image Include="data\effect\images\star.png" />
+    <Image Include="data\Img\BallTexture\Smile.png" />
     <Image Include="data\Model\Ball\texture\lizard.png" />
     <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Diffuse.png" />
     <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Glossiness.png" />
@@ -262,6 +263,7 @@
     <ClCompile Include="src\common\component\material_renderer\MaterialRenderer.cpp" />
     <ClCompile Include="src\common\component\motion_blur\MotionBlur.cpp" />
     <ClCompile Include="src\common\component\physics\Physics.cpp" />
+    <ClCompile Include="src\common\component\renderer\BallRenderer.cpp" />
     <ClCompile Include="src\common\component\shadow_circle\ShadowCircle.cpp" />
     <ClCompile Include="src\common\component\shake\Shake.cpp" />
     <ClCompile Include="src\common\game\GameManager.cpp" />
@@ -416,6 +418,7 @@
     <ClInclude Include="src\common\component\material_renderer\MaterialRenderer.h" />
     <ClInclude Include="src\common\component\motion_blur\MotionBlur.h" />
     <ClInclude Include="src\common\component\physics\Physics.h" />
+    <ClInclude Include="src\common\component\renderer\BallRenderer.h" />
     <ClInclude Include="src\common\component\shadow_circle\ShadowCircle.h" />
     <ClInclude Include="src\common\component\shake\Shake.h" />
     <ClInclude Include="src\common\game\GameManager.h" />

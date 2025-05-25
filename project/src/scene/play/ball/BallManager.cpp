@@ -122,7 +122,7 @@ Ball* BallManager::CreateBall(const Vector3& position)
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
 	obj->transform->position = position;
-	obj->SetModel(m_Model);
+	//obj->SetModel(m_Model);
 	m_pPool->SetObjectPointer(index, obj);
 
 	return obj;

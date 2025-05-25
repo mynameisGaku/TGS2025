@@ -1,7 +1,8 @@
-#include "src/scene/play/team/Team.h"
 #include "src/util/math/mathUtils.h"
-#include "src/scene/play/chara/CharaManager.h"
 #include "src/util/time/GameTime.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/scene/play/status_tracker/StatusTracker.h"
+#include "src/scene/play/team/Team.h"
 #include <algorithm>
 
 Team::Team(const std::string& name)
@@ -33,10 +34,15 @@ int Team::GetTotalPoint()
             continue;
 
         // キル数に置き換える
-        result++;
+        result += chara->GetStatusTracker()->Get_KillCount();
     }
 
     return result;
+}
+
+std::vector<int> Team::GetCharaIDs()
+{
+    return m_CharaIDs;
 }
 
 std::pair<int, int> Team::GetHighestPointHolderIDandPoint()  
@@ -77,7 +83,7 @@ std::vector<std::pair<int, int>> Team::GetTeamRanking()
        if (!chara)  
            continue;  
 
-       int charaPoints = 1; // 現在の仕様ではキル数を1ポイントとしてカウント  
+       int charaPoints = chara->GetStatusTracker()->Get_KillCount();
        ranking.emplace_back(id, charaPoints);  
    }  
 
@@ -92,17 +98,6 @@ std::vector<std::pair<int, int>> Team::GetTeamRanking()
 std::string Team::GetTeamName() const
 {
     return m_TeamName;
-}
-
-void Team::AddPoint(int p)
-{
-    m_PointLog.push_back({ GTime.TotalTimeInt(), p });
-    m_Points.push_back(p);
-}
-
-int Team::GetPoint() const
-{
-    return MathUtil::CalcList(m_Points);
 }
 
 bool Team::queryIsRegistered(int _id)

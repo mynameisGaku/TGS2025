@@ -1,6 +1,7 @@
 #include "MatchManager.h"
 #include "src/common/game/GameManager.h"
 #include <src/util/time/GameTime.h>
+#include <src/util/debug/imgui/imGuiManager.h>
 
 //=== キャラ ===
 #include "src/util/math/mathUtils.h"
@@ -17,7 +18,12 @@
 //=== ボール ===
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
+#include <src/util/string/StringUtil.h>
 
+
+//-----------------------------------------
+//  CurrentGameData
+//-----------------------------------------
 CurrentGameData::CurrentGameData(const GAME_MODE_DESC& desc, std::vector<std::string> teamNames)
 {
     m_Name = desc.GameModeName;
@@ -31,6 +37,9 @@ CurrentGameData::CurrentGameData(const GAME_MODE_DESC& desc, std::vector<std::st
     }
 }
 
+//-----------------------------------------
+//  MatchManager
+//-----------------------------------------
 MatchManager::MatchManager()
 {
     init();
@@ -38,7 +47,7 @@ MatchManager::MatchManager()
 
 MatchManager::~MatchManager()
 {
-
+    delete m_pFsm;
 }
 
 void MatchManager::Update()
@@ -65,6 +74,39 @@ void MatchManager::init()
 #endif
 }
 
+void MatchManager::ImGuiInit()
+{
+#ifdef _DEBUG
+    ImGuiRoot* MatchTree = ImGuiManager::AddRoot(new ImGuiRoot("Match"));	// マッチのツリー
+
+    ImGuiRoot* TeamsTree = MatchTree->AddChild(new ImGuiRoot("Teams"));	// カメラの情報を閲覧するツリー
+    for (auto& teamData : m_pTeamManager->GetTeams())
+    {
+        ImGuiRoot* TeamBranch = TeamsTree->AddChild(new ImGuiRoot(teamData->GetTeamName() + " " + "Team"));	// カメラの情報を閲覧するツリー
+
+        TeamBranch->Add(new ImGuiNode_Text("charaIDs", StringUtil::FormatToString("Chara ID")));
+        TeamBranch->NodeBeginChild(250.0f, 60.0f);
+        for (auto& id : teamData->GetCharaIDs())
+        {
+            TeamBranch->Add(new ImGuiNode_Text("id", StringUtil::FormatToString("id:%d", id)));
+        }
+        TeamBranch->NodeEndChild();
+
+        TeamBranch->Add(new ImGuiNode_Text("ranking", StringUtil::FormatToString("Ranking")));
+        TeamBranch->Add(new ImGuiNode_Text("totalPoint", StringUtil::FormatToString("TotalPoint:%d", teamData->GetTotalPoint())));
+        TeamBranch->NodeBeginChild(250.0f, 60.0f);
+        size_t i = 0;
+        for (auto& rankData : teamData->GetTeamRanking())
+        {
+            i++;
+            TeamBranch->Add(new ImGuiNode_Text("rankData", StringUtil::FormatToString("rank:%d [ id:%d | point:%d]", i, rankData.first, rankData.second)));
+        }
+        TeamBranch->NodeEndChild();
+    }
+
+#endif // _DEBUG
+}
+
 /* 以下ステート */
 
 void MatchManager::StatePhaseBegin(FSMSignal sig)
@@ -85,6 +127,8 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
         // 現在のゲームモードとそのデータを取得し、取っておく
         m_GameData = CurrentGameData(SceneManager::CommonScene()->FindGameObject<GameManager>()->GetCurrentGameModeData());
+
+        ImGuiInit();
     }
     break;
     case FSMSignal::SIG_Update:
@@ -128,24 +172,9 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
     break;
     case FSMSignal::SIG_Update:
     {
-        for (auto& item : m_pCharaManager->GetCharaPool()->GetAllItems())
-        {
-            if (not item->m_IsActive)
-                continue;
-            auto chara = item->m_pObject;
-
-            // 今は死んだかどうかでポイントを加算していますが、本来はここでは行わず、
-            // TeamManager内で、チームに所属しているキャラのキル数を参照し、それらを足し合わせたものを
-            // ポイントとして扱います。なので、このループは将来的に消滅します
-            if (chara->GetHP()->IsDead())
-            {
-                m_pTeamManager->AddPoint(chara->HitBall()->GetCharaTag());
-            }
-        }
-
         for (auto& teamName : GAME_REF.TeamNames)
         {
-            if (m_pTeamManager->GetTeam(teamName)->GetPoint() < m_GameData.m_WinPointMax)
+            if (m_pTeamManager->GetTeam(teamName)->GetTotalPoint() < m_GameData.m_WinPointMax)
                 continue;
 
             m_pFsm->ChangeState(&MatchManager::StatePhaseGameOver);

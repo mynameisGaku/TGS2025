@@ -19,17 +19,6 @@ void TeamManager::RegisterCharaToTeam(CharaBase* pChara)
             continue;
 
         teamData->AddCharaID(pChara->GetIndex());
-    }
-}
-
-void TeamManager::AddPoint(const std::string& team)
-{
-    for (auto& teamData : m_Teams)
-    {
-        if (teamData->GetTeamName() not_eq team)
-            continue;
-
-        teamData->AddPoint(1);
         return;
     }
 }
@@ -42,6 +31,11 @@ Team* TeamManager::GetTeam(const std::string& name)
             return teamData;
     }
     return nullptr;
+}
+
+std::list<Team*> TeamManager::GetTeams()
+{
+    return m_Teams;
 }
 
 void TeamManager::init()

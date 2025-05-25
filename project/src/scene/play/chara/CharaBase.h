@@ -15,6 +15,7 @@ class Catcher;
 class Animator;
 template <class C>
 class Timeline;
+class StatusTracker;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -156,6 +157,11 @@ public:
 	/// </summary>
 	inline const std::string GetCharaTag() const { return m_CharaTag; }
 
+	/// <summary>
+	/// ステータストラッカーを取得
+	/// </summary>
+	inline const StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
+
 	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);
@@ -213,12 +219,13 @@ private:
 	CharaHP*		m_pHP;					// HPのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
-	Catcher* m_Catcher;						// キャッチの当たり判定
+	Catcher*		m_Catcher;				// キャッチの当たり判定
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
-	Animator* m_Animator;					// アニメーション
-	Transform* m_EffectTransform;			// エフェクト出すトランスフォーム
+	Animator*		m_Animator;				// アニメーション
+	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
+	StatusTracker*	m_pStatusTracker;		// ステータスの統計
 	int				m_Index;				// 自身のインデックス
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度

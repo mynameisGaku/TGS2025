@@ -14,9 +14,9 @@ public:
     /// </summary>
     void RegisterCharaToTeam(class CharaBase* pChara);
 
-    void AddPoint(const std::string& team);
-
     Team* GetTeam(const std::string& name);
+
+    std::list<Team*> GetTeams();
 
 private:
     void init();

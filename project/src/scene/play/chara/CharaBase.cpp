@@ -18,6 +18,7 @@
 #include "src/common/camera/CameraManager.h"
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/mathUtils.h"
+#include "src/scene/play/status_tracker/StatusTracker.h"
 
 using namespace KeyDefine;
 
@@ -118,6 +119,7 @@ CharaBase::~CharaBase()
 void CharaBase::Init(std::string tag)
 {
 	m_CharaTag = tag;
+	m_pStatusTracker = new StatusTracker();
 	m_pPhysics = GetComponent<Physics>();
 	m_Catcher = Instantiate<Catcher>();
 	m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
@@ -126,6 +128,7 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+	m_pHP->SetOnDeadCallback([&]() {m_pStatusTracker->AddDeathCount(1); });
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);

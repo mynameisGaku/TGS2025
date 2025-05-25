@@ -24,6 +24,11 @@ public:
     int GetTotalPoint();
 
     /// <summary>
+    /// 所属しているキャラ達のIDを取得
+    /// </summary>
+    std::vector<int> GetCharaIDs();
+
+    /// <summary>
     /// ポイント最多者のIDとポイントをセットで取得
     /// </summary>
     std::pair<int, int> GetHighestPointHolderIDandPoint();
@@ -37,16 +42,6 @@ public:
     /// チーム名を取得
     /// </summary>
     std::string GetTeamName() const;
-
-    /// <summary>
-    /// ポイントを追加
-    /// </summary>
-    void AddPoint(int p = 1);
-
-    /// <summary>
-    /// ポイントを取得
-    /// </summary>
-    int GetPoint() const;
 
 private:
     friend class TeamManager;

@@ -319,6 +319,9 @@
     <Filter Include="src%28application%29\scene\play\team">
       <UniqueIdentifier>{30b4e835-5a21-40b6-b28f-63ddb027a118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\status_tracker">
+      <UniqueIdentifier>{a85d74c8-1149-405a-a8b3-844a108eef89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1043,6 +1046,9 @@
     <ClCompile Include="src\scene\play\team\Team.cpp">
       <Filter>src%28application%29\scene\play\team</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp">
+      <Filter>src%28application%29\scene\play\status_tracker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1716,6 +1722,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\team\Team.h">
       <Filter>src%28application%29\scene\play\team</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h">
+      <Filter>src%28application%29\scene\play\status_tracker</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

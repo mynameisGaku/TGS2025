@@ -35,6 +35,8 @@ private:
     /* Begin */
     void StatePhaseBegin(FSMSignal sig);
 
+    void ImGuiInit();
+
     /* Ready */
     void StatePhaseReady(FSMSignal sig);
     float m_ReadyEndCounterSec;

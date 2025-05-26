@@ -4,8 +4,11 @@
 #include "src/scene/play/ball/BallManager.h"
 #include "src/reference/ball/BallRef.h"
 #include "src/util/file/FileUtil.h"
+#include "vendor/nlohmann/json.hpp"
+#include <fstream>
 
-const std::string BallManager::FOLDER = "data/Img/BallTexture/";
+const std::string BallManager::FOLDER_TEXTURE = "data/Img/BallTexture/";
+const std::string BallManager::FOLDER_JSON = "data/Json/Ball/Texture/";
 
 BallManager::BallManager()
 {
@@ -187,12 +190,22 @@ Ball* BallManager::initfunc(uint32_t index, Ball* pBall)
 
 void BallManager::loadTextures()
 {
-	std::list<std::string> fileNames = FileUtil::FindFileNames(FOLDER, true);
+	std::list<std::string> fileNames = FileUtil::FindFileNames(FOLDER_TEXTURE, true);
 
 	for (std::string fileName : fileNames)
 	{
 		BallTexture tex;
-		tex.Texture = ResourceLoader::LoadGraph(FOLDER + fileName + ".png");
+		tex.Texture = ResourceLoader::LoadGraph(FOLDER_TEXTURE + fileName + ".png");
+
+		nlohmann::json json;
+
+		std::ifstream ifJson(FOLDER_JSON + "/" + fileName + ".json");
+		ifJson >> json;
+		ifJson.close();
+
+		tex.FrameCountAll = json.at("FrameCountAll").get<int>();
+		tex.FrameCountX = json.at("FrameCountX").get<int>();
+
 		m_Textures.emplace(fileName, tex);
 	}
 }

@@ -325,6 +325,9 @@
     <Filter Include="data\Img\BallTexture">
       <UniqueIdentifier>{a11b3c31-3a65-4faf-9451-b279e928db92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\Json\Ball\Texture">
+      <UniqueIdentifier>{6d0efb33-252a-4c10-9270-aa3d2c60f3b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -516,6 +519,30 @@
     <None Include="data\Json\Chara\State\AimToThrow.json">
       <Filter>data\Json\Chara\State</Filter>
     </None>
+    <None Include="data\Json\Ball\Texture\Smile.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Thinking.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Hot_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Mind_Blown.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Nerd_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Poop.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Sunglasses_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Cold_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -601,6 +628,24 @@
       <Filter>data\Img\BallTexture</Filter>
     </Image>
     <Image Include="data\Img\BallTexture\Smile.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Sunglasses_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Cold_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Hot_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Mind_Blown.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Nerd_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Poop.png">
       <Filter>data\Img\BallTexture</Filter>
     </Image>
   </ItemGroup>

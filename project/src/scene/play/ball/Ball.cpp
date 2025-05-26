@@ -50,6 +50,7 @@ void Ball::Reset()
 	m_HomingPeriod = 0.0f;
 
 	m_Physics->velocity = Vector3::Zero;
+	m_Physics->angularVelocity = Vector3::Zero;
 	m_Physics->SetGravity(Vector3::Zero);
 	m_Physics->SetFriction(Vector3::Zero);
 

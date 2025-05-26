@@ -57,8 +57,8 @@ void BallRenderer::InitVertices()
 			vertex.norm = position;
 			vertex.pos = position;
 
-			vertex.u = (position.x * TEXTURE_RADIUS + 1.0f) / 2.0f / 8.0f;
-			vertex.v = (1.0f - (position.y * TEXTURE_RADIUS + 1.0f) / 2.0f) / 8.0f;
+			vertex.u = (position.x * TEXTURE_RADIUS + 1.0f) / 2.0f;
+			vertex.v = (1.0f - (position.y * TEXTURE_RADIUS + 1.0f) / 2.0f);
 
 			stacks.push_back(vertex);
 		}
@@ -79,7 +79,7 @@ void BallRenderer::Update()
 	if (m_FrameTimer > FRAME_INTERVAL)
 	{
 		m_Frame++;
-		if (m_Frame >= 49)
+		if (m_Frame >= m_Texture.FrameCountAll)
 		{
 			m_Frame = 0;
 		}
@@ -91,9 +91,9 @@ void BallRenderer::Update()
 void BallRenderer::Draw()
 {
 	Transform trs = Parent<Object3D>()->transform->Global();
-
-	float uAdd = (m_Frame % 8) / 8.0f;
-	float vAdd = (m_Frame / 8) / 8.0f;
+	
+	float uAdd = (float)(m_Frame % m_Texture.FrameCountX) / m_Texture.FrameCountX;
+	float vAdd = (float)(m_Frame / m_Texture.FrameCountX) / m_Texture.FrameCountX;
 
 	MATERIALPARAM MatParam;
 
@@ -123,12 +123,14 @@ void BallRenderer::Draw()
 				v.pos *= m_Radius;
 				v.pos *= trs.Matrix();
 
+				v.u /= m_Texture.FrameCountX;
 				v.u += uAdd;
 				if (v.u >= 1.0f)
 				{
 					v.u -= 1.0f;
 				}
 
+				v.v /= m_Texture.FrameCountX;
 				v.v += vAdd;
 				if (v.v >= 1.0f)
 				{

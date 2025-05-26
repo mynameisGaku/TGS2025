@@ -9,7 +9,6 @@ struct BallTexture
 	int Texture = -1;
 	int FrameCountAll = 0;
 	int FrameCountX = 0;
-	int FrameCountY = 0;
 };
 
 /// <summary>

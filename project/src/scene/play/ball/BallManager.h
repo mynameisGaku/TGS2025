@@ -30,7 +30,8 @@ private:
 	Ball* initfunc(uint32_t index, Ball* pBall);
 	void loadTextures();
 
-	static const std::string FOLDER;
+	static const std::string FOLDER_TEXTURE;
+	static const std::string FOLDER_JSON;
 
 	int m_Model;
 	std::unordered_map<std::string, BallTexture> m_Textures;

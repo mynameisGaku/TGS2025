@@ -306,6 +306,9 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		{
 			getHit(ball);
 			m_pHP->Damage_UseDefault();
+
+			if (m_pHP->IsDead())
+				ball->LastOwner()->GetStatusTracker()->AddKillCount(1);
 		}
 	}
 }

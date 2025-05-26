@@ -59,6 +59,8 @@ public:
 	bool IsActive() const { return m_IsActive; }
 
 	void SetIsActive(bool flag) { m_IsActive = flag; }
+
+	CharaBase* LastOwner() const { return m_LastOwner; }
 private:
 	friend class BallManager;
 	BallManager*	 m_pManager;
@@ -67,6 +69,7 @@ private:
 	ColliderCapsule* m_Collider;
 	State			 m_State;
 	CharaBase*		 m_Owner;
+	CharaBase*		 m_LastOwner;
 	std::string		 m_CharaTag;
 	uint32_t		 m_Index;
 	float			 m_LifeTime;

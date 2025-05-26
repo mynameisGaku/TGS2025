@@ -160,7 +160,7 @@ public:
 	/// <summary>
 	/// ステータストラッカーを取得
 	/// </summary>
-	inline const StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
+	inline StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
 
 	//=======================================================================================
 	// ▼各ステート

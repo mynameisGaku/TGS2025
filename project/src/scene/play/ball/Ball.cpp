@@ -183,6 +183,7 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 {
 	Throw(velocity);
 	m_Owner = owner;
+	m_LastOwner = m_Owner;
 }
 
 void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target)

@@ -524,10 +524,13 @@ void CharaBase::Catch()
 	}
 }
 
-void CharaBase::CatchSuccess()
+void CharaBase::CatchSuccess(const Vector3& velocity)
 {
 	m_CanCatch = false;
 	m_Catcher->SetColliderActive(false);
+
+	transform->rotation.y = atan2f(velocity.x - transform->position.x, velocity.z - transform->position.z);
+	m_pPhysics->velocity += velocity * Vector3(1, 0, 1);
 
 	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }

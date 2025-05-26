@@ -140,7 +140,7 @@ public:
 	/// </summary>
 	void Catch();
 
-	void CatchSuccess();
+	void CatchSuccess(const Vector3& velocity);
 
 	//=======================================================================================
 	// Å•ÉQÉbÉ^Å[

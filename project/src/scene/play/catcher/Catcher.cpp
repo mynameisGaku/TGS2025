@@ -2,6 +2,7 @@
 #include "src/common/component/collider/ColliderCapsule.h"
 #include "src/scene/play/chara/CharaBase.h"
 #include "src/scene/play/ball/Ball.h"
+#include "src/common/component/physics/Physics.h"
 
 Catcher::Catcher()
 {
@@ -68,7 +69,7 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 	if (isCatch)
 	{
 		m_Parent->SetBall(ball);
-		m_Parent->CatchSuccess();
+		m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
 	}
 }
 

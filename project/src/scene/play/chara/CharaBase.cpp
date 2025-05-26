@@ -128,7 +128,6 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
-	m_pHP->SetOnDeadCallback([&]() {m_pStatusTracker->AddDeathCount(1); });
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
@@ -247,15 +246,7 @@ void CharaBase::Draw()
 
 	if (m_pHP->IsDead())
 	{
-		DrawFormatString(300, 300, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 320, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 340, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 360, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 380, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 400, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 320, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 340, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-		DrawFormatString(300, 360, 0xffffff, "‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
 }
 
@@ -306,9 +297,14 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		{
 			getHit(ball);
 			m_pHP->Damage_UseDefault();
+			m_pStatusTracker->AddGetHitCount(1);
 
+			ball->GetLastOwner()->GetStatusTracker()->AddHitCount(1);
 			if (m_pHP->IsDead())
-				ball->LastOwner()->GetStatusTracker()->AddKillCount(1);
+			{
+				m_pStatusTracker->AddDeathCount(1);
+				ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
+			}
 		}
 	}
 }
@@ -486,6 +482,7 @@ void CharaBase::ThrowHomingBall()
 	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
 	const CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
 	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
+	m_pStatusTracker->AddThrowCount(1);
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
 

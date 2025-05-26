@@ -183,7 +183,7 @@ void SystemManager::LoadUpdate() {
 	case ltStageManager:
 		StageObjectManager::Init();
 		StageObjectManager::SetModelFilePath("data/model/Stage/");
-		StageObjectManager::LoadFromJson("data/json/Stage/Stage.json");
+		StageObjectManager::LoadFromJson("data/json/Stage/Stage_1.json");
 		break;
 
 	case ltUI_Manager:		UI_Manager::Init();		break;

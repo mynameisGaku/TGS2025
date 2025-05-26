@@ -53,6 +53,8 @@ public:
 
 	std::string GetCharaTag() const { return m_CharaTag; }
 
+	CharaBase* GetLastOwner() const { return m_LastOwner; }
+
 	/// <summary>
 	/// —LŒø‚©H
 	/// </summary>
@@ -70,6 +72,7 @@ private:
 	ColliderCapsule* m_Collider;
 	State			 m_State;
 	CharaBase*		 m_Owner;
+	CharaBase*		 m_LastOwner;
 	std::string		 m_CharaTag;
 	uint32_t		 m_Index;
 	float			 m_LifeTime;

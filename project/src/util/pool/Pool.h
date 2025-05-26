@@ -148,7 +148,7 @@ public:
             }
         }
 
-        if ((uint32_t)activeCount >= count)
+        if ((uint32_t)activeCount > count)
         {
             return true;
         }

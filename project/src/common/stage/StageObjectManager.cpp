@@ -281,8 +281,10 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 			Transform tr;			// À•WE‰ñ“]EŠgk‚Ìî•ñ
 			bool isCollision = false;
 
+			std::string name = obj.at("Name").get<std::string>();
 			std::string type = obj.at("Type").get<std::string>();
 
+			info.objname = name;
 			info.type = type;
 			info.hModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + ".mv1");
 			info.hHitModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + "_col.mv1");

@@ -11,6 +11,7 @@
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/common/component/renderer/BallRenderer.h"
+#include "src/scene/play/status_tracker/StatusTracker.h"
 
 Ball::Ball()
 {

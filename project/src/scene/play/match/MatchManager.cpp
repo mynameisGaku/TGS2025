@@ -10,6 +10,7 @@
 #include "src/common/component/controller/PlayerController.h"
 #include "src/common/component/controller/AIController.h"
 #include "src/common/component/controller/DebugController.h"
+#include "src/scene/play/status_tracker/StatusTracker.h"
 
 //=== チーム ===
 #include "src/scene/play/team/Team.h"
@@ -53,6 +54,64 @@ MatchManager::~MatchManager()
 void MatchManager::Update()
 {
     m_pFsm->Update();
+
+#ifdef IMGUI
+    ImGuiRoot* matchRoot = ImGuiManager::FindRoot("Match");
+    if (!matchRoot) return;
+
+    for (auto& team : m_pTeamManager->GetTeams())
+    {
+        std::string teamName = team->GetTeamName();
+        ImGuiRoot* teamTree = matchRoot->SearchChildren(teamName + " Team");
+        if (!teamTree) continue;
+
+        // 合計ポイントの更新
+        teamTree->Node<ImGuiNode_Text>("TotalPoint")->SetText(
+            StringUtil::FormatToString("Total Point: %d", team->GetTotalPoint())
+        );
+
+        // ランキングの更新
+        ImGuiRoot* rankingTree = teamTree->SearchChildren("Ranking");
+        if (rankingTree)
+        {
+            size_t i = 0;
+            for (auto& rank : team->GetTeamRanking())
+            {
+                rankingTree->Node<ImGuiNode_Text>("Rank" + std::to_string(i))->SetText(
+                    StringUtil::FormatToString("[%d] ID:%d | Point:%d", i + 1, rank.first, rank.second)
+                );
+                ++i;
+            }
+        }
+
+        // キャラクターごとのステータス更新
+        ImGuiRoot* memberTree = teamTree->SearchChildren("Members");
+        if (!memberTree) continue;
+
+        for (auto& id : team->GetCharaIDs())
+        {
+            auto chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
+            auto stat = chara->GetStatusTracker();
+
+            std::string label = "[" + std::to_string(chara->GetIndex()) + "] ID:" + std::to_string(chara->GetIndex());
+            ImGuiRoot* charaTree = memberTree->SearchChildren(label);
+            if (!charaTree) continue;
+
+            // 数値がNaNやInfの場合は 0.0f に補正
+            float kd = MathUtil::IsNaN(stat->GetKD()) || MathUtil::IsInf(stat->GetKD()) ? 0.0f : stat->GetKD();
+            float acc = MathUtil::IsNaN(stat->GetAccuracy()) || MathUtil::IsInf(stat->GetAccuracy()) ? 0.0f : stat->GetAccuracy();
+
+            charaTree->Node<ImGuiNode_Text>("KD")->SetText(StringUtil::FormatToString("KD: %.2f", kd));
+            charaTree->Node<ImGuiNode_Text>("Acc")->SetText(StringUtil::FormatToString("Acc: %.2f", acc));
+            charaTree->Node<ImGuiNode_Text>("kill")->SetText(StringUtil::FormatToString("Kill: %d", stat->Get_KillCount()));
+            charaTree->Node<ImGuiNode_Text>("death")->SetText(StringUtil::FormatToString("Death: %d", stat->Get_DeathCount()));
+            charaTree->Node<ImGuiNode_Text>("hit")->SetText(StringUtil::FormatToString("Hit: %d", stat->Get_HitCount()));
+            charaTree->Node<ImGuiNode_Text>("gethit")->SetText(StringUtil::FormatToString("GetHit: %d", stat->Get_GetHitCount()));
+            charaTree->Node<ImGuiNode_Text>("catch")->SetText(StringUtil::FormatToString("Catch: %d", stat->Get_CatchCount()));
+            charaTree->Node<ImGuiNode_Text>("throw")->SetText(StringUtil::FormatToString("Throw: %d", stat->Get_ThrowCount()));
+        }
+    }
+#endif
 }
 
 void MatchManager::Draw()
@@ -77,34 +136,52 @@ void MatchManager::init()
 void MatchManager::ImGuiInit()
 {
 #ifdef _DEBUG
-    ImGuiRoot* MatchTree = ImGuiManager::AddRoot(new ImGuiRoot("Match"));	// マッチのツリー
+    ImGuiRoot* matchRoot = ImGuiManager::AddRoot(new ImGuiRoot("Match"));  // マッチのトップ
 
-    ImGuiRoot* TeamsTree = MatchTree->AddChild(new ImGuiRoot("Teams"));	// カメラの情報を閲覧するツリー
-    for (auto& teamData : m_pTeamManager->GetTeams())
+    for (auto& team : m_pTeamManager->GetTeams())
     {
-        ImGuiRoot* TeamBranch = TeamsTree->AddChild(new ImGuiRoot(teamData->GetTeamName() + " " + "Team"));	// カメラの情報を閲覧するツリー
+        std::string teamName = team->GetTeamName();
+        ImGuiRoot* teamTree = matchRoot->AddChild(new ImGuiRoot(teamName + " Team"));
 
-        TeamBranch->Add(new ImGuiNode_Text("charaIDs", StringUtil::FormatToString("Chara ID")));
-        TeamBranch->NodeBeginChild(250.0f, 60.0f);
-        for (auto& id : teamData->GetCharaIDs())
+        // ランキング
+        ImGuiRoot* rankingTree = teamTree->AddChild(new ImGuiRoot("Ranking"));
+        size_t rankIndex = 0;
+        rankingTree->NodeBeginChild(250, 100);
+        for (auto& rank : team->GetTeamRanking())
         {
-            TeamBranch->Add(new ImGuiNode_Text("id", StringUtil::FormatToString("id:%d", id)));
+            rankingTree->Add(new ImGuiNode_Text("Rank" + std::to_string(rankIndex++),
+                StringUtil::FormatToString("[%d] ID:%d | Point:%d", rankIndex, rank.first, rank.second)));
         }
-        TeamBranch->NodeEndChild();
+        rankingTree->NodeEndChild();
 
-        TeamBranch->Add(new ImGuiNode_Text("ranking", StringUtil::FormatToString("Ranking")));
-        TeamBranch->Add(new ImGuiNode_Text("totalPoint", StringUtil::FormatToString("TotalPoint:%d", teamData->GetTotalPoint())));
-        TeamBranch->NodeBeginChild(250.0f, 60.0f);
-        size_t i = 0;
-        for (auto& rankData : teamData->GetTeamRanking())
+        // キャラ情報
+        ImGuiRoot* memberTree = teamTree->AddChild(new ImGuiRoot("Members"));
+        for (auto& id : team->GetCharaIDs())
         {
-            i++;
-            TeamBranch->Add(new ImGuiNode_Text("rankData", StringUtil::FormatToString("rank:%d [ id:%d | point:%d]", i, rankData.first, rankData.second)));
+            auto chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
+            auto stat = chara->GetStatusTracker();
+
+            std::string label = "[" + std::to_string(chara->GetIndex()) + "] ID:" + std::to_string(chara->GetIndex());
+
+            ImGuiRoot* charaTree = memberTree->AddChild(new ImGuiRoot(label));
+            charaTree->NodeBeginChild(250, 100);
+            charaTree->Add(new ImGuiNode_Text("KD", StringUtil::FormatToString("KD: %.2f", stat->GetKD())));
+            charaTree->Add(new ImGuiNode_Text("Acc", StringUtil::FormatToString("Acc: %.2f", stat->GetAccuracy())));
+            charaTree->Add(new ImGuiNode_Text("kill", StringUtil::FormatToString("Kill: %d", stat->Get_KillCount())));
+            charaTree->Add(new ImGuiNode_Text("death", StringUtil::FormatToString("Death: %d", stat->Get_DeathCount())));
+            charaTree->Add(new ImGuiNode_Text("hit", StringUtil::FormatToString("Hit: %d", stat->Get_HitCount())));
+            charaTree->Add(new ImGuiNode_Text("gethit", StringUtil::FormatToString("GetHit: %d", stat->Get_GetHitCount())));
+            charaTree->Add(new ImGuiNode_Text("catch", StringUtil::FormatToString("Catch: %d", stat->Get_CatchCount())));
+            charaTree->Add(new ImGuiNode_Text("throw", StringUtil::FormatToString("Throw: %d", stat->Get_ThrowCount())));
+            charaTree->NodeEndChild();
         }
-        TeamBranch->NodeEndChild();
+
+        // 合計ポイント
+        teamTree->Add(new ImGuiNode_Space("Space"));
+        teamTree->Add(new ImGuiNode_Text("TotalPoint", StringUtil::FormatToString("Total Point: %d", team->GetTotalPoint())));
+        teamTree->Add(new ImGuiNode_Space("Space"));
     }
-
-#endif // _DEBUG
+#endif
 }
 
 /* 以下ステート */
@@ -122,6 +199,12 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
         addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
         addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+
+        // 追加できるの確認したよ
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();
 

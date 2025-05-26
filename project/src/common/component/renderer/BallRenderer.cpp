@@ -16,7 +16,6 @@ BallRenderer::BallRenderer()
 	m_StacksCount = 0;
 	m_Frame = 0;
 	m_FrameTimer = 0.0f;
-	m_Texture = -1;
 }
 
 BallRenderer::~BallRenderer()
@@ -68,7 +67,7 @@ void BallRenderer::InitVertices()
 	}
 }
 
-void BallRenderer::SetTexture(int texture)
+void BallRenderer::SetTexture(const BallTexture& texture)
 {
 	m_Texture = texture;
 }
@@ -137,7 +136,7 @@ void BallRenderer::Draw()
 				}
 			}
 
-			DrawPolygon3D(vertices, 2, m_Texture, TRUE);
+			DrawPolygon3D(vertices, 2, m_Texture.Texture, TRUE);
 		}
 	}
 }

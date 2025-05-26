@@ -46,7 +46,7 @@ BallManager::~BallManager()
 	ResourceLoader::MV1DeleteModel(m_Model);
 	for (auto item : m_Textures)
 	{
-		ResourceLoader::DeleteGraph(item.second);
+		ResourceLoader::DeleteGraph(item.second.Texture);
 	}
 }
 
@@ -191,6 +191,8 @@ void BallManager::loadTextures()
 
 	for (std::string fileName : fileNames)
 	{
-		m_Textures.emplace(fileName, ResourceLoader::LoadGraph(FOLDER + fileName + ".png"));
+		BallTexture tex;
+		tex.Texture = ResourceLoader::LoadGraph(FOLDER + fileName + ".png");
+		m_Textures.emplace(fileName, tex);
 	}
 }

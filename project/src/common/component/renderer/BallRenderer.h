@@ -4,6 +4,14 @@
 #include <vector>
 #include <string>
 
+struct BallTexture
+{
+	int Texture = -1;
+	int FrameCountAll = 0;
+	int FrameCountX = 0;
+	int FrameCountY = 0;
+};
+
 /// <summary>
 /// 円形の画像を受け取り、球体を描画するコンポーネント
 /// </summary>
@@ -15,7 +23,7 @@ public:
 	~BallRenderer();
 
 	void InitVertices();
-	void SetTexture(int texture);
+	void SetTexture(const BallTexture& texture);
 	void Update() override;
 	void Draw() override;
 private:
@@ -25,7 +33,7 @@ private:
 	static const float FRAME_INTERVAL;
 	static const float TEXTURE_RADIUS;
 	
-	int m_Texture;
+	BallTexture m_Texture;
 	int m_Frame;
 	float m_FrameTimer;
 	float m_Radius;

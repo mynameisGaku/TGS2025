@@ -1,6 +1,7 @@
 #pragma once
 #include "framework/gameObject.h"
 #include "src/util/pool/Pool.h"
+#include "src/common/component/renderer/BallRenderer.h"
 #include <list>
 #include <unordered_map>
 
@@ -32,7 +33,7 @@ private:
 	static const std::string FOLDER;
 
 	int m_Model;
-	std::unordered_map<std::string, int> m_Textures;
+	std::unordered_map<std::string, BallTexture> m_Textures;
 
 #ifdef USE_POOL
 	Pool<Ball>* m_pPool;

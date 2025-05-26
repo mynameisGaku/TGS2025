@@ -1,5 +1,6 @@
 #pragma once
 #include "src/util/object3D/Object3D.h"
+#include "src/common/component/renderer/BallRenderer.h"
 #include <string>
 
 class Physics;
@@ -60,7 +61,7 @@ public:
 
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
-	void SetTexture(int hTexture);
+	void SetTexture(const BallTexture& texture);
 private:
 	friend class BallManager;
 	BallManager*	 m_pManager;

@@ -269,7 +269,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	}
 }
 
-void Ball::SetTexture(int hTexture)
+void Ball::SetTexture(const BallTexture& texture)
 {
 	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
 	if (ballRenderer == nullptr)
@@ -279,7 +279,7 @@ void Ball::SetTexture(int hTexture)
 		Object3D::SetModel(-1);
 	}
 
-	ballRenderer->SetTexture(hTexture);
+	ballRenderer->SetTexture(texture);
 }
 
 void Ball::collisionToGround()

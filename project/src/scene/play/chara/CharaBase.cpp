@@ -33,33 +33,35 @@ namespace
 
 CharaBase::CharaBase()
 {
-	m_pStamina				= Instantiate<CharaStamina>();
-	m_pHP					= Instantiate<CharaHP>();
-	m_pBall					= nullptr;
-	m_pLastBall				= nullptr;
-	m_pPhysics				= nullptr;
-	m_BallChargeRate		= 0.0f;
-	m_IsCharging			= false;
-	m_MoveSpeed				= 0.0f;
-	m_RotSpeed				= 0.0f;
-	m_SpeedScale			= 0.0f;
-	m_CatchTimer			= 0.0f;
-	m_CharaTag				= CHARADEFINE_REF.Tags[0];
-	m_Catcher				= nullptr;
-	m_Index					= 0;
-	m_Animator				= nullptr;
-	m_EmoteTimer			= 0.0f;
-	m_IsLanding				= true;
-	m_SlideTimer			= 0.0f;
-	m_EffectTransform		= nullptr;
-	m_pBallManager			= nullptr;
-	m_Timeline				= nullptr;
-	m_CanMove				= true;
-	m_CanRot				= true;
-	m_IsMove				= false;
-	m_IsJumping				= false;
-	m_CanCatch				= true;
-	m_CanThrow				= true;
+	m_pStamina			= Instantiate<CharaStamina>();
+	m_pHP				= Instantiate<CharaHP>();
+	m_pBall				= nullptr;
+	m_pLastBall			= nullptr;
+	m_pPhysics			= nullptr;
+	m_BallChargeRate	= 0.0f;
+	m_IsCharging		= false;
+	m_MoveSpeed			= 0.0f;
+	m_RotSpeed			= 0.0f;
+	m_SpeedScale		= 0.0f;
+	m_CharaTag			= CHARADEFINE_REF.Tags[0];
+	m_Catcher			= nullptr;
+	m_Index				= 0;
+	m_Animator			= nullptr;
+	m_EmoteTimer		= 0.0f;
+	m_IsLanding			= true;
+	m_SlideTimer		= 0.0f;
+	m_EffectTransform	= nullptr;
+	m_pBallManager		= nullptr;
+	m_Timeline			= nullptr;
+	m_CanMove			= true;
+	m_CanRot			= true;
+	m_IsMove			= false;
+	m_IsJumping			= false;
+	m_CanCatch			= true;
+	m_CanThrow			= true;
+	m_IsCatching		= false;
+	m_CanHold			= true;
+	m_pHitBall			= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -232,8 +234,8 @@ void CharaBase::Update() {
 		m_SpeedScale = 0.0f;
 	}
 
-
 	m_IsMove = false;
+	m_IsCatching = false;
 
 	Object3D::Update();
 }
@@ -434,8 +436,6 @@ void CharaBase::SetBall(Ball* ball)
 	m_pBall->Init(m_CharaTag);
 
 	m_IsCharging = false;
-
-	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
 
 void CharaBase::StartBallCharge()
@@ -520,8 +520,16 @@ void CharaBase::Catch()
 
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
-		m_CatchTimer = CATCH_TIME;
+		m_IsCatching = true;
 	}
+}
+
+void CharaBase::CatchSuccess()
+{
+	m_CanCatch = false;
+	m_Catcher->SetColliderActive(false);
+
+	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
 
 //========================================================================
@@ -1336,7 +1344,7 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_CanCatch && m_CatchTimer > 0.0f)
+		if (m_CanCatch && m_IsCatching)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateCatch); // ステートを変更
 		}
@@ -1453,12 +1461,12 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		catchUpdate();
-
-		if (m_CatchTimer <= 0.0f)
+		if (not m_IsCatching)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 		}
+
+		catchUpdate();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1467,6 +1475,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Catcher->SetColliderActive(false);
 	}
 	break;
 	}
@@ -1543,22 +1552,13 @@ void CharaBase::slideUpdate()
 
 void CharaBase::catchUpdate()
 {
-	if (m_CatchTimer > 0.0f)
+	if (m_IsCatching)
 	{
-		m_CatchTimer -= GTime.deltaTime;
-		if (m_CatchTimer < 0.0f)
+		m_Catcher->SetColliderActive(true);
+		if (m_EffectTransform != nullptr)
 		{
-			m_CatchTimer = 0.0f;
-			m_Catcher->SetColliderActive(false);
-		}
-		else
-		{
-			m_Catcher->SetColliderActive(true);
-			if (m_EffectTransform != nullptr)
-			{
-				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
-				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
-			}
+			EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
+			EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
 		}
 
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
@@ -1567,6 +1567,7 @@ void CharaBase::catchUpdate()
 	{
 		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
 		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
+		m_Catcher->SetColliderActive(false);
 	}
 }
 

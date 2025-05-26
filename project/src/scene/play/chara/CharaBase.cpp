@@ -419,7 +419,12 @@ void CharaBase::GenerateBall()
 	if (m_pBallManager == nullptr)
 		m_pBallManager = FindGameObject<BallManager>();
 
-	m_pBall = m_pBallManager->CreateBall(transform->Global().position);
+	SetBall(m_pBallManager->CreateBall(transform->Global().position));
+}
+
+void CharaBase::SetBall(Ball* ball)
+{
+	m_pBall = ball;
 
 	if (m_pBall == nullptr)
 		return;

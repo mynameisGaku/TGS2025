@@ -82,6 +82,8 @@ public:
 	/// </summary>
 	void GenerateBall();
 
+	void SetBall(Ball* ball);
+
 	void StartBallCharge();
 
 	void StartThrow();

@@ -3,10 +3,17 @@
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/reference/ball/BallRef.h"
+#include "src/util/file/FileUtil.h"
+#include "vendor/nlohmann/json.hpp"
+#include <fstream>
+
+const std::string BallManager::FOLDER_TEXTURE = "data/Img/BallTexture/";
+const std::string BallManager::FOLDER_JSON = "data/Json/Ball/Texture/";
 
 BallManager::BallManager()
 {
 	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
+	loadTextures();
 
 	BALL_REF.Load();
 
@@ -40,6 +47,10 @@ BallManager::~BallManager()
 #endif
 
 	ResourceLoader::MV1DeleteModel(m_Model);
+	for (auto item : m_Textures)
+	{
+		ResourceLoader::DeleteGraph(item.second.Texture);
+	}
 }
 
 void BallManager::Update()
@@ -122,7 +133,39 @@ Ball* BallManager::CreateBall(const Vector3& position)
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
 	obj->transform->position = position;
+
 	obj->SetModel(m_Model);
+	// テスト用 テクスチャをランダムで選択
+	if (not m_Textures.empty())
+	{
+		BallTexture tex;
+
+		if (GetRand(99) < 3)
+		{
+			tex = m_Textures.at("Unicorn");
+		}
+		else
+		{
+			int randMax = (int)m_Textures.size() - 1;
+			int rand = GetRand(randMax);
+			if (rand == randMax)
+			{
+				rand = GetRand(99) < 25 ? rand : 0;
+			}
+
+			auto item = (*std::next(m_Textures.begin(), rand));
+			if (item.first == "Unicorn")
+			{
+				tex = m_Textures.at("Lady_Bug");
+			}
+			else
+			{
+				tex = item.second;
+			}
+		}
+
+		obj->SetTexture(tex);
+	}
 	m_pPool->SetObjectPointer(index, obj);
 
 	return obj;
@@ -167,4 +210,26 @@ Ball* BallManager::initfunc(uint32_t index, Ball* pBall)
 	pBall = Instantiate<Ball>();
 	pBall->m_Index = index;
 	return pBall;
+}
+
+void BallManager::loadTextures()
+{
+	std::list<std::string> fileNames = FileUtil::FindFileNames(FOLDER_TEXTURE, true);
+
+	for (std::string fileName : fileNames)
+	{
+		BallTexture tex;
+		tex.Texture = ResourceLoader::LoadGraph(FOLDER_TEXTURE + fileName + ".png");
+
+		nlohmann::json json;
+
+		std::ifstream ifJson(FOLDER_JSON + "/" + fileName + ".json");
+		ifJson >> json;
+		ifJson.close();
+
+		tex.FrameCountAll = json.at("FrameCountAll").get<int>();
+		tex.FrameCountX = json.at("FrameCountX").get<int>();
+
+		m_Textures.emplace(fileName, tex);
+	}
 }

@@ -319,8 +319,14 @@
     <Filter Include="src%28application%29\scene\play\team">
       <UniqueIdentifier>{30b4e835-5a21-40b6-b28f-63ddb027a118}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\status_tracker">
-      <UniqueIdentifier>{a85d74c8-1149-405a-a8b3-844a108eef89}</UniqueIdentifier>
+    <Filter Include="src%28application%29\common\component\renderer">
+      <UniqueIdentifier>{616d0d18-d4a0-471a-8115-5a50b3d865b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Img\BallTexture">
+      <UniqueIdentifier>{a11b3c31-3a65-4faf-9451-b279e928db92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Ball\Texture">
+      <UniqueIdentifier>{6d0efb33-252a-4c10-9270-aa3d2c60f3b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -513,6 +519,48 @@
     <None Include="data\Json\Chara\State\AimToThrow.json">
       <Filter>data\Json\Chara\State</Filter>
     </None>
+    <None Include="data\Json\Ball\Texture\Smile.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Thinking.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Hot_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Mind_Blown.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Nerd_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Poop.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Sunglasses_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Cold_Face.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Frog.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Hatching_Chick.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Lady_Bug.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Pig.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Turtle.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Unicorn.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -593,6 +641,48 @@
     </Image>
     <Image Include="data\effect\images\star.png">
       <Filter>data\Effect\images</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Thinking.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Smile.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Sunglasses_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Cold_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Hot_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Mind_Blown.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Nerd_Face.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Poop.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Frog.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Hatching_Chick.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Lady_Bug.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Pig.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Turtle.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Unicorn.png">
+      <Filter>data\Img\BallTexture</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -1046,8 +1136,8 @@
     <ClCompile Include="src\scene\play\team\Team.cpp">
       <Filter>src%28application%29\scene\play\team</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp">
-      <Filter>src%28application%29\scene\play\status_tracker</Filter>
+    <ClCompile Include="src\common\component\renderer\BallRenderer.cpp">
+      <Filter>src%28application%29\common\component\renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1723,8 +1813,8 @@
     <ClInclude Include="src\scene\play\team\Team.h">
       <Filter>src%28application%29\scene\play\team</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h">
-      <Filter>src%28application%29\scene\play\status_tracker</Filter>
+    <ClInclude Include="src\common\component\renderer\BallRenderer.h">
+      <Filter>src%28application%29\common\component\renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

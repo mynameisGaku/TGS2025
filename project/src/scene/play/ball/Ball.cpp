@@ -10,6 +10,7 @@
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/ball/BallManager.h"
+#include "src/common/component/renderer/BallRenderer.h"
 
 Ball::Ball()
 {
@@ -49,6 +50,7 @@ void Ball::Reset()
 	m_HomingPeriod = 0.0f;
 
 	m_Physics->velocity = Vector3::Zero;
+	m_Physics->angularVelocity = Vector3::Zero;
 	m_Physics->SetGravity(Vector3::Zero);
 	m_Physics->SetFriction(Vector3::Zero);
 
@@ -267,6 +269,18 @@ void Ball::CollisionEvent(const CollisionData& colData)
 			}
 		}
 	}
+}
+
+void Ball::SetTexture(const BallTexture& texture)
+{
+	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
+	if (ballRenderer == nullptr)
+	{
+		ballRenderer = Object3D::AddComponent<BallRenderer>();
+		ballRenderer->InitVertices();
+	}
+
+	ballRenderer->SetTexture(texture);
 }
 
 void Ball::collisionToGround()

@@ -2,6 +2,7 @@
 #include "src/util/math/Vector3.h"
 #include "src/util/object3D/Object3D.h"
 #include "src/util/time/GameTime.h"
+#include "src/util/easing/easing.h"
 
 const int BallRenderer::SLICES_COUNT = 16;	// ‹…‚Ì‰¡•ûŒü‚Ì•ªŠ„”
 const int BallRenderer::STACKS_COUNT = 16;	// ‹…‚Ìc•ûŒü‚Ì•ªŠ„”
@@ -57,8 +58,14 @@ void BallRenderer::InitVertices()
 			vertex.norm = position;
 			vertex.pos = position;
 
-			vertex.u = (position.x * TEXTURE_RADIUS + 1.0f) / 2.0f;
-			vertex.v = (1.0f - (position.y * TEXTURE_RADIUS + 1.0f) / 2.0f);
+			float u = position.x * TEXTURE_RADIUS;
+			float v = position.y * TEXTURE_RADIUS;
+
+			u *= EasingFunc::OutCirc(1.0f - fabsf(position.z), 1.0f);
+			v *= EasingFunc::OutCirc(1.0f - fabsf(position.z), 1.0f);
+
+			vertex.u = (u + 1.0f) / 2.0f;
+			vertex.v = (1.0f - (v + 1.0f) / 2.0f);
 
 			stacks.push_back(vertex);
 		}
@@ -120,9 +127,6 @@ void BallRenderer::Draw()
 
 			for (VERTEX3D& v : vertices)
 			{
-				v.pos *= m_Radius;
-				v.pos *= trs.Matrix();
-
 				v.u /= m_Texture.FrameCountX;
 				v.u += uAdd;
 				if (v.u >= 1.0f)
@@ -136,9 +140,12 @@ void BallRenderer::Draw()
 				{
 					v.v -= 1.0f;
 				}
+
+				v.pos *= m_Radius;
+				v.pos *= trs.Matrix();
 			}
 
-			DrawPolygon3D(vertices, 2, m_Texture.Texture, TRUE);
+			DrawPolygon3D(vertices, 2, m_Texture.Texture, FALSE);
 		}
 	}
 }

@@ -277,7 +277,6 @@ void Ball::SetTexture(const BallTexture& texture)
 	{
 		ballRenderer = Object3D::AddComponent<BallRenderer>();
 		ballRenderer->InitVertices();
-		Object3D::SetModel(-1);
 	}
 
 	ballRenderer->SetTexture(texture);

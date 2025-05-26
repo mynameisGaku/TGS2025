@@ -133,14 +133,38 @@ Ball* BallManager::CreateBall(const Vector3& position)
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
 	obj->transform->position = position;
+
 	obj->SetModel(m_Model);
-	
 	// テスト用 テクスチャをランダムで選択
 	if (not m_Textures.empty())
 	{
-		int randMax = (int)m_Textures.size() - 1;
-		int rand = GetRand(randMax);
-		obj->SetTexture((*std::next(m_Textures.begin(), rand)).second);
+		BallTexture tex;
+
+		if (GetRand(99) < 3)
+		{
+			tex = m_Textures.at("Unicorn");
+		}
+		else
+		{
+			int randMax = (int)m_Textures.size() - 1;
+			int rand = GetRand(randMax);
+			if (rand == randMax)
+			{
+				rand = GetRand(99) < 25 ? rand : 0;
+			}
+
+			auto item = (*std::next(m_Textures.begin(), rand));
+			if (item.first == "Unicorn")
+			{
+				tex = m_Textures.at("Lady_Bug");
+			}
+			else
+			{
+				tex = item.second;
+			}
+		}
+
+		obj->SetTexture(tex);
 	}
 	m_pPool->SetObjectPointer(index, obj);
 

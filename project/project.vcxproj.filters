@@ -543,6 +543,24 @@
     <None Include="data\Json\Ball\Texture\Cold_Face.json">
       <Filter>data\Json\Ball\Texture</Filter>
     </None>
+    <None Include="data\Json\Ball\Texture\Frog.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Hatching_Chick.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Lady_Bug.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Pig.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Turtle.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Ball\Texture\Unicorn.json">
+      <Filter>data\Json\Ball\Texture</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -646,6 +664,24 @@
       <Filter>data\Img\BallTexture</Filter>
     </Image>
     <Image Include="data\Img\BallTexture\Poop.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Frog.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Hatching_Chick.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Lady_Bug.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Pig.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Turtle.png">
+      <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\BallTexture\Unicorn.png">
       <Filter>data\Img\BallTexture</Filter>
     </Image>
   </ItemGroup>

@@ -44,6 +44,10 @@ BallManager::~BallManager()
 #endif
 
 	ResourceLoader::MV1DeleteModel(m_Model);
+	for (auto item : m_Textures)
+	{
+		ResourceLoader::DeleteGraph(item.second);
+	}
 }
 
 void BallManager::Update()

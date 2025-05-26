@@ -3,10 +3,14 @@
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/reference/ball/BallRef.h"
+#include "src/util/file/FileUtil.h"
+
+const std::string BallManager::FOLDER = "data/Img/BallTexture/";
 
 BallManager::BallManager()
 {
 	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
+	loadTextures();
 
 	BALL_REF.Load();
 
@@ -122,7 +126,15 @@ Ball* BallManager::CreateBall(const Vector3& position)
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
 	obj->transform->position = position;
-	//obj->SetModel(m_Model);
+	obj->SetModel(m_Model);
+	
+	// テスト用 テクスチャをランダムで選択
+	if (not m_Textures.empty())
+	{
+		int randMax = (int)m_Textures.size() - 1;
+		int rand = GetRand(randMax);
+		obj->SetTexture((*std::next(m_Textures.begin(), rand)).second);
+	}
 	m_pPool->SetObjectPointer(index, obj);
 
 	return obj;
@@ -167,4 +179,14 @@ Ball* BallManager::initfunc(uint32_t index, Ball* pBall)
 	pBall = Instantiate<Ball>();
 	pBall->m_Index = index;
 	return pBall;
+}
+
+void BallManager::loadTextures()
+{
+	std::list<std::string> fileNames = FileUtil::FindFileNames(FOLDER, true);
+
+	for (std::string fileName : fileNames)
+	{
+		m_Textures.emplace(fileName, ResourceLoader::LoadGraph(FOLDER + fileName + ".png"));
+	}
 }

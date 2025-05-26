@@ -597,9 +597,6 @@
     <Image Include="data\effect\images\star.png">
       <Filter>data\Effect\images</Filter>
     </Image>
-    <Image Include="data\Img\BallTexture\Smile.png">
-      <Filter>data\Img\BallTexture</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="framework\app.cpp">

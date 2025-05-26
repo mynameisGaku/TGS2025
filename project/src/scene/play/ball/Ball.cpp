@@ -22,8 +22,6 @@ Ball::Ball()
 	m_Index = 0;
 
 	m_Collider = Object3D::AddComponent<ColliderCapsule>();
-	BallRenderer* ballRenderer = Object3D::AddComponent<BallRenderer>();
-	ballRenderer->Init();
 
 	ColDefine::ColBaseParam param;
 	param.trs.scale = Vector3::Ones * BALL_RADIUS / BALL_SCALE * 2.0f;
@@ -269,6 +267,19 @@ void Ball::CollisionEvent(const CollisionData& colData)
 			}
 		}
 	}
+}
+
+void Ball::SetTexture(int hTexture)
+{
+	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
+	if (ballRenderer == nullptr)
+	{
+		ballRenderer = Object3D::AddComponent<BallRenderer>();
+		ballRenderer->InitVertices();
+		Object3D::SetModel(-1);
+	}
+
+	ballRenderer->SetTexture(hTexture);
 }
 
 void Ball::collisionToGround()

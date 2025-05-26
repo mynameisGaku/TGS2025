@@ -14,7 +14,8 @@ public:
 	BallRenderer();
 	~BallRenderer();
 
-	void Init();
+	void InitVertices();
+	void SetTexture(int texture);
 	void Update() override;
 	void Draw() override;
 private:
@@ -23,12 +24,8 @@ private:
 	static const float RADIUS;	// ‹…‚Ì”¼Œa
 	static const float FRAME_INTERVAL;
 	static const float TEXTURE_RADIUS;
-	static const std::string FOLDER;
-
-	bool m_DoDelete;
 	
 	int m_Texture;
-	int m_DivisionCount;
 	int m_Frame;
 	float m_FrameTimer;
 	float m_Radius;

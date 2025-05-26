@@ -59,6 +59,8 @@ public:
 	bool IsActive() const { return m_IsActive; }
 
 	void SetIsActive(bool flag) { m_IsActive = flag; }
+
+	void SetTexture(int hTexture);
 private:
 	friend class BallManager;
 	BallManager*	 m_pManager;

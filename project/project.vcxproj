@@ -220,7 +220,6 @@
     <Image Include="data\effect\images\Particle_Hard.png" />
     <Image Include="data\effect\images\sq.png" />
     <Image Include="data\effect\images\star.png" />
-    <Image Include="data\Img\BallTexture\Smile.png" />
     <Image Include="data\Model\Ball\texture\lizard.png" />
     <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Diffuse.png" />
     <Image Include="data\Model\Chara\Textures\Ch06_nonPBR.fbm\Ch06_1001_Glossiness.png" />

@@ -1,7 +1,8 @@
 #pragma once
 #include "framework/gameObject.h"
-#include <list>
 #include "src/util/pool/Pool.h"
+#include <list>
+#include <unordered_map>
 
 #define USE_POOL
 
@@ -26,8 +27,12 @@ public:
 
 private:
 	Ball* initfunc(uint32_t index, Ball* pBall);
+	void loadTextures();
+
+	static const std::string FOLDER;
 
 	int m_Model;
+	std::unordered_map<std::string, int> m_Textures;
 
 #ifdef USE_POOL
 	Pool<Ball>* m_pPool;

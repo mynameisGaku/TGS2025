@@ -8,29 +8,22 @@ const int BallRenderer::STACKS_COUNT = 16;	// ãÖÇÃècï˚å¸ÇÃï™äÑêî
 const float BallRenderer::RADIUS = 100.0f;	// ãÖÇÃîºåa
 const float BallRenderer::FRAME_INTERVAL = 0.05f;
 const float BallRenderer::TEXTURE_RADIUS = 0.85f;
-const std::string BallRenderer::FOLDER = "data/Img/BallTexture/";
 
 BallRenderer::BallRenderer()
 {
-	m_DoDelete = false;
-
-	char buf[4];
-	sprintf_s(buf, "%03d", GetRand(1));
-	m_Texture = LoadGraph((FOLDER + buf + ".png").c_str());
-	m_DivisionCount = 0;
 	m_Radius = 0.0f;
 	m_SlicesCount = 0;
 	m_StacksCount = 0;
 	m_Frame = 0;
 	m_FrameTimer = 0.0f;
+	m_Texture = -1;
 }
 
 BallRenderer::~BallRenderer()
 {
-	DeleteGraph(m_Texture);
 }
 
-void BallRenderer::Init()
+void BallRenderer::InitVertices()
 {
 	m_SlicesCount = SLICES_COUNT;
 	m_StacksCount = STACKS_COUNT;
@@ -73,6 +66,11 @@ void BallRenderer::Init()
 
 		m_Vertices.push_back(stacks);
 	}
+}
+
+void BallRenderer::SetTexture(int texture)
+{
+	m_Texture = texture;
 }
 
 void BallRenderer::Update()

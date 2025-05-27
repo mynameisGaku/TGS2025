@@ -462,7 +462,7 @@ void CharaBase::ThrowHomingBall()
 
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	const CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
+	const CharaBase* targetChara = CameraManager::GetCamera(m_Index)->TargetChara();
 	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;

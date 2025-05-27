@@ -4,7 +4,7 @@
 
 // ◇汎用
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
+#include "src/util/math/MathUtils.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
@@ -64,8 +64,8 @@ void Camera::ChaseState(FSMSignal sig)
 		// カメラ座標と追従するキャラの座標を一致させる
 		transform->position = charaTrs.position;
 
-		Math::Clamp_Assing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
-		Function::RotLimit(&transform->rotation.y);
+		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		MathUtil::RotLimit(&transform->rotation.y);
 
 		// 注視するキャラ
 		m_TargetChara = charaM->TargetChara(m_CharaIndex);

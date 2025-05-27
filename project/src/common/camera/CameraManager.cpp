@@ -10,6 +10,7 @@
 #include "src/util/debug/imgui/imGuiManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/util/string/StringUtil.h"
+#include "src/util/input/InputManager.h"
 
 using namespace CameraDefine;
 
@@ -31,8 +32,10 @@ void CameraManager::Init() {
 	// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ
 	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
-	CreateCamera(true);
-	CreateCamera(false);
+	Camera* camera1P = CreateCamera();
+	Camera* camera2P = CreateCamera();
+
+	camera2P->SetIsView(false);
 
 #ifdef IMGUI
 	InitImGuiNode();
@@ -53,6 +56,15 @@ void CameraManager::Update() {
 	UpdateImGuiNode();
 #endif
 
+#ifdef TRUE
+
+	if (InputManager::Push(KeyDefine::KeyCode::U)) {
+		for (const auto& c : *cameras) {
+			c->SetIsView(!c->IsView());
+		}
+	}
+
+#endif
 }
 
 void CameraManager::Draw() {
@@ -60,8 +72,10 @@ void CameraManager::Draw() {
 	if (cameras == nullptr)
 		return;
 
-	for (const auto& c : *cameras)
+	for (const auto& c : *cameras) {
+
 		c->Draw();
+	}
 }
 
 void CameraManager::Release() {
@@ -81,12 +95,14 @@ void CameraManager::Release() {
 	PtrUtil::SafeDelete(cameras);
 }
 
-void CameraManager::CreateCamera(bool view) {
+Camera* CameraManager::CreateCamera() {
 
 	if (cameras == nullptr)
-		return;
+		return nullptr;
 
-	cameras->push_back(new Camera(view));
+	Camera* camera = new Camera;
+	cameras->push_back(camera);
+	return camera;
 }
 
 bool CameraManager::CheckNumber(const int& number) {

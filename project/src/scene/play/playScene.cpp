@@ -10,6 +10,8 @@
 #include "src/common/component/controller/DebugController.h"
 #include "src/common/component/collider/CollisionManager.h"
 
+#include "src/common/setting/window/windowSetting.h"
+
 //=== É{Å[Éã ===
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
@@ -55,8 +57,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	CameraManager::MainCamera()->SetHolderCharaIndex(player->CharaIndex());
-	CameraManager::GetCamera(1)->SetHolderCharaIndex(enemy->CharaIndex());
+	CameraManager::MainCamera()->SetHolderCharaIndex(0);
+	CameraManager::GetCamera(1)->SetHolderCharaIndex(1);
 
 	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
 	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);

@@ -29,6 +29,9 @@ public:
 	/// 値を0.0～1.0の範囲内に制限します。
 	static inline float Clamp01(float value) { return Clamp(value, 0.0f, 1.0f); }
 
+	/// 値を指定された範囲内に制限して、代入します。
+	static inline void ClampAssing(float* value, float minValue, float maxValue) { *value = Clamp(*value, minValue, maxValue); }
+
 	/// 指定値以上の最小の 2 のべき乗数を返します。
 	static unsigned int NextPow2(unsigned int value);
 

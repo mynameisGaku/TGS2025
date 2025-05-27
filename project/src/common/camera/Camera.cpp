@@ -43,6 +43,7 @@ Camera::Camera() {
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
 	m_TargetChara = nullptr;
+	isView = true;
 
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
@@ -63,8 +64,6 @@ void Camera::Reset() {
 
 	offset = CAMERADEFINE_REF.m_OffsetDef;
 	target = CAMERADEFINE_REF.m_TargetDef;
-	offsetPrev = offset;
-	targetPrev = target;
 	offsetAfter = offset;
 	targetAfter = target;
 
@@ -88,6 +87,11 @@ void Camera::Update() {
 
 void Camera::Draw() {
 
+	if (not isView) {
+		DrawVirtualCamera();
+		return;
+	}
+
 	Object3D::Draw();
 
 	MATRIX mShake = MGetIdent();	// U“®—ps—ñ
@@ -98,7 +102,7 @@ void Camera::Draw() {
 
 	Transform globalTrs = transform->Global();
 
-	Vector3 cameraPos = (globalTrs.position + OffsetRotAdaptor()) * mShake;
+	Vector3 cameraPos = (WorldPos()) * mShake;
 	Vector3 targetPos = target * mShake;
 
 	if (holder != nullptr) {
@@ -107,14 +111,21 @@ void Camera::Draw() {
 	}
 
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+}
 
-	//Vector3 coneLineL = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(MathUtil::ToRadians(cameraCone.angle * 0.5f)) * globalTrs.RotationMatrix();
-	//Vector3 coneLineR = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(MathUtil::ToRadians(cameraCone.angle * -0.5f)) * globalTrs.RotationMatrix();
-	//DrawLine3D(cameraPos, cameraPos + coneLineL, 0xFF0000);
-	//DrawLine3D(cameraPos, cameraPos + coneLineR, 0xFF0000);
-	//DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
-	//DrawCapsule3D(cameraPos, cameraPos + coneLineL, 8.0f, 16, 0xFFFF00, 0xFFFFFF, false);
-	//DrawCapsule3D(cameraPos, cameraPos + coneLineR, 8.0f, 16, 0x00FFFF, 0xFFFFFF, false);
+void Camera::DrawVirtualCamera() {
+
+	Transform globalTrs = transform->Global();
+
+	Vector3 cameraPos = WorldPos();
+	Vector3 targetPos = target;
+
+	if (holder != nullptr) {
+		cameraPos += holder->Global().position;
+		targetPos += holder->Global().position;
+	}
+
+	DrawCapsule3D(targetPos, cameraPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {

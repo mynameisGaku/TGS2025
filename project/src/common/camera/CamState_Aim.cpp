@@ -4,7 +4,7 @@
 
 // ž”Ä—p
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
+#include "src/util/math/MathUtils.h"
 
 // žŒÂ•Ê‚Å•K—v‚È•¨
 #include "src/util/input/InputManager.h"
@@ -72,17 +72,17 @@ void Camera::AimState(FSMSignal sig)
 		SetTarget_Leap(targetPos);
 
 		const float TARGET_DIR = targetPos.Direction(transform->Global().position);	// ƒJƒƒ‰‚©‚ç’Ž‹ƒLƒƒƒ‰‚Ö‚ÌŠp“x
-		const float ROT_X = Math::DegToRad(-20.0f);			// ƒJƒƒ‰‚ÌXŽ²‰ñ“]’l
+		const float ROT_X = MathUtil::ToRadians(-20.0f);			// ƒJƒƒ‰‚ÌXŽ²‰ñ“]’l
 		float diffRot = TARGET_DIR - transform->rotation.y;	// Œ»Ý‚ÌŒü‚«‚Æ’Ž‹ƒLƒƒƒ‰‚Ö‚ÌŠp“x‚Ì·ˆÙ
 
 		// ‰ñ“]Šp“x‚É§ŒÀ‚ð‚©‚¯‚é
-		Function::RotLimit(&diffRot);
+		MathUtil::RotLimit(&diffRot);
 
 		transform->rotation.x += (ROT_X - transform->rotation.x) * 0.1f;
 		transform->rotation.y += diffRot * 0.1f;
 
 		// ‰ñ“]Šp“x‚É§ŒÀ‚ð‚©‚¯‚é
-		Function::RotLimit(&transform->rotation.y);
+		MathUtil::RotLimit(&transform->rotation.y);
 
 		// ƒJƒƒ‰‚ÆƒLƒƒƒ‰‚ÌŒü‚«‚ð‘µ‚¦‚é
 		//chara->transform->rotation.y = transform->rotation.y;

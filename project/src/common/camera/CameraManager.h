@@ -16,7 +16,7 @@ namespace CameraManager {
 	void Draw();
 	void Release();
 
-	void CreateCamera(bool view);
+	Camera* CreateCamera();
 
 	/// <summary>
 	/// ƒJƒƒ‰‚ÌÄ‰Šú‰»‚ğs‚¤

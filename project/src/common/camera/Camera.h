@@ -81,6 +81,16 @@ public:
 	/// </param>
 	void OperationByStick(int type = -1);
 
+	/// <summary>
+	/// 相対座標の補間処理
+	/// </summary>
+	void UpdateOffsetLeap();
+
+	/// <summary>
+	/// 注視座標の補間処理
+	/// </summary>
+	void UpdateTargetLeap();
+
 	//================================================================================
 	// ▼セッター
 
@@ -91,15 +101,27 @@ public:
 	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
 
 	/// <summary>
+	/// 相対座標を設定する(補間先)
+	/// </summary>
+	inline void SetOffset_Leap(const Vector3& _offset) { offsetAfter = _offset; }
+
+	/// <summary>
 	/// 注視点を設定する
 	/// </summary>
 	/// <param name="_target">注視点を設定する</param>
 	inline void SetTarget(const Vector3& _target) { target = _target; }
 
 	/// <summary>
+	/// 注視点を設定する(補間先)
+	/// </summary>
+	inline void SetTarget_Leap(const Vector3& _target) { targetAfter = _target; }
+
+	/// <summary>
 	/// 保有者を設定する
 	/// </summary>
 	inline void SetHolderTrs(const Transform* trs) { holder = trs; }
+
+	inline void SetIsView(bool view) { isView = view; }
 
 	/// <summary>
 	/// クラスを基に保有者を設定する
@@ -190,7 +212,12 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
-	const CharaBase* TargetChara() const { return targetChara; }
+	/// <summary>
+	/// 注視しているキャラクター
+	/// </summary>
+	const CharaBase* TargetChara() const { return m_TargetChara; }
+
+	inline bool IsView() const { return isView; }
 
 	//================================================================================
 	// ▼ステート
@@ -211,20 +238,27 @@ public:
 	void AimState(FSMSignal sig);
 
 private:
+
+	void DrawVirtualCamera();	// 仮想カメラの描画
+
 	//================================================================================
 	// ▼メンバ変数
 
 	TinyFSM<Camera>* fsm;
 
-	Vector3 offset;		// カメラの相対座標
-	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
-	Vector3 target;		// カメラの注視点
-	Vector3 targetPrev;	// 一つ前のカメラの注視点
-	ColDefine::Cone cameraCone;
+	Vector3 offset;		// 相対座標
+	Vector3 offsetAfter;// 相対座標(補間先)
+	
+	Vector3 target;		// 注視座標
+	Vector3 targetAfter;// 注視座標(補間先)
 
-	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報
-	int m_CharaIndex;			// キャラクターの番号
+	ColDefine::Cone cameraCone;	// コーン形状判定
 
-	const CharaBase* targetChara;
+	int m_CharaIndex;				// キャラクターの番号
+	float m_TargetTransitionTime;	// 注視形態に遷移する時間
+	bool isView;					// 描画を行うか
+
+	const Transform* holder;		// カメラが追従する座標系
+	const CharaBase* m_TargetChara;	// カメラが注視するキャラ
 };

@@ -145,7 +145,7 @@ void BallRenderer::Draw()
 				v.pos *= trs.Matrix();
 			}
 
-			DrawPolygon3D(vertices, 2, m_Texture.Texture, FALSE);
+			DrawPolygon3D(vertices, 2, m_Texture.Texture, TRUE);
 		}
 	}
 }

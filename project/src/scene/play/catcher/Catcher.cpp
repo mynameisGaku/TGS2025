@@ -68,8 +68,8 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 
 	if (isCatch)
 	{
-		m_Parent->SetBall(ball);
 		m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
+		m_Parent->SetBall(ball);
 	}
 }
 

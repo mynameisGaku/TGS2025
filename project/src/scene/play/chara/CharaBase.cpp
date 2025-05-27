@@ -527,10 +527,16 @@ void CharaBase::Catch()
 void CharaBase::CatchSuccess(const Vector3& velocity)
 {
 	m_CanCatch = false;
+	m_CanMove = false;
+	m_CanRot = false;
 	m_Catcher->SetColliderActive(false);
 
-	transform->rotation.y = atan2f(velocity.x - transform->position.x, velocity.z - transform->position.z);
-	m_pPhysics->velocity += velocity * Vector3(1, 0, 1);
+	m_pPhysics->SetGravity(Vector3::Zero);
+	m_pPhysics->SetFriction(Vector3::Zero);
+
+	transform->rotation.y = atan2f(transform->position.x - velocity.x, transform->position.z - velocity.z);
+	m_pPhysics->velocity.y = 10.0f;
+	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 
 	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
@@ -1375,6 +1381,10 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_CanMove = false;
+		m_CanRot = false;
+		m_pPhysics->SetGravity(Vector3::Zero);
+		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1391,6 +1401,10 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetGravity(FRICTION);
 	}
 	break;
 	}

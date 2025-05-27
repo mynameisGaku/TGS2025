@@ -11,6 +11,7 @@
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/common/component/renderer/BallRenderer.h"
+#include "src/scene/play/catcher/Catcher.h"
 
 Ball::Ball()
 {
@@ -207,6 +208,9 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	if (not m_IsActive)
 		return;
 
+	if (colData.Other()->Parent<Catcher>() != nullptr)
+		return;
+
 	if (m_State == S_THROWN)
 	{
 		if (m_IsHoming) HomingDeactivate();
@@ -303,6 +307,8 @@ void Ball::collisionToGround()
 		m_Physics->velocity.x *= 0.99f;
 		m_Physics->velocity.z *= 0.99f;
 		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
+
+		m_State = S_LANDED;
 	}
 }
 
@@ -350,6 +356,8 @@ void Ball::HomingProcess()
 				Vector3 reflectVel = m_Physics->velocity - normal * (1.0f + bounciness) * dot;
 				m_Physics->velocity = reflectVel * damping;
 			}
+
+			m_State = S_LANDED;
 		}
 	}
 

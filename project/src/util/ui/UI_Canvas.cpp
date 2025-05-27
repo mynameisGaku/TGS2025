@@ -4,7 +4,7 @@
 
 // ”Ä—p
 #include "framework/myDxLib.h"
-#include <src/util/math/mathUtils.h>
+#include "src/util/math/MathUtil.h"
 #include <src/util/ptr/PtrUtil.h>
 
 UI_Canvas::UI_Canvas() {

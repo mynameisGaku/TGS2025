@@ -46,6 +46,8 @@ public:
     /// </summary>
     float GetMax() const;
 
+    void Reset();
+
 private:
     float   m_Target;               // 目標値 現在未使用
     float   m_Current;              // 現在の値

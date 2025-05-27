@@ -2,7 +2,7 @@
 
 #include "src/util/sound/SoundManager.h"
 #include <src/util/ptr/PtrUtil.h>
-#include <src/util/math/mathUtils.h>
+#include "src/util/math/MathUtil.h"
 
 VolumeSetting::VolumeSetting() {
 

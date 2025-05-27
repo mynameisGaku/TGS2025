@@ -4,7 +4,8 @@
 #include <DxLib.h>
 
 // 標準ヘッダの math.h と被るので Utils を付けている
-#include "mathUtils.h"
+#include "MathUtil.h"
+#include "Random.h"
 
 
 //==============================================================================
@@ -221,3 +222,4 @@ int MathUtil::CalcList(const std::list<int>& list)
 	}
 	return result;
 }
+

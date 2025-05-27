@@ -12,7 +12,7 @@
 */
 #include <math.h>
 #include <assert.h>
-#include "mathUtils.h"
+#include "MathUtil.h"
 #include "vector3.h"
 #include "vector4.h"
 #include "quaternion.h"

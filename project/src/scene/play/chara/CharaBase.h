@@ -99,11 +99,11 @@ public:
 	/// <param name="speed"></param>
 	void ThrowBallForward();
 
-    /// <summary>
-    /// ホーミングボールを投げる
-    /// </summary>
-    /// <param name="param">ホーミング概要</param>
-    void ThrowHomingBall();
+	/// <summary>
+	/// ホーミングボールを投げる
+	/// </summary>
+	/// <param name="param">ホーミング概要</param>
+	void ThrowHomingBall();
 
 	/// <summary>
 	/// 投げるモーションだけ再生
@@ -138,6 +138,17 @@ public:
 	/// この関数を呼び出している間、吸引キャッチが行われる。
 	/// </summary>
 	void Catch();
+
+	//=======================================================================================
+	// ▼リスポーン
+	
+	/// <summary>
+	/// この関数を呼び出すと、パラメータがリセットされ、指定位置にリスポーンする。
+	/// ToDo : リスポーンステートを作る
+	/// </summary>
+	/// <param name="pos">リスポーン時位置</param>
+	/// <param name="rot">リスポーン時回転</param>
+	void Respawn(const Vector3& pos, const Vector3& rot);
 
 	//=======================================================================================
 	// ▼ゲッター
@@ -214,7 +225,7 @@ private:
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
 	Ball*			m_pHitBall;				// あてられたボールのポインター
-    BallManager*	m_pBallManager;			// ボールマネージャーのポインター
+	BallManager*	m_pBallManager;			// ボールマネージャーのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
 	CharaHP*		m_pHP;					// HPのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター

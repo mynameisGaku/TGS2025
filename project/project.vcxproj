@@ -329,6 +329,7 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
+    <ClCompile Include="src\scene\play\spawner\ISpawner.cpp" />
     <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
@@ -369,7 +370,7 @@
     <ClCompile Include="src\util\input\MouseController.cpp" />
     <ClCompile Include="src\util\input\PadController.cpp" />
     <ClCompile Include="src\util\locus\Locus.cpp" />
-    <ClCompile Include="src\util\math\MathUtils.cpp" />
+    <ClCompile Include="src\util\math\MathUtil.cpp" />
     <ClCompile Include="src\util\math\Matrix.cpp" />
     <ClCompile Include="src\util\math\Plane.cpp" />
     <ClCompile Include="src\util\math\Quaternion.cpp" />
@@ -489,6 +490,8 @@
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h" />
     <ClInclude Include="src\scene\play\match\MatchManager.h" />
     <ClInclude Include="src\scene\play\playScene.h" />
+    <ClInclude Include="src\scene\play\spawner\ISpawner.h" />
+    <ClInclude Include="src\scene\play\spawner\SpawnerDesc.h" />
     <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
@@ -540,7 +543,7 @@
     <ClInclude Include="src\util\math\Asm.h" />
     <ClInclude Include="src\util\math\MathCommon.h" />
     <ClInclude Include="src\util\math\MathIncluder.h" />
-    <ClInclude Include="src\util\math\MathUtils.h" />
+    <ClInclude Include="src\util\math\MathUtil.h" />
     <ClInclude Include="src\util\math\Matrix.h" />
     <ClInclude Include="src\util\math\Operations.h" />
     <ClInclude Include="src\util\math\Plane.h" />

@@ -2,7 +2,7 @@
 #include "vector2.h"
 #include "vector4.h"
 #include "matrix.h"
-#include "mathUtils.h"
+#include "MathUtil.h"
 #include "asm.h"
 
 //==============================================================================

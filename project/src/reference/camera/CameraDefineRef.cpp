@@ -1,6 +1,6 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/util/file/json/settings_json.h"
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 
 CameraDefineRef* CameraDefineRef::instance = nullptr;
 

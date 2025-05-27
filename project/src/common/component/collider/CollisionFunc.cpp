@@ -2,7 +2,7 @@
 #include "src/common/component/collider/CollisionData.h"
 
 // ”Ä—p
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 
 using namespace ColDefine;
 

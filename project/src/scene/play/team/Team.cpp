@@ -1,4 +1,4 @@
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/util/time/GameTime.h"
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"

@@ -142,7 +142,7 @@ const std::deque<CharaHP::HPChangeLog>& CharaHP::GetLog() const
     return m_Log;
 }
 
-void CharaHP::ResetHP()
+void CharaHP::Reset()
 {
     m_Current = m_Max;
     m_Log.clear();

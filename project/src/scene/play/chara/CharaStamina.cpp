@@ -72,3 +72,8 @@ float CharaStamina::GetMax() const
 {
     return m_Max;
 }
+
+void CharaStamina::Reset()
+{
+    m_Current = m_Max;
+}

@@ -17,7 +17,7 @@
 #include "src/util/file/json/VectorJson.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/util/ptr/PtrUtil.h"
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 
 using namespace KeyDefine;
@@ -304,6 +304,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			{
 				m_pStatusTracker->AddDeathCount(1);
 				ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
+				Respawn(Vector3::Zero, Vector3::Zero);
 			}
 		}
 	}
@@ -520,6 +521,25 @@ void CharaBase::Catch()
 	{
 		m_CatchTimer = CATCH_TIME;
 	}
+}
+
+void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
+{
+    m_pHP->Reset();
+    m_pStamina->Reset();
+    m_pBall = nullptr;
+    m_pLastBall = nullptr;
+    m_IsCharging = false;
+    m_BallChargeRate = 0.0f;
+    m_IsJumping = false;
+    m_IsLanding = true;
+    transform->position = pos;
+    transform->rotation = rot;
+    // キャッチャーの位置を更新
+    if (m_Catcher)
+    {
+        m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
+    }
 }
 
 //========================================================================

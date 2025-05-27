@@ -281,8 +281,10 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 			Transform tr;			// ç¿ïWÅEâÒì]ÅEägèkÇÃèÓïÒ
 			bool isCollision = false;
 
+			std::string name = obj.at("Name").get<std::string>();
 			std::string type = obj.at("Type").get<std::string>();
 
+			info.objname = name;
 			info.type = type;
 			info.hModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + ".mv1");
 			info.hHitModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + "_col.mv1");
@@ -313,11 +315,12 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 }
 
 void StageObjectManager::SaveToCsv() {
-
+#if FALSE
 	if (csvFilePath_StageObjData == nullptr || stageObjects == nullptr)
 		return;
 
 	OutPutToCsv(*csvFilePath_StageObjData);
+#endif // FALSE
 }
 
 void StageObjectManager::SaveToJson()

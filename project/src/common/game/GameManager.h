@@ -20,6 +20,13 @@ public:
 
     GAME_MODE_DESC GetCurrentGameModeData();
 
+    struct ResultData
+    {
+        std::unordered_map<std::string, int> PointMap;
+    };
+
+    void SetGameResult(const ResultData& data);
+
 private:
 
     void init();
@@ -32,5 +39,5 @@ private:
     std::vector<std::string>                        m_TeamNames;
 
     std::string                                     m_CurrentGameMode;
-    std::string                                     m_WinnerTeamName;
+    ResultData                                      m_ResultData;
 };

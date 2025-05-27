@@ -2,6 +2,7 @@
 #include "src/common/component/collider/ColliderCapsule.h"
 #include "src/scene/play/chara/CharaBase.h"
 #include "src/scene/play/ball/Ball.h"
+#include "src/scene/play/status_tracker/StatusTracker.h"
 
 Catcher::Catcher()
 {
@@ -56,6 +57,7 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 	ball->DestroyMe();	//ToDo:ƒ{[ƒ‹‹zŽû‚Ì‰‰o
 
 	m_Parent->GenerateBall();
+	m_Parent->GetStatusTracker()->AddCatchCount(1);
 }
 
 void Catcher::SetColliderActive(bool isActive)

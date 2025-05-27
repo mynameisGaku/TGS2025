@@ -3,6 +3,7 @@
 #include "framework/gameObject.h"
 #include "src/common/game/GameManager.h"
 #include "src/util/fsm/TinyFSM.h"
+#include <src/util/transform/Transform.h>
 
 class CurrentGameData
 {
@@ -24,6 +25,7 @@ public:
 
     void Update() override;
     void Draw() override;
+
 private:
 
     void init();
@@ -32,6 +34,8 @@ private:
 
     /* Begin */
     void StatePhaseBegin(FSMSignal sig);
+
+    void ImGuiInit();
 
     /* Ready */
     void StatePhaseReady(FSMSignal sig);
@@ -51,4 +55,9 @@ private:
     CurrentGameData m_GameData;
     TinyFSM<MatchManager>* m_pFsm;
 
+    class CharaManager* m_pCharaManager;
+    class BallManager* m_pBallManager;
+    class TeamManager* m_pTeamManager;
+
+    void addCharacter(const std::string& team, const Transform& trs, bool isAI);
 };

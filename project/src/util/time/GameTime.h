@@ -45,6 +45,9 @@ public:
     /// <summary>起動からの累計時間（timeScaleの影響あり）</summary>
     static float TotalTime();
 
+    /// <summary>起動からの累計時間 int版（timeScaleの影響あり）</summary>
+    static int   TotalTimeInt();
+
     /// <summary>起動からの累計時間（timeScaleの影響なし）</summary>
     static float UnscaledTime();
 
@@ -96,6 +99,7 @@ public:
     static bool IsHitStop();
 
     static float deltaTime;
+    static float timeScale;
 
     static GameTime& Instance()
     {
@@ -160,7 +164,6 @@ private:
     static float m_UnscaledDeltaTime;
     static float m_SmoothDeltaTime;
     static float m_FixedDeltaTime;
-    static float m_TimeScale;
     static float m_MaximumDeltaTime;
     static int m_FrameCount;
     static int m_HitStop;

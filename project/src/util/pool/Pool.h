@@ -148,7 +148,7 @@ public:
             }
         }
 
-        if ((uint32_t)activeCount >= count)
+        if ((uint32_t)activeCount > count)
         {
             return true;
         }
@@ -246,6 +246,23 @@ public:
     {
         return m_ActiveObjectCount;
     }
+
+    bool QueryWasRegister(int index)
+    {
+        if (index > m_Items.size() - 1)
+            return false;
+
+        if (m_Items[index]->m_IsActive)
+            return true;
+
+        return false;
+    }
+
+    T* Get(int index)
+    {
+        return m_Items[index]->m_pObject;
+    }
+
 private:
 
     //------------------------------------------------------------
@@ -286,8 +303,4 @@ private:
     uint32_t                m_Capacity;             // このプールの容量
     uint32_t                m_ActiveObjectCount;    // アクティブなオブジェクトの数
 
-    Item* operator[](int index)
-    {
-        return m_Items[index]->m_pObject;;
-    }
 };

@@ -14,10 +14,10 @@ private:
 public:
 	struct Parameter
 	{
-		int DownScale;	// フィルタをかけるときの縮小度、大きいほど処理が軽い（1..8くらい）
-		int MinBrightness;	// 高輝度を抜き出すときの最小明るさ（0..255）
-		int GaussianRate;	// ガウスぼかしの強さ（0..1000くらい）
-		int AddRate;	// 加算する強さ（0..255）
+		int DownScale = 0;	// フィルタをかけるときの縮小度、大きいほど処理が軽い（1..8くらい）
+		int MinBrightness = 0;	// 高輝度を抜き出すときの最小明るさ（0..255）
+		int GaussianRate = 0;	// ガウスぼかしの強さ（0..1000くらい）
+		int AddRate = 0;	// 加算する強さ（0..255）
 	};
 
 	static BloomRef* Inst()

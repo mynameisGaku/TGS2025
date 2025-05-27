@@ -65,6 +65,8 @@ void SystemManager::Start() {
 		loadScreen->FadeIn(0.1f);
 		loadScreen->SetIsPushFadeOut(true);
 	}
+
+	ImGuiManager::AddNode(new ImGuiNode_SliderFloat("TimeScale", &GTime.timeScale, 0.0f, 2.0f));
 }
 
 void SystemManager::Update() {
@@ -181,7 +183,7 @@ void SystemManager::LoadUpdate() {
 	case ltStageManager:
 		StageObjectManager::Init();
 		StageObjectManager::SetModelFilePath("data/model/Stage/");
-		StageObjectManager::LoadFromJson("data/json/Stage/Stage.json");
+		StageObjectManager::LoadFromJson("data/json/Stage/Stage_1.json");
 		break;
 
 	case ltUI_Manager:		UI_Manager::Init();		break;

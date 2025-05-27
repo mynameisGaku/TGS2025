@@ -1,5 +1,6 @@
 #pragma once
 #include "src/util/object3D/Object3D.h"
+#include "src/common/component/renderer/BallRenderer.h"
 #include <string>
 
 class Physics;
@@ -52,6 +53,8 @@ public:
 
 	std::string GetCharaTag() const { return m_CharaTag; }
 
+	CharaBase* GetLastOwner() const { return m_LastOwner; }
+
 	/// <summary>
 	/// óLå¯Ç©ÅH
 	/// </summary>
@@ -59,6 +62,8 @@ public:
 	bool IsActive() const { return m_IsActive; }
 
 	void SetIsActive(bool flag) { m_IsActive = flag; }
+
+	void SetTexture(const BallTexture& texture);
 private:
 	friend class BallManager;
 	BallManager*	 m_pManager;
@@ -67,6 +72,7 @@ private:
 	ColliderCapsule* m_Collider;
 	State			 m_State;
 	CharaBase*		 m_Owner;
+	CharaBase*		 m_LastOwner;
 	std::string		 m_CharaTag;
 	uint32_t		 m_Index;
 	float			 m_LifeTime;

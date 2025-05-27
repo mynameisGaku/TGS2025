@@ -59,6 +59,7 @@ void InputManager::Init() {
 		key["Jump"] = { KeyCode::Space, KeyCode::ButtonA };
 		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftControl, KeyCode::ButtonB };
 		key["Teleport"] = { KeyCode::E, KeyCode::ButtonY };
+		key["Feint"] = { KeyCode::F, KeyCode::ButtonX };
 
 		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
 		key["MoveUp"] = { KeyCode::W };

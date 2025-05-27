@@ -11,6 +11,7 @@ namespace StageDefine {
 	struct StageObjInfo {
 		int hModel;			// 描画モデル
 		int hHitModel;		// 当たり判定モデル
+		std::string objname;	// オブジェクトの名前
 		std::string type;	// オブジェクトの種類
 		std::string fileName;	// ファイルパス
 

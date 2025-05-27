@@ -36,6 +36,12 @@ public:
 	/// <param name="index">キャラID</param>
 	const CharaBase* TargetChara(int index);
 
+	/// <summary>
+	/// キャラのプールを取得する
+	/// </summary>
+	/// <returns>プール</returns>
+	Pool<CharaBase>* GetCharaPool() const { return m_pPool; }
+
 private:
 
 	CharaBase* initfunc(uint32_t index, CharaBase* pChara);

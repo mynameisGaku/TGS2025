@@ -132,7 +132,7 @@ void BlurScreen::PostRenderBlurScreen() {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(alpha));
 
 	if (notBlendDraw++ > 2)
-		DrawExtendGraphF(0.0f, 0.0f, static_cast<int>(WindowSetting::Inst().width), static_cast<int>(WindowSetting::Inst().height), screen[1 - current], false);
+		DrawExtendGraphF(0.0f, 0.0f, WindowSetting::Inst().width, WindowSetting::Inst().height, screen[1 - current], false);
 
 	SetDrawBlendMode(blendMode, param);
 	SetDrawMode(drawMode);

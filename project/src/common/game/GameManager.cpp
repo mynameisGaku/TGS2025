@@ -14,6 +14,11 @@ GAME_MODE_DESC GameManager::GetCurrentGameModeData()
     return m_GameModeDescs[m_CurrentGameMode];
 }
 
+void GameManager::SetGameResult(const ResultData& data)
+{
+    m_ResultData = data;
+}
+
 void GameManager::init()
 {
     GAME_REF.Load();

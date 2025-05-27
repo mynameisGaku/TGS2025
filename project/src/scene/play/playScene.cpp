@@ -1,18 +1,9 @@
 #include "playScene.h"
 #include "framework/SceneManager.h"
-#include "src/util/math/mathUtils.h"
 
 #include "src/util/input/InputManager.h"
-#include "src/scene/play/chara/CharaManager.h"
 #include "src/common/camera/CameraManager.h"
-#include "src/common/component/controller/PlayerController.h"
-#include "src/common/component/controller/AIController.h"
-#include "src/common/component/controller/DebugController.h"
 #include "src/common/component/collider/CollisionManager.h"
-
-//=== ボール ===
-#include "src/scene/play/ball/BallManager.h"
-#include "src/scene/play/ball/Ball.h"
 
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
@@ -22,34 +13,21 @@
 #include "src/scene/play/crystal/CrystalFragmentManager.h"
 #include "src/util/file/json/settings_json.h"
 
+//=== 進行役 ===
+#include "src/scene/play/match/MatchManager.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
+	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
+	// gameM->SetGameModeName("FreeForAll");
+	// ゲームモードは GameRef.json 内を参照してください
+	gameM->SetGameModeName("Debug");
+	
 	Instantiate<CollisionManager>();
 
-	CharaManager* charaM = Instantiate<CharaManager>();
-
-	CharaBase* player = charaM->Create("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
-	CharaBase* enemy = charaM->Create("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones));
-
-	player->SetMoveSpeed(700.0f);
-	player->SetRotSpeed(MathUtil::ToRadians(10.0f));
-	player->AddComponent<PlayerController>()->Init(DX_INPUT_PAD1);
-
-	enemy->SetMoveSpeed(700.0f);
-	enemy->SetRotSpeed(MathUtil::ToRadians(10.0f));
-
-	// デバッグによってコントローラーを変える。
-#if FALSE
-	enemy->AddComponent<AIController>()->Init();
-#elif FALSE
-	enemy->AddComponent<DebugController>()->Init(DX_INPUT_PAD1);
-#elif TRUE
-	enemy->AddComponent<PlayerController>()->Init(DX_INPUT_PAD2);
-#endif
-
-	BallManager* ballM = Instantiate<BallManager>();
+	Instantiate<MatchManager>();
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();

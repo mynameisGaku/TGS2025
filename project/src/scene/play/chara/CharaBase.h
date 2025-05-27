@@ -15,6 +15,7 @@ class Catcher;
 class Animator;
 template <class C>
 class Timeline;
+class StatusTracker;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -84,6 +85,8 @@ public:
 
 	void StartBallCharge();
 
+	void StartThrow();
+
 	/// <summary>
 	/// ボールを投げる
 	/// </summary>
@@ -103,6 +106,11 @@ public:
     void ThrowHomingBall();
 
 	/// <summary>
+	/// 投げるモーションだけ再生
+	/// </summary>
+	void Feint();
+
+	/// <summary>
 	/// ボールを持っているか？
 	/// </summary>
 	/// <returns></returns>
@@ -116,6 +124,7 @@ public:
 
 	Ball* LastBall() const { return m_pLastBall; }
 	void SetLastBall(Ball* ball) { m_pLastBall = ball; }
+	Ball* HitBall() const { return m_pHitBall; }
 
 	/// <summary>
 	/// 最後に投げたボールにテレポートし、それをキャッチする
@@ -138,6 +147,21 @@ public:
 	/// </summary>
 	inline const CharaHP* GetHP() const { return m_pHP; }
 
+	/// <summary>
+	/// インデックスを取得
+	/// </summary>
+	inline const int GetIndex() const { return m_Index; }
+
+	/// <summary>
+	/// キャラタグ(所属チーム名)を取得
+	/// </summary>
+	inline const std::string GetCharaTag() const { return m_CharaTag; }
+
+	/// <summary>
+	/// ステータストラッカーを取得
+	/// </summary>
+	inline StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
+
 	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);
@@ -145,6 +169,8 @@ public:
 	void StateActionIdleToJump(FSMSignal sig);
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
+
+	void StateAimToThrow(FSMSignal sig);
 
 	void StateAirSpin(FSMSignal sig);
 
@@ -156,6 +182,8 @@ public:
 	void StateFall(FSMSignal sig);
 	void StateFallToCrouch(FSMSignal sig);
 	void StateFallToRoll(FSMSignal sig);
+
+	void StateFeint(FSMSignal sig);
 
 	void StateRoll(FSMSignal sig);
 	void StateRollToActionIdle(FSMSignal sig);
@@ -177,38 +205,44 @@ public:
 	void SubStateGetBall(FSMSignal sig);
 	void SubStateHold(FSMSignal sig);
 	void SubStateHoldToAim(FSMSignal sig);
-	void SubStateAimToThrow(FSMSignal sig);
 	void SubStateCatch(FSMSignal sig);
 
 private:
 	friend class CharaManager;
-	bool			m_IsCharging;			// ボールをチャージしているかどうか
-	float			m_BallChargeRate;		// ボールのチャージ加速度
+
+
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
+	Ball*			m_pHitBall;				// あてられたボールのポインター
     BallManager*	m_pBallManager;			// ボールマネージャーのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
 	CharaHP*		m_pHP;					// HPのポインター
 	Physics*		m_pPhysics;				// 物理挙動のポインター
-	float			m_MoveSpeed;			// 移動速度
-	float			m_RotSpeed;				// 回転速度
-	float			m_SpeedScale;			// 速度倍率
-	int				m_Index;				// 自身のインデックス
-	float			m_CatchTimer;			// キャッチ残り時間タイマー
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション
-	float			m_EmoteTimer;			// 放置アニメーションまでの時間
-	bool			m_IsLanding;			// 着地中
-	float			m_SlideTimer;			// スライディング残り時間タイマー
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
+	StatusTracker*	m_pStatusTracker;		// ステータスの統計
+	int				m_Index;				// 自身のインデックス
+	float			m_BallChargeRate;		// ボールのチャージ加速度
+	float			m_MoveSpeed;			// 移動速度
+	float			m_RotSpeed;				// 回転速度
+	float			m_SpeedScale;			// 速度倍率
+	float			m_CatchTimer;			// キャッチ残り時間タイマー
+	float			m_EmoteTimer;			// 放置アニメーションまでの時間
+	float			m_SlideTimer;			// スライディング残り時間タイマー
+	bool			m_IsCharging;			// ボールをチャージしているかどうか
+	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
 	bool			m_CanRot;				// 回転可能か
 	bool			m_IsMove;				// 移動しようとしているか
 	bool			m_IsJumping;			// ジャンプ中か
+	bool			m_CanCatch;				// キャッチ可能か
+	bool			m_CanHold;				// ボールを持てるか
+	bool			m_CanThrow;				// ボールを投げられるか
 
 	void land();
 
@@ -228,4 +262,5 @@ private:
 	void setCanMove(const nlohmann::json& argument);
 	void setCanRot(const nlohmann::json& argument);
 	void setVelocity(const nlohmann::json& argument);
+	void throwBall(const nlohmann::json& argument);
 };

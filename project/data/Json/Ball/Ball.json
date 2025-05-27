@@ -12,5 +12,5 @@
   "BouncinessDefault": 0.35,
   "SpeedDefault": 40.0,
   "Max": 50,
-  "LifeTimeMax": 2.5
+  "LifeTimeMax": 15.0
 }

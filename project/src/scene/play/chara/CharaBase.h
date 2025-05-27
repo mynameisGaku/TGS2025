@@ -84,6 +84,8 @@ public:
 	/// </summary>
 	void GenerateBall();
 
+	void SetBall(Ball* ball);
+
 	void StartBallCharge();
 
 	void StartThrow();
@@ -139,6 +141,8 @@ public:
 	/// この関数を呼び出している間、吸引キャッチが行われる。
 	/// </summary>
 	void Catch();
+
+	void CatchSuccess(const Vector3& velocity);
 
 	//=======================================================================================
 	// ▼リスポーン
@@ -244,7 +248,6 @@ private:
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
 	float			m_SpeedScale;			// 速度倍率
-	float			m_CatchTimer;			// キャッチ残り時間タイマー
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
@@ -256,6 +259,7 @@ private:
 	bool			m_CanCatch;				// キャッチ可能か
 	bool			m_CanHold;				// ボールを持てるか
 	bool			m_CanThrow;				// ボールを投げられるか
+	bool			m_IsCatching;			// キャッチ中か
 
 	void land();
 

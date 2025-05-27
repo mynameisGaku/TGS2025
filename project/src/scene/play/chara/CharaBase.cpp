@@ -34,33 +34,35 @@ namespace
 
 CharaBase::CharaBase()
 {
-	m_pStamina				= Instantiate<CharaStamina>();
-	m_pHP					= Instantiate<CharaHP>();
-	m_pBall					= nullptr;
-	m_pLastBall				= nullptr;
-	m_pPhysics				= nullptr;
-	m_BallChargeRate		= 0.0f;
-	m_IsCharging			= false;
-	m_MoveSpeed				= 0.0f;
-	m_RotSpeed				= 0.0f;
-	m_SpeedScale			= 0.0f;
-	m_CatchTimer			= 0.0f;
-	m_CharaTag				= CHARADEFINE_REF.Tags[0];
-	m_Catcher				= nullptr;
-	m_Index					= 0;
-	m_Animator				= nullptr;
-	m_EmoteTimer			= 0.0f;
-	m_IsLanding				= true;
-	m_SlideTimer			= 0.0f;
-	m_EffectTransform		= nullptr;
-	m_pBallManager			= nullptr;
-	m_Timeline				= nullptr;
-	m_CanMove				= true;
-	m_CanRot				= true;
-	m_IsMove				= false;
-	m_IsJumping				= false;
-	m_CanCatch				= true;
-	m_CanThrow				= true;
+	m_pStamina			= Instantiate<CharaStamina>();
+	m_pHP				= Instantiate<CharaHP>();
+	m_pBall				= nullptr;
+	m_pLastBall			= nullptr;
+	m_pPhysics			= nullptr;
+	m_BallChargeRate	= 0.0f;
+	m_IsCharging		= false;
+	m_MoveSpeed			= 0.0f;
+	m_RotSpeed			= 0.0f;
+	m_SpeedScale		= 0.0f;
+	m_CharaTag			= CHARADEFINE_REF.Tags[0];
+	m_Catcher			= nullptr;
+	m_Index				= 0;
+	m_Animator			= nullptr;
+	m_EmoteTimer		= 0.0f;
+	m_IsLanding			= true;
+	m_SlideTimer		= 0.0f;
+	m_EffectTransform	= nullptr;
+	m_pBallManager		= nullptr;
+	m_Timeline			= nullptr;
+	m_CanMove			= true;
+	m_CanRot			= true;
+	m_IsMove			= false;
+	m_IsJumping			= false;
+	m_CanCatch			= true;
+	m_CanThrow			= true;
+	m_IsCatching		= false;
+	m_CanHold			= true;
+	m_pHitBall			= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -240,8 +242,8 @@ void CharaBase::Update() {
 		m_SpeedScale = 0.0f;
 	}
 
-
 	m_IsMove = false;
+	m_IsCatching = false;
 
 	Object3D::Update();
 }
@@ -428,7 +430,12 @@ void CharaBase::GenerateBall()
 	if (m_pBallManager == nullptr)
 		m_pBallManager = FindGameObject<BallManager>();
 
-	m_pBall = m_pBallManager->CreateBall(transform->Global().position);
+	SetBall(m_pBallManager->CreateBall(transform->Global().position));
+}
+
+void CharaBase::SetBall(Ball* ball)
+{
+	m_pBall = ball;
 
 	if (m_pBall == nullptr)
 		return;
@@ -438,8 +445,6 @@ void CharaBase::GenerateBall()
 	m_pBall->Init(m_CharaTag);
 
 	m_IsCharging = false;
-
-	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
 
 void CharaBase::StartBallCharge()
@@ -525,27 +530,44 @@ void CharaBase::Catch()
 
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
-		m_CatchTimer = CATCH_TIME;
+		m_IsCatching = true;
 	}
 }
 
 void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 {
-    m_pHP->Reset();
-    m_pStamina->Reset();
-    m_pBall = nullptr;
-    m_pLastBall = nullptr;
-    m_IsCharging = false;
-    m_BallChargeRate = 0.0f;
-    m_IsJumping = false;
-    m_IsLanding = true;
-    transform->position = pos;
-    transform->rotation = rot;
-    // キャッチャーの位置を更新
-    if (m_Catcher)
-    {
-        m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
-    }
+	m_pHP->Reset();
+	m_pStamina->Reset();
+	m_pBall = nullptr;
+	m_pLastBall = nullptr;
+	m_IsCharging = false;
+	m_BallChargeRate = 0.0f;
+	m_IsJumping = false;
+	m_IsLanding = true;
+	transform->position = pos;
+	transform->rotation = rot;
+	// キャッチャーの位置を更新
+	if (m_Catcher)
+	{
+		m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
+	}
+}
+
+void CharaBase::CatchSuccess(const Vector3& velocity)
+{
+	m_CanCatch = false;
+	m_CanMove = false;
+	m_CanRot = false;
+	m_Catcher->SetColliderActive(false);
+
+	m_pPhysics->SetGravity(Vector3::Zero);
+	m_pPhysics->SetFriction(Vector3::Zero);
+
+	transform->rotation.y = atan2f(transform->position.x - velocity.x, transform->position.z - velocity.z);
+	m_pPhysics->velocity.y = 10.0f;
+	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
+
+	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
 
 //========================================================================
@@ -1360,7 +1382,7 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_CanCatch && m_CatchTimer > 0.0f)
+		if (m_CanCatch && m_IsCatching)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateCatch); // ステートを変更
 		}
@@ -1388,6 +1410,10 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_CanMove = false;
+		m_CanRot = false;
+		m_pPhysics->SetGravity(Vector3::Zero);
+		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1404,6 +1430,10 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetGravity(FRICTION);
 	}
 	break;
 	}
@@ -1477,12 +1507,12 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		catchUpdate();
-
-		if (m_CatchTimer <= 0.0f)
+		if (not m_IsCatching)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 		}
+
+		catchUpdate();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1491,6 +1521,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Catcher->SetColliderActive(false);
 	}
 	break;
 	}
@@ -1569,9 +1600,11 @@ void CharaBase::catchUpdate()
 {
 	static int catchReadyFrame;
 	if (m_CatchTimer > 0.0f)
+
+	if (m_IsCatching)
 	{
-		m_CatchTimer -= GTime.deltaTime;
-		if (m_CatchTimer < 0.0f)
+		m_Catcher->SetColliderActive(true);
+		if (m_EffectTransform != nullptr)
 		{
 			m_CatchTimer = 0.0f;
 			m_Catcher->SetColliderActive(false);

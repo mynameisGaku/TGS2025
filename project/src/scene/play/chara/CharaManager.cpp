@@ -219,7 +219,7 @@ const CharaBase* CharaManager::CharaInst(int index)
 #endif
 }
 
-const CharaBase* CharaManager::TargetChara(int index) {
+CharaBase* CharaManager::TargetChara(int index) {
 
 	const CharaBase* chara = CharaInst(index);
 	if (chara == nullptr)

@@ -190,7 +190,7 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
-	const CharaBase* TargetChara() const { return targetChara; }
+	CharaBase* TargetChara() const { return targetChara; }
 
 	//================================================================================
 	// ▼ステート
@@ -226,5 +226,5 @@ private:
 	CsvReader* cameraWork;		// カメラ演出情報
 	int m_CharaIndex;			// キャラクターの番号
 
-	const CharaBase* targetChara;
+	CharaBase* targetChara;
 };

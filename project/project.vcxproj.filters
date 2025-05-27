@@ -390,33 +390,6 @@
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
       <Filter>data\Json\Crystal</Filter>
     </None>
-    <None Include="data\Json\Effect\Catch_Ready.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Line.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Tornado.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Success.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Blue.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Gray.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_NoColor.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Red.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
     <None Include="data\Json\Stage\Stage.json">
       <Filter>data\Json\Stage</Filter>
     </None>
@@ -560,6 +533,42 @@
     </None>
     <None Include="data\Json\Ball\Texture\Unicorn.json">
       <Filter>data\Json\Ball\Texture</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Dust.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Dust_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Dust_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Success.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Gray.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_NoColor.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Template.json">
+      <Filter>data\Json\Effect</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -908,9 +917,6 @@
     <ClCompile Include="src\util\math\Vector4.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\math\MathUtils.cpp">
-      <Filter>src%28application%29\util\math</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\math\Matrix.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
@@ -1139,6 +1145,9 @@
     <ClCompile Include="src\common\component\renderer\BallRenderer.cpp">
       <Filter>src%28application%29\common\component\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\spawner\ISpawner.cpp" />
+    <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp" />
+    <ClCompile Include="src\util\math\MathUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1400,9 +1409,6 @@
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
     <ClInclude Include="src\util\math\MathIncluder.h">
-      <Filter>src%28application%29\util\math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\math\MathUtils.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
     <ClInclude Include="src\util\math\Matrix.h">
@@ -1816,5 +1822,9 @@
     <ClInclude Include="src\common\component\renderer\BallRenderer.h">
       <Filter>src%28application%29\common\component\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene\play\spawner\ISpawner.h" />
+    <ClInclude Include="src\scene\play\spawner\SpawnerDesc.h" />
+    <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h" />
+    <ClInclude Include="src\util\math\MathUtil.h" />
   </ItemGroup>
 </Project>

@@ -237,6 +237,7 @@ private:
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
 	EffectBase*		m_pCatchReadyEffect;	// キャッチの準備エフェクト
+	EffectBase*		m_pCatchDustEffect;		// キャッチの粉エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション
@@ -250,6 +251,7 @@ private:
 	float			m_SpeedScale;			// 速度倍率
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
+    float			m_CatchTimer;			// キャッチの残り時間タイマー
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か

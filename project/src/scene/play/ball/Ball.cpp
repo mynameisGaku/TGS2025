@@ -190,18 +190,20 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 	m_LastOwner = m_Owner;
 }
 
-void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target)
+void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, CharaBase* target)
 {
 	Throw(velocity, owner);
 
 	m_Physics->SetIsActive(false);
 
+    m_HomingTargetChara = target;
+
 	m_HomingPosition = transform->position + Vector3::SetY(100.0f);
-	m_HomingTarget = (target == nullptr) ? Vector3(0, 0, 1000) : target->transform->position;
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算
-	Vector3 diff = m_HomingTarget - m_HomingPosition;
+	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
 }
 
@@ -221,14 +223,6 @@ void Ball::CollisionEvent(const CollisionData& colData)
 		m_State = S_LANDED;
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
-			if (m_CharaTag == "Blue")
-			{
-				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
-			}
-			else
-			{
-				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
-			}
 			m_Owner->SetLastBall(nullptr);
 		}
 
@@ -317,8 +311,9 @@ void Ball::collisionToGround()
 void Ball::HomingProcess()
 {
 	// ---- ホーミング補間 ----
-	Vector3 acceleration = m_HomingTarget - transform->position;
-	Vector3 diff = m_HomingTarget - m_HomingPosition;
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	Vector3 acceleration = m_HomingTargetPos - transform->position;
+	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 
 	acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
 

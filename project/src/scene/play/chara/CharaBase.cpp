@@ -63,6 +63,10 @@ CharaBase::CharaBase()
 	m_IsCatching		= false;
 	m_CanHold			= true;
 	m_pHitBall			= nullptr;
+	m_pStatusTracker	= nullptr;
+	m_pCatchReadyEffect	= nullptr;
+	m_pCatchDustEffect	= nullptr;
+	m_CatchTimer		= 0.0f;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -133,7 +137,7 @@ void CharaBase::Init(std::string tag)
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
-	m_EffectTransform->position.y = 100.0f;
+	m_EffectTransform->position.y = 160.0f;
 	m_EffectTransform->position.z = -100.0f;
 	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
@@ -217,7 +221,12 @@ void CharaBase::Update() {
 	if (m_pCatchReadyEffect)
 	{
 		m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-        m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+		m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	}
+	if (m_pCatchDustEffect)
+	{
+		m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+		m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
 	}
 
 	// ボールの更新
@@ -303,6 +312,18 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
+			if (ball->GetState() == Ball::S_LANDED)
+				return;
+
+			if (m_CharaTag == "Blue")
+			{
+				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
+			}
+			else
+			{
+				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
+			}
+
 			getHit(ball);
 			m_pHP->Damage_UseDefault();
 			m_pStatusTracker->AddGetHitCount(1);
@@ -492,7 +513,7 @@ void CharaBase::ThrowHomingBall()
 
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	const CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
+	CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
 	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
 	m_pStatusTracker->AddThrowCount(1);
 	m_pLastBall = m_pBall;
@@ -1522,6 +1543,8 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Catcher->SetColliderActive(false);
+		m_pCatchReadyEffect = nullptr;
+		m_pCatchDustEffect = nullptr;
 	}
 	break;
 	}
@@ -1598,35 +1621,43 @@ void CharaBase::slideUpdate()
 
 void CharaBase::catchUpdate()
 {
-	static int catchReadyFrame;
-	if (m_CatchTimer > 0.0f)
-
 	if (m_IsCatching)
 	{
-		m_Catcher->SetColliderActive(true);
-		if (m_EffectTransform != nullptr)
+		if (not m_Catcher->IsColliderActive())
 		{
-			m_CatchTimer = 0.0f;
-			m_Catcher->SetColliderActive(false);
-			EffectManager::Stop("Catch_Ready.efk", "Catch_Ready" + m_CharaTag);
-			EffectManager::Stop("Catch_Dust.efk", "Catch_Dust" + m_CharaTag);
-			m_pCatchReadyEffect = nullptr;
-		}
-		else
-		{
-			if(not m_Catcher->IsColliderActive())
+			if (m_EffectTransform != nullptr)
 			{
-				if (m_EffectTransform != nullptr)
+				if (m_CharaTag == "Blue")
 				{
-					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready.efk", m_EffectTransform->Global(), "Catch_Ready" + m_CharaTag);
-					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Dust.efk", m_EffectTransform->Global(), "Catch_Dust" + m_CharaTag);
+					m_pCatchDustEffect = EffectManager::Play3D("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
+					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
+				}
+				else if(m_CharaTag == "Red")
+				{
+					m_pCatchDustEffect = EffectManager::Play3D("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
+					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
 				}
 			}
-
-			m_Catcher->SetColliderActive(true);
 		}
 
+		m_Catcher->SetColliderActive(true);
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
+	}
+	else
+	{
+		m_Catcher->SetColliderActive(false);
+		if (m_CharaTag == "Blue")
+		{
+			EffectManager::Stop("Catch_Dust_Blue.efk", "Catch_Dust_Blue" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Blue.efk", "Catch_Ready_Blue" + m_CharaTag);
+		}
+		else if (m_CharaTag == "Red")
+		{
+			EffectManager::Stop("Catch_Dust_Red.efk", "Catch_Dust_Red" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Red.efk", "Catch_Ready_Red" + m_CharaTag);
+		}
+		m_pCatchReadyEffect = nullptr;
+		m_pCatchDustEffect = nullptr;
 	}
 }
 

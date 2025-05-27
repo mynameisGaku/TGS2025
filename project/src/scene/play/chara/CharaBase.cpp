@@ -132,7 +132,7 @@ void CharaBase::Init(std::string tag)
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
 	m_EffectTransform->position.y = 100.0f;
-	m_EffectTransform->position.z = 100.0f;
+	m_EffectTransform->position.z = -100.0f;
 	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
 	m_Animator = AddComponent<Animator>();
@@ -211,6 +211,12 @@ void CharaBase::Update() {
 	m_FSM->Update();
 	m_SubFSM->Update();
 	m_Timeline->Update();
+
+	if (m_pCatchReadyEffect)
+	{
+		m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+        m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	}
 
 	// ボールの更新
 	if (m_pBall)
@@ -1561,6 +1567,7 @@ void CharaBase::slideUpdate()
 
 void CharaBase::catchUpdate()
 {
+	static int catchReadyFrame;
 	if (m_CatchTimer > 0.0f)
 	{
 		m_CatchTimer -= GTime.deltaTime;
@@ -1568,23 +1575,25 @@ void CharaBase::catchUpdate()
 		{
 			m_CatchTimer = 0.0f;
 			m_Catcher->SetColliderActive(false);
+			EffectManager::Stop("Catch_Ready.efk", "Catch_Ready" + m_CharaTag);
+			EffectManager::Stop("Catch_Dust.efk", "Catch_Dust" + m_CharaTag);
+			m_pCatchReadyEffect = nullptr;
 		}
 		else
 		{
-			m_Catcher->SetColliderActive(true);
-			if (m_EffectTransform != nullptr)
+			if(not m_Catcher->IsColliderActive())
 			{
-				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
-				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
+				if (m_EffectTransform != nullptr)
+				{
+					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready.efk", m_EffectTransform->Global(), "Catch_Ready" + m_CharaTag);
+					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Dust.efk", m_EffectTransform->Global(), "Catch_Dust" + m_CharaTag);
+				}
 			}
+
+			m_Catcher->SetColliderActive(true);
 		}
 
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
-	}
-	else
-	{
-		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
-		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
 	}
 }
 

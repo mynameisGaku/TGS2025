@@ -393,9 +393,19 @@ public:
 	bool operator == (const Vector3& v) const;
 	bool operator != (const Vector3& v) const;
 
+	// DxLibÇÃVECTORÇ∆å›ä∑ê´ÇÇ‡ÇΩÇπÇÈ
 	Vector3(const VECTOR& v);
 	operator const VECTOR() const;
 	operator bool() const;
+	Vector3 operator + (const VECTOR& v) const;
+	Vector3& operator += (const VECTOR& v);
+	Vector3 operator - (const VECTOR& v) const;
+	Vector3& operator -= (const VECTOR& v);
+	Vector3 operator * (const VECTOR& v) const;
+	Vector3& operator *= (const VECTOR& v);
+	Vector3 operator / (const VECTOR& v) const;
+	Vector3& operator /= (const VECTOR& v);
+
 
 	const friend Vector3 operator *(const Vector3& v, const MATRIX& m1);
 	friend Vector3& operator *=(Vector3& v, const MATRIX& m1);

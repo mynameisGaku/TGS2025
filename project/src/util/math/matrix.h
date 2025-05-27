@@ -498,17 +498,20 @@ public:
 	bool operator == (const Matrix& mat) const;
 	bool operator != (const Matrix& mat) const;
 
-    Matrix(const MATRIX& mat)
+	// DxLibÇÃMatrixÇ∆å›ä∑ê´ÇÇ‡ÇΩÇπÇÈ
+	Matrix(const MATRIX& mat);
+	operator MATRIX() const;
+    Matrix& operator = (const MATRIX& mat)
     {
-        memcpy(m, mat.m, sizeof(float) * 16);
+        memcpy(m, mat.m, sizeof(m));
+        return *this;
+    }
+    Matrix& operator = (const Matrix& mat)
+    {
+        memcpy(m, mat.m, sizeof(m));
+        return *this;
     }
 
-    operator MATRIX() const
-    {
-        MATRIX mat;
-        memcpy(mat.m, m, sizeof(float) * 16);
-        return mat;
-    }
 
     operator bool() const
     {

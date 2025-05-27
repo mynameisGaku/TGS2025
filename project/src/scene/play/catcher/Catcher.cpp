@@ -3,6 +3,7 @@
 #include "src/scene/play/chara/CharaBase.h"
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
+#include <src/util/fx/effect/EffectManager.h>
 
 Catcher::Catcher()
 {
@@ -54,6 +55,8 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 	Ball* ball = colData.Other()->Parent<Ball>();
 	if (ball->GetState() == Ball::S_OWNED) return;
 
+	EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global(), "Catch_Success");
+
 	ball->DestroyMe();	//ToDo:ƒ{[ƒ‹‹zŽû‚Ì‰‰o
 
 	m_Parent->GenerateBall();
@@ -63,4 +66,9 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 void Catcher::SetColliderActive(bool isActive)
 {
 	m_Collider->SetIsActive(isActive);
+}
+
+bool Catcher::IsColliderActive() const
+{
+	return m_Collider->IsActive();
 }

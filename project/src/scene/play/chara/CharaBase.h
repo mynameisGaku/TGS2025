@@ -16,6 +16,7 @@ class Animator;
 template <class C>
 class Timeline;
 class StatusTracker;
+class EffectBase;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -231,6 +232,7 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
+	EffectBase*		m_pCatchReadyEffect;	// キャッチの準備エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション

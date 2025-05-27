@@ -163,8 +163,9 @@ void SystemManager::LoadUpdate() {
 		//EffectManager::LoadToCsv("data/csv/EffectData.csv");
 		// エフェクト読み込む
 		{
-			//EffectManager::LoadFromJson("data/json/effect/Catch_Ready.json");
-			//EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Line.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Ready.json");
+			//EffectManager::LoadFromJson("data/json/effect/Catch_Dust.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Line.json");
 			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Dust.json");
 			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Tornado.json");
 			EffectManager::LoadFromJson("data/json/effect/Catch_Success.json");

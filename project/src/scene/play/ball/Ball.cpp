@@ -13,6 +13,7 @@
 #include "src/common/component/renderer/BallRenderer.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
+#include "src/util/fx/trail/trail3D/Trail3D.h"
 
 Ball::Ball()
 {
@@ -30,6 +31,10 @@ Ball::Ball()
 
 	m_Collider->SetOffset(Vector3::Zero);
 	m_Collider->BaseInit(param);
+
+	m_pTrail = new Trail3D();
+	m_pTrail->Init(LoadGraph("data/img/trail/Trail_Green.png"), 1.0f, 40.0f);
+	
 
 	Reset();
 }
@@ -140,7 +145,7 @@ void Ball::Update()
 				{
 					float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
 					transform->rotation.y = forwardRad;
-					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
+					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
 				}
 				m_Physics->velocity.x *= 0.99f;
 				m_Physics->velocity.z *= 0.99f;
@@ -162,6 +167,15 @@ void Ball::Update()
 			}
 		}
 	}
+
+	if (m_State != S_OWNED)
+	{
+		if(m_Physics->velocity.GetLengthSquared() >= 0.1f)
+		{
+			m_pTrail->Add(transform->position);
+		}
+	}
+	m_pTrail->Update(); 
 }
 
 
@@ -169,6 +183,8 @@ void Ball::Draw()
 {
 	if (not m_IsActive)
 		return;
+
+	m_pTrail->Draw();
 
 	Object3D::Draw();
 }
@@ -221,6 +237,9 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 		m_State = S_LANDED;
+
+		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
 			m_Owner->SetLastBall(nullptr);

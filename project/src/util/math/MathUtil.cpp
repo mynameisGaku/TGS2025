@@ -1,5 +1,6 @@
 
 #include <math.h>
+#include <cmath>
 #include <float.h>
 #include <DxLib.h>
 
@@ -83,6 +84,13 @@ float MathUtil::Lerp(float v1, float v2, float t)
 }
 
 //------------------------------------------------------------------------------
+float MathUtil::LerpAngle(float a, float b, float t)
+{
+	float diff = std::fmod(b - a + DX_PI * 3, DX_PI * 2) - DX_PI;
+	return a + diff * t;
+}
+
+//------------------------------------------------------------------------------
 float MathUtil::QuadAccel(float p, float v, float a, float t)
 {
 	return p + (v * t) + (0.5f * a * t * t);
@@ -108,6 +116,25 @@ float MathUtil::CatmullRom(float v1, float v2, float v3, float v4, float t)
 	float d1 = (v3 - v1) * 0.5f;
 	float d2 = (v4 - v2) * 0.5f;
 	return (2.0f * v2 - 2.0f * v3 + d1 + d2) * t * t * t + (-3.0f * v2 + 3.0f * v3 - 2.0f * d1 - d2) * t * t + d1 * t + v2;
+}
+
+Vector3 MathUtil::CatmullRomVec3(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t)
+{
+	float t2 = t * t;
+	float t3 = t2 * t;
+
+	float b0 = -0.5f * t3 + t2 - 0.5f * t;
+	float b1 = 1.5f * t3 - 2.5f * t2 + 1.0f;
+	float b2 = -1.5f * t3 + 2.0f * t2 + 0.5f * t;
+	float b3 = 0.5f * t3 - 0.5f * t2;
+
+	return VAdd(
+		VAdd(
+			VAdd(VScale(p0, b0), VScale(p1, b1)),
+			VScale(p2, b2)
+		),
+		VScale(p3, b3)
+	);
 }
 
 //------------------------------------------------------------------------------

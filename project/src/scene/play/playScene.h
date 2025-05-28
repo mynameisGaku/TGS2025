@@ -2,8 +2,6 @@
 #include "framework/SceneBase.h"
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
 
-class CrystalFragmentManager;
-
 class PlayScene : public SceneBase {
 public:
 	PlayScene(std::string name);

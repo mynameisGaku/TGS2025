@@ -174,6 +174,7 @@ void SystemManager::LoadUpdate() {
 			EffectManager::LoadFromJson("data/json/effect/Hit_Gray.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_Red.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_NoColor.json");
+			EffectManager::LoadFromJson("data/json/effect/Hit_Wall.json");
 		}
 		break;
 

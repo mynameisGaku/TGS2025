@@ -1543,6 +1543,17 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // I—¹
 	{
 		m_Catcher->SetColliderActive(false);
+
+		if (m_CharaTag == "Blue")
+		{
+			EffectManager::Stop("Catch_Dust_Blue.efk", "Catch_Dust_Blue" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Blue.efk", "Catch_Ready_Blue" + m_CharaTag);
+		}
+		else if (m_CharaTag == "Red")
+		{
+			EffectManager::Stop("Catch_Dust_Red.efk", "Catch_Dust_Red" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Red.efk", "Catch_Ready_Red" + m_CharaTag);
+		}
 		m_pCatchReadyEffect = nullptr;
 		m_pCatchDustEffect = nullptr;
 	}
@@ -1646,16 +1657,6 @@ void CharaBase::catchUpdate()
 	else
 	{
 		m_Catcher->SetColliderActive(false);
-		if (m_CharaTag == "Blue")
-		{
-			EffectManager::Stop("Catch_Dust_Blue.efk", "Catch_Dust_Blue" + m_CharaTag);
-			EffectManager::Stop("Catch_Ready_Blue.efk", "Catch_Ready_Blue" + m_CharaTag);
-		}
-		else if (m_CharaTag == "Red")
-		{
-			EffectManager::Stop("Catch_Dust_Red.efk", "Catch_Dust_Red" + m_CharaTag);
-			EffectManager::Stop("Catch_Ready_Red.efk", "Catch_Ready_Red" + m_CharaTag);
-		}
 		m_pCatchReadyEffect = nullptr;
 		m_pCatchDustEffect = nullptr;
 	}

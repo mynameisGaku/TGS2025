@@ -5,6 +5,8 @@
 #include "src/common/camera/CameraManager.h"
 #include "src/common/component/collider/CollisionManager.h"
 
+//=== エフェクト ===
+
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
 #include "src/util/fx/effect/EffectManager.h"

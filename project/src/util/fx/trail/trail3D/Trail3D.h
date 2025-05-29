@@ -12,7 +12,8 @@ public:
     void Add(const Vector3& pos);
     void Update();
     void Draw();
-
+    void Deactive();
+    bool IsActive();
 private:
     struct TrailPoint 
     {
@@ -22,8 +23,8 @@ private:
 
     void DrawTrailSegment(const VECTOR& pos1, const VECTOR& pos2, float t1, float t2, const VECTOR& sideAxis, float alpha1, float alpha2);
 
-    std::deque<TrailPoint> points;
-    int textureHandle = -1;
-    float maxLifeTime = 1.0f;
-    float trailWidth = 1.0f;
+    std::deque<TrailPoint> m_Points;
+    int m_TextureHandle = -1;
+    float m_MaxLifeTime = 1.0f;
+    float m_TrailWidth = 1.0f;
 };

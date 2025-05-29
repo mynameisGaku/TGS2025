@@ -35,6 +35,7 @@ private:
 
 	int m_Model;
 	std::unordered_map<std::string, BallTexture> m_Textures;
+	std::unordered_map<std::string, int> m_hTrails;
 
 #ifdef USE_POOL
 	Pool<Ball>* m_pPool;

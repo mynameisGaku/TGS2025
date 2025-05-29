@@ -14,6 +14,7 @@
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
 #include "src/util/fx/trail/trail3D/Trail3D.h"
+#include "src/util/ptr/PtrUtil.h"
 
 Ball::Ball()
 {
@@ -33,8 +34,6 @@ Ball::Ball()
 	m_Collider->BaseInit(param);
 
 	m_pTrail = new Trail3D();
-	m_pTrail->Init(LoadGraph("data/img/trail/Trail_Green.png"), 1.0f, 40.0f);
-	
 
 	Reset();
 }
@@ -45,6 +44,8 @@ Ball::~Ball()
 	{
 		m_Owner->SetLastBall(nullptr);
 	}
+
+	PtrUtil::SafeDelete(m_pTrail);
 }
 
 void Ball::Reset()
@@ -196,6 +197,7 @@ void Ball::Throw(const Vector3& velocity)
 	m_Physics->SetGravity(BALL_REF.GravityDefault);
 	m_Physics->SetFriction(BALL_REF.FrictionDefault);
 	m_Collider->SetIsActive(true);
+	m_pTrail->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, 1.0f, 40.0f);
 	m_Owner = nullptr;
 }
 
@@ -299,6 +301,11 @@ void Ball::SetTexture(const BallTexture& texture)
 	}
 
 	ballRenderer->SetTexture(texture);
+}
+
+void Ball::SetTrailImage(int hImage)
+{
+	m_hTrailImage = hImage;
 }
 
 void Ball::collisionToGround()

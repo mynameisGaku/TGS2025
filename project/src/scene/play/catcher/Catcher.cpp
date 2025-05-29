@@ -54,11 +54,10 @@ void Catcher::Draw()
 
 void Catcher::CollisionEvent(const CollisionData& colData)
 {
-	EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
-
 	Ball* ball = colData.Other()->Parent<Ball>();
 
-	if (ball->GetState() == Ball::S_OWNED) return;
+	if (ball->GetState() == Ball::S_OWNED)
+		return;
 
 	bool isCatch = false;
 	if (m_Parent->GetCharaTag() != ball->GetCharaTag())
@@ -72,8 +71,12 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 
 	if (isCatch)
 	{
+		EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
+
 		m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
 		m_Parent->SetBall(ball);
+		ball->SetOwner(m_Parent);
+		ball->PickUp();
 		m_Parent->GetStatusTracker()->AddCatchCount(1);
 	}
 }

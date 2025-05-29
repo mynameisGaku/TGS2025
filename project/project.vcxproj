@@ -161,6 +161,7 @@
     <None Include="data\effect\models\Sphare.efkmodel" />
     <None Include="data\effect\models\Torus.efkmodel" />
     <None Include="data\Json\Ball\Ball.json" />
+    <None Include="data\Json\Ball\BallSpawner.json" />
     <None Include="data\Json\Ball\Texture\Cold_Face.json" />
     <None Include="data\Json\Ball\Texture\Frog.json" />
     <None Include="data\Json\Ball\Texture\Hatching_Chick.json" />
@@ -324,6 +325,7 @@
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
     <ClCompile Include="src\scene\play\ball\BallManager.cpp" />
+    <ClCompile Include="src\scene\play\ball\BallSpawner.cpp" />
     <ClCompile Include="src\scene\play\catcher\Catcher.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaBase.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp" />
@@ -486,6 +488,7 @@
     <ClInclude Include="src\scene\play\ball\Ball.h" />
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />
     <ClInclude Include="src\scene\play\ball\BallManager.h" />
+    <ClInclude Include="src\scene\play\ball\BallSpawner.h" />
     <ClInclude Include="src\scene\play\catcher\Catcher.h" />
     <ClInclude Include="src\scene\play\chara\CharaBase.h" />
     <ClInclude Include="src\scene\play\chara\CharaHP.h" />

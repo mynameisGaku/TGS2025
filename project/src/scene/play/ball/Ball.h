@@ -34,8 +34,9 @@ public:
 
 	Ball();
 	~Ball();
-	void Reset();
-	void Init(std::string charaTag);
+	void Reset(std::string charaTag);
+	void Spawn();
+	void Init(std::string charaTag = "None");
 	void Update() override;
 	void Draw() override;
 
@@ -67,6 +68,10 @@ public:
 	void SetTexture(const BallTexture& texture);
 
 	void SetTrailImage(int hImage);
+
+	void SetOwner(CharaBase* pChara);
+
+	void PickUp();
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -84,6 +89,7 @@ private:
 	float				m_AlphaRate;
 	int					m_hTrailImage;
 	bool				m_IsActive;
+	bool				m_IsPickedUp;
 
 	// ホーミング系
 	const CharaBase*	m_HomingTargetChara;

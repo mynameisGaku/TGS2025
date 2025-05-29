@@ -35,7 +35,7 @@ Ball::Ball()
 
 	m_pTrail = new Trail3D();
 
-	Reset();
+	Init();
 }
 
 Ball::~Ball()
@@ -48,11 +48,22 @@ Ball::~Ball()
 	PtrUtil::SafeDelete(m_pTrail);
 }
 
-void Ball::Reset()
+void Ball::Reset(std::string charaTag)
+{
+	Init(charaTag);
+	m_State = S_OWNED;
+}
+
+void Ball::Spawn()
+{
+	Init();
+	m_State = S_LANDED;
+}
+
+void Ball::Init(std::string charaTag)
 {
 	transform->scale = Vector3::Ones * BALL_SCALE;
 
-	m_State = S_OWNED;
 	m_CharaTag = CHARADEFINE_REF.Tags[0];
 
 	m_HomingPeriod = 0.0f;
@@ -62,7 +73,7 @@ void Ball::Reset()
 	m_Physics->SetGravity(Vector3::Zero);
 	m_Physics->SetFriction(Vector3::Zero);
 
-	m_Collider->SetIsActive(false);
+	m_Collider->SetIsActive(true);
 
 	m_LifeTimeMax = BALL_REF.LifeTimeMax;
 	m_LifeTime = m_LifeTimeMax;
@@ -70,11 +81,7 @@ void Ball::Reset()
 
 	m_IsHoming = false;
 	m_IsActive = true;
-}
-
-void Ball::Init(std::string charaTag)
-{
-	Reset();
+	m_IsPickedUp = false;
 
 	ColDefine::Tag tag;
 	std::list<ColDefine::Tag> targets;
@@ -92,7 +99,7 @@ void Ball::Init(std::string charaTag)
 	else
 	{
 		// tag‚ª•s³‚È‚çƒŒƒbƒh‚Á‚Ä‚±‚Æ‚É‚·‚é
-		tag = ColDefine::Tag::tBallRed;
+		tag = ColDefine::Tag::tNone;
 		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
 	
@@ -156,15 +163,18 @@ void Ball::Update()
 
 	if (m_State != S_OWNED)
 	{
-		m_LifeTime -= GTime.deltaTime;
-		if (m_LifeTime <= 0.0f)
+		if(m_IsPickedUp)
 		{
-			m_AlphaRate -= 255.0f * GTime.deltaTime;
-
-			if (m_AlphaRate <= 0.0f)
+			m_LifeTime -= GTime.deltaTime;
+			if (m_LifeTime <= 0.0f)
 			{
-				m_AlphaRate = 0.0f;
-				m_IsActive = false;
+				m_AlphaRate -= 255.0f * GTime.deltaTime;
+
+				if (m_AlphaRate <= 0.0f)
+				{
+					m_AlphaRate = 0.0f;
+					m_IsActive = false;
+				}
 			}
 		}
 	}
@@ -306,6 +316,17 @@ void Ball::SetTexture(const BallTexture& texture)
 void Ball::SetTrailImage(int hImage)
 {
 	m_hTrailImage = hImage;
+}
+
+void Ball::SetOwner(CharaBase* pChara)
+{
+	m_Owner = pChara;
+	m_LastOwner = m_Owner;
+}
+
+void Ball::PickUp()
+{
+	m_IsPickedUp = true;
 }
 
 void Ball::collisionToGround()

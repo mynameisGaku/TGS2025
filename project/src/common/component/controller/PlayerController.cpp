@@ -34,10 +34,11 @@ void PlayerController::Update() {
 
 	if (not chara->IsHoldingBall())
 	{
-		if (InputManager::Push("Throw", padNumber))
+		// ¶¬‹ÖŽ~
+		/*if (InputManager::Push("Throw", padNumber))
 		{
 			chara->GenerateBall();
-		}
+		}*/
 	}
 	else
 	{

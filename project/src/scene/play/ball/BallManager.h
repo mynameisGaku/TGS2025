@@ -22,7 +22,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	Ball* CreateBall(const Vector3& position);
+	Ball* CreateBall(const Vector3& position, bool isSpawn = false);
 
 	Ball* GetBall(uint32_t index);
 

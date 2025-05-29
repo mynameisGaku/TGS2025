@@ -1,5 +1,5 @@
 
-#include "mathUtils.h"
+#include "MathUtil.h"
 #include "vector2.h"
 #include "vector3.h"
 #include "vector4.h"
@@ -356,6 +356,70 @@ Vector3::operator const VECTOR() const
 Vector3::operator bool() const
 {
 	return this->GetLength() != 0;
+}
+
+Vector3 Vector3::operator+(const VECTOR& v) const
+{
+    return Vector3(
+        x + v.x,
+        y + v.y,
+        z + v.z);
+}
+
+Vector3& Vector3::operator+=(const VECTOR& v)
+{
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    return *this;
+}
+
+Vector3 Vector3::operator-(const VECTOR& v) const
+{
+    return Vector3(
+        x - v.x,
+        y - v.y,
+        z - v.z);
+}
+
+Vector3& Vector3::operator-=(const VECTOR& v)
+{
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
+    return *this;
+}
+
+Vector3 Vector3::operator*(const VECTOR& v) const
+{
+    return Vector3(
+        x * v.x,
+        y * v.y,
+        z * v.z);
+}
+
+Vector3& Vector3::operator*=(const VECTOR& v)
+{
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+    return *this;
+}
+
+Vector3 Vector3::operator/(const VECTOR& v) const
+{
+    return Vector3(
+        x / v.x,
+        y / v.y,
+        z / v.z);
+}
+
+Vector3& Vector3::operator/=(const VECTOR& v)
+{
+    if (v.x != 0.0f) x /= v.x;
+    if (v.y != 0.0f) y /= v.y;
+    if (v.z != 0.0f) z /= v.z;
+    return *this;
 }
 
 //------------------------------------------------------------------------------

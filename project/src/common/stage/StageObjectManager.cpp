@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include "src/util/ptr/PtrUtil.h"
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"

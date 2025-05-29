@@ -328,6 +328,21 @@
     <Filter Include="data\Json\Ball\Texture">
       <UniqueIdentifier>{6d0efb33-252a-4c10-9270-aa3d2c60f3b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\fx\trail">
+      <UniqueIdentifier>{e3fd7c7f-b9f3-4085-9717-e15ce96e9bcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\fx\trail\trail3D">
+      <UniqueIdentifier>{b995d086-7750-4685-a6a9-94e8f29ff031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\status_tracker">
+      <UniqueIdentifier>{31c5c5e3-6de8-40e5-bf14-afe436cd1bd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\spawner">
+      <UniqueIdentifier>{d90d59d3-f422-4d1c-92e8-3ec7d9deb9ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Img\Trail">
+      <UniqueIdentifier>{41686a5c-8f72-47bd-8cd9-5034208ddc6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -389,33 +404,6 @@
     </None>
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
       <Filter>data\Json\Crystal</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Dust.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Line.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Ready_Single_Tornado.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Catch_Success.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Blue.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Gray.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_NoColor.json">
-      <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\Effect\Hit_Red.json">
-      <Filter>data\Json\Effect</Filter>
     </None>
     <None Include="data\Json\Stage\Stage.json">
       <Filter>data\Json\Stage</Filter>
@@ -561,6 +549,45 @@
     <None Include="data\Json\Ball\Texture\Unicorn.json">
       <Filter>data\Json\Ball\Texture</Filter>
     </None>
+    <None Include="data\Json\Effect\Catch_Dust.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Dust_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Dust_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Ready_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Catch_Success.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Blue.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Gray.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_NoColor.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Red.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Template.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Wall.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -683,6 +710,9 @@
     </Image>
     <Image Include="data\Img\BallTexture\Unicorn.png">
       <Filter>data\Img\BallTexture</Filter>
+    </Image>
+    <Image Include="data\Img\Trail\Trail_Green.png">
+      <Filter>data\Img\Trail</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -906,9 +936,6 @@
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
     <ClCompile Include="src\util\math\Vector4.cpp">
-      <Filter>src%28application%29\util\math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\math\MathUtils.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
     <ClCompile Include="src\util\math\Matrix.cpp">
@@ -1138,6 +1165,18 @@
     </ClCompile>
     <ClCompile Include="src\common\component\renderer\BallRenderer.cpp">
       <Filter>src%28application%29\common\component\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\fx\trail\trail3D\Trail3D.cpp">
+      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\math\MathUtil.cpp">
+      <Filter>src%28application%29\util\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\spawner\ISpawner.cpp">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp">
+      <Filter>src%28application%29\scene\play\status_tracker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1400,9 +1439,6 @@
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
     <ClInclude Include="src\util\math\MathIncluder.h">
-      <Filter>src%28application%29\util\math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\math\MathUtils.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
     <ClInclude Include="src\util\math\Matrix.h">
@@ -1815,6 +1851,24 @@
     </ClInclude>
     <ClInclude Include="src\common\component\renderer\BallRenderer.h">
       <Filter>src%28application%29\common\component\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h">
+      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h">
+      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\MathUtil.h">
+      <Filter>src%28application%29\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\spawner\SpawnerDesc.h">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\spawner\ISpawner.h">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h">
+      <Filter>src%28application%29\scene\play\status_tracker</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

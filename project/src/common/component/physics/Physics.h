@@ -4,7 +4,7 @@
 #include "src/common/component/Component.h"
 
 // ”Ä—p
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/util/transform/Transform.h"
 #include "src/util/math/Vector3.h"
 

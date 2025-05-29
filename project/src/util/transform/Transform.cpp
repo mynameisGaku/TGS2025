@@ -1,7 +1,7 @@
 #include "src/util/transform/Transform.h"
 
 // ”Ä—p
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 
 Transform::Transform(const Vector3& pos, const Vector3& rot, const Vector3& scl, Transform* p) {
 

@@ -12,7 +12,7 @@
 */
 #include <math.h>
 #include <assert.h>
-#include "mathUtils.h"
+#include "MathUtil.h"
 #include "vector3.h"
 #include "vector4.h"
 #include "quaternion.h"
@@ -1747,4 +1747,16 @@ bool Matrix::operator == (const Matrix& mat) const
 bool Matrix::operator != (const Matrix& mat) const
 {
 	return !Equals(*this, mat);
+}
+
+Matrix::Matrix(const MATRIX& mat)
+{
+	memcpy(m, mat.m, sizeof(float) * 16);
+}
+
+Matrix::operator MATRIX() const
+{
+	MATRIX mat;
+	memcpy(mat.m, m, sizeof(float) * 16);
+	return mat;
 }

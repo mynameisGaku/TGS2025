@@ -65,7 +65,7 @@ public:
     const std::deque<HPChangeLog>& GetLog() const;
 
     /// HPƒŠƒZƒbƒg
-    void ResetHP();
+    void Reset();
 
 private:
     float m_DefaultDamage = 0.0f;

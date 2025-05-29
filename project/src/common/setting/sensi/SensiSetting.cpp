@@ -3,7 +3,7 @@
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
 #include <src/util/ptr/PtrUtil.h>
-#include <src/util/math/mathUtils.h>
+#include "src/util/math/MathUtil.h"
 
 using namespace KeyDefine;
 

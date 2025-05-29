@@ -1,7 +1,7 @@
 #include "Light.h"
 
 // ◇演出・機能
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 
 Light::Light(const LightInfo& _info) {

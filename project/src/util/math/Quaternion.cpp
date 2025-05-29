@@ -1,6 +1,6 @@
 
 #include <assert.h>
-#include "mathUtils.h"
+#include "MathUtil.h"
 #include "vector3.h"
 #include "matrix.h"
 #include "quaternion.h"

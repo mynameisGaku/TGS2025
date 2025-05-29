@@ -17,7 +17,7 @@
 #include "src/util/file/json/VectorJson.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/util/ptr/PtrUtil.h"
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 
 using namespace KeyDefine;
@@ -34,33 +34,39 @@ namespace
 
 CharaBase::CharaBase()
 {
-	m_pStamina				= Instantiate<CharaStamina>();
-	m_pHP					= Instantiate<CharaHP>();
-	m_pBall					= nullptr;
-	m_pLastBall				= nullptr;
-	m_pPhysics				= nullptr;
-	m_BallChargeRate		= 0.0f;
-	m_IsCharging			= false;
-	m_MoveSpeed				= 0.0f;
-	m_RotSpeed				= 0.0f;
-	m_SpeedScale			= 0.0f;
-	m_CatchTimer			= 0.0f;
-	m_CharaTag				= CHARADEFINE_REF.Tags[0];
-	m_Catcher				= nullptr;
-	m_Index					= 0;
-	m_Animator				= nullptr;
-	m_EmoteTimer			= 0.0f;
-	m_IsLanding				= true;
-	m_SlideTimer			= 0.0f;
-	m_EffectTransform		= nullptr;
-	m_pBallManager			= nullptr;
-	m_Timeline				= nullptr;
-	m_CanMove				= true;
-	m_CanRot				= true;
-	m_IsMove				= false;
-	m_IsJumping				= false;
-	m_CanCatch				= true;
-	m_CanThrow				= true;
+	m_pStamina			= Instantiate<CharaStamina>();
+	m_pHP				= Instantiate<CharaHP>();
+	m_pBall				= nullptr;
+	m_pLastBall			= nullptr;
+	m_pPhysics			= nullptr;
+	m_BallChargeRate	= 0.0f;
+	m_IsCharging		= false;
+	m_MoveSpeed			= 0.0f;
+	m_RotSpeed			= 0.0f;
+	m_SpeedScale		= 0.0f;
+	m_CharaTag			= CHARADEFINE_REF.Tags[0];
+	m_Catcher			= nullptr;
+	m_Index				= 0;
+	m_Animator			= nullptr;
+	m_EmoteTimer		= 0.0f;
+	m_IsLanding			= true;
+	m_SlideTimer		= 0.0f;
+	m_EffectTransform	= nullptr;
+	m_pBallManager		= nullptr;
+	m_Timeline			= nullptr;
+	m_CanMove			= true;
+	m_CanRot			= true;
+	m_IsMove			= false;
+	m_IsJumping			= false;
+	m_CanCatch			= true;
+	m_CanThrow			= true;
+	m_IsCatching		= false;
+	m_CanHold			= true;
+	m_pHitBall			= nullptr;
+	m_pStatusTracker	= nullptr;
+	m_pCatchReadyEffect	= nullptr;
+	m_pCatchDustEffect	= nullptr;
+	m_CatchTimer		= 0.0f;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -131,8 +137,8 @@ void CharaBase::Init(std::string tag)
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
-	m_EffectTransform->position.y = 100.0f;
-	m_EffectTransform->position.z = 100.0f;
+	m_EffectTransform->position.y = 160.0f;
+	m_EffectTransform->position.z = -100.0f;
 	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
 	m_Animator = AddComponent<Animator>();
@@ -212,6 +218,17 @@ void CharaBase::Update() {
 	m_SubFSM->Update();
 	m_Timeline->Update();
 
+	if (m_pCatchReadyEffect)
+	{
+		m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+		m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	}
+	if (m_pCatchDustEffect)
+	{
+		m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+		m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	}
+
 	// ボールの更新
 	if (m_pBall)
 	{
@@ -234,8 +251,8 @@ void CharaBase::Update() {
 		m_SpeedScale = 0.0f;
 	}
 
-
 	m_IsMove = false;
+	m_IsCatching = false;
 
 	Object3D::Update();
 }
@@ -295,6 +312,18 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
+			if (ball->GetState() == Ball::S_LANDED)
+				return;
+
+			if (m_CharaTag == "Blue")
+			{
+				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
+			}
+			else
+			{
+				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
+			}
+
 			getHit(ball);
 			m_pHP->Damage_UseDefault();
 			m_pStatusTracker->AddGetHitCount(1);
@@ -304,6 +333,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			{
 				m_pStatusTracker->AddDeathCount(1);
 				ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
+				Respawn(Vector3::Zero, Vector3::Zero);
 			}
 		}
 	}
@@ -421,7 +451,12 @@ void CharaBase::GenerateBall()
 	if (m_pBallManager == nullptr)
 		m_pBallManager = FindGameObject<BallManager>();
 
-	m_pBall = m_pBallManager->CreateBall(transform->Global().position);
+	SetBall(m_pBallManager->CreateBall(transform->Global().position));
+}
+
+void CharaBase::SetBall(Ball* ball)
+{
+	m_pBall = ball;
 
 	if (m_pBall == nullptr)
 		return;
@@ -431,8 +466,6 @@ void CharaBase::GenerateBall()
 	m_pBall->Init(m_CharaTag);
 
 	m_IsCharging = false;
-
-	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
 
 void CharaBase::StartBallCharge()
@@ -480,7 +513,7 @@ void CharaBase::ThrowHomingBall()
 
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	const CharaBase* targetChara = CameraManager::GetCamera(m_Index)->TargetChara();
+	CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
 	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
 	m_pStatusTracker->AddThrowCount(1);
 	m_pLastBall = m_pBall;
@@ -518,8 +551,44 @@ void CharaBase::Catch()
 
 	if (m_pStamina->GetCurrent() > CATCH_STAMINA_MIN)
 	{
-		m_CatchTimer = CATCH_TIME;
+		m_IsCatching = true;
 	}
+}
+
+void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
+{
+	m_pHP->Reset();
+	m_pStamina->Reset();
+	m_pBall = nullptr;
+	m_pLastBall = nullptr;
+	m_IsCharging = false;
+	m_BallChargeRate = 0.0f;
+	m_IsJumping = false;
+	m_IsLanding = true;
+	transform->position = pos;
+	transform->rotation = rot;
+	// キャッチャーの位置を更新
+	if (m_Catcher)
+	{
+		m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
+	}
+}
+
+void CharaBase::CatchSuccess(const Vector3& velocity)
+{
+	m_CanCatch = false;
+	m_CanMove = false;
+	m_CanRot = false;
+	m_Catcher->SetColliderActive(false);
+
+	m_pPhysics->SetGravity(Vector3::Zero);
+	m_pPhysics->SetFriction(Vector3::Zero);
+
+	transform->rotation.y = atan2f(transform->position.x - velocity.x, transform->position.z - velocity.z);
+	m_pPhysics->velocity.y = 10.0f;
+	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
+
+	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
 }
 
 //========================================================================
@@ -1334,7 +1403,7 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_CanCatch && m_CatchTimer > 0.0f)
+		if (m_CanCatch && m_IsCatching)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateCatch); // ステートを変更
 		}
@@ -1362,6 +1431,10 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_CanMove = false;
+		m_CanRot = false;
+		m_pPhysics->SetGravity(Vector3::Zero);
+		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1378,6 +1451,10 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetGravity(FRICTION);
 	}
 	break;
 	}
@@ -1451,12 +1528,12 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		catchUpdate();
-
-		if (m_CatchTimer <= 0.0f)
+		if (not m_IsCatching)
 		{
 			m_SubFSM->ChangeState(&CharaBase::SubStateNone); // ステートを変更
 		}
+
+		catchUpdate();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1465,6 +1542,20 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_Catcher->SetColliderActive(false);
+
+		if (m_CharaTag == "Blue")
+		{
+			EffectManager::Stop("Catch_Dust_Blue.efk", "Catch_Dust_Blue" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Blue.efk", "Catch_Ready_Blue" + m_CharaTag);
+		}
+		else if (m_CharaTag == "Red")
+		{
+			EffectManager::Stop("Catch_Dust_Red.efk", "Catch_Dust_Red" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Red.efk", "Catch_Ready_Red" + m_CharaTag);
+		}
+		m_pCatchReadyEffect = nullptr;
+		m_pCatchDustEffect = nullptr;
 	}
 	break;
 	}
@@ -1541,30 +1632,33 @@ void CharaBase::slideUpdate()
 
 void CharaBase::catchUpdate()
 {
-	if (m_CatchTimer > 0.0f)
+	if (m_IsCatching)
 	{
-		m_CatchTimer -= GTime.deltaTime;
-		if (m_CatchTimer < 0.0f)
+		if (not m_Catcher->IsColliderActive())
 		{
-			m_CatchTimer = 0.0f;
-			m_Catcher->SetColliderActive(false);
-		}
-		else
-		{
-			m_Catcher->SetColliderActive(true);
 			if (m_EffectTransform != nullptr)
 			{
-				EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
-				EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
+				if (m_CharaTag == "Blue")
+				{
+					m_pCatchDustEffect = EffectManager::Play3D("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
+					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
+				}
+				else if(m_CharaTag == "Red")
+				{
+					m_pCatchDustEffect = EffectManager::Play3D("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
+					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
+				}
 			}
 		}
 
+		m_Catcher->SetColliderActive(true);
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
 	}
 	else
 	{
-		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
-		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
+		m_Catcher->SetColliderActive(false);
+		m_pCatchReadyEffect = nullptr;
+		m_pCatchDustEffect = nullptr;
 	}
 }
 

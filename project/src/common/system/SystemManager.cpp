@@ -163,15 +163,18 @@ void SystemManager::LoadUpdate() {
 		//EffectManager::LoadToCsv("data/csv/EffectData.csv");
 		// エフェクト読み込む
 		{
-			//EffectManager::LoadFromJson("data/json/effect/Catch_Ready.json");
-			//EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Line.json");
-			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Dust.json");
-			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Single_Tornado.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Ready.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Red.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Ready_Blue.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Dust.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Dust_Red.json");
+			EffectManager::LoadFromJson("data/json/effect/Catch_Dust_Blue.json");
 			EffectManager::LoadFromJson("data/json/effect/Catch_Success.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_Blue.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_Gray.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_Red.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_NoColor.json");
+			EffectManager::LoadFromJson("data/json/effect/Hit_Wall.json");
 		}
 		break;
 

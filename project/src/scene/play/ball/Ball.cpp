@@ -12,6 +12,8 @@
 #include "src/scene/play/ball/BallManager.h"
 #include "src/common/component/renderer/BallRenderer.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
+#include "src/scene/play/catcher/Catcher.h"
+#include "src/util/fx/trail/trail3D/Trail3D.h"
 
 Ball::Ball()
 {
@@ -29,6 +31,10 @@ Ball::Ball()
 
 	m_Collider->SetOffset(Vector3::Zero);
 	m_Collider->BaseInit(param);
+
+	m_pTrail = new Trail3D();
+	m_pTrail->Init(LoadGraph("data/img/trail/Trail_Green.png"), 1.0f, 40.0f);
+	
 
 	Reset();
 }
@@ -75,18 +81,18 @@ void Ball::Init(std::string charaTag)
 	if (charaTag == "Red")
 	{
 		tag = ColDefine::Tag::tBallRed;
-		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
 	else if (charaTag == "Blue")
 	{
 		tag = ColDefine::Tag::tBallBlue;
-		targets = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		targets = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
 	else
 	{
 		// tagが不正ならレッドってことにする
 		tag = ColDefine::Tag::tBallRed;
-		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
 	
 	m_Collider->SetTag(tag);
@@ -139,7 +145,7 @@ void Ball::Update()
 				{
 					float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
 					transform->rotation.y = forwardRad;
-					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
+					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
 				}
 				m_Physics->velocity.x *= 0.99f;
 				m_Physics->velocity.z *= 0.99f;
@@ -161,6 +167,15 @@ void Ball::Update()
 			}
 		}
 	}
+
+	if (m_State != S_OWNED)
+	{
+		if(m_Physics->velocity.GetLengthSquared() >= 0.1f)
+		{
+			m_pTrail->Add(transform->position);
+		}
+	}
+	m_pTrail->Update(); 
 }
 
 
@@ -168,6 +183,8 @@ void Ball::Draw()
 {
 	if (not m_IsActive)
 		return;
+
+	m_pTrail->Draw();
 
 	Object3D::Draw();
 }
@@ -189,18 +206,20 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 	m_LastOwner = m_Owner;
 }
 
-void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target)
+void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, CharaBase* target)
 {
 	Throw(velocity, owner);
 
 	m_Physics->SetIsActive(false);
 
+    m_HomingTargetChara = target;
+
 	m_HomingPosition = transform->position + Vector3::SetY(100.0f);
-	m_HomingTarget = (target == nullptr) ? Vector3(0, 0, 1000) : target->transform->position;
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算
-	Vector3 diff = m_HomingTarget - m_HomingPosition;
+	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
 }
 
@@ -209,22 +228,20 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	if (not m_IsActive)
 		return;
 
+	if (colData.Other()->Parent<Catcher>() != nullptr)
+		return;
+
 	if (m_State == S_THROWN)
 	{
 		if (m_IsHoming) HomingDeactivate();
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 		m_State = S_LANDED;
+
+		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
-			if (m_CharaTag == "Blue")
-			{
-				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
-			}
-			else
-			{
-				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
-			}
 			m_Owner->SetLastBall(nullptr);
 		}
 
@@ -305,14 +322,17 @@ void Ball::collisionToGround()
 		m_Physics->velocity.x *= 0.99f;
 		m_Physics->velocity.z *= 0.99f;
 		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
+
+		m_State = S_LANDED;
 	}
 }
 
 void Ball::HomingProcess()
 {
 	// ---- ホーミング補間 ----
-	Vector3 acceleration = m_HomingTarget - transform->position;
-	Vector3 diff = m_HomingTarget - m_HomingPosition;
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	Vector3 acceleration = m_HomingTargetPos - transform->position;
+	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 
 	acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
 
@@ -352,6 +372,8 @@ void Ball::HomingProcess()
 				Vector3 reflectVel = m_Physics->velocity - normal * (1.0f + bounciness) * dot;
 				m_Physics->velocity = reflectVel * damping;
 			}
+
+			m_State = S_LANDED;
 		}
 	}
 

@@ -2,6 +2,7 @@
 #include "framework/sceneManager.h"
 #include "src/util/time/GameTime.h"
 #include "src/util/input/InputManager.h"
+#include "src/util/math/Random.h"
 
 bool exitFlag = false;
 
@@ -18,6 +19,8 @@ void AppUpdate()
 
 	GTime.Update();
 	SceneManager::Update();
+
+	Random.SetSeed(Random.GetInt());
 }
 
 void AppDraw()

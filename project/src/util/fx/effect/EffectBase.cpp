@@ -96,10 +96,10 @@ void EffectBase::SetTransform2D(const RectTransform& trs) {
 void EffectBase::SetPosition3D(const Vector3& pos) {
 
 	transform->position = pos;
-
+	int err = 0;
 	switch (info.dimension) {
-	case Dimensional::_2D:	SetPosPlayingEffekseer2DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
-	case Dimensional::_3D:	SetPosPlayingEffekseer3DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
+	case Dimensional::_2D:	err = SetPosPlayingEffekseer2DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
+	case Dimensional::_3D:	err = SetPosPlayingEffekseer3DEffect(info.playingHandle, transform->position.x, transform->position.y, transform->position.z); break;
 	default:
 		break;
 	}

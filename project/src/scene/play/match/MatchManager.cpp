@@ -4,7 +4,7 @@
 #include <src/util/debug/imgui/imGuiManager.h>
 
 //=== ƒLƒƒƒ‰ ===
-#include "src/util/math/mathUtils.h"
+#include "src/util/math/MathUtil.h"
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/scene/play/chara/CharaHP.h"
 #include "src/common/component/controller/PlayerController.h"

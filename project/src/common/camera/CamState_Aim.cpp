@@ -87,7 +87,7 @@ void Camera::AimState(FSMSignal sig)
 		// ƒJƒƒ‰‚ÆƒLƒƒƒ‰‚ÌŒü‚«‚ð‘µ‚¦‚é
 		//chara->transform->rotation.y = transform->rotation.y;
 
-		if (not InputManager::Hold("TargetCamera"))
+		if (not InputManager::Hold("TargetCamera", chara->GetIndex() + 1))
 		{
 			m_TargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);

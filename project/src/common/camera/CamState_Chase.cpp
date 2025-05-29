@@ -71,7 +71,7 @@ void Camera::ChaseState(FSMSignal sig)
 		m_TargetChara = charaM->TargetChara(m_CharaIndex);
 
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_TargetChara != nullptr && InputManager::Hold("TargetCamera"))
+		if (m_TargetChara != nullptr && InputManager::Hold("TargetCamera", chara->GetIndex() + 1))
 		{
 			// マウスの移動検知
 			if (MouseController::Info().Move().GetLengthSquared() > 5.0f)

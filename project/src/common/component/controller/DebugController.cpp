@@ -71,7 +71,7 @@ void DebugController::Update()
 	if (chara == nullptr || IsMoveButton() == false)
 		return;
 
-	Camera* camera = CameraManager::MainCamera();
+	Camera* camera = CameraManager::GetCamera(chara->GetIndex());
 	if (camera == nullptr)
 		return;
 

@@ -91,7 +91,7 @@ void PlayerController::Update() {
 
 	////////////////////////////////////////////////////
 	// ƒLƒƒƒ‰ˆÚ“®‘€ìˆ—
-	Camera* camera = CameraManager::MainCamera();
+	Camera* camera = CameraManager::GetCamera(chara->GetIndex());
 	if (camera == nullptr)
 		return;
 

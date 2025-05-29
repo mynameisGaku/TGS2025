@@ -35,7 +35,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	CameraManager::SetIsScreenDivision(false);
+	CameraManager::SetIsScreenDivision(true);
 	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
 	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
 }

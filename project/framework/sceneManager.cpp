@@ -3,6 +3,9 @@
 #include "framework/sceneFactory.h"
 #include "src/common/system/SystemManager.h"
 
+#include "src/common/camera/CameraManager.h"
+#include "src/common/setting/window/WindowSetting.h"
+
 namespace {
 
 	std::string m_currentName; // 現在のシーンの名称
@@ -40,12 +43,54 @@ void SceneManager::Update()
 
 void SceneManager::Draw()
 {
-	DrawBefore();
+	if (not CameraManager::IsScreenDivision()) {
+		DrawBefore();
 
-	if (m_currentScene != nullptr) {
-		m_currentScene->Draw();
+		if (m_currentScene != nullptr) {
+			m_currentScene->Draw();
+		}
+		m_commonScene->Draw();
 	}
-	m_commonScene->Draw();
+	else {
+
+		int screenBeingX = 0;
+		int screenBeingY = 0;
+
+		int screenWidth = WindowSetting::Inst().width;
+		int screenHeight = WindowSetting::Inst().height;
+
+		int screenHalfX = WindowSetting::Inst().width_half;
+		int screenHalfY = WindowSetting::Inst().height;
+
+		//===========================================================
+		// 1Pカメラの描画
+
+		CameraManager::CameraScreenDivisionDraw(screenBeingX, screenBeingY, screenHalfX, screenHeight, 0);
+
+		DrawBefore();
+
+		if (m_currentScene != nullptr) {
+			m_currentScene->Draw();
+		}
+		m_commonScene->Draw();
+
+		//===========================================================
+		// 2Pカメラの描画
+
+		CameraManager::CameraScreenDivisionDraw(screenHalfX, screenBeingY, screenHalfX, screenHeight, 1);
+
+		DrawBefore();
+
+		if (m_currentScene != nullptr) {
+			m_currentScene->Draw();
+		}
+		m_commonScene->Draw();
+
+		//===========================================================
+		// 画面分割処を初期化
+
+		CameraManager::CameraScreenDivision(0, 0, screenWidth, screenHeight);
+	}
 }
 
 void SceneManager::Release()

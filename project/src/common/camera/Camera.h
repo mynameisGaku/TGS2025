@@ -79,7 +79,7 @@ public:
 	/// </summary>
 	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
 	/// </param>
-	void OperationByStick(int type = -1);
+	void OperationByStick(int padNumber, int type = -1);
 
 	//================================================================================
 	// ▼セッター
@@ -90,16 +90,22 @@ public:
 	/// <param name="_offset">相対座標</param>
 	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
 
+	inline void SetOffsetAfter(const Vector3& _offset) { offsetAfter = _offset; }
+
 	/// <summary>
 	/// 注視点を設定する
 	/// </summary>
 	/// <param name="_target">注視点を設定する</param>
 	inline void SetTarget(const Vector3& _target) { target = _target; }
 
+	inline void SetTargetAfter(const Vector3& _target) { targetAfter = _target; }
+
 	/// <summary>
 	/// 保有者を設定する
 	/// </summary>
 	inline void SetHolderTrs(const Transform* trs) { holder = trs; }
+
+	inline void SetIsView(bool view) { isView = view; }
 
 	/// <summary>
 	/// クラスを基に保有者を設定する
@@ -190,7 +196,9 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
-	const CharaBase* TargetChara() const { return targetChara; }
+	const CharaBase* TargetChara() const { return m_TargetChara; }
+
+	inline bool IsView() const { return isView; }
 
 	//================================================================================
 	// ▼ステート
@@ -211,20 +219,29 @@ public:
 	void AimState(FSMSignal sig);
 
 private:
+
+	void UpdateOffsetLeap();
+	void UpdateTargetLeap();
+
+	void DrawVirtualCamera();
+
 	//================================================================================
 	// ▼メンバ変数
 
 	TinyFSM<Camera>* fsm;
 
 	Vector3 offset;		// カメラの相対座標
-	Vector3 offsetPrev;	// 一つ前のカメラの相対座標
+	Vector3 offsetAfter;// 補間先のカメラの相対座標
 	Vector3 target;		// カメラの注視点
-	Vector3 targetPrev;	// 一つ前のカメラの注視点
+	Vector3 targetAfter;// 補間先のカメラの注視点
 	ColDefine::Cone cameraCone;
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報
 	int m_CharaIndex;			// キャラクターの番号
+	float m_TargetTransitionTime;
+	bool isView;
+	bool drawFlag;
 
-	const CharaBase* targetChara;
+	const CharaBase* m_TargetChara;
 };

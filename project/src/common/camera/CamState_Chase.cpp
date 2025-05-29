@@ -4,7 +4,7 @@
 
 // ◇汎用
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
+#include "src/util/math/MathUtils.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
@@ -40,7 +40,7 @@ void Camera::ChaseState(FSMSignal sig)
 			m_TargetTransitionTime = 0.0f;
 
 		OperationByMouse();
-		OperationByStick();
+		OperationByStick(m_CharaIndex + 1);
 
 		// キャラクターの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
@@ -56,16 +56,16 @@ void Camera::ChaseState(FSMSignal sig)
 		const Transform charaTrs = chara->transform->Global();
 
 		// カメラの相対座標を設定
-		SetOffset_Leap(CAMERADEFINE_REF.m_OffsetChase);
+		SetOffsetAfter(CAMERADEFINE_REF.m_OffsetChase);
 
 		// カメラの注視点を設定
-		SetTarget_Leap(CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix());
+		SetTargetAfter(CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix());
 		
 		// カメラ座標と追従するキャラの座標を一致させる
 		transform->position = charaTrs.position;
 
-		Math::Clamp_Assing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
-		Function::RotLimit(&transform->rotation.y);
+		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		MathUtil::RotLimit(&transform->rotation.y);
 
 		// 注視するキャラ
 		m_TargetChara = charaM->TargetChara(m_CharaIndex);

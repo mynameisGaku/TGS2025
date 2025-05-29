@@ -4,7 +4,7 @@
 
 // ◇汎用
 #include "src/util/time/GameTime.h"
-#include "src/util/Utils.h"
+#include "src/util/math/MathUtils.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
@@ -66,23 +66,23 @@ void Camera::AimState(FSMSignal sig)
 		transform->position = charaTrs.position;
 
 		// カメラの相対座標を設定
-		SetOffset_Leap(CAMERADEFINE_REF.m_OffsetAim);
+		SetOffsetAfter(CAMERADEFINE_REF.m_OffsetAim);
 
 		// カメラの注視点を設定
-		SetTarget_Leap(targetPos);
+		SetTargetAfter(targetPos);
 
 		const float TARGET_DIR = targetPos.Direction(transform->Global().position);	// カメラから注視キャラへの角度
-		const float ROT_X = Math::DegToRad(-20.0f);			// カメラのX軸回転値
+		const float ROT_X = MathUtil::ToRadians(-20.0f);			// カメラのX軸回転値
 		float diffRot = TARGET_DIR - transform->rotation.y;	// 現在の向きと注視キャラへの角度の差異
 
 		// 回転角度に制限をかける
-		Function::RotLimit(&diffRot);
+		MathUtil::RotLimit(&diffRot);
 
 		transform->rotation.x += (ROT_X - transform->rotation.x) * 0.1f;
 		transform->rotation.y += diffRot * 0.1f;
 
 		// 回転角度に制限をかける
-		Function::RotLimit(&transform->rotation.y);
+		MathUtil::RotLimit(&transform->rotation.y);
 
 		// カメラとキャラの向きを揃える
 		//chara->transform->rotation.y = transform->rotation.y;

@@ -33,11 +33,14 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
+	CameraManager::SetIsScreenDivision(true);
 	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
+	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
 }
 
 PlayScene::~PlayScene()
 {
+	CameraManager::SetIsScreenDivision(false);
 }
 
 void PlayScene::Update()
@@ -57,6 +60,7 @@ void PlayScene::Draw()
 	EffectManager::Draw();
 	m_BloomManager->SetDrawScreenToBack();
 
+	CameraManager::ApplyScreenDivision();
 	SceneBase::Draw();
 
 	DrawSphere3D(Vector3(0, 150, 1000), 50, 32, 0xffffff, 0x001fff, true);

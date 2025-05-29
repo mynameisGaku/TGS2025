@@ -56,11 +56,11 @@ void SceneManager::Draw()
 		int screenBeingX = 0;
 		int screenBeingY = 0;
 
-		int screenWidth = WindowSetting::Inst().width;
-		int screenHeight = WindowSetting::Inst().height;
+		int screenWidth = (int)WindowSetting::Inst().width;
+		int screenHeight = (int)WindowSetting::Inst().height;
 
-		int screenHalfX = WindowSetting::Inst().width_half;
-		int screenHalfY = WindowSetting::Inst().height;
+		int screenHalfX = (int)WindowSetting::Inst().width_half;
+		int screenHalfY = (int)WindowSetting::Inst().height;
 
 		//===========================================================
 		// 1PƒJƒƒ‰‚Ì•`‰æ

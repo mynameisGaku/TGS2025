@@ -35,7 +35,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	CameraManager::SetIsScreenDivision(true);
+	CameraManager::SetIsScreenDivision(false);
 	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
 	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
 }
@@ -62,11 +62,15 @@ void PlayScene::Draw()
 	EffectManager::Draw();
 	m_BloomManager->SetDrawScreenToBack();
 
-	CameraManager::ApplyScreenDivision();
-	SceneBase::Draw();
-
+	if (CameraManager::IsScreenDivision())
+		CameraManager::ApplyScreenDivision();
+	
 	DrawSphere3D(Vector3(0, 150, 1000), 50, 32, 0xffffff, 0x001fff, true);
 
-	Settings_json::Inst()->RenderImGuiFileManager();
+	SceneBase::Draw();
+
+	if (not CameraManager::IsScreenDivision())
+		Settings_json::Inst()->RenderImGuiFileManager();
+
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 }

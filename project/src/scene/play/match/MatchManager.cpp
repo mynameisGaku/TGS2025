@@ -21,6 +21,8 @@
 #include "src/scene/play/ball/Ball.h"
 #include <src/util/string/StringUtil.h>
 
+//=== ƒJƒƒ‰ ===
+#include "src/common/camera/CameraManager.h"
 
 //-----------------------------------------
 //  CurrentGameData
@@ -116,7 +118,8 @@ void MatchManager::Update()
 
 void MatchManager::Draw()
 {
-    m_pFsm->ImGuiDebugRender();
+    if (not CameraManager::IsScreenDivision())
+        m_pFsm->ImGuiDebugRender();
 }
 
 void MatchManager::init()

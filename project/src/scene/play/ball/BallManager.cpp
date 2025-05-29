@@ -7,6 +7,8 @@
 #include "vendor/nlohmann/json.hpp"
 #include <fstream>
 
+#include "src/common/camera/CameraManager.h"
+
 const std::string BallManager::FOLDER_TEXTURE = "data/Img/BallTexture/";
 const std::string BallManager::FOLDER_JSON = "data/Json/Ball/Texture/";
 
@@ -94,6 +96,9 @@ void BallManager::Update()
 
 void BallManager::Draw()
 {
+	if (CameraManager::IsScreenDivision())
+		return;
+
 	m_pPool->PoolImGuiRendererBegin("ball pool debug");
 
 	ImGui::Text(("Capacity: " + std::to_string(m_pPool->GetCapacity())).c_str());

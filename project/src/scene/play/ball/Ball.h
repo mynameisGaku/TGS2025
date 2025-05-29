@@ -65,6 +65,8 @@ public:
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
 	void SetTexture(const BallTexture& texture);
+
+	void SetTrailImage(int hImage);
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -80,6 +82,7 @@ private:
 	float				m_LifeTime;
 	float				m_LifeTimeMax;
 	float				m_AlphaRate;
+	int					m_hTrailImage;
 	bool				m_IsActive;
 
 	// ホーミング系

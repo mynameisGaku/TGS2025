@@ -6,38 +6,37 @@
 
 void Trail3D::Init(int texHandle, float lifetime, float width)
 {
-    textureHandle = texHandle;
-    maxLifeTime = lifetime;
-    trailWidth = width;
-    points.clear();
+    m_TextureHandle = texHandle;
+    m_MaxLifeTime = lifetime;
+    m_TrailWidth = width;
+    m_Points.clear();
 }
-
 
 void Trail3D::Add(const Vector3& pos)
 {
-    const float MIN_SEGMENT_LENGTH = trailWidth * 0.5f;
-    if (points.empty() || VSize(VSub(pos, points.back().position)) >= MIN_SEGMENT_LENGTH)
+    const float MIN_SEGMENT_LENGTH = m_TrailWidth * 0.5f;
+    if (m_Points.empty() || VSize(VSub(pos, m_Points.back().position)) >= MIN_SEGMENT_LENGTH)
     {
-        points.push_back({ pos, 0.0f });
+        m_Points.push_back({ pos, 0.0f });
     }
 }
 
 void Trail3D::Update()
 {
     float dt = GameTime::DeltaTime();
-    for (auto& pt : points)
+    for (auto& pt : m_Points)
     {
         pt.timeAlive += dt;
     }
-    while (!points.empty() && points.front().timeAlive > maxLifeTime)
+    while (!m_Points.empty() && m_Points.front().timeAlive > m_MaxLifeTime)
     {
-        points.pop_front();
+        m_Points.pop_front();
     }
 }
 
 void Trail3D::Draw()
 {
-    if (points.size() < 4 || textureHandle == -1)
+    if (m_Points.size() < 4 || m_TextureHandle == -1)
     {
         return;
     }
@@ -50,7 +49,7 @@ void Trail3D::Draw()
 
     auto CalcAlpha = [&](float timeAlive) -> float
         {
-            float t = timeAlive / maxLifeTime;
+            float t = timeAlive / m_MaxLifeTime;
             float eased = 1.0f - t;
             float alpha = eased * eased;
             return alpha * 255.0f;
@@ -58,12 +57,12 @@ void Trail3D::Draw()
 
     const int subdivs = 16; // 補間分割数（大きいほど滑らか）
 
-    for (size_t i = 1; i + 2 < points.size(); ++i)
+    for (size_t i = 1; i + 2 < m_Points.size(); ++i)
     {
-        const TrailPoint& p0 = points[i - 1];
-        const TrailPoint& p1 = points[i];
-        const TrailPoint& p2 = points[i + 1];
-        const TrailPoint& p3 = points[i + 2];
+        const TrailPoint& p0 = m_Points[i - 1];
+        const TrailPoint& p1 = m_Points[i];
+        const TrailPoint& p2 = m_Points[i + 1];
+        const TrailPoint& p3 = m_Points[i + 2];
 
         for (int j = 0; j < subdivs; ++j)
         {
@@ -91,10 +90,24 @@ void Trail3D::Draw()
     SetWriteZBuffer3D(TRUE);
 }
 
+void Trail3D::Deactive()
+{
+    // すべてのトレイルを削除する
+    while(m_Points.size() > 0)
+    {
+        m_Points.pop_front();
+    }
+}
+
+bool Trail3D::IsActive()
+{
+    return m_Points.size() > 0;
+}
+
 void Trail3D::DrawTrailSegment(const VECTOR& pos1, const VECTOR& pos2, float t1, float t2, const VECTOR& sideAxis, float alpha1, float alpha2)
 {
-    float width1 = trailWidth * (1.0f - t1 / maxLifeTime);
-    float width2 = trailWidth * (1.0f - t2 / maxLifeTime);
+    float width1 = m_TrailWidth * (1.0f - t1 / m_MaxLifeTime);
+    float width2 = m_TrailWidth * (1.0f - t2 / m_MaxLifeTime);
 
     VECTOR side1 = VScale(sideAxis, width1 * 0.5f);
     VECTOR side2 = VScale(sideAxis, width2 * 0.5f);
@@ -115,5 +128,5 @@ void Trail3D::DrawTrailSegment(const VECTOR& pos1, const VECTOR& pos2, float t1,
     verts[4] = verts[2];
     verts[5] = { a2, VGet(0, 0, 0), col1, col1, 0, 1, 0, 0 };
 
-    DrawPolygon3D(verts, 2, textureHandle, TRUE);
+    DrawPolygon3D(verts, 2, m_TextureHandle, TRUE);
 }

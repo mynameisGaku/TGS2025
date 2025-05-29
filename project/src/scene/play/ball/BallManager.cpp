@@ -17,12 +17,21 @@ BallManager::BallManager()
 
 	BALL_REF.Load();
 
+	m_hTrails["Green"] = LoadGraph("data/img/trail/Trail_Green.png");
+
 	m_pPool = new Pool<Ball>(BALL_REF.Max);
 }
 
 BallManager::~BallManager()
 {
 #ifdef USE_POOL
+
+	for (auto& it : m_hTrails)
+	{
+		DeleteGraph(it.second);
+	}
+	m_hTrails.clear();
+
 	for (auto& item : m_pPool->GetAllItems())
 	{
 		if (item == nullptr)
@@ -133,6 +142,9 @@ Ball* BallManager::CreateBall(const Vector3& position)
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
 	obj->transform->position = position;
+
+	// チームに合わせてトレイルカラー変更
+	obj->SetTrailImage(m_hTrails["Green"]);
 
 	obj->SetModel(m_Model);
 	// テスト用 テクスチャをランダムで選択

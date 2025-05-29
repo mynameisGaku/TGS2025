@@ -463,7 +463,7 @@ void CharaBase::SetBall(Ball* ball)
 
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
-	m_pBall->Init(m_CharaTag);
+	m_pBall->Reset(m_CharaTag);
 
 	m_IsCharging = false;
 }

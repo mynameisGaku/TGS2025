@@ -18,6 +18,9 @@
 //=== 進行役 ===
 #include "src/scene/play/match/MatchManager.h"
 
+//=== ボール ===
+#include "src/scene/play/ball/BallSpawner.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
@@ -30,6 +33,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	Instantiate<CollisionManager>();
 
 	Instantiate<MatchManager>();
+
+	BallSpawnerPlaceByJson("data/Json/Ball/BallSpawner.json", "BallSpawner");
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();

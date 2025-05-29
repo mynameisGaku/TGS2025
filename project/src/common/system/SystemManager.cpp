@@ -21,6 +21,8 @@
 #include "src/common/stage/StageObjectManager.h"
 #include "src/util/ui/UI_Manager.h"
 
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+
 // ŒÂ•Ê‚Å•K—v‚È•¨
 #include <iostream>
 #include <fstream>
@@ -108,8 +110,6 @@ void SystemManager::Draw() {
 
 	if (isLoading)
 		return;
-
-	EffectManager::Draw();
 
 	UI_Manager::DrawBack();
 

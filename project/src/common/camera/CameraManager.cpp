@@ -213,6 +213,16 @@ bool CameraManager::IsScreenDivision()
 	return isScreenDivision;
 }
 
+Vector2 CameraManager::GetScreenDivisionPos() {
+
+	return Vector2(screenDivBeginX, screenDivBeginY);
+}
+
+Vector2 CameraManager::GetScreenDivisionSize() {
+
+	return Vector2(screenDivWidth, screenDivHeight);
+}
+
 #ifdef IMGUI
 
 void CameraManager::InitImGuiNode() {
@@ -331,6 +341,18 @@ void CameraManager::InitImGuiNode() {
 
 		CSTN->Add(new ImGuiNode_Button("Reset", std::bind(ResetCamera, i)));
 	}
+
+	CameraTree->Add(new ImGuiNode_Button("Reset All", []() {
+		if (cameras == nullptr)
+			return;
+		for (int i = 0; i < cameras->size(); i++) {
+			(*cameras)[i]->Reset();
+		}
+	}
+	)
+	);
+
+	CameraTree->Add(new ImGuiNode_CheckBox("ScreenDivision", &isScreenDivision));
 }
 
 void CameraManager::UpdateImGuiNode() {

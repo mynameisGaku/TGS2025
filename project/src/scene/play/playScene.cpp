@@ -35,7 +35,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	CameraManager::SetIsScreenDivision(true);
+	CameraManager::SetIsScreenDivision(false);
 	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
 	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
 }
@@ -58,9 +58,9 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	// ToDo:ƒŒƒCƒ„[ŠÇ—
-	m_BloomManager->SetDrawScreenToEmitter();
+	//m_BloomManager->SetDrawScreenToEmitter();
 	EffectManager::Draw();
-	m_BloomManager->SetDrawScreenToBack();
+	//m_BloomManager->SetDrawScreenToBack();
 
 	if (CameraManager::IsScreenDivision())
 		CameraManager::ApplyScreenDivision();

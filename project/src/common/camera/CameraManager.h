@@ -108,6 +108,10 @@ namespace CameraManager {
 	/// </summary>
 	bool IsScreenDivision();
 
+	Vector2 GetScreenDivisionPos();
+
+	Vector2 GetScreenDivisionSize();
+
 	//================================================================================
 	// ▼デバッグ機能
 

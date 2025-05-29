@@ -4,7 +4,7 @@
 
 // ”Ä—p
 #include "src/util/time/GameTime.h"
-#include "src/util/math/MathUtils.h"
+#include "src/util/math/MathUtil.h"
 
 // ŒÂ•Ê‚Å•K—v‚È•¨
 #include "src/util/input/InputManager.h"

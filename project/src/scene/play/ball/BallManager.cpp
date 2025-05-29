@@ -105,8 +105,8 @@ void BallManager::Update()
 
 void BallManager::Draw()
 {
-	/*if (CameraManager::IsScreenDivision())
-		return;*/
+	if (CameraManager::IsScreenDivision())
+		return;
 
 	m_pPool->PoolImGuiRendererBegin("ball pool debug");
 

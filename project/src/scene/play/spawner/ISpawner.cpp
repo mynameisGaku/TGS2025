@@ -92,7 +92,10 @@ void ISpawner::Spawn(int spawnAmount)
 void ISpawner::Draw()
 {
 #if TRUE
-    DrawSphere3D(m_Desc.SPAWNER_POSITION, 50.0f, 4, 0xffffff, 0x000000, false);
+    if(m_SpawnIntervalSec > 0)
+        DrawSphere3D(m_Desc.SPAWNER_POSITION, 50.0f, 4, 0x00ff00, 0x000000, false);
+    else
+        DrawSphere3D(m_Desc.SPAWNER_POSITION, 50.0f, 4, 0xff0000, 0x000000, false);
 #endif
 }
 

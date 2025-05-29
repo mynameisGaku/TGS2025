@@ -7,7 +7,7 @@
 #include "src/common/camera/CameraManager.h"
 #include "src/scene/play/chara/CharaBase.h"
 #include "src/util/fsm/StateManager.h"
-
+#include "src/util/math/Vector3.h"
 #include "src/common/component/physics/Physics.h"
 
 PlayerController::PlayerController() {
@@ -32,15 +32,17 @@ void PlayerController::Update() {
 	////////////////////////////////////////////////////
 	// ボール投げる処理
 
-	if (not chara->IsHoldingBall())
-	{
-		// 生成禁止
-		/*if (InputManager::Push("Throw", padNumber))
-		{
-			chara->GenerateBall();
-		}*/
-	}
-	else
+	// 生成禁止
+	//if (not chara->IsHoldingBall())
+	//{
+	//	/*if (InputManager::Push("Throw", padNumber))
+	//	{
+	//		chara->GenerateBall();
+	//	}*/
+	//}
+	//else
+
+	if(chara->CanThrow() && chara->IsHoldingBall())
 	{
 		if (not chara->IsChargingBall())
 		{
@@ -66,14 +68,16 @@ void PlayerController::Update() {
 	// 吸引キャッチ処理
 	if (InputManager::Hold("Catch", padNumber))
 	{
-		chara->Catch();
+		if (chara->CanCatch())
+			chara->Catch();
 	}
 
 	////////////////////////////////////////////////////
 	// ジャンプ処理
 	if (InputManager::Push("Jump", padNumber))
 	{
-		chara->Jump();
+		if (chara->CanMove() && not chara->IsJumping())
+			chara->Jump();
 	}
 
 	////////////////////////////////////////////////////
@@ -100,7 +104,8 @@ void PlayerController::Update() {
 	Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
 	if (stick.GetLengthSquared() > 0.0f)
 	{
-		chara->Move(stick);
+		if (chara->CanMove())
+			chara->Move(stick);
 	}
 }
 

@@ -70,8 +70,6 @@ void PlayScene::Draw()
 	if (CameraManager::IsScreenDivision())
 		CameraManager::ApplyScreenDivision();
 	
-	DrawSphere3D(Vector3(0, 150, 1000), 50, 32, 0xffffff, 0x001fff, true);
-
 	SceneBase::Draw();
 
 	if (not CameraManager::IsScreenDivision())

@@ -178,6 +178,27 @@ public:
 	/// </summary>
 	inline StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
 
+	// ボールをチャージしているかどうか
+	inline bool	IsCharging()	const { return m_IsCharging;}			
+	// 着地中
+	inline bool	IsLanding()		const { return m_IsLanding;}			
+	// 移動可能か
+	inline bool	CanMove()		const { return m_CanMove;}				
+	// 回転可能か
+	inline bool	CanRot()		const { return m_CanRot;}				
+	// 移動しようとしているか
+	inline bool	IsMove()		const { return m_IsMove;}				
+	// ジャンプ中か
+	inline bool	IsJumping()		const { return m_IsJumping;}			
+	// キャッチ可能か
+	inline bool	CanCatch()		const { return m_CanCatch;}				
+	// ボールを持てるか
+	inline bool	CanHold()		const { return m_CanHold;}				
+	// ボールを投げられるか
+	inline bool	CanThrow()		const { return m_CanThrow;}				
+	// キャッチ中か
+	inline bool	IsCatching()	const { return m_IsCatching;}			
+
 	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);

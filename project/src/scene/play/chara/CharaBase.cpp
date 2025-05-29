@@ -881,6 +881,10 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("DamageToDown");
+
+		m_CanCatch	= false;
+		m_CanMove	= false;
+		m_CanRot	= false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -897,6 +901,9 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanCatch	= true;
+		m_CanMove	= true;
+		m_CanRot	= true;
 	}
 	break;
 	}

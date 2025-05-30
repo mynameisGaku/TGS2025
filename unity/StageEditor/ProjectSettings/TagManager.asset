@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - ttttt
+  - BallSpawner
+  - CharaSpawnPoint
+  - CharaSpawner
   layers:
   - Default
   - TransparentFX

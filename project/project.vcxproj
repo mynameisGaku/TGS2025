@@ -330,6 +330,7 @@
     <ClCompile Include="src\scene\play\chara\CharaBase.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaManager.cpp" />
+    <ClCompile Include="src\scene\play\chara\CharaSpawnPoint.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaStamina.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragment.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentManager.cpp" />
@@ -494,6 +495,7 @@
     <ClInclude Include="src\scene\play\chara\CharaBase.h" />
     <ClInclude Include="src\scene\play\chara\CharaHP.h" />
     <ClInclude Include="src\scene\play\chara\CharaManager.h" />
+    <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h" />
     <ClInclude Include="src\scene\play\chara\CharaStamina.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragment.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentManager.h" />
@@ -501,7 +503,7 @@
     <ClInclude Include="src\scene\play\match\MatchManager.h" />
     <ClInclude Include="src\scene\play\playScene.h" />
     <ClInclude Include="src\scene\play\spawner\ISpawner.h" />
-    <ClInclude Include="src\scene\play\spawner\SpawnerDesc.h" />
+    <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h" />
     <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />

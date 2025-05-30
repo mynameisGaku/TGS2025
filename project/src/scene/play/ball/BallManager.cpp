@@ -127,7 +127,7 @@ void BallManager::Draw()
 	m_pPool->PoolImguiRendererEnd();
 }
 
-Ball* BallManager::CreateBall(const Vector3& position)
+Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 {
 
 	auto& ref = BALL_REF;
@@ -146,6 +146,11 @@ Ball* BallManager::CreateBall(const Vector3& position)
 	uint32_t index = m_pPool->GetIndex();
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
+	if (isSpawn)
+	{
+		obj->Spawn();
+	}
+
 	obj->transform->position = position;
 
 	// チームに合わせてトレイルカラー変更

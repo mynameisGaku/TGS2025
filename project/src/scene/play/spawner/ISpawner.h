@@ -10,19 +10,20 @@
 class ISpawner : public GameObject
 {
 public:
-    ISpawner(const SPAWNER_DESC& desc = {});
+    ISpawner();
     ~ISpawner();
 
+    void Init(const SPAWNER_DESC& desc);
     virtual void Start() override;
     virtual void Update() override;
     virtual void Draw() override;
+    // 生成処理を実行。実装は派生クラスで行う。
+    virtual void OnSpawn(const Vector3& pos) {}
 
     // Spawnerの有効化
     void Activate() { m_IsActive = true; }
     // Spawnerの無効化
     void Deactivate() { m_IsActive = false; }
-    // 生成処理を実行。実装は派生クラスで行う。
-    virtual void OnSpawn(const Vector3& pos) {}
 
     // 生成間隔を進める
     void IntervalProcess();

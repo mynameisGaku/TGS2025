@@ -75,8 +75,14 @@ void Trail3D::Draw()
             float time1 = MathUtil::Lerp(p1.timeAlive, p2.timeAlive, t1);
             float time2 = MathUtil::Lerp(p1.timeAlive, p2.timeAlive, t2);
 
-            float alpha1 = CalcAlpha(time1);
-            float alpha2 = CalcAlpha(time2);
+            /*float alpha1 = CalcAlpha(time1);
+            float alpha2 = CalcAlpha(time2);*/
+            float alpha1 = 255.0f;
+            float alpha2 = 255.0f; 
+            if (p1.timeAlive <= m_MaxLifeTime * 0.1f)
+                alpha1 = EasingFunc::OutQuint<int>(time1, m_MaxLifeTime, 255, 0);
+            if (p2.timeAlive <= m_MaxLifeTime * 0.1f)
+                alpha2 = EasingFunc::OutQuint<int>(time2, m_MaxLifeTime, 255, 0);
 
             VECTOR dir = VSub(pos2, pos1);
             VECTOR viewVec = VSub(camPos, pos1);

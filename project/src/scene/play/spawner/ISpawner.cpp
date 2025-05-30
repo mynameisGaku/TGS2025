@@ -3,8 +3,8 @@
 #include "src/util/math/MathUtil.h"
 #include "src/util/math/Random.h"
 
-ISpawner::ISpawner(const SPAWNER_DESC& desc)
-    : m_Desc(desc)
+ISpawner::ISpawner()
+    : m_Desc({})
     , m_SpawnIntervalSec(0.0f)
     , m_IsActive(false)
 {
@@ -12,6 +12,11 @@ ISpawner::ISpawner(const SPAWNER_DESC& desc)
 
 ISpawner::~ISpawner()
 {
+}
+
+void ISpawner::Init(const SPAWNER_DESC& desc)
+{
+    m_Desc = desc;
 }
 
 void ISpawner::Start()
@@ -45,8 +50,18 @@ bool ISpawner::GenerateProcess()
         }
     }
 
+    int spawnAmount = 0;
+
     // ˆê“x‚É¶¬‚·‚é”‚ðƒ‰ƒ“ƒ_ƒ€‚ÉŒˆ’è
-    int spawnAmount = Random.GetIntRange(m_Desc.SPAWN_AMOUNT_ONCE_MIN, m_Desc.SPAWN_AMOUNT_ONCE_MAX + m_Desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE);
+    if (m_Desc.SPAWN_AMOUNT_ONCE_MIN == 1 &&
+        m_Desc.SPAWN_AMOUNT_ONCE_MAX == 1)
+    {
+        spawnAmount = 1;
+    }
+    else
+    {
+        spawnAmount = Random.GetIntRange(m_Desc.SPAWN_AMOUNT_ONCE_MIN, m_Desc.SPAWN_AMOUNT_ONCE_MAX + m_Desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE);
+    }
 
     // •¦‚©‚·
     Spawn(spawnAmount);
@@ -77,7 +92,10 @@ void ISpawner::Spawn(int spawnAmount)
 void ISpawner::Draw()
 {
 #if TRUE
-    DrawSphere3D(m_Desc.SPAWNER_POSITION, 50.0f, 64, 0xffffff, 0x000000, false);
+    if(m_SpawnIntervalSec > 0)
+        DrawSphere3D(m_Desc.SPAWNER_POSITION, 50.0f, 4, 0x00ff00, 0x000000, false);
+    else
+        DrawSphere3D(m_Desc.SPAWNER_POSITION, 50.0f, 4, 0xff0000, 0x000000, false);
 #endif
 }
 

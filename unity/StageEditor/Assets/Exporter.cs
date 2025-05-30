@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class SceneExporterWindow : EditorWindow
 {
@@ -32,6 +33,9 @@ public class SceneExporterWindow : EditorWindow
             if (!obj.activeInHierarchy || obj.transform.parent != null)
                 continue;
 
+            if (obj.gameObject.name == "Main Camera" || obj.gameObject.name == "Directional Light")
+                continue;
+
             var mesh = obj.GetComponent<MeshFilter>()?.sharedMesh;
             string meshName = mesh != null
                 ? Regex.Replace(mesh.name, @"\s*\([^\)]*\)", "")
@@ -40,6 +44,7 @@ public class SceneExporterWindow : EditorWindow
             editableObjects.Add(new EditableObject
             {
                 GameObject = obj,
+                Tag = obj.tag,
                 Export = true,
                 CustomMeshName = meshName,
                 IsCollision = obj.GetComponent<Collider>() != null
@@ -60,10 +65,16 @@ public class SceneExporterWindow : EditorWindow
         GUILayout.Label("エクスポート対象オブジェクト:");
         scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Height(300));
 
+        string[] tags = UnityEditorInternal.InternalEditorUtility.tags;
+
         foreach (var item in editableObjects)
         {
             GUILayout.BeginVertical("box");
-            item.Export = GUILayout.Toggle(item.Export, $"エクスポート: {item.GameObject.name}");
+            item.Export = GUILayout.Toggle(item.Export, $"エクスポートする: {item.GameObject.name}");
+            item.tagIndex = EditorGUILayout.Popup(item.tagIndex, tags);
+            if (GUILayout.Button("SetTag"))
+                item.Tag = tags[item.tagIndex];
+            GUILayout.Label($"タグ:, {item.Tag}");
             item.CustomMeshName = EditorGUILayout.TextField("メッシュ名", item.CustomMeshName);
             item.IsCollision = EditorGUILayout.Toggle("衝突判定", item.IsCollision);
             GUILayout.EndVertical();
@@ -106,6 +117,7 @@ public class SceneExporterWindow : EditorWindow
             {
                 Name = obj.name,
                 Type = item.CustomMeshName,
+                Tag = obj.tag,
                 Position = new SimpleVector3(obj.transform.position * 100.0f),
                 Rotation = new SimpleVector3(obj.transform.eulerAngles * Mathf.Deg2Rad),
                 Scale = new SimpleVector3(obj.transform.localScale),
@@ -138,6 +150,7 @@ public class SceneExporterWindow : EditorWindow
     {
         public string Name;
         public string Type;
+        public string Tag;
         public SimpleVector3 Position;
         public SimpleVector3 Rotation;
         public SimpleVector3 Scale;
@@ -155,6 +168,8 @@ public class SceneExporterWindow : EditorWindow
         public GameObject GameObject;
         public bool Export;
         public string CustomMeshName;
+        public string Tag;
         public bool IsCollision;
+        public int tagIndex;
     }
 }

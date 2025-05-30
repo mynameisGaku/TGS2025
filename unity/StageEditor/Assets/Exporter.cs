@@ -43,7 +43,7 @@ public class SceneExporterWindow : EditorWindow
                 mesh = meshFilter.sharedMesh;
             }
 
-            CharaSpawnerDesc charaSpawnerDesc = null;
+            CharaSpawnPointDesc charaSpawnerDesc = null;
             BallSpawnerDesc ballSpawnerDesc = null;
 
             string meshName = "";
@@ -56,10 +56,10 @@ public class SceneExporterWindow : EditorWindow
                 if (obj.tag == "CharaSpawnPoint")
                 {
                     meshName = "CharaSpawnPoint";
-                    charaSpawnerDesc = obj.gameObject.GetComponent<CharaSpawnerDesc>();
+                    charaSpawnerDesc = obj.gameObject.GetComponent<CharaSpawnPointDesc>();
                     if (charaSpawnerDesc == null)
                     {
-                        charaSpawnerDesc = obj.AddComponent<CharaSpawnerDesc>();
+                        charaSpawnerDesc = obj.AddComponent<CharaSpawnPointDesc>();
                     }
                 }
                 else if (obj.tag == "BallSpawner")
@@ -82,7 +82,7 @@ public class SceneExporterWindow : EditorWindow
                 GameObject = obj,
                 Tag = obj.tag,
                 Export = true,
-                CharaSpawnerDesc = charaSpawnerDesc,
+                CharaSpawnPointDesc = charaSpawnerDesc,
                 BallSpawnerDesc = ballSpawnerDesc,
                 CustomMeshName = meshName,
                 IsCollision = obj.GetComponent<Collider>() != null
@@ -155,7 +155,7 @@ public class SceneExporterWindow : EditorWindow
                 Position = new SimpleVector3(obj.transform.position * 100.0f),
                 Rotation = new SimpleVector3(obj.transform.eulerAngles * Mathf.Deg2Rad),
                 Scale = new SimpleVector3(obj.transform.localScale),
-                CharaSpawnerDesc = item.CharaSpawnerDesc != null ? new CharaSpawnerData(item.CharaSpawnerDesc) : null,
+                CharaSpawnPointDesc = item.CharaSpawnPointDesc != null ? new CharaSpawnPointData(item.CharaSpawnPointDesc) : null,
                 BallSpawnerDesc = item.BallSpawnerDesc != null ? new BallSpawnerData(item.BallSpawnerDesc) : null,
                 IsCollision = item.IsCollision
             };
@@ -181,17 +181,15 @@ public class SceneExporterWindow : EditorWindow
     }
 
     [System.Serializable]
-    public class CharaSpawnerData
+    public class CharaSpawnPointData
     {
-        public SimpleVector3 SPAWN_FIRST_VELOCITY;
+        public SimpleVector3 SPAWN_INITIAL_VELOCITY;
         public SimpleVector3 SPAWNER_POSITION;
         public string SPAWNER_NAME;
 
-        public CharaSpawnerData(CharaSpawnerDesc desc)
+        public CharaSpawnPointData(CharaSpawnPointDesc desc)
         {
-            SPAWN_FIRST_VELOCITY = new SimpleVector3(desc.SPAWN_FIRST_VELOCITY);
-            SPAWNER_POSITION = new SimpleVector3(desc.SPAWNER_POSITION);
-            SPAWNER_NAME = desc.SPAWNER_NAME;
+            SPAWN_INITIAL_VELOCITY = new SimpleVector3(desc.SPAWN_INITIAL_VELOCITY);
         }
     }
 
@@ -205,9 +203,7 @@ public class SceneExporterWindow : EditorWindow
         public int SPAWN_AMOUNT_ONCE_RANDOM_RANGE;
         public int SPAWN_AMOUNT_INITIAL;
         public SimpleVector3 SPAWN_RANGE;
-        public SimpleVector3 SPAWN_FIRST_VELOCITY;
-        public SimpleVector3 SPAWNER_POSITION;
-        public string SPAWNER_NAME;
+        public SimpleVector3 SPAWN_INITIAL_VELOCITY;
 
         public BallSpawnerData(BallSpawnerDesc desc)
         {
@@ -218,9 +214,7 @@ public class SceneExporterWindow : EditorWindow
             SPAWN_AMOUNT_ONCE_RANDOM_RANGE = desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE;
             SPAWN_AMOUNT_INITIAL = desc.SPAWN_AMOUNT_INITIAL;
             SPAWN_RANGE = new SimpleVector3(desc.SPAWN_RANGE);
-            SPAWN_FIRST_VELOCITY = new SimpleVector3(desc.SPAWN_FIRST_VELOCITY);
-            SPAWNER_POSITION = new SimpleVector3(desc.SPAWNER_POSITION);
-            SPAWNER_NAME = desc.SPAWNER_NAME;
+            SPAWN_INITIAL_VELOCITY = new SimpleVector3(desc.SPAWN_INITIAL_VELOCITY);
         }
     }
 
@@ -233,7 +227,7 @@ public class SceneExporterWindow : EditorWindow
         public SimpleVector3 Position;
         public SimpleVector3 Rotation;
         public SimpleVector3 Scale;
-        public CharaSpawnerData CharaSpawnerDesc;
+        public CharaSpawnPointData CharaSpawnPointDesc;
         public BallSpawnerData BallSpawnerDesc;
         public bool IsCollision;
     }
@@ -248,7 +242,7 @@ public class SceneExporterWindow : EditorWindow
     {
         public GameObject GameObject;
         public bool Export;
-        public CharaSpawnerDesc CharaSpawnerDesc;
+        public CharaSpawnPointDesc CharaSpawnPointDesc;
         public BallSpawnerDesc BallSpawnerDesc;
         public string CustomMeshName;
         public string Tag;

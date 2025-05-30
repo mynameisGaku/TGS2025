@@ -1175,9 +1175,6 @@
     <ClCompile Include="src\util\math\MathUtil.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\spawner\ISpawner.cpp">
-      <Filter>src%28application%29\scene\play\spawner</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp">
       <Filter>src%28application%29\scene\play\status_tracker</Filter>
     </ClCompile>
@@ -1186,6 +1183,9 @@
     </ClCompile>
     <ClCompile Include="src\util\fx\post_effect\bloom\cameraBloom.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaSpawnPoint.cpp">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaSpawnPointManager.cpp">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1874,9 +1874,6 @@
     <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h">
       <Filter>src%28application%29\scene\play\spawner</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\spawner\ISpawner.h">
-      <Filter>src%28application%29\scene\play\spawner</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h">
       <Filter>src%28application%29\scene\play\status_tracker</Filter>
     </ClInclude>
@@ -1885,6 +1882,9 @@
     </ClInclude>
     <ClInclude Include="src\util\fx\post_effect\bloom\cameraBloom.h" />
     <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaSpawnPointManager.h">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClInclude>
   </ItemGroup>

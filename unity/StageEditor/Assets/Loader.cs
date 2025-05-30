@@ -94,12 +94,10 @@ public class SceneImporterWindow : EditorWindow
             }
 
             // --- DescŒn‚Ì•œŒ³ ---
-            if (objData.CharaSpawnerDesc != null)
+            if (objData.CharaSpawnPoint != null)
             {
-                var charaComp = go.GetComponent<CharaSpawnerDesc>() ?? go.AddComponent<CharaSpawnerDesc>();
-                charaComp.SPAWN_FIRST_VELOCITY = objData.CharaSpawnerDesc.SPAWN_FIRST_VELOCITY.ToVector3();
-                charaComp.SPAWNER_POSITION = objData.CharaSpawnerDesc.SPAWNER_POSITION.ToVector3();
-                charaComp.SPAWNER_NAME = objData.CharaSpawnerDesc.SPAWNER_NAME;
+                var charaComp = go.GetComponent<CharaSpawnPointDesc>() ?? go.AddComponent<CharaSpawnPointDesc>();
+                charaComp.SPAWN_INITIAL_VELOCITY = objData.CharaSpawnPoint.SPAWN_INITIAL_VELOCITY.ToVector3();
             }
 
             if (objData.BallSpawnerDesc != null)
@@ -112,9 +110,7 @@ public class SceneImporterWindow : EditorWindow
                 ballComp.SPAWN_AMOUNT_ONCE_RANDOM_RANGE = objData.BallSpawnerDesc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE;
                 ballComp.SPAWN_AMOUNT_INITIAL = objData.BallSpawnerDesc.SPAWN_AMOUNT_INITIAL;
                 ballComp.SPAWN_RANGE = objData.BallSpawnerDesc.SPAWN_RANGE.ToVector3();
-                ballComp.SPAWN_FIRST_VELOCITY = objData.BallSpawnerDesc.SPAWN_FIRST_VELOCITY.ToVector3();
-                ballComp.SPAWNER_POSITION = objData.BallSpawnerDesc.SPAWNER_POSITION.ToVector3();
-                ballComp.SPAWNER_NAME = objData.BallSpawnerDesc.SPAWNER_NAME;
+                ballComp.SPAWN_INITIAL_VELOCITY = objData.BallSpawnerDesc.SPAWN_INITIAL_VELOCITY.ToVector3();
             }
         }
 
@@ -144,21 +140,25 @@ public class SceneImporterWindow : EditorWindow
     }
 
     [System.Serializable] public class SimpleVector3 { public float x, y, z; public Vector3 ToVector3() => new Vector3(x, y, z); }
-    [System.Serializable] public class CharaSpawnerData { public SimpleVector3 SPAWN_FIRST_VELOCITY; public SimpleVector3 SPAWNER_POSITION; public string SPAWNER_NAME; }
+    [System.Serializable] public class CharaSpawnerData { public SimpleVector3 SPAWN_INITIAL_VELOCITY; public SimpleVector3 SPAWNER_POSITION; public string SPAWNER_NAME; }
     [System.Serializable]
     public class BallSpawnerData
     {
-        public float INTERVAL_SEC, INTERVAL_SEC_RANDOM_RANGE;
-        public int SPAWN_AMOUNT_ONCE_MAX, SPAWN_AMOUNT_ONCE_MIN, SPAWN_AMOUNT_ONCE_RANDOM_RANGE, SPAWN_AMOUNT_INITIAL;
-        public SimpleVector3 SPAWN_RANGE, SPAWN_FIRST_VELOCITY, SPAWNER_POSITION;
-        public string SPAWNER_NAME;
+        public float INTERVAL_SEC;
+        public float INTERVAL_SEC_RANDOM_RANGE;
+        public int SPAWN_AMOUNT_ONCE_MAX;
+        public int SPAWN_AMOUNT_ONCE_MIN;
+        public int SPAWN_AMOUNT_ONCE_RANDOM_RANGE;
+        public int SPAWN_AMOUNT_INITIAL;
+        public SimpleVector3 SPAWN_RANGE;
+        public SimpleVector3 SPAWN_INITIAL_VELOCITY;
     }
     [System.Serializable]
     public class ObjectData
     {
         public string Name, Type, Tag;
         public SimpleVector3 Position, Rotation, Scale;
-        public CharaSpawnerData CharaSpawnerDesc;
+        public CharaSpawnerData CharaSpawnPoint;
         public BallSpawnerData BallSpawnerDesc;
         public bool IsCollision;
     }

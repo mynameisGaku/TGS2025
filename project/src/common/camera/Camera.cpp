@@ -262,8 +262,8 @@ void Camera::SetAnimation(const Vector3& begin, const Vector3& end, const Vector
 	m_AnimationBegin = begin;
 	m_AnimationEnd = end;
 	m_AnimationTarget = target;
-	m_AnimationSec= duration;
-	m_AnimationSecMax= duration;
+	m_AnimationSec= sec;
+	m_AnimationSecMax= sec;
 }
 
 Vector3 Camera::WorldPos() const {

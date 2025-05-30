@@ -43,6 +43,9 @@ void SceneManager::Update()
 
 void SceneManager::Draw()
 {
+	int screenWidth = (int)WindowSetting::Inst().width;
+	int screenHeight = (int)WindowSetting::Inst().height;
+
 	if (not CameraManager::IsScreenDivision()) {
 		DrawBefore();
 
@@ -53,44 +56,35 @@ void SceneManager::Draw()
 	}
 	else {
 
+		const int camNum = (int)CameraManager::AllCameras().size();
+
 		int screenBeingX = 0;
 		int screenBeingY = 0;
 
-		int screenWidth = (int)WindowSetting::Inst().width;
-		int screenHeight = (int)WindowSetting::Inst().height;
-
-		int screenHalfX = (int)WindowSetting::Inst().width_half;
-		int screenHalfY = (int)WindowSetting::Inst().height;
+		int screenDivX = (int)(screenWidth / camNum);
+		int screenDivY = screenHeight;
 
 		//===========================================================
-		// 1PƒJƒƒ‰‚Ì•`‰æ
+		// ƒJƒƒ‰‚Ì•`‰æ
 
-		CameraManager::CameraScreenDivisionDraw(screenBeingX, screenBeingY, screenHalfX, screenHeight, 0);
+		for (int i = 0; i < camNum; i++) {
 
-		DrawBefore();
+			CameraManager::CameraScreenDivisionDraw(screenBeingX, screenBeingY, screenDivX, screenHeight, i);
 
-		if (m_currentScene != nullptr) {
-			m_currentScene->Draw();
+			DrawBefore();
+
+			if (m_currentScene != nullptr) {
+				m_currentScene->Draw();
+			}
+			m_commonScene->Draw();
+
+			screenBeingX += screenDivX;
 		}
-		m_commonScene->Draw();
-
-		//===========================================================
-		// 2PƒJƒƒ‰‚Ì•`‰æ
-
-		CameraManager::CameraScreenDivisionDraw(screenHalfX, screenBeingY, screenHalfX, screenHeight, 1);
-
-		DrawBefore();
-
-		if (m_currentScene != nullptr) {
-			m_currentScene->Draw();
-		}
-		m_commonScene->Draw();
-
-		//===========================================================
-		// ‰æ–Ê•ªŠ„ˆ‚ğ‰Šú‰»
-
-		CameraManager::CameraScreenDivision(0, 0, screenWidth, screenHeight);
 	}
+	//===========================================================
+	// ‰æ–Ê•ªŠ„‚ğ‰Šú‰»
+
+	CameraManager::CameraScreenDivision(0, 0, screenWidth, screenHeight);
 }
 
 void SceneManager::Release()

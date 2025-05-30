@@ -22,8 +22,8 @@ namespace {
 
 	static int screenDivBeginX = 0;	// 画面分割の開始X座標
 	static int screenDivBeginY = 0;	// 画面分割の開始Y座標
-	static int screenDivWidth = WindowSetting::Inst().width;	// 画面分割の幅
-	static int screenDivHeight = WindowSetting::Inst().height;	// 画面分割の高さ
+	static int screenDivWidth = (int)WindowSetting::Inst().width;	// 画面分割の幅
+	static int screenDivHeight = (int)WindowSetting::Inst().height;	// 画面分割の高さ
 }
 
 void CameraManager::Init() {
@@ -43,6 +43,8 @@ void CameraManager::Init() {
 
 	Camera* camera1P = CreateCamera();
 	Camera* camera2P = CreateCamera();
+	//Camera* camera3P = CreateCamera();
+	//Camera* camera4P = CreateCamera();
 
 #ifdef IMGUI
 	InitImGuiNode();
@@ -102,7 +104,7 @@ Camera* CameraManager::CreateCamera() {
 		return nullptr;
 
 	Camera* newCamera = new Camera();
-	newCamera->SetHolderCharaIndex(cameras->size());
+	newCamera->SetHolderCharaIndex((int)cameras->size());
 	cameras->push_back(newCamera);
 	return newCamera;
 }
@@ -112,7 +114,7 @@ bool CameraManager::CheckNumber(const int& number) {
 	if (cameras == nullptr)
 		return false;
 
-	if (number < 0 || cameras->size() < number)
+	if (number < 0 || cameras->size() <= number)
 		return false;
 
 	return true;
@@ -163,6 +165,12 @@ void CameraManager::CameraScreenDivisionDraw(int x, int y, int w, int h, int num
 void CameraManager::ApplyScreenDivision() {
 
 	CameraScreenDivision(screenDivBeginX, screenDivBeginY, screenDivWidth, screenDivHeight);
+}
+
+void CameraManager::DefaultScreenSize() {
+
+	SetDrawArea(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height);
+	SetCameraScreenCenter(WindowSetting::Inst().width * 0.5f, WindowSetting::Inst().height * 0.5f);
 }
 
 void CameraManager::SetCameraWork(const int& number, const std::string& type) {

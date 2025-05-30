@@ -513,7 +513,13 @@ void CharaBase::ThrowHomingBall()
 
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	const CharaBase* targetChara = CameraManager::GetCamera(m_Index)->TargetChara();
+	
+	const CharaBase* targetChara = nullptr;
+	Camera* camera = CameraManager::GetCamera(m_Index);
+
+	if (camera != nullptr)
+		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+
 	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
 	m_pStatusTracker->AddThrowCount(1);
 	m_pLastBall = m_pBall;

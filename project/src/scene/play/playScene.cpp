@@ -23,9 +23,9 @@ using namespace KeyDefine;
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
-	// gameM->SetGameModeName("FreeForAll");
+	gameM->SetGameModeName("FreeForAll");
 	// ゲームモードは GameRef.json 内を参照してください
-	gameM->SetGameModeName("Debug");
+	//gameM->SetGameModeName("Debug");
 	
 	Instantiate<CollisionManager>();
 
@@ -35,9 +35,11 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	CameraManager::SetIsScreenDivision(false);
-	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
-	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
+	CameraManager::SetIsScreenDivision(true);
+
+	for (int i = 0; i < CameraManager::AllCameras().size(); i++) {
+		CameraManager::ChangeStateCamera(i, &Camera::ChaseState);
+	}
 }
 
 PlayScene::~PlayScene()
@@ -58,14 +60,18 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	// ToDo:レイヤー管理
-	//m_BloomManager->SetDrawScreenToEmitter();
+	m_BloomManager->SetDrawScreenToEmitter();
+	// エフェクトにbloomを適応
 	EffectManager::Draw();
-	//m_BloomManager->SetDrawScreenToBack();
+	m_BloomManager->SetDrawScreenToBack();
 
 	if (CameraManager::IsScreenDivision())
 		CameraManager::ApplyScreenDivision();
 	
 	DrawSphere3D(Vector3(0, 150, 1000), 50, 32, 0xffffff, 0x001fff, true);
+
+	// bloomを適応していないエフェクトを描画
+	EffectManager::Draw();
 
 	SceneBase::Draw();
 

@@ -33,15 +33,7 @@ void BloomManager::Reset()
 
 	DeleteGraph(m_EmitterScreen);
 
-	int screenWidth = (int)WindowSetting::Inst().width;
-	int screenHeight = (int)WindowSetting::Inst().height;
-
-	if (CameraManager::IsScreenDivision()) {
-		screenWidth = (int)(CameraManager::GetScreenDivisionPos().x + CameraManager::GetScreenDivisionSize().x);
-		screenHeight = (int)(CameraManager::GetScreenDivisionPos().y + CameraManager::GetScreenDivisionSize().y);
-	}
-
-	m_EmitterScreen = MakeScreen(screenWidth, screenHeight, FALSE);
+	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, FALSE);
 	SetUseGraphZBuffer(m_EmitterScreen, TRUE);
 	SetParameter(BLOOM_REF.Param);
 	m_DoBloom = true;
@@ -63,20 +55,20 @@ void BloomManager::Draw()
 {
 	if (not m_DoBloom) return;
 
-	Vector2 screenBegin = Vector2::Zero;
-	int screenWidth = (int)WindowSetting::Inst().width;
-	int screenHeight = (int)WindowSetting::Inst().height;
+	Vector2 pos = CameraManager::GetScreenDivisionPos();
+	Vector2 size = CameraManager::GetScreenDivisionSize();
 
-	if (CameraManager::IsScreenDivision()) {
-		screenBegin = CameraManager::GetScreenDivisionPos();
-		screenWidth = (int)(screenBegin.x + CameraManager::GetScreenDivisionSize().x);
-		screenHeight = (int)(screenBegin.y + CameraManager::GetScreenDivisionSize().y);
-	}
+	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
+}
 
-	int highBrightScreen = MakeScreen(screenWidth, screenHeight, FALSE);
-	int downScaleScreen = MakeScreen(screenWidth / m_Parameter.DownScale, screenHeight / m_Parameter.DownScale, FALSE);
+void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
 
-	GetDrawScreenGraph((int)screenBegin.x, (int)screenBegin.y, screenWidth, screenHeight, highBrightScreen);
+	if (not m_DoBloom) return;
+
+	int highBrightScreen = MakeScreen(w, h, FALSE);
+	int downScaleScreen = MakeScreen(w / m_Parameter.DownScale, h / m_Parameter.DownScale, FALSE);
+
+	GetDrawScreenGraph(x, y, x + w, y + h, highBrightScreen);
 
 	// •`‰æŒ‹‰Ê‚©‚ç‚‹P“x•”•ª‚Ì‚İ‚ğ”²‚«o‚µ‚½‰æ‘œ‚ğ“¾‚é
 	GraphFilterBlt(highBrightScreen, highBrightScreen, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, m_Parameter.MinBrightness, TRUE, GetColor(0, 0, 0), 255);
@@ -97,8 +89,8 @@ void BloomManager::Draw()
 
 	// ‚‹P“x•”•ª‚ğk¬‚µ‚Ä‚Ú‚©‚µ‚½‰æ‘œ‚ğ‰æ–Ê‚¢‚Á‚Ï‚¢‚É•`‰æ‚·‚é
 	SetDrawBright(255, 255, 255);
-	DrawExtendGraph((int)screenBegin.x, (int)screenBegin.y, screenWidth, screenHeight, downScaleScreen, FALSE);
-	DrawExtendGraph((int)screenBegin.x, (int)screenBegin.y, screenWidth, screenHeight, downScaleScreen, FALSE);
+	DrawExtendGraph(x, y, x + w, y + h, downScaleScreen, FALSE);
+	DrawExtendGraph(x, y, x + w, y + h, downScaleScreen, FALSE);
 	SetDrawBright(255, 255, 255);
 
 	// •`‰æƒuƒŒƒ“ƒhƒ‚[ƒh‚ğƒuƒŒƒ“ƒh–³‚µ‚É–ß‚·

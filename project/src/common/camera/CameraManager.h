@@ -63,9 +63,14 @@ namespace CameraManager {
 	void CameraScreenDivisionDraw(int x, int y, int w, int h, int number);
 
 	/// <summary>
-	/// 画面分割を適用します。
+	/// 画面分割を適用する
 	/// </summary>
 	void ApplyScreenDivision();
+
+	/// <summary>
+	/// 既定の画面サイズに戻す
+	/// </summary>
+	void DefaultScreenSize();
 
 	//================================================================================
 	// ▼セッター

@@ -25,7 +25,7 @@ public class SceneImporterWindow : EditorWindow
         jsonFilePath = EditorGUILayout.TextField(jsonFilePath);
         if (GUILayout.Button("参照", GUILayout.Width(60)))
         {
-            string path = EditorUtility.OpenFilePanel("JSONファイルを選択", Application.dataPath, "json");
+            string path = EditorUtility.OpenFilePanel("JSONファイルを選択", Application.dataPath + "../../project/data/json/stage", "json");
             if (!string.IsNullOrEmpty(path))
             {
                 jsonFilePath = path;

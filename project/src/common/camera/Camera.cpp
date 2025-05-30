@@ -12,6 +12,9 @@
 // ◇ステート関連
 #include "src/util/fsm/StateManager.h"
 
+// ◇コンポーネント
+#include "src/common/component/shake/Shake.h"
+
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
 #include "src/util/input/PadController.h"
@@ -28,8 +31,7 @@ Camera::Camera() {
 
 	cameraWork = nullptr;
 
-	m_pShake = AddComponent<Shake>();
-	m_pShake->Init(this);
+	AddComponent<Shake>();
 
 	// fsmの初期化
 	fsm = new TinyFSM<Camera>(this);
@@ -81,7 +83,6 @@ void Camera::Update() {
 
 	UpdateOffsetLeap();
 	UpdateTargetLeap();
-	UpdateAnimation();
 
 	Object3D::Update();
 
@@ -100,7 +101,11 @@ void Camera::Draw() {
 
 	Object3D::Draw();
 
-	MATRIX mShake = m_pShake->Matrix();	// 振動用行列
+	MATRIX mShake = MGetIdent();	// 振動用行列
+
+	Shake* shake = GetComponent<Shake>();
+	if (shake != nullptr)
+		mShake = shake->Matrix();
 
 	Transform globalTrs = transform->Global();
 
@@ -226,44 +231,18 @@ void Camera::OperationByStick(int padNumber, int type) {
 
 void Camera::UpdateOffsetLeap() {
 
-	offset += ((offsetAfter - offset) * CAMERADEFINE_REF.m_Interpolation) * GTime.timeScale;
+	offset += (offsetAfter - offset) * CAMERADEFINE_REF.m_Interpolation;
 }
 
 void Camera::UpdateTargetLeap() {
 
-	target += ((targetAfter - target) * CAMERADEFINE_REF.m_Interpolation) * GTime.timeScale;
-}
-
-void Camera::UpdateAnimation() {
-
-	if (m_AnimationSec > 0.0f) {
-		m_AnimationSec -= GTime.deltaTime;
-
-		const float TimeHeaf = m_AnimationSecMax * 0.5f;
-
-		if (m_AnimationSec > TimeHeaf)
-			offset = EasingFunc::Linear(m_AnimationSec - TimeHeaf, TimeHeaf, m_AnimationBegin, m_AnimationEnd);
-		else
-			offset = EasingFunc::Linear(m_AnimationSec, TimeHeaf, m_AnimationEnd, m_AnimationBegin);
-	}
-	else {
-		m_AnimationSec = 0.0f;
-	}
+	target += (targetAfter - target) * CAMERADEFINE_REF.m_Interpolation;
 }
 
 void Camera::SetPerformance(const std::string& perfType) {
 
 	//stateManager->ChangeState(State::sPerformance);
 	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
-}
-
-void Camera::SetAnimation(const Vector3& begin, const Vector3& end, const Vector3& target, float sec) {
-
-	m_AnimationBegin = begin;
-	m_AnimationEnd = end;
-	m_AnimationTarget = target;
-	m_AnimationSec= sec;
-	m_AnimationSecMax= sec;
 }
 
 Vector3 Camera::WorldPos() const {

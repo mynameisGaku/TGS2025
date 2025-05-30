@@ -10,7 +10,6 @@
 // ◇個別で必要な物
 #include "src/common/camera/CameraDefine.h"
 #include "src/common/component/collider/CollisionDefine.h"
-#include "src/common/component/shake/Shake.h"
 
 class StateManager;
 class CharaBase;
@@ -91,10 +90,6 @@ public:
 	/// <param name="_offset">相対座標</param>
 	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
 
-	/// <summary>
-	///補間先の相対座標を設定する
-	/// </summary>
-	/// <param name="_offset">相対座標</param>
 	inline void SetOffsetAfter(const Vector3& _offset) { offsetAfter = _offset; }
 
 	/// <summary>
@@ -103,10 +98,6 @@ public:
 	/// <param name="_target">注視点を設定する</param>
 	inline void SetTarget(const Vector3& _target) { target = _target; }
 
-	/// <summary>
-	/// 補間先の注視点を設定する
-	/// </summary>
-	/// <param name="_target">注視点を設定する</param>
 	inline void SetTargetAfter(const Vector3& _target) { targetAfter = _target; }
 
 	/// <summary>
@@ -114,9 +105,6 @@ public:
 	/// </summary>
 	inline void SetHolderTrs(const Transform* trs) { holder = trs; }
 
-	/// <summary>
-	/// 描画を行うかどうかを設定する
-	/// </summary>
 	inline void SetIsView(bool view) { isView = view; }
 
 	/// <summary>
@@ -152,15 +140,6 @@ public:
 	/// </summary>
 	/// <param name="perfType">演出の種類</param>
 	void SetPerformance(const std::string& perfType);
-
-	/// <summary>
-	/// アニメーションを設定して、開始地点から終了地点へ移動して、終了地点から地点へ戻る動作を、指定された秒数で行う
-	/// </summary>
-	/// <param name="begin">アニメーションの開始位置を表すVector3。</param>
-	/// <param name="end">アニメーションの終了位置を表すVector3。</param>
-	/// <param name="target">アニメーションのターゲット位置を表すVector3。</param>
-	/// <param name="sec">アニメーションの効果時間(秒)</param>
-	void SetAnimation(const Vector3& begin, const Vector3& end, const Vector3& target, float sec);
 
 	//================================================================================
 	// ▼ゲッター
@@ -217,20 +196,9 @@ public:
 	/// </summary>
 	Vector3 TargetLay() const;
 
-	/// <summary>
-	/// 注視しているキャラクター
-	/// </summary>
 	const CharaBase* TargetChara() const { return m_TargetChara; }
 
-	/// <summary>
-	/// 描画を行うか
-	/// </summary>
 	inline bool IsView() const { return isView; }
-
-	/// <summary>
-	/// アニメーションが再生中か
-	/// </summary>
-	inline bool IsPlayAnim() const { return m_AnimationSec > 0.0f; }
 
 	//================================================================================
 	// ▼ステート
@@ -254,7 +222,6 @@ private:
 
 	void UpdateOffsetLeap();
 	void UpdateTargetLeap();
-	void UpdateAnimation();
 
 	void DrawVirtualCamera();
 
@@ -268,14 +235,6 @@ private:
 	Vector3 target;		// カメラの注視点
 	Vector3 targetAfter;// 補間先のカメラの注視点
 	ColDefine::Cone cameraCone;
-
-	Vector3 m_AnimationBegin;	// アニメーション開始位置
-	Vector3 m_AnimationEnd;		// アニメーション終了位置
-	Vector3 m_AnimationTarget;	// アニメーションの注視点
-	float m_AnimationSec;		// アニメーションの時間
-	float m_AnimationSecMax;	// アニメーションの最大時間
-
-	Shake* m_pShake;	// シェイクコンポーネント
 
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報

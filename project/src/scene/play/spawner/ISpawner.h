@@ -1,7 +1,7 @@
 #pragma once
 #include "framework/gameObject.h"
 #include "src/util/math/Vector3.h"
-#include "src/scene/play/spawner/SpawnerDesc.h"
+#include "src/scene/play/spawner/SpawnerDescs.h"
 
 /// <summary>
 /// スポナーのインターフェース

@@ -1,7 +1,7 @@
 #include "src/scene/play/ball/BallSpawner.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
-#include "src/scene/play/spawner/SpawnerDesc.h"
+#include "src/scene/play/spawner/SpawnerDescs.h"
 #include "src/util/file/json/settings_json.h"
 #include "src/util/file/json/VectorJson.h"
 

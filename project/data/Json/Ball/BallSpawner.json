@@ -14,7 +14,7 @@
         "y": 0.0,
         "z": 0.0
       },
-      "SPAWN_FIRST_VELOCITY": {
+      "SPAWN_INITIAL_VELOCITY": {
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -39,7 +39,7 @@
         "y": 0.0,
         "z": 0.0
       },
-      "SPAWN_FIRST_VELOCITY": {
+      "SPAWN_INITIAL_VELOCITY": {
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -64,7 +64,7 @@
         "y": 0.0,
         "z": 0.0
       },
-      "SPAWN_FIRST_VELOCITY": {
+      "SPAWN_INITIAL_VELOCITY": {
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -89,7 +89,7 @@
         "y": 0.0,
         "z": 0.0
       },
-      "SPAWN_FIRST_VELOCITY": {
+      "SPAWN_INITIAL_VELOCITY": {
         "x": 0.0,
         "y": 0.0,
         "z": 0.0

@@ -93,8 +93,14 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 			if (cameraShake != nullptr)
 				cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 3.0f, Vector3(0.15f), 0.5f);
 
+			CameraDefine::CameraAnimData cameraAnimData;
+
+			cameraAnimData.SetAnim(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.6f, 0.2f, 0.5f);
+			cameraAnimData.SetRotMat(Vector3::Zero, Vector3(0.0f, 0.0f, MathUtil::ToRadians(-8.0f)), 0.2f, 0.5f);
+			cameraAnimData.SetHoldTime(0.35f);
+
 			// ƒJƒƒ‰‚ÌˆÊ’u‚ð’²®
-			camera->SetAnimation(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.5f, Vector3::Zero, 0.25f);
+			camera->SetAnimation(cameraAnimData);
 		}
 
 		PadController::SetVibration(m_Parent->GetIndex() + 1, 250, 4.0f);

@@ -45,6 +45,10 @@ Camera::Camera() {
 	isView = true;
 	drawFlag = false;
 
+	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
+
+	m_CameraRotMat = MGetIdent();
+
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 
@@ -79,7 +83,9 @@ void Camera::Update() {
 	if (fsm != nullptr)
 		fsm->Update();
 
-	UpdateOffsetLeap();
+	if (m_AnimData.state != CameraAnimState::Hold)
+		UpdateOffsetLeap();
+
 	UpdateTargetLeap();
 	UpdateAnimation();
 
@@ -112,7 +118,8 @@ void Camera::Draw() {
 		targetPos += holder->Global().position;
 	}
 
-	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY,m_CameraRotMat));
+	//SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 
 	drawFlag = true;
 }
@@ -131,7 +138,6 @@ void Camera::DrawVirtualCamera() {
 
 	DrawCapsule3D(cameraPos, targetPos, 8.0f, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), false);
 }
-
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
@@ -236,18 +242,41 @@ void Camera::UpdateTargetLeap() {
 
 void Camera::UpdateAnimation() {
 
-	if (m_AnimationSec > 0.0f) {
-		m_AnimationSec -= GTime.deltaTime;
+	if (not m_AnimData.isPlaying)
+		return;
 
-		const float TimeHeaf = m_AnimationSecMax * 0.5f;
+	m_AnimData.Update();
 
-		if (m_AnimationSec > TimeHeaf)
-			offset = EasingFunc::Linear(m_AnimationSec - TimeHeaf, TimeHeaf, m_AnimationBegin, m_AnimationEnd);
-		else
-			offset = EasingFunc::Linear(m_AnimationSec, TimeHeaf, m_AnimationEnd, m_AnimationBegin);
-	}
-	else {
-		m_AnimationSec = 0.0f;
+	switch (m_AnimData.state) {
+	case CameraAnimState::Begin_To_End:
+		if (m_AnimData.useAnim)
+			offset = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.begin, m_AnimData.end);
+
+		if (m_AnimData.useTarget)
+			target = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginTarget, m_AnimData.endTarget);
+
+		if (m_AnimData.useMatrix) {
+			Vector3 rot = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginRotMatrix, m_AnimData.endRotMatrix);
+			m_CameraRotMat = rot.ToRotationMatrix();
+		}
+
+		break;
+
+	case CameraAnimState::End_To_Begin:
+		if (m_AnimData.useAnim)
+			offset = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.end, m_AnimData.begin);
+
+		if (m_AnimData.useTarget)
+			target = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endTarget, m_AnimData.beginTarget);
+
+		if (m_AnimData.useMatrix) {
+			Vector3 rot = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endRotMatrix, m_AnimData.beginRotMatrix);
+			m_CameraRotMat = rot.ToRotationMatrix();
+		}
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -257,13 +286,9 @@ void Camera::SetPerformance(const std::string& perfType) {
 	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
 }
 
-void Camera::SetAnimation(const Vector3& begin, const Vector3& end, const Vector3& target, float sec) {
+void Camera::SetAnimation(const CameraAnimData& animData) {
 
-	m_AnimationBegin = begin;
-	m_AnimationEnd = end;
-	m_AnimationTarget = target;
-	m_AnimationSec= sec;
-	m_AnimationSecMax= sec;
+	m_AnimData = animData;
 }
 
 Vector3 Camera::WorldPos() const {

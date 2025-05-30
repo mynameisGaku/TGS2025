@@ -156,11 +156,7 @@ public:
 	/// <summary>
 	/// アニメーションを設定して、開始地点から終了地点へ移動して、終了地点から地点へ戻る動作を、指定された秒数で行う
 	/// </summary>
-	/// <param name="begin">アニメーションの開始位置を表すVector3。</param>
-	/// <param name="end">アニメーションの終了位置を表すVector3。</param>
-	/// <param name="target">アニメーションのターゲット位置を表すVector3。</param>
-	/// <param name="sec">アニメーションの効果時間(秒)</param>
-	void SetAnimation(const Vector3& begin, const Vector3& end, const Vector3& target, float sec);
+	void SetAnimation(const CameraDefine::CameraAnimData& animData);
 
 	//================================================================================
 	// ▼ゲッター
@@ -227,11 +223,6 @@ public:
 	/// </summary>
 	inline bool IsView() const { return isView; }
 
-	/// <summary>
-	/// アニメーションが再生中か
-	/// </summary>
-	inline bool IsPlayAnim() const { return m_AnimationSec > 0.0f; }
-
 	//================================================================================
 	// ▼ステート
 
@@ -267,13 +258,12 @@ private:
 	Vector3 offsetAfter;// 補間先のカメラの相対座標
 	Vector3 target;		// カメラの注視点
 	Vector3 targetAfter;// 補間先のカメラの注視点
+
+	MATRIX m_CameraRotMat;	// カメラの回転行列
+
 	ColDefine::Cone cameraCone;
 
-	Vector3 m_AnimationBegin;	// アニメーション開始位置
-	Vector3 m_AnimationEnd;		// アニメーション終了位置
-	Vector3 m_AnimationTarget;	// アニメーションの注視点
-	float m_AnimationSec;		// アニメーションの時間
-	float m_AnimationSecMax;	// アニメーションの最大時間
+	CameraDefine::CameraAnimData m_AnimData;	// カメラアニメーションのデータ
 
 	Shake* m_pShake;	// シェイクコンポーネント
 

@@ -218,16 +218,16 @@ void CharaBase::Update() {
 	m_SubFSM->Update();
 	m_Timeline->Update();
 
-	if (m_pCatchReadyEffect)
-	{
-		m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-		m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
-	}
-	if (m_pCatchDustEffect)
-	{
-		m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-		m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
-	}
+	//if (m_pCatchReadyEffect)
+	//{
+	//	m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+	//	m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	//}
+	//if (m_pCatchDustEffect)
+	//{
+	//	m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+	//	m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	//}
 
 	// ボールの更新
 	if (m_pBall)
@@ -1567,8 +1567,8 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 			EffectManager::Stop("Catch_Dust_Red.efk", "Catch_Dust_Red" + m_CharaTag);
 			EffectManager::Stop("Catch_Ready_Red.efk", "Catch_Ready_Red" + m_CharaTag);
 		}
-		m_pCatchReadyEffect = nullptr;
-		m_pCatchDustEffect = nullptr;
+		//m_pCatchReadyEffect = nullptr;
+		//m_pCatchDustEffect = nullptr;
 	}
 	break;
 	}
@@ -1647,22 +1647,26 @@ void CharaBase::catchUpdate()
 {
 	if (m_IsCatching)
 	{
-		if (not m_Catcher->IsColliderActive())
-		{
+		//if (not m_Catcher->IsColliderActive())
+		//{
 			if (m_EffectTransform != nullptr)
 			{
 				if (m_CharaTag == "Blue")
 				{
-					m_pCatchDustEffect = EffectManager::Play3D("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
-					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
+					//m_pCatchDustEffect = EffectManager::Play3D_Loop("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
+					//m_pCatchReadyEffect = EffectManager::Play3D_Loop("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
 				}
 				else if(m_CharaTag == "Red")
 				{
-					m_pCatchDustEffect = EffectManager::Play3D("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
-					m_pCatchReadyEffect = EffectManager::Play3D("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
+					//m_pCatchDustEffect = EffectManager::Play3D_Loop("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
+					//m_pCatchReadyEffect = EffectManager::Play3D_Loop("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
 				}
 			}
-		}
+		//}
 
 		m_Catcher->SetColliderActive(true);
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
@@ -1670,8 +1674,8 @@ void CharaBase::catchUpdate()
 	else
 	{
 		m_Catcher->SetColliderActive(false);
-		m_pCatchReadyEffect = nullptr;
-		m_pCatchDustEffect = nullptr;
+		//m_pCatchReadyEffect = nullptr;
+		//m_pCatchDustEffect = nullptr;
 	}
 }
 

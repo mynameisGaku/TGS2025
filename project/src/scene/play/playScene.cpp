@@ -77,5 +77,5 @@ void PlayScene::Draw()
 	if (not CameraManager::IsScreenDivision())
 		Settings_json::Inst()->RenderImGuiFileManager();
 
-	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
+	//DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 }

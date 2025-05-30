@@ -6,6 +6,11 @@
 #include <src/util/fx/effect/EffectManager.h>
 #include "src/common/component/physics/Physics.h"
 
+#include "src/common/camera/CameraManager.h"
+#include "src/reference/camera/CameraDefineRef.h"
+#include "src/common/component/shake/Shake.h"
+#include "src/util/input/PadController.h"
+
 Catcher::Catcher()
 {
 	m_Collider = nullptr;
@@ -78,6 +83,21 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 		ball->SetOwner(m_Parent);
 		ball->PickUp();
 		m_Parent->GetStatusTracker()->AddCatchCount(1);
+
+		Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
+
+		if (camera != nullptr) {
+
+			// ƒJƒƒ‰U“®ˆ—
+			Shake* cameraShake = camera->GetComponent<Shake>();
+			if (cameraShake != nullptr)
+				cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 3.0f, Vector3(0.15f), 0.5f);
+
+			// ƒJƒƒ‰‚ÌˆÊ’u‚ð’²®
+			camera->SetAnimation(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.5f, Vector3::Zero, 0.25f);
+		}
+
+		PadController::SetVibration(m_Parent->GetIndex() + 1, 250, 4.0f);
 	}
 }
 

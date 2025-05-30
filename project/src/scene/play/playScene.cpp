@@ -70,6 +70,8 @@ void PlayScene::Draw()
 	if (CameraManager::IsScreenDivision())
 		CameraManager::ApplyScreenDivision();
 	
+	EffectManager::Draw();
+
 	SceneBase::Draw();
 
 	if (not CameraManager::IsScreenDivision())

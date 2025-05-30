@@ -22,7 +22,7 @@ void EffectBase::Update() {
 	if (IsActive() == false)
 		return;
 
-	SetPlaySpeed(info.playSpeed);
+	//SetPlaySpeed(info.playSpeed);
 
 	if (IsPlaying() == false)
 		Stop();
@@ -195,8 +195,8 @@ bool EffectBase::IsPlaying() const {
 	bool result = false;
 
 	switch (info.dimension) {
-	case Dimensional::_2D:	result = (IsEffekseer2DEffectPlaying(info.playingHandle) != -1); break;
-	case Dimensional::_3D:	result = (IsEffekseer3DEffectPlaying(info.playingHandle) != -1); break;
+	case Dimensional::_2D:	result = (IsEffekseer2DEffectPlaying(info.playingHandle) == 0); break;
+	case Dimensional::_3D:	result = (IsEffekseer3DEffectPlaying(info.playingHandle) == 0); break;
 	default:
 		break;
 	}

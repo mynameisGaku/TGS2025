@@ -91,7 +91,7 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 			// ƒJƒƒ‰U“®ˆ—
 			Shake* cameraShake = camera->GetComponent<Shake>();
 			if (cameraShake != nullptr)
-				cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 3.0f, Vector3(0.15f), 0.5f);
+				cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 5.0f, Vector3(0.15f), 0.5f);
 
 			CameraDefine::CameraAnimData cameraAnimData;
 

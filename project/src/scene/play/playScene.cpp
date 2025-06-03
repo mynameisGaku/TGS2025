@@ -21,6 +21,9 @@
 //=== ボール ===
 #include "src/scene/play/ball/BallSpawner.h"
 
+//=== ステージ ===
+#include "src/common/stage/StageObjectManager.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
@@ -34,11 +37,11 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	Instantiate<MatchManager>();
 
-	BallSpawnerPlaceByJson("data/Json/Ball/BallSpawner.json", "BallSpawner");
-
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
+
+	StageObjectManager::LoadFromJson("data/json/Stage/Stage_3.json");
 
 	CameraManager::SetIsScreenDivision(true);
 
@@ -81,5 +84,5 @@ void PlayScene::Draw()
 	if (not CameraManager::IsScreenDivision())
 		Settings_json::Inst()->RenderImGuiFileManager();
 
-	//DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
+	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 }

@@ -18,7 +18,6 @@ public class SceneImporterWindow : EditorWindow
     private void OnGUI()
     {
         GUILayout.Label("シーンインポーター", EditorStyles.boldLabel);
-
         GUILayout.Space(10);
         GUILayout.Label("読み込むJSONファイル:");
 
@@ -26,7 +25,7 @@ public class SceneImporterWindow : EditorWindow
         jsonFilePath = EditorGUILayout.TextField(jsonFilePath);
         if (GUILayout.Button("参照", GUILayout.Width(60)))
         {
-            string path = EditorUtility.OpenFilePanel("JSONファイルを選択", Application.dataPath, "json");
+            string path = EditorUtility.OpenFilePanel("JSONファイルを選択", Application.dataPath + "../../project/data/json/stage", "json");
             if (!string.IsNullOrEmpty(path))
             {
                 jsonFilePath = path;
@@ -65,11 +64,24 @@ public class SceneImporterWindow : EditorWindow
 
         foreach (var objData in objectList.Objects)
         {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube); // 仮：Cubeを配置
+            GameObject go = null;
 
+            // --- プレハブを探してインスタンス化 ---
+            string prefabPath = $"Assets/{objData.Type}.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            if (prefab != null)
+            {
+                go = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            }
+            else
+            {
+                Debug.LogWarning($"Prefab not found for type: {objData.Type}, creating empty object.");
+                go = GameObject.CreatePrimitive(PrimitiveType.Cube);  // 仮にCubeを生成
+            }
+
+            // 基本情報の復元
             go.name = objData.Name;
             go.tag = objData.Tag;
-
             go.transform.position = objData.Position.ToVector3() / 100.0f;
             Vector3 eulerRad = objData.Rotation.ToVector3();
             go.transform.rotation = Quaternion.Euler(eulerRad * Mathf.Rad2Deg);
@@ -77,7 +89,28 @@ public class SceneImporterWindow : EditorWindow
 
             if (!objData.IsCollision)
             {
-                DestroyImmediate(go.GetComponent<Collider>());
+                Collider col = go.GetComponent<Collider>();
+                if (col != null) DestroyImmediate(col);
+            }
+
+            // --- Desc系の復元 ---
+            if (objData.CharaSpawnPoint != null)
+            {
+                var charaComp = go.GetComponent<CharaSpawnPointDesc>() ?? go.AddComponent<CharaSpawnPointDesc>();
+                charaComp.SPAWN_INITIAL_VELOCITY = objData.CharaSpawnPoint.SPAWN_INITIAL_VELOCITY.ToVector3();
+            }
+
+            if (objData.BallSpawnerDesc != null)
+            {
+                var ballComp = go.GetComponent<BallSpawnerDesc>() ?? go.AddComponent<BallSpawnerDesc>();
+                ballComp.INTERVAL_SEC = objData.BallSpawnerDesc.INTERVAL_SEC;
+                ballComp.INTERVAL_SEC_RANDOM_RANGE = objData.BallSpawnerDesc.INTERVAL_SEC_RANDOM_RANGE;
+                ballComp.SPAWN_AMOUNT_ONCE_MAX = objData.BallSpawnerDesc.SPAWN_AMOUNT_ONCE_MAX;
+                ballComp.SPAWN_AMOUNT_ONCE_MIN = objData.BallSpawnerDesc.SPAWN_AMOUNT_ONCE_MIN;
+                ballComp.SPAWN_AMOUNT_ONCE_RANDOM_RANGE = objData.BallSpawnerDesc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE;
+                ballComp.SPAWN_AMOUNT_INITIAL = objData.BallSpawnerDesc.SPAWN_AMOUNT_INITIAL;
+                ballComp.SPAWN_RANGE = objData.BallSpawnerDesc.SPAWN_RANGE.ToVector3();
+                ballComp.SPAWN_INITIAL_VELOCITY = objData.BallSpawnerDesc.SPAWN_INITIAL_VELOCITY.ToVector3();
             }
         }
 
@@ -87,45 +120,47 @@ public class SceneImporterWindow : EditorWindow
     private void DeleteAllObjects()
     {
         GameObject[] allObjects = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+
+        List<GameObject> targets = new List<GameObject>();
+
         foreach (var obj in allObjects)
         {
             if (obj.transform.parent != null)
                 continue;
-
             if (obj.name == "Main Camera" || obj.name == "Directional Light")
                 continue;
 
-            DestroyImmediate(obj);
+            targets.Add(obj);
         }
-    }
 
-    // データクラス定義（Exporterと同じ構造）
-    [System.Serializable]
-    public class SimpleVector3
-    {
-        public float x, y, z;
-
-        public Vector3 ToVector3()
+        foreach (var target in targets)
         {
-            return new Vector3(x, y, z);
+            DestroyImmediate(target);
         }
     }
 
+    [System.Serializable] public class SimpleVector3 { public float x, y, z; public Vector3 ToVector3() => new Vector3(x, y, z); }
+    [System.Serializable] public class CharaSpawnerData { public SimpleVector3 SPAWN_INITIAL_VELOCITY; public SimpleVector3 SPAWNER_POSITION; public string SPAWNER_NAME; }
+    [System.Serializable]
+    public class BallSpawnerData
+    {
+        public float INTERVAL_SEC;
+        public float INTERVAL_SEC_RANDOM_RANGE;
+        public int SPAWN_AMOUNT_ONCE_MAX;
+        public int SPAWN_AMOUNT_ONCE_MIN;
+        public int SPAWN_AMOUNT_ONCE_RANDOM_RANGE;
+        public int SPAWN_AMOUNT_INITIAL;
+        public SimpleVector3 SPAWN_RANGE;
+        public SimpleVector3 SPAWN_INITIAL_VELOCITY;
+    }
     [System.Serializable]
     public class ObjectData
     {
-        public string Name;
-        public string Type;
-        public string Tag;
-        public SimpleVector3 Position;
-        public SimpleVector3 Rotation;
-        public SimpleVector3 Scale;
+        public string Name, Type, Tag;
+        public SimpleVector3 Position, Rotation, Scale;
+        public CharaSpawnerData CharaSpawnPoint;
+        public BallSpawnerData BallSpawnerDesc;
         public bool IsCollision;
     }
-
-    [System.Serializable]
-    public class ObjectList
-    {
-        public List<ObjectData> Objects = new();
-    }
+    [System.Serializable] public class ObjectList { public List<ObjectData> Objects = new(); }
 }

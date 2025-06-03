@@ -15,6 +15,11 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/file/json/settings_json.h"
 
+// スポナー
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
+#include "src/scene/play/chara/CharaSpawnPoint.h"
+#include "src/scene/play/ball/BallSpawner.h"
+
 using namespace StageDefine;
 
 namespace {
@@ -30,6 +35,8 @@ namespace {
 	static unsigned int productionID;	// 製造番号
 	bool canSaveCsv;			// CSVデータを保存できるか
 	bool initialize = false;	// 初期化処理が行われたか
+
+	static CharaSpawnPointManager* pCharaSpawnPointManager;
 }
 
 void StageObjectManager::Init() {
@@ -269,43 +276,65 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 	if (*csvFilePath_StageObjData != filename)
 		*csvFilePath_StageObjData = filename;
 
-	// 読み込み
+	if (not pCharaSpawnPointManager)
+		pCharaSpawnPointManager = Instantiate<CharaSpawnPointManager>();
+
+	auto settings_json = Settings_json::Inst();
+	settings_json->LoadSettingJson(filename, filename, true);
+	auto objects = settings_json->Get<std::vector<nlohmann::json>>("Objects", filename);
+
+	for (const auto& obj : objects)
 	{
-		auto settings_json = Settings_json::Inst();
-		settings_json->LoadSettingJson(filename, filename, true);
-		std::vector<nlohmann::json> objects = Settings_json::Inst()->Get<std::vector<nlohmann::json>>("Objects", filename);
+		StageObjInfo info;
+		Transform tr;
+		bool isCollision = false;
 
-		for (const auto& obj : objects) {
+		info.objname = obj.at("Name").get<std::string>();
+		info.type = obj.at("Type").get<std::string>();
 
-			StageObjInfo info;		// ステージオブジェクトの情報
-			Transform tr;			// 座標・回転・拡縮の情報
-			bool isCollision = false;
+		auto pos = obj.at("Position");
+		tr.position = Vector3(pos.at("x").get<float>(), pos.at("y").get<float>(), pos.at("z").get<float>());
+		auto rot = obj.at("Rotation");
+		tr.rotation = Vector3(rot.at("x").get<float>(), rot.at("y").get<float>(), rot.at("z").get<float>());
+		auto sca = obj.at("Scale");
+		tr.scale = Vector3(sca.at("x").get<float>(), sca.at("y").get<float>(), sca.at("z").get<float>());
 
-			std::string name = obj.at("Name").get<std::string>();
-			std::string type = obj.at("Type").get<std::string>();
+		// CharaSpawnPoint
+		if (obj.contains("CharaSpawnPointDesc") && !obj.at("CharaSpawnPointDesc").is_null())
+		{
+			info.hModel = ResourceLoader::MV1LoadModel("data/model/spawner/" + info.type + ".mv1");
+			
+			auto desc = obj.at("CharaSpawnPointDesc");
+			CHARA_SPAWN_POINT_DESC cdesc;
+			auto v = desc.at("SPAWN_INITIAL_VELOCITY");
+			cdesc.SPAWN_INITIAL_VELOCITY = Vector3(v.at("x").get<float>(), v.at("y").get<float>(), v.at("z").get<float>());
+			pCharaSpawnPointManager->AddSpawnPoint(info.hModel, tr, cdesc);
+		}
+		else if (obj.contains("BallSpawnerDesc") && !obj.at("BallSpawnerDesc").is_null())
+		{
+			// BallSpawner
+			info.hModel = ResourceLoader::MV1LoadModel("data/model/spawner/" + info.type + ".mv1");
 
-			info.objname = name;
-			info.type = type;
-			info.hModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + ".mv1");
-			info.hHitModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + type + "_col.mv1");
+			auto desc = obj.at("BallSpawnerDesc");
+			BALL_SPAWNER_DESC bdesc;
+			bdesc.INTERVAL_SEC = desc.at("INTERVAL_SEC");
+			bdesc.INTERVAL_SEC_RANDOM_RANGE = desc.at("INTERVAL_SEC_RANDOM_RANGE");
+			bdesc.SPAWN_AMOUNT_ONCE_MAX = desc.at("SPAWN_AMOUNT_ONCE_MAX");
+			bdesc.SPAWN_AMOUNT_ONCE_MIN = desc.at("SPAWN_AMOUNT_ONCE_MIN");
+			bdesc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE = desc.at("SPAWN_AMOUNT_ONCE_RANDOM_RANGE");
+			bdesc.SPAWN_AMOUNT_INITIAL = desc.at("SPAWN_AMOUNT_INITIAL");
+			auto range = desc.at("SPAWN_RANGE");
+			bdesc.SPAWN_RANGE = Vector3(range.at("x").get<float>(), range.at("y").get<float>(), range.at("z").get<float>());
+			auto vel = desc.at("SPAWN_INITIAL_VELOCITY");
+			bdesc.SPAWN_INITIAL_VELOCITY = Vector3(vel.at("x").get<float>(), vel.at("y").get<float>(), vel.at("z").get<float>());
 
-			auto pos = obj.at("Position");
-			float px = pos.at("x").get<float>();
-			float py = pos.at("y").get<float>();
-			float pz = pos.at("z").get<float>();
-			tr.position = Vector3(px, py, pz);
-
-			auto rot = obj.at("Rotation");
-			float rx = rot.at("x").get<float>();
-			float ry = rot.at("y").get<float>();
-			float rz = rot.at("z").get<float>();
-			tr.rotation = Vector3(rx, ry, rz);
-
-			auto sca = obj.at("Scale");
-			float sx = sca.at("x").get<float>();
-			float sy = sca.at("y").get<float>();
-			float sz = sca.at("z").get<float>();
-			tr.scale = Vector3(sx, sy, sz);
+			// 登録
+			AddBallSpawner(info.hModel, tr, bdesc);
+		}
+		else
+		{
+			info.hModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + info.type + ".mv1");
+			info.hHitModel = ResourceLoader::MV1LoadModel(*csvFilePath_StageObjModel + info.type + "_col.mv1");
 
 			isCollision = obj.at("IsCollision").get<bool>();
 
@@ -313,6 +342,7 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 		}
 	}
 }
+
 
 void StageObjectManager::SaveToCsv() {
 #if FALSE
@@ -325,14 +355,86 @@ void StageObjectManager::SaveToCsv() {
 
 void StageObjectManager::SaveToJson()
 {
-	if (csvFilePath_StageObjData == nullptr || stageObjects == nullptr)
+	if (stageObjects == nullptr)
 		return;
 
-    // 書き込み
-    {
-        auto settings_json = Settings_json::Inst();
-		settings_json->Save(*csvFilePath_StageObjData);
-    }
+	nlohmann::json exportJson;
+	std::vector<nlohmann::json> objectsJson;
+
+	for (auto obj : *stageObjects)
+	{
+		nlohmann::json jsonObj;
+		jsonObj["Name"] = obj->Info().objname;
+		jsonObj["Type"] = obj->Info().type;
+		jsonObj["Tag"] = obj->Info().type;
+
+		jsonObj["Position"] = {
+			{"x", obj->transform->position.x},
+			{"y", obj->transform->position.y},
+			{"z", obj->transform->position.z}
+		};
+		jsonObj["Rotation"] = {
+			{"x", obj->transform->rotation.x},
+			{"y", obj->transform->rotation.y},
+			{"z", obj->transform->rotation.z}
+		};
+		jsonObj["Scale"] = {
+			{"x", obj->transform->scale.x},
+			{"y", obj->transform->scale.y},
+			{"z", obj->transform->scale.z}
+		};
+		jsonObj["IsCollision"] = obj->IsCollider();
+
+		// CharaSpawnPointDesc用: 仮の保存用。普段は必要ならCharaSpawnPointManagerから取る
+		if (obj->Info().type == "CharaSpawnPoint")
+		{
+			CHARA_SPAWN_POINT_DESC cdesc{};
+			cdesc.SPAWN_INITIAL_VELOCITY = Vector3(0, 0, 0);  // 仮データ
+
+			jsonObj["CharaSpawnPointDesc"] = {
+				{"SPAWN_INITIAL_VELOCITY", {
+					{"x", cdesc.SPAWN_INITIAL_VELOCITY.x},
+					{"y", cdesc.SPAWN_INITIAL_VELOCITY.y},
+					{"z", cdesc.SPAWN_INITIAL_VELOCITY.z}
+				}}
+			};
+		}
+
+		// BallSpawnerDesc用: 仮の保存用。普段は必要ならBallSpawnerから取る
+		if (obj->Info().type == "BallSpawner")
+		{
+			BALL_SPAWNER_DESC bdesc{};
+			bdesc.SPAWN_RANGE = Vector3(0, 0, 0);
+			bdesc.SPAWN_INITIAL_VELOCITY = Vector3(0, 0, 0);
+
+			jsonObj["BallSpawnerDesc"] = {
+				{"INTERVAL_SEC", bdesc.INTERVAL_SEC},
+				{"INTERVAL_SEC_RANDOM_RANGE", bdesc.INTERVAL_SEC_RANDOM_RANGE},
+				{"SPAWN_AMOUNT_ONCE_MAX", bdesc.SPAWN_AMOUNT_ONCE_MAX},
+				{"SPAWN_AMOUNT_ONCE_MIN", bdesc.SPAWN_AMOUNT_ONCE_MIN},
+				{"SPAWN_AMOUNT_ONCE_RANDOM_RANGE", bdesc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE},
+				{"SPAWN_AMOUNT_INITIAL", bdesc.SPAWN_AMOUNT_INITIAL},
+				{"SPAWN_RANGE", {
+					{"x", bdesc.SPAWN_RANGE.x},
+					{"y", bdesc.SPAWN_RANGE.y},
+					{"z", bdesc.SPAWN_RANGE.z}
+				}},
+				{"SPAWN_INITIAL_VELOCITY", {
+					{"x", bdesc.SPAWN_INITIAL_VELOCITY.x},
+					{"y", bdesc.SPAWN_INITIAL_VELOCITY.y},
+					{"z", bdesc.SPAWN_INITIAL_VELOCITY.z}
+				}}
+			};
+		}
+
+		objectsJson.push_back(jsonObj);
+	}
+
+	exportJson["Objects"] = objectsJson;
+
+	std::ofstream file(*csvFilePath_StageObjData);
+	file << exportJson.dump(4);
+	file.close();
 }
 
 void StageObjectManager::OutPutToCsv(const std::string& filename) {

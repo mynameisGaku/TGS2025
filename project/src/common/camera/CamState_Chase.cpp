@@ -39,9 +39,7 @@ void Camera::ChaseState(FSMSignal sig)
 		else
 			m_TargetTransitionTime = 0.0f;
 
-		if (m_CharaIndex == 0 && GetJoypadNum() == 0)
-			OperationByMouse();
-
+		OperationByMouse();
 		OperationByStick(m_CharaIndex + 1);
 
 		// キャラクターの管理者

@@ -19,6 +19,7 @@
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
+#include "src/util/fx/trail/trail3D/Trail3D.h"
 
 using namespace KeyDefine;
 
@@ -119,6 +120,11 @@ CharaBase::~CharaBase()
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
+    for (int i = 0; i < 5; ++i)
+    {
+        PtrUtil::SafeDelete(m_pTrail[i]);
+    }
+
 	PtrUtil::SafeDelete(m_EffectTransform);
 }
 
@@ -134,6 +140,43 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	float s = 0.7f;
+	// ‹¹
+	{
+		m_pTrail[0] = new Trail3D();
+		m_pTrail[0]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+		m_pTrail[0]->SetInterval(1);
+		m_pTrail[0]->SetSubdivisions(16);
+	}
+    // ¶˜r
+    {
+        m_pTrail[1] = new Trail3D();
+        m_pTrail[1]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[1]->SetInterval(1);
+        m_pTrail[1]->SetSubdivisions(16);
+    }
+    // ‰E˜r
+    {
+        m_pTrail[2] = new Trail3D();
+        m_pTrail[2]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[2]->SetInterval(1);
+        m_pTrail[2]->SetSubdivisions(16);
+    }
+	// ¶‹r
+    {
+        m_pTrail[3] = new Trail3D();
+        m_pTrail[3]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[3]->SetInterval(1);
+        m_pTrail[3]->SetSubdivisions(16);
+    }
+    // ‰E‹r
+    {
+        m_pTrail[4] = new Trail3D();
+        m_pTrail[4]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[4]->SetInterval(1);
+        m_pTrail[4]->SetSubdivisions(16);
+    }
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
@@ -255,11 +298,37 @@ void CharaBase::Update() {
 	m_IsCatching = false;
 
 	Object3D::Update();
+
+	Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
+	m_pTrail[0]->Add(chestPos);
+
+    Vector3 leftArmPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftHand"));
+    m_pTrail[1]->Add(leftArmPos);
+
+    Vector3 rightArmPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand"));
+    m_pTrail[2]->Add(rightArmPos);
+
+    /*Vector3 leftLegPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
+    m_pTrail[3]->Add(leftLegPos);
+
+    Vector3 rightLegPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
+    m_pTrail[4]->Add(rightLegPos);*/
+	
+	for (int i = 0; i < 3; i++)
+	{
+        m_pTrail[i]->Update();
+	}
+
 }
 
 void CharaBase::Draw()
 {
 	Object3D::Draw();
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_pTrail[i]->Draw();
+	}
 
 	if (m_pHP->IsDead())
 	{
@@ -578,6 +647,11 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 	{
 		m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
 	}
+}
+
+void CharaBase::SetTrailImage(int hImage)
+{
+    m_hTrailImage = hImage;
 }
 
 void CharaBase::CatchSuccess(const Vector3& velocity)

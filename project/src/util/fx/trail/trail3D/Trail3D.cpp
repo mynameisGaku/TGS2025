@@ -23,6 +23,12 @@ void Trail3D::Add(const Vector3& pos)
 
 void Trail3D::Update()
 {
+    m_UpdateInterval = max(1, m_UpdateInterval); // 更新間隔は1以上にする
+    if (GameTime::FrameCount() % m_UpdateInterval != 0)
+    {
+        return; // 更新間隔に達していない場合は何もしない
+    }
+
     float dt = GameTime::DeltaTime();
     for (auto& pt : m_Points)
     {
@@ -55,8 +61,6 @@ void Trail3D::Draw()
             return alpha * 255.0f;
         };
 
-    const int subdivs = 16; // 補間分割数（大きいほど滑らか）
-
     for (size_t i = 1; i + 2 < m_Points.size(); ++i)
     {
         const TrailPoint& p0 = m_Points[i - 1];
@@ -64,10 +68,10 @@ void Trail3D::Draw()
         const TrailPoint& p2 = m_Points[i + 1];
         const TrailPoint& p3 = m_Points[i + 2];
 
-        for (int j = 0; j < subdivs; ++j)
+        for (int j = 0; j < m_Subdivisions; ++j)
         {
-            float t1 = (float)j / subdivs;
-            float t2 = (float)(j + 1) / subdivs;
+            float t1 = (float)j / m_Subdivisions;
+            float t2 = (float)(j + 1) / m_Subdivisions;
 
             VECTOR pos1 = MathUtil::CatmullRomVec3(p0.position, p1.position, p2.position, p3.position, t1);
             VECTOR pos2 = MathUtil::CatmullRomVec3(p0.position, p1.position, p2.position, p3.position, t2);

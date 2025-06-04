@@ -141,39 +141,39 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
 
-	float s = 0.7f;
+	float s = 0.35f;
 	// ‹¹
 	{
 		m_pTrail[0] = new Trail3D();
-		m_pTrail[0]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+		m_pTrail[0]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s * 1.5f, 50.0f);
 		m_pTrail[0]->SetInterval(1);
 		m_pTrail[0]->SetSubdivisions(16);
 	}
-    // ¶˜r
+    // ¶Œ¨
     {
         m_pTrail[1] = new Trail3D();
-        m_pTrail[1]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[1]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
         m_pTrail[1]->SetInterval(1);
         m_pTrail[1]->SetSubdivisions(16);
     }
-    // ‰E˜r
+    // ‰EŒ¨
     {
         m_pTrail[2] = new Trail3D();
-        m_pTrail[2]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[2]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
         m_pTrail[2]->SetInterval(1);
         m_pTrail[2]->SetSubdivisions(16);
     }
-	// ¶‹r
+	// ¶˜
     {
         m_pTrail[3] = new Trail3D();
-        m_pTrail[3]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[3]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
         m_pTrail[3]->SetInterval(1);
         m_pTrail[3]->SetSubdivisions(16);
     }
-    // ‰E‹r
+    // ‰E˜
     {
         m_pTrail[4] = new Trail3D();
-        m_pTrail[4]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 10.0f);
+        m_pTrail[4]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
         m_pTrail[4]->SetInterval(1);
         m_pTrail[4]->SetSubdivisions(16);
     }
@@ -302,19 +302,19 @@ void CharaBase::Update() {
 	Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
 	m_pTrail[0]->Add(chestPos);
 
-    Vector3 leftArmPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftHand"));
-    m_pTrail[1]->Add(leftArmPos);
+    Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
+    m_pTrail[1]->Add(leftShoulderPos);
 
-    Vector3 rightArmPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand"));
-    m_pTrail[2]->Add(rightArmPos);
+    Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
+    m_pTrail[2]->Add(rightShoulderPos);
 
-    /*Vector3 leftLegPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
-    m_pTrail[3]->Add(leftLegPos);
+    Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
+    m_pTrail[3]->Add(leftHipPos);
 
-    Vector3 rightLegPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
-    m_pTrail[4]->Add(rightLegPos);*/
+    Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
+    m_pTrail[4]->Add(rightHipPos);
 	
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
         m_pTrail[i]->Update();
 	}

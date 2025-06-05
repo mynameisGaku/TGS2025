@@ -551,6 +551,7 @@
     <ClInclude Include="src\util\math\Random.h" />
     <ClInclude Include="src\util\math\Vector2.h" />
     <ClInclude Include="src\util\math\Vector3.h" />
+    <ClInclude Include="src\util\math\Vector3Util.h" />
     <ClInclude Include="src\util\math\Vector4.h" />
     <ClInclude Include="src\util\object2D\Object2D.h" />
     <ClInclude Include="src\util\object3D\Object3D.h" />

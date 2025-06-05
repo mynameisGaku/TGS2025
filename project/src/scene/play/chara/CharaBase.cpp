@@ -19,6 +19,7 @@
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
+#include <src/util/math/Vector3Util.h>
 
 using namespace KeyDefine;
 
@@ -63,6 +64,7 @@ CharaBase::CharaBase()
 	m_IsCatching		= false;
 	m_CanHold			= true;
 	m_pHitBall			= nullptr;
+	m_pStatusTracker	= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -217,7 +219,12 @@ void CharaBase::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		m_pBall->transform->position = VTransform(Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS), MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand")));
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand"));
+		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
+
+		m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
+		m_pBall->transform->position *= m;
+		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
 	}
 
 	static const float MOVE_ACCEL = 0.03f;

@@ -20,6 +20,9 @@
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include <src/util/math/Vector3Util.h>
+#include "src/common/component/model_frame_trail_renderer/ModelFrameTrailRenderer.h"
+#include "src/common/component/model_frame_trail_renderer/MODEL_FRAME_TRAIL_RENDERER_DESC.h"
+#include "src/util/math/Random.h"
 
 using namespace KeyDefine;
 
@@ -65,6 +68,9 @@ CharaBase::CharaBase()
 	m_CanHold			= true;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
+	m_pCatchReadyEffect	= nullptr;
+	m_pCatchDustEffect	= nullptr;
+	m_CatchTimer		= 0.0f;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -117,6 +123,11 @@ CharaBase::~CharaBase()
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
+	/*for (int i = 0; i < 5; ++i)
+	{
+		PtrUtil::SafeDelete(m_pTrail[i]);
+	}*/
+
 	PtrUtil::SafeDelete(m_EffectTransform);
 }
 
@@ -133,10 +144,63 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
 
+	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
+	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
+		{ "mixamorig9:Hips", "HipsTrail" },
+		{ "mixamorig9:Spine2", "Spine1Trail" },
+		{ "mixamorig9:LeftShoulder", "LeftShoulderTrail" },
+		{ "mixamorig9:RightShoulder", "RightShoulderTrail" },
+		{ "mixamorig9:LeftLeg", "LeftLegTrail" },
+		{ "mixamorig9:LeftUpLeg", "LeftUpLegTrail" },
+		{ "mixamorig9:RightLeg", "RightLegTrail" },
+		{ "mixamorig9:RightUpLeg", "RightUpLegTrail"}
+	};
+	ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
+	MODEL_FRAME_TRAIL_RENDERER_DESC desc1;
+	MODEL_FRAME_TRAIL_RENDERER_DESC desc2;
+
+	auto addTrail = []()
+		{
+			float lt = 0.4f; // トレイルの寿命
+			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+
+			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
+			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descBold.thick = 50.0f; // トレイルの太さ
+			descBold.lifeTime = lifeTime; // トレイルの寿命
+			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descBold.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
+
+			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
+			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descSmall.thick = 25.0f; // トレイルの太さ
+			descSmall.lifeTime = lifeTime; // トレイルの寿命
+			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descSmall.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
+
+			return std::pair<MODEL_FRAME_TRAIL_RENDERER_DESC, MODEL_FRAME_TRAIL_RENDERER_DESC>(descBold, descSmall);
+		};
+	descs.reserve(frameAndTrailNames.size());
+	for (const auto& pair : frameAndTrailNames)
+	{
+		desc1 = addTrail().first;
+		desc1.frameName = pair.first;
+		desc1.trailName = pair.second;
+		desc2 = addTrail().second;
+		desc2.frameName = pair.first;
+		desc2.trailName = pair.second;
+
+		descs.push_back(desc1);
+		descs.push_back(desc2);
+	}
+	trail->Finalize(Model(), descs, m_hTrailImage);
+
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
-	m_EffectTransform->position.y = 100.0f;
-	m_EffectTransform->position.z = 100.0f;
+	m_EffectTransform->position.y = 160.0f;
+	m_EffectTransform->position.z = -100.0f;
 	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
 	m_Animator = AddComponent<Animator>();
@@ -216,6 +280,17 @@ void CharaBase::Update() {
 	m_SubFSM->Update();
 	m_Timeline->Update();
 
+	//if (m_pCatchReadyEffect)
+	//{
+	//	m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+	//	m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	//}
+	//if (m_pCatchDustEffect)
+	//{
+	//	m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
+	//	m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
+	//}
+
 	// ボールの更新
 	if (m_pBall)
 	{
@@ -247,11 +322,37 @@ void CharaBase::Update() {
 	m_IsCatching = false;
 
 	Object3D::Update();
+
+	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
+	m_pTrail[0]->Add(chestPos);
+
+	Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
+	m_pTrail[1]->Add(leftShoulderPos);
+
+	Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
+	m_pTrail[2]->Add(rightShoulderPos);
+
+	Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
+	m_pTrail[3]->Add(leftHipPos);
+
+	Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
+	m_pTrail[4]->Add(rightHipPos);
+	
+	for (int i = 0; i < 5; i++)
+	{
+		m_pTrail[i]->Update();
+	}*/
+
 }
 
 void CharaBase::Draw()
 {
 	Object3D::Draw();
+
+	/*for (int i = 0; i < 5; i++)
+	{
+		m_pTrail[i]->Draw();
+	}*/
 
 	if (m_pHP->IsDead())
 	{
@@ -304,6 +405,18 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
+			if (ball->GetState() == Ball::S_LANDED)
+				return;
+
+			if (m_CharaTag == "Blue")
+			{
+				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
+			}
+			else
+			{
+				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
+			}
+
 			getHit(ball);
 			m_pHP->Damage_UseDefault();
 			m_pStatusTracker->AddGetHitCount(1);
@@ -443,7 +556,7 @@ void CharaBase::SetBall(Ball* ball)
 
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
-	m_pBall->Init(m_CharaTag);
+	m_pBall->Reset(m_CharaTag);
 
 	m_IsCharging = false;
 }
@@ -493,7 +606,13 @@ void CharaBase::ThrowHomingBall()
 
 	Vector3 forward = transform->Forward();
 	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	const CharaBase* targetChara = CameraManager::MainCamera()->TargetChara();
+	
+	const CharaBase* targetChara = nullptr;
+	Camera* camera = CameraManager::GetCamera(m_Index);
+
+	if (camera != nullptr)
+		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+
 	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
 	m_pStatusTracker->AddThrowCount(1);
 	m_pLastBall = m_pBall;
@@ -552,6 +671,11 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 	{
 		m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
 	}
+}
+
+void CharaBase::SetTrailImage(int hImage)
+{
+	m_hTrailImage = hImage;
 }
 
 void CharaBase::CatchSuccess(const Vector3& velocity)
@@ -861,6 +985,10 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("DamageToDown");
+
+		m_CanCatch	= false;
+		m_CanMove	= false;
+		m_CanRot	= false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -877,6 +1005,9 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanCatch	= true;
+		m_CanMove	= true;
+		m_CanRot	= true;
 	}
 	break;
 	}
@@ -1523,6 +1654,19 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Catcher->SetColliderActive(false);
+
+		if (m_CharaTag == "Blue")
+		{
+			EffectManager::Stop("Catch_Dust_Blue.efk", "Catch_Dust_Blue" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Blue.efk", "Catch_Ready_Blue" + m_CharaTag);
+		}
+		else if (m_CharaTag == "Red")
+		{
+			EffectManager::Stop("Catch_Dust_Red.efk", "Catch_Dust_Red" + m_CharaTag);
+			EffectManager::Stop("Catch_Ready_Red.efk", "Catch_Ready_Red" + m_CharaTag);
+		}
+		//m_pCatchReadyEffect = nullptr;
+		//m_pCatchDustEffect = nullptr;
 	}
 	break;
 	}
@@ -1601,20 +1745,35 @@ void CharaBase::catchUpdate()
 {
 	if (m_IsCatching)
 	{
-		m_Catcher->SetColliderActive(true);
-		if (m_EffectTransform != nullptr)
-		{
-			EffectManager::Play3D("Catch_Ready_Single_Dust.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Dust" + m_CharaTag);
-			EffectManager::Play3D("Catch_Ready_Single_Tornado.efk", m_EffectTransform->Global(), "Catch_Ready_Single_Tornado" + m_CharaTag);
-		}
+		//if (not m_Catcher->IsColliderActive())
+		//{
+			if (m_EffectTransform != nullptr)
+			{
+				if (m_CharaTag == "Blue")
+				{
+					//m_pCatchDustEffect = EffectManager::Play3D_Loop("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
+					//m_pCatchReadyEffect = EffectManager::Play3D_Loop("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Dust_Blue.efk", m_EffectTransform->Global(), "Catch_Dust_Blue" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Ready_Blue.efk", m_EffectTransform->Global(), "Catch_Ready_Blue" + m_CharaTag);
+				}
+				else if(m_CharaTag == "Red")
+				{
+					//m_pCatchDustEffect = EffectManager::Play3D_Loop("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
+					//m_pCatchReadyEffect = EffectManager::Play3D_Loop("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Dust_Red.efk", m_EffectTransform->Global(), "Catch_Dust_Red" + m_CharaTag);
+					EffectManager::Play3D_Loop("Catch_Ready_Red.efk", m_EffectTransform->Global(), "Catch_Ready_Red" + m_CharaTag);
+				}
+			}
+		//}
 
+		m_Catcher->SetColliderActive(true);
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
 	}
 	else
 	{
-		EffectManager::Stop("Catch_Ready_Single_Dust.efk", "Catch_Ready_Single_Dust" + m_CharaTag);
-		EffectManager::Stop("Catch_Ready_Single_Tornado.efk", "Catch_Ready_Single_Tornado" + m_CharaTag);
 		m_Catcher->SetColliderActive(false);
+		//m_pCatchReadyEffect = nullptr;
+		//m_pCatchDustEffect = nullptr;
 	}
 }
 

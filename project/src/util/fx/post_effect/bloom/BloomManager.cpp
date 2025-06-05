@@ -2,6 +2,7 @@
 #include "src/common/setting/window/WindowSetting.h"
 #include "src/util/input/InputManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/common/camera/CameraManager.h"
 
 void SetDrawScreenWithCamera(int screen)
 {
@@ -31,7 +32,8 @@ void BloomManager::Reset()
 	BLOOM_REF.Load();
 
 	DeleteGraph(m_EmitterScreen);
-	m_EmitterScreen = MakeScreen((int)WindowSetting::width, (int)WindowSetting::height, FALSE);
+
+	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, FALSE);
 	SetUseGraphZBuffer(m_EmitterScreen, TRUE);
 	SetParameter(BLOOM_REF.Param);
 	m_DoBloom = true;
@@ -53,10 +55,20 @@ void BloomManager::Draw()
 {
 	if (not m_DoBloom) return;
 
-	int highBrightScreen = MakeScreen((int)WindowSetting::width, (int)WindowSetting::height, FALSE);
-	int downScaleScreen = MakeScreen((int)WindowSetting::width / m_Parameter.DownScale, (int)WindowSetting::height / m_Parameter.DownScale, FALSE);
+	Vector2 pos = CameraManager::GetScreenDivisionPos();
+	Vector2 size = CameraManager::GetScreenDivisionSize();
 
-	GetDrawScreenGraph(0, 0, (int)WindowSetting::width, (int)WindowSetting::height, highBrightScreen);
+	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
+}
+
+void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
+
+	if (not m_DoBloom) return;
+
+	int highBrightScreen = MakeScreen(w, h, FALSE);
+	int downScaleScreen = MakeScreen(w / m_Parameter.DownScale, h / m_Parameter.DownScale, FALSE);
+
+	GetDrawScreenGraph(x, y, x + w, y + h, highBrightScreen);
 
 	// 描画結果から高輝度部分のみを抜き出した画像を得る
 	GraphFilterBlt(highBrightScreen, highBrightScreen, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, m_Parameter.MinBrightness, TRUE, GetColor(0, 0, 0), 255);
@@ -77,8 +89,8 @@ void BloomManager::Draw()
 
 	// 高輝度部分を縮小してぼかした画像を画面いっぱいに描画する
 	SetDrawBright(255, 255, 255);
-	DrawExtendGraph(0, 0, (int)WindowSetting::width, (int)WindowSetting::height, downScaleScreen, FALSE);
-	DrawExtendGraph(0, 0, (int)WindowSetting::width, (int)WindowSetting::height, downScaleScreen, FALSE);
+	DrawExtendGraph(x, y, x + w, y + h, downScaleScreen, FALSE);
+	DrawExtendGraph(x, y, x + w, y + h, downScaleScreen, FALSE);
 	SetDrawBright(255, 255, 255);
 
 	// 描画ブレンドモードをブレンド無しに戻す

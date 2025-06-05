@@ -27,6 +27,8 @@ public:
 
 	void SetColliderActive(bool isActive);
 	void SetParent(CharaBase* parent) { m_Parent = parent; }
+
+	bool IsColliderActive() const;
 private:
 	ColliderCapsule* m_Collider;	// 当たり判定
 	CharaBase* m_Parent;			// 親キャラクター

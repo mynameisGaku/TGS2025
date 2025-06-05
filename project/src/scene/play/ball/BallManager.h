@@ -22,7 +22,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	Ball* CreateBall(const Vector3& position);
+	Ball* CreateBall(const Vector3& position, bool isSpawn = false);
 
 	Ball* GetBall(uint32_t index);
 
@@ -35,6 +35,7 @@ private:
 
 	int m_Model;
 	std::unordered_map<std::string, BallTexture> m_Textures;
+	std::unordered_map<std::string, int> m_hTrails;
 
 #ifdef USE_POOL
 	Pool<Ball>* m_pPool;

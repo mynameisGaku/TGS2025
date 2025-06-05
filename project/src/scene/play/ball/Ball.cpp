@@ -13,6 +13,8 @@
 #include "src/common/component/renderer/BallRenderer.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
+#include "src/util/fx/trail/trail3D/Trail3D.h"
+#include "src/util/ptr/PtrUtil.h"
 
 Ball::Ball()
 {
@@ -31,7 +33,9 @@ Ball::Ball()
 	m_Collider->SetOffset(Vector3::Zero);
 	m_Collider->BaseInit(param);
 
-	Reset();
+	m_pTrail = new Trail3D();
+
+	Init();
 }
 
 Ball::~Ball()
@@ -40,13 +44,26 @@ Ball::~Ball()
 	{
 		m_Owner->SetLastBall(nullptr);
 	}
+
+	PtrUtil::SafeDelete(m_pTrail);
 }
 
-void Ball::Reset()
+void Ball::Reset(std::string charaTag)
+{
+	Init(charaTag);
+	m_State = S_OWNED;
+}
+
+void Ball::Spawn()
+{
+	Init();
+	m_State = S_LANDED;
+}
+
+void Ball::Init(std::string charaTag)
 {
 	transform->scale = Vector3::Ones * BALL_SCALE;
 
-	m_State = S_OWNED;
 	m_CharaTag = CHARADEFINE_REF.Tags[0];
 
 	m_HomingPeriod = 0.0f;
@@ -56,7 +73,7 @@ void Ball::Reset()
 	m_Physics->SetGravity(Vector3::Zero);
 	m_Physics->SetFriction(Vector3::Zero);
 
-	m_Collider->SetIsActive(false);
+	m_Collider->SetIsActive(true);
 
 	m_LifeTimeMax = BALL_REF.LifeTimeMax;
 	m_LifeTime = m_LifeTimeMax;
@@ -64,11 +81,7 @@ void Ball::Reset()
 
 	m_IsHoming = false;
 	m_IsActive = true;
-}
-
-void Ball::Init(std::string charaTag)
-{
-	Reset();
+	m_IsPickedUp = false;
 
 	ColDefine::Tag tag;
 	std::list<ColDefine::Tag> targets;
@@ -86,7 +99,7 @@ void Ball::Init(std::string charaTag)
 	else
 	{
 		// tagが不正ならレッドってことにする
-		tag = ColDefine::Tag::tBallRed;
+		tag = ColDefine::Tag::tNone;
 		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
 	
@@ -140,7 +153,7 @@ void Ball::Update()
 				{
 					float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
 					transform->rotation.y = forwardRad;
-					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
+					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
 				}
 				m_Physics->velocity.x *= 0.99f;
 				m_Physics->velocity.z *= 0.99f;
@@ -150,18 +163,30 @@ void Ball::Update()
 
 	if (m_State != S_OWNED)
 	{
-		m_LifeTime -= GTime.deltaTime;
-		if (m_LifeTime <= 0.0f)
+		if(m_IsPickedUp)
 		{
-			m_AlphaRate -= 255.0f * GTime.deltaTime;
-
-			if (m_AlphaRate <= 0.0f)
+			m_LifeTime -= GTime.deltaTime;
+			if (m_LifeTime <= 0.0f)
 			{
-				m_AlphaRate = 0.0f;
-				m_IsActive = false;
+				m_AlphaRate -= 255.0f * GTime.deltaTime;
+
+				if (m_AlphaRate <= 0.0f)
+				{
+					m_AlphaRate = 0.0f;
+					m_IsActive = false;
+				}
 			}
 		}
 	}
+
+	if (m_State != S_OWNED)
+	{
+		if(m_Physics->velocity.GetLengthSquared() >= 0.1f)
+		{
+			m_pTrail->Add(transform->position);
+		}
+	}
+	m_pTrail->Update(); 
 }
 
 
@@ -169,6 +194,8 @@ void Ball::Draw()
 {
 	if (not m_IsActive)
 		return;
+
+	m_pTrail->Draw();
 
 	Object3D::Draw();
 }
@@ -180,6 +207,8 @@ void Ball::Throw(const Vector3& velocity)
 	m_Physics->SetGravity(BALL_REF.GravityDefault);
 	m_Physics->SetFriction(BALL_REF.FrictionDefault);
 	m_Collider->SetIsActive(true);
+	m_pTrail->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, 1.0f, 40.0f);
+	m_pTrail->SetSubdivisions(4);
 	m_Owner = nullptr;
 }
 
@@ -196,12 +225,14 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 
 	m_Physics->SetIsActive(false);
 
+    m_HomingTargetChara = target;
+
 	m_HomingPosition = transform->position;
-	m_HomingTarget = (target == nullptr) ? Vector3(0, 0, 1000) : target->transform->position;
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算
-	Vector3 diff = m_HomingTarget - m_HomingPosition;
+	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
 }
 
@@ -219,16 +250,11 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 		m_State = S_LANDED;
+
+		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
-			if (m_CharaTag == "Blue")
-			{
-				EffectManager::Play3D("Hit_Blue.efk", *transform->Copy(), "Hit_Blue" + m_CharaTag);
-			}
-			else
-			{
-				EffectManager::Play3D("Hit_Red.efk", *transform->Copy(), "Hit_Red" + m_CharaTag);
-			}
 			m_Owner->SetLastBall(nullptr);
 		}
 
@@ -288,6 +314,22 @@ void Ball::SetTexture(const BallTexture& texture)
 	ballRenderer->SetTexture(texture);
 }
 
+void Ball::SetTrailImage(int hImage)
+{
+	m_hTrailImage = hImage;
+}
+
+void Ball::SetOwner(CharaBase* pChara)
+{
+	m_Owner = pChara;
+	m_LastOwner = m_Owner;
+}
+
+void Ball::PickUp()
+{
+	m_IsPickedUp = true;
+}
+
 void Ball::collisionToGround()
 {
 	if (m_State == S_OWNED) return;
@@ -317,8 +359,9 @@ void Ball::collisionToGround()
 void Ball::HomingProcess()
 {
 	// ---- ホーミング補間 ----
-	Vector3 acceleration = m_HomingTarget - transform->position;
-	Vector3 diff = m_HomingTarget - m_HomingPosition;
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	Vector3 acceleration = m_HomingTargetPos - transform->position;
+	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 
 	acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
 

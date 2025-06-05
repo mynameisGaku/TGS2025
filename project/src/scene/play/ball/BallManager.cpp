@@ -7,6 +7,8 @@
 #include "vendor/nlohmann/json.hpp"
 #include <fstream>
 
+#include "src/common/camera/CameraManager.h"
+
 const std::string BallManager::FOLDER_TEXTURE = "data/Img/BallTexture/";
 const std::string BallManager::FOLDER_JSON = "data/Json/Ball/Texture/";
 
@@ -17,12 +19,21 @@ BallManager::BallManager()
 
 	BALL_REF.Load();
 
+	m_hTrails["Green"] = LoadGraph("data/img/trail/Trail_Green.png");
+
 	m_pPool = new Pool<Ball>(BALL_REF.Max);
 }
 
 BallManager::~BallManager()
 {
 #ifdef USE_POOL
+
+	for (auto& it : m_hTrails)
+	{
+		DeleteGraph(it.second);
+	}
+	m_hTrails.clear();
+
 	for (auto& item : m_pPool->GetAllItems())
 	{
 		if (item == nullptr)
@@ -94,6 +105,9 @@ void BallManager::Update()
 
 void BallManager::Draw()
 {
+	if (CameraManager::IsScreenDivision())
+		return;
+
 	m_pPool->PoolImGuiRendererBegin("ball pool debug");
 
 	ImGui::Text(("Capacity: " + std::to_string(m_pPool->GetCapacity())).c_str());
@@ -113,7 +127,7 @@ void BallManager::Draw()
 	m_pPool->PoolImguiRendererEnd();
 }
 
-Ball* BallManager::CreateBall(const Vector3& position)
+Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 {
 
 	auto& ref = BALL_REF;
@@ -132,7 +146,15 @@ Ball* BallManager::CreateBall(const Vector3& position)
 	uint32_t index = m_pPool->GetIndex();
 
 	auto obj = m_pPool->Alloc([&](uint32_t i, Ball* p) { return initfunc(i, p); });
+	if (isSpawn)
+	{
+		obj->Spawn();
+	}
+
 	obj->transform->position = position;
+
+	// チームに合わせてトレイルカラー変更
+	obj->SetTrailImage(m_hTrails["Green"]);
 
 	obj->SetModel(m_Model);
 	// テスト用 テクスチャをランダムで選択

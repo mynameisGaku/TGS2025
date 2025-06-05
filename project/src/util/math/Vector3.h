@@ -147,10 +147,10 @@ public:
 	/* トモミチゾーン */
 
 	// 引数との差を取得する
-	inline const Vector3 Distance(Vector3 value) { return Vector3(x - value.x, y - value.y, z - value.z); }
+	inline const Vector3 Distance(const Vector3& value) { return Vector3(x - value.x, y - value.y, z - value.z); }
 
 	// 引数から自身の方へ向く角度を取得する
-	inline const float Direction(Vector3 value) {
+	inline const float Direction(const Vector3& value) {
 		Vector3 v = Distance(value);
 		return atan2f(v.x, v.z);
 	}
@@ -270,6 +270,7 @@ public:
 		@return		変換されたベクトル
 	*/
 	static Vector3 TransformCoord(const Vector3& vec, const Matrix& mat);
+	static Vector3 TransformCoord(const Vector3& vec, const MATRIX& mat);
 
 	/**
 		@brief		2 つのベクトル間の線形補間を行います。
@@ -364,6 +365,17 @@ public:
 	*/
 	static Vector3 SetZ(int z);
 
+	// 3次元ベクトルを回転行列に変換する
+	inline MATRIX ToRotationMatrix() {
+
+		MATRIX m = MGetIdent();
+		m = MMult(m, MGetRotZ(z));
+		m = MMult(m, MGetRotX(x));
+		m = MMult(m, MGetRotY(y));
+
+		return m;
+	}
+
 public:
 
 	Vector3& operator += (const Vector3& v);
@@ -393,9 +405,19 @@ public:
 	bool operator == (const Vector3& v) const;
 	bool operator != (const Vector3& v) const;
 
+	// DxLibのVECTORと互換性をもたせる
 	Vector3(const VECTOR& v);
 	operator const VECTOR() const;
 	operator bool() const;
+	Vector3 operator + (const VECTOR& v) const;
+	Vector3& operator += (const VECTOR& v);
+	Vector3 operator - (const VECTOR& v) const;
+	Vector3& operator -= (const VECTOR& v);
+	Vector3 operator * (const VECTOR& v) const;
+	Vector3& operator *= (const VECTOR& v);
+	Vector3 operator / (const VECTOR& v) const;
+	Vector3& operator /= (const VECTOR& v);
+
 
 	const friend Vector3 operator *(const Vector3& v, const MATRIX& m1);
 	friend Vector3& operator *=(Vector3& v, const MATRIX& m1);

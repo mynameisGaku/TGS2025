@@ -1,0 +1,104 @@
+{
+  "Params": [
+    {
+      "SPAWNER_NAME": "BallSpawner1",
+      "INTERVAL_SEC": 1.0,
+      "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+      "SPAWN_AMOUNT_ONCE_MAX": 1,
+      "SPAWN_AMOUNT_ONCE_MIN": 1,
+      "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+      "SPAWN_AMOUNT_INITIAL": 0,
+
+      "SPAWN_RANGE": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWN_INITIAL_VELOCITY": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWNER_POSITION": {
+        "x": 0.0,
+        "y": 100.0,
+        "z": -1000.0
+      }
+    },
+    {
+      "SPAWNER_NAME": "BallSpawner2",
+      "INTERVAL_SEC": 1.0,
+      "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+      "SPAWN_AMOUNT_ONCE_MAX": 1,
+      "SPAWN_AMOUNT_ONCE_MIN": 1,
+      "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+      "SPAWN_AMOUNT_INITIAL": 0,
+
+      "SPAWN_RANGE": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWN_INITIAL_VELOCITY": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWNER_POSITION": {
+        "x": 0.0,
+        "y": 100.0,
+        "z": 1000.0
+      }
+    },
+    {
+      "SPAWNER_NAME": "BallSpawner3",
+      "INTERVAL_SEC": 1.0,
+      "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+      "SPAWN_AMOUNT_ONCE_MAX": 1,
+      "SPAWN_AMOUNT_ONCE_MIN": 1,
+      "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+      "SPAWN_AMOUNT_INITIAL": 0,
+
+      "SPAWN_RANGE": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWN_INITIAL_VELOCITY": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWNER_POSITION": {
+        "x": 1000.0,
+        "y": 100.0,
+        "z": 0.0
+      }
+    },
+    {
+      "SPAWNER_NAME": "BallSpawner4",
+      "INTERVAL_SEC": 1.0,
+      "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+      "SPAWN_AMOUNT_ONCE_MAX": 1,
+      "SPAWN_AMOUNT_ONCE_MIN": 1,
+      "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+      "SPAWN_AMOUNT_INITIAL": 0,
+
+      "SPAWN_RANGE": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWN_INITIAL_VELOCITY": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "SPAWNER_POSITION": {
+        "x": -1000.0,
+        "y": 100.0,
+        "z": 0.0
+      }
+    }
+  ]
+}

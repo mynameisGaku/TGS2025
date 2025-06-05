@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include "src/util/math/Vector3.h"
 
 /**
 	@brief	一般的な数学関数と定数をまとめたモジュールです。
@@ -29,6 +30,8 @@ public:
 
 	/// 値を0.0～1.0の範囲内に制限します。
 	static inline float Clamp01(float value) { return Clamp(value, 0.0f, 1.0f); }
+
+	static inline void ClampAssing(float* value, float minValue,float maxValue) { *value = Clamp(*value, minValue, maxValue); }
 
 	/// 指定値以上の最小の 2 のべき乗数を返します。
 	static unsigned int NextPow2(unsigned int value);
@@ -74,6 +77,8 @@ public:
 	*/
 	static float Lerp(float v1, float v2, float t);
 
+	static float LerpAngle(float a, float b, float t);
+
 	/**
 		@brief		エルミートスプライン補間を実行します。
 		@param[in]	v1	: 開始値
@@ -97,6 +102,18 @@ public:
 		@details	t は通常、0.0～1.0 を指定します。
 	*/
 	static float CatmullRom(float v1, float v2, float v3, float v4, float t);
+
+	/**
+		@brief		Catmull-Rom 補間を実行します。
+		@param[in]	v1	: 1番目の位置
+		@param[in]	v2	: 2番目の位置 (t = 0.0 のときの値)
+		@param[in]	v3	: 3番目の位置 (t = 1.0 のときの値)
+		@param[in]	v4	: 4番目の位置
+		@param[in]	t	: 加重係数
+		@return		補間結果の値
+		@details	t は通常、0.0～1.0 を指定します。
+	*/
+	static Vector3 CatmullRomVec3(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t);
 
 	// 半分にする
 	static float Half(float value);

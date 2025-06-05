@@ -16,6 +16,8 @@ class Animator;
 template <class C>
 class Timeline;
 class StatusTracker;
+class EffectBase;
+class Trail3D;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -154,6 +156,8 @@ public:
 	/// <param name="rot">リスポーン時回転</param>
 	void Respawn(const Vector3& pos, const Vector3& rot);
 
+	void SetTrailImage(int hImage);
+
 	//=======================================================================================
 	// ▼ゲッター
 
@@ -176,6 +180,27 @@ public:
 	/// ステータストラッカーを取得
 	/// </summary>
 	inline StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
+
+	// ボールをチャージしているかどうか
+	inline bool	IsCharging()	const { return m_IsCharging;}			
+	// 着地中
+	inline bool	IsLanding()		const { return m_IsLanding;}			
+	// 移動可能か
+	inline bool	CanMove()		const { return m_CanMove;}				
+	// 回転可能か
+	inline bool	CanRot()		const { return m_CanRot;}				
+	// 移動しようとしているか
+	inline bool	IsMove()		const { return m_IsMove;}				
+	// ジャンプ中か
+	inline bool	IsJumping()		const { return m_IsJumping;}			
+	// キャッチ可能か
+	inline bool	CanCatch()		const { return m_CanCatch;}				
+	// ボールを持てるか
+	inline bool	CanHold()		const { return m_CanHold;}				
+	// ボールを投げられるか
+	inline bool	CanThrow()		const { return m_CanThrow;}				
+	// キャッチ中か
+	inline bool	IsCatching()	const { return m_IsCatching;}			
 
 	//=======================================================================================
 	// ▼各ステート
@@ -235,12 +260,15 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
+	EffectBase*		m_pCatchReadyEffect;	// キャッチの準備エフェクト
+	EffectBase*		m_pCatchDustEffect;		// キャッチの粉エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
+    int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
@@ -248,6 +276,7 @@ private:
 	float			m_SpeedScale;			// 速度倍率
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
+    float			m_CatchTimer;			// キャッチの残り時間タイマー
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か

@@ -1,6 +1,7 @@
 #pragma once
 #include "src/util/fx/effect/EffectBase.h"
 #include "src/util/fx/effect/EffectDefine.h"
+#include "src/config/imgui/imGuiConfig.h"
 
 using namespace EffectDefine;
 

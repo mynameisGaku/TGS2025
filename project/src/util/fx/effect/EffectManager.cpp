@@ -344,6 +344,7 @@ void EffectManager::AllReleaseInfo() {
 
 	PtrUtil::SafeDelete(effectInfoDatas);
 }
+
 #ifdef IMGUI
 
 #include "src/util/debug/imgui/imGuiManager.h"

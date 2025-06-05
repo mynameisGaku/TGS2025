@@ -10,17 +10,27 @@
 #include "src/util/debug/imgui/imGuiManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/util/string/StringUtil.h"
+#include "src/util/input/InputManager.h"
+#include "src/common/setting/window/WindowSetting.h"
 
 using namespace CameraDefine;
 
 namespace {
 
-	std::vector<Camera*>* cameras;
+	std::vector<Camera*>* cameras;	// カメラ
+	bool isScreenDivision;			// 画面分割の有無
+
+	static int screenDivBeginX = 0;	// 画面分割の開始X座標
+	static int screenDivBeginY = 0;	// 画面分割の開始Y座標
+	static int screenDivWidth = (int)WindowSetting::Inst().width;	// 画面分割の幅
+	static int screenDivHeight = (int)WindowSetting::Inst().height;	// 画面分割の高さ
 }
 
 void CameraManager::Init() {
 
 	CAMERADEFINE_REF.Load();
+
+	isScreenDivision = false;
 
 	if (cameras == nullptr)
 		cameras = new std::vector<Camera*>();
@@ -31,7 +41,10 @@ void CameraManager::Init() {
 	// カメラの描画範囲
 	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
-	cameras->push_back(new Camera());
+	Camera* camera1P = CreateCamera();
+	Camera* camera2P = CreateCamera();
+	//Camera* camera3P = CreateCamera();
+	//Camera* camera4P = CreateCamera();
 
 #ifdef IMGUI
 	InitImGuiNode();
@@ -52,15 +65,20 @@ void CameraManager::Update() {
 	UpdateImGuiNode();
 #endif
 
+	if (InputManager::Push(KeyDefine::KeyCode::U)) {
+		for (const auto& c : *cameras) {
+			c->SetIsView(!c->IsView());
+		}
+	}
 }
 
 void CameraManager::Draw() {
 
-	if (cameras == nullptr)
+	// 画面分割されていない場合は、メインカメラのみ描画する
+	if (cameras == nullptr || isScreenDivision)
 		return;
 
-	for (const auto& c : *cameras)
-		c->Draw();
+	MainCamera()->Draw();
 }
 
 void CameraManager::Release() {
@@ -80,12 +98,23 @@ void CameraManager::Release() {
 	PtrUtil::SafeDelete(cameras);
 }
 
+Camera* CameraManager::CreateCamera() {
+
+	if (cameras == nullptr)
+		return nullptr;
+
+	Camera* newCamera = new Camera();
+	newCamera->SetHolderCharaIndex((int)cameras->size());
+	cameras->push_back(newCamera);
+	return newCamera;
+}
+
 bool CameraManager::CheckNumber(const int& number) {
 
 	if (cameras == nullptr)
 		return false;
 
-	if (number < 0 || cameras->size() < number)
+	if (number < 0 || cameras->size() <= number)
 		return false;
 
 	return true;
@@ -107,12 +136,54 @@ void CameraManager::ChangeStateCamera(const int& number, void(Camera::* state)(F
 	(*cameras)[number]->ChangeState(state);
 }
 
+void CameraManager::CameraScreenDivision(int x, int y, int w, int h) {
+
+	int x2 = x + w;
+	int y2 = y + h;
+
+	SetDrawArea(x, y, x2, y2);
+
+	float centerX = (x + x2) * 0.5f;
+	float centerY = y2 * 0.5f;
+	SetCameraScreenCenter(centerX, centerY);
+
+	screenDivBeginX = x;
+	screenDivBeginY = y;
+	screenDivWidth = w;
+	screenDivHeight = h;
+}
+
+void CameraManager::CameraScreenDivisionDraw(int x, int y, int w, int h, int number) {
+
+	if (not CheckNumber(number))
+		return;
+
+	(*cameras)[number]->Draw();
+	CameraScreenDivision(x, y, w, h);
+}
+
+void CameraManager::ApplyScreenDivision() {
+
+	CameraScreenDivision(screenDivBeginX, screenDivBeginY, screenDivWidth, screenDivHeight);
+}
+
+void CameraManager::DefaultScreenSize() {
+
+	SetDrawArea(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height);
+	SetCameraScreenCenter(WindowSetting::Inst().width * 0.5f, WindowSetting::Inst().height * 0.5f);
+}
+
 void CameraManager::SetCameraWork(const int& number, const std::string& type) {
 
-	if (CheckNumber(number) == false)
+	if (CameraManager::CheckNumber(number) == false)
 		return;
 
 	(*cameras)[number]->SetPerformance(type);
+}
+
+void CameraManager::SetIsScreenDivision(bool value) {
+
+	isScreenDivision = value;
 }
 
 void CameraManager::CameraChangeStateTheString(const std::string& state) {
@@ -143,6 +214,21 @@ Camera* CameraManager::GetCamera(const int& index) {
 std::vector<Camera*> CameraManager::AllCameras() {
 
 	return *cameras;
+}
+
+bool CameraManager::IsScreenDivision()
+{
+	return isScreenDivision;
+}
+
+Vector2 CameraManager::GetScreenDivisionPos() {
+
+	return Vector2(screenDivBeginX, screenDivBeginY);
+}
+
+Vector2 CameraManager::GetScreenDivisionSize() {
+
+	return Vector2(screenDivWidth, screenDivHeight);
 }
 
 #ifdef IMGUI
@@ -263,6 +349,18 @@ void CameraManager::InitImGuiNode() {
 
 		CSTN->Add(new ImGuiNode_Button("Reset", std::bind(ResetCamera, i)));
 	}
+
+	CameraTree->Add(new ImGuiNode_Button("Reset All", []() {
+		if (cameras == nullptr)
+			return;
+		for (int i = 0; i < cameras->size(); i++) {
+			(*cameras)[i]->Reset();
+		}
+	}
+	)
+	);
+
+	CameraTree->Add(new ImGuiNode_CheckBox("ScreenDivision", &isScreenDivision));
 }
 
 void CameraManager::UpdateImGuiNode() {

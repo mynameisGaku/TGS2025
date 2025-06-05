@@ -1748,3 +1748,15 @@ bool Matrix::operator != (const Matrix& mat) const
 {
 	return !Equals(*this, mat);
 }
+
+Matrix::Matrix(const MATRIX& mat)
+{
+	memcpy(m, mat.m, sizeof(float) * 16);
+}
+
+Matrix::operator MATRIX() const
+{
+	MATRIX mat;
+	memcpy(mat.m, m, sizeof(float) * 16);
+	return mat;
+}

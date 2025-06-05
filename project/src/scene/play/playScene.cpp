@@ -5,6 +5,8 @@
 #include "src/common/camera/CameraManager.h"
 #include "src/common/component/collider/CollisionManager.h"
 
+//=== エフェクト ===
+
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
 #include "src/util/fx/effect/EffectManager.h"
@@ -15,6 +17,12 @@
 
 //=== 進行役 ===
 #include "src/scene/play/match/MatchManager.h"
+
+//=== ボール ===
+#include "src/scene/play/ball/BallSpawner.h"
+
+//=== ステージ ===
+#include "src/common/stage/StageObjectManager.h"
 
 using namespace KeyDefine;
 
@@ -33,11 +41,20 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
+	StageObjectManager::LoadFromJson("data/json/Stage/Stage_3.json");
+
+	CameraManager::SetIsScreenDivision(true);
+
+	const int camNum = (int)CameraManager::AllCameras().size();
+
+	for (int i = 0; i < camNum; i++) {
+		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
+	}
 }
 
 PlayScene::~PlayScene()
 {
+	CameraManager::SetIsScreenDivision(false);
 }
 
 void PlayScene::Update()
@@ -57,10 +74,15 @@ void PlayScene::Draw()
 	EffectManager::Draw();
 	m_BloomManager->SetDrawScreenToBack();
 
+	if (CameraManager::IsScreenDivision())
+		CameraManager::ApplyScreenDivision();
+	
+	EffectManager::Draw();
+
 	SceneBase::Draw();
 
-	DrawSphere3D(Vector3(0, 150, 1000), 50, 32, 0xffffff, 0x001fff, true);
+	if (not CameraManager::IsScreenDivision())
+		Settings_json::Inst()->RenderImGuiFileManager();
 
-	Settings_json::Inst()->RenderImGuiFileManager();
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 }

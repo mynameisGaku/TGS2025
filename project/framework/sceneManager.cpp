@@ -3,6 +3,9 @@
 #include "framework/sceneFactory.h"
 #include "src/common/system/SystemManager.h"
 
+#include "src/common/camera/CameraManager.h"
+#include "src/common/setting/window/WindowSetting.h"
+
 namespace {
 
 	std::string m_currentName; // Œ»İ‚ÌƒV[ƒ“‚Ì–¼Ì
@@ -40,12 +43,48 @@ void SceneManager::Update()
 
 void SceneManager::Draw()
 {
-	DrawBefore();
+	int screenWidth = (int)WindowSetting::Inst().width;
+	int screenHeight = (int)WindowSetting::Inst().height;
 
-	if (m_currentScene != nullptr) {
-		m_currentScene->Draw();
+	if (not CameraManager::IsScreenDivision()) {
+		DrawBefore();
+
+		if (m_currentScene != nullptr) {
+			m_currentScene->Draw();
+		}
+		m_commonScene->Draw();
 	}
-	m_commonScene->Draw();
+	else {
+
+		const int camNum = (int)CameraManager::AllCameras().size();
+
+		int screenBeingX = 0;
+		int screenBeingY = 0;
+
+		int screenDivX = (int)(screenWidth / camNum);
+		int screenDivY = screenHeight;
+
+		//===========================================================
+		// ƒJƒƒ‰‚Ì•`‰æ
+
+		for (int i = 0; i < camNum; i++) {
+
+			CameraManager::CameraScreenDivisionDraw(screenBeingX, screenBeingY, screenDivX, screenHeight, i);
+
+			DrawBefore();
+
+			if (m_currentScene != nullptr) {
+				m_currentScene->Draw();
+			}
+			m_commonScene->Draw();
+
+			screenBeingX += screenDivX;
+		}
+	}
+	//===========================================================
+	// ‰æ–Ê•ªŠ„‚ğ‰Šú‰»
+
+	CameraManager::CameraScreenDivision(0, 0, screenWidth, screenHeight);
 }
 
 void SceneManager::Release()

@@ -21,6 +21,15 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	/// <summary>
+	/// 指定した座標とサイズで分割画面上に描画します
+	/// </summary>
+	/// <param name="x">描画領域の左上隅のX座標</param>
+	/// <param name="y">描画領域の左上隅のY座標</param>
+	/// <param name="w">描画領域の幅</param>
+	/// <param name="h">描画領域の高さ</param>
+	void DrawOnScreenDiv(int x, int y, int w, int h);
+
 	void SetDrawScreenToEmitter();
 	void SetDrawScreenToBack();
 	void SetParameter(BloomRef::Parameter parameter);

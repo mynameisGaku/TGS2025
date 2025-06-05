@@ -8,6 +8,7 @@ class ColliderCapsule;
 class CharaBase;
 class Collider;
 class BallManager;
+class Trail3D;
 
 namespace
 {
@@ -33,8 +34,9 @@ public:
 
 	Ball();
 	~Ball();
-	void Reset();
-	void Init(std::string charaTag);
+	void Reset(std::string charaTag);
+	void Spawn();
+	void Init(std::string charaTag = "None");
 	void Update() override;
 	void Draw() override;
 
@@ -64,28 +66,38 @@ public:
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
 	void SetTexture(const BallTexture& texture);
+
+	void SetTrailImage(int hImage);
+
+	void SetOwner(CharaBase* pChara);
+
+	void PickUp();
 private:
 	friend class BallManager;
-	BallManager*	 m_pManager;
+	BallManager*		m_pManager;
+	Trail3D*			m_pTrail;
 
-	Physics*		 m_Physics;
-	ColliderCapsule* m_Collider;
-	State			 m_State;
-	CharaBase*		 m_Owner;
-	CharaBase*		 m_LastOwner;
-	std::string		 m_CharaTag;
-	uint32_t		 m_Index;
-	float			 m_LifeTime;
-	float			 m_LifeTimeMax;
-	float			 m_AlphaRate;
-	bool			 m_IsActive;
+	Physics*			m_Physics;
+	ColliderCapsule*	m_Collider;
+	State				m_State;
+	CharaBase*			m_Owner;
+	CharaBase*			m_LastOwner;
+	std::string			m_CharaTag;
+	uint32_t			m_Index;
+	float				m_LifeTime;
+	float				m_LifeTimeMax;
+	float				m_AlphaRate;
+	int					m_hTrailImage;
+	bool				m_IsActive;
+	bool				m_IsPickedUp;
 
 	// ホーミング系
-	Vector3			m_HomingVelocity;
-	Vector3			m_HomingPosition;
-	Vector3			m_HomingTarget;
-	float			m_HomingPeriod;
-	bool			m_IsHoming;
+	const CharaBase*	m_HomingTargetChara;
+	Vector3				m_HomingVelocity;
+	Vector3				m_HomingPosition;
+	Vector3				m_HomingTargetPos;
+	float				m_HomingPeriod;
+	bool				m_IsHoming;
 
 	void collisionToGround();
 	void HomingDeactivate();

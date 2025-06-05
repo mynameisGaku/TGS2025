@@ -17,6 +17,12 @@ namespace CameraManager {
 	void Release();
 
 	/// <summary>
+	/// カメラの生成を行う
+	/// </summary>
+	/// <returns>生成したカメラの実体</returns>
+	Camera* CreateCamera();
+
+	/// <summary>
 	/// カメラの再初期化を行う
 	/// </summary>
 	/// <param name="number">カメラの番号</param>
@@ -37,6 +43,35 @@ namespace CameraManager {
 	/// <param name="state">変更するステート</param>
 	void ChangeStateCamera(const int& number, void(Camera::* state)(FSMSignal));
 
+	/// <summary>
+	/// カメラ描画を指定された位置とサイズで分割します
+	/// </summary>
+	/// <param name="x">分割領域の左上隅のX座標</param>
+	/// <param name="y">分割領域の左上隅のY座標</param>
+	/// <param name="w">分割領域の幅</param>
+	/// <param name="h">分割領域の高さ</param>
+	void CameraScreenDivision(int x, int y, int w, int h);
+
+	/// <summary>
+	/// カメラ描画を指定された位置とサイズで分割してから、描画します
+	/// </summary>
+	/// <param name="x">分割領域の左上隅のX座標</param>
+	/// <param name="y">分割領域の左上隅のY座標</param>
+	/// <param name="w">分割領域の幅</param>
+	/// <param name="h">分割領域の高さ</param>
+	/// <param name="number">描画を行うカメラの番号</param>
+	void CameraScreenDivisionDraw(int x, int y, int w, int h, int number);
+
+	/// <summary>
+	/// 画面分割を適用する
+	/// </summary>
+	void ApplyScreenDivision();
+
+	/// <summary>
+	/// 既定の画面サイズに戻す
+	/// </summary>
+	void DefaultScreenSize();
+
 	//================================================================================
 	// ▼セッター
 
@@ -46,6 +81,11 @@ namespace CameraManager {
 	/// <param name="number">カメラの番号</param>
 	/// <param name="type">カメラワークの種類</param>
 	void SetCameraWork(const int& number, const std::string& type);
+
+	/// <summary>
+	/// 画面分割処理を行うかを設定する
+	/// </summary>
+	void SetIsScreenDivision(bool value);
 
 	//================================================================================
 	// ▼ゲッター
@@ -67,6 +107,15 @@ namespace CameraManager {
 	/// 全てのカメラのリストを取得する
 	/// </summary>
 	std::vector<Camera*> AllCameras();
+
+	/// <summary>
+	/// 画面が分割されているか取得する
+	/// </summary>
+	bool IsScreenDivision();
+
+	Vector2 GetScreenDivisionPos();
+
+	Vector2 GetScreenDivisionSize();
 
 	//================================================================================
 	// ▼デバッグ機能

@@ -34,7 +34,7 @@ public:
 	/// 指定したキャラに対して、最も近い敵キャラを取得する
 	/// </summary>
 	/// <param name="index">キャラID</param>
-	const CharaBase* TargetChara(int index);
+	CharaBase* TargetChara(int index);
 
 	/// <summary>
 	/// キャラのプールを取得する
@@ -48,6 +48,7 @@ private:
 
 	int						 m_Max;
 	std::vector<std::string> m_Tags;
+	std::unordered_map<std::string, int> m_hTrails;
 
 #ifdef USE_POOL
 	Pool<CharaBase>*		 m_pPool;

@@ -6,19 +6,18 @@
 #include "src/util/time/GameTime.h"
 #include "src/Util/ptr/PtrUtil.h"
 #include "src/common/stage/Stage.h"
+#include "src/util/easing/EasingUtils.h"
 #include <assert.h>
 
 // ◇ステート関連
 #include "src/util/fsm/StateManager.h"
-
-// ◇コンポーネント
-#include "src/common/component/shake/Shake.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/common/setting/window/WindowSetting.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -29,7 +28,8 @@ Camera::Camera() {
 
 	cameraWork = nullptr;
 
-	AddComponent<Shake>();
+	m_pShake = AddComponent<Shake>();
+	m_pShake->Init(this);
 
 	// fsmの初期化
 	fsm = new TinyFSM<Camera>(this);
@@ -41,7 +41,13 @@ Camera::Camera() {
 	cameraCone.range = CAMERADEFINE_REF.m_ConeRange;
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
-	targetChara = nullptr;
+	m_TargetChara = nullptr;
+	isView = true;
+	drawFlag = false;
+
+	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
+
+	m_CameraRotMat = MGetIdent();
 
 	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
@@ -62,8 +68,10 @@ void Camera::Reset() {
 
 	offset = CAMERADEFINE_REF.m_OffsetDef;
 	target = CAMERADEFINE_REF.m_TargetDef;
-	offsetPrev = offset;
-	targetPrev = target;
+	offsetAfter = offset;
+	targetAfter = target;
+
+	m_TargetTransitionTime = 0.0f;
 
 	holder = nullptr;
 }
@@ -75,38 +83,60 @@ void Camera::Update() {
 	if (fsm != nullptr)
 		fsm->Update();
 
+	if (m_AnimData.state != CameraAnimState::Hold)
+		UpdateOffsetLeap();
+
+	UpdateTargetLeap();
+	UpdateAnimation();
+
 	Object3D::Update();
+
+	drawFlag = false;
 }
 
 void Camera::Draw() {
 
+	if (drawFlag)
+		return;
+
+	if (not isView) {
+		DrawVirtualCamera();
+		return;
+	}
+
 	Object3D::Draw();
 
-	MATRIX mShakeTrs = MGetIdent();	// 振動用行列
-
-	Shake* shake = GetComponent<Shake>();
-	if (shake != nullptr)
-		mShakeTrs = shake->Matrix();
+	MATRIX mShake = m_pShake->Matrix();	// 振動用行列
 
 	Transform globalTrs = transform->Global();
 
-	Vector3 cameraPos = globalTrs.position + offset * globalTrs.RotationMatrix() * mShakeTrs;
-	Vector3 targetPos = target * mShakeTrs;
+	Vector3 cameraPos = WorldPos() * mShake;
+	Vector3 targetPos = target * mShake;
 
 	if (holder != nullptr) {
 		cameraPos += holder->Global().position;
 		targetPos += holder->Global().position;
 	}
 
-	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY,m_CameraRotMat));
+	//SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 
-	//Vector3 coneLineL = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(MathUtil::ToRadians(cameraCone.angle * 0.5f)) * globalTrs.RotationMatrix();
-	//Vector3 coneLineR = Vector3::SetZ(cameraCone.range * 0.1f) * MGetRotY(MathUtil::ToRadians(cameraCone.angle * -0.5f)) * globalTrs.RotationMatrix();
-	//DrawLine3D(cameraPos, cameraPos + coneLineL, 0xFF0000);
-	//DrawLine3D(cameraPos, cameraPos + coneLineR, 0xFF0000);
-	//DrawSphere3D(targetPos, 8.0f, 16, 0x00FF00, 0xFFFFFF, false);
-	//DrawCapsule3D(cameraPos, cameraPos + coneLineL, 8.0f, 16, 0xFFFF00, 0xFFFFFF, false);
-	//DrawCapsule3D(cameraPos, cameraPos + coneLineR, 8.0f, 16, 0x00FFFF, 0xFFFFFF, false);
+	drawFlag = true;
+}
+
+void Camera::DrawVirtualCamera() {
+
+	Transform globalTrs = transform->Global();
+
+	Vector3 cameraPos = WorldPos();
+	Vector3 targetPos = target;
+
+	if (holder != nullptr) {
+		cameraPos += holder->Global().position;
+		targetPos += holder->Global().position;
+	}
+
+	DrawCapsule3D(cameraPos, targetPos, 8.0f, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), false);
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
@@ -119,14 +149,15 @@ void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
 void Camera::ColCheckToTerrain() {
 
-	Vector3 hitPos = Vector3::Zero;
-	Vector3 cameraPosition = WorldPos();
+	Vector3 hitPos = Vector3::Zero;	// 当たった座標
+	Vector3 cameraPos = WorldPos();	// カメラの座標
+	Vector3 lay = Vector3::SetY(-10.0f);
 
-	if (Stage::ColCheckGround(target, cameraPosition - Vector3::SetY(10.0f), &hitPos)) {
+	if (Stage::ColCheckGround(target, cameraPos + lay, &hitPos)) {
 		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * Vector3::UnitY;	// 地面との設置点
 		Vector3 targePos = target * Vector3::UnitY;
 
-		transform->position = terrainPos + targePos + Vector3::SetY(10.0f);
+		transform->position = terrainPos + targePos - lay;
 	}
 }
 
@@ -178,10 +209,10 @@ void Camera::OperationByMouse(int type) {
 	transform->rotation.y += min(max(addRot.y, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
 }
 
-void Camera::OperationByStick(int type) {
+void Camera::OperationByStick(int padNumber, int type) {
 
 	Vector2 addRot = Vector2::Zero;	// 加算する回転量
-	Vector2 rightStick = PadController::NormalizedRightStick();
+	Vector2 rightStick = PadController::NormalizedRightStick(padNumber);
 
 	switch (type) {
 	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * MathUtil::ToRadians(-1.0f);break;
@@ -199,10 +230,65 @@ void Camera::OperationByStick(int type) {
 	transform->rotation.y += addRot.y;
 }
 
+void Camera::UpdateOffsetLeap() {
+
+	offset += ((offsetAfter - offset) * CAMERADEFINE_REF.m_Interpolation) * GTime.timeScale;
+}
+
+void Camera::UpdateTargetLeap() {
+
+	target += ((targetAfter - target) * CAMERADEFINE_REF.m_Interpolation) * GTime.timeScale;
+}
+
+void Camera::UpdateAnimation() {
+
+	if (not m_AnimData.isPlaying)
+		return;
+
+	m_AnimData.Update();
+
+	switch (m_AnimData.state) {
+	case CameraAnimState::Begin_To_End:
+		if (m_AnimData.useAnim)
+			offset = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.begin, m_AnimData.end);
+
+		if (m_AnimData.useTarget)
+			target = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginTarget, m_AnimData.endTarget);
+
+		if (m_AnimData.useMatrix) {
+			Vector3 rot = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginRotMatrix, m_AnimData.endRotMatrix);
+			m_CameraRotMat = rot.ToRotationMatrix();
+		}
+
+		break;
+
+	case CameraAnimState::End_To_Begin:
+		if (m_AnimData.useAnim)
+			offset = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.end, m_AnimData.begin);
+
+		if (m_AnimData.useTarget)
+			target = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endTarget, m_AnimData.beginTarget);
+
+		if (m_AnimData.useMatrix) {
+			Vector3 rot = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endRotMatrix, m_AnimData.beginRotMatrix);
+			m_CameraRotMat = rot.ToRotationMatrix();
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
 void Camera::SetPerformance(const std::string& perfType) {
 
 	//stateManager->ChangeState(State::sPerformance);
 	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
+}
+
+void Camera::SetAnimation(const CameraAnimData& animData) {
+
+	m_AnimData = animData;
 }
 
 Vector3 Camera::WorldPos() const {

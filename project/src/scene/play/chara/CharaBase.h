@@ -17,6 +17,7 @@ template <class C>
 class Timeline;
 class StatusTracker;
 class EffectBase;
+class Trail3D;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -155,6 +156,8 @@ public:
 	/// <param name="rot">リスポーン時回転</param>
 	void Respawn(const Vector3& pos, const Vector3& rot);
 
+	void SetTrailImage(int hImage);
+
 	//=======================================================================================
 	// ▼ゲッター
 
@@ -265,6 +268,7 @@ private:
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
+    int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度

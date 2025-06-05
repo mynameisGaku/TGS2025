@@ -44,8 +44,12 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 
 	CameraManager::SetIsScreenDivision(true);
-	CameraManager::MainCamera()->ChangeState(&Camera::ChaseState);
-	CameraManager::GetCamera(1)->ChangeState(&Camera::ChaseState);
+
+	const int camNum = (int)CameraManager::AllCameras().size();
+
+	for (int i = 0; i < camNum; i++) {
+		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
+	}
 }
 
 PlayScene::~PlayScene()

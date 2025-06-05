@@ -270,6 +270,7 @@ public:
 		@return		変換されたベクトル
 	*/
 	static Vector3 TransformCoord(const Vector3& vec, const Matrix& mat);
+	static Vector3 TransformCoord(const Vector3& vec, const MATRIX& mat);
 
 	/**
 		@brief		2 つのベクトル間の線形補間を行います。
@@ -363,6 +364,17 @@ public:
 		@param[in]	z				: z要素
 	*/
 	static Vector3 SetZ(int z);
+
+	// 3次元ベクトルを回転行列に変換する
+	inline MATRIX ToRotationMatrix() {
+
+		MATRIX m = MGetIdent();
+		m = MMult(m, MGetRotZ(z));
+		m = MMult(m, MGetRotX(x));
+		m = MMult(m, MGetRotY(y));
+
+		return m;
+	}
 
 public:
 

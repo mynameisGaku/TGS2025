@@ -208,6 +208,7 @@ void Ball::Throw(const Vector3& velocity)
 	m_Physics->SetFriction(BALL_REF.FrictionDefault);
 	m_Collider->SetIsActive(true);
 	m_pTrail->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, 1.0f, 40.0f);
+	m_pTrail->SetSubdivisions(4);
 	m_Owner = nullptr;
 }
 

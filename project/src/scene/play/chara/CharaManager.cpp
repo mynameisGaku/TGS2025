@@ -17,6 +17,13 @@ CharaManager::CharaManager()
 	m_Max = CHARADEFINE_REF.Max;
 	m_Tags = CHARADEFINE_REF.Tags;
 
+	m_hTrails["Green"] = LoadGraph("data/img/trail/Trail_Green.png");
+	m_hTrails["Blue"] = LoadGraph("data/img/trail/Trail_Blue.png");
+	m_hTrails["Red"] = LoadGraph("data/img/trail/Trail_Red.png");
+	m_hTrails["Plain"] = LoadGraph("data/img/trail/Trail_Plain.png");
+	m_hTrails["Plain_Distortion"] = LoadGraph("data/img/trail/Trail_Plain_Distortion.png");
+	m_hTrails["Plain_Distortion_Thin"] = LoadGraph("data/img/trail/Trail_Plain_Distortion_Thin.png");
+
 #ifdef USE_POOL
 	m_pPool = new Pool<CharaBase>(m_Max);
 #else
@@ -26,6 +33,11 @@ CharaManager::CharaManager()
 
 CharaManager::~CharaManager()
 {
+	for (auto& it : m_hTrails)
+	{
+		DeleteGraph(it.second);
+	}
+	m_hTrails.clear();
 #ifdef USE_POOL
 	for (auto& item : m_pPool->GetAllItems())
 	{
@@ -169,6 +181,9 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 		colParamChara.tag = ColDefine::Tag::tCharaBlue;
 		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
 	}
+
+	//newChara->SetTrailImage(m_hTrails[tag]);
+	newChara->SetTrailImage(m_hTrails["Plain_Distortion_Thin"]);
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
 	int origin = MV1SearchFrame(hModel, "mixamorig9:Hips");

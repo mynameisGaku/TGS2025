@@ -294,6 +294,8 @@
     <ClCompile Include="src\common\component\controller\DebugController.cpp" />
     <ClCompile Include="src\common\component\controller\PlayerController.cpp" />
     <ClCompile Include="src\common\component\material_renderer\MaterialRenderer.cpp" />
+    <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp" />
+    <ClCompile Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.cpp" />
     <ClCompile Include="src\common\component\motion_blur\MotionBlur.cpp" />
     <ClCompile Include="src\common\component\physics\Physics.cpp" />
     <ClCompile Include="src\common\component\renderer\BallRenderer.cpp" />
@@ -455,6 +457,9 @@
     <ClInclude Include="src\common\component\controller\DebugController.h" />
     <ClInclude Include="src\common\component\controller\PlayerController.h" />
     <ClInclude Include="src\common\component\material_renderer\MaterialRenderer.h" />
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\FrameTrail.h" />
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.h" />
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h" />
     <ClInclude Include="src\common\component\motion_blur\MotionBlur.h" />
     <ClInclude Include="src\common\component\physics\Physics.h" />
     <ClInclude Include="src\common\component\renderer\BallRenderer.h" />

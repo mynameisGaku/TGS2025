@@ -704,6 +704,16 @@ Vector3 Vector3::TransformCoord(const Vector3& vec, const Matrix& mat)
 		((vec.x * mat.m13) + (vec.y * mat.m23) + (vec.z * mat.m33) + mat.m43) * w);
 }
 
+Vector3 Vector3::TransformCoord(const Vector3& vec, const MATRIX& mat)
+{
+	float w = 1.0f / ((((vec.x * mat.m[0][3]) + (vec.y * mat.m[1][3])) + (vec.z * mat.m[2][3])) + mat.m[3][3]);
+	return Vector3(
+		((vec.x * mat.m[0][0]) + (vec.y * mat.m[1][0]) + (vec.z * mat.m[2][0]) + mat.m[3][0]) * w,
+		((vec.x * mat.m[0][1]) + (vec.y * mat.m[1][1]) + (vec.z * mat.m[2][1]) + mat.m[3][1]) * w,
+		((vec.x * mat.m[0][2]) + (vec.y * mat.m[1][2]) + (vec.z * mat.m[2][2]) + mat.m[3][2]) * w);
+}
+
+
 //------------------------------------------------------------------------------
 // static
 //------------------------------------------------------------------------------

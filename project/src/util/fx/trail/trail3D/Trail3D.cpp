@@ -12,17 +12,23 @@ void Trail3D::Init(int texHandle, float lifetime, float width)
     m_Points.clear();
 }
 
-void Trail3D::Add(const Vector3& pos)
+void Trail3D::Add(const Vector3& pos, bool isActive)
 {
     const float MIN_SEGMENT_LENGTH = m_TrailWidth * 0.5f;
     if (m_Points.empty() || VSize(VSub(pos, m_Points.back().position)) >= MIN_SEGMENT_LENGTH)
     {
-        m_Points.push_back({ pos, 0.0f });
+        m_Points.push_back({ pos, 0.0f, isActive });
     }
 }
 
 void Trail3D::Update()
 {
+    m_UpdateInterval = max(1, m_UpdateInterval); // 更新間隔は1以上にする
+    if (GameTime::FrameCount() % m_UpdateInterval != 0)
+    {
+        return; // 更新間隔に達していない場合は何もしない
+    }
+
     float dt = GameTime::DeltaTime();
     for (auto& pt : m_Points)
     {
@@ -43,6 +49,7 @@ void Trail3D::Draw()
 
     SetUseZBuffer3D(TRUE);
     SetWriteZBuffer3D(FALSE);
+
     SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
 
     VECTOR camPos = GetCameraPosition();
@@ -55,8 +62,6 @@ void Trail3D::Draw()
             return alpha * 255.0f;
         };
 
-    const int subdivs = 16; // 補間分割数（大きいほど滑らか）
-
     for (size_t i = 1; i + 2 < m_Points.size(); ++i)
     {
         const TrailPoint& p0 = m_Points[i - 1];
@@ -64,10 +69,10 @@ void Trail3D::Draw()
         const TrailPoint& p2 = m_Points[i + 1];
         const TrailPoint& p3 = m_Points[i + 2];
 
-        for (int j = 0; j < subdivs; ++j)
+        for (int j = 0; j < m_Subdivisions; ++j)
         {
-            float t1 = (float)j / subdivs;
-            float t2 = (float)(j + 1) / subdivs;
+            float t1 = (float)j / m_Subdivisions;
+            float t2 = (float)(j + 1) / m_Subdivisions;
 
             VECTOR pos1 = MathUtil::CatmullRomVec3(p0.position, p1.position, p2.position, p3.position, t1);
             VECTOR pos2 = MathUtil::CatmullRomVec3(p0.position, p1.position, p2.position, p3.position, t2);
@@ -80,9 +85,9 @@ void Trail3D::Draw()
             float alpha1 = 255.0f;
             float alpha2 = 255.0f; 
             if (p1.timeAlive <= m_MaxLifeTime * 0.1f)
-                alpha1 = EasingFunc::OutQuint<int>(time1, m_MaxLifeTime, 255, 0);
+                alpha1 = EasingFunc::InOutQuint<int>(time1, m_MaxLifeTime, 255, 0);
             if (p2.timeAlive <= m_MaxLifeTime * 0.1f)
-                alpha2 = EasingFunc::OutQuint<int>(time2, m_MaxLifeTime, 255, 0);
+                alpha2 = EasingFunc::InOutQuint<int>(time2, m_MaxLifeTime, 255, 0);
 
             VECTOR dir = VSub(pos2, pos1);
             VECTOR viewVec = VSub(camPos, pos1);

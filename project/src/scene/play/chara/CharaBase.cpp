@@ -19,7 +19,9 @@
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
-#include "src/util/fx/trail/trail3D/Trail3D.h"
+#include "src/common/component/model_frame_trail_renderer/ModelFrameTrailRenderer.h"
+#include "src/common/component/model_frame_trail_renderer/MODEL_FRAME_TRAIL_RENDERER_DESC.h"
+#include "src/util/math/Random.h"
 
 using namespace KeyDefine;
 
@@ -120,10 +122,10 @@ CharaBase::~CharaBase()
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
-    for (int i = 0; i < 5; ++i)
-    {
-        PtrUtil::SafeDelete(m_pTrail[i]);
-    }
+	/*for (int i = 0; i < 5; ++i)
+	{
+		PtrUtil::SafeDelete(m_pTrail[i]);
+	}*/
 
 	PtrUtil::SafeDelete(m_EffectTransform);
 }
@@ -141,42 +143,143 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
 
-	float s = 0.35f;
-	// 胸
-	{
-		m_pTrail[0] = new Trail3D();
-		m_pTrail[0]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s * 1.5f, 50.0f);
-		m_pTrail[0]->SetInterval(1);
-		m_pTrail[0]->SetSubdivisions(16);
-	}
-    // 左肩
-    {
-        m_pTrail[1] = new Trail3D();
-        m_pTrail[1]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-        m_pTrail[1]->SetInterval(1);
-        m_pTrail[1]->SetSubdivisions(16);
-    }
-    // 右肩
-    {
-        m_pTrail[2] = new Trail3D();
-        m_pTrail[2]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-        m_pTrail[2]->SetInterval(1);
-        m_pTrail[2]->SetSubdivisions(16);
-    }
-	// 左腰
-    {
-        m_pTrail[3] = new Trail3D();
-        m_pTrail[3]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-        m_pTrail[3]->SetInterval(1);
-        m_pTrail[3]->SetSubdivisions(16);
-    }
-    // 右腰
-    {
-        m_pTrail[4] = new Trail3D();
-        m_pTrail[4]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-        m_pTrail[4]->SetInterval(1);
-        m_pTrail[4]->SetSubdivisions(16);
-    }
+	/*float s = 0.25f;*/
+	//// 胸
+	//{
+	//	m_pTrail[0] = new Trail3D();
+	//	m_pTrail[0]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s * 1.5f, 50.0f);
+	//	m_pTrail[0]->SetInterval(1);
+	//	m_pTrail[0]->SetSubdivisions(16);
+	//}
+	//// 左肩
+	//{
+	//	m_pTrail[1] = new Trail3D();
+	//	m_pTrail[1]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
+	//	m_pTrail[1]->SetInterval(1);
+	//	m_pTrail[1]->SetSubdivisions(16);
+	//}
+	//// 右肩
+	//{
+	//	m_pTrail[2] = new Trail3D();
+	//	m_pTrail[2]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
+	//	m_pTrail[2]->SetInterval(1);
+	//	m_pTrail[2]->SetSubdivisions(16);
+	//}
+	//// 左腰
+	//{
+	//	m_pTrail[3] = new Trail3D();
+	//	m_pTrail[3]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
+	//	m_pTrail[3]->SetInterval(1);
+	//	m_pTrail[3]->SetSubdivisions(16);
+	//}
+	//// 右腰
+	//{
+	//	m_pTrail[4] = new Trail3D();
+	//	m_pTrail[4]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
+	//	m_pTrail[4]->SetInterval(1);
+	//	m_pTrail[4]->SetSubdivisions(16);
+	//}
+	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
+    ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
+    MODEL_FRAME_TRAIL_RENDERER_DESC desc;
+
+	float thick_Bold = 30.0f;
+    float thick_Small = 5.0f;
+
+    desc.frameName = "mixamorig9:Hips"; // フレーム名
+    desc.trailName = "HipsTrail"; // トレイルの名前
+    desc.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+    desc.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+    desc.thick = thick_Bold; // トレイルの太さ
+    float lt = 0.4f; // トレイルの寿命
+    desc.appearRate = 1.0f; // トレイルが出現する確率（0.0f～1.0f）
+	desc.lifeTime = lt *Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+    desc.thick = thick_Small; // トレイルの太さを20.0fに設定
+    desc.appearRate = 0.5f; // 出現率を50%に設定
+    desc.frameName = "mixamorig9:Spine2";
+    desc.trailName = "Spine1Trail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+    desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+    desc.thick = thick_Small; // トレイルの太さを20.0fに設定
+    desc.appearRate = 0.5f; // 出現率を50%に設定
+    desc.frameName = "mixamorig9:Spine2";
+    desc.trailName = "Spine1Trail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+    desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+    desc.thick = thick_Small; // トレイルの太さを20.0fに設定
+    desc.appearRate = 0.5f; // 出現率を50%に設定
+    desc.frameName = "mixamorig9:LeftShoulder";
+    desc.trailName = "LeftShoulderTrail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+    desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+	desc.thick = thick_Small;
+    desc.frameName = "mixamorig9:RightShoulder";
+    desc.trailName = "RightShoulderTrail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+	desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+	descs.push_back(desc);
+
+	desc.thick = thick_Small;
+    desc.frameName = "mixamorig9:LeftLeg";
+    desc.trailName = "LeftLegTrail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+	desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+	descs.push_back(desc);
+
+	desc.thick = thick_Small;
+    desc.frameName = "mixamorig9:LeftUpLeg";
+    desc.trailName = "LeftUpLegTrail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+	desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+	descs.push_back(desc);
+
+	desc.thick = thick_Small;
+    desc.frameName = "mixamorig9:RightLeg";
+    desc.trailName = "RightLegTrail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+	desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+	descs.push_back(desc);
+
+	desc.thick = thick_Small;
+    desc.frameName = "mixamorig9:RightUpLeg";
+    desc.trailName = "RightUpLegTrail";
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+    descs.push_back(desc);
+
+	desc.thick = thick_Bold;
+	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+	descs.push_back(desc);
+
+    trail->Finalize(Model(), descs, m_hTrailImage);
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
@@ -299,25 +402,25 @@ void CharaBase::Update() {
 
 	Object3D::Update();
 
-	Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
+	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
 	m_pTrail[0]->Add(chestPos);
 
-    Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
-    m_pTrail[1]->Add(leftShoulderPos);
+	Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
+	m_pTrail[1]->Add(leftShoulderPos);
 
-    Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
-    m_pTrail[2]->Add(rightShoulderPos);
+	Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
+	m_pTrail[2]->Add(rightShoulderPos);
 
-    Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
-    m_pTrail[3]->Add(leftHipPos);
+	Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
+	m_pTrail[3]->Add(leftHipPos);
 
-    Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
-    m_pTrail[4]->Add(rightHipPos);
+	Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
+	m_pTrail[4]->Add(rightHipPos);
 	
 	for (int i = 0; i < 5; i++)
 	{
-        m_pTrail[i]->Update();
-	}
+		m_pTrail[i]->Update();
+	}*/
 
 }
 
@@ -325,10 +428,10 @@ void CharaBase::Draw()
 {
 	Object3D::Draw();
 
-	for (int i = 0; i < 5; i++)
+	/*for (int i = 0; i < 5; i++)
 	{
 		m_pTrail[i]->Draw();
-	}
+	}*/
 
 	if (m_pHP->IsDead())
 	{
@@ -651,7 +754,7 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 
 void CharaBase::SetTrailImage(int hImage)
 {
-    m_hTrailImage = hImage;
+	m_hTrailImage = hImage;
 }
 
 void CharaBase::CatchSuccess(const Vector3& velocity)

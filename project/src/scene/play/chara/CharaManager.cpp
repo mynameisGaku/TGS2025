@@ -22,6 +22,7 @@ CharaManager::CharaManager()
 	m_hTrails["Red"] = LoadGraph("data/img/trail/Trail_Red.png");
 	m_hTrails["Plain"] = LoadGraph("data/img/trail/Trail_Plain.png");
 	m_hTrails["Plain_Distortion"] = LoadGraph("data/img/trail/Trail_Plain_Distortion.png");
+	m_hTrails["Plain_Distortion_Thin"] = LoadGraph("data/img/trail/Trail_Plain_Distortion_Thin.png");
 
 #ifdef USE_POOL
 	m_pPool = new Pool<CharaBase>(m_Max);
@@ -182,7 +183,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	}
 
 	//newChara->SetTrailImage(m_hTrails[tag]);
-	newChara->SetTrailImage(m_hTrails["Plain_Distortion"]);
+	newChara->SetTrailImage(m_hTrails["Plain_Distortion_Thin"]);
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
 	int origin = MV1SearchFrame(hModel, "mixamorig9:Hips");

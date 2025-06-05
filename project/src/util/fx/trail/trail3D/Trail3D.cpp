@@ -12,12 +12,12 @@ void Trail3D::Init(int texHandle, float lifetime, float width)
     m_Points.clear();
 }
 
-void Trail3D::Add(const Vector3& pos)
+void Trail3D::Add(const Vector3& pos, bool isActive)
 {
     const float MIN_SEGMENT_LENGTH = m_TrailWidth * 0.5f;
     if (m_Points.empty() || VSize(VSub(pos, m_Points.back().position)) >= MIN_SEGMENT_LENGTH)
     {
-        m_Points.push_back({ pos, 0.0f });
+        m_Points.push_back({ pos, 0.0f, isActive });
     }
 }
 
@@ -49,6 +49,7 @@ void Trail3D::Draw()
 
     SetUseZBuffer3D(TRUE);
     SetWriteZBuffer3D(FALSE);
+
     SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
 
     VECTOR camPos = GetCameraPosition();
@@ -84,9 +85,9 @@ void Trail3D::Draw()
             float alpha1 = 255.0f;
             float alpha2 = 255.0f; 
             if (p1.timeAlive <= m_MaxLifeTime * 0.1f)
-                alpha1 = EasingFunc::OutQuint<int>(time1, m_MaxLifeTime, 255, 0);
+                alpha1 = EasingFunc::InOutQuint<int>(time1, m_MaxLifeTime, 255, 0);
             if (p2.timeAlive <= m_MaxLifeTime * 0.1f)
-                alpha2 = EasingFunc::OutQuint<int>(time2, m_MaxLifeTime, 255, 0);
+                alpha2 = EasingFunc::InOutQuint<int>(time2, m_MaxLifeTime, 255, 0);
 
             VECTOR dir = VSub(pos2, pos1);
             VECTOR viewVec = VSub(camPos, pos1);

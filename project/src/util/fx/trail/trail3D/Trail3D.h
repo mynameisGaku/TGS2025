@@ -9,7 +9,7 @@ class Trail3D
 {
 public:
     void Init(int texHandle, float lifetime, float width);
-    void Add(const Vector3& pos);
+    void Add(const Vector3& pos, bool isActive = true);
     void Update();
     void Draw();
     void Deactive();
@@ -21,6 +21,7 @@ private:
     {
         Vector3 position;
         float timeAlive;
+        bool isActive;
     };
 
     void DrawTrailSegment(const VECTOR& pos1, const VECTOR& pos2, float t1, float t2, const VECTOR& sideAxis, float alpha1, float alpha2);

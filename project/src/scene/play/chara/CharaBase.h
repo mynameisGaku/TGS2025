@@ -268,7 +268,6 @@ private:
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
-    Trail3D*		m_pTrail[5];			// トレイルのポインター
     int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_BallChargeRate;		// ボールのチャージ加速度

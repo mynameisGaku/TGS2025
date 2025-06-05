@@ -6,6 +6,9 @@
 #include <string>
 #include "src/util/math/Vector3.h"
 
+/// <summary>
+/// 指定のモデルの指定のフレームからトレイルを生成するクラス
+/// </summary>
 class FrameTrail
 {
 public:

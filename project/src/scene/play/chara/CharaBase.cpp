@@ -294,7 +294,7 @@ void CharaBase::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand"));
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHandThumb1"));
 		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
 
 		m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);

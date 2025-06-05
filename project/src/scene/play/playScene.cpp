@@ -41,7 +41,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
 
-	StageObjectManager::LoadFromJson("data/json/Stage/Stage_3.json");
+	StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 
 	CameraManager::SetIsScreenDivision(true);
 

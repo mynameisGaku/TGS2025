@@ -268,7 +268,7 @@ private:
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
-    int				m_hTrailImage;			// トレイルの画像ハンドル
+	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
@@ -276,7 +276,7 @@ private:
 	float			m_SpeedScale;			// 速度倍率
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
-    float			m_CatchTimer;			// キャッチの残り時間タイマー
+	float			m_CatchTimer;			// キャッチの残り時間タイマー
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -297,7 +297,15 @@ private:
 	void jumpUpdate();
 
 	void getHit(Ball* hit);
-	
+
+	//=== サウンド再生 ===
+	void playThrowSound();
+	void playGetHitSound();
+	void playFootStepSound();
+	void playCatchBallSound();
+	void playPickupBallSound();
+	void playVacuumSound();
+
 	//=== タイムライン用 ===
 	void setAnimationSpeed(const nlohmann::json& argument);
 	void moveToPosition(const nlohmann::json& argument);

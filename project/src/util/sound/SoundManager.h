@@ -55,6 +55,12 @@ namespace SoundManager {
 	/// <param name="filename">Csvデータが存在するファイルパス</param>
 	void LoadToCsv(const std::string& filename);
 
+	/// <summary>
+	/// Jsonデータから音源情報を取得して読み込む
+	/// </summary>
+	/// <param name="filename">Jsonデータが存在するファイルパス</param>
+	void LoadFromJson(const std::string& filename);
+
 	//================================================================================
 	// ▼再生処理
 

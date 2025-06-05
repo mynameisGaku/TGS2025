@@ -1,0 +1,142 @@
+{
+  "Params": {
+    "BGM": {
+      "Category": "BGM",
+      "Path": "data/sound/bgm/",
+      "Datas": [
+        {
+          "FileName": "InMatch.mp3",
+          "Name": "InMatch",
+          "Volume": 100,
+          "IsLoop": true
+        }
+      ]
+    },
+    "SE": {
+      "Category": "SE",
+      "Path": "data/sound/se/",
+      "Datas": [
+        {
+          "FileName": "bound_ball_00.mp3",
+          "Name": "bound_ball_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "bound_ball_01.mp3",
+          "Name": "bound_ball_01",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "bound_ball_02.mp3",
+          "Name": "bound_ball_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "catch_success_00.mp3",
+          "Name": "catch_success_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "catch_success_01.mp3",
+          "Name": "catch_success_01",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_00.mp3",
+          "Name": "footsound_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_01.mp3",
+          "Name": "footsound_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_02.mp3",
+          "Name": "footsound_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_03.mp3",
+          "Name": "footsound_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "hit_00.mp3",
+          "Name": "hit_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "hit_01.mp3",
+          "Name": "hit_01",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_normal_00.mp3",
+          "Name": "throw_normal_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_normal_01.mp3",
+          "Name": "throw_normal_01",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_strong_00.mp3",
+          "Name": "throw_strong_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_strong_01.mp3",
+          "Name": "throw_strong_01",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_weak_00.mp3",
+          "Name": "throw_weak_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "vacuum_00.mp3",
+          "Name": "vacuum_00",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "vacuum_01.mp3",
+          "Name": "vacuum_01",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "vacuum_02.mp3",
+          "Name": "vacuum_02",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_weak_01.mp3",
+          "Name": "throw_weak_01",
+          "Volume": 100,
+          "IsLoop": false
+        }
+      ]
+    }
+  }
+}

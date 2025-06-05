@@ -143,143 +143,56 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
 
-	/*float s = 0.25f;*/
-	//// 胸
-	//{
-	//	m_pTrail[0] = new Trail3D();
-	//	m_pTrail[0]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s * 1.5f, 50.0f);
-	//	m_pTrail[0]->SetInterval(1);
-	//	m_pTrail[0]->SetSubdivisions(16);
-	//}
-	//// 左肩
-	//{
-	//	m_pTrail[1] = new Trail3D();
-	//	m_pTrail[1]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-	//	m_pTrail[1]->SetInterval(1);
-	//	m_pTrail[1]->SetSubdivisions(16);
-	//}
-	//// 右肩
-	//{
-	//	m_pTrail[2] = new Trail3D();
-	//	m_pTrail[2]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-	//	m_pTrail[2]->SetInterval(1);
-	//	m_pTrail[2]->SetSubdivisions(16);
-	//}
-	//// 左腰
-	//{
-	//	m_pTrail[3] = new Trail3D();
-	//	m_pTrail[3]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-	//	m_pTrail[3]->SetInterval(1);
-	//	m_pTrail[3]->SetSubdivisions(16);
-	//}
-	//// 右腰
-	//{
-	//	m_pTrail[4] = new Trail3D();
-	//	m_pTrail[4]->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, s, 20.0f);
-	//	m_pTrail[4]->SetInterval(1);
-	//	m_pTrail[4]->SetSubdivisions(16);
-	//}
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
-    ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
-    MODEL_FRAME_TRAIL_RENDERER_DESC desc;
+	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
+		{ "mixamorig9:Hips", "HipsTrail" },
+		{ "mixamorig9:Spine2", "Spine1Trail" },
+		{ "mixamorig9:LeftShoulder", "LeftShoulderTrail" },
+		{ "mixamorig9:RightShoulder", "RightShoulderTrail" },
+		{ "mixamorig9:LeftLeg", "LeftLegTrail" },
+		{ "mixamorig9:LeftUpLeg", "LeftUpLegTrail" },
+		{ "mixamorig9:RightLeg", "RightLegTrail" },
+		{ "mixamorig9:RightUpLeg", "RightUpLegTrail"}
+	};
+	ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
+	MODEL_FRAME_TRAIL_RENDERER_DESC desc1;
+	MODEL_FRAME_TRAIL_RENDERER_DESC desc2;
 
-	float thick_Bold = 30.0f;
-    float thick_Small = 5.0f;
+	auto addTrail = []()
+		{
+			float lt = 0.4f; // トレイルの寿命
+			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
 
-    desc.frameName = "mixamorig9:Hips"; // フレーム名
-    desc.trailName = "HipsTrail"; // トレイルの名前
-    desc.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-    desc.subdivisions = 16; // 補間分割数（大きいほど滑らか）
-    desc.thick = thick_Bold; // トレイルの太さ
-    float lt = 0.4f; // トレイルの寿命
-    desc.appearRate = 1.0f; // トレイルが出現する確率（0.0f～1.0f）
-	desc.lifeTime = lt *Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
+			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
+			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descBold.thick = 30.0f; // トレイルの太さ
+			descBold.lifeTime = lifeTime; // トレイルの寿命
+			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
 
-    desc.thick = thick_Small; // トレイルの太さを20.0fに設定
-    desc.appearRate = 0.5f; // 出現率を50%に設定
-    desc.frameName = "mixamorig9:Spine2";
-    desc.trailName = "Spine1Trail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
+			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
+			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descSmall.thick = 5.0f; // トレイルの太さ
+			descSmall.lifeTime = lifeTime; // トレイルの寿命
+			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
 
-    desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
+			return std::pair<MODEL_FRAME_TRAIL_RENDERER_DESC, MODEL_FRAME_TRAIL_RENDERER_DESC>(descBold, descSmall);
+		};
+	descs.reserve(frameAndTrailNames.size());
+	for (const auto& pair : frameAndTrailNames)
+	{
+		desc1 = addTrail().first;
+		desc1.frameName = pair.first;
+		desc1.trailName = pair.second;
+		desc2 = addTrail().second;
+		desc2.frameName = pair.first;
+		desc2.trailName = pair.second;
 
-    desc.thick = thick_Small; // トレイルの太さを20.0fに設定
-    desc.appearRate = 0.5f; // 出現率を50%に設定
-    desc.frameName = "mixamorig9:Spine2";
-    desc.trailName = "Spine1Trail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-    desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-    desc.thick = thick_Small; // トレイルの太さを20.0fに設定
-    desc.appearRate = 0.5f; // 出現率を50%に設定
-    desc.frameName = "mixamorig9:LeftShoulder";
-    desc.trailName = "LeftShoulderTrail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-    desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-	desc.thick = thick_Small;
-    desc.frameName = "mixamorig9:RightShoulder";
-    desc.trailName = "RightShoulderTrail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-	desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-	descs.push_back(desc);
-
-	desc.thick = thick_Small;
-    desc.frameName = "mixamorig9:LeftLeg";
-    desc.trailName = "LeftLegTrail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-	desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-	descs.push_back(desc);
-
-	desc.thick = thick_Small;
-    desc.frameName = "mixamorig9:LeftUpLeg";
-    desc.trailName = "LeftUpLegTrail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-	desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-	descs.push_back(desc);
-
-	desc.thick = thick_Small;
-    desc.frameName = "mixamorig9:RightLeg";
-    desc.trailName = "RightLegTrail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-	desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-	descs.push_back(desc);
-
-	desc.thick = thick_Small;
-    desc.frameName = "mixamorig9:RightUpLeg";
-    desc.trailName = "RightUpLegTrail";
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-    descs.push_back(desc);
-
-	desc.thick = thick_Bold;
-	desc.lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
-	descs.push_back(desc);
-
-    trail->Finalize(Model(), descs, m_hTrailImage);
+		descs.push_back(desc1);
+		descs.push_back(desc2);
+	}
+	trail->Finalize(Model(), descs, m_hTrailImage);
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);

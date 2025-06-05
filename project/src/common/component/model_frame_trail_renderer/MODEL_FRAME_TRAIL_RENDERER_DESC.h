@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include "src/util/math/Vector3.h"
 typedef struct
 {
+    Vector3     posRandomRange; // 位置のランダム範囲（トレイルの位置にランダムなオフセットを加えるための範囲）
     std::string frameName;      // モデルのフレーム名
     std::string trailName;      // トレイルの名前
     int         interval;       // フレーム間隔（何フレームごとに描画するか

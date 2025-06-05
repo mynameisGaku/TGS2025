@@ -196,7 +196,7 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 
 	m_Physics->SetIsActive(false);
 
-	m_HomingPosition = transform->position + Vector3::SetY(100.0f);
+	m_HomingPosition = transform->position;
 	m_HomingTarget = (target == nullptr) ? Vector3(0, 0, 1000) : target->transform->position;
 	m_IsHoming = true;
 

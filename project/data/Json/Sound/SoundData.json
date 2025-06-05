@@ -17,21 +17,21 @@
       "Path": "data/sound/se/",
       "Datas": [
         {
-          "FileName": "catch_ball_00.mp3",
-          "Name": "catch_ball_00",
-          "Volume": 100,
+          "FileName": "bound_ball_00.mp3",
+          "Name": "bound_ball_00",
+          "Volume": 200,
           "IsLoop": false
         },
         {
-          "FileName": "catch_ball_01.mp3",
-          "Name": "catch_ball_01",
-          "Volume": 100,
+          "FileName": "bound_ball_01.mp3",
+          "Name": "bound_ball_01",
+          "Volume": 200,
           "IsLoop": false
         },
         {
-          "FileName": "catch_ball_02.mp3",
-          "Name": "catch_ball_00",
-          "Volume": 100,
+          "FileName": "bound_ball_02.mp3",
+          "Name": "bound_ball_00",
+          "Volume": 200,
           "IsLoop": false
         },
         {
@@ -73,13 +73,13 @@
         {
           "FileName": "hit_00.mp3",
           "Name": "hit_00",
-          "Volume": 100,
+          "Volume": 200,
           "IsLoop": false
         },
         {
           "FileName": "hit_01.mp3",
           "Name": "hit_01",
-          "Volume": 100,
+          "Volume": 200,
           "IsLoop": false
         },
         {

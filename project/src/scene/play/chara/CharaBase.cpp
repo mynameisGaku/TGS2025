@@ -22,6 +22,7 @@
 #include "src/common/component/model_frame_trail_renderer/ModelFrameTrailRenderer.h"
 #include "src/common/component/model_frame_trail_renderer/MODEL_FRAME_TRAIL_RENDERER_DESC.h"
 #include "src/util/math/Random.h"
+#include "src/util/sound/SoundManager.h"
 
 using namespace KeyDefine;
 
@@ -612,6 +613,8 @@ void CharaBase::ThrowHomingBall()
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
 
+	playThrowSound();
+
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
 }
@@ -678,6 +681,8 @@ void CharaBase::CatchSuccess(const Vector3& velocity)
 	m_CanMove = false;
 	m_CanRot = false;
 	m_Catcher->SetColliderActive(false);
+
+	playCatchBallSound();
 
 	m_pPhysics->SetGravity(Vector3::Zero);
 	m_pPhysics->SetFriction(Vector3::Zero);
@@ -1795,6 +1800,132 @@ void CharaBase::getHit(Ball* hit)
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
 	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:ŠO•”‰»
+
+	playGetHitSound();
+}
+
+void CharaBase::playThrowSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+    std::string base = "SE_throw_";
+	std::string power = "";
+	std::string num = "00";
+	std::string fileType = ".mp3";
+
+    if (m_BallChargeRate < 0.2f)
+    {
+        power += "weak_";
+    }
+    else if (m_BallChargeRate < 0.8f)
+    {
+        power += "normal_";
+    }
+    else
+    {
+        power += "strong_";
+    }
+
+    if (rand < 50)
+    {
+        num = "01";
+    }
+
+    std::string soundName = base + power + num + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playGetHitSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_hit_";
+	std::string num = "00";
+	std::string fileType = ".mp3";
+
+	if (rand < 50)
+	{
+		num = "01";
+	}
+
+	std::string soundName = base + num + fileType;
+
+
+	std::string base2 = "SE_bound_ball";
+	std::string num2 = "";
+
+	if (rand < 33)
+	{
+		num = "00";
+	}
+	else if (rand < 66)
+	{
+		num = "01";
+	}
+	else
+	{
+		num = "02";
+	}
+	std::string soundName2 = base2 + num2 + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+
+}
+
+void CharaBase::playFootStepSound()
+{
+}
+
+void CharaBase::playCatchBallSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_bound_ball";
+	std::string num = "";
+	std::string fileType = ".mp3";
+
+	if (rand < 33)
+	{
+		num = "00";
+	}
+    else if (rand < 66)
+    {
+        num = "01";
+    }
+    else
+    {
+        num = "02";
+    }
+
+	std::string base2 = "SE_catch_success_";
+	std::string num2 = "";
+    if (rand < 50)
+    {
+        num2 = "00";
+    }
+    else
+    {
+        num2 = "01";
+    }
+
+	std::string soundName = base + num + fileType;
+    std::string soundName2 = base2 + num2 + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+	if (not SoundManager::IsPlaying(soundName2, soundName2))
+		SoundManager::Play(soundName2, soundName2);
+}
+
+void CharaBase::playPickupBallSound()
+{
+}
+
+void CharaBase::playVacuumSound()
+{
 }
 
 void CharaBase::setAnimationSpeed(const nlohmann::json& argument)

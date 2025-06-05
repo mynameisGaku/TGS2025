@@ -346,6 +346,9 @@
     <Filter Include="src%28application%29\common\component\model_frame_trail_renderer">
       <UniqueIdentifier>{292ec78f-b62c-4105-ba5c-68c95304f740}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\Json\Sound">
+      <UniqueIdentifier>{66e2275a-c146-4557-afc7-95b3044cc8fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -593,6 +596,9 @@
     </None>
     <None Include="data\Json\Ball\BallSpawner.json">
       <Filter>data\Json\Ball</Filter>
+    </None>
+    <None Include="data\Json\Sound\SoundData.json">
+      <Filter>data\Json\Sound</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

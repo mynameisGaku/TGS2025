@@ -4,6 +4,7 @@
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/util/file/csv/CsvReader.h"
+#include "src/util/file/json/settings_json.h"
 #include <vendor/magic_enum/magic_enum.hpp>
 
 namespace {
@@ -222,6 +223,53 @@ void SoundManager::LoadToCsv(const std::string& filename) {
 	}
 
 	delete csv;
+}
+
+void SoundManager::LoadFromJson(const std::string& filename)
+{
+	auto jsonSetting = Settings_json::Inst();
+	jsonSetting->LoadSettingJson(filename, filename);
+
+	auto json = jsonSetting->GetJson(filename);
+
+	for (const auto& [type, value] : json["Params"].items())
+	{
+		const std::string& path = value["Path"];
+		const auto& datas = value["Datas"];
+		std::string cat = value["Category"];
+
+		for (const auto& data : datas)
+		{
+			std::string fileName = data["FileName"];
+			std::string name = data["Name"];
+			int volume = data["Volume"];
+			bool isLoop = data["IsLoop"];
+
+			std::string fullPath = path + fileName;
+
+			SoundInfo info{};
+			info.typeName = type + "_" + name;
+			info.fileName = fullPath;
+
+			if (cat == "BGM")
+				info.category = SoundCategory::cBGM;
+			else if (cat == "ENV")
+				info.category = SoundCategory::cENV;
+			else if (cat == "SE")
+				info.category = SoundCategory::cSE;
+			else if (cat == "Voice")
+				info.category = SoundCategory::cVoice;
+			else
+				info.category = SoundCategory::cMaster; // デフォルトはマスター
+
+			info.defVolume = volume;
+			info.curVolume = volume;
+			info.playType = isLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_NORMAL;
+			info.handle = ResourceLoader::LoadSoundMem(fullPath);
+
+			Load(info);
+		}
+	}
 }
 
 SoundBase* SoundManager::Play(const std::string& typeName, const std::string& label) {

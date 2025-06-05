@@ -155,7 +155,7 @@ void SystemManager::LoadUpdate() {
 	case ltInputManager:	InputManager::Init();	break;
 	case ltSoundManager:
 		SoundManager::Init();
-		SoundManager::LoadToCsv("data/csv/SoundData.csv");
+		SoundManager::LoadFromJson("data/json/sound/SoundData.json");
 		break;
 
 	case ltEffectManager:

@@ -343,6 +343,9 @@
     <Filter Include="data\Img\BallTexture">
       <UniqueIdentifier>{a11b3c31-3a65-4faf-9451-b279e928db92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\targetting">
+      <UniqueIdentifier>{6c845b08-2b5a-4122-afb9-ea2a6f3b2212}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1188,6 +1191,9 @@
     <ClCompile Include="src\scene\play\chara\CharaSpawnPointManager.cpp">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\targetting\Targetting.cpp">
+      <Filter>src%28application%29\scene\play\targetting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1886,6 +1892,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\chara\CharaSpawnPointManager.h">
       <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\targetting\Targetting.h">
+      <Filter>src%28application%29\scene\play\targetting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

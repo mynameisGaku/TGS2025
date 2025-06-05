@@ -11,6 +11,7 @@
 #include "src/common/camera/CameraDefine.h"
 #include "src/common/component/collider/CollisionDefine.h"
 #include "src/common/component/shake/Shake.h"
+#include "src/util/math/Vector2.h"
 
 class StateManager;
 class CharaBase;
@@ -117,7 +118,7 @@ public:
 	/// <summary>
 	/// 描画を行うかどうかを設定する
 	/// </summary>
-	inline void SetIsView(bool view) { isView = view; }
+	inline void SetIsView(bool view) { m_IsView = view; }
 
 	/// <summary>
 	/// クラスを基に保有者を設定する
@@ -219,9 +220,24 @@ public:
 	const CharaBase* TargetChara() const { return m_TargetChara; }
 
 	/// <summary>
+	/// 描画が終了したかどうかを判定
+	/// </summary>
+	inline bool IsDrawEnd() const { return m_DrawFlag; }
+
+	/// <summary>
 	/// 描画を行うか
 	/// </summary>
-	inline bool IsView() const { return isView; }
+	inline bool IsView() const { return m_IsView; }
+
+	/// <summary>
+	/// カメラの正面にいるかどうかを返す
+	/// </summary>
+	bool IsFrontView(const Vector3& pos) const;
+
+	/// <summary>
+	/// カメラの右側にいるかどうかを返す
+	/// </summary>
+	bool IsRightView(const Vector3& pos) const;
 
 	//================================================================================
 	// ▼ステート
@@ -271,8 +287,8 @@ private:
 	CsvReader* cameraWork;		// カメラ演出情報
 	int m_CharaIndex;			// キャラクターの番号
 	float m_TargetTransitionTime;
-	bool isView;
-	bool drawFlag;
+	bool m_IsView;
+	bool m_DrawFlag;
 
 	const CharaBase* m_TargetChara;
 };

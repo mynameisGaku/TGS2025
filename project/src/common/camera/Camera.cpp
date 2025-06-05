@@ -42,8 +42,8 @@ Camera::Camera() {
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
 	m_TargetChara = nullptr;
-	isView = true;
-	drawFlag = false;
+	m_IsView = true;
+	m_DrawFlag = false;
 
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
@@ -91,15 +91,15 @@ void Camera::Update() {
 
 	Object3D::Update();
 
-	drawFlag = false;
+	m_DrawFlag = false;
 }
 
 void Camera::Draw() {
 
-	if (drawFlag)
+	if (m_DrawFlag)
 		return;
 
-	if (not isView) {
+	if (not m_IsView) {
 		DrawVirtualCamera();
 		return;
 	}
@@ -120,8 +120,8 @@ void Camera::Draw() {
 
 	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY,m_CameraRotMat));
 	//SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
-
-	drawFlag = true;
+	
+	m_DrawFlag = true;
 }
 
 void Camera::DrawVirtualCamera() {
@@ -316,4 +316,32 @@ Vector3 Camera::TargetLay() const {
 	}
 
 	return targetPos - cameraPos;
+}
+
+bool Camera::IsFrontView(const Vector3& pos) const {
+
+	Vector3 cameraPos = WorldPos();	// カメラの座標
+	Vector3 toPos = pos - cameraPos;// カメラからのベクトル
+	Vector3 cameraDir = transform->Global().Forward();	// カメラの向きベクトル
+
+	float dot = Vector3::Dot(toPos, cameraDir);	// 内積を計算
+	if (dot > 0.0f)	// 内積が正なら、カメラの前方にある
+		return true;
+
+	return false;
+}
+
+bool Camera::IsRightView(const Vector3& pos) const {
+
+	Vector3 cameraPos = WorldPos();	// カメラの座標
+	Vector3 toPos = pos - cameraPos;// カメラからのベクトル
+	Vector3 cameraDir = transform->Global().Right();	// カメラの向きベクトル
+
+	float dot = Vector3::Dot(toPos, cameraDir);	// 内積を計算
+	if (dot > 0.0f)	// 内積が正なら、カメラの前方にある
+		return true;
+
+	return false;
+
+	return false;
 }

@@ -6,6 +6,7 @@
 #include "src/common/component/collider/CollisionManager.h"
 
 //=== エフェクト ===
+#include "src/scene/play/targetting/Targetting.h"
 
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
@@ -40,6 +41,9 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();
 	SetDrawOrder(m_BloomManager, 10000);
+
+	Targetting* targetting = Instantiate<Targetting>();
+	SetDrawOrder(targetting, 1000);
 
 	StageObjectManager::LoadFromJson("data/json/Stage/Stage_3.json");
 

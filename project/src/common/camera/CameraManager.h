@@ -113,9 +113,20 @@ namespace CameraManager {
 	/// </summary>
 	bool IsScreenDivision();
 
+	/// <summary>
+	/// 画面分割の開始地点を取得する
+	/// </summary>
 	Vector2 GetScreenDivisionPos();
 
+	/// <summary>
+	/// 画面分割の大きさを取得する
+	/// </summary>
 	Vector2 GetScreenDivisionSize();
+
+	/// <summary>
+	/// 画面分割の中心座標を取得する
+	/// </summary>
+	Vector2 GetScreenDivisionCenter();
 
 	//================================================================================
 	// ▼デバッグ機能

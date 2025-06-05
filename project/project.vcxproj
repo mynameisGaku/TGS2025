@@ -339,6 +339,7 @@
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
     <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp" />
+    <ClCompile Include="src\scene\play\targetting\Targetting.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
@@ -505,6 +506,7 @@
     <ClInclude Include="src\scene\play\playScene.h" />
     <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h" />
     <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h" />
+    <ClInclude Include="src\scene\play\targetting\Targetting.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />

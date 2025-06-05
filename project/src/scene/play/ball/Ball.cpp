@@ -358,7 +358,7 @@ void Ball::collisionToGround()
 void Ball::HomingProcess()
 {
 	// ---- ホーミング補間 ----
-	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? (Vector3::UnitZ * 200.0f) * m_Owner->transform->RotationMatrix() : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 	Vector3 acceleration = m_HomingTargetPos - transform->position;
 	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 

@@ -6,6 +6,8 @@
 #include "src/util/fsm/TinyFSM.h"
 #include <vendor/nlohmann/json_fwd.hpp>
 
+#include "src/util/math/Vector2.h"
+
 class CharaHP;
 class CharaStamina;
 class Ball;
@@ -156,6 +158,11 @@ public:
 	void Respawn(const Vector3& pos, const Vector3& rot);
 
 	//=======================================================================================
+	// ▼演出
+
+	Vector2 Target(const Ball* ball);
+
+	//=======================================================================================
 	// ▼ゲッター
 
 	/// <summary>
@@ -178,6 +185,9 @@ public:
 	/// </summary>
 	inline StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
 
+	inline Ball* GetHaveBall() const { return m_pBall; }
+	inline const Ball* GetTargetBall() const { return m_pTargetBall; }
+
 	// ボールをチャージしているかどうか
 	inline bool	IsCharging()	const { return m_IsCharging;}			
 	// 着地中
@@ -197,7 +207,11 @@ public:
 	// ボールを投げられるか
 	inline bool	CanThrow()		const { return m_CanThrow;}				
 	// キャッチ中か
-	inline bool	IsCatching()	const { return m_IsCatching;}			
+	inline bool	IsCatching()	const { return m_IsCatching;}	
+	// ターゲットを狙っているか
+	inline bool IsTarget() const { return m_IsTarget; }
+	// ターゲットされているか
+	inline bool IsTargeted() const { return m_IsTargeted; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -251,6 +265,7 @@ private:
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
 	Ball*			m_pHitBall;				// あてられたボールのポインター
+	const Ball*		m_pTargetBall;			// 狙われているボールのポインター
 	BallManager*	m_pBallManager;			// ボールマネージャーのポインター
 	CharaStamina*	m_pStamina;				// スタミナのポインター
 	CharaHP*		m_pHP;					// HPのポインター
@@ -283,6 +298,10 @@ private:
 	bool			m_CanHold;				// ボールを持てるか
 	bool			m_CanThrow;				// ボールを投げられるか
 	bool			m_IsCatching;			// キャッチ中か
+	bool 			m_IsTarget;				// ターゲットを狙っているか
+	bool 			m_IsTargeted;			// ターゲットされているか
+
+	
 
 	void land();
 

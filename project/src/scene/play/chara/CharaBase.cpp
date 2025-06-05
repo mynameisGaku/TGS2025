@@ -4,6 +4,7 @@
 
 #include "src/common/component/physics/Physics.h"
 #include "src/common/component/collider/CollisionDefine.h"
+#include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/stage/Stage.h"
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/chara/CharaStamina.h"
@@ -578,6 +579,18 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 	{
 		m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
 	}
+}
+
+Vector2 CharaBase::Target(const Ball* ball) {
+
+	if (ball == nullptr)
+		return Vector2::Zero;
+
+	m_pTargetBall = ball;
+	
+	VECTOR scrBallPos = ConvWorldPosToScreenPos(ball->transform->Global().position);	// ボールの位置(ワールド座標)
+
+	return Vector2(scrBallPos.x, scrBallPos.y);
 }
 
 void CharaBase::CatchSuccess(const Vector3& velocity)

@@ -166,16 +166,18 @@ void CharaBase::Init(std::string tag)
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
 			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
 			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
-			descBold.thick = 30.0f; // トレイルの太さ
+			descBold.thick = 50.0f; // トレイルの太さ
 			descBold.lifeTime = lifeTime; // トレイルの寿命
 			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descBold.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
 			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
 			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
-			descSmall.thick = 5.0f; // トレイルの太さ
+			descSmall.thick = 25.0f; // トレイルの太さ
 			descSmall.lifeTime = lifeTime; // トレイルの寿命
 			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descSmall.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			return std::pair<MODEL_FRAME_TRAIL_RENDERER_DESC, MODEL_FRAME_TRAIL_RENDERER_DESC>(descBold, descSmall);
 		};

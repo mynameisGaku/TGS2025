@@ -14,6 +14,7 @@ void FrameTrail::Init(int hModel, const MODEL_FRAME_TRAIL_RENDERER_DESC& desc, i
     m_Thick = desc.thick;
     m_LifeTime = desc.lifeTime;
     m_AppearRate = desc.appearRate;
+    m_PosRandomRange = desc.posRandomRange;
 
     m_UpdateAppearIntervalSec = 0.5f;
     m_UpdateAppearTimer = m_UpdateAppearIntervalSec;
@@ -54,7 +55,12 @@ void FrameTrail::Update()
     }
 
     // ƒgƒŒƒCƒ‹‚ð’Ç‰Á‚·‚é
-    m_Trail.Add(m_CurrPos, m_IsActive);
+    Vector3 randomRange = Vector3(
+        Random.GetFloatRange(m_PosRandomRange.x, -m_PosRandomRange.x),
+        Random.GetFloatRange(m_PosRandomRange.y, -m_PosRandomRange.y),
+        Random.GetFloatRange(m_PosRandomRange.z, -m_PosRandomRange.z)
+    );
+    m_Trail.Add(m_CurrPos + randomRange, m_IsActive);
     m_Trail.Update();
 }
 

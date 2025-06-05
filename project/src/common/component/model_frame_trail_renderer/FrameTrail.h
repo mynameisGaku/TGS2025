@@ -17,10 +17,10 @@ public:
     void Init(int hModel, const MODEL_FRAME_TRAIL_RENDERER_DESC& desc, int hImage);
     void Update();
     void Draw();
-
 private:
     Vector3     m_PrevPos = Vector3::Zero; // 前回の位置
     Vector3     m_CurrPos = Vector3::Zero; // 現在の位置
+    Vector3     m_PosRandomRange = Vector3::Zero; // 位置のランダム範囲
     std::string m_FrameName = ""; // モデルのフレーム名
     Trail3D     m_Trail; // トレイルのインスタンス
     int         m_hImage = -1; // トレイルの画像ハンドル

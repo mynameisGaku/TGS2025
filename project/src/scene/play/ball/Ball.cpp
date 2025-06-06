@@ -15,6 +15,7 @@
 #include "src/scene/play/catcher/Catcher.h"
 #include "src/util/fx/trail/trail3D/Trail3D.h"
 #include "src/util/ptr/PtrUtil.h"
+#include "src/util/math/Random.h"
 
 Ball::Ball()
 {
@@ -35,6 +36,8 @@ Ball::Ball()
 
 	m_pTrail = new Trail3D();
 
+	m_ChargeRate = 0.0f;
+
 	Init();
 }
 
@@ -51,13 +54,13 @@ Ball::~Ball()
 void Ball::Reset(std::string charaTag)
 {
 	Init(charaTag);
-	m_State = S_OWNED;
+	changeState(S_OWNED);
 }
 
 void Ball::Spawn()
 {
 	Init();
-	m_State = S_LANDED;
+	changeState(S_LANDED);
 }
 
 void Ball::Init(std::string charaTag)
@@ -79,13 +82,16 @@ void Ball::Init(std::string charaTag)
 	m_LifeTime = m_LifeTimeMax;
 	m_AlphaRate = 255.0f;
 
+	if (not m_pManager)
+		m_pManager = FindGameObject<BallManager>();
+
 	m_IsHoming = false;
 	m_IsActive = true;
 	m_IsPickedUp = false;
 
 	ColDefine::Tag tag;
 	std::list<ColDefine::Tag> targets;
-
+	
 	if (charaTag == "Red")
 	{
 		tag = ColDefine::Tag::tBallRed;
@@ -107,6 +113,7 @@ void Ball::Init(std::string charaTag)
 	m_Collider->SetTargetTags(targets);
 	
 	m_CharaTag = charaTag;
+	EffectManager::Stop("Ball_Outline.efk", "Ball_Outline" + m_CharaTag);
 }
 
 void Ball::Update()
@@ -114,7 +121,35 @@ void Ball::Update()
 	Object3D::Update();
 
 	if (not m_IsActive)
+	{
 		return;
+	}
+
+	// エフェクト
+	{
+		const float DROPDUST_APPEAR_RATE_PERCENT = 95.0f / 100.0f; // %
+		const float RAND_RANGE_MAX = 100.0f;
+		const float RAND_RANGE_MIN = 0.0f;
+
+		std::string eff = "Ball_Outline_";
+		eff += m_CharaTag;
+		eff += "_Holding.efk";
+		if (m_State == S_THROWN || m_State == S_OWNED)
+		{
+			EffectManager::Play3D_Loop(eff, transform->Global(), "Ball_Outline" + m_CharaTag + "_" + std::to_string(m_Index));
+			if (m_State == S_THROWN)
+			{
+				if (Random.GetFloatRange(RAND_RANGE_MIN, RAND_RANGE_MAX) / RAND_RANGE_MAX >= DROPDUST_APPEAR_RATE_PERCENT)
+				{
+					EffectManager::Play3D("DropDust.efk", transform->Global(), "DropDust" + m_CharaTag);
+				}
+			}
+		}
+		else
+		{
+			EffectManager::Stop(eff, "Ball_Outline" + m_CharaTag + "_" + std::to_string(m_Index));
+		}
+	}
 
 	if (m_IsHoming)
 	{
@@ -132,6 +167,7 @@ void Ball::Update()
 			Vector3 pushVec;
 			if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
 			{
+
 				transform->position += pushVec;
 
 				// 押し出し方向
@@ -186,7 +222,7 @@ void Ball::Update()
 			m_pTrail->Add(transform->position);
 		}
 	}
-	m_pTrail->Update(); 
+	m_pTrail->Update();
 }
 
 
@@ -202,11 +238,12 @@ void Ball::Draw()
 
 void Ball::Throw(const Vector3& velocity)
 {
-	m_State = S_THROWN;
+	changeState(S_THROWN);
 	setVelocity(velocity * BALL_REF.SpeedDefault);
 	m_Physics->SetGravity(BALL_REF.GravityDefault);
 	m_Physics->SetFriction(BALL_REF.FrictionDefault);
 	m_Collider->SetIsActive(true);
+	m_hTrailImage = m_pManager->GetTrailImage(m_CharaTag);
 	m_pTrail->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, 1.0f, 40.0f);
 	m_pTrail->SetSubdivisions(4);
 	m_Owner = nullptr;
@@ -219,7 +256,7 @@ void Ball::Throw(const Vector3& velocity, CharaBase* owner)
 	m_LastOwner = m_Owner;
 }
 
-void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target)
+void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate)
 {
 	Throw(velocity, owner);
 
@@ -234,6 +271,8 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 	// ターゲット位置と現在位置からちょうどいい時間を計算
 	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
+
+	m_ChargeRate = chargeRate;
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -249,9 +288,9 @@ void Ball::CollisionEvent(const CollisionData& colData)
 		if (m_IsHoming) HomingDeactivate();
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
-		m_State = S_LANDED;
 
-		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+		changeState(S_LANDED);
+
 
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
@@ -352,7 +391,7 @@ void Ball::collisionToGround()
 		m_Physics->velocity.z *= 0.99f;
 		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
 
-		m_State = S_LANDED;
+		changeState(S_LANDED);
 	}
 }
 
@@ -371,7 +410,6 @@ void Ball::HomingProcess()
 		HomingDeactivate();
 		return;
 	}
-
 	m_Physics->velocity += acceleration * GTime.deltaTime;
 	m_HomingPosition += m_Physics->velocity * GTime.deltaTime;
 
@@ -402,7 +440,8 @@ void Ball::HomingProcess()
 				m_Physics->velocity = reflectVel * damping;
 			}
 
-			m_State = S_LANDED;
+			changeState(S_LANDED);
+			EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 		}
 	}
 
@@ -421,4 +460,10 @@ void Ball::HomingDeactivate()
 void Ball::setVelocity(const Vector3& velocity)
 {
 	m_Physics->velocity = velocity;
+}
+
+void Ball::changeState(const State& s)
+{
+	m_StatePrev = m_State;
+	m_State = s;
 }

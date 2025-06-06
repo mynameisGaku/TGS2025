@@ -26,6 +26,8 @@ public:
 
 	Ball* GetBall(uint32_t index);
 
+	int GetTrailImage(const std::string& teamColor);
+
 private:
 	Ball* initfunc(uint32_t index, Ball* pBall);
 	void loadTextures();

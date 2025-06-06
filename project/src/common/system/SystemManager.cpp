@@ -175,6 +175,10 @@ void SystemManager::LoadUpdate() {
 			EffectManager::LoadFromJson("data/json/effect/Hit_Red.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_NoColor.json");
 			EffectManager::LoadFromJson("data/json/effect/Hit_Wall.json");
+			EffectManager::LoadFromJson("data/json/effect/Ball_Outline.json");
+			EffectManager::LoadFromJson("data/json/effect/Ball_Outline_Red_Holding.json");
+			EffectManager::LoadFromJson("data/json/effect/Ball_Outline_Blue_Holding.json");
+			EffectManager::LoadFromJson("data/json/effect/DropDust.json");
 		}
 		break;
 

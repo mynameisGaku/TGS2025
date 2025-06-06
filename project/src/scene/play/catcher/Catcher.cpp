@@ -82,6 +82,7 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 		m_Parent->SetBall(ball);
 		ball->SetOwner(m_Parent);
 		ball->PickUp();
+		ball->SetChargeRate(0.1f);
 		m_Parent->GetStatusTracker()->AddCatchCount(1);
 
 		Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());

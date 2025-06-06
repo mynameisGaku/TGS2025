@@ -614,7 +614,7 @@ void CharaBase::ThrowHomingBall()
 	if (camera != nullptr)
 		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
 
-	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara);
+	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara, 0.1f + m_BallChargeRate);
 	m_pStatusTracker->AddThrowCount(1);
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;

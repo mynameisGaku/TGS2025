@@ -196,6 +196,9 @@
     <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
+    <None Include="data\Json\Effect\Ball_Outline.json" />
+    <None Include="data\Json\Effect\Ball_Outline_Blue_Holding.json" />
+    <None Include="data\Json\Effect\Ball_Outline_Red_Holding.json" />
     <None Include="data\Json\Effect\Catch_Dust.json" />
     <None Include="data\Json\Effect\Catch_Dust_Blue.json" />
     <None Include="data\Json\Effect\Catch_Dust_Red.json" />
@@ -203,6 +206,7 @@
     <None Include="data\Json\Effect\Catch_Ready_Blue.json" />
     <None Include="data\Json\Effect\Catch_Ready_Red.json" />
     <None Include="data\Json\Effect\Catch_Success.json" />
+    <None Include="data\Json\Effect\DropDust.json" />
     <None Include="data\Json\Effect\Hit_Blue.json" />
     <None Include="data\Json\Effect\Hit_Gray.json" />
     <None Include="data\Json\Effect\Hit_NoColor.json" />

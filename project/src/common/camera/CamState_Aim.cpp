@@ -66,8 +66,10 @@ void Camera::AimState(FSMSignal sig)
 	{
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		if (m_FollowerChara == nullptr || m_TargetChara == nullptr)
+		if (m_FollowerChara == nullptr || m_TargetChara == nullptr) {
+			ChangeState(&Camera::ChaseState);
 			return;
+		}
 
 		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
 		const Transform TARGET_TRS = m_TargetChara->transform->Global();

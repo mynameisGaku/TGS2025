@@ -600,6 +600,18 @@
     <None Include="data\Json\Sound\SoundData.json">
       <Filter>data\Json\Sound</Filter>
     </None>
+    <None Include="data\Json\Effect\Ball_Outline.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Ball_Outline_Blue_Holding.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\Ball_Outline_Red_Holding.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Effect\DropDust.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1911,5 +1923,6 @@
     <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\math\Vector3Util.h" />
   </ItemGroup>
 </Project>

@@ -20,6 +20,11 @@ BallManager::BallManager()
 	BALL_REF.Load();
 
 	m_hTrails["Green"] = LoadGraph("data/img/trail/Trail_Green.png");
+	m_hTrails["Blue"] = LoadGraph("data/img/trail/Trail_Blue.png");
+	m_hTrails["Red"] = LoadGraph("data/img/trail/Trail_Red.png");
+	m_hTrails["Plain"] = LoadGraph("data/img/trail/Trail_Plain.png");
+	m_hTrails["Plain_Distortion"] = LoadGraph("data/img/trail/Trail_Plain_Distortion.png");
+	m_hTrails["Plain_Distortion_Thin"] = LoadGraph("data/img/trail/Trail_Plain_Distortion_Thin.png");
 
 	m_pPool = new Pool<Ball>(BALL_REF.Max);
 }
@@ -225,6 +230,14 @@ Ball* BallManager::GetBall(uint32_t index)
 
 #endif
 
+}
+
+int BallManager::GetTrailImage(const std::string& teamColor)
+{
+	if (teamColor == "None")
+		return DX_NONE_GRAPH;
+
+	return m_hTrails[teamColor];
 }
 
 Ball* BallManager::initfunc(uint32_t index, Ball* pBall)

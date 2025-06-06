@@ -1,12 +1,12 @@
 {
   "Param": {
-    "magnification": 85.0,
-    "defMagnification": 85.0,
+    "magnification": 10.0,
+    "defMagnification": 10.0,
     "playSpeed": 1.0,
     "defPlaySpeed": 1.0,
     "isLoop": false,
     "fileName": "data/effect/",
-    "typeName": "Hit_Wall.efk",
-    "dimension": "3D"
+    "typeName": "DropDust.efk",
+    "dimension": "3d"
   }
 }

@@ -42,7 +42,7 @@ public:
 
 	void Throw(const Vector3& velocity);
 	void Throw(const Vector3& velocity, CharaBase*owner);
-	void ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target);
+	void ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate = 1.0f);
 	void HomingProcess();
 
 	State GetState() const { return m_State; }
@@ -72,6 +72,8 @@ public:
 	void SetOwner(CharaBase* pChara);
 
 	void PickUp();
+
+	void SetChargeRate(float rate) { m_ChargeRate = rate; }
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -80,6 +82,7 @@ private:
 	Physics*			m_Physics;
 	ColliderCapsule*	m_Collider;
 	State				m_State;
+	State				m_StatePrev;
 	CharaBase*			m_Owner;
 	CharaBase*			m_LastOwner;
 	std::string			m_CharaTag;
@@ -102,4 +105,7 @@ private:
 	void collisionToGround();
 	void HomingDeactivate();
 	void setVelocity(const Vector3& velocity);
+	void changeState(const State& s);
+
+	float				m_ChargeRate;
 };

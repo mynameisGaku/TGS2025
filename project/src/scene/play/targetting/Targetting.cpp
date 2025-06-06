@@ -45,10 +45,6 @@ void Targetting::Update() {
 
 void Targetting::Draw() {
 
-	const float circleRadius = 32.0f;
-	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
-	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
-
 	for (auto& target : targetList) {
 
 		int index = target.first;
@@ -67,106 +63,28 @@ void Targetting::Draw() {
 		if (chara == nullptr)
 			continue;
 
-		// 狙われているキャラ
-		CharaBase* charaTarget = charaPool->Get(targetIndex);
-		if (charaTarget == nullptr)
-			continue;
-
-
+		// 狙っているキャラに対応するカメラを取得
 		Camera* targetCamera = CameraManager::GetCamera(targetIndex);
 		if (targetCamera == nullptr)
-			continue;
+			return;
 
 		if (not targetCamera->IsDrawEnd())
-			continue;
+			return;
 
-		// ボールを所持している場合
+		// ボールをチャージしている場合
 		Ball* ball = chara->GetHaveBall();
 		if (ball != nullptr && chara->IsCharging()) {
-
-			// 距離
-			Vector3 dir = ball->transform->Global().position - charaTarget->transform->Global().position;
-
-			// 距離を長さに変換
-			float distance = dir.GetLength();
-
-			// 角度の計算
-			float angle = atan2f(dir.z, dir.x);
-
-			// Z-X平面で考える
-			float dz = -sinf(angle);
-			float dx = cosf(angle);
-
-			// 描画位置
-			Vector3 drawPoint = Vector3(dx, 0.0f, dz);
-
-			// 描画位置をビュー行列で回す
-			drawPoint = VTransform(drawPoint, targetCamera->transform->RotationMatrix());
-			
-			// 画面中央のサークル
-			Vector2 markerPos = screenCenter + Vector2(drawPoint.x, drawPoint.z) * circleRadius;
-
-			// マーカーの大きさを距離に応じて変える
-			const float DistMax = 6000.0f;
-
-			// 距離が最大値を超えた場合は最大値にする
-			MathUtil::ClampAssing(&distance, 0.0f, DistMax);
-
-			// 正規化された距離を計算
-			float distNormalize = distance / DistMax;
-
-			SetDrawBright(255, 55 + 200 * distNormalize, 55 + 200 * distNormalize);
-
-			Vector2 markerFromCenter = markerPos - screenCenter;
-			float arrowAngle = atan2f(markerFromCenter.y, markerFromCenter.x) + DX_PI_F / 2.0f;
-
-			DrawRectRotaGraphF(markerPos.x, markerPos.y, 0, 0, 32, 32, 2.0f, arrowAngle, hArrow, true, false);
-
-			SetDrawBright(255, 255, 255);
+			DrawBallPosMarker(ball->transform->Global().position, targetIndex);
+			DrawWarning();
+			DrawThorn(ball->transform->Global().position, targetIndex);
 		}
 
+		// ボールを投げた場合
 		const Ball* targetBall = chara->LastBall();
 		if (targetBall != nullptr && targetBall->GetState() == Ball::State::S_THROWN) {
-		
-			// 距離
-			Vector3 dir = targetBall->transform->Global().position - charaTarget->transform->Global().position;
-
-			// 距離を長さに変換
-			float distance = dir.GetLength();
-
-			// 角度の計算
-			float angle = atan2f(dir.z, dir.x);
-
-			// Z-X平面で考える
-			float dz = -sinf(angle);
-			float dx = cosf(angle);
-
-			// 描画位置
-			Vector3 drawPoint = Vector3(dx, 0.0f, dz);
-
-			// 描画位置をビュー行列で回す
-			drawPoint = VTransform(drawPoint, targetCamera->transform->RotationMatrix());
-
-			// 画面中央のサークル
-			Vector2 markerPos = screenCenter + Vector2(drawPoint.x, drawPoint.z) * circleRadius;
-
-			// マーカーの大きさを距離に応じて変える
-			const float DistMax = 6000.0f;
-
-			// 距離が最大値を超えた場合は最大値にする
-			MathUtil::ClampAssing(&distance, 0.0f, DistMax);
-
-			// 正規化された距離を計算
-			float distNormalize = distance / DistMax;
-
-			SetDrawBright(255, 255 * distNormalize, 255 * distNormalize);
-
-			Vector2 markerFromCenter = markerPos - screenCenter;
-			float arrowAngle = atan2f(markerFromCenter.y, markerFromCenter.x) + DX_PI_F / 2.0f;
-
-			DrawRectRotaGraphF(markerPos.x, markerPos.y, 0, 0, 32, 32, 2.0f, arrowAngle, hArrow, true, false);
-
-			SetDrawBright(255, 255, 255);
+			DrawBallPosMarker(targetBall->transform->Global().position, targetIndex);
+			DrawWarning();
+			DrawThorn(targetBall->transform->Global().position, targetIndex);
 		}
 	}
 }
@@ -177,4 +95,138 @@ int Targetting::IsTargetting(int myIndex) {
 		return -1;
 
 	return targetList[myIndex];
+}
+
+void Targetting::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
+
+	const float circleRadius = 32.0f;
+	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
+	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
+
+	Pool<CharaBase>* charaPool = charaManager->GetCharaPool();
+	if (charaPool == nullptr)
+		return;
+
+	// 狙われているキャラ
+	CharaBase* charaTarget = charaPool->Get(targetCharaID);
+	if (charaTarget == nullptr)
+		return;
+
+	// 狙っているキャラに対応するカメラを取得
+	Camera* targetCamera = CameraManager::GetCamera(targetCharaID);
+	if (targetCamera == nullptr)
+		return;
+
+	if (not targetCamera->IsDrawEnd())
+		return;
+
+	// 距離
+	Vector3 dir = ballPos - charaTarget->transform->Global().position;
+
+	// 距離を長さに変換
+	float distance = dir.GetLength();
+
+	// 角度の計算
+	float angle = atan2f(dir.z, dir.x);
+
+	// Z-X平面で考える
+	float dz = -sinf(angle);
+	float dx = cosf(angle);
+
+	// 描画位置
+	Vector3 drawPoint = Vector3(dx, 0.0f, dz);
+
+	// 描画位置をビュー行列で回す
+	drawPoint = VTransform(drawPoint, targetCamera->transform->RotationMatrix());
+
+	// 画面中央のサークル
+	Vector2 markerPos = screenCenter + Vector2(drawPoint.x, drawPoint.z) * circleRadius;
+
+	// マーカーの大きさを距離に応じて変える
+	const float DistMax = 6000.0f;
+
+	// 距離が最大値を超えた場合は最大値にする
+	MathUtil::ClampAssing(&distance, 0.0f, DistMax);
+
+	// 正規化された距離を計算
+	float distNormalize = distance / DistMax;
+
+	Vector2 markerFromCenter = markerPos - screenCenter;
+	float arrowAngle = atan2f(markerFromCenter.y, markerFromCenter.x) + DX_PI_F / 2.0f;
+
+	SetDrawBright(180 + 75 * distNormalize, 0, 0);
+
+	DrawRectRotaGraphF(markerPos.x, markerPos.y, 0, 0, 32, 32, 2.0f, arrowAngle, hArrow, true, false);
+
+	SetDrawBright(255, 255, 255);
+}
+
+void Targetting::DrawWarning() {
+
+	Vector2 scrPos = CameraManager::GetScreenDivisionPos();
+	Vector2 scrSize = CameraManager::GetScreenDivisionSize();
+
+	DrawBoxAA(scrPos.x + 1.0f, scrPos.y + 1.0f, scrPos.x + scrSize.x - 1.0f, scrPos.y + scrSize.y - 1.0f, GetColor(255, 0, 0), false, 10.0f);
+}
+
+void Targetting::DrawThorn(const Vector3& ballPos, int targetCharaID) {
+
+	const float circleRadius = 32.0f;
+	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
+	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
+
+	Pool<CharaBase>* charaPool = charaManager->GetCharaPool();
+	if (charaPool == nullptr)
+		return;
+
+	// 狙われているキャラ
+	CharaBase* charaTarget = charaPool->Get(targetCharaID);
+	if (charaTarget == nullptr)
+		return;
+
+	// 狙っているキャラに対応するカメラを取得
+	Camera* targetCamera = CameraManager::GetCamera(targetCharaID);
+	if (targetCamera == nullptr)
+		return;
+
+	if (not targetCamera->IsDrawEnd())
+		return;
+
+	Vector2 screenDivSize = CameraManager::GetScreenDivisionSize();
+
+	// 距離
+	Vector3 dir = ballPos - charaTarget->transform->Global().position;
+
+	// 距離を長さに変換
+	float distance = dir.GetLength();
+
+	// 角度の計算
+	float angle = atan2f(dir.z, dir.x);
+
+	// Z-X平面で考える
+	float dz = -sinf(angle);
+	float dx = cosf(angle);
+
+	// 描画位置
+	Vector3 drawPoint = Vector3(dx, 0.0f, dz);
+
+	// 描画位置をビュー行列で回す
+	drawPoint = VTransform(drawPoint, targetCamera->transform->RotationMatrix());
+
+	Vector2 thornPos = screenCenter + Vector2(drawPoint.x, drawPoint.z) * screenDivSize;
+
+	Vector2 thornFromCenter = thornPos - screenCenter;
+	float thornAngle = atan2f(thornFromCenter.y, thornFromCenter.x) + DX_PI_F / 2.0f * -1.0f;
+
+	Vector2 thornOffset1 = Vector2(50.0f, 0.0f) * cosf(thornAngle);
+	Vector2 thornOffset2 = Vector2(0.0f, 50.0f) * -sinf(thornAngle);
+	Vector2 thornOffset3 = Vector2(drawPoint.x, drawPoint.z) * screenDivSize * 0.35f;
+
+	Vector2 thornPos1 = thornPos + thornOffset1;
+	Vector2 thornPos2 = thornPos + thornOffset2;
+	Vector2 thornPos3 = screenCenter + thornOffset3;
+	Vector2 thornBackPos3 = screenCenter + Vector2(drawPoint.x, drawPoint.z) * screenDivSize * 0.3f;
+
+	DrawTriangleAA(thornPos1.x, thornPos1.y, thornPos2.x, thornPos2.y, thornBackPos3.x, thornBackPos3.y, GetColor(0,0,0), true, 10.0f);
+	DrawTriangleAA(thornPos1.x, thornPos1.y, thornPos2.x, thornPos2.y, thornPos3.x, thornPos3.y, GetColor(255,255,255), true, 10.0f);
 }

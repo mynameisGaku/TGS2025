@@ -17,8 +17,12 @@ public:
 	int IsTargetting(int myIndex);
 
 private:
+	void DrawBallPosMarker(const Vector3& ballPos, int targetCharaID);
+	void DrawWarning();
+	void DrawThorn(const Vector3& ballPos, int targetCharaID);
+
 	BallManager* ballManager;
 	CharaManager* charaManager;
 	std::unordered_map<int, int> targetList;	// Key: myIndex, Value: targetIndex
-	int hArrow;	
+	int hArrow;
 };

@@ -74,7 +74,7 @@ void Targetting::Draw() {
 		// ボールをチャージしている場合
 		Ball* ball = chara->GetHaveBall();
 		if (ball != nullptr && chara->IsCharging()) {
-			DrawBallPosMarker(ball->transform->Global().position, targetIndex);
+			//DrawBallPosMarker(ball->transform->Global().position, targetIndex);
 			DrawWarning();
 			DrawThorn(ball->transform->Global().position, targetIndex);
 		}
@@ -82,7 +82,7 @@ void Targetting::Draw() {
 		// ボールを投げた場合
 		const Ball* targetBall = chara->LastBall();
 		if (targetBall != nullptr && targetBall->GetState() == Ball::State::S_THROWN) {
-			DrawBallPosMarker(targetBall->transform->Global().position, targetIndex);
+			//DrawBallPosMarker(targetBall->transform->Global().position, targetIndex);
 			DrawWarning();
 			DrawThorn(targetBall->transform->Global().position, targetIndex);
 		}
@@ -173,8 +173,7 @@ void Targetting::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 
 	const float circleRadius = 32.0f;
 	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
-	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
-
+	
 	Pool<CharaBase>* charaPool = charaManager->GetCharaPool();
 	if (charaPool == nullptr)
 		return;

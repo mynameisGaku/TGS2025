@@ -234,7 +234,7 @@ const CharaBase* CharaManager::CharaInst(int index)
 #endif
 }
 
-CharaBase* CharaManager::TargetChara(int index) {
+CharaBase* CharaManager::NearestEnemy(int index) {
 
 	const CharaBase* chara = CharaInst(index);
 	if (chara == nullptr)

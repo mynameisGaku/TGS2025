@@ -156,7 +156,12 @@ public:
 	/// <summary>
 	/// ‰ñ“]Šp“x‚É§ŒÀ‚ğ‚©‚¯‚é(-PI`PI)
 	/// </summary>
-	static void RotLimit(float* rot);
+	static float RotLimit(float rot);
+
+	/// <summary>
+	/// ‰ñ“]Šp“x‚É§ŒÀ‚ğ‚©‚¯‚é(-PI`PI)
+	/// </summary>
+	static void RotLimitAssing(float* rot);
 
 	static int CalcList(const std::list<int>& list);
 };

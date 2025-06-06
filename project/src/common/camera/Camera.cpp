@@ -41,10 +41,12 @@ Camera::Camera() {
 	cameraCone.range = CAMERADEFINE_REF.m_ConeRange;
 	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
 
+	m_FollowerChara = nullptr;
 	m_TargetChara = nullptr;
+	
 	m_IsView = true;
 	m_DrawFlag = false;
-
+	
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
 	m_CameraRotMat = MGetIdent();
@@ -66,11 +68,16 @@ void Camera::Reset() {
 	transform->position = Vector3(0.0f, 100.0f, -100.0f);
 	transform->rotation = Vector3::Zero;
 
-	offset = CAMERADEFINE_REF.m_OffsetDef;
-	target = CAMERADEFINE_REF.m_TargetDef;
-	offsetAfter = offset;
-	targetAfter = target;
+	m_PositionPrev = transform->position;
+	m_RotationPrev = transform->position;
 
+	m_Offset = CAMERADEFINE_REF.m_OffsetDef;
+	m_OffsetPrev = m_Offset;
+	
+	m_Target = CAMERADEFINE_REF.m_TargetDef;
+	m_TargetPrev = m_Offset;
+
+	m_EasingTime = 0.0f;
 	m_TargetTransitionTime = 0.0f;
 
 	holder = nullptr;
@@ -83,10 +90,6 @@ void Camera::Update() {
 	if (fsm != nullptr)
 		fsm->Update();
 
-	if (m_AnimData.state != CameraAnimState::Hold)
-		UpdateOffsetLeap();
-
-	UpdateTargetLeap();
 	UpdateAnimation();
 
 	Object3D::Update();
@@ -111,15 +114,15 @@ void Camera::Draw() {
 	Transform globalTrs = transform->Global();
 
 	Vector3 cameraPos = WorldPos() * mShake;
-	Vector3 targetPos = target * mShake;
+	Vector3 m_TargetPos = m_Target * mShake;
 
 	if (holder != nullptr) {
 		cameraPos += holder->Global().position;
-		targetPos += holder->Global().position;
+		m_TargetPos += holder->Global().position;
 	}
 
-	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY,m_CameraRotMat));
-	//SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	SetCameraPositionAndTargetAndUpVec(cameraPos, m_TargetPos, Vector3::TransformCoord(Vector3::UnitY,m_CameraRotMat));
+	//SetCameraPositionAndTarget_UpVecY(cameraPos, m_TargetPos);
 	
 	m_DrawFlag = true;
 }
@@ -129,14 +132,14 @@ void Camera::DrawVirtualCamera() {
 	Transform globalTrs = transform->Global();
 
 	Vector3 cameraPos = WorldPos();
-	Vector3 targetPos = target;
+	Vector3 m_TargetPos = m_Target;
 
 	if (holder != nullptr) {
 		cameraPos += holder->Global().position;
-		targetPos += holder->Global().position;
+		m_TargetPos += holder->Global().position;
 	}
 
-	DrawCapsule3D(cameraPos, targetPos, 8.0f, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), false);
+	DrawCapsule3D(cameraPos, m_TargetPos, 8.0f, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), false);
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
@@ -153,9 +156,9 @@ void Camera::ColCheckToTerrain() {
 	Vector3 cameraPos = WorldPos();	// カメラの座標
 	Vector3 lay = Vector3::SetY(-10.0f);
 
-	if (Stage::ColCheckGround(target, cameraPos + lay, &hitPos)) {
+	if (Stage::ColCheckGround(m_Target, cameraPos + lay, &hitPos)) {
 		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * Vector3::UnitY;	// 地面との設置点
-		Vector3 targePos = target * Vector3::UnitY;
+		Vector3 targePos = m_Target * Vector3::UnitY;
 
 		transform->position = terrainPos + targePos - lay;
 	}
@@ -172,7 +175,7 @@ void Camera::MoveProcess()
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
 	
-    target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
+    m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -230,16 +233,6 @@ void Camera::OperationByStick(int padNumber, int type) {
 	transform->rotation.y += addRot.y;
 }
 
-void Camera::UpdateOffsetLeap() {
-
-	offset += ((offsetAfter - offset) * CAMERADEFINE_REF.m_Interpolation) * GTime.timeScale;
-}
-
-void Camera::UpdateTargetLeap() {
-
-	target += ((targetAfter - target) * CAMERADEFINE_REF.m_Interpolation) * GTime.timeScale;
-}
-
 void Camera::UpdateAnimation() {
 
 	if (not m_AnimData.isPlaying)
@@ -250,10 +243,10 @@ void Camera::UpdateAnimation() {
 	switch (m_AnimData.state) {
 	case CameraAnimState::Begin_To_End:
 		if (m_AnimData.useAnim)
-			offset = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.begin, m_AnimData.end);
+			m_Offset = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.begin, m_AnimData.end);
 
 		if (m_AnimData.useTarget)
-			target = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginTarget, m_AnimData.endTarget);
+			m_Target = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginTarget, m_AnimData.endTarget);
 
 		if (m_AnimData.useMatrix) {
 			Vector3 rot = EasingFunc::Linear(m_AnimData.beginToEndSec, m_AnimData.beginToEndSec_Max, m_AnimData.beginRotMatrix, m_AnimData.endRotMatrix);
@@ -264,10 +257,10 @@ void Camera::UpdateAnimation() {
 
 	case CameraAnimState::End_To_Begin:
 		if (m_AnimData.useAnim)
-			offset = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.end, m_AnimData.begin);
+			m_Offset = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.end, m_AnimData.begin);
 
 		if (m_AnimData.useTarget)
-			target = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endTarget, m_AnimData.beginTarget);
+			m_Target = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endTarget, m_AnimData.beginTarget);
 
 		if (m_AnimData.useMatrix) {
 			Vector3 rot = EasingFunc::Linear(m_AnimData.endToBeginSec, m_AnimData.endToBeginSec_Max, m_AnimData.endRotMatrix, m_AnimData.beginRotMatrix);
@@ -294,28 +287,28 @@ void Camera::SetAnimation(const CameraAnimData& animData) {
 Vector3 Camera::WorldPos() const {
 
 	Vector3 globalPos = transform->Global().position;	// カメラの絶対座標
-	Vector3 offsetRotAdap = OffsetRotAdaptor();			// 回転行列をかけた相対座標
+	Vector3 m_OffsetRotAdap = OffsetRotAdaptor();			// 回転行列をかけた相対座標
 	Vector3 holderPos = Vector3::Zero;	// 保有者の座標
 
 	if (holder != nullptr)
 		holderPos += holder->Global().position;
 
-	Vector3 pos = globalPos + offsetRotAdap + holderPos;
+	Vector3 pos = globalPos + m_OffsetRotAdap + holderPos;
 
 	return pos;
 }
 
 Vector3 Camera::TargetLay() const {
 
-	Vector3 cameraPos = offset * transform->Matrix();
-	Vector3 targetPos = target;
+	Vector3 cameraPos = m_Offset * transform->Matrix();
+	Vector3 m_TargetPos = m_Target;
 
 	if (holder != nullptr) {
 		cameraPos += holder->Global().position;
-		targetPos += holder->Global().position;
+		m_TargetPos += holder->Global().position;
 	}
 
-	return targetPos - cameraPos;
+	return m_TargetPos - cameraPos;
 }
 
 bool Camera::IsFrontView(const Vector3& pos) const {

@@ -5,6 +5,7 @@
 // ◇汎用
 #include "src/util/time/GameTime.h"
 #include "src/util/math/MathUtil.h"
+#include "src/util/easing/EasingUtils.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
@@ -22,6 +23,7 @@ void Camera::ChaseState(FSMSignal sig)
 {
 	// 移動可能か
 	static bool canMove;
+	static const float EASING_TIME = 0.5f;
 
 	switch (sig)
 	{
@@ -30,17 +32,11 @@ void Camera::ChaseState(FSMSignal sig)
 		canMove = true;
 
 		m_TargetTransitionTime = 0.0f;
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新 (Update)
-	{
-		if (m_TargetTransitionTime > 0.0f)
-			m_TargetTransitionTime -= GTime.DeltaTime();
-		else
-			m_TargetTransitionTime = 0.0f;
+		m_EasingTime = EASING_TIME;
 
-		//OperationByMouse();
-		OperationByStick(m_CharaIndex + 1);
+		m_PositionPrev = transform->Global().position;
+		m_OffsetPrev = Offset();
+		m_TargetPrev = Target();
 
 		// キャラクターの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
@@ -48,33 +44,49 @@ void Camera::ChaseState(FSMSignal sig)
 			return;
 
 		// 追従するキャラクター
-		const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
-		if (chara == nullptr)
+		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
+		// 注視するキャラ
+		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新 (Update)
+	{
+		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
+		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
+
+		if (m_FollowerChara == nullptr)
 			return;
 
-		// キャラクターのトランスフォーム
-		const Transform charaTrs = chara->transform->Global();
+		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
 
-		// カメラの相対座標を設定
-		SetOffsetAfter(CAMERADEFINE_REF.m_OffsetChase);
+		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
+		const Vector3 TARGET = CAMERADEFINE_REF.m_TargetChase * FOLLOWER_TRS.Matrix();
+		const Vector3 POSITION = FOLLOWER_TRS.position;
 
-		// カメラの注視点を設定
-		SetTargetAfter(CAMERADEFINE_REF.m_TargetChase * charaTrs.Matrix());
+		if (m_EasingTime > 0.0f)
+		{
+			SetOffset(EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_OffsetPrev, OFFSET));
+			SetTarget(EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_TargetPrev, TARGET));
+			transform->position = EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_PositionPrev, POSITION);
+		}
+		else
+		{
+			SetOffset(OFFSET);
+			SetTarget(TARGET);
+			transform->position = POSITION;
+		}
+
+		OperationByStick(m_CharaIndex + 1);
 		
-		// カメラ座標と追従するキャラの座標を一致させる
-		transform->position = charaTrs.position;
-
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
-		MathUtil::RotLimit(&transform->rotation.y);
-
-		// 注視するキャラ
-		m_TargetChara = charaM->TargetChara(m_CharaIndex);
+		MathUtil::RotLimitAssing(&transform->rotation.y);
 
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_TargetChara != nullptr && InputManager::Hold("TargetCamera", chara->GetIndex() + 1))
+		if (m_TargetChara != nullptr && InputManager::Hold("TargetCamera", m_FollowerChara->GetIndex() + 1))
 		{
-			// マウスの移動検知
-			if (MouseController::Info().Move().GetLengthSquared() > 5.0f)
+			// 視点移動検知
+			if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
+				PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
 				m_TargetTransitionTime = 0.5f;
 
 			// コーン形状の判定内に注視するキャラが居る場合

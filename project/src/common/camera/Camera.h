@@ -90,25 +90,13 @@ public:
 	/// 相対座標を設定する
 	/// </summary>
 	/// <param name="_offset">相対座標</param>
-	inline void SetOffset(const Vector3& _offset) { offset = _offset; }
-
-	/// <summary>
-	///補間先の相対座標を設定する
-	/// </summary>
-	/// <param name="_offset">相対座標</param>
-	inline void SetOffsetAfter(const Vector3& _offset) { offsetAfter = _offset; }
+	inline void SetOffset(const Vector3& _offset) { m_Offset = _offset; }
 
 	/// <summary>
 	/// 注視点を設定する
 	/// </summary>
 	/// <param name="_target">注視点を設定する</param>
-	inline void SetTarget(const Vector3& _target) { target = _target; }
-
-	/// <summary>
-	/// 補間先の注視点を設定する
-	/// </summary>
-	/// <param name="_target">注視点を設定する</param>
-	inline void SetTargetAfter(const Vector3& _target) { targetAfter = _target; }
+	inline void SetTarget(const Vector3& _target) { m_Target = _target; }
 
 	/// <summary>
 	/// 保有者を設定する
@@ -170,27 +158,27 @@ public:
 	/// <summary>
 	/// 相対座標を取得する
 	/// </summary>
-	inline Vector3 Offset() const { return offset; }
+	inline Vector3 Offset() const { return m_Offset; }
 
 	/// <summary>
 	///相対座標のアドレスを取得する 
 	/// </summary>
-	inline Vector3& OffsetPtr() { return offset; }
+	inline Vector3& OffsetPtr() { return m_Offset; }
 
 	/// <summary>
 	/// 回転行列をかけた相対座標を取得する
 	/// </summary>
-	inline Vector3 OffsetRotAdaptor() const { return offset * transform->Global().RotationMatrix(); } 
+	inline Vector3 OffsetRotAdaptor() const { return m_Offset * transform->Global().RotationMatrix(); }
 
 	/// <summary>
 	/// 注視点を取得する
 	/// </summary>
-	inline Vector3 Target() const { return target; }
+	inline Vector3 Target() const { return m_Target; }
 
 	/// <summary>
 	/// 注視点のアドレスを取得する
 	/// </summary>
-	inline Vector3& TargetPtr() { return target; }
+	inline Vector3& TargetPtr() { return m_Target; }
 
 	/// <summary>
 	/// カメラの保有者のトランスフォームを取得する
@@ -259,8 +247,6 @@ public:
 
 private:
 
-	void UpdateOffsetLeap();
-	void UpdateTargetLeap();
 	void UpdateAnimation();
 
 	void DrawVirtualCamera();
@@ -270,10 +256,14 @@ private:
 
 	TinyFSM<Camera>* fsm;
 
-	Vector3 offset;		// カメラの相対座標
-	Vector3 offsetAfter;// 補間先のカメラの相対座標
-	Vector3 target;		// カメラの注視点
-	Vector3 targetAfter;// 補間先のカメラの注視点
+	Vector3 m_PositionPrev;	// 補間前のカメラの座標
+	Vector3 m_RotationPrev;	// 補間前のカメラの回転
+
+	Vector3 m_Offset;		// カメラの相対座標
+	Vector3 m_OffsetPrev;	// 補間前のカメラの相対座標
+	
+	Vector3 m_Target;		// カメラの注視点
+	Vector3 m_TargetPrev;	// 補間前のカメラの注視点
 
 	MATRIX m_CameraRotMat;	// カメラの回転行列
 
@@ -286,9 +276,13 @@ private:
 	const Transform* holder;	// カメラの保有者
 	CsvReader* cameraWork;		// カメラ演出情報
 	int m_CharaIndex;			// キャラクターの番号
-	float m_TargetTransitionTime;
-	bool m_IsView;
-	bool m_DrawFlag;
 
-	const CharaBase* m_TargetChara;
+	float m_EasingTime;			// イージング用タイマー
+	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
+
+	bool m_IsView;		// 描画しているか
+	bool m_DrawFlag;	// 描画が完了しているか
+
+	const CharaBase* m_FollowerChara;	// 追尾しているキャラ
+	const CharaBase* m_TargetChara;		// 注視しているキャラ
 };

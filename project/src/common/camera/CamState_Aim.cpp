@@ -5,6 +5,7 @@
 // ◇汎用
 #include "src/util/time/GameTime.h"
 #include "src/util/math/MathUtil.h"
+#include "src/util/easing/EasingUtils.h"
 
 // ◇個別で必要な物
 #include "src/util/input/InputManager.h"
@@ -22,73 +23,96 @@ void Camera::AimState(FSMSignal sig)
 {
 	// 移動可能か
 	static bool canMove;
+	static const float EASING_TIME = 1.0f;
 
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
 	{
 		canMove = true;
-	}
-	break;
-	case FSMSignal::SIG_Update: // 更新 (Update)
-	{
+
+		m_EasingTime = EASING_TIME;
+
+		m_PositionPrev = transform->Global().position;
+		m_RotationPrev = transform->Global().rotation;
+		m_OffsetPrev = Offset();
+		m_TargetPrev = Target();
+
 		// キャラクターの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
 		if (charaM == nullptr)
 			return;
 
-		// 追従するキャラ
-		const CharaBase* chara = charaM->CharaInst(m_CharaIndex);
-		if (chara == nullptr)
-			return;
-
+		// 追従するキャラクター
+		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
 		// 注視するキャラ
-		m_TargetChara = charaM->TargetChara(m_CharaIndex);
-		if (m_TargetChara == nullptr || MouseController::Info().Move().GetLengthSquared() > 5.0f) {
-			m_TargetTransitionTime = 0.5f;
+		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
+		if (m_TargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
 		// コーンの範囲に入って居ない場合
-		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, m_TargetChara->transform->position).IsCollision()) {
+		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, m_TargetChara->transform->position).IsCollision() ||
+			MouseController::Info().Move().GetLengthSquared() > 5.0f) {
 			m_TargetChara = nullptr;
+			m_TargetTransitionTime = 0.5f;
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新 (Update)
+	{
+		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		const Transform charaTrs = chara->transform->Global();			// 追従キャラのトランスフォーム
-		const Transform targetTrs = m_TargetChara->transform->Global();	// 注視キャラのトランスフォーム
-		Vector3 targetOffset = Vector3::SetY(100.0f);					// 注視点の相対座標
-		Vector3 targetPos = targetTrs.position + targetOffset;
+		if (m_FollowerChara == nullptr || m_TargetChara == nullptr)
+			return;
 
-		// カメラ座標と追従するキャラの座標を一致させる
-		transform->position = charaTrs.position;
+		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
+		const Transform TARGET_TRS = m_TargetChara->transform->Global();
 
-		// カメラの相対座標を設定
-		SetOffsetAfter(CAMERADEFINE_REF.m_OffsetAim);
+		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
+		const Vector3 TARGET = TARGET_TRS.position + Vector3::SetY(10.0f);
+		const Vector3 POSITION = FOLLOWER_TRS.position;
+		const Vector3 TOVEC = TARGET - POSITION;
+		const Vector3 ROTATION = Vector3(MathUtil::ToRadians(-20.0f), MathUtil::RotLimit(atan2f(TOVEC.x, TOVEC.z)), 0.0f);
 
-		// カメラの注視点を設定
-		SetTargetAfter(targetPos);
-
-		const float TARGET_DIR = targetPos.Direction(transform->Global().position);	// カメラから注視キャラへの角度
-		const float ROT_X = MathUtil::ToRadians(-20.0f);			// カメラのX軸回転値
-		float diffRot = TARGET_DIR - transform->rotation.y;	// 現在の向きと注視キャラへの角度の差異
-
-		// 回転角度に制限をかける
-		MathUtil::RotLimit(&diffRot);
-
-		transform->rotation.x += (ROT_X - transform->rotation.x) * 0.1f;
-		transform->rotation.y += diffRot * 0.1f;
-
-		// 回転角度に制限をかける
-		MathUtil::RotLimit(&transform->rotation.y);
-
-		// カメラとキャラの向きを揃える
-		//chara->transform->rotation.y = transform->rotation.y;
-
-		if (not InputManager::Hold("TargetCamera", chara->GetIndex() + 1))
+		if (m_EasingTime > 0.0f)
 		{
+			if (fabsf(ROTATION.y - m_RotationPrev.y) > DX_PI_F) {
+				if (m_RotationPrev.y > 0.0f)
+					m_RotationPrev.y -= DX_TWO_PI_F;
+				else if (m_RotationPrev.y < 0.0f)
+					m_RotationPrev.y += DX_TWO_PI_F;
+			}
+
+			SetOffset(EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_OffsetPrev, OFFSET));
+			SetTarget(EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_TargetPrev, TARGET));
+			transform->position = EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_PositionPrev, POSITION);
+			transform->rotation = EasingFunc::InCubic(m_EasingTime, EASING_TIME, m_RotationPrev, ROTATION);
+		}
+		else
+		{
+			SetOffset(OFFSET);
+			SetTarget(TARGET);
+			transform->position = POSITION;
+			transform->rotation = ROTATION;
+		}
+
+		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		MathUtil::RotLimitAssing(&transform->rotation.y);
+
+		if (not InputManager::Hold("TargetCamera", m_FollowerChara->GetIndex() + 1))
+		{
+			m_TargetChara = nullptr;
+			ChangeState(&Camera::ChaseState);
+		}
+
+		if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
+			PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+		{
+			m_TargetTransitionTime = 0.5f;
 			m_TargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}

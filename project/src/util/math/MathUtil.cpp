@@ -232,7 +232,17 @@ float MathUtil::RotAngle(float current, float terminus, float rotSpeed)
 	return ans;
 }
 
-void MathUtil::RotLimit(float* rot)
+float MathUtil::RotLimit(float rot)
+{
+	if (rot > MathUtil::PI)
+		rot -= MathUtil::PI_TW;
+	else if (rot < -MathUtil::PI)
+		rot += MathUtil::PI_TW;
+
+	return rot;
+}
+
+void MathUtil::RotLimitAssing(float* rot)
 {
 	if (*rot > MathUtil::PI)
 		*rot -= MathUtil::PI_TW;

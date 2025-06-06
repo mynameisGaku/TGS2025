@@ -34,7 +34,7 @@ public:
 	/// 指定したキャラに対して、最も近い敵キャラを取得する
 	/// </summary>
 	/// <param name="index">キャラID</param>
-	CharaBase* TargetChara(int index);
+	CharaBase* NearestEnemy(int index);
 
 	/// <summary>
 	/// キャラのプールを取得する

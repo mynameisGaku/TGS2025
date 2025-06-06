@@ -134,7 +134,8 @@ void Camera::DrawVirtualCamera() {
 	Vector3 cameraPos = WorldPos();
 	Vector3 m_TargetPos = m_Target;
 
-	if (holder != nullptr) {
+	if (holder != nullptr)
+	{
 		cameraPos += holder->Global().position;
 		m_TargetPos += holder->Global().position;
 	}

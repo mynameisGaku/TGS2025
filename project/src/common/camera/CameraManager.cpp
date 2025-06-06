@@ -231,6 +231,11 @@ Vector2 CameraManager::GetScreenDivisionSize() {
 	return Vector2(screenDivWidth, screenDivHeight);
 }
 
+Vector2 CameraManager::GetScreenDivisionPos_CameraIndex(int index) {
+
+	return Vector2((WindowSetting().width / cameras->size()) * index, 0.0f);
+}
+
 Vector2 CameraManager::GetScreenDivisionCenter() {
 
 	return GetScreenDivisionPos() + (GetScreenDivisionSize() * 0.5f);

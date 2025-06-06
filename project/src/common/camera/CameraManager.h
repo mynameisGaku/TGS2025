@@ -124,6 +124,11 @@ namespace CameraManager {
 	Vector2 GetScreenDivisionSize();
 
 	/// <summary>
+	/// 画面分割の開始地点を取得する
+	/// </summary>
+	Vector2 GetScreenDivisionPos_CameraIndex(int index);
+
+	/// <summary>
 	/// 画面分割の中心座標を取得する
 	/// </summary>
 	Vector2 GetScreenDivisionCenter();

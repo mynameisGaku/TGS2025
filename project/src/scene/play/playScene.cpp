@@ -6,7 +6,7 @@
 #include "src/common/component/collider/CollisionManager.h"
 
 //=== エフェクト ===
-#include "src/scene/play/targetting/Targetting.h"
+#include "src/scene/play/targetting/TargetManager.h"
 
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
@@ -38,8 +38,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	Instantiate<MatchManager>();
 
-	Targetting* targetting = Instantiate<Targetting>();
-	SetDrawOrder(targetting, 1000);
+	TargetManager* targetManager = Instantiate<TargetManager>();
+	SetDrawOrder(targetManager, 1000);
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();

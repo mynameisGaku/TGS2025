@@ -247,8 +247,14 @@ public:
 
 private:
 
+	/// <summary>
+	/// 演出の更新処理
+	/// </summary>
 	void UpdateAnimation();
 
+	/// <summary>
+	/// 仮想カメラの描画位置をカプセルで描画
+	/// </summary>
 	void DrawVirtualCamera();
 
 	//================================================================================

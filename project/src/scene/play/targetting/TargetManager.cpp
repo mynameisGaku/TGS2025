@@ -1,54 +1,78 @@
-#include "Targetting.h"
+#include "TargetManager.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/common/setting/window/WindowSetting.h"
 
-Targetting::Targetting() {
+TargetManager::TargetManager() {
 
 	ballManager = nullptr;
 	charaManager = nullptr;
+	checkCamera.clear();
 	targetList.clear();
 
 	hArrow = LoadGraph("data/texture/arrow.png");
 }
 
-Targetting::~Targetting() {
+TargetManager::~TargetManager() {
 
+	checkCamera.clear();
 	targetList.clear();
 
 	DeleteGraph(hArrow);
 }
 
-void Targetting::Start() {
+void TargetManager::Start() {
 
 	ballManager = FindGameObject<BallManager>();
 	charaManager = FindGameObject<CharaManager>();
+
+	const int cameraNum = (int)CameraManager::AllCameras().size();
+	for (int i = 0; i < cameraNum; i++)
+		checkCamera.push_back(false);
 }
 
-void Targetting::Update() {
+void TargetManager::Update() {
 
-	int cameraNum = CameraManager::AllCameras().size();
+	// カメラの総数
+	const int cameraNum = CameraManager::AllCameras().size();
 
 	for (int i = 0; i < cameraNum; i++) {
-
 		Camera* camera = CameraManager::GetCamera(i);
+
+		// カメラが誰も注視していない場合
 		if (camera->TargetChara() == nullptr) {
 			targetList[i] = -1;
 			continue;
 		}
 
+		// 注視していたキャラの番号を取得
 		targetList[i] = camera->TargetChara()->GetIndex();
 	}
+
+	// チェック済マークのリセット
+	for (auto check : checkCamera)
+		check = false;
 }
 
-void Targetting::Draw() {
+void TargetManager::Draw() {
 
-	for (auto& target : targetList) {
+	// カメラの総数
+	const int cameraNum = (int)CameraManager::AllCameras().size();
 
-		int index = target.first;
-		int targetIndex = target.second;
+	for (int i = 0; i < cameraNum; i++) {
+
+		Camera* camera = CameraManager::GetCamera(i);
+		if (camera == nullptr)
+			continue;
+
+		// カメラの描画が完了しているかつ、チェック済の場合
+		if (camera->IsDrawEnd() && checkCamera[i])
+			continue;
+
+		int index = i;					// カメラの番号＆キャラの番号
+		int targetIndex = targetList[i];// 注視しているキャラの番号
 
 		// ターゲットが居ない場合
 		if (targetIndex == -1)
@@ -66,38 +90,42 @@ void Targetting::Draw() {
 		// 狙っているキャラに対応するカメラを取得
 		Camera* targetCamera = CameraManager::GetCamera(targetIndex);
 		if (targetCamera == nullptr)
-			return;
+			continue;
 
+		// 描画が完了していない場合
+		// 警告マーカーを描画するのは相手方のカメラなので、相手方の描画が終わるのを待つ
 		if (not targetCamera->IsDrawEnd())
-			return;
+			continue;
+
+		const Ball* haveBall = chara->GetHaveBall();
+		const Ball* lastBall = chara->LastBall();
 
 		// ボールをチャージしている場合
-		Ball* ball = chara->GetHaveBall();
-		if (ball != nullptr && chara->IsCharging()) {
-			//DrawBallPosMarker(ball->transform->Global().position, targetIndex);
+		if (haveBall != nullptr && chara->IsCharging()) {
 			DrawWarning();
-			DrawThorn(ball->transform->Global().position, targetIndex);
+			DrawThorn(haveBall->transform->Global().position, targetIndex);
 		}
 
 		// ボールを投げた場合
-		const Ball* targetBall = chara->LastBall();
-		if (targetBall != nullptr && targetBall->GetState() == Ball::State::S_THROWN) {
-			//DrawBallPosMarker(targetBall->transform->Global().position, targetIndex);
+		if (lastBall != nullptr && lastBall->GetState() == Ball::State::S_THROWN &&
+			lastBall->GetLastOwner() == chara) {
 			DrawWarning();
-			DrawThorn(targetBall->transform->Global().position, targetIndex);
+			DrawThorn(lastBall->transform->Global().position, targetIndex);
 		}
+
+		checkCamera[i] = true;
 	}
 }
 
-int Targetting::IsTargetting(int myIndex) {
+int TargetManager::TargetID(int charaIndex) {
 
-	if (targetList.contains(myIndex))
+	if (targetList.contains(charaIndex))
 		return -1;
 
-	return targetList[myIndex];
+	return targetList[charaIndex];
 }
 
-void Targetting::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
+void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
 
 	const float circleRadius = 32.0f;
 	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
@@ -161,7 +189,7 @@ void Targetting::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
 	SetDrawBright(255, 255, 255);
 }
 
-void Targetting::DrawWarning() {
+void TargetManager::DrawWarning() {
 
 	Vector2 scrPos = CameraManager::GetScreenDivisionPos();
 	Vector2 scrSize = CameraManager::GetScreenDivisionSize();
@@ -169,7 +197,7 @@ void Targetting::DrawWarning() {
 	DrawBoxAA(scrPos.x + 1.0f, scrPos.y + 1.0f, scrPos.x + scrSize.x - 1.0f, scrPos.y + scrSize.y - 1.0f, GetColor(255, 0, 0), false, 10.0f);
 }
 
-void Targetting::DrawThorn(const Vector3& ballPos, int targetCharaID) {
+void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 
 	const float circleRadius = 32.0f;
 	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();

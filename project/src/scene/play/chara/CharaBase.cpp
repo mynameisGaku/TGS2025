@@ -4,7 +4,6 @@
 
 #include "src/common/component/physics/Physics.h"
 #include "src/common/component/collider/CollisionDefine.h"
-#include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/stage/Stage.h"
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/chara/CharaStamina.h"
@@ -20,6 +19,11 @@
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
+#include <src/util/math/Vector3Util.h>
+#include "src/common/component/model_frame_trail_renderer/ModelFrameTrailRenderer.h"
+#include "src/common/component/model_frame_trail_renderer/MODEL_FRAME_TRAIL_RENDERER_DESC.h"
+#include "src/util/math/Random.h"
+#include "src/util/sound/SoundManager.h"
 
 using namespace KeyDefine;
 
@@ -120,6 +124,11 @@ CharaBase::~CharaBase()
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
+	/*for (int i = 0; i < 5; ++i)
+	{
+		PtrUtil::SafeDelete(m_pTrail[i]);
+	}*/
+
 	PtrUtil::SafeDelete(m_EffectTransform);
 }
 
@@ -135,6 +144,59 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
+	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
+		{ "mixamorig9:Hips", "HipsTrail" },
+		{ "mixamorig9:Spine2", "Spine1Trail" },
+		{ "mixamorig9:LeftShoulder", "LeftShoulderTrail" },
+		{ "mixamorig9:RightShoulder", "RightShoulderTrail" },
+		{ "mixamorig9:LeftLeg", "LeftLegTrail" },
+		{ "mixamorig9:LeftUpLeg", "LeftUpLegTrail" },
+		{ "mixamorig9:RightLeg", "RightLegTrail" },
+		{ "mixamorig9:RightUpLeg", "RightUpLegTrail"}
+	};
+	ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
+	MODEL_FRAME_TRAIL_RENDERER_DESC desc1;
+	MODEL_FRAME_TRAIL_RENDERER_DESC desc2;
+
+	auto addTrail = []()
+		{
+			float lt = 0.4f; // トレイルの寿命
+			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+
+			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
+			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descBold.thick = 50.0f; // トレイルの太さ
+			descBold.lifeTime = lifeTime; // トレイルの寿命
+			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descBold.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
+
+			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
+			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
+			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descSmall.thick = 25.0f; // トレイルの太さ
+			descSmall.lifeTime = lifeTime; // トレイルの寿命
+			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descSmall.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
+
+			return std::pair<MODEL_FRAME_TRAIL_RENDERER_DESC, MODEL_FRAME_TRAIL_RENDERER_DESC>(descBold, descSmall);
+		};
+	descs.reserve(frameAndTrailNames.size());
+	for (const auto& pair : frameAndTrailNames)
+	{
+		desc1 = addTrail().first;
+		desc1.frameName = pair.first;
+		desc1.trailName = pair.second;
+		desc2 = addTrail().second;
+		desc2.frameName = pair.first;
+		desc2.trailName = pair.second;
+
+		descs.push_back(desc1);
+		descs.push_back(desc2);
+	}
+	trail->Finalize(Model(), descs, m_hTrailImage);
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
@@ -233,7 +295,12 @@ void CharaBase::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		m_pBall->transform->position = VTransform(Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS), MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHand")));
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHandThumb1"));
+		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
+
+		m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
+		m_pBall->transform->position *= m;
+		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
 	}
 
 	static const float MOVE_ACCEL = 0.03f;
@@ -256,11 +323,37 @@ void CharaBase::Update() {
 	m_IsCatching = false;
 
 	Object3D::Update();
+
+	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
+	m_pTrail[0]->Add(chestPos);
+
+	Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
+	m_pTrail[1]->Add(leftShoulderPos);
+
+	Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
+	m_pTrail[2]->Add(rightShoulderPos);
+
+	Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
+	m_pTrail[3]->Add(leftHipPos);
+
+	Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
+	m_pTrail[4]->Add(rightHipPos);
+	
+	for (int i = 0; i < 5; i++)
+	{
+		m_pTrail[i]->Update();
+	}*/
+
 }
 
 void CharaBase::Draw()
 {
 	Object3D::Draw();
+
+	/*for (int i = 0; i < 5; i++)
+	{
+		m_pTrail[i]->Draw();
+	}*/
 
 	if (m_pHP->IsDead())
 	{
@@ -526,6 +619,8 @@ void CharaBase::ThrowHomingBall()
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;
 
+	playThrowSound();
+
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
 }
@@ -581,16 +676,9 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 	}
 }
 
-Vector2 CharaBase::Target(const Ball* ball) {
-
-	if (ball == nullptr)
-		return Vector2::Zero;
-
-	m_pTargetBall = ball;
-	
-	VECTOR scrBallPos = ConvWorldPosToScreenPos(ball->transform->Global().position);	// ボールの位置(ワールド座標)
-
-	return Vector2(scrBallPos.x, scrBallPos.y);
+void CharaBase::SetTrailImage(int hImage)
+{
+	m_hTrailImage = hImage;
 }
 
 void CharaBase::CatchSuccess(const Vector3& velocity)
@@ -599,6 +687,8 @@ void CharaBase::CatchSuccess(const Vector3& velocity)
 	m_CanMove = false;
 	m_CanRot = false;
 	m_Catcher->SetColliderActive(false);
+
+	playCatchBallSound();
 
 	m_pPhysics->SetGravity(Vector3::Zero);
 	m_pPhysics->SetFriction(Vector3::Zero);
@@ -1716,6 +1806,132 @@ void CharaBase::getHit(Ball* hit)
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
 	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:外部化
+
+	playGetHitSound();
+}
+
+void CharaBase::playThrowSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+    std::string base = "SE_throw_";
+	std::string power = "";
+	std::string num = "00";
+	std::string fileType = ".mp3";
+
+    if (m_BallChargeRate < 0.2f)
+    {
+        power += "weak_";
+    }
+    else if (m_BallChargeRate < 0.8f)
+    {
+        power += "normal_";
+    }
+    else
+    {
+        power += "strong_";
+    }
+
+    if (rand < 50)
+    {
+        num = "01";
+    }
+
+    std::string soundName = base + power + num + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playGetHitSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_hit_";
+	std::string num = "00";
+	std::string fileType = ".mp3";
+
+	if (rand < 50)
+	{
+		num = "01";
+	}
+
+	std::string soundName = base + num + fileType;
+
+
+	std::string base2 = "SE_bound_ball";
+	std::string num2 = "";
+
+	if (rand < 33)
+	{
+		num = "00";
+	}
+	else if (rand < 66)
+	{
+		num = "01";
+	}
+	else
+	{
+		num = "02";
+	}
+	std::string soundName2 = base2 + num2 + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+
+}
+
+void CharaBase::playFootStepSound()
+{
+}
+
+void CharaBase::playCatchBallSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_bound_ball";
+	std::string num = "";
+	std::string fileType = ".mp3";
+
+	if (rand < 33)
+	{
+		num = "00";
+	}
+    else if (rand < 66)
+    {
+        num = "01";
+    }
+    else
+    {
+        num = "02";
+    }
+
+	std::string base2 = "SE_catch_success_";
+	std::string num2 = "";
+    if (rand < 50)
+    {
+        num2 = "00";
+    }
+    else
+    {
+        num2 = "01";
+    }
+
+	std::string soundName = base + num + fileType;
+    std::string soundName2 = base2 + num2 + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+	if (not SoundManager::IsPlaying(soundName2, soundName2))
+		SoundManager::Play(soundName2, soundName2);
+}
+
+void CharaBase::playPickupBallSound()
+{
+}
+
+void CharaBase::playVacuumSound()
+{
 }
 
 void CharaBase::setAnimationSpeed(const nlohmann::json& argument)

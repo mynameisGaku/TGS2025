@@ -48,6 +48,7 @@ private:
 
 	int						 m_Max;
 	std::vector<std::string> m_Tags;
+	std::unordered_map<std::string, int> m_hTrails;
 
 #ifdef USE_POOL
 	Pool<CharaBase>*		 m_pPool;

@@ -343,8 +343,11 @@
     <Filter Include="data\Img\BallTexture">
       <UniqueIdentifier>{a11b3c31-3a65-4faf-9451-b279e928db92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\targetting">
-      <UniqueIdentifier>{6c845b08-2b5a-4122-afb9-ea2a6f3b2212}</UniqueIdentifier>
+    <Filter Include="src%28application%29\common\component\model_frame_trail_renderer">
+      <UniqueIdentifier>{292ec78f-b62c-4105-ba5c-68c95304f740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Sound">
+      <UniqueIdentifier>{66e2275a-c146-4557-afc7-95b3044cc8fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -593,6 +596,9 @@
     </None>
     <None Include="data\Json\Ball\BallSpawner.json">
       <Filter>data\Json\Ball</Filter>
+    </None>
+    <None Include="data\Json\Sound\SoundData.json">
+      <Filter>data\Json\Sound</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1191,8 +1197,11 @@
     <ClCompile Include="src\scene\play\chara\CharaSpawnPointManager.cpp">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\targetting\Targetting.cpp">
-      <Filter>src%28application%29\scene\play\targetting</Filter>
+    <ClCompile Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.cpp">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1893,8 +1902,14 @@
     <ClInclude Include="src\scene\play\chara\CharaSpawnPointManager.h">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\targetting\Targetting.h">
-      <Filter>src%28application%29\scene\play\targetting</Filter>
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.h">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\FrameTrail.h">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

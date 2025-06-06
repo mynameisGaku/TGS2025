@@ -35,8 +35,6 @@ namespace {
 	static unsigned int productionID;	// 製造番号
 	bool canSaveCsv;			// CSVデータを保存できるか
 	bool initialize = false;	// 初期化処理が行われたか
-
-	static CharaSpawnPointManager* pCharaSpawnPointManager;
 }
 
 void StageObjectManager::Init() {
@@ -276,7 +274,8 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 	if (*csvFilePath_StageObjData != filename)
 		*csvFilePath_StageObjData = filename;
 
-	if (not pCharaSpawnPointManager)
+	CharaSpawnPointManager* pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
+	if (pCharaSpawnPointManager == nullptr)
 		pCharaSpawnPointManager = Instantiate<CharaSpawnPointManager>();
 
 	auto settings_json = Settings_json::Inst();

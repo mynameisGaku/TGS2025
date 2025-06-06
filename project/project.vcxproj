@@ -210,6 +210,7 @@
     <None Include="data\Json\Effect\Hit_Wall.json" />
     <None Include="data\Json\Effect\Template.json" />
     <None Include="data\Json\Game\GameRef.json" />
+    <None Include="data\Json\Sound\SoundData.json" />
     <None Include="data\Json\Stage\Stage.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
@@ -294,6 +295,8 @@
     <ClCompile Include="src\common\component\controller\DebugController.cpp" />
     <ClCompile Include="src\common\component\controller\PlayerController.cpp" />
     <ClCompile Include="src\common\component\material_renderer\MaterialRenderer.cpp" />
+    <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp" />
+    <ClCompile Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.cpp" />
     <ClCompile Include="src\common\component\motion_blur\MotionBlur.cpp" />
     <ClCompile Include="src\common\component\physics\Physics.cpp" />
     <ClCompile Include="src\common\component\renderer\BallRenderer.cpp" />
@@ -456,6 +459,9 @@
     <ClInclude Include="src\common\component\controller\DebugController.h" />
     <ClInclude Include="src\common\component\controller\PlayerController.h" />
     <ClInclude Include="src\common\component\material_renderer\MaterialRenderer.h" />
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\FrameTrail.h" />
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.h" />
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h" />
     <ClInclude Include="src\common\component\motion_blur\MotionBlur.h" />
     <ClInclude Include="src\common\component\physics\Physics.h" />
     <ClInclude Include="src\common\component\renderer\BallRenderer.h" />
@@ -568,6 +574,7 @@
     <ClInclude Include="src\util\math\Random.h" />
     <ClInclude Include="src\util\math\Vector2.h" />
     <ClInclude Include="src\util\math\Vector3.h" />
+    <ClInclude Include="src\util\math\Vector3Util.h" />
     <ClInclude Include="src\util\math\Vector4.h" />
     <ClInclude Include="src\util\object2D\Object2D.h" />
     <ClInclude Include="src\util\object3D\Object3D.h" />

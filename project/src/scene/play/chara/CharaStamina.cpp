@@ -13,16 +13,17 @@ CharaStamina::CharaStamina()
 {
     // スタミナの最大値を取得
     CHARASTAMINA_REF.Load();
-    m_Max            = CHARASTAMINA_REF.Max;
-    m_RegenTakesTime = CHARASTAMINA_REF.RegenTakesTime;
-    m_RegenStartTime = CHARASTAMINA_REF.RegenStartTime;
-    m_RegenStartTime_AllLost = CHARASTAMINA_REF.RegenStartTime_AllLost;
-    m_Current        = m_Max;
-    m_Target         = m_Max;
-    m_RegenTimeCount = 0.0f;
-    m_RegenStartTimeCount = 0.0f;
-    m_IsNeedRegen    = false;
-    m_IsAllLost      = false;
+    m_Max                       = CHARASTAMINA_REF.Max;
+    m_RegenTakesTime            = CHARASTAMINA_REF.RegenTakesTime;
+    m_RegenTakesTime_AllLost    = CHARASTAMINA_REF.RegenTakesTime_AllLost;
+    m_RegenStartTime            = CHARASTAMINA_REF.RegenStartTime;
+    m_RegenStartTime_AllLost    = CHARASTAMINA_REF.RegenStartTime_AllLost;
+    m_Current                   = m_Max;
+    m_Target                    = m_Max;
+    m_RegenTimeCount            = 0.0f;
+    m_RegenStartTimeCount       = 0.0f;
+    m_IsNeedRegen               = false;
+    m_IsAllLost                 = false;
 }
 
 void CharaStamina::Update()
@@ -38,11 +39,16 @@ void CharaStamina::Update()
 
     // RegenTakesTime秒かけて全回復する
     m_RegenTimeCount += GTime.deltaTime;
-    float norm = std::min(m_RegenTimeCount / m_RegenTakesTime, 1.0f);
+    float rate = 1.0f;
+
+   if (m_IsAllLost)
+       rate = m_RegenTakesTime_AllLost;
+   else
+        rate = m_RegenTakesTime;
 
     // Lerpやめて、代入に仕様変更
     //m_Current = MathUtil::Lerp(m_Current, m_Max, norm);
-    m_Current += (m_Max - m_Current) * norm;
+    m_Current += (m_Max / rate) * GTime.deltaTime;
 
     if (m_Current >= m_Max)
     {

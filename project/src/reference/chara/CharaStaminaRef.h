@@ -34,9 +34,10 @@ public:
         instance = nullptr;
     }
 
-    float Max;              // 最大スタミナ
-    float RegenTakesTime;   // 回復にかかる時間
-    float RegenStartTime;   // 回復開始までの時間
+    float Max;                      // 最大スタミナ
+    float RegenTakesTime;           // 回復にかかる時間
+    float RegenTakesTime_AllLost;   // スタミナが切れた際の回復にかかる時間
+    float RegenStartTime;           // 回復開始までの時間
     float RegenStartTime_AllLost;   // スタミナが切れた際の回復開始までの時間
 
     void Load(bool ForceLoad = false);

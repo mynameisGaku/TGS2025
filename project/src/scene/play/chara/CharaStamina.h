@@ -49,14 +49,15 @@ public:
     void Reset();
 
 private:
-    float   m_Target;               // 目標値 現在未使用
-    float   m_Current;              // 現在の値
-    float   m_Max;                  // 最大値
-    float   m_RegenTakesTime;       // 回復にかかる時間
-    float   m_RegenTimeCount;       // 回復中のカウント
-    float   m_RegenStartTime;       // 回復開始までの時間
-    float   m_RegenStartTime_AllLost;  // スタミナが切れた際の回復開始までのカウント
-    float   m_RegenStartTimeCount;  // 回復開始までのカウント
-    bool    m_IsNeedRegen;          // 回復が必要か？
-    bool    m_IsAllLost;            // スタミナを使い切ったか？
+    float   m_Target;                   // 目標値 現在未使用
+    float   m_Current;                  // 現在の値
+    float   m_Max;                      // 最大値
+    float   m_RegenTakesTime;           // 回復にかかる時間
+    float   m_RegenTakesTime_AllLost;   // スタミナが切れた際の回復にかかる時間
+    float   m_RegenTimeCount;           // 回復中のカウント
+    float   m_RegenStartTime;           // 回復開始までの時間
+    float   m_RegenStartTime_AllLost;   // スタミナが切れた際の回復開始までのカウント
+    float   m_RegenStartTimeCount;      // 回復開始までのカウント
+    bool    m_IsNeedRegen;              // 回復が必要か？
+    bool    m_IsAllLost;                // スタミナを使い切ったか？
 };

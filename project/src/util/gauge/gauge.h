@@ -46,6 +46,14 @@ class Gauge {
 public:
 	Gauge();
 
+	// ÉXÉNÉçÅ[ÉãÇÃå¸Ç´
+	enum class ScrollType {
+		eUp,	// è„Ç©ÇÁâ∫
+		eDown,	// â∫Ç©ÇÁè„
+		eLeft,	// ç∂Ç©ÇÁâE
+		eRight,	// âEÇ©ÇÁç∂
+	};
+
 	/// <summary>
 	/// íPêFÉQÅ[ÉWï`âÊ ç∂è„å¥ì_
 	/// </summary>
@@ -179,14 +187,18 @@ public:
 	/// <param name="scale">âÊëúÇÃägëÂó¶</param>
 	/// <param name="angle">âÊëúÇÃâÒì]</param>
 	template<typename Ty = float>
-	[[nodiscard]] inline void DrawRectRotaGraphGauge(Vector2 pos, Ty current, Ty max, Ty min, int graph, int delayGraph, int increaseGraph, int backGraph, float scrollSpeed, Vector2 scale = Vector2::Ones, float angle = 0.0f) {
+	[[nodiscard]] inline void DrawRectRotaGraphGauge(const Vector2& pos, Ty current, Ty max, Ty min, int graph, int delayGraph, int increaseGraph, int backGraph, float scrollSpeed, const Vector2& scale = Vector2::Ones, float angle = 0.0f, ScrollType scroll = ScrollType::eRight) {
 
 		int srcWidth, srcHeight;
-		GetGraphSize(backGraph, &srcWidth, &srcHeight);
+		GetGraphSize(graph, &srcWidth, &srcHeight);
 
 		int width = static_cast<int>(srcWidth * scale.x);
 		int height = static_cast<int>(srcHeight * scale.y);
-		float scale = (scale.x + scale.y) / 2;
+		float scl = (scale.x + scale.y) / 2;
+
+		// îwåiÇï`âÊ
+		if (backGraph != -1)
+			DrawRectRotaGraphF(pos.x, pos.y, 0, 0, width, height, scl, 0, backGraph, TRUE);
 
 		// èââÒåƒÇ—èoÇµéûÇ…íxâÑílÇê›íË
 		if (delayValuesF.find(id) == delayValuesF.end())
@@ -202,7 +214,7 @@ public:
 		float range = max - min;
 		float percentage = (current - min) / range;
 		float gaugeWidth = width * percentage;
-		float gaugeHeight = width * percentage;
+		float gaugeHeight = height * percentage;
 
 		float delayPercentage = (delayValuesF[id] - min) / range;
 		float delayGaugeWidth = width * delayPercentage;
@@ -211,13 +223,41 @@ public:
 		// ÉQÅ[ÉWÇï`âÊ
 		if (current < delayValuesF[id])
 		{
-			DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(delayGaugeWidth), 0, srcWidth, srcHeight, scale, angle, delayGraph == -1 ? graph : delayGraph, TRUE);
-			DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(gaugeWidth), 0, srcWidth, srcHeight, scale, angle, graph, TRUE);
+			switch (scroll) {
+			case Gauge::ScrollType::eUp:
+				DrawRectRotaGraphF(pos.x, pos.y + delayGaugeHeight / 2, 0, delayGaugeHeight / scl,	srcWidth, srcHeight, scl, 0.0f, delayGraph == -1 ? graph : delayGraph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y + gaugeHeight / 2,		0, gaugeHeight / scl,		srcWidth, srcHeight, scl, 0.0f, graph, TRUE);
+				break;
+			case Gauge::ScrollType::eDown:
+				break;
+			case Gauge::ScrollType::eLeft:
+				break;
+			case Gauge::ScrollType::eRight:
+				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(delayGaugeWidth), 0, srcWidth, srcHeight, scl, angle, delayGraph == -1 ? graph : delayGraph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(gaugeWidth),		0, srcWidth, srcHeight, scl, angle, graph, TRUE);
+				break;
+			default:
+				break;
+			}
 		}
 		else
 		{
-			DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(delayGaugeWidth), 0, srcWidth, srcHeight, scale, angle, delayGraph == -1 ? graph : delayGraph, TRUE);
-			DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(gaugeWidth), 0, srcWidth, srcHeight, scale, angle, graph, TRUE);
+			switch (scroll) {
+			case Gauge::ScrollType::eUp:
+				DrawRectRotaGraphF(pos.x, pos.y + delayGaugeHeight / 2, 0, delayGaugeHeight / scl,	srcWidth, srcHeight, scl, 0.0f, increaseGraph == -1 ? graph : increaseGraph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y + gaugeHeight / 2,		0, gaugeHeight / scl,		srcWidth, srcHeight, scl, 0.0f, graph, TRUE);
+				break;
+			case Gauge::ScrollType::eDown:
+				break;
+			case Gauge::ScrollType::eLeft:
+				break;
+			case Gauge::ScrollType::eRight:
+				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(delayGaugeWidth), 0, srcWidth, srcHeight, scl, angle, increaseGraph == -1 ? graph : increaseGraph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(gaugeWidth), 0, srcWidth, srcHeight, scl, angle, graph, TRUE);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 

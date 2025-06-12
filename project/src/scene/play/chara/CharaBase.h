@@ -263,6 +263,7 @@ public:
 
 private:
 	friend class CharaManager;
+	friend class UI_CrossHair;
 
 
 	Ball*			m_pBall;				// 所有しているボールのポインター

@@ -292,6 +292,7 @@ private:
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
+	float			m_Stamina;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か

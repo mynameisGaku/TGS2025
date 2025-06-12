@@ -25,6 +25,9 @@
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
 
+#include "src/util/ui/UI_Manager.h"
+#include "src/util/ui/UI_Gauge.h"
+
 using namespace KeyDefine;
 
 namespace
@@ -144,6 +147,11 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	float scrWidth = WindowSetting::Inst().width / CameraManager::AllCameras().size() * m_Index;
+
+	UI_Gauge* stamina = new UI_Gauge(RectTransform(Anchor::Preset::LeftDown, Vector2(scrWidth + 10.0f, -30.0f)), &m_Stamina, 20.0f, m_pStamina->GetMax(),
+		Vector2(250.0f, 30.0f), UI_Define::SliderColor(0x00CCFF, 0xFF0000, 0xFFFFFF, 0x888888, 0xFFFFFF), 1.0f, 0.1f);
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
@@ -322,6 +330,8 @@ void CharaBase::Update() {
 	m_IsMove = false;
 	m_IsCatching = false;
 
+	m_Stamina = m_pStamina->GetCurrent();
+
 	Object3D::Update();
 
 	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
@@ -359,6 +369,8 @@ void CharaBase::Draw()
 	{
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
+
+	
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {

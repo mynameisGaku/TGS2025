@@ -349,6 +349,9 @@
     <Filter Include="data\Json\Sound">
       <UniqueIdentifier>{66e2275a-c146-4557-afc7-95b3044cc8fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\singleton">
+      <UniqueIdentifier>{0cbebc53-3161-4837-b221-e166ec99dc8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1215,6 +1218,10 @@
     <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
+    <ClCompile Include="src\util\singleton\singleton.cpp">
+      <Filter>src%28application%29\util\singleton</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1924,5 +1931,9 @@
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\util\math\Vector3Util.h" />
+    <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
+    <ClInclude Include="src\util\singleton\singleton.h">
+      <Filter>src%28application%29\util\singleton</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

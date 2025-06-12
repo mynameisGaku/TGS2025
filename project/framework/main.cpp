@@ -36,7 +36,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/util/file/ini/settings_ini.h"
 #include "src/util/file/FileUtil.h"
 
-#include "src/reference/ball/BallRef.h"
 #include "src/reference/bloom/BloomRef.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/reference/chara/CharaDefineRef.h"
@@ -164,7 +163,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	*/
 	Settings_json::Inst()->Destroy();
 	Settings_ini::Inst().Destroy();
-	BALL_REF.Destroy();
 	BLOOM_REF.Destroy();
 	CAMERADEFINE_REF.Destroy();
 	CHARADEFINE_REF.Destroy();

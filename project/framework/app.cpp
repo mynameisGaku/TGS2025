@@ -3,6 +3,7 @@
 #include "src/util/time/GameTime.h"
 #include "src/util/input/InputManager.h"
 #include "src/util/math/Random.h"
+#include "src/util/singleton/singleton.h"
 
 bool exitFlag = false;
 
@@ -31,6 +32,7 @@ void AppDraw()
 void AppRelease()
 {
 	SceneManager::Release();
+	SingletonDeleter::Delete();
 }
 
 void Exit()

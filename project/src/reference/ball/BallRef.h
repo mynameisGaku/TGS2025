@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "src/util/math/Vector3.h"
+#include "src/util/singleton/singleton.h"
 
 /// <summary>
 /// ボールのJsonパラメータを読み込む
@@ -11,29 +12,8 @@ class BallRef
 private:
 	const std::string PATH    = "data/Json/Ball/Ball.json";
 	const std::string FILEKEY = "Ball";
-
-	static BallRef* instance;
 public:
-	static BallRef* Inst()
-	{
-		if (instance == nullptr)
-		{
-			instance = new BallRef;
-		}
-		return instance;
-	}
-
-	// " リファレンス解放 "
-	// ↑を文字列検索したら着くところで解放してます。(おそらくメインループのすぐあと)
-	void Destroy()
-	{
-		if (instance)
-		{
-			delete instance;
-		}
-		instance = nullptr;
-	}
-
+	BallRef() { Load(); }
 	void Load();
 
 	Vector3 GravityDefault;		// デフォルトの重力(cm/s^2)
@@ -45,4 +25,4 @@ public:
 	int		Max = 0;
 };
 
-#define BALL_REF (*BallRef::Inst())
+#define BALL_REF Singleton<BallRef>::Instance()

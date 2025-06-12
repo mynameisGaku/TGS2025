@@ -194,6 +194,7 @@
     <None Include="data\Json\Chara\State\Run.json" />
     <None Include="data\Json\Chara\State\RunToActionIdle.json" />
     <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json" />
+    <None Include="data\Json\Chara\State\Tackle.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
     <None Include="data\Json\Effect\Ball_Outline.json" />
@@ -350,6 +351,7 @@
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
+    <ClCompile Include="src\util\alarm\Alarm.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorDecorator.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorNode.cpp" />
@@ -520,6 +522,7 @@
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
+    <ClInclude Include="src\util\alarm\Alarm.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorDecorator.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorNode.h" />

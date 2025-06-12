@@ -134,6 +134,9 @@ CharaBase::~CharaBase()
 
 void CharaBase::Init(std::string tag)
 {
+	m_Alarm = new Alarm;
+	m_Alarm->Reset();
+
 	m_CharaTag = tag;
 	m_pStatusTracker = new StatusTracker();
 	m_pPhysics = GetComponent<Physics>();
@@ -681,6 +684,11 @@ void CharaBase::SetTrailImage(int hImage)
 	m_hTrailImage = hImage;
 }
 
+Vector2 CharaBase::Target(const Ball* ball)
+{
+	return Vector2();
+}
+
 void CharaBase::CatchSuccess(const Vector3& velocity)
 {
 	m_CanCatch = false;
@@ -698,6 +706,14 @@ void CharaBase::CatchSuccess(const Vector3& velocity)
 	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 
 	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
+}
+
+void CharaBase::Tackle()
+{
+	if (not m_CanTackle)
+		return;
+
+	m_IsTackling = true;
 }
 
 //========================================================================
@@ -838,6 +854,36 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("ActionIdleToStandingIdle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		idleUpdate();
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateStandingIdleEmote); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
+void CharaBase::StateActionIdleToTackle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("ActionIdleToTackle");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1361,6 +1407,10 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	}
 }
 
+void CharaBase::StateRunToTackle(FSMSignal sig)
+{
+}
+
 void CharaBase::StateSlide(FSMSignal sig)
 {
 	switch (sig)
@@ -1500,6 +1550,38 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
+void CharaBase::StateTackle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("Tackle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		tackleUpdate();
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			if (m_Alarm->IsFinish())
+				m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_Timeline->Stop();
+		m_IsTackling = false;
 	}
 	break;
 	}
@@ -1803,6 +1885,15 @@ void CharaBase::jumpUpdate()
 	if (not m_IsJumping)
 	{
 		m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+	}
+}
+
+void CharaBase::tackleUpdate()
+{
+	if (m_Animator->IsFinished())
+	{
+		// あと隙
+		m_Alarm->Set(0.1f); // magic:>
 	}
 }
 

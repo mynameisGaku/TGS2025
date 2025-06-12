@@ -349,6 +349,9 @@
     <Filter Include="data\Json\Sound">
       <UniqueIdentifier>{66e2275a-c146-4557-afc7-95b3044cc8fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\alarm">
+      <UniqueIdentifier>{6a30f2f1-978e-4e67-b1d3-0e70fcb4ea15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -611,6 +614,9 @@
     </None>
     <None Include="data\Json\Effect\DropDust.json">
       <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Tackle.json">
+      <Filter>data\Json\Chara\State</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1214,6 +1220,10 @@
     </ClCompile>
     <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
+    <ClCompile Include="src\util\alarm\Alarm.cpp">
+      <Filter>src%28application%29\util\alarm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1924,5 +1934,9 @@
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\util\math\Vector3Util.h" />
+    <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
+    <ClInclude Include="src\util\alarm\Alarm.h">
+      <Filter>src%28application%29\util\alarm</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 #include <vendor/nlohmann/json_fwd.hpp>
 
 #include "src/util/math/Vector2.h"
+#include "src/util/alarm/Alarm.h"
 
 class CharaHP;
 class CharaStamina;
@@ -149,6 +150,11 @@ public:
 
 	//=======================================================================================
 	// ▼リスポーン
+	void Tackle();
+
+	
+	//=======================================================================================
+	// ▼リスポーン
 	
 	/// <summary>
 	/// この関数を呼び出すと、パラメータがリセットされ、指定位置にリスポーンする。
@@ -215,6 +221,10 @@ public:
 	inline bool IsTarget() const { return m_IsTarget; }
 	// ターゲットされているか
 	inline bool IsTargeted() const { return m_IsTargeted; }
+	// タックル中か
+	inline bool IsTackling() const { return m_IsTackling; }
+	// タックル可能か
+	inline bool CanTackle() const { return m_CanTackle; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -223,6 +233,7 @@ public:
 	void StateActionIdleToJump(FSMSignal sig);
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
+	void StateActionIdleToTackle(FSMSignal sig);
 
 	void StateAimToThrow(FSMSignal sig);
 
@@ -247,6 +258,7 @@ public:
 	void StateRunToActionIdle(FSMSignal sig);
 	void StateRunToJump(FSMSignal sig);
 	void StateRunToSlide(FSMSignal sig);
+	void StateRunToTackle(FSMSignal sig);
 
 	void StateSlide(FSMSignal sig);
 	void StateSlideToRun(FSMSignal sig);
@@ -254,6 +266,8 @@ public:
 	void StateStandingIdle(FSMSignal sig);
 	void StateStandingIdleEmote(FSMSignal sig);
 	void StateStandingIdleToActionIdle(FSMSignal sig);
+
+	void StateTackle(FSMSignal sig);
 
 	void SubStateNone(FSMSignal sig);
 	void SubStateGetBall(FSMSignal sig);
@@ -283,6 +297,7 @@ private:
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
+	Alarm*			m_Alarm;				// アラーム
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_BallChargeRate;		// ボールのチャージ加速度
@@ -304,6 +319,8 @@ private:
 	bool			m_IsCatching;			// キャッチ中か
 	bool 			m_IsTarget;				// ターゲットを狙っているか
 	bool 			m_IsTargeted;			// ターゲットされているか
+	bool			m_CanTackle;			// タックル可能か
+	bool			m_IsTackling;			// タックル中か
 
 	
 
@@ -314,6 +331,7 @@ private:
 	void slideUpdate();
 	void catchUpdate();
 	void jumpUpdate();
+	void tackleUpdate();
 
 	void getHit(Ball* hit);
 

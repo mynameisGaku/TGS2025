@@ -1773,10 +1773,21 @@ void CharaBase::catchUpdate()
 
 		m_Catcher->SetColliderActive(true);
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
+
+		// ƒJƒƒ‰‚ÌŒü‚«‚É‡‚í‚¹‚é
+		m_CanRot = false;
+
+		Camera* camera = CameraManager::GetCamera(m_Index);
+		if (camera != nullptr) {
+			float currentY = transform->rotation.y;
+			float terminusY = camera->transform->rotation.y;
+			transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
+		}
 	}
 	else
 	{
 		m_Catcher->SetColliderActive(false);
+		m_CanRot = true;
 		//m_pCatchReadyEffect = nullptr;
 		//m_pCatchDustEffect = nullptr;
 	}

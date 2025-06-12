@@ -9,9 +9,6 @@
 
 #include "src/common/camera/CameraManager.h"
 
-const std::string BallManager::FOLDER_TEXTURE = "data/Img/BallTexture/";
-const std::string BallManager::FOLDER_JSON = "data/Json/Ball/Texture/";
-
 BallManager::BallManager()
 {
 	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");

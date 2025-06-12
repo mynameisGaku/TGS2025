@@ -97,7 +97,6 @@ private:
 	// ホーミング系
 	const CharaBase*	m_HomingTargetChara;
 	Vector3				m_HomingVelocity;
-	Vector3				m_HomingPosition;
 	Vector3				m_HomingTargetPos;
 	float				m_HomingPeriod;
 	bool				m_IsHoming;
@@ -106,6 +105,7 @@ private:
 	void HomingDeactivate();
 	void setVelocity(const Vector3& velocity);
 	void changeState(const State& s);
+	void effectUpdate();
 
 	float				m_ChargeRate;
 };

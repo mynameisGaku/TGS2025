@@ -17,6 +17,13 @@
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/Random.h"
 
+namespace
+{
+	const float DROPDUST_APPEAR_RATE_PERCENT = 95.0f / 100.0f; // %
+	const float RAND_RANGE_MAX = 100.0f;
+	const float RAND_RANGE_MIN = 0.0f;
+}
+
 Ball::Ball()
 {
 	m_Physics = Object3D::AddComponent<Physics>();
@@ -118,38 +125,16 @@ void Ball::Init(std::string charaTag)
 
 void Ball::Update()
 {
-	Object3D::Update();
-
 	if (not m_IsActive)
 	{
 		return;
 	}
+	
+	Object3D::Update();
+
 
 	// エフェクト
-	{
-		const float DROPDUST_APPEAR_RATE_PERCENT = 95.0f / 100.0f; // %
-		const float RAND_RANGE_MAX = 100.0f;
-		const float RAND_RANGE_MIN = 0.0f;
-
-		std::string eff = "Ball_Outline_";
-		eff += m_CharaTag;
-		eff += "_Holding.efk";
-		if (m_State == S_THROWN || m_State == S_OWNED)
-		{
-			EffectManager::Play3D_Loop(eff, transform->Global(), "Ball_Outline" + m_CharaTag + "_" + std::to_string(m_Index));
-			if (m_State == S_THROWN)
-			{
-				if (Random.GetFloatRange(RAND_RANGE_MIN, RAND_RANGE_MAX) / RAND_RANGE_MAX >= DROPDUST_APPEAR_RATE_PERCENT)
-				{
-					EffectManager::Play3D("DropDust.efk", transform->Global(), "DropDust" + m_CharaTag);
-				}
-			}
-		}
-		else
-		{
-			EffectManager::Stop(eff, "Ball_Outline" + m_CharaTag + "_" + std::to_string(m_Index));
-		}
-	}
+	effectUpdate();
 
 	if (m_IsHoming)
 	{
@@ -167,15 +152,14 @@ void Ball::Update()
 			Vector3 pushVec;
 			if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
 			{
-
 				transform->position += pushVec;
 
 				// 押し出し方向
 				Vector3 normal = pushVec.Normalize();
 
 				// 速度を反射させる
-				float bounciness = BALL_REF.BouncinessDefault;
-				Vector3 vel = m_Physics->velocity;
+				const float bounciness = BALL_REF.BouncinessDefault;
+				const Vector3 vel = m_Physics->velocity;
 
 				float dot = VDot(vel, normal);
 				if (dot < 0.0f) // 内側からの衝突のみ反射
@@ -225,6 +209,29 @@ void Ball::Update()
 	m_pTrail->Update();
 }
 
+void Ball::effectUpdate()
+{
+	std::string eff = "Ball_Outline_";
+	eff += m_CharaTag;
+	eff += "_";
+	if (m_State == S_THROWN || m_State == S_OWNED)
+	{
+		EffectManager::Play3D_Loop(eff + "Holding.efk", transform->Global(), eff + std::to_string(m_Index));
+	}
+	else
+	{
+		EffectManager::Stop(eff + "Holding.efk", eff + std::to_string(m_Index));
+	}
+
+	if (m_State == S_THROWN)
+	{
+		if (Random.GetFloatRange(RAND_RANGE_MIN, RAND_RANGE_MAX) / RAND_RANGE_MAX >= DROPDUST_APPEAR_RATE_PERCENT)
+		{
+			EffectManager::Play3D("DropDust.efk", transform->Global(), "DropDust" + m_CharaTag);
+		}
+	}
+}
+
 
 void Ball::Draw()
 {
@@ -264,12 +271,11 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 
     m_HomingTargetChara = target;
 
-	m_HomingPosition = transform->position;
 	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 	m_IsHoming = true;
 
 	// ターゲット位置と現在位置からちょうどいい時間を計算
-	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
+	Vector3 diff = m_HomingTargetPos - transform->position;
 	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
 
 	m_ChargeRate = chargeRate;
@@ -398,9 +404,12 @@ void Ball::collisionToGround()
 void Ball::HomingProcess()
 {
 	// ---- ホーミング補間 ----
-	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? (Vector3::UnitZ * 200.0f) * m_Owner->transform->RotationMatrix() : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? 
+		(Vector3::UnitZ * 200.0f) * m_Owner->transform->RotationMatrix() : 
+		m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+
 	Vector3 acceleration = m_HomingTargetPos - transform->position;
-	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
+	Vector3 diff = m_HomingTargetPos - transform->position;
 
 	acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
 
@@ -411,41 +420,61 @@ void Ball::HomingProcess()
 		return;
 	}
 	m_Physics->velocity += acceleration * GTime.deltaTime;
-	m_HomingPosition += m_Physics->velocity * GTime.deltaTime;
+	transform->position = transform->position + m_Physics->velocity * GTime.deltaTime;
+
+	bool hit = false;
 
 	// ---- 押し出し + 跳ね返り処理 ----
-	if (m_Collider)
+	if (m_Collider != nullptr && m_Collider->IsActive())
 	{
-		Vector3 p1 = m_HomingPosition;
+		Vector3 p1 = transform->position;
 		Vector3 p2 = m_Collider->OffsetWorld();  // ホーミング中は本来位置からズレるが、近似可
-
 		float radius = BALL_RADIUS;
+		
 		Vector3 pushVec;
-
 		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
 		{
-			HomingDeactivate();
+			hit = true;
 
-			m_HomingPosition += pushVec;
+			transform->position += pushVec;
 
+			// 押し出し方向
 			Vector3 normal = pushVec.Normalize();
+
+			// 速度を反射させる
+			const float bounciness = BALL_REF.BouncinessDefault;
+			const Vector3 vel = m_Physics->velocity;
+
 			float dot = VDot(m_Physics->velocity, normal);
-
-			if (dot < 0.0f)
+			if (dot < 0.0f) // 内側からの衝突のみ反射
 			{
-				const float bounciness = BALL_REF.BouncinessDefault;
-				const float damping = 0.85f; // ホーミング中の減衰
+				//const float damping = 0.85f; // ホーミング中の減衰
+				const float damping = 1.0f; // ホーミング中の減衰
 
-				Vector3 reflectVel = m_Physics->velocity - normal * (1.0f + bounciness) * dot;
+				Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
 				m_Physics->velocity = reflectVel * damping;
 			}
+			// Y方向の反発時に転がり回転も発生
+			if (abs(normal.y) > 0.5f)
+			{
+				float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
+				transform->rotation.y = forwardRad;
+				m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
+			}
+			m_Physics->velocity.x *= 0.99f;
+			m_Physics->velocity.z *= 0.99f;
 
-			changeState(S_LANDED);
-			EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 		}
 	}
 
-	transform->position = m_HomingPosition;
+	if (hit)
+	{
+		HomingDeactivate(); 
+		changeState(S_LANDED);
+		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+	}
+
+	//transform->position = nextPosition;
 }
 
 void Ball::HomingDeactivate()

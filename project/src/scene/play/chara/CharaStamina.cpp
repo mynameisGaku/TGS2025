@@ -16,11 +16,13 @@ CharaStamina::CharaStamina()
     m_Max            = CHARASTAMINA_REF.Max;
     m_RegenTakesTime = CHARASTAMINA_REF.RegenTakesTime;
     m_RegenStartTime = CHARASTAMINA_REF.RegenStartTime;
+    m_RegenStartTime_AllLost = CHARASTAMINA_REF.RegenStartTime_AllLost;
     m_Current        = m_Max;
     m_Target         = m_Max;
     m_RegenTimeCount = 0.0f;
     m_RegenStartTimeCount = 0.0f;
     m_IsNeedRegen    = false;
+    m_IsAllLost      = false;
 }
 
 void CharaStamina::Update()
@@ -36,9 +38,7 @@ void CharaStamina::Update()
 
     // RegenTakesTime秒かけて全回復する
     m_RegenTimeCount += GTime.deltaTime;
-    float norm = (m_RegenTimeCount / m_RegenTakesTime);
-    if (norm >= 1.0f)
-        norm = 1.0f;
+    float norm = std::min(m_RegenTimeCount / m_RegenTakesTime, 1.0f);
 
     // Lerpやめて、代入に仕様変更
     //m_Current = MathUtil::Lerp(m_Current, m_Max, norm);
@@ -50,6 +50,7 @@ void CharaStamina::Update()
         m_RegenTimeCount = 0.0f;
         m_RegenStartTimeCount = m_RegenStartTime;
         m_IsNeedRegen = false;
+        m_IsAllLost = false;
     }
 }
 
@@ -58,8 +59,16 @@ void CharaStamina::Use(float sub)
     // デフォルト引数の場合、1秒で1.0f減る
     m_Current = std::max(0.0f, m_Current - sub);
     m_RegenTimeCount = 0.0f;
-    m_RegenStartTimeCount = m_RegenStartTime;
     m_IsNeedRegen = true;
+
+    if (m_Current <= 0.0f) {
+        m_IsAllLost = true;
+        m_RegenStartTimeCount = m_RegenStartTime_AllLost;
+    }
+    else {
+        m_IsAllLost = false;
+        m_RegenStartTimeCount = m_RegenStartTime;
+    }
 }
 
 void CharaStamina::SetMaxStamina(float maxStamina)

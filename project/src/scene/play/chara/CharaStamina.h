@@ -55,6 +55,8 @@ private:
     float   m_RegenTakesTime;       // 回復にかかる時間
     float   m_RegenTimeCount;       // 回復中のカウント
     float   m_RegenStartTime;       // 回復開始までの時間
+    float   m_RegenStartTime_AllLost;  // スタミナが切れた際の回復開始までのカウント
     float   m_RegenStartTimeCount;  // 回復開始までのカウント
     bool    m_IsNeedRegen;          // 回復が必要か？
+    bool    m_IsAllLost;            // スタミナを使い切ったか？
 };

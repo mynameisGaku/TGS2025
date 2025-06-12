@@ -37,6 +37,7 @@ public:
     float Max;              // 最大スタミナ
     float RegenTakesTime;   // 回復にかかる時間
     float RegenStartTime;   // 回復開始までの時間
+    float RegenStartTime_AllLost;   // スタミナが切れた際の回復開始までの時間
 
     void Load(bool ForceLoad = false);
 
@@ -46,7 +47,8 @@ private:
     CharaStaminaRef() :
         Max(0.0f),
         RegenTakesTime(0.0f),
-        RegenStartTime(0.0f)
+        RegenStartTime(0.0f),
+        RegenStartTime_AllLost(0.0f)
     { /*DO NOTHING*/ }
 
     ~CharaStaminaRef()

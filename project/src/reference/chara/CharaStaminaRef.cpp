@@ -20,6 +20,7 @@ void CharaStaminaRef::Load(bool ForceLoad)
     Max             = jsonLoader->GetOrDefault<float>("Param.Max",            0.0f, FILEKEY);
     RegenTakesTime  = jsonLoader->GetOrDefault<float>("Param.RegenTakesTime", 0.0f, FILEKEY);
     RegenStartTime  = jsonLoader->GetOrDefault<float>("Param.RegenStartTime", 0.0f, FILEKEY);
+    RegenStartTime_AllLost = jsonLoader->GetOrDefault<float>("Param.RegenStartTime_AllLost", 0.0f, FILEKEY);
 
     // ƒ[ƒh‚µ‚½‚æ
     m_WasLoad = true;

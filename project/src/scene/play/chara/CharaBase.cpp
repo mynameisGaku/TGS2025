@@ -33,7 +33,7 @@ using namespace KeyDefine;
 namespace
 {
 	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ（毎秒）
-	static const float CATCH_STAMINA_MIN = 20.0f;	// キャッチを開始するのに必要な残スタミナ
+	static const float CATCH_STAMINA_MIN = 0.0f;	// キャッチを開始するのに必要な残スタミナ
 	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 1.0f;
@@ -150,7 +150,7 @@ void CharaBase::Init(std::string tag)
 
 	float scrWidth = WindowSetting::Inst().width / CameraManager::AllCameras().size() * m_Index;
 
-	UI_Gauge* stamina = new UI_Gauge(RectTransform(Anchor::Preset::LeftDown, Vector2(scrWidth + 10.0f, -30.0f)), &m_Stamina, 20.0f, m_pStamina->GetMax(),
+	UI_Gauge* stamina = new UI_Gauge(RectTransform(Anchor::Preset::LeftDown, Vector2(scrWidth + 10.0f, -30.0f)), &m_Stamina, 0.0f, m_pStamina->GetMax(),
 		Vector2(250.0f, 30.0f), UI_Define::SliderColor(0x00CCFF, 0xFF0000, 0xFFFFFF, 0x888888, 0xFFFFFF), 1.0f, 0.1f);
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;

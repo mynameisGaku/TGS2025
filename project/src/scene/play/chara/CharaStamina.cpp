@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include "src/util/math/MathUtil.h"
+
 // min/max マクロ無効化
 #undef min
 #undef max
@@ -34,12 +36,19 @@ void CharaStamina::Update()
 
     // RegenTakesTime秒かけて全回復する
     m_RegenTimeCount += GTime.deltaTime;
-    m_Current = std::lerp(m_Current, m_Max, m_RegenTimeCount);
+    float norm = (m_RegenTimeCount / m_RegenTakesTime);
+    if (norm >= 1.0f)
+        norm = 1.0f;
 
-    if (m_Current > m_Max)
+    // Lerpやめて、代入に仕様変更
+    //m_Current = MathUtil::Lerp(m_Current, m_Max, norm);
+    m_Current += (m_Max - m_Current) * norm;
+
+    if (m_Current >= m_Max)
     {
         m_Current = m_Max;
         m_RegenTimeCount = 0.0f;
+        m_RegenStartTimeCount = m_RegenStartTime;
         m_IsNeedRegen = false;
     }
 }
@@ -48,6 +57,7 @@ void CharaStamina::Use(float sub)
 {
     // デフォルト引数の場合、1秒で1.0f減る
     m_Current = std::max(0.0f, m_Current - sub);
+    m_RegenTimeCount = 0.0f;
     m_RegenStartTimeCount = m_RegenStartTime;
     m_IsNeedRegen = true;
 }

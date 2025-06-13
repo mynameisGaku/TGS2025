@@ -49,6 +49,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #define CoGVersion (2.2)
 
+LARGE_INTEGER freq;
+LARGE_INTEGER start, end;
+int timeRecordCounter = 0;
+double tick = 0.0;
+bool isRefreshTick = false;
+
+void BeginRecordPerformance();
+void EndRecordPerformance();
+
 // ÉvÉçÉOÉâÉÄÇÕ WinMain Ç©ÇÁénÇ‹ÇËÇ‹Ç∑
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -124,6 +133,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int mStartTime = GetNowCount();
 
 	while (true) {
+
+		BeginRecordPerformance();
+
 		int cur = GetNowCount();
 		if (cur < mStartTime + 16) //120fpsëŒçÙ
 			continue;
@@ -138,12 +150,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		
 #endif // IMGUI
 
+		ImGui::Begin("TimeRecord");
+		ImGui::Text("time %lf[ms]", tick);
+		ImGui::End();
+
 		AppUpdate();
 		ClearDrawScreen();
 		AppDraw();
 		if (ProcessMessage() == -1 || IsExit())
 			break;
 		ScreenFlip();
+
+		EndRecordPerformance();
+
+		if (++timeRecordCounter % 60 == 0)
+			tick = static_cast<double>(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
 
 #ifdef IMGUI
 		
@@ -207,3 +228,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 #endif // IMGUI
+
+void BeginRecordPerformance()
+{
+	isRefreshTick = false;
+	QueryPerformanceFrequency(&freq);
+	QueryPerformanceCounter(&start);
+}
+
+void EndRecordPerformance()
+{
+	QueryPerformanceCounter(&end);
+	isRefreshTick = true;
+}

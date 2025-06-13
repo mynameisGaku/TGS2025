@@ -30,10 +30,20 @@ namespace KeyDefine {
 		Right,			// デジタル方向ボタン右
 		Start,			// STARTボタン
 		Back,			// BACKボタン
+		LeftStickUp,	// 左スティック上傾き
+		LeftStickDown,	// 左スティック下傾き
+		LeftStickLeft,	// 左スティック左傾き
+		LeftStickRight,	// 左スティック右傾き
+		RightStickUp,	// 右スティック上傾き
+		RightStickDown,	// 右スティック下傾き
+		RightStickLeft,	// 右スティック左傾き
+		RightStickRight,// 右スティック右傾き
 		LeftThumb,		// 左スティック押し込み
 		RightThumb,		// 右スティック押し込み
 		LeftShoulder,	// LBボタン
 		RightShoulder,	// RBボタン
+		LeftTrigger,	// 左トリガー
+		RightTrigger,	// 右トリガー
 		ButtonA,		// Aボタン
 		ButtonB,		// Bボタン
 		ButtonX,		// Xボタン
@@ -141,6 +151,26 @@ namespace KeyDefine {
 		Key,		// キーボード
 		Pad,		// パッド
 		Mouse,		// マウス
+	};
+
+	/// <summary>
+	/// スティックの番号
+	/// </summary>
+	enum class StickNumber {
+		eNone = -1,
+		eLeftStick,		// 左スティック
+		eRightStick,	// 右スティック
+		eMax
+	};
+
+	/// <summary>
+	/// トリガーの番号
+	/// </summary>
+	enum class TriggerNumber {
+		eNone = -1,
+		eLeftTrigger,	// 左トリガー
+		eRightTrigger,	// 右トリガー
+		eMax
 	};
 
 	/// <summary>

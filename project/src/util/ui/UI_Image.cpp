@@ -1,5 +1,9 @@
 #include "src/util/ui/UI_Image.h"
 
+UI_Image::UI_Image() : UI_Image(-1, RectTransform()) {
+
+}
+
 UI_Image::UI_Image(const int& image, const RectTransform& trs) {
 
 	Object2D::SetTransform(trs);

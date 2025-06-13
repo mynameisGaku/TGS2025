@@ -25,12 +25,17 @@
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
 
+#include "src/util/ui/UI_Manager.h"
+#include "src/util/ui/UI_Gauge.h"
+#include "src/scene/play/ui/UI_CrossHair.h"
+#include "src/scene/play/ui/UI_HitPoint_Icon.h"
+
 using namespace KeyDefine;
 
 namespace
 {
 	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ（毎秒）
-	static const float CATCH_STAMINA_MIN = 20.0f;	// キャッチを開始するのに必要な残スタミナ
+	static const float CATCH_STAMINA_MIN = 0.0f;	// キャッチを開始するのに必要な残スタミナ
 	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 1.0f;
@@ -72,6 +77,9 @@ CharaBase::CharaBase()
 	m_pCatchReadyEffect	= nullptr;
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
+
+	m_HitPoint = 0;
+	m_Stamina = 0.0f;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -147,6 +155,22 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	float scrWidth = (WindowSetting::Inst().width / CameraManager::AllCameras().size()) * m_Index;
+	UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, WindowSetting::Inst().height_half), 0.0f, Vector2::Ones));
+	crossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
+	crossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
+	crossHair->SetHandle_CrossHairFrame			("data/texture/UI/CrossHair/CrossHairFrame.png");
+	crossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
+	crossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+
+	UI_CrossHair* ballChargeMeter = new UI_CrossHair(RectTransform(Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, WindowSetting::Inst().height_half), 0.0f, Vector2::Ones));
+	ballChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
+	ballChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
+
+	UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, 0.0f), 0.0f, Vector2::Ones));
+	hitPointIcon->SetValue(&m_HitPoint, 0, m_pHP->GetMax(), m_pHP->GetMax());
+	hitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
@@ -325,6 +349,9 @@ void CharaBase::Update() {
 	m_IsMove = false;
 	m_IsCatching = false;
 
+	m_Stamina = m_pStamina->GetCurrent();
+	m_HitPoint = m_pHP->GetCurrent();
+
 	Object3D::Update();
 
 	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
@@ -362,6 +389,8 @@ void CharaBase::Draw()
 	{
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
+
+	
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {

@@ -4,6 +4,9 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/math/Random.h"
 
+#include "vendor/ImGui/imgui.h"
+
+
 bool exitFlag = false;
 
 void AppInit()

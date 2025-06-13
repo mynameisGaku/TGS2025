@@ -68,6 +68,9 @@ void InputManager::Init() {
 		key["MoveRight"] = { KeyCode::D };
 
 		key["TargetCamera"] = { KeyCode::LeftClick, KeyCode::RightShoulder };
+
+		key["AnyKey"] = { KeyCode::Z, KeyCode::Space, KeyCode::Enter,
+			KeyCode::ButtonA, KeyCode::ButtonB, KeyCode::ButtonX, KeyCode::ButtonY };
 	}
 
 	//==========================================================================================

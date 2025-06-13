@@ -277,6 +277,7 @@ public:
 
 private:
 	friend class CharaManager;
+	friend class UI_CrossHair;
 
 
 	Ball*			m_pBall;				// 所有しているボールのポインター
@@ -300,6 +301,7 @@ private:
 	Alarm*			m_Alarm;				// アラーム
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
+	int				m_HitPoint;
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
@@ -307,6 +309,7 @@ private:
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
+	float			m_Stamina;
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か

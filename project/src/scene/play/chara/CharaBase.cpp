@@ -918,6 +918,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 		m_CanCatch = false;
 		m_CanHold = false;
 		m_CanThrow = false;
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -937,6 +938,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 		m_CanCatch = true;
 		m_CanHold = true;
 		m_CanThrow = true;
+		m_CanTackle = true;
 		m_Timeline->Stop();
 	}
 	break;
@@ -1040,6 +1042,7 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 		m_CanCatch	= false;
 		m_CanMove	= false;
 		m_CanRot	= false;
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1059,6 +1062,7 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 		m_CanCatch	= true;
 		m_CanMove	= true;
 		m_CanRot	= true;
+		m_CanTackle = true;
 	}
 	break;
 	}
@@ -1171,6 +1175,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 		m_CanCatch = false;
 		m_CanHold = false;
 		m_CanThrow = false;
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1192,6 +1197,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 		m_CanCatch = true;
 		m_CanHold = true;
 		m_CanThrow = true;
+		m_CanTackle = true;
 
 		m_Timeline->Stop();
 	}
@@ -1562,6 +1568,7 @@ void CharaBase::StateTackle(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Tackle");
+		m_IsTackling = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新

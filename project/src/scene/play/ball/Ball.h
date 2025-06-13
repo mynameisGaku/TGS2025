@@ -102,6 +102,8 @@ private:
 	bool				m_IsHoming;
 
 	void collisionToGround();
+	// 地形との押し出し処理、当たったらtrue
+	bool collisionToStage();
 	void HomingDeactivate();
 	void setVelocity(const Vector3& velocity);
 	void changeState(const State& s);

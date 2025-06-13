@@ -141,44 +141,15 @@ void Ball::Update()
 		m_Physics->SetIsActive(false);
 		HomingProcess();
 	}
-	else
+
+	// メモ：ここまでできた
+	bool hit = collisionToStage();
+
+	if (m_IsHoming && hit)
 	{
-		if (m_Collider != nullptr && m_Collider->IsActive())
-		{
-			Vector3 p1 = transform->Global().position;
-			Vector3 p2 = m_Collider->OffsetWorld();
-			float radius = BALL_RADIUS;
-
-			Vector3 pushVec;
-			if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
-			{
-				transform->position += pushVec;
-
-				// 押し出し方向
-				Vector3 normal = pushVec.Normalize();
-
-				// 速度を反射させる
-				const float bounciness = BALL_REF.BouncinessDefault;
-				const Vector3 vel = m_Physics->velocity;
-
-				float dot = VDot(vel, normal);
-				if (dot < 0.0f) // 内側からの衝突のみ反射
-				{
-					Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
-					m_Physics->velocity = reflectVel;
-				}
-
-				// Y方向の反発時に転がり回転も発生
-				if (abs(normal.y) > 0.5f)
-				{
-					float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
-					transform->rotation.y = forwardRad;
-					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
-				}
-				m_Physics->velocity.x *= 0.99f;
-				m_Physics->velocity.z *= 0.99f;
-			}
-		}
+		HomingDeactivate();
+		changeState(S_LANDED);
+		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 	}
 
 	if (m_State != S_OWNED)
@@ -421,16 +392,18 @@ void Ball::HomingProcess()
 	}
 	m_Physics->velocity += acceleration * GTime.deltaTime;
 	transform->position = transform->position + m_Physics->velocity * GTime.deltaTime;
+}
 
+bool Ball::collisionToStage()
+{
 	bool hit = false;
 
-	// ---- 押し出し + 跳ね返り処理 ----
 	if (m_Collider != nullptr && m_Collider->IsActive())
 	{
-		Vector3 p1 = transform->position;
-		Vector3 p2 = m_Collider->OffsetWorld();  // ホーミング中は本来位置からズレるが、近似可
+		Vector3 p1 = transform->Global().position;
+		Vector3 p2 = m_Collider->OffsetWorld();
 		float radius = BALL_RADIUS;
-		
+
 		Vector3 pushVec;
 		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
 		{
@@ -445,15 +418,13 @@ void Ball::HomingProcess()
 			const float bounciness = BALL_REF.BouncinessDefault;
 			const Vector3 vel = m_Physics->velocity;
 
-			float dot = VDot(m_Physics->velocity, normal);
+			float dot = VDot(vel, normal);
 			if (dot < 0.0f) // 内側からの衝突のみ反射
 			{
-				//const float damping = 0.85f; // ホーミング中の減衰
-				const float damping = 1.0f; // ホーミング中の減衰
-
 				Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
-				m_Physics->velocity = reflectVel * damping;
+				m_Physics->velocity = reflectVel;
 			}
+
 			// Y方向の反発時に転がり回転も発生
 			if (abs(normal.y) > 0.5f)
 			{
@@ -463,18 +434,10 @@ void Ball::HomingProcess()
 			}
 			m_Physics->velocity.x *= 0.99f;
 			m_Physics->velocity.z *= 0.99f;
-
 		}
 	}
 
-	if (hit)
-	{
-		HomingDeactivate(); 
-		changeState(S_LANDED);
-		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
-	}
-
-	//transform->position = nextPosition;
+	return hit;
 }
 
 void Ball::HomingDeactivate()

@@ -355,6 +355,9 @@
     <Filter Include="src%28application%29\scene\play\target">
       <UniqueIdentifier>{d687d189-b331-4161-aeb0-1f33fbff2cbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\alarm">
+      <UniqueIdentifier>{57939c35-e090-463e-92d9-09704641751d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -617,6 +620,9 @@
     </None>
     <None Include="data\Json\Effect\DropDust.json">
       <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Tackle.json">
+      <Filter>data\Json\Chara\State</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1228,6 +1234,9 @@
     </ClCompile>
     <ClCompile Include="src\scene\play\targetting\TargetManager.cpp">
       <Filter>src%28application%29\scene\play\target</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\alarm\Alarm.cpp">
+      <Filter>src%28application%29\util\alarm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1947,6 +1956,9 @@
     </ClInclude>
     <ClInclude Include="src\util\math\Vector3Util.h">
       <Filter>src%28application%29\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\alarm\Alarm.h">
+      <Filter>src%28application%29\util\alarm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

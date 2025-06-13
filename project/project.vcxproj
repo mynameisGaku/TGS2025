@@ -349,6 +349,7 @@
     <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
@@ -380,7 +381,6 @@
     <ClCompile Include="src\util\fx\effect\EffectBase.cpp" />
     <ClCompile Include="src\util\fx\effect\EffectManager.cpp" />
     <ClCompile Include="src\util\fx\post_effect\bloom\BloomManager.cpp" />
-    <ClCompile Include="src\util\fx\post_effect\bloom\cameraBloom.cpp" />
     <ClCompile Include="src\util\fx\trail\trail3D\Trail3D.cpp" />
     <ClCompile Include="src\util\gauge\gauge.cpp" />
     <ClCompile Include="src\util\input\InputManager.cpp" />
@@ -520,6 +520,7 @@
     <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
+    <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h" />
     <ClInclude Include="src\scene\play\ui\UI_CrossHair.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />
@@ -559,7 +560,6 @@
     <ClInclude Include="src\util\fx\effect\EffectDefine.h" />
     <ClInclude Include="src\util\fx\effect\EffectManager.h" />
     <ClInclude Include="src\util\fx\post_effect\bloom\BloomManager.h" />
-    <ClInclude Include="src\util\fx\post_effect\bloom\cameraBloom.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h" />
     <ClInclude Include="src\util\gauge\gauge.h" />

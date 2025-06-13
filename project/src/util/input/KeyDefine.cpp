@@ -18,21 +18,31 @@ void KeyDefine::Init() {
 
 	auto& key = (*keys);
 
-	key[KeyCode::None] = InputData(new int{ -1 }, KeyCode::None, DeviceType::None);
-	key[KeyCode::Up] = InputData(new int{ XINPUT_BUTTON_DPAD_UP }, KeyCode::Up, DeviceType::Pad);
-	key[KeyCode::Down] = InputData(new int{ XINPUT_BUTTON_DPAD_DOWN }, KeyCode::Down, DeviceType::Pad);
-	key[KeyCode::Left] = InputData(new int{ XINPUT_BUTTON_DPAD_LEFT }, KeyCode::Left, DeviceType::Pad);
-	key[KeyCode::Right] = InputData(new int{ XINPUT_BUTTON_DPAD_RIGHT }, KeyCode::Right, DeviceType::Pad);
-	key[KeyCode::Start] = InputData(new int{ XINPUT_BUTTON_START }, KeyCode::Start, DeviceType::Pad);
-	key[KeyCode::Back] = InputData(new int{ XINPUT_BUTTON_BACK }, KeyCode::Back, DeviceType::Pad);
-	key[KeyCode::LeftThumb] = InputData(new int{ XINPUT_BUTTON_LEFT_THUMB }, KeyCode::LeftThumb, DeviceType::Pad);
-	key[KeyCode::RightThumb] = InputData(new int{ XINPUT_BUTTON_RIGHT_THUMB }, KeyCode::RightThumb, DeviceType::Pad);
-	key[KeyCode::LeftShoulder] = InputData(new int{ XINPUT_BUTTON_LEFT_SHOULDER }, KeyCode::LeftShoulder, DeviceType::Pad);
-	key[KeyCode::RightShoulder] = InputData(new int{ XINPUT_BUTTON_RIGHT_SHOULDER }, KeyCode::RightShoulder, DeviceType::Pad);
-	key[KeyCode::ButtonA] = InputData(new int{ XINPUT_BUTTON_A }, KeyCode::ButtonA, DeviceType::Pad);
-	key[KeyCode::ButtonB] = InputData(new int{ XINPUT_BUTTON_B }, KeyCode::ButtonB, DeviceType::Pad);
-	key[KeyCode::ButtonX] = InputData(new int{ XINPUT_BUTTON_X }, KeyCode::ButtonX, DeviceType::Pad);
-	key[KeyCode::ButtonY] = InputData(new int{ XINPUT_BUTTON_Y }, KeyCode::ButtonY, DeviceType::Pad);
+	key[KeyCode::None]				= InputData(new int{ -1 },								KeyCode::None,				DeviceType::None);
+	key[KeyCode::Up]				= InputData(new int{ XINPUT_BUTTON_DPAD_UP },			KeyCode::Up,				DeviceType::Pad);
+	key[KeyCode::Down]				= InputData(new int{ XINPUT_BUTTON_DPAD_DOWN },			KeyCode::Down,				DeviceType::Pad);
+	key[KeyCode::Left]				= InputData(new int{ XINPUT_BUTTON_DPAD_LEFT },			KeyCode::Left,				DeviceType::Pad);
+	key[KeyCode::Right]				= InputData(new int{ XINPUT_BUTTON_DPAD_RIGHT },		KeyCode::Right,				DeviceType::Pad);
+	key[KeyCode::Start]				= InputData(new int{ XINPUT_BUTTON_START },				KeyCode::Start,				DeviceType::Pad);
+	key[KeyCode::Back]				= InputData(new int{ XINPUT_BUTTON_BACK },				KeyCode::Back,				DeviceType::Pad);
+	key[KeyCode::LeftStickUp]		= InputData(new int{ -1 },								KeyCode::LeftStickUp,		DeviceType::Pad);
+	key[KeyCode::LeftStickDown]		= InputData(new int{ -1 },								KeyCode::LeftStickDown,		DeviceType::Pad);
+	key[KeyCode::LeftStickLeft]		= InputData(new int{ -1 },								KeyCode::LeftStickLeft,		DeviceType::Pad);
+	key[KeyCode::LeftStickRight]	= InputData(new int{ -1 },								KeyCode::LeftStickRight,	DeviceType::Pad);
+	key[KeyCode::RightStickUp]		= InputData(new int{ -1 },								KeyCode::RightStickUp,		DeviceType::Pad);
+	key[KeyCode::RightStickDown]	= InputData(new int{ -1 },								KeyCode::RightStickDown,	DeviceType::Pad);
+	key[KeyCode::RightStickLeft]	= InputData(new int{ -1 },								KeyCode::RightStickLeft,	DeviceType::Pad);
+	key[KeyCode::RightStickRight]	= InputData(new int{ -1 },								KeyCode::RightStickRight,	DeviceType::Pad);
+	key[KeyCode::LeftThumb]			= InputData(new int{ XINPUT_BUTTON_LEFT_THUMB },		KeyCode::LeftThumb,			DeviceType::Pad);
+	key[KeyCode::RightThumb]		= InputData(new int{ XINPUT_BUTTON_RIGHT_THUMB },		KeyCode::RightThumb,		DeviceType::Pad);
+	key[KeyCode::LeftShoulder]		= InputData(new int{ XINPUT_BUTTON_LEFT_SHOULDER },		KeyCode::LeftShoulder,		DeviceType::Pad);
+	key[KeyCode::RightShoulder]		= InputData(new int{ XINPUT_BUTTON_RIGHT_SHOULDER },	KeyCode::RightShoulder,		DeviceType::Pad);
+	key[KeyCode::LeftTrigger]		= InputData(new int{ -1 },								KeyCode::LeftTrigger,		DeviceType::Pad);
+	key[KeyCode::RightTrigger]		= InputData(new int{ -1 },								KeyCode::RightTrigger,		DeviceType::Pad);
+	key[KeyCode::ButtonA]			= InputData(new int{ XINPUT_BUTTON_A },					KeyCode::ButtonA,			DeviceType::Pad);
+	key[KeyCode::ButtonB]			= InputData(new int{ XINPUT_BUTTON_B },					KeyCode::ButtonB,			DeviceType::Pad);
+	key[KeyCode::ButtonX]			= InputData(new int{ XINPUT_BUTTON_X },					KeyCode::ButtonX,			DeviceType::Pad);
+	key[KeyCode::ButtonY]			= InputData(new int{ XINPUT_BUTTON_Y },					KeyCode::ButtonY,			DeviceType::Pad);
 
 	key[KeyCode::A] = InputData(new int{ KEY_INPUT_A }, KeyCode::A, DeviceType::Key);
 	key[KeyCode::B] = InputData(new int{ KEY_INPUT_B }, KeyCode::B, DeviceType::Key);

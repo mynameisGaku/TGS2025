@@ -349,6 +349,12 @@
     <Filter Include="data\Json\Sound">
       <UniqueIdentifier>{66e2275a-c146-4557-afc7-95b3044cc8fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\ui">
+      <UniqueIdentifier>{ac9ad424-43c6-42f7-9064-38ad79380ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\target">
+      <UniqueIdentifier>{d687d189-b331-4161-aeb0-1f33fbff2cbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1202,7 +1208,6 @@
     <ClCompile Include="src\scene\play\ball\BallSpawner.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\fx\post_effect\bloom\cameraBloom.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaSpawnPoint.cpp">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClCompile>
@@ -1214,6 +1219,15 @@
     </ClCompile>
     <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\targetting\TargetManager.cpp">
+      <Filter>src%28application%29\scene\play\target</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1907,7 +1921,6 @@
     <ClInclude Include="src\scene\play\ball\BallSpawner.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\fx\post_effect\bloom\cameraBloom.h" />
     <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClInclude>
@@ -1923,6 +1936,17 @@
     <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\Vector3Util.h" />
+    <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_CrossHair.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\targetting\TargetManager.h">
+      <Filter>src%28application%29\scene\play\target</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Vector3Util.h">
+      <Filter>src%28application%29\util\math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -286,6 +286,7 @@ private:
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
+	int				m_HitPoint;
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度

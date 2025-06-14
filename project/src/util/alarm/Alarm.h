@@ -18,4 +18,5 @@ public:
 
 private:
     float m_Timer;
+    bool m_Finish;
 };

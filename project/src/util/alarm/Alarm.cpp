@@ -4,6 +4,7 @@
 Alarm::Alarm()
 {
     m_Timer = 0.0f;
+    m_Finish = true;
 }
 
 Alarm::~Alarm()
@@ -12,20 +13,28 @@ Alarm::~Alarm()
 
 void Alarm::Update()
 {
-    if (not IsFinish())
+    if (not m_Finish)
     {
         m_Timer -= GTime.deltaTime;
+        if (m_Timer < 0.0f)
+        {
+            m_Finish = true;
+        }
+    }
+    else
+    {
+        m_Timer = 0.0f;
     }
 }
 
 bool Alarm::IsFinish() const
 {
-    return m_Timer <= 0.0f;
+    return m_Finish;
 }
 
 void Alarm::Set(float t)
 {
-    if (not IsFinish())
+    if (not m_Finish)
         return;
 
     m_Timer = t;

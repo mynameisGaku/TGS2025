@@ -72,6 +72,7 @@ CharaBase::CharaBase()
 	m_CanThrow			= true;
 	m_IsCatching		= false;
 	m_CanHold			= true;
+	m_CanTackle			= true;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
 	m_pCatchReadyEffect	= nullptr;
@@ -1597,7 +1598,9 @@ void CharaBase::StateTackle(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Tackle");
-		m_IsTackling = true;
+
+		m_CanMove = false;
+		m_CanRot = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1618,6 +1621,8 @@ void CharaBase::StateTackle(FSMSignal sig)
 	{
 		m_Timeline->Stop();
 		m_IsTackling = false;
+		m_CanMove = true;
+		m_CanRot = true;
 	}
 	break;
 	}
@@ -1820,6 +1825,10 @@ void CharaBase::idleUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateActionIdleToRun); // ステートを変更
 	}
+	else if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
+	}
 }
 
 void CharaBase::runUpdate()
@@ -1839,6 +1848,10 @@ void CharaBase::runUpdate()
 	else if (m_SlideTimer > 0.0f)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToSlide); // ステートを変更
+	}
+	else if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
 	}
 }
 
@@ -1861,6 +1874,11 @@ void CharaBase::slideUpdate()
 		{
 			m_pPhysics->SetFriction(FRICTION / 10.0f);
 		}
+	}
+
+	if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
 	}
 }
 
@@ -1921,6 +1939,11 @@ void CharaBase::jumpUpdate()
 	if (not m_IsJumping)
 	{
 		m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+	}
+
+	if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
 	}
 }
 

@@ -572,6 +572,7 @@
     <ClInclude Include="src\util\input\MouseController.h" />
     <ClInclude Include="src\util\input\PadController.h" />
     <ClInclude Include="src\util\locus\Locus.h" />
+    <ClInclude Include="src\util\logger\Logger.h" />
     <ClInclude Include="src\util\math\Asm.h" />
     <ClInclude Include="src\util\math\MathCommon.h" />
     <ClInclude Include="src\util\math\MathIncluder.h" />

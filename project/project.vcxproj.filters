@@ -358,6 +358,9 @@
     <Filter Include="src%28application%29\util\alarm">
       <UniqueIdentifier>{57939c35-e090-463e-92d9-09704641751d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\logger">
+      <UniqueIdentifier>{97598d31-b798-451e-83a6-4964e9ea8bb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1959,6 +1962,9 @@
     </ClInclude>
     <ClInclude Include="src\util\alarm\Alarm.h">
       <Filter>src%28application%29\util\alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\logger\Logger.h">
+      <Filter>src%28application%29\util\logger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

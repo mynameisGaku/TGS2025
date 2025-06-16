@@ -99,6 +99,7 @@ private:
 	Vector3				m_HomingOrigin;			// ホーミング開始地点
 	bool				m_IsHoming;	// ホーミング中か
 	float				m_Progress;
+	float				m_Speed;
 
 	void collisionToGround();
 	// 地形との押し出し処理、当たったらtrue

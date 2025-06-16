@@ -18,6 +18,7 @@
 #include "src/util/math/Random.h"
 #include "src/util/math/Vector3Util.h"
 #include "src/util/math/matrix.h"
+#include "src/util/math/MathUtil.h"
 
 namespace
 {
@@ -97,6 +98,8 @@ void Ball::Init(std::string charaTag)
 	m_IsHoming = false;
 	m_IsActive = true;
 	m_IsPickedUp = false;
+	m_Speed = 0.0f;
+	m_Progress = 0.0f;
 
 	ColDefine::Tag tag;
 	std::list<ColDefine::Tag> targets;
@@ -245,6 +248,7 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 	m_ChargeRate		= chargeRate;
 	m_HomingOrigin		= transform->position;
 	m_Progress = 0.0f;
+	m_Speed = m_Physics->velocity.GetLength();
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -386,17 +390,27 @@ void Ball::HomingProcess()
 	const Vector3 middle = (homingTargetPos + m_HomingOrigin) / 2.0f;
 	const Vector3 middleToCurrent = transform->position - middle;
 
-	const float dot = Vector3::Dot(dir, Vector3::Normalize(middleToCurrent));
-	const float progress = (dot + 1.0f) * 0.5f;
-	const float nextProgress = progress + 0.01f;
+	const float distance = diff.GetLength();
 
-	m_Progress += 0.01f;
+	float delta = 0.0f;
+
+	if (distance < 0.0f)
+	{
+		delta = 1.0f;
+	}
+	else
+	{
+		delta = m_Speed / distance * GTime.DeltaTime();
+	}
+
+	m_Progress += delta;
 
 	const Vector3 circlePos = Vector3(sinf(m_Progress * DX_PI_F), 0.0f, -cosf(m_Progress * DX_PI_F)) *
-		diff.GetLength() * 0.5f *
+		distance * 0.5f *
 		dirRotMat;
 
-	transform->position = circlePos + middle;
+	m_Physics->velocity = (circlePos + middle) - transform->position;
+	transform->position += m_Physics->velocity;
 
 	/*
 	// ‡@

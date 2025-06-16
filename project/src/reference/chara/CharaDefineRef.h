@@ -36,6 +36,10 @@ public:
     float                       CatchRadius;
     float                       EmoteInterval;
     float                       JumpPower;
+    float                       TackleRadius;
+    float                       TackleInvincibleDurationSec;
+    float                       TackleForce_Vertical;
+    float                       TackleForce_Horizontal;
     
     void Load(bool ForceLoad = false);
 private:

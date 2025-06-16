@@ -115,9 +115,6 @@
     <Filter Include="src%28application%29\scene\play\ball">
       <UniqueIdentifier>{5fc18a84-21ac-4f49-ae10-096d49843adc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\catcher">
-      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\scene\play\chara">
       <UniqueIdentifier>{ba273b49-bf53-422e-8406-b5fe6f399fa1}</UniqueIdentifier>
     </Filter>
@@ -360,6 +357,12 @@
     </Filter>
     <Filter Include="src%28application%29\util\logger">
       <UniqueIdentifier>{97598d31-b798-451e-83a6-4964e9ea8bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\tackler">
+      <UniqueIdentifier>{64039751-ec3c-4977-a96e-833ecbed0d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\catcher">
+      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1241,6 +1244,9 @@
     <ClCompile Include="src\util\alarm\Alarm.cpp">
       <Filter>src%28application%29\util\alarm</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\tackler\Tackler.cpp">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1965,6 +1971,9 @@
     </ClInclude>
     <ClInclude Include="src\util\logger\Logger.h">
       <Filter>src%28application%29\util\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\tackler\Tackler.h">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

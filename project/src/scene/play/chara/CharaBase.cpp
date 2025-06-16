@@ -24,11 +24,13 @@
 #include "src/common/component/model_frame_trail_renderer/MODEL_FRAME_TRAIL_RENDERER_DESC.h"
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
+#include "src/scene/play/tackler/Tackler.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
+#include <src/reference/ball/BallRef.h>
 
 using namespace KeyDefine;
 
@@ -56,6 +58,7 @@ CharaBase::CharaBase()
 	m_SpeedScale		= 0.0f;
 	m_CharaTag			= CHARADEFINE_REF.Tags[0];
 	m_Catcher			= nullptr;
+	m_Tackler			= nullptr;
 	m_Index				= 0;
 	m_Animator			= nullptr;
 	m_EmoteTimer		= 0.0f;
@@ -73,6 +76,7 @@ CharaBase::CharaBase()
 	m_IsCatching		= false;
 	m_CanHold			= true;
 	m_CanTackle			= true;
+	m_IsInvincible		= false;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
 	m_pCatchReadyEffect	= nullptr;
@@ -156,6 +160,14 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	m_Tackler = Instantiate<Tackler>();
+	m_Tackler->transform->position = Vector3(0.0f, CHARADEFINE_REF.TackleRadius, CHARADEFINE_REF.TackleRadius);
+	m_Tackler->transform->scale = Vector3::Ones * CHARADEFINE_REF.TackleRadius * 2.0f;
+	m_Tackler->transform->SetParent(transform);
+	m_Tackler->Init(tag);
+	m_Tackler->SetColliderActive(false);
+	m_Tackler->SetParent(this);
 
 	float scrWidth = (WindowSetting::Inst().width / CameraManager::AllCameras().size()) * m_Index;
 	UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, WindowSetting::Inst().height_half), 0.0f, Vector2::Ones));
@@ -295,6 +307,7 @@ void CharaBase::Init(std::string tag)
 }
 
 void CharaBase::Update() {
+
 	HitGroundProcess();
 
 	// デバッグ機能
@@ -308,17 +321,6 @@ void CharaBase::Update() {
 	m_FSM->Update();
 	m_SubFSM->Update();
 	m_Timeline->Update();
-
-	//if (m_pCatchReadyEffect)
-	//{
-	//	m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-	//	m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
-	//}
-	//if (m_pCatchDustEffect)
-	//{
-	//	m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-	//	m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
-	//}
 
 	// ボールの更新
 	if (m_pBall)
@@ -355,26 +357,7 @@ void CharaBase::Update() {
 
 	Object3D::Update();
 
-	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
-	m_pTrail[0]->Add(chestPos);
-
-	Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
-	m_pTrail[1]->Add(leftShoulderPos);
-
-	Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
-	m_pTrail[2]->Add(rightShoulderPos);
-
-	Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
-	m_pTrail[3]->Add(leftHipPos);
-
-	Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
-	m_pTrail[4]->Add(rightHipPos);
-	
-	for (int i = 0; i < 5; i++)
-	{
-		m_pTrail[i]->Update();
-	}*/
-
+	invincibleUpdate();
 }
 
 void CharaBase::Draw()
@@ -441,6 +424,12 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		{
 			if (ball->GetState() == Ball::S_LANDED)
 				return;
+
+			if (m_IsInvincible)
+			{
+				EffectManager::Play3D("Hit_Wall.efk", *transform->Copy(), "Hit_Wall" + m_CharaTag);
+				return;
+			}
 
 			if (m_CharaTag == "Blue")
 			{
@@ -680,6 +669,18 @@ void CharaBase::TeleportToLastBall()
 	m_FSM->ChangeState(&CharaBase::StateAirSpin);
 }
 
+void CharaBase::DropBall(const Vector3& other, float force_vertical, float force_horizontal)
+{
+	if (not m_pBall)
+		return;
+
+	m_pBall->ChangeState(Ball::State::S_LANDED);
+	m_pBall->GetComponent<Physics>()->SetGravity(GRAVITY);
+	m_pBall->Knockback(other, force_vertical, force_horizontal);
+	m_pBall->SetOwner(nullptr);
+	m_pBall = nullptr;
+}
+
 void CharaBase::Catch()
 {
 	if (not m_CanCatch) return;
@@ -744,6 +745,61 @@ void CharaBase::Tackle()
 		return;
 
 	m_IsTackling = true;
+}
+
+void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback)
+{
+	if (m_IsInvincible && not isForceKnockback)
+	{
+		return;
+	}
+
+	Knockback(other, force_vertical, force_horizontal);
+
+	SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
+
+	DropBall(transform->position, BALL_REF.DropForce_Vertical, BALL_REF.DropForce_Horizontal);
+
+	m_FSM->ChangeState(&CharaBase::StateDamageToDown);
+}
+
+void CharaBase::SetInvincible(float duration_sec, bool isOverride)
+{
+	if (!isOverride 
+		&& m_InvincibleTimer > 0.0f
+		)
+	{
+		return;
+	}
+
+	m_InvincibleTimer = duration_sec;
+	m_IsInvincible = true;
+}
+
+void CharaBase::invincibleUpdate()
+{
+	if (m_InvincibleTimer > 0.0f)
+	{
+		m_InvincibleTimer -= GTime.deltaTime;
+		m_IsInvincible = true;
+	}
+	else
+	{
+		m_IsInvincible = false;
+		m_InvincibleTimer = 0.0f;
+	}
+}
+
+void CharaBase::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
+{
+	Vector3 otherToMe = transform->position - other;
+	otherToMe.y += 20.0f;
+	Vector3 impactNorm = otherToMe.Normalize();
+	Vector3 impactVertical = Vector3(0.0f, impactNorm.y, 0.0f) * force_vertical;
+	Vector3 impactHorizontal = Vector3(impactNorm.x, 0.0f, impactNorm.z) * force_horizontal;
+	Vector3 impact = impactVertical + impactHorizontal;
+
+	m_pPhysics->velocity += impact;
 }
 
 //========================================================================
@@ -1105,6 +1161,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Fall");
+		m_CanTackle = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1120,6 +1177,10 @@ void CharaBase::StateFall(FSMSignal sig)
 				m_FSM->ChangeState(&CharaBase::StateFallToCrouch); // ステートを変更
 			}
 		}
+		if (m_IsTackling)
+		{
+			m_FSM->ChangeState(&CharaBase::StateTackle);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1129,6 +1190,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+		m_CanTackle = false;
 	}
 	break;
 	}
@@ -1141,10 +1203,16 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("FallToCrouch");
+		m_CanTackle = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		if (m_IsTackling)
+		{
+			m_FSM->ChangeState(&CharaBase::StateTackle);
+		}
+
 		if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
 		{
 			m_FSM->ChangeState(&CharaBase::StateCrouchToRun); // ステートを変更
@@ -1173,10 +1241,15 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("FallToRoll");
+		m_CanTackle = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		if (m_IsTackling)
+		{
+			m_FSM->ChangeState(&CharaBase::StateTackle);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1601,6 +1674,10 @@ void CharaBase::StateTackle(FSMSignal sig)
 
 		m_CanMove = false;
 		m_CanRot = false;
+
+		m_Tackler->SetColliderActive(true);
+
+		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1620,6 +1697,7 @@ void CharaBase::StateTackle(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+		m_Tackler->SetColliderActive(false);
 		m_IsTackling = false;
 		m_CanMove = true;
 		m_CanRot = true;

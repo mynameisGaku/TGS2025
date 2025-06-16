@@ -264,6 +264,7 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 
     m_HomingTargetChara = target;
 
+	m_IsRefreshHomingTargetPos = true;
 	m_HomingPosition = transform->position;
 	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 	m_IsHoming = true;
@@ -271,7 +272,6 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 	// ターゲット位置と現在位置からちょうどいい時間を計算
 	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
-
 	m_ChargeRate = chargeRate;
 }
 
@@ -369,6 +369,17 @@ void Ball::PickUp()
 	m_IsPickedUp = true;
 }
 
+void Ball::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
+{
+	Vector3 otherToMe = transform->position - other;
+	Vector3 impactNorm = otherToMe.Normalize();
+	Vector3 impactVertical = Vector3(0.0f, impactNorm.y, 0.0f) * force_vertical;
+	Vector3 impactHorizontal = Vector3(impactNorm.x, 0.0f, impactNorm.z) * force_horizontal;
+	Vector3 impact = impactVertical + impactHorizontal;
+
+	GetComponent<Physics>()->velocity += impact;
+}
+
 void Ball::collisionToGround()
 {
 	if (m_State == S_OWNED) return;
@@ -398,7 +409,9 @@ void Ball::collisionToGround()
 void Ball::HomingProcess()
 {
 	// ---- ホーミング補間 ----
-	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? (Vector3::UnitZ * 200.0f) * m_Owner->transform->RotationMatrix() : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	if (m_IsRefreshHomingTargetPos)
+		m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? (Vector3::UnitZ * 200.0f) * m_Owner->transform->RotationMatrix() : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+
 	Vector3 acceleration = m_HomingTargetPos - transform->position;
 	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
 
@@ -412,6 +425,12 @@ void Ball::HomingProcess()
 	}
 	m_Physics->velocity += acceleration * GTime.deltaTime;
 	m_HomingPosition += m_Physics->velocity * GTime.deltaTime;
+
+	if (m_HomingTargetChara->IsTackling())
+	{
+		changeState(S_LANDED);
+		m_IsRefreshHomingTargetPos = false;
+	}
 
 	// ---- 押し出し + 跳ね返り処理 ----
 	if (m_Collider)

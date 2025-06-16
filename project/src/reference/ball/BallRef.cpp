@@ -20,5 +20,7 @@ void BallRef::Load()
 	SpeedDefault		= settingsJson->GetOrDefault("SpeedDefault", 0.0f, FILEKEY);
 	HomingTimeMax		= settingsJson->GetOrDefault("HomingTimeMax", 0.0f, FILEKEY);
 	LifeTimeMax			= settingsJson->GetOrDefault("LifeTimeMax", 0.0f, FILEKEY);
+	DropForce_Horizontal = settingsJson->GetOrDefault("DropForce_Horizontal", 0.0f, FILEKEY);
+	DropForce_Vertical  = settingsJson->GetOrDefault("DropForce_Vertical", 0.0f, FILEKEY);
 	Max					= settingsJson->GetOrDefault("Max", 0, FILEKEY);
 }

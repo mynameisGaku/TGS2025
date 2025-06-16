@@ -15,6 +15,7 @@ class Ball;
 class BallManager;
 class Physics;
 class Catcher;
+class Tackler;
 class Animator;
 template <class C>
 class Timeline;
@@ -138,6 +139,8 @@ public:
 	/// </summary>
 	void TeleportToLastBall();
 
+	void DropBall(const Vector3& other, float force_vertical, float force_horizontal);
+
 	//=======================================================================================
 	// ▼キャッチ
 
@@ -149,10 +152,19 @@ public:
 	void CatchSuccess(const Vector3& velocity);
 
 	//=======================================================================================
-	// ▼リスポーン
+	// ▼タックル
 	void Tackle();
 
-	
+	void GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback);
+
+	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
+
+	//=======================================================================================
+	// ▼無敵
+	void SetInvincible(float duration_sec, bool isOverride);
+private:
+	void invincibleUpdate();
+public:
 	//=======================================================================================
 	// ▼リスポーン
 	
@@ -225,6 +237,8 @@ public:
 	inline bool IsTackling() const { return m_IsTackling; }
 	// タックル可能か
 	inline bool CanTackle() const { return m_CanTackle; }
+	// 無敵中か
+	inline bool IsInvincible() const { return m_IsInvincible; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -290,6 +304,7 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
+	Tackler*		m_Tackler;				// タックルの当たり判定
 	EffectBase*		m_pCatchReadyEffect;	// キャッチの準備エフェクト
 	EffectBase*		m_pCatchDustEffect;		// キャッチの粉エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
@@ -309,7 +324,8 @@ private:
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
-	float			m_Stamina;
+	float			m_InvincibleTimer;		// 無敵残り時間
+	float			m_Stamina;				// 
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -320,10 +336,12 @@ private:
 	bool			m_CanHold;				// ボールを持てるか
 	bool			m_CanThrow;				// ボールを投げられるか
 	bool			m_IsCatching;			// キャッチ中か
-	bool 			m_IsTarget;				// ターゲットを狙っているか
-	bool 			m_IsTargeted;			// ターゲットされているか
+	bool			m_IsTarget;				// ターゲットを狙っているか
+	bool			m_IsTargeted;			// ターゲットされているか
 	bool			m_CanTackle;			// タックル可能か
 	bool			m_IsTackling;			// タックル中か
+	bool			m_IsInvincible;			// 無敵か
+	bool			m_IsDamage;				// ダメージ喰らい中か
 
 	
 

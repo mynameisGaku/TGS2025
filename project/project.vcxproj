@@ -216,7 +216,12 @@
     <None Include="data\Json\Effect\Template.json" />
     <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Sound\SoundData.json" />
-    <None Include="data\Json\Stage\Stage.json" />
+    <None Include="data\Json\Stage\Stage_0.json" />
+    <None Include="data\Json\Stage\Stage_1.json" />
+    <None Include="data\Json\Stage\Stage_2.json" />
+    <None Include="data\Json\Stage\Stage_3.json" />
+    <None Include="data\Json\Stage\Stage_4.json" />
+    <None Include="data\Json\Stage\TestStage.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
     <None Include="data\Model\Stage\Cube.mv1" />

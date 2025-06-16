@@ -426,9 +426,6 @@
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
       <Filter>data\Json\Crystal</Filter>
     </None>
-    <None Include="data\Json\Stage\Stage.json">
-      <Filter>data\Json\Stage</Filter>
-    </None>
     <None Include="data\Model\Ball\Ball.mv1">
       <Filter>data\Model\Ball</Filter>
     </None>
@@ -629,6 +626,24 @@
     </None>
     <None Include="data\Json\Chara\State\Tackle.json">
       <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_0.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_1.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_2.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_3.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_4.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\TestStage.json">
+      <Filter>data\Json\Stage</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -95,11 +95,10 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	const CharaBase*	m_HomingTargetChara;
-	Vector3				m_HomingVelocity;
-	Vector3				m_HomingTargetPos;
-	float				m_HomingPeriod;
-	bool				m_IsHoming;
+	const CharaBase*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
+	Vector3				m_HomingOrigin;			// ホーミング開始地点
+	bool				m_IsHoming;	// ホーミング中か
+	float				m_Progress;
 
 	void collisionToGround();
 	// 地形との押し出し処理、当たったらtrue

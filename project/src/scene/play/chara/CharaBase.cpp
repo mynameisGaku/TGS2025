@@ -583,7 +583,7 @@ void CharaBase::ThrowBall(const Vector3& velocity)
 	if (m_pBall == nullptr)
 		return;
 
-	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this);
+	m_pBall->ThrowVelocity(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this);
 
 	m_pLastBall = m_pBall;
 	m_pBall = nullptr;

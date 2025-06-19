@@ -40,10 +40,9 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void Throw(const Vector3& velocity);
-	void Throw(const Vector3& velocity, CharaBase*owner);
+	void Throw(CharaBase* owner);
+	void ThrowVelocity(const Vector3& velocity, CharaBase*owner);
 	void ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate = 1.0f);
-	void HomingProcess();
 
 	State GetState() const { return m_State; }
 
@@ -106,10 +105,10 @@ private:
 	void collisionToGround();
 	// 地形との押し出し処理、当たったらtrue
 	bool collisionToStage();
-	void HomingDeactivate();
-	void setVelocity(const Vector3& velocity);
 	void changeState(const State& s);
 	void effectUpdate();
+	void homingProcess();
+	void homingDeactivate();
 
 	float				m_ChargeRate;
 };

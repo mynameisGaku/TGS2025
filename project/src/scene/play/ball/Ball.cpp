@@ -146,14 +146,14 @@ void Ball::Update()
 	if (m_IsHoming)
 	{
 		m_Physics->SetIsActive(false);
-		HomingProcess();
+		homingProcess();
 	}
 
 	bool hit = collisionToStage();
 
 	if (m_IsHoming && hit)
 	{
-		HomingDeactivate();
+		homingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 	}
@@ -220,29 +220,33 @@ void Ball::Draw()
 	Object3D::Draw();
 }
 
-void Ball::Throw(const Vector3& velocity)
+void Ball::Throw(CharaBase* owner)
 {
 	changeState(S_THROWN);
-	setVelocity(velocity * BALL_REF.SpeedDefault);
+
 	m_Physics->SetGravity(BALL_REF.GravityDefault);
 	m_Physics->SetFriction(BALL_REF.FrictionDefault);
+
 	m_Collider->SetIsActive(true);
+
 	m_hTrailImage = m_pManager->GetTrailImage(m_CharaTag);
 	m_pTrail->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, 1.0f, 40.0f);
 	m_pTrail->SetSubdivisions(4);
-	m_Owner = nullptr;
-}
 
-void Ball::Throw(const Vector3& velocity, CharaBase* owner)
-{
-	Throw(velocity);
 	m_Owner = owner;
 	m_LastOwner = m_Owner;
 }
 
+void Ball::ThrowVelocity(const Vector3& velocity, CharaBase* owner)
+{
+	Throw(owner);
+
+	m_Physics->velocity = velocity * BALL_REF.SpeedDefault;
+}
+
 void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate)
 {
-	Throw(velocity, owner);
+	ThrowVelocity(velocity, owner);
 	m_Physics->SetIsActive(false);
 
     m_HomingTargetChara = target;
@@ -265,7 +269,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 	if (m_State == S_THROWN)
 	{
-		if (m_IsHoming) HomingDeactivate();
+		if (m_IsHoming) homingDeactivate();
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 
@@ -357,7 +361,7 @@ void Ball::collisionToGround()
 	bool hit = Stage::ColCheckGround(transform->position + Vector3::SetY(BALL_RADIUS), transform->position - Vector3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)
 	{
-		if (m_IsHoming) HomingDeactivate();
+		if (m_IsHoming) homingDeactivate();
 
 		// Y方向に跳ね返る
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
@@ -375,7 +379,13 @@ void Ball::collisionToGround()
 	}
 }
 
-void Ball::HomingProcess()
+void Ball::changeState(const State& s)
+{
+	m_StatePrev = m_State;
+	m_State = s;
+}
+
+void Ball::homingProcess()
 {
 	if (m_HomingTargetChara == nullptr) return;
 
@@ -461,22 +471,11 @@ bool Ball::collisionToStage()
 	return hit;
 }
 
-void Ball::HomingDeactivate()
+void Ball::homingDeactivate()
 {
 	m_Physics->velocity *= GTime.deltaTime;
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.GravityDefault);
 	// 物理にホーミングの情報を引き継ぐ
 	m_IsHoming = false;
-}
-
-void Ball::setVelocity(const Vector3& velocity)
-{
-	m_Physics->velocity = velocity;
-}
-
-void Ball::changeState(const State& s)
-{
-	m_StatePrev = m_State;
-	m_State = s;
 }

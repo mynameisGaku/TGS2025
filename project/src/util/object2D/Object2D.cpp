@@ -90,21 +90,22 @@ void Object2D::SetImage(const int& handle, const Vector2& _clipStart, const Vect
 
 Vector2 Object2D::DisplacementByAnchorPoint() {
 
+	const RectTransform globalTrs = rectTransform->Global();
 	Vector2 offset = Vector2::Zero;	// ·
 	const float adjust = 2.0f;	// ’²®’l
 
 	// …•½Ž²‚ÌƒYƒŒ’²®
 	switch (Anchor::PlacementHorizontal(rectTransform->preset)) {
-	case Anchor::Placement::LEFT:	offset.x = imageSize.x * 0.5f;	break;
-	case Anchor::Placement::RIGHT:	offset.x = -imageSize.x * 0.5f;	break;
+	case Anchor::Placement::LEFT:	offset.x = ( imageSize.x * 0.5f) * globalTrs.scale.x;	break;
+	case Anchor::Placement::RIGHT:	offset.x = (-imageSize.x * 0.5f) * globalTrs.scale.x;	break;
 	case Anchor::Placement::MIDDLE:	offset.x = 0.0f;				break;
 	default:						offset.x = 0.0f;				break;
 	}
 
 	// ‚’¼Ž²‚ÌƒYƒŒ’²®
 	switch (Anchor::PlacementVertical(rectTransform->preset)) {
-	case Anchor::Placement::UP:		offset.y = imageSize.y * 0.5f - adjust;	break;
-	case Anchor::Placement::DOWN:	offset.y = -imageSize.y * 0.5f - adjust;	break;
+	case Anchor::Placement::UP:		offset.y = ( imageSize.y * 0.5f) * globalTrs.scale.y;	break;
+	case Anchor::Placement::DOWN:	offset.y = (-imageSize.y * 0.5f) * globalTrs.scale.y;	break;
 	case Anchor::Placement::MIDDLE:	offset.y = 0.0f;							break;
 	default:						offset.y = 0.0f;							break;
 	}

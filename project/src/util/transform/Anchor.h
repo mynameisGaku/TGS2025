@@ -46,7 +46,7 @@ namespace Anchor {
 		case 0:		return Placement::LEFT;		break;
 		case 1:		return Placement::MIDDLE;	break;
 		case 2:		return Placement::RIGHT;	break;
-		default:	return Placement::MIDDLE;	break;
+		default:	return Placement::None;	break;
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace Anchor {
 		case 0:		return Placement::UP;		break;
 		case 1:		return Placement::MIDDLE;	break;
 		case 2:		return Placement::DOWN;		break;
-		default:	return Placement::MIDDLE;	break;
+		default:	return Placement::None;	break;
 		}
 	}
 

@@ -217,7 +217,7 @@ bool PadController::CheckInclinationStickCurrent(KeyCode keyCode, int padNumber)
 
 	bool result = false;
 	const Vector2 leftStick = NormalizedLeftStick(padNumber);
-	const Vector2 rightStick = NormalizedLeftStick(padNumber);
+	const Vector2 rightStick = NormalizedRightStick(padNumber);
 
 	switch (keyCode) {
 	case KeyDefine::KeyCode::LeftStickUp:		result = (leftStick.y >= STICK_DEADZONE);	break;
@@ -240,7 +240,7 @@ bool PadController::CheckInclinationStickBefore(KeyCode keyCode, int padNumber) 
 
 	bool result = false;
 	const Vector2 leftStick = NormalizedLeftStickBefore(padNumber);
-	const Vector2 rightStick = NormalizedLeftStickBefore(padNumber);
+	const Vector2 rightStick = NormalizedRightStickBefore(padNumber);
 
 	switch (keyCode) {
 	case KeyDefine::KeyCode::LeftStickUp:		result = (leftStick.y >= STICK_DEADZONE);	break;

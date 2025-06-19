@@ -241,6 +241,11 @@ Vector2 CameraManager::GetScreenDivisionCenter() {
 	return GetScreenDivisionPos() + (GetScreenDivisionSize() * 0.5f);
 }
 
+Vector2 CameraManager::GetDivedByCameraNum() {
+
+	return Vector2(WindowSetting::Inst().width / AllCameras().size(), WindowSetting::Inst().height / AllCameras().size());
+}
+
 #ifdef IMGUI
 
 void CameraManager::InitImGuiNode() {

@@ -133,6 +133,8 @@ namespace CameraManager {
 	/// </summary>
 	Vector2 GetScreenDivisionCenter();
 
+	Vector2 GetDivedByCameraNum();
+
 	//================================================================================
 	// ▼デバッグ機能
 

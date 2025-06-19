@@ -1,10 +1,13 @@
 #include "UI_CrossHair.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/common/camera/CameraManager.h"
 
-UI_CrossHair::UI_CrossHair(const RectTransform& trs)
+UI_CrossHair::UI_CrossHair(const RectTransform& trs, int index)
 {
 	SetTransform(trs);
 	SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eRight);
+
+	charaIndex = index;
 
 	hCrossHair = -1;
 	hCrossHairFrame = -1;
@@ -32,8 +35,24 @@ UI_CrossHair::~UI_CrossHair()
 
 void UI_CrossHair::Update()
 {
-	UI_Canvas::Update();
+	if (charaIndex >= 0) {
 
+		if (CameraManager::IsScreenDivision()) {
+			SetIsDraw(true);
+			Vector2 cameraDiv = CameraManager::GetDivedByCameraNum();
+			rectTransform->position = Vector2(cameraDiv.x * charaIndex + cameraDiv.x * 0.5f, WindowSetting::Inst().height_half);
+		}
+		else if (charaIndex == 0) {
+			SetIsDraw(true);
+			Vector2 drawPos = CameraManager::GetScreenDivisionPos_CameraIndex(charaIndex);
+			Vector2 drawSize = CameraManager::GetScreenDivisionSize();
+			rectTransform->position = (drawPos + drawSize) * 0.5f;
+		}
+		else {
+			SetIsDraw(false);
+		}
+	}
+	UI_Canvas::Update();
 }
 
 void UI_CrossHair::Draw()

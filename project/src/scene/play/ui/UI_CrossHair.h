@@ -4,7 +4,7 @@
 
 class UI_CrossHair : public UI_Canvas {
 public:
-	UI_CrossHair(const RectTransform& trs);
+	UI_CrossHair(const RectTransform& trs, int index);
 	~UI_CrossHair();
 
 	void Update() override;
@@ -29,6 +29,8 @@ public:
 private:
 	Gauge gauge;
 	Gauge::ScrollType scrollType;
+	int charaIndex;
+
 	float* value;
 	float valueMin;
 	float valueMax;

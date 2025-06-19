@@ -169,19 +169,18 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
 
-	float scrWidth = (WindowSetting::Inst().width / CameraManager::AllCameras().size()) * m_Index;
-	UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, WindowSetting::Inst().height_half), 0.0f, Vector2::Ones));
+	UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(), m_Index);
 	crossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
 	crossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
 	crossHair->SetHandle_CrossHairFrame			("data/texture/UI/CrossHair/CrossHairFrame.png");
 	crossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
 	crossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
 
-	UI_CrossHair* ballChargeMeter = new UI_CrossHair(RectTransform(Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, WindowSetting::Inst().height_half), 0.0f, Vector2::Ones));
+	UI_CrossHair* ballChargeMeter = new UI_CrossHair(RectTransform(), m_Index);
 	ballChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
 	ballChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
 
-	UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2(scrWidth + WindowSetting::Inst().width * 0.25f, 0.0f), 0.0f, Vector2::Ones));
+	UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(), m_Index);
 	hitPointIcon->SetValue(&m_HitPoint, 0, m_pHP->GetMax(), m_pHP->GetMax());
 	hitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 

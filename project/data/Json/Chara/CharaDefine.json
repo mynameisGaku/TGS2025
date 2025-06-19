@@ -2,11 +2,15 @@
   "Param": {
     "Max": 6,
     "Tags": [
-        "Red",
-        "Blue"
+      "Red",
+      "Blue"
     ],
-    "CatchRadius": 100.0,
+    "CatchRadius": 250.0,
     "EmoteInterval": 2.0,
-    "JumpPower": 20.0
+    "JumpPower": 20.0,
+    "TackleRadius": 150.0,
+    "TackleInvincibleDurationSec": 1.5,
+    "TackleForce_Horizontal": 15.0,
+    "TackleForce_Vertical": 35.0
   }
 }

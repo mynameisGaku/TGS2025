@@ -74,6 +74,10 @@ public:
 	void PickUp();
 
 	void SetChargeRate(float rate) { m_ChargeRate = rate; }
+
+	void ChangeState(const State& state) { changeState(state); }
+
+	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -101,6 +105,7 @@ private:
 	Vector3				m_HomingTargetPos;
 	float				m_HomingPeriod;
 	bool				m_IsHoming;
+	bool				m_IsRefreshHomingTargetPos;
 
 	void collisionToGround();
 	void HomingDeactivate();

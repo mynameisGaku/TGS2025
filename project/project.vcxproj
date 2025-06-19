@@ -216,7 +216,12 @@
     <None Include="data\Json\Effect\Template.json" />
     <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Sound\SoundData.json" />
-    <None Include="data\Json\Stage\Stage.json" />
+    <None Include="data\Json\Stage\Stage_0.json" />
+    <None Include="data\Json\Stage\Stage_1.json" />
+    <None Include="data\Json\Stage\Stage_2.json" />
+    <None Include="data\Json\Stage\Stage_3.json" />
+    <None Include="data\Json\Stage\Stage_4.json" />
+    <None Include="data\Json\Stage\TestStage.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
     <None Include="data\Model\Stage\Cube.mv1" />
@@ -347,6 +352,7 @@
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
     <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp" />
+    <ClCompile Include="src\scene\play\tackler\Tackler.cpp" />
     <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
@@ -519,6 +525,7 @@
     <ClInclude Include="src\scene\play\playScene.h" />
     <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h" />
     <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h" />
+    <ClInclude Include="src\scene\play\tackler\Tackler.h" />
     <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
@@ -572,6 +579,7 @@
     <ClInclude Include="src\util\input\MouseController.h" />
     <ClInclude Include="src\util\input\PadController.h" />
     <ClInclude Include="src\util\locus\Locus.h" />
+    <ClInclude Include="src\util\logger\Logger.h" />
     <ClInclude Include="src\util\math\Asm.h" />
     <ClInclude Include="src\util\math\MathCommon.h" />
     <ClInclude Include="src\util\math\MathIncluder.h" />

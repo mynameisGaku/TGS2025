@@ -4,22 +4,21 @@
     {
       "Name": "SetAnimationSpeed",
       "Start": 0.0,
-      "End": 4.0,
       "Argument": {
-        "Speed": 0.75
+        "Speed": 0.6
       }
     },
     {
       "Name": "SetAnimationSpeed",
       "Start": 4.0,
       "Argument": {
-        "Speed": 1.0
+        "Speed": 1.2
       }
     },
     {
       "Name": "MoveToPosition",
-      "Start": 5.0,
-      "End": 7.0,
+      "Start": 1.8,
+      "End": 4.4,
       "Argument": {
         "Position": {
           "X": 0,
@@ -30,13 +29,25 @@
     },
     {
       "Name": "MoveToPosition",
-      "Start": 7.0,
+      "Start": 4.1,
+      "End": 7.5,
+      "Argument": {
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 450
+        }
+      }
+    },
+    {
+      "Name": "MoveToPosition",
+      "Start": 7.5,
       "End": 9.0,
       "Argument": {
         "Position": {
           "X": 0,
           "Y": 0,
-          "Z": 80
+          "Z": 100
         }
       }
     },
@@ -48,7 +59,7 @@
         "Position": {
           "X": 0,
           "Y": 0,
-          "Z": 100
+          "Z": 80
         }
       }
     },
@@ -60,7 +71,7 @@
         "Position": {
           "X": 0,
           "Y": 0,
-          "Z": -3
+          "Z": 40
         }
       }
     }

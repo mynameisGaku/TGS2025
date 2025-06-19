@@ -115,9 +115,6 @@
     <Filter Include="src%28application%29\scene\play\ball">
       <UniqueIdentifier>{5fc18a84-21ac-4f49-ae10-096d49843adc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\catcher">
-      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\scene\play\chara">
       <UniqueIdentifier>{ba273b49-bf53-422e-8406-b5fe6f399fa1}</UniqueIdentifier>
     </Filter>
@@ -358,6 +355,15 @@
     <Filter Include="src%28application%29\util\alarm">
       <UniqueIdentifier>{57939c35-e090-463e-92d9-09704641751d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\logger">
+      <UniqueIdentifier>{97598d31-b798-451e-83a6-4964e9ea8bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\tackler">
+      <UniqueIdentifier>{64039751-ec3c-4977-a96e-833ecbed0d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\catcher">
+      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -419,9 +425,6 @@
     </None>
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
       <Filter>data\Json\Crystal</Filter>
-    </None>
-    <None Include="data\Json\Stage\Stage.json">
-      <Filter>data\Json\Stage</Filter>
     </None>
     <None Include="data\Model\Ball\Ball.mv1">
       <Filter>data\Model\Ball</Filter>
@@ -623,6 +626,24 @@
     </None>
     <None Include="data\Json\Chara\State\Tackle.json">
       <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_0.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_1.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_2.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_3.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_4.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\TestStage.json">
+      <Filter>data\Json\Stage</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1237,6 +1258,9 @@
     </ClCompile>
     <ClCompile Include="src\util\alarm\Alarm.cpp">
       <Filter>src%28application%29\util\alarm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\tackler\Tackler.cpp">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1959,6 +1983,12 @@
     </ClInclude>
     <ClInclude Include="src\util\alarm\Alarm.h">
       <Filter>src%28application%29\util\alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\logger\Logger.h">
+      <Filter>src%28application%29\util\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\tackler\Tackler.h">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -100,6 +100,8 @@ void Ball::Init(std::string charaTag)
 	m_IsPickedUp = false;
 	m_Speed = 0.0f;
 	m_Progress = 0.0f;
+	m_HormingCurveAngle = 0.0f;
+	m_HormingCurveScale = 0.0f;
 
 	ColDefine::Tag tag;
 	std::list<ColDefine::Tag> targets;
@@ -249,6 +251,8 @@ void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBas
 	m_HomingOrigin		= transform->position;
 	m_Progress = 0.0f;
 	m_Speed = m_Physics->velocity.GetLength();
+	m_HormingCurveAngle = 0.0f;
+	m_HormingCurveScale = 1.0f;
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -378,14 +382,10 @@ void Ball::HomingProcess()
 	// ---- ホーミング補間 ----
 	const Vector3 homingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
 
-	// ①ホーミング進行度を求める
-	//  a.原点から敵へのベクトル
-	//  b.ベクトルから
-
 	const Vector3 diff = homingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
-	const Vector3 dirRot = Vector3Util::DirToEuler(dir);
-	const MATRIX dirRotMat = (dirRot * Vector3(-1, 1, 0)).ToRotationMatrix();
+	const Vector3 dirRot = Vector3Util::DirToEuler(dir) + Vector3(0.0f, 0.0f, m_HormingCurveAngle);
+	const MATRIX dirRotMat = (dirRot * Vector3(-1, 1, 1)).ToRotationMatrix();
 
 	const Vector3 middle = (homingTargetPos + m_HomingOrigin) / 2.0f;
 	const Vector3 middleToCurrent = transform->position - middle;
@@ -405,56 +405,14 @@ void Ball::HomingProcess()
 
 	m_Progress += delta;
 
-	const Vector3 circlePos = Vector3(sinf(m_Progress * DX_PI_F), 0.0f, -cosf(m_Progress * DX_PI_F)) *
+	const float circleY = sinf(m_Progress * DX_PI_F) * m_HormingCurveScale;
+	const float circleZ = -1 + m_Progress * 2.0f;
+	const Vector3 circlePos = Vector3(0.0f, circleY, circleZ) *
 		distance * 0.5f *
 		dirRotMat;
 
 	m_Physics->velocity = (circlePos + middle) - transform->position;
 	transform->position += m_Physics->velocity;
-
-	/*
-	// ①
-	const Vector3 currentDiff = homingTargetPos - transform->position;
-	const Vector3 originDiff = homingTargetPos - m_HomingOrigin;
-	const Vector3 distanceDiff = transform->position - m_HomingOrigin;
-
-	const float currentDiffLength = currentDiff.GetLength();
-	const float originDiffLength = originDiff.GetLength();
-
-	const Vector3 currentDir = Vector3::Normalize(currentDiff);
-	const Vector3 originDir = Vector3::Normalize(originDiff);
-
-	const float distance = Vector3::Dot(distanceDiff, originDir);	// 現在進んだ距離
-
-	// ②
-	const float nextDistance = distance + 100;
-	const float nextProgress = nextDistance / originDiffLength;
-
-	// ③
-	const Vector3 dirRot = Vector3Util::DirToEuler(currentDir);
-	MATRIX dirRotMat = dirRot.ToRotationMatrix();
-
-	//const Vector3 circlePos = Vector3(sinf(nextProgress * DX_PI_F), 0.0f, (cosf(nextProgress * DX_PI_F) + 1) * 0.5f) *
-	//	originDiffLength *
-	//	dirRotMat;
-
-	const Vector3 circlePos = Vector3(0.0f, 0.0f, nextProgress) *
-		originDiffLength *
-		dirRotMat;
-
-	//m_Physics->velocity = (circlePos + m_HomingOrigin) - transform->position;
-	//transform->position = transform->position + m_Physics->velocity * GTime.deltaTime;
-
-	transform->position = (circlePos + m_HomingOrigin);
-
-	//Vector3 acceleration = m_HomingTargetPos - transform->position;
-	//Vector3 diff = m_HomingTargetPos - transform->position;
-
-	//acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
-
-	//m_Physics->velocity += acceleration * GTime.deltaTime;
-	//transform->position = transform->position + m_Physics->velocity * GTime.deltaTime;
-	*/
 }
 
 bool Ball::collisionToStage()

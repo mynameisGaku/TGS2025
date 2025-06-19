@@ -100,6 +100,8 @@ private:
 	bool				m_IsHoming;	// ホーミング中か
 	float				m_Progress;
 	float				m_Speed;
+	float				m_HormingCurveAngle;	// カーブ方向を決める角度
+	float				m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
 
 	void collisionToGround();
 	// 地形との押し出し処理、当たったらtrue

@@ -228,6 +228,8 @@
     <None Include="data\Model\Stage\Cube_col.mv1" />
     <None Include="data\Model\Stage\Ground_000.mv1" />
     <None Include="data\Model\Stage\Sky_000.mv1" />
+    <None Include="imgui.ini" />
+    <None Include="window.ini" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json" />

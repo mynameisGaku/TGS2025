@@ -56,20 +56,16 @@ void Camera::ChaseState(FSMSignal sig)
 
 		// キャラクターの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr) {
-			ChangeState(&Camera::DebugState);
+		if (charaM == nullptr)
 			return;
-		}
 
 		// 追従するキャラクター
 		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
 		// 注視するキャラ
 		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
 
-		if (m_FollowerChara == nullptr) {
-			ChangeState(&Camera::DebugState);
+		if (m_FollowerChara == nullptr)
 			return;
-		}
 
 		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
 

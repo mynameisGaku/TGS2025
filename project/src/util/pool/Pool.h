@@ -5,8 +5,8 @@
 //------------------------------------------------------------
 #include <vector>
 #include <functional>
-#include <stdexcept>
 #include <vendor/ImGui/imgui.h>
+#include "src/util/exception/Exception.h"
 
 /// <summary>
 /// オブジェクトプーリング用クラス
@@ -64,13 +64,18 @@ public:
         int index = GetIndex();
         if (index == -1)
         {
-            throw std::runtime_error("無効なインデックスを参照しています。");
+            Exception::Throw("無効なインデックスを参照しています。");
         }
 
         auto ret = m_Items[index]->m_pObject;
         return ret;
     }
 
+    /// <summary>
+    /// オブジェクトを確保(Allocate)する
+    /// </summary>
+    /// <param name="func">オブジェクトの初期化に使用する関数へのポインタ</param>
+    /// <returns>生成したオブジェクトへのポインタ</returns>
     T* Alloc(POOL_INIT_FUNC func = nullptr)
     {
         T* obj = GetDeactiveObject();
@@ -96,7 +101,7 @@ public:
     /// <summary>
     /// オブジェクトを非アクティブ状態にする
     /// </summary>
-    /// <param name="object">対象のポインタ</param>
+    /// <param name="object">対象へのポインタ</param>
     void DeActive(T* object)
     {
         for (auto& obj : m_Items)
@@ -192,26 +197,46 @@ public:
         m_ActiveObjectCount = 0;
     }
 
+    /// <summary>
+    /// すべてのアイテムを取得する
+    /// </summary>
     std::vector<Item*> GetAllItems() const
     {
         return m_Items;
     }
 
+    /// <summary>
+    /// 指定インデックスのアイテムを取得する
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     Item* GetItem(uint32_t index) const
     {
         return m_Items[index];
     }
 
+    /// <summary>
+    /// 指定インデックスのアイテムが持つオブジェクトにポインタをセットする
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="pObj"></param>
     void SetObjectPointer(uint32_t index, T* pObj)
     {
         m_Items[index]->m_pObject = pObj;
     }
 
+    /// <summary>
+    /// プールデバッガー 描画開始
+    /// 名前設定可能 IMGUI使用
+    /// </summary>
     void PoolImGuiRendererBegin(const std::string& name = "PoolDebugger")
     {
         ImGui::Begin(name.c_str());
     }
 
+    /// <summary>
+    /// プールデバッガー 描画終了
+    /// </summary>
     void PoolImguiRendererEnd()
     {
         ImGui::End();
@@ -242,11 +267,18 @@ public:
         return -1;
     }
 
+    /// <summary>
+    /// 現在有効なアイテムの総数を取得する
+    /// </summary>
     int GetActiveItemNum()
     {
         return m_ActiveObjectCount;
     }
 
+    /// <summary>
+    /// 指定インデックスが既に登録されているかどうかをクエリする
+    /// 登録されていればtrue
+    /// </summary>
     bool QueryWasRegister(int index)
     {
         if (index > m_Items.size() - 1)
@@ -258,6 +290,9 @@ public:
         return false;
     }
 
+    /// <summary>
+    /// 指定インデックスのオブジェクトへのポインタを取得する(アイテムではない)
+    /// </summary>
     T* Get(int index)
     {
         return m_Items[index]->m_pObject;

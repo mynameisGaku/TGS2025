@@ -1,4 +1,6 @@
 #include "src/util/file/json/settings_json.h"
+#include "src/util/logger/Logger.h"
+#include "src/util/exception/Exception.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -64,7 +66,7 @@ void Settings_json::LoadSettingJson(const std::string& filepath, const std::stri
     std::ifstream ifs(filepath);
     if (!ifs.is_open())
     {
-        std::cerr << "[Error] ファイルを開けませんでした: " << filepath << std::endl;
+        Logger::FormatErrorLog("ファイルを開けませんでした: %s", filepath.c_str());
         return;
     }
 
@@ -75,7 +77,7 @@ void Settings_json::LoadSettingJson(const std::string& filepath, const std::stri
     }
     catch (const std::exception& e)
     {
-        std::cerr << "[Error] JSONパースに失敗しました: " << e.what() << std::endl;
+        Logger::FormatErrorLog("JSONパースに失敗しました: %s", e.what());
         return;
     }
 
@@ -117,7 +119,7 @@ const nlohmann::json& Settings_json::GetJson(const std::string& fileKey) const
     auto it = m_JsonFiles.find(key);
     if (it == m_JsonFiles.end())
     {
-        throw std::runtime_error("[Error] 指定されたファイルキーが見つかりません: " + key);
+        Exception::Throw("指定されたファイルキーが見つかりません: " + key);
     }
 
     return it->second.jsonContent;
@@ -130,7 +132,7 @@ nlohmann::json& Settings_json::GetJson(const std::string& fileKey)
     auto it = m_JsonFiles.find(key);
     if (it == m_JsonFiles.end())
     {
-        throw std::runtime_error("[Error] 指定されたファイルキーが見つかりません: " + key);
+        Exception::Throw("指定されたファイルキーが見つかりません: " + key);
     }
 
     return it->second.jsonContent;
@@ -188,7 +190,7 @@ void Settings_json::Save(const std::string& fileKey, const std::string& customFi
     auto it = m_JsonFiles.find(fileKey);
     if (it == m_JsonFiles.end())
     {
-        std::cerr << "[Error] 保存対象のファイルが見つかりません: " << fileKey << std::endl;
+        Logger::FormatErrorLog("保存対象のファイルが見つかりません: %s", fileKey.c_str());
         return;
     }
 
@@ -210,7 +212,7 @@ void Settings_json::Save(const std::string& fileKey, const std::string& customFi
     std::ofstream ofs(savePath);
     if (!ofs)
     {
-        std::cerr << "[Error] ファイル保存に失敗しました: " << savePath << std::endl;
+        Logger::FormatErrorLog("ファイル保存に失敗しました: %s", savePath.c_str());
         return;
     }
 
@@ -222,7 +224,7 @@ void Settings_json::SaveActiveFile()
 {
     if (m_ActiveFileKey.empty())
     {
-        std::cerr << "[Error] アクティブファイルが選択されていません。" << std::endl;
+        Logger::FormatErrorLog("アクティブファイルが選択されていません。");
         return;
     }
 
@@ -261,7 +263,7 @@ void Settings_json::CheckFileChanges()
         auto currentTime = std::filesystem::last_write_time(fileData.filePath);
         if (m_FileModificationTimes[key] != currentTime)
         {
-            std::cout << "[Info] ファイル変更検知: " << fileData.filePath << " - 再読み込み中..." << std::endl;
+            Logger::FormatDebugLog("ファイル変更検知: %s - 再読み込み中...", fileData.filePath.c_str());
             LoadSettingJson(fileData.filePath.string(), key, false);
         }
     }

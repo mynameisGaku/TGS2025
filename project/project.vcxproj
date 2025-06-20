@@ -228,6 +228,9 @@
     <None Include="data\Model\Stage\Cube_col.mv1" />
     <None Include="data\Model\Stage\Ground_000.mv1" />
     <None Include="data\Model\Stage\Sky_000.mv1" />
+    <None Include="vendor\ImGui\imgui_bezier_math.inl" />
+    <None Include="vendor\ImGui\imgui_extra_math.inl" />
+    <None Include="vendor\ImGui\imgui_node_editor_internal.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json" />
@@ -313,6 +316,7 @@
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
+    <ClCompile Include="src\common\node_editor\NodeEditor.cpp" />
     <ClCompile Include="src\common\setting\sensi\SensiSetting.cpp" />
     <ClCompile Include="src\common\setting\SettingBase.cpp" />
     <ClCompile Include="src\common\setting\SettingManager.cpp" />
@@ -422,12 +426,16 @@
     <ClCompile Include="src\util\ui\UI_Slider.cpp" />
     <ClCompile Include="src\util\ui\UI_Subtone.cpp" />
     <ClCompile Include="src\util\ui\UI_Text.cpp" />
+    <ClCompile Include="vendor\ImGui\crude_json.cpp" />
     <ClCompile Include="vendor\ImGui\imgui.cpp" />
+    <ClCompile Include="vendor\ImGui\imgui_canvas.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_draw.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_impl_dx11.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_ja_gryph_ranges.cpp" />
+    <ClCompile Include="vendor\ImGui\imgui_node_editor.cpp" />
+    <ClCompile Include="vendor\ImGui\imgui_node_editor_api.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_tables.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
   </ItemGroup>
@@ -473,6 +481,7 @@
     <ClInclude Include="src\common\light\LightDefine.h" />
     <ClInclude Include="src\common\light\LightManager.h" />
     <ClInclude Include="src\common\load_screen\LoadScreen.h" />
+    <ClInclude Include="src\common\node_editor\NodeEditor.h" />
     <ClInclude Include="src\common\setting\sensi\SensiSetting.h" />
     <ClInclude Include="src\common\setting\SettingBase.h" />
     <ClInclude Include="src\common\setting\SettingManager.h" />
@@ -607,13 +616,19 @@
     <ClInclude Include="src\util\ui\UI_Slider.h" />
     <ClInclude Include="src\util\ui\UI_Subtone.h" />
     <ClInclude Include="src\util\ui\UI_Text.h" />
+    <ClInclude Include="vendor\ImGui\crude_json.h" />
     <ClInclude Include="vendor\ImGui\imconfig.h" />
     <ClInclude Include="vendor\ImGui\imgui.h" />
+    <ClInclude Include="vendor\ImGui\imgui_bezier_math.h" />
+    <ClInclude Include="vendor\ImGui\imgui_canvas.h" />
+    <ClInclude Include="vendor\ImGui\imgui_extra_math.h" />
     <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h" />
     <ClInclude Include="vendor\ImGui\imgui_impl_dx9.h" />
     <ClInclude Include="vendor\ImGui\imgui_impl_dxlib.hpp" />
     <ClInclude Include="vendor\ImGui\imgui_impl_win32.h" />
     <ClInclude Include="vendor\ImGui\imgui_internal.h" />
+    <ClInclude Include="vendor\ImGui\imgui_node_editor.h" />
+    <ClInclude Include="vendor\ImGui\imgui_node_editor_internal.h" />
     <ClInclude Include="vendor\ImGui\imstb_rectpack.h" />
     <ClInclude Include="vendor\ImGui\imstb_textedit.h" />
     <ClInclude Include="vendor\ImGui\imstb_truetype.h" />

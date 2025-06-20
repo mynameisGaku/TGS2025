@@ -364,6 +364,9 @@
     <Filter Include="src%28application%29\scene\play\catcher">
       <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\common\node_editor">
+      <UniqueIdentifier>{2cf8626d-8986-466f-b343-8f05ea847c7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -635,6 +638,15 @@
     </None>
     <None Include="data\Json\Stage\TestStage.json">
       <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="vendor\ImGui\imgui_node_editor_internal.inl">
+      <Filter>vendor\imgui</Filter>
+    </None>
+    <None Include="vendor\ImGui\imgui_bezier_math.inl">
+      <Filter>vendor\imgui</Filter>
+    </None>
+    <None Include="vendor\ImGui\imgui_extra_math.inl">
+      <Filter>vendor\imgui</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1225,6 +1237,21 @@
     </ClCompile>
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_node_editor.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_node_editor_api.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\crude_json.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_canvas.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\node_editor\NodeEditor.cpp">
+      <Filter>src%28application%29\common\node_editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1920,6 +1947,27 @@
     </ClInclude>
     <ClInclude Include="vendor\ImGui\imstb_truetype.h">
       <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_node_editor.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_node_editor_internal.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\crude_json.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_bezier_math.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_canvas.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_extra_math.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\node_editor\NodeEditor.h">
+      <Filter>src%28application%29\common\node_editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

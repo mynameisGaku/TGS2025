@@ -44,9 +44,9 @@ void Camera::ChaseState(FSMSignal sig)
 			return;
 
 		// 追従するキャラクター
-		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
 		// 注視するキャラ
-		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
@@ -60,14 +60,14 @@ void Camera::ChaseState(FSMSignal sig)
 			return;
 
 		// 追従するキャラクター
-		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
 		// 注視するキャラ
-		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);
 
-		if (m_FollowerChara == nullptr)
+		if (m_pFollowerChara == nullptr)
 			return;
 
-		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
+		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 
 		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
 		const Vector3 TARGET = CAMERADEFINE_REF.m_TargetChase * FOLLOWER_TRS.Matrix();
@@ -86,13 +86,13 @@ void Camera::ChaseState(FSMSignal sig)
 			transform->position = POSITION;
 		}
 
-		OperationByStick(m_CharaIndex + 1);
+		operationByStick(m_CharaIndex + 1, ViewPointShift::All);
 		
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_TargetChara != nullptr && InputManager::Hold("TargetCamera", m_FollowerChara->GetIndex() + 1))
+		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
 		{
 			// 視点移動検知
 			if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
@@ -100,7 +100,7 @@ void Camera::ChaseState(FSMSignal sig)
 				m_TargetTransitionTime = 0.5f;
 
 			// コーン形状の判定内に注視するキャラが居る場合
-			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(cameraCone, m_TargetChara->transform->position).IsCollision())
+			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pTargetChara->transform->position).IsCollision())
 				ChangeState(&Camera::AimState);
 		}
 	}

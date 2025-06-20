@@ -46,7 +46,7 @@ CharaManager::~CharaManager()
 
 		if (item->m_pObject != nullptr)
 		{
-			item->m_pObject->DestroyMe();
+			delete item->m_pObject;
 			item->m_pObject = nullptr;
 		}
 

@@ -83,6 +83,10 @@ CharaBase::CharaBase()
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
 
+	m_UI_CrossHair = nullptr;
+	m_UI_BallChargeMeter = nullptr;
+	m_UI_HitPointIcon = nullptr;
+
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
 
@@ -134,6 +138,10 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_SubFSM);
 	PtrUtil::SafeDelete(m_Timeline);
 
+	PtrUtil::SafeDelete(m_UI_CrossHair);
+	PtrUtil::SafeDelete(m_UI_BallChargeMeter);
+	PtrUtil::SafeDelete(m_UI_HitPointIcon);
+
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
@@ -169,20 +177,20 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
 
-	UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(), m_Index);
-	crossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
-	crossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
-	crossHair->SetHandle_CrossHairFrame			("data/texture/UI/CrossHair/CrossHairFrame.png");
-	crossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
-	crossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+	m_UI_CrossHair = new UI_CrossHair(RectTransform(), m_Index);
+	m_UI_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
+	m_UI_CrossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
+	m_UI_CrossHair->SetHandle_CrossHairFrame			("data/texture/UI/CrossHair/CrossHairFrame.png");
+	m_UI_CrossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
+	m_UI_CrossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
 
-	UI_CrossHair* ballChargeMeter = new UI_CrossHair(RectTransform(), m_Index);
-	ballChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
-	ballChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
+	m_UI_BallChargeMeter = new UI_CrossHair(RectTransform(), m_Index);
+	m_UI_BallChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
+	m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
 
-	UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(), m_Index);
-	hitPointIcon->SetValue(&m_HitPoint, 0, m_pHP->GetMax(), m_pHP->GetMax());
-	hitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(), m_Index);
+	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0, m_pHP->GetMax(), m_pHP->GetMax());
+	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {

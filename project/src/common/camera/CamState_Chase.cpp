@@ -54,8 +54,22 @@ void Camera::ChaseState(FSMSignal sig)
 		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		if (m_FollowerChara == nullptr)
+		// キャラクターの管理者
+		CharaManager* charaM = FindGameObject<CharaManager>();
+		if (charaM == nullptr) {
+			ChangeState(&Camera::DebugState);
 			return;
+		}
+
+		// 追従するキャラクター
+		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
+		// 注視するキャラ
+		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
+
+		if (m_FollowerChara == nullptr) {
+			ChangeState(&Camera::DebugState);
+			return;
+		}
 
 		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
 

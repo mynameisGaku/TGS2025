@@ -171,7 +171,7 @@ void UI_Canvas::SubtoneAdaptation(const UI_Subtone& sub) {
 	subtone->SetPoint(globalTrs.position + devi, globalTrs.position + devi + ImageSize());
 }
 
-void UI_Canvas::SetPriority(const int& value) {
+void UI_Canvas::SetPriority(int value) {
 
 	priority = value;
 	UI_Manager::Sort();

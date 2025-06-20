@@ -10,17 +10,17 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void SetValue(int* value, int valueMin, int valueMax, int dispNum);
+	void SetValue(float* value, float valueMin, float valueMax, float dispNum);
 
 	void SetDiffSize(const Vector2& diffSize);
 
 private:
 	int charaIndex;
 
-	int* m_Value;
-	int m_ValueMin;
-	int m_ValueMax;
-	int m_DispNum;
+	float* m_Value;
+	float m_ValueMin;
+	float m_ValueMax;
+	float m_DispNum;
 
 	Vector2 m_DiffSize;
 };

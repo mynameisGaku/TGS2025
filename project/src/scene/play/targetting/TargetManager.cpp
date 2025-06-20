@@ -36,7 +36,7 @@ void TargetManager::Start() {
 void TargetManager::Update() {
 
 	// ƒJƒƒ‰‚Ì‘”
-	const int cameraNum = CameraManager::AllCameras().size();
+	const int cameraNum = (int)CameraManager::AllCameras().size();
 
 	for (int i = 0; i < cameraNum; i++) {
 		Camera* camera = CameraManager::GetCamera(i);
@@ -182,7 +182,7 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 	Vector2 markerFromCenter = markerPos - screenCenter;
 	float arrowAngle = atan2f(markerFromCenter.y, markerFromCenter.x) + DX_PI_F / 2.0f;
 
-	SetDrawBright(180 + 75 * distNormalize, 0, 0);
+	SetDrawBright(180 + (int)(75.0f * distNormalize), 0, 0);
 
 	DrawRectRotaGraphF(markerPos.x, markerPos.y, 0, 0, 32, 32, 2.0f, arrowAngle, hArrow, true, false);
 

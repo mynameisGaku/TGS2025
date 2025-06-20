@@ -10,7 +10,7 @@ UI_HitPoint_Icon::UI_HitPoint_Icon(const RectTransform& trs, int index)
 {
 	charaIndex = index;
 	SetTransform(trs);
-	SetValue(nullptr, 0, 0, 0);
+	SetValue(nullptr, 0.0f, 0.0f, 0.0f);
 }
 
 UI_HitPoint_Icon::~UI_HitPoint_Icon()
@@ -59,13 +59,13 @@ void UI_HitPoint_Icon::Draw()
 	else
 	{
 		UI_Canvas::Draw();
-		DrawFormatStringF(globalTrs.position.x + ImageSize().x + 5.0f, globalTrs.position.y - ImageSize().y * 0.5f, 0xFFFFFF, "x %d", *m_Value);
+		DrawFormatStringF(globalTrs.position.x + ImageSize().x + 5.0f, globalTrs.position.y - ImageSize().y * 0.5f, 0xFFFFFF, "x %0f", *m_Value);
 	}
 
 	rectTransform->position = saveTrs.position;
 }
 
-void UI_HitPoint_Icon::SetValue(int* value, int valueMin, int valueMax, int dispNum)
+void UI_HitPoint_Icon::SetValue(float* value, float valueMin, float valueMax, float dispNum)
 {
 	m_Value = value;
 	m_ValueMin = valueMin;

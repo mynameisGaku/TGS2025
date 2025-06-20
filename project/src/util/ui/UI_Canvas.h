@@ -77,12 +77,12 @@ public:
 	/// <summary>
 	/// 不透明度を設定する
 	/// </summary>
-	inline void SetAlpha(const int& _alpha) { alpha = _alpha; }
+	inline void SetAlpha(int _alpha) { alpha = _alpha; }
 
 	/// <summary>
 	/// 描画優先度を設定する
 	/// </summary>
-	void SetPriority(const int& value);
+	void SetPriority(int value);
 
 	/// <summary>
 	/// サブトーンを設定する
@@ -92,27 +92,27 @@ public:
 	/// <summary>
 	/// 更新処理を行うかを設定する
 	/// </summary>
-	inline void SetIsUpdate(const bool& value) { isUpdate = value; }
+	inline void SetIsUpdate(bool value) { isUpdate = value; }
 
 	/// <summary>
 	/// 描画処理を行うかを設定する
 	/// </summary>
-	inline void SetIsDraw(const bool& value) { isDraw = value; }
+	inline void SetIsDraw(bool value) { isDraw = value; }
 
 	/// <summary>
 	/// 点滅処理を行うかを設定する
 	/// </summary>
-	inline void SetNeedBlink(const bool& value) { needBlink = value; }
+	inline void SetNeedBlink(bool value) { needBlink = value; }
 
 	/// <summary>
 	/// 残像処理を行うかを設定する
 	/// </summary>
-	inline void SetAfterImage(const bool& value) { needAfterImage = value; }
+	inline void SetAfterImage(bool value) { needAfterImage = value; }
 
 	/// <summary>
 	/// 点滅する時間を設定する(引数の秒数で点滅の一連の流れを行う)
 	/// </summary>
-	inline void SetBlinkTime(const float& sec) { blinkSpeed = sec; }
+	inline void SetBlinkTime(float sec) { blinkSpeed = sec; }
 
 	/// <summary>
 	/// イージング挙動を設定する
@@ -122,8 +122,8 @@ public:
 	/// <param name="end">終点</param>
 	/// <param name="totalTime">効果時間</param>
 	/// <param name="type">イージングの種類</param>
-	template<typename Ty = float>
-	void SetEasing(const EasingMovement& move, const Ty& begin, const Ty& end, const float& totalTime, const EasingType& type = EasingType::Linear);
+	template<typename Ty>
+	void SetEasing(EasingMovement move, const Ty& begin, const Ty& end, float totalTime, EasingType type = EasingType::Linear);
 
 	/// <summary>
 	/// イージング挙動を設定する
@@ -133,8 +133,8 @@ public:
 	/// <param name="end">終点</param>
 	/// <param name="totalTime">効果時間</param>
 	/// <param name="type">イージングの種類</param>
-	template<typename Ty = float>
-	void SetAfterImageEasing(const EasingMovement& move, const Ty& begin, const Ty& end, const float& totalTime, const EasingType& type = EasingType::Linear);
+	template<typename Ty>
+	void SetAfterImageEasing(EasingMovement move, const Ty& begin, const Ty& end, float totalTime, EasingType type = EasingType::Linear);
 
 	//================================================================================
 	// ▼ゲッター
@@ -242,7 +242,7 @@ protected:
 /// <param name="totalTime">効果時間</param>
 /// <param name="type">イージングの種類</param>
 template<typename Ty>
-inline void UI_Canvas::SetEasing(const EasingMovement& move, const Ty& begin, const Ty& end, const float& totalTime, const EasingType& type) {
+inline void UI_Canvas::SetEasing(EasingMovement move, const Ty& begin, const Ty& end, float totalTime, EasingType type) {
 
 	switch (move) {
 	case EasingMovement::eMove:
@@ -253,8 +253,8 @@ inline void UI_Canvas::SetEasing(const EasingMovement& move, const Ty& begin, co
 		break;
 
 	case EasingMovement::eRot:
-		easingRot.begin = static_cast<float>(begin);
-		easingRot.end = static_cast<float>(end);
+		easingRot.begin = begin;
+		easingRot.end = end;
 		easingRot.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingRot.info, &rectTransform->rotation, easingRot.end, easingRot.begin);
 		break;
@@ -267,8 +267,8 @@ inline void UI_Canvas::SetEasing(const EasingMovement& move, const Ty& begin, co
 		break;
 
 	case EasingMovement::eAlpha:
-		easingAlpha.begin = static_cast<int>(begin);
-		easingAlpha.end = static_cast<int>(end);
+		easingAlpha.begin = begin;
+		easingAlpha.end = end;
 		easingAlpha.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingAlpha.info, &alpha, easingAlpha.end, easingAlpha.begin);
 		break;
@@ -284,7 +284,7 @@ inline void UI_Canvas::SetEasing(const EasingMovement& move, const Ty& begin, co
 /// <param name="totalTime">効果時間</param>
 /// <param name="type">イージングの種類</param>
 template<typename Ty>
-inline void UI_Canvas::SetAfterImageEasing(const EasingMovement& move, const Ty& begin, const Ty& end, const float& totalTime, const EasingType& type) {
+inline void UI_Canvas::SetAfterImageEasing(EasingMovement move, const Ty& begin, const Ty& end, float totalTime, EasingType type) {
 
 	switch (move) {
 	case EasingMovement::eMove:
@@ -295,8 +295,8 @@ inline void UI_Canvas::SetAfterImageEasing(const EasingMovement& move, const Ty&
 		break;
 
 	case EasingMovement::eRot:
-		easingRotAftImg.begin = static_cast<float>(begin);
-		easingRotAftImg.end = static_cast<float>(end);
+		easingRotAftImg.begin = begin;
+		easingRotAftImg.end = end;
 		easingRotAftImg.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingRotAftImg.info, &easingRotAftImg.current, easingRotAftImg.end, easingRotAftImg.begin);
 		break;
@@ -309,8 +309,8 @@ inline void UI_Canvas::SetAfterImageEasing(const EasingMovement& move, const Ty&
 		break;
 
 	case EasingMovement::eAlpha:
-		easingAlphaAftImg.begin = static_cast<int>(begin);
-		easingAlphaAftImg.end = static_cast<int>(end);
+		easingAlphaAftImg.begin = begin;
+		easingAlphaAftImg.end = end;
 		easingAlphaAftImg.info = EasingInfo(0.0f, totalTime, true, GameTime::AdditionMethod::Rate, type);
 		EasingFunc::Process(&easingAlphaAftImg.info, &easingAlphaAftImg.current, easingAlphaAftImg.end, easingAlphaAftImg.begin);
 		break;

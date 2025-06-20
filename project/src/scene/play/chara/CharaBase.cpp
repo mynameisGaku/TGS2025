@@ -189,7 +189,7 @@ void CharaBase::Init(std::string tag)
 	m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
 
 	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(), m_Index);
-	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0, m_pHP->GetMax(), m_pHP->GetMax());
+	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
 	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;

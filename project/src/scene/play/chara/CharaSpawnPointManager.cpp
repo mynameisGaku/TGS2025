@@ -87,7 +87,7 @@ CharaSpawnPoint* CharaSpawnPointManager::Get_Far(const Vector3& pos)
 
 CharaSpawnPoint* CharaSpawnPointManager::Get_Random()
 {
-    int r = Random.GetIntRange(0, m_SpawnPoints.size() - 1);
+    int r = Random.GetIntRange(0, (int)m_SpawnPoints.size() - 1);
     int c = 0;
     for (auto& csp : m_SpawnPoints)
     {

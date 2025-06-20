@@ -7,38 +7,6 @@
 namespace CameraDefine {
 
 	/// <summary>
-	/// カメラの各種ステート
-	/// </summary>
-	enum State {
-		sNone = -1,
-		sTitle,			// タイトル
-		sPlay,			// プレイ
-		sResult,		// リザルト
-		sChase,
-		sTarget,		// 注視
-		sPerformance,	// 演出
-		sTeam,			// チームプレイ
-		sDebug,			// デバッグ
-		sMax
-	};
-
-	static const float SHAKE_MIN = 4.0f;	// カメラ振動の最小値
-	static const float SHAKE_MAX = 10.0f;	// カメラ振動の最小値
-
-	/// <summary>
-	/// カメラ演出の種類
-	/// </summary>
-	enum class CameraWorkType {
-		None = -1,
-		Type,			// 種類
-		Opening,		// 開始時
-		PlayerLose,		// 敗北
-		PlayerWin,		// 勝利
-		PlayerAtkSp,	// プレイヤーの必殺技
-		Max
-	};
-
-	/// <summary>
 	/// カメラ演出情報の要素
 	/// </summary>
 	enum class CameraWorkElement {

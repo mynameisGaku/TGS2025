@@ -38,16 +38,14 @@ void Camera::AimState(FSMSignal sig)
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
 
-		// キャラクターの管理者
+		// キャラの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
 		if (charaM == nullptr)
 			return;
-
-		// 追従するキャラクター
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		// 注視するキャラ
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);
-		if (m_pTargetChara == nullptr) {
+		
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// 追従するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
@@ -65,6 +63,14 @@ void Camera::AimState(FSMSignal sig)
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
+
+		// キャラの管理者
+		CharaManager* charaM = FindGameObject<CharaManager>();
+		if (charaM == nullptr)
+			return;
+
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// 追従するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
 
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);

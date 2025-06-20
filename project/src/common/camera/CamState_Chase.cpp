@@ -37,16 +37,6 @@ void Camera::ChaseState(FSMSignal sig)
 		m_PositionPrev = transform->Global().position;
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
-
-		// キャラクターの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
-
-		// 追従するキャラクター
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		// 注視するキャラ
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
@@ -54,16 +44,13 @@ void Camera::ChaseState(FSMSignal sig)
 		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		// キャラクターの管理者
+		// キャラの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
 		if (charaM == nullptr)
 			return;
 
-		// 追従するキャラクター
+		// 追従するキャラ
 		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		// 注視するキャラ
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);
-
 		if (m_pFollowerChara == nullptr)
 			return;
 
@@ -86,13 +73,23 @@ void Camera::ChaseState(FSMSignal sig)
 			transform->position = POSITION;
 		}
 
+		// スティックによる操作
 		operationByStick(m_CharaIndex + 1, ViewPointShift::All);
+	
+		// マウスによる操作
+		if (m_CharaIndex == 0)
+			operationByMouse(ViewPointShift::All);
 		
+		// X軸回転に制限をかける
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		
+		// Y軸回転に制限をかける
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
+		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))
 		{
 			// 視点移動検知
 			if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||

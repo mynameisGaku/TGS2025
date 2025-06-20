@@ -2054,6 +2054,8 @@ void CharaBase::throwBallHoming()
 	{
 		Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
 		float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
+		float angleRound = roundf(angle / (DX_PI_F * 0.5f));
+		angle = angleRound * (DX_PI_F * 0.5f);
 
 		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
 	}

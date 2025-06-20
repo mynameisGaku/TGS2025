@@ -3,7 +3,7 @@
 
 Alarm::Alarm()
 {
-    m_Timer = 0.0f;
+    m_TimerSec = 0.0f;
     m_Finish = true;
 }
 
@@ -15,15 +15,15 @@ void Alarm::Update()
 {
     if (not m_Finish)
     {
-        m_Timer -= GTime.deltaTime;
-        if (m_Timer < 0.0f)
+        m_TimerSec -= GTime.deltaTime;
+        if (m_TimerSec < 0.0f)
         {
             m_Finish = true;
         }
     }
     else
     {
-        m_Timer = 0.0f;
+        m_TimerSec = 0.0f;
     }
 }
 
@@ -37,10 +37,10 @@ void Alarm::Set(float t)
     if (not m_Finish)
         return;
 
-    m_Timer = t;
+    m_TimerSec = t;
 }
 
 void Alarm::Reset()
 {
-    m_Timer = 0.0f;
+    m_TimerSec = 0.0f;
 }

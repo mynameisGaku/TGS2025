@@ -310,9 +310,6 @@
     <Filter Include="src%28application%29\util\ptr">
       <UniqueIdentifier>{5330e165-a6f0-4dba-8d46-b2755c3533eb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\Ini">
-      <UniqueIdentifier>{f4a1c136-f6dd-4eb0-9524-1bf26c00d24f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\scene\play\team">
       <UniqueIdentifier>{30b4e835-5a21-40b6-b28f-63ddb027a118}</UniqueIdentifier>
     </Filter>
@@ -363,6 +360,9 @@
     </Filter>
     <Filter Include="src%28application%29\scene\play\catcher">
       <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ini">
+      <UniqueIdentifier>{70787b9f-905b-4ebf-b40b-52bbdcba4047}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -635,6 +635,12 @@
     </None>
     <None Include="data\Json\Stage\TestStage.json">
       <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="imgui.ini">
+      <Filter>ini</Filter>
+    </None>
+    <None Include="window.ini">
+      <Filter>ini</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

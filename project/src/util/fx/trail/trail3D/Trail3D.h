@@ -1,6 +1,5 @@
 #pragma once
 #include <deque>
-#include "src/util/fx/trail/trail3D/TrailPoint3D.h"
 #include "src/util/math/Vector3.h"
 #include "src/util/easing/EasingUtils.h"
 #include <src/util/easing/easing.h>

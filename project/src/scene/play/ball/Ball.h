@@ -42,7 +42,7 @@ public:
 
 	void Throw(CharaBase* owner, float chargeRate);
 	void ThrowDirection(const Vector3& direction, CharaBase*owner, float chargeRate);
-	void ThrowHoming(const CharaBase* target, CharaBase* owner,  float chargeRate);
+	void ThrowHoming(const CharaBase* target, CharaBase* owner,  float chargeRate, float curveAngle, float curveScale);
 
 	State GetState() const { return m_State; }
 

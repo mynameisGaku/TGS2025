@@ -246,14 +246,14 @@ void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float char
 	m_Physics->velocity = direction * BALL_REF.SpeedDefault * (1.0f + chargeRate);
 }
 
-void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate)
+void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate, float curveAngle, float curveScale)
 {
 	m_IsHoming			= true;
 	m_DoRefreshHoming = true;
 	m_HomingOrigin		= transform->position;
     m_HomingTargetChara = target;
-	m_HormingCurveAngle = 0.0f;
-	m_HormingCurveScale = 1.0f;
+	m_HormingCurveAngle = curveAngle;
+	m_HormingCurveScale = curveScale;
 	m_HomingProgress = 0.0f;
 
 	const Vector3 direction = Vector3::Normalize(target->transform->position - transform->position);

@@ -714,6 +714,9 @@ void CharaBase::Tackle()
 		return;
 
 	m_IsTackling = true;
+	const Vector3 dir = Vector3::Normalize(m_pPhysics->FlatVelocity());
+	float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
+	transform->rotation.y = terminusRot;
 }
 
 void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback)
@@ -2041,11 +2044,19 @@ void CharaBase::throwBallHoming()
 
 	const CharaBase* targetChara = nullptr;
 	Camera* camera = CameraManager::GetCamera(m_Index);
+	assert(camera != nullptr);
 
-	if (camera != nullptr)
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+	targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
 
-	m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate);
+	if (m_IsLanding == true)
+		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+	else
+	{
+		Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
+		float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
+
+		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+	}
 
 	releaseBall();
 }

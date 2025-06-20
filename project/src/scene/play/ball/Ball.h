@@ -9,6 +9,7 @@ class CharaBase;
 class Collider;
 class BallManager;
 class Trail3D;
+class PerformanceProfiler;
 
 namespace
 {
@@ -80,6 +81,9 @@ public:
 	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
 private:
 	friend class BallManager;
+
+	PerformanceProfiler* m_pProfilerDraw;
+	PerformanceProfiler* m_pProfilerUpdate;
 	BallManager*		m_pManager;
 	Trail3D*			m_pTrail;
 

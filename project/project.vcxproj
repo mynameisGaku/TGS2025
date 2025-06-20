@@ -315,6 +315,8 @@
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
+    <ClCompile Include="src\common\performance_profiler\PerformanceProfiler.cpp" />
+    <ClCompile Include="src\common\performance_profiler\PerformanceProfilerManager Manager.cpp" />
     <ClCompile Include="src\common\setting\sensi\SensiSetting.cpp" />
     <ClCompile Include="src\common\setting\SettingBase.cpp" />
     <ClCompile Include="src\common\setting\SettingManager.cpp" />
@@ -376,6 +378,7 @@
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Space.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Text.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiRoot.cpp" />
+    <ClCompile Include="src\util\exception\Exception.cpp" />
     <ClCompile Include="src\util\fader\Fader.cpp" />
     <ClCompile Include="src\util\file\csv\csvReader.cpp" />
     <ClCompile Include="src\util\file\FileUtil.cpp" />
@@ -475,6 +478,8 @@
     <ClInclude Include="src\common\light\LightDefine.h" />
     <ClInclude Include="src\common\light\LightManager.h" />
     <ClInclude Include="src\common\load_screen\LoadScreen.h" />
+    <ClInclude Include="src\common\performance_profiler\PerformanceProfiler.h" />
+    <ClInclude Include="src\common\performance_profiler\PerformanceProfilerManager Manager.h" />
     <ClInclude Include="src\common\setting\sensi\SensiSetting.h" />
     <ClInclude Include="src\common\setting\SettingBase.h" />
     <ClInclude Include="src\common\setting\SettingManager.h" />
@@ -545,6 +550,7 @@
     <ClInclude Include="src\util\debug\imgui\imGuiRoot.h" />
     <ClInclude Include="src\util\easing\easing.h" />
     <ClInclude Include="src\util\easing\EasingUtils.h" />
+    <ClInclude Include="src\util\exception\Exception.h" />
     <ClInclude Include="src\util\fader\Fader.h" />
     <ClInclude Include="src\util\file\csv\csvReader.h" />
     <ClInclude Include="src\util\file\FileUtil.h" />
@@ -561,7 +567,6 @@
     <ClInclude Include="src\util\fx\effect\EffectManager.h" />
     <ClInclude Include="src\util\fx\post_effect\bloom\BloomManager.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h" />
-    <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h" />
     <ClInclude Include="src\util\gauge\gauge.h" />
     <ClInclude Include="src\util\input\InputManager.h" />
     <ClInclude Include="src\util\input\KeyController.h" />

@@ -43,17 +43,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
 #include <src/reference/game/GameRef.h>
 #include <src/util/time/GameTime.h>
+#include <src/common/performance_profiler/PerformanceProfilerManager Manager.h>
+#include <src/common/performance_profiler/PerformanceProfiler.h>
 
 #define CoGVersion (2.2)
-
-LARGE_INTEGER freq;
-LARGE_INTEGER start, end;
-int timeRecordCounter = 0;
-double tick = 0.0;
-bool isRefreshTick = false;
-
-void BeginRecordPerformance();
-void EndRecordPerformance();
 
 // ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çŽn‚Ü‚è‚Ü‚·
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -119,11 +112,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	AppInit();
 
+	PerformanceProfilerManager* ppM = PerformanceProfilerManager::GetInst();
+	PerformanceProfiler* gameLoopProfiler = new PerformanceProfiler("GameLoop");
+	PerformanceProfiler* gameLoopProfilerUpdate = new PerformanceProfiler("GameLoop Update");
+	PerformanceProfiler* gameLoopProfilerRendering = new PerformanceProfiler("GameLoop Rendering");
+
 	int mStartTime = GetNowCount();
 
 	while (true) {
 
-		BeginRecordPerformance();
+		gameLoopProfiler->BeginProfiling();
 
 		int cur = GetNowCount();
 		if (cur < mStartTime + 16) //120fps‘Îô
@@ -134,22 +132,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		ImGui_ImplDXlib_NewFrame();
 		ImGui::NewFrame();
 #endif // IMGUI
+		ppM->Render();
 
-		ImGui::Begin("TimeRecord");
-		ImGui::Text("time %lf[ms]", tick);
-		ImGui::End();
-
+		gameLoopProfilerUpdate->BeginProfiling();
 		AppUpdate();
+		gameLoopProfilerUpdate->EndProfiling();
 		ClearDrawScreen();
+		gameLoopProfilerRendering->BeginProfiling();
 		AppDraw();
+		gameLoopProfilerRendering->EndProfiling();
 		if (ProcessMessage() == -1 || IsExit())
 			break;
 		ScreenFlip();
-
-		EndRecordPerformance();
-
-		if (++timeRecordCounter % 60 == 0)
-			tick = static_cast<double>(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
 
 #ifdef IMGUI
 
@@ -164,8 +158,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 #endif // IMGUI
 
-	}
+		gameLoopProfiler->EndProfiling();
 
+		ppM->OnEndFrame();
+	}
+	
+	delete gameLoopProfiler;
+	delete gameLoopProfilerUpdate;
+	delete gameLoopProfilerRendering;
 	AppRelease();
 
 	/*
@@ -186,6 +186,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	GAME_REF.Destroy();
 	wSetting.Destroy();
 	GTime.Destroy();
+	ppM->Destroy();
 
 #ifdef IMGUI
 
@@ -217,16 +218,3 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 #endif // IMGUI
-
-void BeginRecordPerformance()
-{
-	isRefreshTick = false;
-	QueryPerformanceFrequency(&freq);
-	QueryPerformanceCounter(&start);
-}
-
-void EndRecordPerformance()
-{
-	QueryPerformanceCounter(&end);
-	isRefreshTick = true;
-}

@@ -16,6 +16,7 @@
 #include "src/util/fx/trail/trail3D/Trail3D.h"
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/Random.h"
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
 Ball::Ball()
 {
@@ -49,6 +50,8 @@ Ball::~Ball()
 	}
 
 	PtrUtil::SafeDelete(m_pTrail);
+	PtrUtil::SafeDelete(m_pProfilerUpdate);
+	PtrUtil::SafeDelete(m_pProfilerDraw);
 }
 
 void Ball::Reset(std::string charaTag)
@@ -114,10 +117,14 @@ void Ball::Init(std::string charaTag)
 	
 	m_CharaTag = charaTag;
 	EffectManager::Stop("Ball_Outline.efk", "Ball_Outline" + m_CharaTag);
+
+	m_pProfilerUpdate = new PerformanceProfiler("BallUpdate: " + std::to_string(m_Index));
+	m_pProfilerDraw = new PerformanceProfiler("BallDraw: " + std::to_string(m_Index));
 }
 
 void Ball::Update()
 {
+	m_pProfilerUpdate->BeginProfiling();
 	Object3D::Update();
 
 	if (not m_IsActive)
@@ -223,6 +230,7 @@ void Ball::Update()
 		}
 	}
 	m_pTrail->Update();
+	m_pProfilerUpdate->EndProfiling();
 }
 
 
@@ -231,9 +239,12 @@ void Ball::Draw()
 	if (not m_IsActive)
 		return;
 
+	m_pProfilerDraw->BeginProfiling();
+
 	m_pTrail->Draw();
 
 	Object3D::Draw();
+	m_pProfilerDraw->EndProfiling();
 }
 
 void Ball::Throw(const Vector3& velocity)

@@ -54,6 +54,10 @@ public:
 
 	Vector3 m_Interpolation;// カメラの補間係数
 
+	float m_MoveSpeed;		// カメラの水平軸移動量
+	float m_ShiftSpeed;		// カメラの垂直軸移動量
+	float m_RotSpeed;		// カメラの回転速度
+
 	void Load(bool ForceLoad = false);
 
 private:
@@ -76,7 +80,10 @@ private:
 		m_TargetChase(Vector3::Zero),
 		m_OffsetAim(Vector3::Zero),
 		m_TargetAim(Vector3::Zero),
-		m_Interpolation(Vector3::Zero)
+		m_Interpolation(Vector3::Zero),
+		m_MoveSpeed(0.0f),
+		m_ShiftSpeed(0.0f),
+		m_RotSpeed(0.0f)
 	{ /*DO NOTHING*/
 	}
 

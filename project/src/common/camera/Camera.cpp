@@ -26,39 +26,25 @@ Camera::Camera() {
 
 	Reset();
 
-	cameraWork = nullptr;
-
 	m_pShake = AddComponent<Shake>();
 	m_pShake->Init(this);
 
-	// fsmの初期化
-	fsm = new TinyFSM<Camera>(this);
-	fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	//fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	fsm->ChangeState(&Camera::DebugState); // ステートを変更
-
-	cameraCone.transform = *transform;
-	cameraCone.range = CAMERADEFINE_REF.m_ConeRange;
-	cameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
-
-	m_FollowerChara = nullptr;
-	m_TargetChara = nullptr;
-	
-	m_IsView = true;
-	m_DrawFlag = false;
+	// m_Fsmの初期化
+	m_Fsm = new TinyFSM<Camera>(this);
+	m_Fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	//m_Fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	m_Fsm->ChangeState(&Camera::DebugState); // ステートを変更
 	
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
-	m_CameraRotMat = MGetIdent();
-
-	//cameraWork = new CsvReader("data/csv/CameraWork.csv");
+	m_CameraWork = nullptr;
+	//m_CameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 
 Camera::~Camera() {
 
-	holder = nullptr;
-	PtrUtil::SafeDelete(fsm);
-	PtrUtil::SafeDelete(cameraWork);
+	PtrUtil::SafeDelete(m_Fsm);
+	PtrUtil::SafeDelete(m_CameraWork);
 
 	RemoveComponent<Shake>();
 }
@@ -69,7 +55,7 @@ void Camera::Reset() {
 	transform->rotation = Vector3::Zero;
 
 	m_PositionPrev = transform->position;
-	m_RotationPrev = transform->position;
+	m_RotationPrev = transform->rotation;
 
 	m_Offset = CAMERADEFINE_REF.m_OffsetDef;
 	m_OffsetPrev = m_Offset;
@@ -80,17 +66,28 @@ void Camera::Reset() {
 	m_EasingTime = 0.0f;
 	m_TargetTransitionTime = 0.0f;
 
-	holder = nullptr;
+	m_CameraRotMat = MGetIdent();
+
+	m_CameraCone.transform = *transform;
+	m_CameraCone.range = CAMERADEFINE_REF.m_ConeRange;
+	m_CameraCone.angle = CAMERADEFINE_REF.m_ConeAngle;
+
+	m_pHolder = nullptr;
+	m_pFollowerChara = nullptr;
+	m_pTargetChara = nullptr;
+
+	m_IsView = true;
+	m_DrawFlag = false;
 }
 
 void Camera::Update() {
 
-	cameraCone.transform = *transform;
+	m_CameraCone.transform = *transform;
 
-	if (fsm != nullptr)
-		fsm->Update();
+	if (m_Fsm != nullptr)
+		m_Fsm->Update();
 
-	UpdateAnimation();
+	updateAnimation();
 
 	Object3D::Update();
 
@@ -99,59 +96,62 @@ void Camera::Update() {
 
 void Camera::Draw() {
 
+	// 既に描画済なら
 	if (m_DrawFlag)
 		return;
 
+	// 描画の有無
 	if (not m_IsView) {
-		DrawVirtualCamera();
+		drawVirtualCamera();
 		return;
 	}
 
 	Object3D::Draw();
 
-	MATRIX mShake = m_pShake->Matrix();	// 振動用行列
-
-	Transform globalTrs = transform->Global();
-
-	Vector3 cameraPos = WorldPos() * mShake;
-	Vector3 m_TargetPos = m_Target * mShake;
-
-	if (holder != nullptr) {
-		cameraPos += holder->Global().position;
-		m_TargetPos += holder->Global().position;
-	}
-
-	SetCameraPositionAndTargetAndUpVec(cameraPos, m_TargetPos, Vector3::TransformCoord(Vector3::UnitY,m_CameraRotMat));
-	//SetCameraPositionAndTarget_UpVecY(cameraPos, m_TargetPos);
+	// カメラ描画
+	rendering();
 	
-	m_DrawFlag = true;
+	m_DrawFlag = true;	// 描画完了
 }
 
-void Camera::DrawVirtualCamera() {
-
-	Transform globalTrs = transform->Global();
+void Camera::drawVirtualCamera() {
 
 	Vector3 cameraPos = WorldPos();
-	Vector3 m_TargetPos = m_Target;
+	Vector3 targetPos = m_Target;
 
-	if (holder != nullptr)
+	if (m_pHolder != nullptr)
 	{
-		cameraPos += holder->Global().position;
-		m_TargetPos += holder->Global().position;
+		cameraPos += m_pHolder->Global().position;
+		targetPos += m_pHolder->Global().position;
 	}
 
-	DrawCapsule3D(cameraPos, m_TargetPos, 8.0f, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), false);
+	DrawCapsule3D(cameraPos, targetPos, 8.0f, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), false);
 }
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
-    if (fsm == nullptr)
+    if (m_Fsm == nullptr)
         return;
 
-    fsm->ChangeState(state);
+    m_Fsm->ChangeState(state);
 }
 
-void Camera::ColCheckToTerrain() {
+void Camera::rendering() {
+
+	Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
+	Vector3 targetPos = m_Target * m_pShake->Matrix();
+
+	// 保有者が存在する場合
+	if (m_pHolder != nullptr)
+	{
+		cameraPos += m_pHolder->Global().position;
+		targetPos += m_pHolder->Global().position;
+	}
+
+	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY, m_CameraRotMat));
+}
+
+void Camera::colCheckToTerrain() {
 
 	Vector3 hitPos = Vector3::Zero;	// 当たった座標
 	Vector3 cameraPos = WorldPos();	// カメラの座標
@@ -165,7 +165,7 @@ void Camera::ColCheckToTerrain() {
 	}
 }
 
-void Camera::MoveProcess()
+void Camera::moveProcess()
 {
 	//====================================================================================================
 	// ▼マウスによるカメラの向き変更
@@ -181,28 +181,27 @@ void Camera::MoveProcess()
 	//====================================================================================================
 	// ▼移動処理
 
-	Vector3 velocity = (InputManager::AnalogStick() * MOVE_SPEED) * transform->RotationMatrix();
+	Vector3 velocity = (InputManager::AnalogStick() * CAMERADEFINE_REF.m_MoveSpeed) * transform->RotationMatrix();
 
 	if (InputManager::Hold(KeyCode::Space))
-		velocity.y += SHIFT_SPEED;
+		velocity.y += CAMERADEFINE_REF.m_ShiftSpeed;
 
 	else if (InputManager::Hold(KeyCode::LeftShift))
-		velocity.y -= SHIFT_SPEED;
+		velocity.y -= CAMERADEFINE_REF.m_ShiftSpeed;
 
 	transform->position += velocity;
 }
 
-void Camera::OperationByMouse(int type) {
+void Camera::operationByMouse(ViewPointShift type) {
 
 	Vector2 addRot = Vector2::Zero;	// 加算する回転量
 
 	MouseController::MouseInfo mouse = MouseController::Info();	// マウスの情報
 
 	switch (type) {
-	case 0:	addRot.x = (mouse.moveY * mouse.sensitivity.y) * MathUtil::ToRadians(0.1f);	break;
-	case 1:	addRot.y = (mouse.moveX * mouse.sensitivity.x) * MathUtil::ToRadians(0.1f);	break;
-
-	default:
+	case ViewPointShift::Horizontal:addRot.x = (mouse.moveY * mouse.sensitivity.y) * MathUtil::ToRadians(0.1f);	break;
+	case ViewPointShift::Vertical:	addRot.y = (mouse.moveX * mouse.sensitivity.x) * MathUtil::ToRadians(0.1f);	break;
+	case ViewPointShift::All:
 		addRot.x = (mouse.moveY * mouse.sensitivity.y) * MathUtil::ToRadians(0.1f);
 		addRot.y = (mouse.moveX * mouse.sensitivity.x) * MathUtil::ToRadians(0.1f);
 		break;
@@ -213,15 +212,15 @@ void Camera::OperationByMouse(int type) {
 	transform->rotation.y += min(max(addRot.y, -CAMERADEFINE_REF.m_RotSpeedLimit), CAMERADEFINE_REF.m_RotSpeedLimit);
 }
 
-void Camera::OperationByStick(int padNumber, int type) {
+void Camera::operationByStick(int padNumber, ViewPointShift type) {
 
 	Vector2 addRot = Vector2::Zero;	// 加算する回転量
 	Vector2 rightStick = PadController::NormalizedRightStick(padNumber);
 
 	switch (type) {
-	case 0:	addRot.x = (rightStick.y * PadController::StickSensitivity().y) * MathUtil::ToRadians(-1.0f);break;
-	case 1:	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * MathUtil::ToRadians(1.0f);	break;
-	default:
+	case ViewPointShift::Horizontal:addRot.x = (rightStick.y * PadController::StickSensitivity().y) * MathUtil::ToRadians(-1.0f);break;
+	case ViewPointShift::Vertical:	addRot.y = (rightStick.x * PadController::StickSensitivity().x) * MathUtil::ToRadians(1.0f);	break;
+	case ViewPointShift::All:
 		addRot.x = (rightStick.y * PadController::StickSensitivity().y) * MathUtil::ToRadians(-1.0f);
 		addRot.y = (rightStick.x * PadController::StickSensitivity().x) * MathUtil::ToRadians(1.0f);
 		break;
@@ -234,7 +233,7 @@ void Camera::OperationByStick(int padNumber, int type) {
 	transform->rotation.y += addRot.y;
 }
 
-void Camera::UpdateAnimation() {
+void Camera::updateAnimation() {
 
 	if (not m_AnimData.isPlaying)
 		return;
@@ -285,28 +284,28 @@ void Camera::SetAnimation(const CameraAnimData& animData) {
 	m_AnimData = animData;
 }
 
-Vector3 Camera::WorldPos() const {
+const Vector3 Camera::WorldPos() const {
 
 	Vector3 globalPos = transform->Global().position;	// カメラの絶対座標
 	Vector3 m_OffsetRotAdap = OffsetRotAdaptor();			// 回転行列をかけた相対座標
-	Vector3 holderPos = Vector3::Zero;	// 保有者の座標
+	Vector3 m_pHolderPos = Vector3::Zero;	// 保有者の座標
 
-	if (holder != nullptr)
-		holderPos += holder->Global().position;
+	if (m_pHolder != nullptr)
+		m_pHolderPos += m_pHolder->Global().position;
 
-	Vector3 pos = globalPos + m_OffsetRotAdap + holderPos;
+	Vector3 pos = globalPos + m_OffsetRotAdap + m_pHolderPos;
 
 	return pos;
 }
 
-Vector3 Camera::TargetLay() const {
+const Vector3 Camera::TargetLay() const {
 
 	Vector3 cameraPos = m_Offset * transform->Matrix();
 	Vector3 m_TargetPos = m_Target;
 
-	if (holder != nullptr) {
-		cameraPos += holder->Global().position;
-		m_TargetPos += holder->Global().position;
+	if (m_pHolder != nullptr) {
+		cameraPos += m_pHolder->Global().position;
+		m_TargetPos += m_pHolder->Global().position;
 	}
 
 	return m_TargetPos - cameraPos;

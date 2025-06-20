@@ -39,6 +39,10 @@ void CameraDefineRef::Load(bool ForceLoad)
 	
 	m_Interpolation = jsonLoader->GetOrDefault<Vector3>("Interpolation", Vector3::Zero, FILEKEY);
 
+	m_MoveSpeed = jsonLoader->GetOrDefault<float>("MoveSpeed", 0.0f, FILEKEY);
+	m_ShiftSpeed = jsonLoader->GetOrDefault<float>("ShiftSpeed", 0.0f, FILEKEY);
+	m_RotSpeed = jsonLoader->GetOrDefault<float>("RotSpeed", 0.0f, FILEKEY);
+
 	// ƒ[ƒh‚µ‚½‚æ
 	m_WasLoad = true;
 }

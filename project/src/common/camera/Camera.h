@@ -16,18 +16,22 @@
 class StateManager;
 class CharaBase;
 
-namespace
-{
-	static const float MOVE_SPEED = 12.0f;	// 横移動速度
-	static const float SHIFT_SPEED = 6.0f;	// 縦移動速度
-	static const float ROT_SPEED = MathUtil::ToRadians(3.0f);	// 回転速度
-}
-
 /// <summary>
 /// カメラのクラス
 /// </summary>
 class Camera : public Object3D {
 public:
+
+	/// <summary>
+	/// カメラの視点移動方法
+	/// </summary>
+	enum class ViewPointShift {
+		None = -1,	// 無
+		Horizontal,	// 水平軸のみ
+		Vertical,	// 垂直軸のみ
+		All			// 水平軸・垂直軸を含む
+	};
+
 	//================================================================================
 	// ▼コンストラクタ・デストラクタ
 
@@ -59,30 +63,6 @@ public:
 	/// <param name="state">ステートの関数ポインタ</param>
 	void ChangeState(void(Camera::*state)(FSMSignal));
 
-	/// <summary>
-	/// 地形とめり込まない様にする処理 
-	/// </summary>
-	void ColCheckToTerrain();
-
-	/// <summary>
-	/// 移動処理
-	/// </summary>
-	void MoveProcess();
-
-	/// <summary>
-	/// マウスによるカメラ操作
-	/// </summary>
-	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
-	/// </param>
-	void OperationByMouse(int type = -1);
-
-	/// <summary>
-	/// スティックによるカメラ操作
-	/// </summary>
-	/// <param name="type">【0】の場合、X軸のみ。【1】の場合、Y軸のみ。【その他】XY軸。
-	/// </param>
-	void OperationByStick(int padNumber, int type = -1);
-
 	//================================================================================
 	// ▼セッター
 
@@ -101,34 +81,12 @@ public:
 	/// <summary>
 	/// 保有者を設定する
 	/// </summary>
-	inline void SetHolderTrs(const Transform* trs) { holder = trs; }
+	inline void SetHolderTrs(const Transform* trs) { m_pHolder = trs; }
 
 	/// <summary>
 	/// 描画を行うかどうかを設定する
 	/// </summary>
 	inline void SetIsView(bool view) { m_IsView = view; }
-
-	/// <summary>
-	/// クラスを基に保有者を設定する
-	/// </summary>
-	/// <typeparam name="C">保有させたいクラス</typeparam>
-	template<class C>
-	inline void SetHolder() {
-
-		C* c = FindGameObject<C>();
-		if (c == nullptr) {
-			SetHolderTrs(nullptr);
-			return;
-		}
-
-		Object3D* obj = dynamic_cast<Object3D*>(c);
-		if (obj == nullptr) {
-			SetHolderTrs(nullptr);
-			return;
-		}
-
-		SetHolderTrs(obj->transform);
-	}
 
 	/// <summary>
 	/// 追従するキャラクターの番号を設定する
@@ -143,7 +101,7 @@ public:
 	void SetPerformance(const std::string& perfType);
 
 	/// <summary>
-	/// アニメーションを設定して、開始地点から終了地点へ移動して、終了地点から地点へ戻る動作を、指定された秒数で行う
+	/// アニメーションを設定する。開始地点から終了地点へ移動して、終了地点から開始地点へ戻る動作を、指定された秒数で行う
 	/// </summary>
 	void SetAnimation(const CameraDefine::CameraAnimData& animData);
 
@@ -153,59 +111,49 @@ public:
 	/// <summary>
 	/// ステートパターンの情報を取得する
 	/// </summary>
-	inline TinyFSM<Camera>* State() const { return fsm; }
+	inline TinyFSM<Camera>* State() const { return m_Fsm; }
 
 	/// <summary>
 	/// 相対座標を取得する
 	/// </summary>
-	inline Vector3 Offset() const { return m_Offset; }
-
-	/// <summary>
-	///相対座標のアドレスを取得する 
-	/// </summary>
-	inline Vector3& OffsetPtr() { return m_Offset; }
+	inline const Vector3 Offset() const { return m_Offset; }
 
 	/// <summary>
 	/// 回転行列をかけた相対座標を取得する
 	/// </summary>
-	inline Vector3 OffsetRotAdaptor() const { return m_Offset * transform->Global().RotationMatrix(); }
+	inline const Vector3 OffsetRotAdaptor() const { return m_Offset * transform->Global().RotationMatrix(); }
 
 	/// <summary>
 	/// 注視点を取得する
 	/// </summary>
-	inline Vector3 Target() const { return m_Target; }
-
-	/// <summary>
-	/// 注視点のアドレスを取得する
-	/// </summary>
-	inline Vector3& TargetPtr() { return m_Target; }
+	inline const Vector3 Target() const { return m_Target; }
 
 	/// <summary>
 	/// カメラの保有者のトランスフォームを取得する
 	/// </summary>
 	/// <returns></returns>
-	inline const Transform* HolderTrs() const { return holder; }
+	inline const Transform* HolderTrs() const { return m_pHolder; }
 
 	/// <summary>
 	/// カメラワークの情報を取得する
 	/// </summary>
 	/// <returns>カメラワーク情報のCsvデータ</returns>
-	inline CsvReader* CameraWorkData() const { return cameraWork; }
+	inline const CsvReader* CameraWorkData() const { return m_CameraWork; }
 
 	/// <summary>
 	/// カメラの位置(絶対座標)
 	/// </summary>
-	Vector3 WorldPos() const;
+	const Vector3 WorldPos() const;
 
 	/// <summary>
 	/// 注視点へ向かうベクトル
 	/// </summary>
-	Vector3 TargetLay() const;
+	const Vector3 TargetLay() const;
 
 	/// <summary>
 	/// 注視しているキャラクター
 	/// </summary>
-	const CharaBase* TargetChara() const { return m_TargetChara; }
+	inline const CharaBase* TargetChara() const { return m_pTargetChara; }
 
 	/// <summary>
 	/// 描画が終了したかどうかを判定
@@ -248,19 +196,47 @@ public:
 private:
 
 	/// <summary>
+	/// カメラ描画処理
+	/// </summary>
+	void rendering();
+
+	/// <summary>
+	/// 地形とめり込まない様にする処理 
+	/// </summary>
+	void colCheckToTerrain();
+
+	/// <summary>
+	/// 移動処理
+	/// </summary>
+	void moveProcess();
+
+	/// <summary>
+	/// マウスによるカメラ操作
+	/// </summary>
+	/// <param name="type">カメラの視点移動方法</param>
+	void operationByMouse(ViewPointShift type);
+
+	/// <summary>
+	/// スティックによるカメラ操作
+	/// </summary>
+	/// <param name="padNumber">パッドの番号</param>
+	/// <param name="type">カメラの視点移動方法</param>
+	void operationByStick(int padNumber, ViewPointShift type);
+
+	/// <summary>
 	/// 演出の更新処理
 	/// </summary>
-	void UpdateAnimation();
+	void updateAnimation();
 
 	/// <summary>
 	/// 仮想カメラの描画位置をカプセルで描画
 	/// </summary>
-	void DrawVirtualCamera();
+	void drawVirtualCamera();
 
 	//================================================================================
 	// ▼メンバ変数
 
-	TinyFSM<Camera>* fsm;
+	TinyFSM<Camera>* m_Fsm;
 
 	Vector3 m_PositionPrev;	// 補間前のカメラの座標
 	Vector3 m_RotationPrev;	// 補間前のカメラの回転
@@ -273,22 +249,22 @@ private:
 
 	MATRIX m_CameraRotMat;	// カメラの回転行列
 
-	ColDefine::Cone cameraCone;
+	ColDefine::Cone m_CameraCone;	// カメラの視野角情報
 
 	CameraDefine::CameraAnimData m_AnimData;	// カメラアニメーションのデータ
 
 	Shake* m_pShake;	// シェイクコンポーネント
 
-	const Transform* holder;	// カメラの保有者
-	CsvReader* cameraWork;		// カメラ演出情報
+	CsvReader* m_CameraWork;	// カメラ演出情報
+	const Transform* m_pHolder;	// カメラの保有者
 	int m_CharaIndex;			// キャラクターの番号
 
-	float m_EasingTime;			// イージング用タイマー
+	float m_EasingTime;				// イージング用タイマー
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
 
 	bool m_IsView;		// 描画しているか
 	bool m_DrawFlag;	// 描画が完了しているか
 
-	const CharaBase* m_FollowerChara;	// 追尾しているキャラ
-	const CharaBase* m_TargetChara;		// 注視しているキャラ
+	const CharaBase* m_pFollowerChara;	// 追尾しているキャラ
+	const CharaBase* m_pTargetChara;	// 注視しているキャラ
 };

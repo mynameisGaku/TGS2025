@@ -376,6 +376,7 @@
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Space.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Text.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiRoot.cpp" />
+    <ClCompile Include="src\util\exception\Exception.cpp" />
     <ClCompile Include="src\util\fader\Fader.cpp" />
     <ClCompile Include="src\util\file\csv\csvReader.cpp" />
     <ClCompile Include="src\util\file\FileUtil.cpp" />
@@ -545,6 +546,7 @@
     <ClInclude Include="src\util\debug\imgui\imGuiRoot.h" />
     <ClInclude Include="src\util\easing\easing.h" />
     <ClInclude Include="src\util\easing\EasingUtils.h" />
+    <ClInclude Include="src\util\exception\Exception.h" />
     <ClInclude Include="src\util\fader\Fader.h" />
     <ClInclude Include="src\util\file\csv\csvReader.h" />
     <ClInclude Include="src\util\file\FileUtil.h" />

@@ -16,10 +16,7 @@
 
 #define IMGUI
 #ifdef IMGUI
-#include "vendor/imgui/imgui.h"
-#include "vendor/imgui/imgui_impl_dx11.h"
-#include "vendor/imgui/imgui_impl_win32.h"
-#include "vendor/imgui/imgui_ja_gryph_ranges.cpp"
+#include "vendor/imgui/imgui_impl_dxlib.hpp"
 
 extern IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -47,6 +44,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include <src/util/time/GameTime.h>
 
 #define CoGVersion (2.2)
+
+LARGE_INTEGER freq;
+LARGE_INTEGER start, end;
+int timeRecordCounter = 0;
+double tick = 0.0;
+bool isRefreshTick = false;
+
+void BeginRecordPerformance();
+void EndRecordPerformance();
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -81,28 +87,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		return -1;
 	}
 
-#ifdef IMGUI
-
-	// ImGui
-	{
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("data/font/DotGothic16-Regular.ttf", 18.0f, NULL, glyphRangesJapanese);
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-
-		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	SetHookWinProc([](HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT /*CALLBACK*/
 		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
-
-		ImGui_ImplWin32_Init(DxLib::GetMainWindowHandle());
-		ImGui_ImplDX11_Init((ID3D11Device*)DxLib::GetUseDirect3D11Device(), (ID3D11DeviceContext*)DxLib::GetUseDirect3D11DeviceContext());
-	}
+			// DxLibとImGuiのウィンドウプロシージャを両立させる
+			SetUseHookWinProcReturnValue(FALSE);
+			return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
+		});
+#ifdef IMGUI
+	// ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+	io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());	ImGui_ImplDXlib_Init();
 #endif // IMGUI
 
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
@@ -123,19 +121,22 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	int mStartTime = GetNowCount();
 
 	while (true) {
+
+		BeginRecordPerformance();
+
 		int cur = GetNowCount();
 		if (cur < mStartTime + 16) //120fps対策
 			continue;
 		mStartTime = cur;
 
 #ifdef IMGUI
-
-		//※アップデートの最初に呼ぶ
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
+		ImGui_ImplDXlib_NewFrame();
 		ImGui::NewFrame();
-		
 #endif // IMGUI
+
+		ImGui::Begin("TimeRecord");
+		ImGui::Text("time %lf[ms]", tick);
+		ImGui::End();
 
 		AppUpdate();
 		ClearDrawScreen();
@@ -144,12 +145,22 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			break;
 		ScreenFlip();
 
-#ifdef IMGUI
-		
-		//※アップデートの最後に呼ぶ
-		ImGui::EndFrame();
-		ImGui::UpdatePlatformWindows();
+		EndRecordPerformance();
 
+		if (++timeRecordCounter % 60 == 0)
+			tick = static_cast<double>(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
+
+#ifdef IMGUI
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplDXlib_RenderDrawData();
+
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+		}
 #endif // IMGUI
 
 	}
@@ -177,8 +188,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 #ifdef IMGUI
 
 	// 解放
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
+	ImGui_ImplDXlib_Shutdown();
 	ImGui::DestroyContext();
 
 #endif // IMGUI
@@ -205,3 +215,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 #endif // IMGUI
+
+void BeginRecordPerformance()
+{
+	isRefreshTick = false;
+	QueryPerformanceFrequency(&freq);
+	QueryPerformanceCounter(&start);
+}
+
+void EndRecordPerformance()
+{
+	QueryPerformanceCounter(&end);
+	isRefreshTick = true;
+}

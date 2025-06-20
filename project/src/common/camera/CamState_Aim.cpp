@@ -38,24 +38,22 @@ void Camera::AimState(FSMSignal sig)
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
 
-		// キャラクターの管理者
+		// キャラの管理者
 		CharaManager* charaM = FindGameObject<CharaManager>();
 		if (charaM == nullptr)
 			return;
-
-		// 追従するキャラクター
-		m_FollowerChara = charaM->CharaInst(m_CharaIndex);
-		// 注視するキャラ
-		m_TargetChara = charaM->NearestEnemy(m_CharaIndex);
-		if (m_TargetChara == nullptr) {
+		
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// 追従するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
 		// コーンの範囲に入って居ない場合
-		if (not ColFunction::ColCheck_ConeToPoint(cameraCone, m_TargetChara->transform->position).IsCollision() ||
+		if (not ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pTargetChara->transform->position).IsCollision() ||
 			MouseController::Info().Move().GetLengthSquared() > 5.0f) {
-			m_TargetChara = nullptr;
+			m_pTargetChara = nullptr;
 			m_TargetTransitionTime = 0.5f;
 			ChangeState(&Camera::ChaseState);
 			return;
@@ -66,13 +64,21 @@ void Camera::AimState(FSMSignal sig)
 	{
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		if (m_FollowerChara == nullptr || m_TargetChara == nullptr) {
+		// キャラの管理者
+		CharaManager* charaM = FindGameObject<CharaManager>();
+		if (charaM == nullptr)
+			return;
+
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// 追従するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+
+		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
-		const Transform FOLLOWER_TRS = m_FollowerChara->transform->Global();
-		const Transform TARGET_TRS = m_TargetChara->transform->Global();
+		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
+		const Transform TARGET_TRS = m_pTargetChara->transform->Global();
 
 		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
 		const Vector3 TARGET = TARGET_TRS.position + Vector3::SetY(10.0f);
@@ -105,9 +111,9 @@ void Camera::AimState(FSMSignal sig)
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
-		if (not InputManager::Hold("TargetCamera", m_FollowerChara->GetIndex() + 1))
+		if (not InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
 		{
-			m_TargetChara = nullptr;
+			m_pTargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 
@@ -115,7 +121,7 @@ void Camera::AimState(FSMSignal sig)
 			PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
 		{
 			m_TargetTransitionTime = 0.5f;
-			m_TargetChara = nullptr;
+			m_pTargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 	}
@@ -127,7 +133,7 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
-		m_TargetChara = nullptr;
+		m_pTargetChara = nullptr;
 		canMove = true;
 	}
 	break;

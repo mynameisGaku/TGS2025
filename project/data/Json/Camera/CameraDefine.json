@@ -43,5 +43,9 @@
         "X": 0.1,
         "Y": 0.25,
         "Z": 0.1
-    }
+    },
+
+    "MoveSpeed": 12.0,
+    "ShiftSpeed": 6.0,
+    "RotSpeed":  3.0
 }

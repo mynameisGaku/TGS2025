@@ -24,13 +24,20 @@
 #include "src/common/component/model_frame_trail_renderer/MODEL_FRAME_TRAIL_RENDERER_DESC.h"
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
+#include "src/scene/play/tackler/Tackler.h"
+
+#include "src/util/ui/UI_Manager.h"
+#include "src/util/ui/UI_Gauge.h"
+#include "src/scene/play/ui/UI_CrossHair.h"
+#include "src/scene/play/ui/UI_HitPoint_Icon.h"
+#include <src/reference/ball/BallRef.h>
 
 using namespace KeyDefine;
 
 namespace
 {
 	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ（毎秒）
-	static const float CATCH_STAMINA_MIN = 20.0f;	// キャッチを開始するのに必要な残スタミナ
+	static const float CATCH_STAMINA_MIN = 0.0f;	// キャッチを開始するのに必要な残スタミナ
 	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 1.0f;
@@ -51,6 +58,7 @@ CharaBase::CharaBase()
 	m_SpeedScale		= 0.0f;
 	m_CharaTag			= CHARADEFINE_REF.Tags[0];
 	m_Catcher			= nullptr;
+	m_Tackler			= nullptr;
 	m_Index				= 0;
 	m_Animator			= nullptr;
 	m_EmoteTimer		= 0.0f;
@@ -67,6 +75,8 @@ CharaBase::CharaBase()
 	m_CanThrow			= true;
 	m_IsCatching		= false;
 	m_CanHold			= true;
+	m_CanTackle			= true;
+	m_IsInvincible		= false;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
 	m_pCatchReadyEffect	= nullptr;
@@ -76,6 +86,18 @@ CharaBase::CharaBase()
 	m_IsTargeting			= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
+
+	m_UI_CrossHair = nullptr;
+	m_UI_BallChargeMeter = nullptr;
+	m_UI_HitPointIcon = nullptr;
+
+	m_HitPoint = 0;
+	m_Stamina = 0.0f;
+
+	m_Alarm = nullptr;
+	m_InvincibleTimer = 0.0f;
+	m_IsDamage = false;
+	m_IsTackling = false;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -125,6 +147,10 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_SubFSM);
 	PtrUtil::SafeDelete(m_Timeline);
 
+	PtrUtil::SafeDelete(m_UI_CrossHair);
+	PtrUtil::SafeDelete(m_UI_BallChargeMeter);
+	PtrUtil::SafeDelete(m_UI_HitPointIcon);
+
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
@@ -138,6 +164,9 @@ CharaBase::~CharaBase()
 
 void CharaBase::Init(std::string tag)
 {
+	m_Alarm = new Alarm;
+	m_Alarm->Reset();
+
 	m_CharaTag = tag;
 	m_pStatusTracker = new StatusTracker();
 	m_pPhysics = GetComponent<Physics>();
@@ -148,6 +177,29 @@ void CharaBase::Init(std::string tag)
 	m_Catcher->Init(tag);
 	m_Catcher->SetColliderActive(false);
 	m_Catcher->SetParent(this);
+
+	m_Tackler = Instantiate<Tackler>();
+	m_Tackler->transform->position = Vector3(0.0f, CHARADEFINE_REF.TackleRadius, CHARADEFINE_REF.TackleRadius);
+	m_Tackler->transform->scale = Vector3::Ones * CHARADEFINE_REF.TackleRadius * 2.0f;
+	m_Tackler->transform->SetParent(transform);
+	m_Tackler->Init(tag);
+	m_Tackler->SetColliderActive(false);
+	m_Tackler->SetParent(this);
+
+	m_UI_CrossHair = new UI_CrossHair(RectTransform(), m_Index);
+	m_UI_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
+	m_UI_CrossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
+	m_UI_CrossHair->SetHandle_CrossHairFrame			("data/texture/UI/CrossHair/CrossHairFrame.png");
+	m_UI_CrossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
+	m_UI_CrossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+
+	m_UI_BallChargeMeter = new UI_CrossHair(RectTransform(), m_Index);
+	m_UI_BallChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
+	m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
+
+	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(), m_Index);
+	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0, (int)m_pHP->GetMax(), (int)m_pHP->GetMax());
+	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
@@ -271,6 +323,7 @@ void CharaBase::Init(std::string tag)
 }
 
 void CharaBase::Update() {
+
 	HitGroundProcess();
 
 	// デバッグ機能
@@ -284,17 +337,6 @@ void CharaBase::Update() {
 	m_FSM->Update();
 	m_SubFSM->Update();
 	m_Timeline->Update();
-
-	//if (m_pCatchReadyEffect)
-	//{
-	//	m_pCatchReadyEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-	//	m_pCatchReadyEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
-	//}
-	//if (m_pCatchDustEffect)
-	//{
-	//	m_pCatchDustEffect->SetPosition3D(transform->Global().position + VTransform(m_EffectTransform->position, m_EffectTransform->Global().RotationMatrix()));
-	//	m_pCatchDustEffect->SetRotation3D(transform->Global().rotation + m_EffectTransform->rotation);
-	//}
 
 	// ボールの更新
 	if (m_pBall)
@@ -326,28 +368,12 @@ void CharaBase::Update() {
 	m_IsMove = false;
 	m_IsCatching = false;
 
+	m_Stamina = m_pStamina->GetCurrent();
+	m_HitPoint = (int)m_pHP->GetCurrent();
+
 	Object3D::Update();
 
-	/*Vector3 chestPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:Spine2"));
-	m_pTrail[0]->Add(chestPos);
-
-	Vector3 leftShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftShoulder"));
-	m_pTrail[1]->Add(leftShoulderPos);
-
-	Vector3 rightShoulderPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightShoulder"));
-	m_pTrail[2]->Add(rightShoulderPos);
-
-	Vector3 leftHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:LeftUpLeg"));
-	m_pTrail[3]->Add(leftHipPos);
-
-	Vector3 rightHipPos = MV1GetFramePosition(Model(), MV1SearchFrame(Model(), "mixamorig9:RightUpLeg"));
-	m_pTrail[4]->Add(rightHipPos);
-	
-	for (int i = 0; i < 5; i++)
-	{
-		m_pTrail[i]->Update();
-	}*/
-
+	invincibleUpdate();
 }
 
 void CharaBase::Draw()
@@ -363,6 +389,8 @@ void CharaBase::Draw()
 	{
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
+
+	
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -412,6 +440,12 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		{
 			if (ball->GetState() == Ball::S_LANDED)
 				return;
+
+			if (m_IsInvincible)
+			{
+				EffectManager::Play3D("Hit_Wall.efk", *transform->Copy(), "Hit_Wall" + m_CharaTag);
+				return;
+			}
 
 			if (m_CharaTag == "Blue")
 			{
@@ -604,6 +638,18 @@ void CharaBase::TeleportToLastBall()
 	m_FSM->ChangeState(&CharaBase::StateAirSpin);
 }
 
+void CharaBase::DropBall(const Vector3& other, float force_vertical, float force_horizontal)
+{
+	if (not m_pBall)
+		return;
+
+	m_pBall->ChangeState(Ball::State::S_LANDED);
+	m_pBall->GetComponent<Physics>()->SetGravity(GRAVITY);
+	m_pBall->Knockback(other, force_vertical, force_horizontal);
+	m_pBall->SetOwner(nullptr);
+	m_pBall = nullptr;
+}
+
 void CharaBase::Catch()
 {
 	if (not m_CanCatch) return;
@@ -638,6 +684,11 @@ void CharaBase::SetTrailImage(int hImage)
 	m_hTrailImage = hImage;
 }
 
+Vector2 CharaBase::Target(const Ball* ball)
+{
+	return Vector2();
+}
+
 void CharaBase::CatchSuccess(const Vector3& velocity)
 {
 	m_CanCatch = false;
@@ -655,6 +706,69 @@ void CharaBase::CatchSuccess(const Vector3& velocity)
 	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 
 	m_SubFSM->ChangeState(&CharaBase::SubStateGetBall); // ステートを変更
+}
+
+void CharaBase::Tackle()
+{
+	if (not m_CanTackle)
+		return;
+
+	m_IsTackling = true;
+}
+
+void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback)
+{
+	if (m_IsInvincible && not isForceKnockback)
+	{
+		return;
+	}
+
+	Knockback(other, force_vertical, force_horizontal);
+
+	SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
+
+	DropBall(transform->position, BALL_REF.DropForce_Vertical, BALL_REF.DropForce_Horizontal);
+
+	m_FSM->ChangeState(&CharaBase::StateDamageToDown);
+}
+
+void CharaBase::SetInvincible(float duration_sec, bool isOverride)
+{
+	if (!isOverride 
+		&& m_InvincibleTimer > 0.0f
+		)
+	{
+		return;
+	}
+
+	m_InvincibleTimer = duration_sec;
+	m_IsInvincible = true;
+}
+
+void CharaBase::invincibleUpdate()
+{
+	if (m_InvincibleTimer > 0.0f)
+	{
+		m_InvincibleTimer -= GTime.deltaTime;
+		m_IsInvincible = true;
+	}
+	else
+	{
+		m_IsInvincible = false;
+		m_InvincibleTimer = 0.0f;
+	}
+}
+
+void CharaBase::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
+{
+	Vector3 otherToMe = transform->position - other;
+	otherToMe.y += 20.0f;
+	Vector3 impactNorm = otherToMe.Normalize();
+	Vector3 impactVertical = Vector3(0.0f, impactNorm.y, 0.0f) * force_vertical;
+	Vector3 impactHorizontal = Vector3(impactNorm.x, 0.0f, impactNorm.z) * force_horizontal;
+	Vector3 impact = impactVertical + impactHorizontal;
+
+	m_pPhysics->velocity += impact;
 }
 
 //========================================================================
@@ -818,6 +932,36 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 	}
 }
 
+void CharaBase::StateActionIdleToTackle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("ActionIdleToTackle");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		idleUpdate();
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateStandingIdleEmote); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
 void CharaBase::StateAimToThrow(FSMSignal sig)
 {
 	switch (sig)
@@ -829,6 +973,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 		m_CanCatch = false;
 		m_CanHold = false;
 		m_CanThrow = false;
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -848,6 +993,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 		m_CanCatch = true;
 		m_CanHold = true;
 		m_CanThrow = true;
+		m_CanTackle = true;
 		m_Timeline->Stop();
 	}
 	break;
@@ -951,6 +1097,7 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 		m_CanCatch	= false;
 		m_CanMove	= false;
 		m_CanRot	= false;
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -970,6 +1117,7 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 		m_CanCatch	= true;
 		m_CanMove	= true;
 		m_CanRot	= true;
+		m_CanTackle = true;
 	}
 	break;
 	}
@@ -982,6 +1130,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Fall");
+		m_CanTackle = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -997,6 +1146,10 @@ void CharaBase::StateFall(FSMSignal sig)
 				m_FSM->ChangeState(&CharaBase::StateFallToCrouch); // ステートを変更
 			}
 		}
+		if (m_IsTackling)
+		{
+			m_FSM->ChangeState(&CharaBase::StateTackle);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1006,6 +1159,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+		m_CanTackle = false;
 	}
 	break;
 	}
@@ -1018,10 +1172,16 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("FallToCrouch");
+		m_CanTackle = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		if (m_IsTackling)
+		{
+			m_FSM->ChangeState(&CharaBase::StateTackle);
+		}
+
 		if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
 		{
 			m_FSM->ChangeState(&CharaBase::StateCrouchToRun); // ステートを変更
@@ -1050,10 +1210,15 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("FallToRoll");
+		m_CanTackle = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		if (m_IsTackling)
+		{
+			m_FSM->ChangeState(&CharaBase::StateTackle);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1082,6 +1247,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 		m_CanCatch = false;
 		m_CanHold = false;
 		m_CanThrow = false;
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1103,6 +1269,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 		m_CanCatch = true;
 		m_CanHold = true;
 		m_CanThrow = true;
+		m_CanTackle = true;
 
 		m_Timeline->Stop();
 	}
@@ -1318,6 +1485,10 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	}
 }
 
+void CharaBase::StateRunToTackle(FSMSignal sig)
+{
+}
+
 void CharaBase::StateSlide(FSMSignal sig)
 {
 	switch (sig)
@@ -1457,6 +1628,48 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
+void CharaBase::StateTackle(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("Tackle");
+
+		m_CanMove = false;
+		m_CanRot = false;
+
+		m_Tackler->SetColliderActive(true);
+
+		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		tackleUpdate();
+	}
+	break;
+	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			if (m_Alarm->IsFinish())
+				m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_Timeline->Stop();
+		m_Tackler->SetColliderActive(false);
+		m_IsTackling = false;
+		m_CanMove = true;
+		m_CanRot = true;
 	}
 	break;
 	}
@@ -1659,6 +1872,10 @@ void CharaBase::idleUpdate()
 	{
 		m_FSM->ChangeState(&CharaBase::StateActionIdleToRun); // ステートを変更
 	}
+	else if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
+	}
 }
 
 void CharaBase::runUpdate()
@@ -1678,6 +1895,10 @@ void CharaBase::runUpdate()
 	else if (m_SlideTimer > 0.0f)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToSlide); // ステートを変更
+	}
+	else if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
 	}
 }
 
@@ -1700,6 +1921,11 @@ void CharaBase::slideUpdate()
 		{
 			m_pPhysics->SetFriction(FRICTION / 10.0f);
 		}
+	}
+
+	if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
 	}
 }
 
@@ -1760,6 +1986,20 @@ void CharaBase::jumpUpdate()
 	if (not m_IsJumping)
 	{
 		m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+	}
+
+	if (m_IsTackling)
+	{
+		m_FSM->ChangeState(&CharaBase::StateTackle);
+	}
+}
+
+void CharaBase::tackleUpdate()
+{
+	if (m_Animator->IsFinished())
+	{
+		// あと隙
+		m_Alarm->Set(0.1f); // magic:>
 	}
 }
 

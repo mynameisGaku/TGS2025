@@ -96,6 +96,7 @@ void Ball::Init(std::string charaTag)
 		m_pManager = FindGameObject<BallManager>();
 
 	m_IsHoming = false;
+	m_DoRefreshHoming = false;
 	m_IsActive = true;
 	m_IsPickedUp = false;
 	m_HomingSpeed = 0.0f;
@@ -248,6 +249,7 @@ void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float char
 void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate)
 {
 	m_IsHoming			= true;
+	m_DoRefreshHoming = true;
 	m_HomingOrigin		= transform->position;
     m_HomingTargetChara = target;
 	m_HormingCurveAngle = 0.0f;
@@ -355,6 +357,17 @@ void Ball::PickUp()
 	m_IsPickedUp = true;
 }
 
+void Ball::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
+{
+	Vector3 otherToMe = transform->position - other;
+	Vector3 impactNorm = otherToMe.Normalize();
+	Vector3 impactVertical = Vector3(0.0f, impactNorm.y, 0.0f) * force_vertical;
+	Vector3 impactHorizontal = Vector3(impactNorm.x, 0.0f, impactNorm.z) * force_horizontal;
+	Vector3 impact = impactVertical + impactHorizontal;
+
+	GetComponent<Physics>()->velocity += impact;
+}
+
 void Ball::collisionToGround()
 {
 	if (m_State == S_OWNED) return;
@@ -392,14 +405,17 @@ void Ball::homingProcess()
 	if (m_HomingTargetChara == nullptr) return;
 
 	// ---- ホーミング補間 ----
-	const Vector3 homingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	if (m_DoRefreshHoming)
+	{
+		m_HomingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	}
 
-	const Vector3 diff = homingTargetPos - m_HomingOrigin;
+	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
 	const Vector3 dirRot = Vector3Util::DirToEuler(dir) + Vector3(0.0f, 0.0f, m_HormingCurveAngle);
 	const MATRIX dirRotMat = (dirRot * Vector3(-1, 1, 1)).ToRotationMatrix();
 
-	const Vector3 middle = (homingTargetPos + m_HomingOrigin) / 2.0f;
+	const Vector3 middle = (m_HomingTargetPos + m_HomingOrigin) / 2.0f;
 	const Vector3 middleToCurrent = transform->position - middle;
 
 	const float distance = diff.GetLength();
@@ -413,6 +429,12 @@ void Ball::homingProcess()
 	else
 	{
 		delta = m_HomingSpeed / distance * GTime.DeltaTime();
+	}
+
+	if (m_HomingTargetChara->IsTackling())
+	{
+		changeState(S_LANDED);
+		m_DoRefreshHoming = false;
 	}
 
 	m_HomingProgress += delta;

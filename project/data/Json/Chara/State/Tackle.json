@@ -1,0 +1,79 @@
+{
+  "Animation": "Tackle",
+  "Events": [
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 0.0,
+      "Argument": {
+        "Speed": 0.6
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 4.0,
+      "Argument": {
+        "Speed": 1.2
+      }
+    },
+    {
+      "Name": "MoveToPosition",
+      "Start": 1.8,
+      "End": 4.4,
+      "Argument": {
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 40
+        }
+      }
+    },
+    {
+      "Name": "MoveToPosition",
+      "Start": 4.1,
+      "End": 7.5,
+      "Argument": {
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 450
+        }
+      }
+    },
+    {
+      "Name": "MoveToPosition",
+      "Start": 7.5,
+      "End": 9.0,
+      "Argument": {
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 100
+        }
+      }
+    },
+    {
+      "Name": "MoveToPosition",
+      "Start": 9.0,
+      "End": 13.0,
+      "Argument": {
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 80
+        }
+      }
+    },
+    {
+      "Name": "MoveToPosition",
+      "Start": 13.0,
+      "End": 15.0,
+      "Argument": {
+        "Position": {
+          "X": 0,
+          "Y": 0,
+          "Z": 40
+        }
+      }
+    }
+  ]
+}

@@ -115,9 +115,6 @@
     <Filter Include="src%28application%29\scene\play\ball">
       <UniqueIdentifier>{5fc18a84-21ac-4f49-ae10-096d49843adc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\catcher">
-      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\scene\play\chara">
       <UniqueIdentifier>{ba273b49-bf53-422e-8406-b5fe6f399fa1}</UniqueIdentifier>
     </Filter>
@@ -349,8 +346,26 @@
     <Filter Include="data\Json\Sound">
       <UniqueIdentifier>{66e2275a-c146-4557-afc7-95b3044cc8fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\ui">
+      <UniqueIdentifier>{ac9ad424-43c6-42f7-9064-38ad79380ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\target">
+      <UniqueIdentifier>{d687d189-b331-4161-aeb0-1f33fbff2cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\alarm">
+      <UniqueIdentifier>{57939c35-e090-463e-92d9-09704641751d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\logger">
+      <UniqueIdentifier>{97598d31-b798-451e-83a6-4964e9ea8bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\tackler">
+      <UniqueIdentifier>{64039751-ec3c-4977-a96e-833ecbed0d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\catcher">
+      <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src%28application%29\util\singleton">
-      <UniqueIdentifier>{0cbebc53-3161-4837-b221-e166ec99dc8d}</UniqueIdentifier>
+      <UniqueIdentifier>{430f2277-aef4-4d9f-ad79-e1f265bb2350}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -413,9 +428,6 @@
     </None>
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json">
       <Filter>data\Json\Crystal</Filter>
-    </None>
-    <None Include="data\Json\Stage\Stage.json">
-      <Filter>data\Json\Stage</Filter>
     </None>
     <None Include="data\Model\Ball\Ball.mv1">
       <Filter>data\Model\Ball</Filter>
@@ -500,15 +512,6 @@
     </None>
     <None Include="data\effect\materials\Dissolve.efkmatd">
       <Filter>data\Effect\materials</Filter>
-    </None>
-    <None Include="vendor\imgui\imgui_bezier_math.inl">
-      <Filter>vendor\imgui</Filter>
-    </None>
-    <None Include="vendor\imgui\imgui_extra_math.inl">
-      <Filter>vendor\imgui</Filter>
-    </None>
-    <None Include="vendor\imgui\imgui_node_editor_internal.inl">
-      <Filter>vendor\imgui</Filter>
     </None>
     <None Include="data\Json\Game\GameRef.json">
       <Filter>data\Json\Game</Filter>
@@ -614,6 +617,27 @@
     </None>
     <None Include="data\Json\Effect\DropDust.json">
       <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Tackle.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_0.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_1.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_2.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_3.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\Stage_4.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\TestStage.json">
+      <Filter>data\Json\Stage</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -968,57 +992,6 @@
     <ClCompile Include="src\util\math\Matrix.cpp">
       <Filter>src%28application%29\util\math</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\imgui\crude_json.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\GraphEditor.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\ImCurveEdit.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\ImGradient.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_canvas.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_impl_dx11.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_impl_win32.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_ja_gryph_ranges.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_node_editor.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_node_editor_api.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\ImGuizmo.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\ImSequencer.cpp">
-      <Filter>vendor\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\time\GameTime.cpp">
       <Filter>src%28application%29\util\time</Filter>
     </ClCompile>
@@ -1205,7 +1178,6 @@
     <ClCompile Include="src\scene\play\ball\BallSpawner.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\fx\post_effect\bloom\cameraBloom.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaSpawnPoint.cpp">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClCompile>
@@ -1218,7 +1190,45 @@
     <ClCompile Include="src\common\component\model_frame_trail_renderer\FrameTrail.cpp">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\targetting\TargetManager.cpp">
+      <Filter>src%28application%29\scene\play\target</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\alarm\Alarm.cpp">
+      <Filter>src%28application%29\util\alarm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\tackler\Tackler.cpp">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_draw.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_impl_dx9.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_impl_dx11.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_impl_win32.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_ja_gryph_ranges.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_tables.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGui\imgui_widgets.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
     <ClCompile Include="src\util\singleton\singleton.cpp">
       <Filter>src%28application%29\util\singleton</Filter>
     </ClCompile>
@@ -1487,69 +1497,6 @@
     </ClInclude>
     <ClInclude Include="src\util\math\Matrix.h">
       <Filter>src%28application%29\util\math</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\crude_json.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\GraphEditor.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imconfig.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\ImCurveEdit.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\ImGradient.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_bezier_math.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_canvas.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_extra_math.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_impl_dx11.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_impl_win32.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_internal.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_node_editor.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_node_editor_internal.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_stdlib.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\ImGuizmo.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\ImSequencer.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imstb_rectpack.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imstb_textedit.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imstb_truetype.h">
-      <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\ImZoomSlider.h">
-      <Filter>vendor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\magic_enum\magic_enum.hpp">
       <Filter>vendor\magic_enum</Filter>
@@ -1914,7 +1861,6 @@
     <ClInclude Include="src\scene\play\ball\BallSpawner.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\fx\post_effect\bloom\cameraBloom.h" />
     <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClInclude>
@@ -1930,8 +1876,57 @@
     <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h">
       <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\Vector3Util.h" />
-    <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
+    <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_CrossHair.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\targetting\TargetManager.h">
+      <Filter>src%28application%29\scene\play\target</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Vector3Util.h">
+      <Filter>src%28application%29\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\alarm\Alarm.h">
+      <Filter>src%28application%29\util\alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\logger\Logger.h">
+      <Filter>src%28application%29\util\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\tackler\Tackler.h">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imconfig.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_dx9.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_dxlib.hpp">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_win32.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_internal.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imstb_rectpack.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imstb_textedit.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imstb_truetype.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
     <ClInclude Include="src\util\singleton\singleton.h">
       <Filter>src%28application%29\util\singleton</Filter>
     </ClInclude>

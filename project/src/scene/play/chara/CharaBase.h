@@ -7,6 +7,7 @@
 #include <vendor/nlohmann/json_fwd.hpp>
 
 #include "src/util/math/Vector2.h"
+#include "src/util/alarm/Alarm.h"
 
 class CharaHP;
 class CharaStamina;
@@ -14,12 +15,16 @@ class Ball;
 class BallManager;
 class Physics;
 class Catcher;
+class Tackler;
 class Animator;
 template <class C>
 class Timeline;
 class StatusTracker;
 class EffectBase;
 class Trail3D;
+
+class UI_CrossHair;
+class UI_HitPoint_Icon;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -119,6 +124,8 @@ public:
 	/// </summary>
 	void TeleportToLastBall();
 
+	void DropBall(const Vector3& other, float force_vertical, float force_horizontal);
+
 	//=======================================================================================
 	// ▼キャッチ
 
@@ -129,6 +136,20 @@ public:
 
 	void CatchSuccess(const Vector3& velocity);
 
+	//=======================================================================================
+	// ▼タックル
+	void Tackle();
+
+	void GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback);
+
+	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
+
+	//=======================================================================================
+	// ▼無敵
+	void SetInvincible(float duration_sec, bool isOverride);
+private:
+	void invincibleUpdate();
+public:
 	//=======================================================================================
 	// ▼リスポーン
 	
@@ -197,6 +218,12 @@ public:
 	inline bool IsTargeting() const { return m_IsTargeting; }
 	// ターゲットされているか
 	inline bool IsTargeted() const { return m_IsTargeted; }
+	// タックル中か
+	inline bool IsTackling() const { return m_IsTackling; }
+	// タックル可能か
+	inline bool CanTackle() const { return m_CanTackle; }
+	// 無敵中か
+	inline bool IsInvincible() const { return m_IsInvincible; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -205,6 +232,7 @@ public:
 	void StateActionIdleToJump(FSMSignal sig);
 	void StateActionIdleToRun(FSMSignal sig);
 	void StateActionIdleToStandingIdle(FSMSignal sig);
+	void StateActionIdleToTackle(FSMSignal sig);
 
 	void StateAimToThrow(FSMSignal sig);
 
@@ -229,6 +257,7 @@ public:
 	void StateRunToActionIdle(FSMSignal sig);
 	void StateRunToJump(FSMSignal sig);
 	void StateRunToSlide(FSMSignal sig);
+	void StateRunToTackle(FSMSignal sig);
 
 	void StateSlide(FSMSignal sig);
 	void StateSlideToRun(FSMSignal sig);
@@ -236,6 +265,8 @@ public:
 	void StateStandingIdle(FSMSignal sig);
 	void StateStandingIdleEmote(FSMSignal sig);
 	void StateStandingIdleToActionIdle(FSMSignal sig);
+
+	void StateTackle(FSMSignal sig);
 
 	void SubStateNone(FSMSignal sig);
 	void SubStateGetBall(FSMSignal sig);
@@ -245,6 +276,7 @@ public:
 
 private:
 	friend class CharaManager;
+	friend class UI_CrossHair;
 
 
 	Ball*			m_pBall;				// 所有しているボールのポインター
@@ -257,6 +289,7 @@ private:
 	Physics*		m_pPhysics;				// 物理挙動のポインター
 	std::string		m_CharaTag;				// キャラクターのチームのタグ
 	Catcher*		m_Catcher;				// キャッチの当たり判定
+	Tackler*		m_Tackler;				// タックルの当たり判定
 	EffectBase*		m_pCatchReadyEffect;	// キャッチの準備エフェクト
 	EffectBase*		m_pCatchDustEffect;		// キャッチの粉エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
@@ -265,8 +298,10 @@ private:
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
+	Alarm*			m_Alarm;				// アラーム
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
+	int				m_HitPoint;
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
@@ -274,6 +309,8 @@ private:
 	float			m_EmoteTimer;			// 放置アニメーションまでの時間
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
+	float			m_InvincibleTimer;		// 無敵残り時間
+	float			m_Stamina;				// 
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -284,10 +321,16 @@ private:
 	bool			m_CanHold;				// ボールを持てるか
 	bool			m_CanThrow;				// ボールを投げられるか
 	bool			m_IsCatching;			// キャッチ中か
-	bool 			m_IsTargeting;				// ターゲットを狙っているか
+	bool 			m_IsTargeting;			// ターゲットを狙っているか
 	bool 			m_IsTargeted;			// ターゲットされているか
+	bool			m_CanTackle;			// タックル可能か
+	bool			m_IsTackling;			// タックル中か
+	bool			m_IsInvincible;			// 無敵か
+	bool			m_IsDamage;				// ダメージ喰らい中か
 
-	
+	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
+	UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
+	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
 
 	void land();
 
@@ -296,6 +339,7 @@ private:
 	void slideUpdate();
 	void catchUpdate();
 	void jumpUpdate();
+	void tackleUpdate();
 
 	void getHit(Ball* hit);
 

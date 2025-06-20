@@ -107,6 +107,16 @@ void PlayerController::Update() {
 		if (chara->CanMove())
 			chara->Move(stick);
 	}
+
+	////////////////////////////////////////////////////
+	// ƒ^ƒbƒNƒ‹
+	if (chara->CanTackle())
+	{
+		if (InputManager::Push("Tackle", padNumber))
+		{
+			chara->Tackle();
+		}
+	}
 }
 
 Vector3 PlayerController::AnalogStick() {

@@ -24,6 +24,21 @@ namespace PadController {
 	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 入力情報を更新する
+	/// </summary>
+	void InputUpdate();
+
+	/// <summary>
+	/// スティックの傾きを更新する
+	/// </summary>
+	void StickUpdate();
+
+	/// <summary>
+	/// トリガーの押し込みを更新する
+	/// </summary>
+	void TriggerUpdate();
+
 	//==========================================================================================
 	// ▼入力情報の取得
 
@@ -38,8 +53,41 @@ namespace PadController {
 	/// 1フレーム前のパッド入力を確認
 	/// </summary>
 	/// <param name="keyCode">入力の種類</param>
+	/// <param name="padNumber">パッド番号</param>
 	/// <returns>押されていたら:True</returns>
 	bool CheckPushStatusBefore(KeyDefine::KeyCode keyCode, int padNumber = DX_INPUT_PAD1);
+
+	/// <summary>
+	/// 現在のスティックが傾いているかを確認
+	/// </summary>
+	/// <param name="keyCode">入力種類(スティックのみ)</param>
+	/// <param name="padNumber">パッド番号</param>
+	/// <returns>デッドゾーンより傾いていた場合、True</returns>
+	bool CheckInclinationStickCurrent(KeyDefine::KeyCode keyCode, int padNumber = DX_INPUT_PAD1);
+
+	/// <summary>
+	/// 1フレーム前のスティックが傾いているかを確認
+	/// </summary>
+	/// <param name="keyCode">入力種類(スティックのみ)</param>
+	/// <param name="padNumber">パッド番号</param>
+	/// <returns>デッドゾーンより傾いていた場合、True</returns>
+	bool CheckInclinationStickBefore(KeyDefine::KeyCode keyCode, int padNumber = DX_INPUT_PAD1);
+
+	/// <summary>
+	/// 現在のトリガーが傾いているかを確認
+	/// </summary>
+	/// <param name="keyCode">入力種類(トリガーのみ)</param>
+	/// <param name="padNumber">パッド番号</param>
+	/// <returns>デッドゾーンより傾いていた場合、True</returns>
+	bool CheckInclinationTriggerCurrent(KeyDefine::KeyCode keyCode, int padNumber = DX_INPUT_PAD1);
+
+	/// <summary>
+	/// 1フレーム前のトリガーが傾いているかを確認
+	/// </summary>
+	/// <param name="keyCode">入力種類(トリガーのみ)</param>
+	/// <param name="padNumber">パッド番号</param>
+	/// <returns>デッドゾーンより傾いていた場合、True</returns>
+	bool CheckInclinationTriggerBefore(KeyDefine::KeyCode keyCode, int padNumber = DX_INPUT_PAD1);
 
 	//==========================================================================================
 	// ▼セッター
@@ -92,6 +140,20 @@ namespace PadController {
 	Vector2 NormalizedRightStick(int num = DX_INPUT_PAD1);
 
 	/// <summary>
+	/// 1フレーム前の左スティックの入力値
+	/// </summary>
+	/// <param name="num">パッドの番号</param>
+	/// <returns>1から-1の間の値</returns>
+	Vector2 NormalizedLeftStickBefore(int num = DX_INPUT_PAD1);
+
+	/// <summary>
+	/// 1フレーム前の右スティックの入力値
+	/// </summary>
+	/// <param name="num">パッドの番号</param>
+	/// <returns>1から-1の間の値</returns>
+	Vector2 NormalizedRightStickBefore(int num = DX_INPUT_PAD1);
+
+	/// <summary>
 	/// 左トリガーの入力値
 	/// </summary>
 	/// <param name="num">パッドの番号</param>
@@ -106,6 +168,20 @@ namespace PadController {
 	float NormalizedRightTrigger(int num = DX_INPUT_PAD1);
 
 	/// <summary>
+	/// 1フレーム前の左トリガーの入力値
+	/// </summary>
+	/// <param name="num">パッドの番号</param>
+	/// <returns>1から0の間の値</returns>
+	float NormalizedLeftTriggerBefore(int num = DX_INPUT_PAD1);
+
+	/// <summary>
+	/// 1フレーム前の右トリガーの入力値
+	/// </summary>
+	/// <param name="num">パッドの番号</param>
+	/// <returns>1から0の間の値</returns>
+	float NormalizedRightTriggerBefore(int num = DX_INPUT_PAD1);
+
+	/// <summary>
 	/// パッドの入力情報を返す
 	/// </summary>
 	/// <param name="num">パッドの番号</param>
@@ -116,4 +192,21 @@ namespace PadController {
 	/// 引数のパッド番号が0以上かつ、接続されているパッドの数以下の時、Trueを返す
 	/// </summary>
 	inline const bool CheckPadNumber(int num) { return (0 < num) && (num <= GetJoypadNum()); }
+
+	/// <summary>
+	/// 機能するデータ内容かを確認する
+	/// </summary>
+	/// <param name="keyCode">入力種類</param>
+	/// <param name="padNumber">パッド番号</param>
+	/// <returns>正しい場合、True</returns>
+	inline const bool CheckCorrectData(KeyDefine::KeyCode keyCode, int padNumber) {
+
+		if (CheckPadNumber(padNumber) == false)
+			return false;
+
+		if (KeyCodeToDeviceType(keyCode) != KeyDefine::DeviceType::Pad)
+			return false;
+
+		return true;
+	}
 }

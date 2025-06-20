@@ -54,12 +54,13 @@ void InputManager::Init() {
 		key["Left"] = { KeyCode::Left, KeyCode::LeftArrow };
 		key["Right"] = { KeyCode::Right, KeyCode::RightArrow };
 
-		key["Throw"] = { KeyCode::LeftClick, KeyCode::RightShoulder };
-		key["Catch"] = { KeyCode::RightClick, KeyCode::LeftShoulder };
+		key["Throw"] = { KeyCode::LeftClick, KeyCode::RightTrigger };
+		key["Catch"] = { KeyCode::RightClick, KeyCode::LeftTrigger };
 		key["Jump"] = { KeyCode::Space, KeyCode::ButtonA };
-		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftControl, KeyCode::ButtonB };
+		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftShoulder };
 		key["Teleport"] = { KeyCode::E, KeyCode::ButtonY };
 		key["Feint"] = { KeyCode::F, KeyCode::ButtonX };
+		key["Tackle"] = { KeyCode::LeftControl, KeyCode::ButtonB };
 
 		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
 		key["MoveUp"] = { KeyCode::W };
@@ -67,7 +68,10 @@ void InputManager::Init() {
 		key["MoveLeft"] = { KeyCode::A };
 		key["MoveRight"] = { KeyCode::D };
 
-		key["TargetCamera"] = { KeyCode::LeftClick, KeyCode::RightShoulder };
+		key["TargetCamera"] = { KeyCode::LeftClick, KeyCode::RightTrigger };
+
+		key["AnyKey"] = { KeyCode::Z, KeyCode::Space, KeyCode::Enter,
+			KeyCode::ButtonA, KeyCode::ButtonB, KeyCode::ButtonX, KeyCode::ButtonY };
 	}
 
 	//==========================================================================================

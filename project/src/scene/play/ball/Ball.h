@@ -73,6 +73,10 @@ public:
 	void PickUp();
 
 	void SetChargeRate(float rate) { m_ChargeRate = rate; }
+
+	void ChangeState(const State& state) { changeState(state); }
+
+	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -96,7 +100,9 @@ private:
 	// ホーミング系
 	const CharaBase*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
 	Vector3				m_HomingOrigin;			// ホーミング開始地点
+	Vector3				m_HomingTargetPos;		// ホーミング対象の座標
 	bool				m_IsHoming;	// ホーミング中か
+	bool				m_DoRefreshHoming;	// ホーミング先を更新するか
 	float				m_HomingProgress;
 	float				m_HomingSpeed;
 	float				m_HormingCurveAngle;	// カーブ方向を決める角度

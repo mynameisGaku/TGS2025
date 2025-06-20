@@ -26,7 +26,7 @@ namespace CameraManager {
 	/// カメラの再初期化を行う
 	/// </summary>
 	/// <param name="number">カメラの番号</param>
-	void ResetCamera(const int& number);
+	void ResetCamera(int number);
 
 	/// <summary>
 	/// カメラの番号が正しいか確認する。
@@ -34,14 +34,14 @@ namespace CameraManager {
 	/// <param name="number">カメラの番号</param>
 	/// <param name="number"></param>
 	/// <returns>番号が一致したカメラが存在する場合true</returns>
-	bool CheckNumber(const int& number);
+	bool CheckNumber(int number);
 
 	/// <summary>
 	/// カメラのステートを変更する
 	/// </summary>
 	/// <param name="number">カメラの番号</param>
 	/// <param name="state">変更するステート</param>
-	void ChangeStateCamera(const int& number, void(Camera::* state)(FSMSignal));
+	void ChangeStateCamera(int number, void(Camera::* state)(FSMSignal));
 
 	/// <summary>
 	/// カメラ描画を指定された位置とサイズで分割します
@@ -80,7 +80,7 @@ namespace CameraManager {
 	/// </summary>
 	/// <param name="number">カメラの番号</param>
 	/// <param name="type">カメラワークの種類</param>
-	void SetCameraWork(const int& number, const std::string& type);
+	void SetCameraWork(int number, const std::string& type);
 
 	/// <summary>
 	/// 画面分割処理を行うかを設定する
@@ -101,7 +101,7 @@ namespace CameraManager {
 	/// </summary>
 	/// <param name="number">カメラの番号</param>
 	/// <returns>カメラのポインター</returns>
-	Camera* GetCamera(const int& number);
+	Camera* GetCamera(int number);
 
 	/// <summary>
 	/// 全てのカメラのリストを取得する
@@ -133,6 +133,8 @@ namespace CameraManager {
 	/// </summary>
 	Vector2 GetScreenDivisionCenter();
 
+	Vector2 GetDivedByCameraNum();
+
 	//================================================================================
 	// ▼デバッグ機能
 
@@ -140,8 +142,7 @@ namespace CameraManager {
 	/// ステートを変更する(string型)
 	/// </summary>
 	/// <param name="state">変更するステート名</param>
-	void CameraChangeStateTheString(const std::string& state);
-
+	//void CameraChangeStateTheString(const std::string& state);
 
 #ifdef _DEBUG
 #ifndef IMGUI

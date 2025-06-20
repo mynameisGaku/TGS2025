@@ -46,7 +46,7 @@ CharaManager::~CharaManager()
 
 		if (item->m_pObject != nullptr)
 		{
-			item->m_pObject->DestroyMe();
+			delete item->m_pObject;
 			item->m_pObject = nullptr;
 		}
 
@@ -172,14 +172,14 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tCharaRed;
-		colParamChara.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue };
+		colParamChara.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue, ColDefine::Tag::tTackleBlue, ColDefine::Tag::tTackleRed};
 	}
 	else if (tag == "Blue")
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tCharaBlue;
-		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed };
+		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed, ColDefine::Tag::tTackleRed, ColDefine::Tag::tTackleBlue };
 	}
 
 	//newChara->SetTrailImage(m_hTrails[tag]);

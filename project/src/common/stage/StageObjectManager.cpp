@@ -170,6 +170,32 @@ bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, 
 	return hitFlag;
 }
 
+bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector3& p2, float r, Vector3* hitPos)
+{
+	if (stageObjects == nullptr)
+		return false;
+
+	bool hitFlag = false;
+	Vector3 pushVec = VGet(0, 0, 0);
+
+	for (const auto& obj : *stageObjects) {
+
+		if (!obj->IsCollider())
+			continue;
+
+		MV1SetupCollInfo(obj->Info().hHitModel, -1, 8, 8, 8);
+		MV1_COLL_RESULT_POLY_DIM dim = MV1CollCheck_Capsule(obj->Info().hHitModel, -1, p1, p2, r);
+		for (int i = 0; i < dim.HitNum; i++) {
+			hitFlag = true;
+			if (hitPos)
+				*hitPos = dim.Dim->HitPosition;
+		}
+		MV1CollResultPolyDimTerminate(dim);
+	}
+
+	return hitFlag;
+}
+
 bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos)
 {
 	for (const auto& obj : *stageObjects) {

@@ -12,5 +12,7 @@
   "BouncinessDefault": 0.35,
   "SpeedDefault": 40.0,
   "Max": 50,
-  "LifeTimeMax": 15.0
+  "LifeTimeMax": 15.0,
+  "DropForce_Vertical": 20.0,
+  "DropForce_Horizontal": 5.0
 }

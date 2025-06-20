@@ -22,6 +22,8 @@ public:
 	float	SpeedDefault = 0.0f;
 	float	HomingTimeMax = 0.0f;
 	float	LifeTimeMax = 0.0f;
+	float	DropForce_Vertical = 0.0f;
+	float	DropForce_Horizontal = 0.0f;
 	int		Max = 0;
 };
 

@@ -529,7 +529,7 @@ void CharaBase::Move(const Vector3& dir)
 	if (m_CanRot)
 	{
 		float currentRot = transform->rotation.y;	// 現在の向き
-		float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
+		float terminusRot = atan2f(dir.x, dir.z);	// 終点の向き
 
 		// 徐々に終点の向きへ合わせる
 		transform->rotation.y = MathUtil::RotAngle(currentRot, terminusRot, m_RotSpeed);

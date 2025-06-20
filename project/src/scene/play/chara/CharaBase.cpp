@@ -72,6 +72,10 @@ CharaBase::CharaBase()
 	m_pCatchReadyEffect	= nullptr;
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
+	m_hTrailImage		= -1;
+	m_IsTargeting			= false;
+	m_IsTargeted		= false;
+	m_pTargetBall		= nullptr;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -576,53 +580,6 @@ void CharaBase::StartThrow()
 		return;
 
 	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
-}
-
-void CharaBase::ThrowBall(const Vector3& velocity)
-{
-	if (m_pBall == nullptr)
-		return;
-
-	m_pBall->ThrowVelocity(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this);
-
-	m_pLastBall = m_pBall;
-	m_pBall = nullptr;
-
-	m_IsCharging = false;
-	m_BallChargeRate = 0.0f;
-}
-
-void CharaBase::ThrowBallForward()
-{
-	Vector3 forward = transform->Forward();
-	Vector3 velocity = forward + Vector3::SetY(0.15f);	// Magic:)
-
-	ThrowBall(velocity);
-}
-
-void CharaBase::ThrowHomingBall()
-{
-	if (m_pBall == nullptr)
-		return;
-
-	Vector3 forward = transform->Forward();
-	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	
-	const CharaBase* targetChara = nullptr;
-	Camera* camera = CameraManager::GetCamera(m_Index);
-
-	if (camera != nullptr)
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
-
-	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara, 0.1f + m_BallChargeRate);
-	m_pStatusTracker->AddThrowCount(1);
-	m_pLastBall = m_pBall;
-	m_pBall = nullptr;
-
-	playThrowSound();
-
-	m_IsCharging = false;
-	m_BallChargeRate = 0.0f;
 }
 
 void CharaBase::Feint()
@@ -1821,6 +1778,50 @@ void CharaBase::getHit(Ball* hit)
 	playGetHitSound();
 }
 
+void CharaBase::throwBallForward()
+{
+	if (m_pBall == nullptr)
+		return;
+
+	Vector3 forward = transform->Forward();
+	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+
+	m_pBall->ThrowDirection(dir, this, m_BallChargeRate);
+
+	releaseBall();
+}
+
+void CharaBase::throwBallHoming()
+{
+	if (m_pBall == nullptr)
+		return;
+
+	Vector3 forward = transform->Forward();
+	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+
+	const CharaBase* targetChara = nullptr;
+	Camera* camera = CameraManager::GetCamera(m_Index);
+
+	if (camera != nullptr)
+		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+
+	m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate);
+
+	releaseBall();
+}
+
+void CharaBase::releaseBall()
+{
+	m_pStatusTracker->AddThrowCount(1);
+
+	playThrowSound();
+
+	m_pLastBall = m_pBall;
+	m_pBall = nullptr;
+	m_IsCharging = false;
+	m_BallChargeRate = 0.0f;
+}
+
 void CharaBase::playThrowSound()
 {
 	int rand = Random.GetIntRange(0, 100);
@@ -2001,6 +2002,6 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 {
 	if (m_FSM->GetCurrentState() == &CharaBase::StateAimToThrow)
 	{
-		ThrowHomingBall();
+		throwBallHoming();
 	}
 }

@@ -98,8 +98,8 @@ void Ball::Init(std::string charaTag)
 	m_IsHoming = false;
 	m_IsActive = true;
 	m_IsPickedUp = false;
-	m_Speed = 0.0f;
-	m_Progress = 0.0f;
+	m_HomingSpeed = 0.0f;
+	m_HomingProgress = 0.0f;
 	m_HormingCurveAngle = 0.0f;
 	m_HormingCurveScale = 0.0f;
 
@@ -220,7 +220,7 @@ void Ball::Draw()
 	Object3D::Draw();
 }
 
-void Ball::Throw(CharaBase* owner)
+void Ball::Throw(CharaBase* owner, float chargeRate)
 {
 	changeState(S_THROWN);
 
@@ -235,28 +235,30 @@ void Ball::Throw(CharaBase* owner)
 
 	m_Owner = owner;
 	m_LastOwner = m_Owner;
+	m_ChargeRate = chargeRate;
 }
 
-void Ball::ThrowVelocity(const Vector3& velocity, CharaBase* owner)
+void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float chargeRate)
 {
-	Throw(owner);
+	Throw(owner, chargeRate);
 
-	m_Physics->velocity = velocity * BALL_REF.SpeedDefault;
+	m_Physics->velocity = direction * BALL_REF.SpeedDefault * (1.0f + chargeRate);
 }
 
-void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate)
+void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate)
 {
-	ThrowVelocity(velocity, owner);
-	m_Physics->SetIsActive(false);
-
-    m_HomingTargetChara = target;
 	m_IsHoming			= true;
-	m_ChargeRate		= chargeRate;
 	m_HomingOrigin		= transform->position;
-	m_Progress = 0.0f;
-	m_Speed = m_Physics->velocity.GetLength();
+    m_HomingTargetChara = target;
 	m_HormingCurveAngle = 0.0f;
 	m_HormingCurveScale = 1.0f;
+	m_HomingProgress = 0.0f;
+
+	const Vector3 direction = Vector3::Normalize(target->transform->position - transform->position);
+	ThrowDirection(direction, owner, chargeRate);
+	m_Physics->SetIsActive(false);
+
+	m_HomingSpeed = m_Physics->velocity.GetLength();
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -410,13 +412,13 @@ void Ball::homingProcess()
 	}
 	else
 	{
-		delta = m_Speed / distance * GTime.DeltaTime();
+		delta = m_HomingSpeed / distance * GTime.DeltaTime();
 	}
 
-	m_Progress += delta;
+	m_HomingProgress += delta;
 
-	const float circleY = sinf(m_Progress * DX_PI_F) * m_HormingCurveScale;
-	const float circleZ = -1 + m_Progress * 2.0f;
+	const float circleY = sinf(m_HomingProgress * DX_PI_F) * m_HormingCurveScale;
+	const float circleZ = -1 + m_HomingProgress * 2.0f;
 	const Vector3 circlePos = Vector3(0.0f, circleY, circleZ) *
 		distance * 0.5f *
 		dirRotMat;

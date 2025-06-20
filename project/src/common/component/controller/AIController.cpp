@@ -175,7 +175,7 @@ void AIController::AttackState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // I—¹ (Exit)
 	{
-		m_Chara->ThrowBallForward();
+		//m_Chara->ThrowBallForward();
 	}
 	break;
 	}

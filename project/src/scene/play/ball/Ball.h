@@ -40,9 +40,9 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void Throw(CharaBase* owner);
-	void ThrowVelocity(const Vector3& velocity, CharaBase*owner);
-	void ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate = 1.0f);
+	void Throw(CharaBase* owner, float chargeRate);
+	void ThrowDirection(const Vector3& direction, CharaBase*owner, float chargeRate);
+	void ThrowHoming(const CharaBase* target, CharaBase* owner,  float chargeRate);
 
 	State GetState() const { return m_State; }
 
@@ -97,8 +97,8 @@ private:
 	const CharaBase*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
 	Vector3				m_HomingOrigin;			// ホーミング開始地点
 	bool				m_IsHoming;	// ホーミング中か
-	float				m_Progress;
-	float				m_Speed;
+	float				m_HomingProgress;
+	float				m_HomingSpeed;
 	float				m_HormingCurveAngle;	// カーブ方向を決める角度
 	float				m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
 

@@ -36,5 +36,5 @@ public:
 
 private:
 	std::list<ColliderBase*> colliders;
-
+	class PerformanceProfiler* m_pProfiler;
 };

@@ -8,10 +8,14 @@
 #include "src/common/component/collider/ColliderSphere.h"
 #include "src/common/component/collider/ColliderCapsule.h"
 #include "src/common/component/collider/ColliderModel.h"
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
 CollisionManager::CollisionManager() {
 
 	colliders.clear();
+
+	m_pProfiler = new PerformanceProfiler("Collision");
+	m_pProfiler->Activate(); 
 }
 
 CollisionManager::~CollisionManager() {
@@ -29,6 +33,8 @@ void CollisionManager::Update() {
 
 	if (GTime.GetTimeScale() == 0.0f)
 		return;
+
+	m_pProfiler->BeginProfiling();
 
 	for (ColliderBase* col : colliders) {
 		if (col->IsActive() == false)
@@ -93,6 +99,7 @@ void CollisionManager::Update() {
 			data = nullptr;
 		}
 	}
+	m_pProfiler->EndProfiling();
 }
 
 void CollisionManager::Draw() {

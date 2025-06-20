@@ -124,13 +124,15 @@ void Ball::Init(std::string charaTag)
 
 void Ball::Update()
 {
-	m_pProfilerUpdate->BeginProfiling();
 	Object3D::Update();
 
 	if (not m_IsActive)
 	{
+		m_pProfilerUpdate->Deactivate();
 		return;
 	}
+	m_pProfilerUpdate->Activate();
+	m_pProfilerUpdate->BeginProfiling();
 
 	// エフェクト
 	{
@@ -237,8 +239,11 @@ void Ball::Update()
 void Ball::Draw()
 {
 	if (not m_IsActive)
+	{
+		m_pProfilerDraw->Deactivate();
 		return;
-
+	}
+	m_pProfilerDraw->Activate();
 	m_pProfilerDraw->BeginProfiling();
 
 	m_pTrail->Draw();

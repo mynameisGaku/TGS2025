@@ -47,6 +47,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	//StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 	StageObjectManager::LoadFromJson("data/json/Stage/TestStage.json");
+	//StageObjectManager::LoadFromJson("data/json/Stage/Empty.json");
 
 	CameraManager::SetIsScreenDivision(true);
 

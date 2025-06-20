@@ -9,7 +9,6 @@ class CharaBase;
 class Collider;
 class BallManager;
 class Trail3D;
-class PerformanceProfiler;
 
 namespace
 {
@@ -82,8 +81,9 @@ public:
 private:
 	friend class BallManager;
 
-	PerformanceProfiler* m_pProfilerDraw;
-	PerformanceProfiler* m_pProfilerUpdate;
+	class PerformanceProfiler* m_pProfilerDraw;
+	class PerformanceProfiler* m_pProfilerUpdate;
+	class PerformanceProfiler* m_pProfilerCollider;
 	BallManager*		m_pManager;
 	Trail3D*			m_pTrail;
 

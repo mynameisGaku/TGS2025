@@ -114,8 +114,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	PerformanceProfilerManager* ppM = PerformanceProfilerManager::GetInst();
 	PerformanceProfiler* gameLoopProfiler = new PerformanceProfiler("GameLoop");
+	gameLoopProfiler->Activate();
 	PerformanceProfiler* gameLoopProfilerUpdate = new PerformanceProfiler("GameLoop Update");
+	gameLoopProfilerUpdate->Activate();
 	PerformanceProfiler* gameLoopProfilerRendering = new PerformanceProfiler("GameLoop Rendering");
+	gameLoopProfilerRendering->Activate();
 
 	int mStartTime = GetNowCount();
 

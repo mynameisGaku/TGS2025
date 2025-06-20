@@ -25,6 +25,7 @@
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
 #include "src/scene/play/tackler/Tackler.h"
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
@@ -142,6 +143,9 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_UI_BallChargeMeter);
 	PtrUtil::SafeDelete(m_UI_HitPointIcon);
 
+	PtrUtil::SafeDelete(m_pProfilerUpdate);
+	PtrUtil::SafeDelete(m_pProfilerDraw);
+
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
 
@@ -155,6 +159,11 @@ CharaBase::~CharaBase()
 
 void CharaBase::Init(std::string tag)
 {
+	m_pProfilerUpdate = new PerformanceProfiler("CharaUpdate: " + std::to_string(m_Index));
+	m_pProfilerUpdate->Activate();
+	m_pProfilerDraw = new PerformanceProfiler("CharaDraw: " + std::to_string(m_Index));
+	m_pProfilerDraw->Activate();
+
 	m_Alarm = new Alarm;
 	m_Alarm->Reset();
 
@@ -315,6 +324,7 @@ void CharaBase::Init(std::string tag)
 
 void CharaBase::Update() {
 
+	m_pProfilerUpdate->BeginProfiling();
 	HitGroundProcess();
 
 	// デバッグ機能
@@ -365,10 +375,12 @@ void CharaBase::Update() {
 	Object3D::Update();
 
 	invincibleUpdate();
+	m_pProfilerUpdate->EndProfiling();
 }
 
 void CharaBase::Draw()
 {
+	m_pProfilerDraw->BeginProfiling();
 	Object3D::Draw();
 
 	/*for (int i = 0; i < 5; i++)
@@ -381,6 +393,7 @@ void CharaBase::Draw()
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
 
+	m_pProfilerDraw->EndProfiling();
 	
 }
 

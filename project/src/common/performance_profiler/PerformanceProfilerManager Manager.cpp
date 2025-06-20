@@ -34,6 +34,9 @@ void PerformanceProfilerManager::Render()
     ImGui::Begin("Performance Profile Debugger");
     for (auto& it : m_Profilers)
     {
+        if (not it->IsActive())
+            continue;
+
         if (ImGui::TreeNode(it->GetName().c_str()))
         {
             ImGui::Text("Tick: %lf ms", it->GetResult());

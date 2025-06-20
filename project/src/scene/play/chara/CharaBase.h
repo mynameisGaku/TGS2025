@@ -296,6 +296,8 @@ private:
 	friend class CharaManager;
 	friend class UI_CrossHair;
 
+	class PerformanceProfiler* m_pProfilerDraw;
+	class PerformanceProfiler* m_pProfilerUpdate;
 
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター

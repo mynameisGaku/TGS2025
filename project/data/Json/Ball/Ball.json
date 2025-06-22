@@ -1,18 +1,20 @@
 {
-  "GravityDefault": {
-    "X": 0.0,
-    "Y": -0.75,
-    "Z": 0.0
-  },
-  "FrictionDefault": {
-    "X": 0.0,
-    "Y": 0.0,
-    "Z": 0.0
-  },
-  "BouncinessDefault": 0.35,
-  "SpeedDefault": 1600.0,
-  "Max": 50,
-  "LifeTimeMax": 15.0,
-  "DropForce_Vertical": 20.0,
-  "DropForce_Horizontal": 5.0
+    "Gravity": {
+        "X": 0.0,
+        "Y": -0.75,
+        "Z": 0.0
+    },
+    "Friction": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+    },
+    "Bounciness": 0.35,
+    "SpeedDefault": 1600.0,
+
+    "DropForce_Vertical": 20.0,
+    "DropForce_Horizontal": 5.0,
+
+    "LifeTimeMax": 15.0,
+    "PoolMax": 50
 }

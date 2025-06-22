@@ -1,6 +1,12 @@
 #include "src/reference/ball/BallRef.h"
 #include "src/util/file/json/settings_json.h"
 
+namespace
+{
+	const char* PATH = "data/Json/Ball/Ball.json";
+	const char* FILEKEY = "Ball";
+}
+
 void BallRef::Load()
 {
 	//=== Json“Ç‚Ýž‚Ý ===
@@ -8,13 +14,14 @@ void BallRef::Load()
 	settingsJson->LoadSettingJson(PATH, FILEKEY);
 
 	//=== ƒpƒ‰ƒ[ƒ^ ===
-	GravityDefault		= settingsJson->GetOrDefault("GravityDefault", Vector3(0, 0, 0), FILEKEY);
-	FrictionDefault		= settingsJson->GetOrDefault("FrictionDefault", Vector3(0, 0, 0), FILEKEY);
-	BouncinessDefault	= settingsJson->GetOrDefault("BouncinessDefault", 0.0f, FILEKEY);
-	SpeedDefault		= settingsJson->GetOrDefault("SpeedDefault", 0.0f, FILEKEY);
-	HomingTimeMax		= settingsJson->GetOrDefault("HomingTimeMax", 0.0f, FILEKEY);
-	LifeTimeMax			= settingsJson->GetOrDefault("LifeTimeMax", 0.0f, FILEKEY);
-	DropForce_Horizontal = settingsJson->GetOrDefault("DropForce_Horizontal", 0.0f, FILEKEY);
-	DropForce_Vertical  = settingsJson->GetOrDefault("DropForce_Vertical", 0.0f, FILEKEY);
-	Max					= settingsJson->GetOrDefault("Max", 0, FILEKEY);
+	Gravity					= settingsJson->GetOrDefault("Gravity", Vector3(0, 0, 0), FILEKEY);
+	Friction				= settingsJson->GetOrDefault("Friction", Vector3(0, 0, 0), FILEKEY);
+	Bounciness				= settingsJson->GetOrDefault("Bounciness", 0.0f, FILEKEY);
+	SpeedDefault			= settingsJson->GetOrDefault("SpeedDefault", 0.0f, FILEKEY);
+
+	DropForce_Horizontal	= settingsJson->GetOrDefault("DropForce_Horizontal", 0.0f, FILEKEY);
+	DropForce_Vertical		= settingsJson->GetOrDefault("DropForce_Vertical", 0.0f, FILEKEY);
+
+	LifeTimeMax				= settingsJson->GetOrDefault("LifeTimeMax", 0.0f, FILEKEY);
+	PoolMax					= settingsJson->GetOrDefault("PoolMax", 0, FILEKEY);
 }

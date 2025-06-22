@@ -9,22 +9,20 @@
 /// <author>佐藤紘斗</author>
 class BallRef
 {
-private:
-	const std::string PATH    = "data/Json/Ball/Ball.json";
-	const std::string FILEKEY = "Ball";
 public:
 	BallRef() { Load(); }
 	void Load();
 
-	Vector3 GravityDefault;		// デフォルトの重力(cm/s^2)
-	Vector3 FrictionDefault;	// デフォルトの摩擦係数
-	float	BouncinessDefault = 0.0f;	// デフォルトの反発係数
-	float	SpeedDefault = 0.0f;
-	float	HomingTimeMax = 0.0f;
-	float	LifeTimeMax = 0.0f;
-	float	DropForce_Vertical = 0.0f;
-	float	DropForce_Horizontal = 0.0f;
-	int		Max = 0;
+	Vector3 Gravity;		// 重力(cm/s^2)
+	Vector3 Friction;		// 摩擦係数
+	float	Bounciness;		// 反発係数
+	float	SpeedDefault;	// 溜め無しの速度
+
+	float	DropForce_Vertical;
+	float	DropForce_Horizontal;
+
+	float	LifeTimeMax;
+	int		PoolMax;
 };
 
 #define BALL_REF Singleton<BallRef>::Instance()

@@ -225,8 +225,8 @@ void Ball::Throw(CharaBase* owner, float chargeRate)
 {
 	changeState(S_THROWN);
 
-	m_Physics->SetGravity(BALL_REF.GravityDefault);
-	m_Physics->SetFriction(BALL_REF.FrictionDefault);
+	m_Physics->SetGravity(BALL_REF.Gravity);
+	m_Physics->SetFriction(BALL_REF.Friction);
 
 	m_Collider->SetIsActive(true);
 
@@ -308,7 +308,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 			if (relVelAlongNormal > 0.0f) return;
 
-			float e = BALL_REF.BouncinessDefault;
+			float e = BALL_REF.Bounciness;
 			float j = -(1.0f + e) * relVelAlongNormal / 2.0f;
 			Vector3 impulse = normal * j;
 
@@ -380,7 +380,7 @@ void Ball::collisionToGround()
 
 		// Y方向に跳ね返る
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
-		m_Physics->velocity.y *= -BALL_REF.BouncinessDefault;
+		m_Physics->velocity.y *= -BALL_REF.Bounciness;
 
 		// 転がっていく処理
 		float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
@@ -470,7 +470,7 @@ bool Ball::collisionToStage()
 			Vector3 normal = pushVec.Normalize();
 
 			// 速度を反射させる
-			const float bounciness = BALL_REF.BouncinessDefault;
+			const float bounciness = BALL_REF.Bounciness;
 			const Vector3 vel = m_Physics->velocity;
 
 			float dot = VDot(vel, normal);
@@ -499,7 +499,7 @@ void Ball::homingDeactivate()
 {
 	m_Physics->velocity *= GTime.deltaTime;
 	m_Physics->SetIsActive(true);
-	m_Physics->SetGravity(BALL_REF.GravityDefault);
+	m_Physics->SetGravity(BALL_REF.Gravity);
 	// 物理にホーミングの情報を引き継ぐ
 	m_IsHoming = false;
 }

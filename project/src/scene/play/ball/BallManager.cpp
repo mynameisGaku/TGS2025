@@ -23,7 +23,7 @@ BallManager::BallManager()
 	m_hTrails["Plain_Distortion"] = LoadGraph("data/img/trail/Trail_Plain_Distortion.png");
 	m_hTrails["Plain_Distortion_Thin"] = LoadGraph("data/img/trail/Trail_Plain_Distortion_Thin.png");
 
-	m_pPool = new Pool<Ball>(BALL_REF.Max);
+	m_pPool = new Pool<Ball>(BALL_REF.PoolMax);
 }
 
 BallManager::~BallManager()

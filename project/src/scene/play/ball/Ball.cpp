@@ -519,9 +519,7 @@ bool Ball::collisionToStage()
 
 void Ball::homingDeactivate()
 {
-	m_Physics->velocity *= GTime.deltaTime;
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
-	// 物理にホーミングの情報を引き継ぐ
 	m_IsHoming = false;
 }

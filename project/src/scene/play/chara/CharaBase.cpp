@@ -2010,7 +2010,7 @@ void CharaBase::getHit(Ball* hit)
 {
 	m_FSM->ChangeState(&CharaBase::StateDamageToDown);
 
-	Vector3 dif = hit->transform->position - transform->position;
+	Vector3 dif = hit->GetComponent<Physics>()->velocity * -1.0f;
 
 	m_pHitBall = hit;
 

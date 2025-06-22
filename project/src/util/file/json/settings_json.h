@@ -22,6 +22,7 @@
 
 //=== 追加のJson変換 ===
 #include "src/util/file/json/VectorJson.h"
+#include "src/util/file/json/BallThrowParamJson.h"
 
 /// <summary>
 /// JSON設定ファイルの読み込み、保存、取得、監視、及びインゲームでのImGuiによるリアルタイム変更を行うクラス。

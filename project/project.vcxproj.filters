@@ -367,6 +367,9 @@
     <Filter Include="src%28application%29\util\exception">
       <UniqueIdentifier>{8a59f6d4-07cc-4719-9d51-71d53cddeb3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\singleton">
+      <UniqueIdentifier>{45e5b4d4-9de5-4161-829b-c861ccd6745d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1238,6 +1241,12 @@
     <ClCompile Include="src\util\exception\Exception.cpp">
       <Filter>src%28application%29\util\exception</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\file\json\BallThrowParamJson.cpp">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\singleton\singleton.cpp">
+      <Filter>src%28application%29\util\singleton</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1935,6 +1944,12 @@
     </ClInclude>
     <ClInclude Include="src\util\exception\Exception.h">
       <Filter>src%28application%29\util\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\BallThrowParamJson.h">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\singleton\singleton.h">
+      <Filter>src%28application%29\util\singleton</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@
 
 DebugController::DebugController() 
 {
-
+	isPush = false;
 	chara = nullptr;
 	padNumber = -1;
 }
@@ -39,7 +39,7 @@ void DebugController::Update()
 		if (not isPush)
 		{
 			chara->GenerateBall();
-			chara->ThrowHomingBall();
+			chara->StartThrow();
 			isPush = true;
 		}
 	}

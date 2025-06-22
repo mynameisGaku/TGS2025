@@ -82,6 +82,10 @@ CharaBase::CharaBase()
 	m_pCatchReadyEffect	= nullptr;
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
+	m_hTrailImage		= -1;
+	m_IsTargeting			= false;
+	m_IsTargeted		= false;
+	m_pTargetBall		= nullptr;
 
 	m_UI_CrossHair = nullptr;
 	m_UI_BallChargeMeter = nullptr;
@@ -89,6 +93,11 @@ CharaBase::CharaBase()
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
+
+	m_Alarm = nullptr;
+	m_InvincibleTimer = 0.0f;
+	m_IsDamage = false;
+	m_IsTackling = false;
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
@@ -360,7 +369,7 @@ void CharaBase::Update() {
 	m_IsCatching = false;
 
 	m_Stamina = m_pStamina->GetCurrent();
-	m_HitPoint = m_pHP->GetCurrent();
+	m_HitPoint = (int)m_pHP->GetCurrent();
 
 	Object3D::Update();
 
@@ -607,53 +616,6 @@ void CharaBase::StartThrow()
 	m_FSM->ChangeState(&CharaBase::StateAimToThrow); // ステートを変更
 }
 
-void CharaBase::ThrowBall(const Vector3& velocity)
-{
-	if (m_pBall == nullptr)
-		return;
-
-	m_pBall->Throw(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this);
-
-	m_pLastBall = m_pBall;
-	m_pBall = nullptr;
-
-	m_IsCharging = false;
-	m_BallChargeRate = 0.0f;
-}
-
-void CharaBase::ThrowBallForward()
-{
-	Vector3 forward = transform->Forward();
-	Vector3 velocity = forward + Vector3::SetY(0.15f);	// Magic:)
-
-	ThrowBall(velocity);
-}
-
-void CharaBase::ThrowHomingBall()
-{
-	if (m_pBall == nullptr)
-		return;
-
-	Vector3 forward = transform->Forward();
-	Vector3 velocity = (forward * 35.0f) + Vector3::SetY(0.3f);	// Magic:)
-	
-	const CharaBase* targetChara = nullptr;
-	Camera* camera = CameraManager::GetCamera(m_Index);
-
-	if (camera != nullptr)
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
-
-	m_pBall->ThrowHoming(velocity * (1.0f + m_BallChargeRate * CHARGE_BALLSPEED), this, targetChara, 0.1f + m_BallChargeRate);
-	m_pStatusTracker->AddThrowCount(1);
-	m_pLastBall = m_pBall;
-	m_pBall = nullptr;
-
-	playThrowSound();
-
-	m_IsCharging = false;
-	m_BallChargeRate = 0.0f;
-}
-
 void CharaBase::Feint()
 {
 	if (not m_CanThrow)
@@ -752,6 +714,9 @@ void CharaBase::Tackle()
 		return;
 
 	m_IsTackling = true;
+	const Vector3 dir = Vector3::Normalize(m_pPhysics->FlatVelocity());
+	float terminusRot = atan2f(dir.x, dir.z);		// 終点の向き
+	transform->rotation.y = terminusRot;
 }
 
 void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback)
@@ -2045,7 +2010,7 @@ void CharaBase::getHit(Ball* hit)
 {
 	m_FSM->ChangeState(&CharaBase::StateDamageToDown);
 
-	Vector3 dif = hit->transform->position - transform->position;
+	Vector3 dif = hit->GetComponent<Physics>()->velocity * -1.0f;
 
 	m_pHitBall = hit;
 
@@ -2054,6 +2019,63 @@ void CharaBase::getHit(Ball* hit)
 	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:外部化
 
 	playGetHitSound();
+}
+
+void CharaBase::throwBallForward()
+{
+	if (m_pBall == nullptr)
+		return;
+
+	Vector3 forward = transform->Forward();
+	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+
+	m_pBall->ThrowDirection(dir, this, m_BallChargeRate);
+
+	releaseBall();
+}
+
+void CharaBase::throwBallHoming()
+{
+	if (m_pBall == nullptr)
+		return;
+
+	Vector3 forward = transform->Forward();
+	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+
+	const CharaBase* targetChara = nullptr;
+	Camera* camera = CameraManager::GetCamera(m_Index);
+	assert(camera != nullptr);
+
+	targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+
+	if (m_IsLanding == true)
+		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+	else
+	{
+		// 自分の向きとターゲットの向きを比較して、投げる角度を調整
+		Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
+		float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
+
+		// 角度を90度単位で丸める
+		float angleRound = roundf(angle / (DX_PI_F * 0.5f));
+		angle = angleRound * (DX_PI_F * 0.5f);
+
+		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+	}
+
+	releaseBall();
+}
+
+void CharaBase::releaseBall()
+{
+	m_pStatusTracker->AddThrowCount(1);
+
+	playThrowSound();
+
+	m_pLastBall = m_pBall;
+	m_pBall = nullptr;
+	m_IsCharging = false;
+	m_BallChargeRate = 0.0f;
 }
 
 void CharaBase::playThrowSound()
@@ -2236,6 +2258,6 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 {
 	if (m_FSM->GetCurrentState() == &CharaBase::StateAimToThrow)
 	{
-		ThrowHomingBall();
+		throwBallHoming();
 	}
 }

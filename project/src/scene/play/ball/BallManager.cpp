@@ -9,9 +9,6 @@
 
 #include "src/common/camera/CameraManager.h"
 
-const std::string BallManager::FOLDER_TEXTURE = "data/Img/BallTexture/";
-const std::string BallManager::FOLDER_JSON = "data/Json/Ball/Texture/";
-
 BallManager::BallManager()
 {
 	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
@@ -26,7 +23,7 @@ BallManager::BallManager()
 	m_hTrails["Plain_Distortion"] = LoadGraph("data/img/trail/Trail_Plain_Distortion.png");
 	m_hTrails["Plain_Distortion_Thin"] = LoadGraph("data/img/trail/Trail_Plain_Distortion_Thin.png");
 
-	m_pPool = new Pool<Ball>(BALL_REF.Max);
+	m_pPool = new Pool<Ball>(BALL_REF.PoolMax);
 }
 
 BallManager::~BallManager()

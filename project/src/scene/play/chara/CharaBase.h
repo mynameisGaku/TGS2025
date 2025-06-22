@@ -99,24 +99,6 @@ public:
 	void StartThrow();
 
 	/// <summary>
-	/// ボールを投げる
-	/// </summary>
-	/// <param name="velocity"></param>
-	void ThrowBall(const Vector3& velocity);
-
-	/// <summary>
-	/// ボールを前方に投げる
-	/// </summary>
-	/// <param name="speed"></param>
-	void ThrowBallForward();
-
-	/// <summary>
-	/// ホーミングボールを投げる
-	/// </summary>
-	/// <param name="param">ホーミング概要</param>
-	void ThrowHomingBall();
-
-	/// <summary>
 	/// 投げるモーションだけ再生
 	/// </summary>
 	void Feint();
@@ -233,7 +215,7 @@ public:
 	// キャッチ中か
 	inline bool	IsCatching()	const { return m_IsCatching;}	
 	// ターゲットを狙っているか
-	inline bool IsTarget() const { return m_IsTarget; }
+	inline bool IsTargeting() const { return m_IsTargeting; }
 	// ターゲットされているか
 	inline bool IsTargeted() const { return m_IsTargeted; }
 	// タックル中か
@@ -339,8 +321,8 @@ private:
 	bool			m_CanHold;				// ボールを持てるか
 	bool			m_CanThrow;				// ボールを投げられるか
 	bool			m_IsCatching;			// キャッチ中か
-	bool			m_IsTarget;				// ターゲットを狙っているか
-	bool			m_IsTargeted;			// ターゲットされているか
+	bool 			m_IsTargeting;			// ターゲットを狙っているか
+	bool 			m_IsTargeted;			// ターゲットされているか
 	bool			m_CanTackle;			// タックル可能か
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
@@ -360,6 +342,13 @@ private:
 	void tackleUpdate();
 
 	void getHit(Ball* hit);
+
+	// キャラの正面に方向指定ボールを投げる
+	void throwBallForward();
+	// ホーミングボールを投げる
+	void throwBallHoming();
+	// ボールを手放す処理
+	void releaseBall();
 
 	//=== サウンド再生 ===
 	void playThrowSound();

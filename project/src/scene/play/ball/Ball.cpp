@@ -443,7 +443,7 @@ void Ball::homingProcess()
 	}
 	else
 	{
-		delta = m_HomingSpeed / distance * GTime.DeltaTime();
+		delta = m_HomingSpeed / (distance + ((distance * 0.5f * DX_PI_F) - distance) * m_HormingCurveScale) * GTime.DeltaTime();
 	}
 
 	if (m_HomingTargetChara->IsTackling())
@@ -454,14 +454,21 @@ void Ball::homingProcess()
 
 	m_HomingProgress += delta;
 
-	const float circleY = sinf(m_HomingProgress * DX_PI_F) * m_HormingCurveScale;
-	const float circleZ = -1 + m_HomingProgress * 2.0f;
-	const Vector3 circlePos = Vector3(0.0f, circleY, circleZ) *
-		distance * 0.5f *
-		dirRotMat;
+	if (m_HomingProgress >= 1.0f)
+	{
+		transform->position = m_HomingTargetPos;
+	}
+	else
+	{
+		const float circleY = sinf(m_HomingProgress * DX_PI_F) * m_HormingCurveScale;
+		const float circleZ = -1 + m_HomingProgress * 2.0f;
+		const Vector3 circlePos = Vector3(0.0f, circleY, circleZ) *
+			distance * 0.5f *
+			dirRotMat;
 
-	m_Physics->velocity = (circlePos + middle) - transform->position;
-	transform->position += m_Physics->velocity;
+		m_Physics->velocity = (circlePos + middle) - transform->position;
+		transform->position += m_Physics->velocity;
+	}
 }
 
 bool Ball::collisionToStage()

@@ -378,6 +378,7 @@
     <ClCompile Include="src\util\file\csv\csvReader.cpp" />
     <ClCompile Include="src\util\file\FileUtil.cpp" />
     <ClCompile Include="src\util\file\ini\settings_ini.cpp" />
+    <ClCompile Include="src\util\file\json\BallThrowParamJson.cpp" />
     <ClCompile Include="src\util\file\json\settings_json.cpp" />
     <ClCompile Include="src\util\file\json\VectorJson.cpp" />
     <ClCompile Include="src\util\file\resource_loader\resourceLoader.cpp" />
@@ -548,6 +549,7 @@
     <ClInclude Include="src\util\file\csv\csvReader.h" />
     <ClInclude Include="src\util\file\FileUtil.h" />
     <ClInclude Include="src\util\file\ini\settings_ini.h" />
+    <ClInclude Include="src\util\file\json\BallThrowParamJson.h" />
     <ClInclude Include="src\util\file\json\settings_json.h" />
     <ClInclude Include="src\util\file\json\VectorJson.h" />
     <ClInclude Include="src\util\file\resource_loader\resourceLoader.h" />

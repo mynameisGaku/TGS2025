@@ -17,7 +17,7 @@ void BallRef::Load()
 	Gravity					= settingsJson->GetOrDefault("Gravity", Vector3(0, 0, 0), FILEKEY);
 	Friction				= settingsJson->GetOrDefault("Friction", Vector3(0, 0, 0), FILEKEY);
 	Bounciness				= settingsJson->GetOrDefault("Bounciness", 0.0f, FILEKEY);
-	SpeedDefault			= settingsJson->GetOrDefault("SpeedDefault", 0.0f, FILEKEY);
+	ChargeLevels			= settingsJson->GetOrDefault("ChargeLevels", std::vector<BallThrowParam>(), FILEKEY);
 
 	DropForce_Horizontal	= settingsJson->GetOrDefault("DropForce_Horizontal", 0.0f, FILEKEY);
 	DropForce_Vertical		= settingsJson->GetOrDefault("DropForce_Vertical", 0.0f, FILEKEY);

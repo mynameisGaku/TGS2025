@@ -243,7 +243,22 @@ void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float char
 {
 	Throw(owner, chargeRate);
 
-	m_Physics->velocity = direction * BALL_REF.SpeedDefault * (1.0f + chargeRate);
+	int chargeLevel = 0;
+
+	if (chargeRate < 0.5f)
+	{
+		chargeLevel = 0;
+	}
+	else if (chargeRate < 1.0f)
+	{
+		chargeLevel = 1;
+	}
+	else
+	{
+		chargeLevel = 2;
+	}
+
+	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
 void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate, float curveAngle, float curveScale)

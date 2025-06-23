@@ -155,7 +155,7 @@ void UI_Text::SetText(const std::string& _text, const FontInfo& _font) {
 	Font::CreateFontToHandle(&fontInfo);	// フォント情報を変更
 
 	textSize.x = static_cast<float>(GetDrawStringWidthToHandle(text.c_str(), Len(), fontInfo.handle));
-	textSize.y = fontInfo.size;
+	textSize.y = static_cast<float>(fontInfo.size);
 
 	RectTransform globalTrs = rectTransform->Global();	// グローバルな座標・回転・拡縮情報
 	Vector2 diff = Vector2::Zero;	// 原点から文字座標へのベクトル

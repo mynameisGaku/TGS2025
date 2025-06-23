@@ -25,6 +25,8 @@ void CharaDefineRef::Load(bool ForceLoad)
     }
     CatchRadius = jsonLoader->GetOrDefault<float>("Param.CatchRadius", 0.0f, FILEKEY);
     EmoteInterval = jsonLoader->GetOrDefault<float>("Param.EmoteInterval", 0.0f, FILEKEY);
+    MoveSpeed = jsonLoader->GetOrDefault<float>("Param.MoveSpeed", 0.0f, FILEKEY);
+    RotSpeed = jsonLoader->GetOrDefault<float>("Param.RotSpeed", 0.0f, FILEKEY);
     JumpPower = jsonLoader->GetOrDefault<float>("Param.JumpPower", 0.0f, FILEKEY);
     TackleRadius = jsonLoader->GetOrDefault<float>("Param.TackleRadius", 0.0f, FILEKEY);
     TackleInvincibleDurationSec = jsonLoader->GetOrDefault<float>("Param.TackleInvincibleDurationSec", 0.0f, FILEKEY);

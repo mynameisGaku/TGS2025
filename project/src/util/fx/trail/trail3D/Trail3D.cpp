@@ -85,9 +85,9 @@ void Trail3D::Draw()
             float alpha1 = 255.0f;
             float alpha2 = 255.0f; 
             if (p1.timeAlive <= m_MaxLifeTime * 0.1f)
-                alpha1 = EasingFunc::InOutQuint<int>(time1, m_MaxLifeTime, 255, 0);
+                alpha1 = EasingFunc::InOutQuint<float>(time1, m_MaxLifeTime, 255, 0);
             if (p2.timeAlive <= m_MaxLifeTime * 0.1f)
-                alpha2 = EasingFunc::InOutQuint<int>(time2, m_MaxLifeTime, 255, 0);
+                alpha2 = EasingFunc::InOutQuint<float>(time2, m_MaxLifeTime, 255, 0);
 
             VECTOR dir = VSub(pos2, pos1);
             VECTOR viewVec = VSub(camPos, pos1);

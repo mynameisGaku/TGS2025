@@ -7,6 +7,7 @@
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/scene/play/chara/CharaHP.h"
+#include "src/reference/chara/CharaDefineRef.h"
 #include "src/common/component/controller/PlayerController.h"
 #include "src/common/component/controller/AIController.h"
 #include "src/common/component/controller/DebugController.h"
@@ -337,8 +338,8 @@ void MatchManager::addCharacter(const std::string& team, const Transform& trs, b
 {
     CharaBase* chara = m_pCharaManager->Create(team, trs);
 
-    chara->SetMoveSpeed(700.0f);
-    chara->SetRotSpeed(MathUtil::ToRadians(10.0f));
+    chara->SetMoveSpeed(CHARADEFINE_REF.MoveSpeed);
+    chara->SetRotSpeed(MathUtil::ToRadians(CHARADEFINE_REF.RotSpeed));
 
     std::unordered_map<int, int> padNumMap =
     {

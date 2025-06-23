@@ -7,6 +7,8 @@
     ],
     "CatchRadius": 250.0,
     "EmoteInterval": 2.0,
+    "MoveSpeed": 700.0,
+    "RotSpeed": 15.0,
     "JumpPower": 20.0,
     "TackleRadius": 150.0,
     "TackleInvincibleDurationSec": 1.5,

@@ -40,10 +40,9 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void Throw(const Vector3& velocity);
-	void Throw(const Vector3& velocity, CharaBase*owner);
-	void ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate = 1.0f);
-	void HomingProcess();
+	void Throw(CharaBase* owner, float chargeRate);
+	void ThrowDirection(const Vector3& direction, CharaBase*owner, float chargeRate);
+	void ThrowHoming(const CharaBase* target, CharaBase* owner,  float chargeRate, float curveAngle, float curveScale);
 
 	State GetState() const { return m_State; }
 
@@ -103,18 +102,23 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	const CharaBase*	m_HomingTargetChara;
-	Vector3				m_HomingVelocity;
-	Vector3				m_HomingPosition;
-	Vector3				m_HomingTargetPos;
-	float				m_HomingPeriod;
-	bool				m_IsHoming;
-	bool				m_IsRefreshHomingTargetPos;
+	const CharaBase*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
+	Vector3				m_HomingOrigin;			// ホーミング開始地点
+	Vector3				m_HomingTargetPos;		// ホーミング対象の座標
+	bool				m_IsHoming;	// ホーミング中か
+	bool				m_DoRefreshHoming;	// ホーミング先を更新するか
+	float				m_HomingProgress;
+	float				m_HomingSpeed;
+	float				m_HormingCurveAngle;	// カーブ方向を決める角度
+	float				m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
 
 	void collisionToGround();
-	void HomingDeactivate();
-	void setVelocity(const Vector3& velocity);
+	// 地形との押し出し処理、当たったらtrue
+	bool collisionToStage();
 	void changeState(const State& s);
+	void effectUpdate();
+	void homingProcess();
+	void homingDeactivate();
 
 	float				m_ChargeRate;
 };

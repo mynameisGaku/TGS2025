@@ -35,6 +35,8 @@ public:
     std::vector<std::string>    Tags;
     float                       CatchRadius;
     float                       EmoteInterval;
+    float                       MoveSpeed;
+    float                       RotSpeed;
     float                       JumpPower;
     float                       TackleRadius;
     float                       TackleInvincibleDurationSec;

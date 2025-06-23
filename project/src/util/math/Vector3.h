@@ -366,7 +366,7 @@ public:
 	static Vector3 SetZ(int z);
 
 	// 3次元ベクトルを回転行列に変換する
-	inline MATRIX ToRotationMatrix() {
+	inline MATRIX ToRotationMatrix() const {
 
 		MATRIX m = MGetIdent();
 		m = MMult(m, MGetRotZ(z));

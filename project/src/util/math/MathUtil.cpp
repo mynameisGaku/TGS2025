@@ -86,7 +86,7 @@ float MathUtil::Lerp(float v1, float v2, float t)
 //------------------------------------------------------------------------------
 float MathUtil::LerpAngle(float a, float b, float t)
 {
-	float diff = std::fmod(b - a + DX_PI * 3, DX_PI * 2) - DX_PI;
+	float diff = (float)std::fmod((double)(b - a + DX_PI_F * 3), (double)(DX_PI_F * 2)) - DX_PI_F;
 	return a + diff * t;
 }
 

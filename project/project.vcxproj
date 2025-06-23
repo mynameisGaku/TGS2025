@@ -383,6 +383,7 @@
     <ClCompile Include="src\util\file\csv\csvReader.cpp" />
     <ClCompile Include="src\util\file\FileUtil.cpp" />
     <ClCompile Include="src\util\file\ini\settings_ini.cpp" />
+    <ClCompile Include="src\util\file\json\BallThrowParamJson.cpp" />
     <ClCompile Include="src\util\file\json\settings_json.cpp" />
     <ClCompile Include="src\util\file\json\VectorJson.cpp" />
     <ClCompile Include="src\util\file\resource_loader\resourceLoader.cpp" />
@@ -410,6 +411,7 @@
     <ClCompile Include="src\util\object2D\Object2D.cpp" />
     <ClCompile Include="src\util\object3D\Object3D.cpp" />
     <ClCompile Include="src\util\shadow_map\ShadowMap.cpp" />
+    <ClCompile Include="src\util\singleton\singleton.cpp" />
     <ClCompile Include="src\util\sound\SoundBase.cpp" />
     <ClCompile Include="src\util\sound\SoundManager.cpp" />
     <ClCompile Include="src\util\time\GameTime.cpp" />
@@ -555,6 +557,7 @@
     <ClInclude Include="src\util\file\csv\csvReader.h" />
     <ClInclude Include="src\util\file\FileUtil.h" />
     <ClInclude Include="src\util\file\ini\settings_ini.h" />
+    <ClInclude Include="src\util\file\json\BallThrowParamJson.h" />
     <ClInclude Include="src\util\file\json\settings_json.h" />
     <ClInclude Include="src\util\file\json\VectorJson.h" />
     <ClInclude Include="src\util\file\resource_loader\resourceLoader.h" />
@@ -593,6 +596,7 @@
     <ClInclude Include="src\util\pool\Pool.h" />
     <ClInclude Include="src\util\ptr\PtrUtil.h" />
     <ClInclude Include="src\util\shadow_map\ShadowMap.h" />
+    <ClInclude Include="src\util\singleton\singleton.h" />
     <ClInclude Include="src\util\sound\SoundBase.h" />
     <ClInclude Include="src\util\sound\SoundDefine.h" />
     <ClInclude Include="src\util\sound\SoundManager.h" />

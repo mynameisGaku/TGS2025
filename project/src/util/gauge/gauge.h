@@ -225,8 +225,8 @@ public:
 		{
 			switch (scroll) {
 			case Gauge::ScrollType::eUp:
-				DrawRectRotaGraphF(pos.x, pos.y + delayGaugeHeight / 2, 0, delayGaugeHeight / scl,	srcWidth, srcHeight, scl, 0.0f, delayGraph == -1 ? graph : delayGraph, TRUE);
-				DrawRectRotaGraphF(pos.x, pos.y + gaugeHeight / 2,		0, gaugeHeight / scl,		srcWidth, srcHeight, scl, 0.0f, graph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y + delayGaugeHeight / 2, 0, (int)(delayGaugeHeight / scl),	srcWidth, srcHeight, scl, 0.0f, delayGraph == -1 ? graph : delayGraph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y + gaugeHeight / 2,		0, (int)(gaugeHeight / scl),		srcWidth, srcHeight, scl, 0.0f, graph, TRUE);
 				break;
 			case Gauge::ScrollType::eDown:
 				break;
@@ -244,8 +244,8 @@ public:
 		{
 			switch (scroll) {
 			case Gauge::ScrollType::eUp:
-				DrawRectRotaGraphF(pos.x, pos.y + delayGaugeHeight / 2, 0, delayGaugeHeight / scl,	srcWidth, srcHeight, scl, 0.0f, increaseGraph == -1 ? graph : increaseGraph, TRUE);
-				DrawRectRotaGraphF(pos.x, pos.y + gaugeHeight / 2,		0, gaugeHeight / scl,		srcWidth, srcHeight, scl, 0.0f, graph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y + delayGaugeHeight / 2, 0,(int)(delayGaugeHeight / scl),srcWidth, srcHeight, scl, 0.0f, increaseGraph == -1 ? graph : increaseGraph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y + gaugeHeight / 2,		0,(int)(gaugeHeight / scl),		srcWidth, srcHeight, scl, 0.0f, graph, TRUE);
 				break;
 			case Gauge::ScrollType::eDown:
 				break;
@@ -253,7 +253,7 @@ public:
 				break;
 			case Gauge::ScrollType::eRight:
 				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(delayGaugeWidth), 0, srcWidth, srcHeight, scl, angle, increaseGraph == -1 ? graph : increaseGraph, TRUE);
-				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(gaugeWidth), 0, srcWidth, srcHeight, scl, angle, graph, TRUE);
+				DrawRectRotaGraphF(pos.x, pos.y, static_cast<int>(gaugeWidth),		0, srcWidth, srcHeight, scl, angle, graph, TRUE);
 				break;
 			default:
 				break;

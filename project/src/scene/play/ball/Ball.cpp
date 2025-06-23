@@ -16,7 +16,16 @@
 #include "src/util/fx/trail/trail3D/Trail3D.h"
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/Random.h"
-#include "src/common/performance_profiler/PerformanceProfiler.h"
+#include "src/util/math/Vector3Util.h"
+#include "src/util/math/matrix.h"
+#include "src/util/math/MathUtil.h"
+
+namespace
+{
+	const float DROPDUST_APPEAR_RATE_PERCENT = 95.0f / 100.0f; // %
+	const float RAND_RANGE_MAX = 100.0f;
+	const float RAND_RANGE_MIN = 0.0f;
+}
 
 Ball::Ball()
 {
@@ -50,8 +59,6 @@ Ball::~Ball()
 	}
 
 	PtrUtil::SafeDelete(m_pTrail);
-	PtrUtil::SafeDelete(m_pProfilerUpdate);
-	PtrUtil::SafeDelete(m_pProfilerDraw);
 }
 
 void Ball::Reset(std::string charaTag)
@@ -72,12 +79,12 @@ void Ball::Init(std::string charaTag)
 
 	m_CharaTag = CHARADEFINE_REF.Tags[0];
 
-	m_HomingPeriod = 0.0f;
-
 	m_Physics->velocity = Vector3::Zero;
 	m_Physics->angularVelocity = Vector3::Zero;
 	m_Physics->SetGravity(Vector3::Zero);
 	m_Physics->SetFriction(Vector3::Zero);
+
+	m_HomingOrigin = Vector3::Zero;
 
 	m_Collider->SetIsActive(true);
 
@@ -89,8 +96,13 @@ void Ball::Init(std::string charaTag)
 		m_pManager = FindGameObject<BallManager>();
 
 	m_IsHoming = false;
+	m_DoRefreshHoming = false;
 	m_IsActive = true;
 	m_IsPickedUp = false;
+	m_HomingSpeed = 0.0f;
+	m_HomingProgress = 0.0f;
+	m_HormingCurveAngle = 0.0f;
+	m_HormingCurveScale = 0.0f;
 
 	ColDefine::Tag tag;
 	std::list<ColDefine::Tag> targets;
@@ -117,93 +129,34 @@ void Ball::Init(std::string charaTag)
 	
 	m_CharaTag = charaTag;
 	EffectManager::Stop("Ball_Outline.efk", "Ball_Outline" + m_CharaTag);
-
-	m_pProfilerUpdate = new PerformanceProfiler("BallUpdate: " + std::to_string(m_Index));
-	m_pProfilerDraw = new PerformanceProfiler("BallDraw: " + std::to_string(m_Index));
 }
 
 void Ball::Update()
 {
-	Object3D::Update();
-
 	if (not m_IsActive)
 	{
-		m_pProfilerUpdate->Deactivate();
 		return;
 	}
-	m_pProfilerUpdate->Activate();
-	m_pProfilerUpdate->BeginProfiling();
+	
+	Object3D::Update();
+
 
 	// エフェクト
-	{
-		const float DROPDUST_APPEAR_RATE_PERCENT = 95.0f / 100.0f; // %
-		const float RAND_RANGE_MAX = 100.0f;
-		const float RAND_RANGE_MIN = 0.0f;
-
-		std::string eff = "Ball_Outline_";
-		eff += m_CharaTag;
-		eff += "_Holding.efk";
-		if (m_State == S_THROWN || m_State == S_OWNED)
-		{
-			EffectManager::Play3D_Loop(eff, transform->Global(), "Ball_Outline" + m_CharaTag + "_" + std::to_string(m_Index));
-			if (m_State == S_THROWN)
-			{
-				if (Random.GetFloatRange(RAND_RANGE_MIN, RAND_RANGE_MAX) / RAND_RANGE_MAX >= DROPDUST_APPEAR_RATE_PERCENT)
-				{
-					EffectManager::Play3D("DropDust.efk", transform->Global(), "DropDust" + m_CharaTag);
-				}
-			}
-		}
-		else
-		{
-			EffectManager::Stop(eff, "Ball_Outline" + m_CharaTag + "_" + std::to_string(m_Index));
-		}
-	}
+	effectUpdate();
 
 	if (m_IsHoming)
 	{
 		m_Physics->SetIsActive(false);
-		HomingProcess();
+		homingProcess();
 	}
-	else
+
+	bool hit = collisionToStage();
+
+	if (m_IsHoming && hit)
 	{
-		if (m_Collider != nullptr && m_Collider->IsActive())
-		{
-			Vector3 p1 = transform->Global().position;
-			Vector3 p2 = m_Collider->OffsetWorld();
-			float radius = BALL_RADIUS;
-
-			Vector3 pushVec;
-			if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
-			{
-
-				transform->position += pushVec;
-
-				// 押し出し方向
-				Vector3 normal = pushVec.Normalize();
-
-				// 速度を反射させる
-				float bounciness = BALL_REF.BouncinessDefault;
-				Vector3 vel = m_Physics->velocity;
-
-				float dot = VDot(vel, normal);
-				if (dot < 0.0f) // 内側からの衝突のみ反射
-				{
-					Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
-					m_Physics->velocity = reflectVel;
-				}
-
-				// Y方向の反発時に転がり回転も発生
-				if (abs(normal.y) > 0.5f)
-				{
-					float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
-					transform->rotation.y = forwardRad;
-					m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
-				}
-				m_Physics->velocity.x *= 0.99f;
-				m_Physics->velocity.z *= 0.99f;
-			}
-		}
+		homingDeactivate();
+		changeState(S_LANDED);
+		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 	}
 
 	if (m_State != S_OWNED)
@@ -232,63 +185,97 @@ void Ball::Update()
 		}
 	}
 	m_pTrail->Update();
-	m_pProfilerUpdate->EndProfiling();
+}
+
+void Ball::effectUpdate()
+{
+	std::string eff = "Ball_Outline_";
+	eff += m_CharaTag;
+	eff += "_";
+	if (m_State == S_THROWN || m_State == S_OWNED)
+	{
+		EffectManager::Play3D_Loop(eff + "Holding.efk", transform->Global(), eff + std::to_string(m_Index));
+	}
+	else
+	{
+		EffectManager::Stop(eff + "Holding.efk", eff + std::to_string(m_Index));
+	}
+
+	if (m_State == S_THROWN)
+	{
+		if (Random.GetFloatRange(RAND_RANGE_MIN, RAND_RANGE_MAX) / RAND_RANGE_MAX >= DROPDUST_APPEAR_RATE_PERCENT)
+		{
+			EffectManager::Play3D("DropDust.efk", transform->Global(), "DropDust" + m_CharaTag);
+		}
+	}
 }
 
 
 void Ball::Draw()
 {
 	if (not m_IsActive)
-	{
-		m_pProfilerDraw->Deactivate();
 		return;
-	}
-	m_pProfilerDraw->Activate();
-	m_pProfilerDraw->BeginProfiling();
 
 	m_pTrail->Draw();
 
 	Object3D::Draw();
-	m_pProfilerDraw->EndProfiling();
 }
 
-void Ball::Throw(const Vector3& velocity)
+void Ball::Throw(CharaBase* owner, float chargeRate)
 {
 	changeState(S_THROWN);
-	setVelocity(velocity * BALL_REF.SpeedDefault);
-	m_Physics->SetGravity(BALL_REF.GravityDefault);
-	m_Physics->SetFriction(BALL_REF.FrictionDefault);
+
+	m_Physics->SetGravity(BALL_REF.Gravity);
+	m_Physics->SetFriction(BALL_REF.Friction);
+
 	m_Collider->SetIsActive(true);
+
 	m_hTrailImage = m_pManager->GetTrailImage(m_CharaTag);
 	m_pTrail->Init(m_hTrailImage > 0 ? m_hTrailImage : DX_NONE_GRAPH, 1.0f, 40.0f);
 	m_pTrail->SetSubdivisions(4);
-	m_Owner = nullptr;
-}
 
-void Ball::Throw(const Vector3& velocity, CharaBase* owner)
-{
-	Throw(velocity);
 	m_Owner = owner;
 	m_LastOwner = m_Owner;
+	m_ChargeRate = chargeRate;
 }
 
-void Ball::ThrowHoming(const Vector3& velocity, CharaBase* owner, const CharaBase* target, float chargeRate)
+void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float chargeRate)
 {
-	Throw(velocity, owner);
+	Throw(owner, chargeRate);
 
+	int chargeLevel = 0;
+
+	if (chargeRate < 0.5f)
+	{
+		chargeLevel = 0;
+	}
+	else if (chargeRate < 1.0f)
+	{
+		chargeLevel = 1;
+	}
+	else
+	{
+		chargeLevel = 2;
+	}
+
+	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
+}
+
+void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate, float curveAngle, float curveScale)
+{
+	m_IsHoming			= true;
+	m_DoRefreshHoming = true;
+	m_HomingOrigin		= transform->position;
+    m_HomingTargetChara = target;
+	m_HormingCurveAngle = curveAngle;
+	m_HormingCurveScale = curveScale;
+	m_HomingProgress = 0.0f;
+
+	const Vector3 direction = Vector3::Normalize(target->transform->position - transform->position);
+	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
 
-    m_HomingTargetChara = target;
-
-	m_IsRefreshHomingTargetPos = true;
-	m_HomingPosition = transform->position;
-	m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? Vector3(0, 150, 1000) : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
-	m_IsHoming = true;
-
-	// ターゲット位置と現在位置からちょうどいい時間を計算
-	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
-	m_HomingPeriod = diff.GetLength() / m_Physics->velocity.GetLength();
-	m_ChargeRate = chargeRate;
+	m_HomingSpeed = m_Physics->velocity.GetLength();
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -301,7 +288,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 	if (m_State == S_THROWN)
 	{
-		if (m_IsHoming) HomingDeactivate();
+		if (m_IsHoming) homingDeactivate();
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 
@@ -336,7 +323,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 			if (relVelAlongNormal > 0.0f) return;
 
-			float e = BALL_REF.BouncinessDefault;
+			float e = BALL_REF.Bounciness;
 			float j = -(1.0f + e) * relVelAlongNormal / 2.0f;
 			Vector3 impulse = normal * j;
 
@@ -404,11 +391,11 @@ void Ball::collisionToGround()
 	bool hit = Stage::ColCheckGround(transform->position + Vector3::SetY(BALL_RADIUS), transform->position - Vector3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)
 	{
-		if (m_IsHoming) HomingDeactivate();
+		if (m_IsHoming) homingDeactivate();
 
 		// Y方向に跳ね返る
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
-		m_Physics->velocity.y *= -BALL_REF.BouncinessDefault;
+		m_Physics->velocity.y *= -BALL_REF.Bounciness;
 
 		// 転がっていく処理
 		float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
@@ -422,83 +409,117 @@ void Ball::collisionToGround()
 	}
 }
 
-void Ball::HomingProcess()
-{
-	// ---- ホーミング補間 ----
-	if (m_IsRefreshHomingTargetPos)
-		m_HomingTargetPos = (m_HomingTargetChara == nullptr) ? (Vector3::UnitZ * 200.0f) * m_Owner->transform->RotationMatrix() : m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
-
-	Vector3 acceleration = m_HomingTargetPos - transform->position;
-	Vector3 diff = m_HomingTargetPos - m_HomingPosition;
-
-	acceleration += (diff - m_Physics->velocity * m_HomingPeriod) * 2.0f / (m_HomingPeriod * m_HomingPeriod);
-
-	m_HomingPeriod -= GTime.deltaTime;
-	if (m_HomingPeriod < 0.0f)
-	{
-		HomingDeactivate();
-		return;
-	}
-	m_Physics->velocity += acceleration * GTime.deltaTime;
-	m_HomingPosition += m_Physics->velocity * GTime.deltaTime;
-
-	if (m_HomingTargetChara->IsTackling())
-	{
-		changeState(S_LANDED);
-		m_IsRefreshHomingTargetPos = false;
-	}
-
-	// ---- 押し出し + 跳ね返り処理 ----
-	if (m_Collider)
-	{
-		Vector3 p1 = m_HomingPosition;
-		Vector3 p2 = m_Collider->OffsetWorld();  // ホーミング中は本来位置からズレるが、近似可
-
-		float radius = BALL_RADIUS;
-		Vector3 pushVec;
-
-		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
-		{
-			HomingDeactivate();
-
-			m_HomingPosition += pushVec;
-
-			Vector3 normal = pushVec.Normalize();
-			float dot = VDot(m_Physics->velocity, normal);
-
-			if (dot < 0.0f)
-			{
-				const float bounciness = BALL_REF.BouncinessDefault;
-				const float damping = 0.85f; // ホーミング中の減衰
-
-				Vector3 reflectVel = m_Physics->velocity - normal * (1.0f + bounciness) * dot;
-				m_Physics->velocity = reflectVel * damping;
-			}
-
-			changeState(S_LANDED);
-			EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
-		}
-	}
-
-	transform->position = m_HomingPosition;
-}
-
-void Ball::HomingDeactivate()
-{
-	m_Physics->velocity *= GTime.deltaTime;
-	m_Physics->SetIsActive(true);
-	m_Physics->SetGravity(BALL_REF.GravityDefault);
-	// 物理にホーミングの情報を引き継ぐ
-	m_IsHoming = false;
-}
-
-void Ball::setVelocity(const Vector3& velocity)
-{
-	m_Physics->velocity = velocity;
-}
-
 void Ball::changeState(const State& s)
 {
 	m_StatePrev = m_State;
 	m_State = s;
+}
+
+void Ball::homingProcess()
+{
+	if (m_HomingTargetChara == nullptr) return;
+
+	// ---- ホーミング補間 ----
+	if (m_DoRefreshHoming)
+	{
+		m_HomingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
+	}
+
+	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
+	const Vector3 dir = Vector3::Normalize(diff);
+	const Vector3 dirRot = Vector3Util::DirToEuler(dir) + Vector3(0.0f, 0.0f, m_HormingCurveAngle);
+	const MATRIX dirRotMat = (dirRot * Vector3(-1, 1, 1)).ToRotationMatrix();
+
+	const Vector3 middle = (m_HomingTargetPos + m_HomingOrigin) / 2.0f;
+	const Vector3 middleToCurrent = transform->position - middle;
+
+	const float distance = diff.GetLength();
+
+	float delta = 0.0f;
+
+	if (distance < 0.0f)
+	{
+		delta = 1.0f;
+	}
+	else
+	{
+		delta = m_HomingSpeed / (distance + ((distance * 0.5f * DX_PI_F) - distance) * m_HormingCurveScale) * GTime.DeltaTime();
+	}
+
+	if (m_HomingTargetChara->IsTackling())
+	{
+		changeState(S_LANDED);
+		m_DoRefreshHoming = false;
+	}
+
+	m_HomingProgress += delta;
+
+	if (m_HomingProgress >= 1.0f)
+	{
+		transform->position = m_HomingTargetPos;
+	}
+	else
+	{
+		const float circleY = sinf(m_HomingProgress * DX_PI_F) * m_HormingCurveScale;
+		const float circleZ = -1 + m_HomingProgress * 2.0f;
+		const Vector3 circlePos = Vector3(0.0f, circleY, circleZ) *
+			distance * 0.5f *
+			dirRotMat;
+
+		m_Physics->velocity = (circlePos + middle) - transform->position;
+		transform->position += m_Physics->velocity;
+	}
+}
+
+bool Ball::collisionToStage()
+{
+	bool hit = false;
+
+	if (m_Collider != nullptr && m_Collider->IsActive())
+	{
+		Vector3 p1 = transform->Global().position;
+		Vector3 p2 = m_Collider->OffsetWorld();
+		float radius = BALL_RADIUS;
+
+		Vector3 pushVec;
+		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+		{
+			hit = true;
+
+			transform->position += pushVec;
+
+			// 押し出し方向
+			Vector3 normal = pushVec.Normalize();
+
+			// 速度を反射させる
+			const float bounciness = BALL_REF.Bounciness;
+			const Vector3 vel = m_Physics->velocity;
+
+			float dot = VDot(vel, normal);
+			if (dot < 0.0f) // 内側からの衝突のみ反射
+			{
+				Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
+				m_Physics->velocity = reflectVel;
+			}
+
+			// Y方向の反発時に転がり回転も発生
+			if (abs(normal.y) > 0.5f)
+			{
+				float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
+				transform->rotation.y = forwardRad;
+				m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.03f;
+			}
+			m_Physics->velocity.x *= 0.99f;
+			m_Physics->velocity.z *= 0.99f;
+		}
+	}
+
+	return hit;
+}
+
+void Ball::homingDeactivate()
+{
+	m_Physics->SetIsActive(true);
+	m_Physics->SetGravity(BALL_REF.Gravity);
+	m_IsHoming = false;
 }

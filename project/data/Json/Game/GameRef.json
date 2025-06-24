@@ -48,7 +48,7 @@
 
   "GameStartCountMaxSec": 5.0,
   "GameEndCountMaxSec": 5.0,
-  "DefaultStageName": "Stage_4",
+  "DefaultStageName": "Stage_3",
   "StageNames": [
     {
       "Name": "Stage_0"

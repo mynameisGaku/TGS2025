@@ -66,7 +66,7 @@ void GameRef::Load(bool forceLoad)
 
     GameStartCountMaxSec = jsonLoader->GetOrDefault<float>("GameStartCountMaxSec", 0.0f, FILEKEY);
     GameEndCountMaxSec   = jsonLoader->GetOrDefault<float>("GameEndCountMaxSec", 0.0f, FILEKEY);
-    DefaultStageName     = jsonLoader->GetOrDefault<std::string>("DefaultStageName", std::string("Stage_4"), FILEKEY);
+    DefaultStageName     = jsonLoader->GetOrDefault<std::string>("DefaultStageName", std::string("Stage_3"), FILEKEY);
 
     m_WasLoad = true;
 }

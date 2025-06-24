@@ -639,9 +639,6 @@
     <None Include="data\Json\Stage\Stage_3.json">
       <Filter>data\Json\Stage</Filter>
     </None>
-    <None Include="data\Json\Stage\Stage_4.json">
-      <Filter>data\Json\Stage</Filter>
-    </None>
     <None Include="data\Json\Stage\TestStage.json">
       <Filter>data\Json\Stage</Filter>
     </None>

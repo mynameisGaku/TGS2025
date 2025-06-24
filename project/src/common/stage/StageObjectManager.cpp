@@ -10,6 +10,7 @@
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include <vendor/magic_enum/magic_enum.hpp>
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
@@ -35,6 +36,9 @@ namespace {
 	static unsigned int productionID;	// 製造番号
 	bool canSaveCsv;			// CSVデータを保存できるか
 	bool initialize = false;	// 初期化処理が行われたか
+
+	PerformanceProfiler* pProfiler;
+	double profileResult;
 }
 
 void StageObjectManager::Init() {
@@ -47,6 +51,11 @@ void StageObjectManager::Init() {
 
 	if (csvFilePath_StageObjModel == nullptr)
 		csvFilePath_StageObjModel = new std::string;
+
+	if (pProfiler == nullptr)
+		pProfiler = new PerformanceProfiler("Collision StageObject");
+
+	pProfiler->Activate();
 
 	productionID = 0;
 	canSaveCsv = true;
@@ -124,12 +133,15 @@ void StageObjectManager::Release() {
 	PtrUtil::SafeDelete(stageObjects);
 	PtrUtil::SafeDelete(csvFilePath_StageObjData);
 	PtrUtil::SafeDelete(csvFilePath_StageObjModel);
+	PtrUtil::SafeDelete(pProfiler);
 }
 
 bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push) {
 
 	if (stageObjects == nullptr)
 		return false;
+
+	pProfiler->BeginProfiling();
 
 	bool hitFlag = false;
 	Vector3 pushVec = VGet(0, 0, 0);
@@ -167,6 +179,10 @@ bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, 
 
 	if (push != nullptr)
 		*push = pushVec;
+
+	pProfiler->EndProfiling();
+	profileResult += pProfiler->GetResult();
+
 	return hitFlag;
 }
 
@@ -174,6 +190,8 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 {
 	if (stageObjects == nullptr)
 		return false;
+
+	pProfiler->BeginProfiling();
 
 	bool hitFlag = false;
 	Vector3 pushVec = VGet(0, 0, 0);
@@ -193,11 +211,15 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 		MV1CollResultPolyDimTerminate(dim);
 	}
 
+	pProfiler->EndProfiling();
+	profileResult += pProfiler->GetResult();
 	return hitFlag;
 }
 
 bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos)
 {
+
+	pProfiler->BeginProfiling();
 	for (const auto& obj : *stageObjects) {
 
 		MV1_COLL_RESULT_POLY hit;
@@ -208,11 +230,15 @@ bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vect
 			return true;
 		}
 	}
+	pProfiler->EndProfiling();
+	profileResult += pProfiler->GetResult();
 	return false;
 }
 
 bool StageObjectManager::CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push)
 {
+
+	pProfiler->BeginProfiling();
 	bool hitFlag = false;
 	VECTOR pushVec = VGet(0, 0, 0);
 	for (const auto& obj : *stageObjects) {
@@ -246,6 +272,8 @@ bool StageObjectManager::CollCheckCapsule_Horizon(const Vector3& begin, const Ve
 
 	if (push != nullptr)
 		*push = pushVec * -1.0f;
+	pProfiler->EndProfiling();
+	profileResult += pProfiler->GetResult();
 	return hitFlag;
 }
 

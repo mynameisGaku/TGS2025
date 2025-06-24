@@ -370,6 +370,9 @@
     <Filter Include="src%28application%29\util\singleton">
       <UniqueIdentifier>{45e5b4d4-9de5-4161-829b-c861ccd6745d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\common\performance_profiler">
+      <UniqueIdentifier>{6c2dc8e7-72a1-46b5-b06c-26ae67ffc56c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1247,6 +1250,8 @@
     <ClCompile Include="src\util\singleton\singleton.cpp">
       <Filter>src%28application%29\util\singleton</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\performance_profiler\PerformanceProfiler.cpp" />
+    <ClCompile Include="src\common\performance_profiler\PerformanceProfilerManager Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1861,9 +1866,6 @@
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h">
       <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h">
-      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
-    </ClInclude>
     <ClInclude Include="src\util\math\MathUtil.h">
       <Filter>src%28application%29\util\math</Filter>
     </ClInclude>
@@ -1951,5 +1953,7 @@
     <ClInclude Include="src\util\singleton\singleton.h">
       <Filter>src%28application%29\util\singleton</Filter>
     </ClInclude>
+    <ClInclude Include="src\common\performance_profiler\PerformanceProfiler.h" />
+    <ClInclude Include="src\common\performance_profiler\PerformanceProfilerManager Manager.h" />
   </ItemGroup>
 </Project>

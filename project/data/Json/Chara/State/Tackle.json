@@ -74,6 +74,13 @@
           "Z": 40
         }
       }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 14.8,
+      "Argument": {
+        "Speed": 0.2
+      }
     }
   ]
 }

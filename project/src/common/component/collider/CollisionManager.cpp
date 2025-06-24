@@ -9,6 +9,7 @@
 #include "src/common/component/collider/ColliderCapsule.h"
 #include "src/common/component/collider/ColliderModel.h"
 #include "src/common/performance_profiler/PerformanceProfiler.h"
+#include <src/util/ptr/PtrUtil.h>
 
 CollisionManager::CollisionManager() {
 
@@ -27,6 +28,8 @@ CollisionManager::~CollisionManager() {
 	}
 
 	colliders.clear();
+
+	PtrUtil::SafeDelete(m_pProfiler);
 }
 
 void CollisionManager::Update() {

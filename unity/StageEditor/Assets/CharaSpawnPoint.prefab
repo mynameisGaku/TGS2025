@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8a8f29ba49abeec40854cb28d0b9119d, type: 2}
+  - {fileID: 2100000, guid: 79d9cf5830ed43848babb75e52b2e8d8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,7 +175,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6e32e4fa3aeb7e24e8273db4e465ef5b, type: 2}
+  - {fileID: 2100000, guid: 55f59b7f01840344196228ea034034a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -230,8 +230,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3692407951727488342}
   - component: {fileID: 6980743308320551957}
-  - component: {fileID: 7770897008342463577}
-  - component: {fileID: 6649924003465875493}
   m_Layer: 0
   m_Name: CharaSpawnPoint
   m_TagString: CharaSpawnPoint
@@ -265,33 +263,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6617611601714128032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9052bc4192ed14a91531096773b271, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SPAWN_INITIAL_VELOCITY: {x: 0, y: 0, z: 0}
---- !u!114 &7770897008342463577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6617611601714128032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9052bc4192ed14a91531096773b271, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SPAWN_INITIAL_VELOCITY: {x: 0, y: 0, z: 0}
---- !u!114 &6649924003465875493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6617611601714128032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9052bc4192ed14a91531096773b271, type: 3}
+  m_Script: {fileID: 11500000, guid: bafc285cfc12ccd429b8e1f153d5a7fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SPAWN_INITIAL_VELOCITY: {x: 0, y: 0, z: 0}

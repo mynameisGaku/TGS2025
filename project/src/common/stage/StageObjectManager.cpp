@@ -126,6 +126,44 @@ void StageObjectManager::Release() {
 	PtrUtil::SafeDelete(csvFilePath_StageObjModel);
 }
 
+bool StageObjectManager::CollCheckLine(const Vector3& begin, const Vector3& end, Vector3* hitPos) {
+
+	if (stageObjects == nullptr)
+		return false;
+
+	bool hitFlag = false;
+	//VECTOR prevPush = VGet(0, 0, 0);
+	float minDist = VSquareSize(begin - end);
+	VECTOR hitPosition = begin;
+
+	for (auto obj : *stageObjects) {
+
+		obj->SetOpacity(1.0f);
+		MV1SetupCollInfo(obj->Info().hHitModel, -1, 8, 8, 8);
+
+		MV1_COLL_RESULT_POLY ret = MV1CollCheck_Line(obj->Info().hHitModel, -1, end, begin);
+
+		if (ret.HitFlag) {
+			float distX = ret.HitPosition.x - end.x;
+			float distY = ret.HitPosition.y - end.y;
+			float distZ = ret.HitPosition.z - end.z;
+
+			float dist = VSquareSize(Vector3(distX, distY, distZ));
+			if (dist < minDist) {
+				minDist = dist;
+				hitPosition = ret.HitPosition;
+				hitFlag = true;
+			}
+		}
+	}
+
+	// 当たっていたかを判断して、余計な代入を行わない
+	if (hitFlag && hitPos != nullptr)
+		*hitPos = hitPosition;
+
+	return hitFlag;
+}
+
 bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push) {
 
 	if (stageObjects == nullptr)

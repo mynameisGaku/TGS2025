@@ -46,6 +46,8 @@ namespace StageObjectManager {
 	//==========================================================================================
 	// ▼当たり判定関連
 
+	bool CollCheckLine(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
+
 	/// <summary>
 	/// カプセルと、StageObjectとの当たり判定をする
 	/// </summary>

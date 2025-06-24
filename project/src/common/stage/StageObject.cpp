@@ -24,6 +24,14 @@ StageObject::~StageObject() {
 	}
 }
 
+void StageObject::Update() {
+
+	if (counter > 0) {
+		opacity += (opacityTarget - opacity) / counter;
+		counter--;
+	}
+}
+
 void StageObject::Draw() {
 
 	Object3D::Draw();
@@ -32,5 +40,13 @@ void StageObject::Draw() {
 	if (isCollider && isHitModelDraw) {
 		MV1SetMatrix(info.hHitModel, transform->Global().Matrix());	// MATRIX‚ðƒ‚ƒfƒ‹‚É“K‰ž
 		MV1DrawModel(info.hHitModel);		// ƒ‚ƒfƒ‹‚Ì•`‰æ
+	}
+}
+
+void StageObject::SetOpacity(float rate) {
+
+	if (opacityTarget != rate) {
+		opacityTarget = rate;
+		counter = 10;
 	}
 }

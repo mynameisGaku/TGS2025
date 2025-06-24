@@ -6,6 +6,7 @@
 #include "src/util/time/GameTime.h"
 #include "src/Util/ptr/PtrUtil.h"
 #include "src/common/stage/Stage.h"
+#include "src/common/stage/StageObjectManager.h"
 #include "src/util/easing/EasingUtils.h"
 #include <assert.h>
 
@@ -148,21 +149,43 @@ void Camera::rendering() {
 		targetPos += m_pHolder->Global().position;
 	}
 
+	Vector3 hitPos = Vector3::Zero;
+	Vector3 apprach = (targetPos - cameraPos).Normalize() * 16.0f;
+
+	if (StageObjectManager::CollCheckLine(cameraPos, targetPos, &hitPos))
+		cameraPos = hitPos + apprach;
+
+	//cameraPos = StageObjectManager::CollCheckCapsule_Hitpos(cameraPos, targetPos, 32.0f, &hitPos);
+
 	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY, m_CameraRotMat));
 }
 
-void Camera::colCheckToTerrain() {
+Vector3 Camera::colCheckToTerrain(const Vector3& begin, const Vector3& end, Vector3* hitPos) {
 
-	Vector3 hitPos = Vector3::Zero;	// 当たった座標
-	Vector3 cameraPos = WorldPos();	// カメラの座標
-	Vector3 lay = Vector3::SetY(-10.0f);
+	Vector3 cameraPos = WorldPos();
+	Vector3 apprach = (end - begin).Normalize() * 100.0f;
 
-	if (Stage::ColCheckGround(m_Target, cameraPos + lay, &hitPos)) {
-		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * Vector3::UnitY;	// 地面との設置点
-		Vector3 targePos = m_Target * Vector3::UnitY;
-
-		transform->position = terrainPos + targePos - lay;
+	if (Stage::ColCheckGround(begin, end, hitPos)) {
+		cameraPos = apprach;
+		if (hitPos != nullptr)
+			cameraPos += *hitPos;
 	}
+
+	return cameraPos;
+}
+
+Vector3 Camera::collCheckCapsule_Hitpos(const Vector3& begin, const Vector3& end, Vector3* hitPos) {
+
+	Vector3 cameraPos = WorldPos();
+	Vector3 apprach = (end - begin).Normalize() * 100.0f;
+
+	if (StageObjectManager::CollCheckCapsule_Hitpos(begin, end, 32.0f, hitPos)) {
+		cameraPos = apprach;
+		if (hitPos != nullptr)
+			cameraPos += *hitPos;
+	}
+
+	return cameraPos;
 }
 
 void Camera::moveProcess()

@@ -203,7 +203,8 @@ private:
 	/// <summary>
 	/// ’nŒ`‚Æ‚ß‚è‚Ü‚È‚¢—l‚É‚·‚éˆ— 
 	/// </summary>
-	void colCheckToTerrain();
+	Vector3 colCheckToTerrain(const Vector3& begin, const Vector3& end, Vector3* hitPos);
+	Vector3 collCheckCapsule_Hitpos(const Vector3& begin, const Vector3& end, Vector3* hitPos);
 
 	/// <summary>
 	/// ˆÚ“®ˆ—

@@ -68,6 +68,9 @@ void Stage::Release() {
 
 bool Stage::ColCheckGround(Vector3 begin, Vector3 end, Vector3* hitPos) {
 
+	if (ground == nullptr)
+		return false;
+
 	MV1_COLL_RESULT_POLY hit;
 	hit = MV1CollCheck_Line(ground->Model(), 0, begin, end);
 	if (hit.HitFlag > 0) {

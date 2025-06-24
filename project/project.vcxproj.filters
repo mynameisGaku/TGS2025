@@ -121,9 +121,6 @@
     <Filter Include="src%28application%29\scene\play\crystal">
       <UniqueIdentifier>{0068d998-e214-4429-a3f6-6c1a1149118f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\result">
-      <UniqueIdentifier>{973ef84f-fb75-4cc1-8ffc-d8ddaeb7d857}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\scene\title">
       <UniqueIdentifier>{d0709ba3-e5dc-461c-8c69-7cb2b1a8ac92}</UniqueIdentifier>
     </Filter>
@@ -369,6 +366,9 @@
     </Filter>
     <Filter Include="src%28application%29\util\singleton">
       <UniqueIdentifier>{45e5b4d4-9de5-4161-829b-c861ccd6745d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\result">
+      <UniqueIdentifier>{973ef84f-fb75-4cc1-8ffc-d8ddaeb7d857}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

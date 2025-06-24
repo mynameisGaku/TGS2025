@@ -189,7 +189,7 @@ void CharaBase::Init(std::string tag)
 	m_UI_CrossHair = new UI_CrossHair(RectTransform(), m_Index);
 	m_UI_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
 	m_UI_CrossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
-	m_UI_CrossHair->SetHandle_CrossHairFrame			("data/texture/UI/CrossHair/CrossHairFrame.png");
+	m_UI_CrossHair->SetHandle_CrossHairFrame		("data/texture/UI/CrossHair/CrossHairFrame.png");
 	m_UI_CrossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
 	m_UI_CrossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
 

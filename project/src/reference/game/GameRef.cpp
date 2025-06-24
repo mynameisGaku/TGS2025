@@ -42,6 +42,12 @@ void GameRef::Load(bool forceLoad)
         TeamNames.push_back(name);
     }
 
+    for (const auto& data : rawJson["StageNames"])
+    {
+        std::string name = data.value<std::string>("Name", "No Information.");
+        StageNames.push_back(name);
+    }
+
     for (const auto& data : rawJson["GameModeDescs"])
     {
         GameModeDesc desc = {};
@@ -60,6 +66,7 @@ void GameRef::Load(bool forceLoad)
 
     GameStartCountMaxSec = jsonLoader->GetOrDefault<float>("GameStartCountMaxSec", 0.0f, FILEKEY);
     GameEndCountMaxSec   = jsonLoader->GetOrDefault<float>("GameEndCountMaxSec", 0.0f, FILEKEY);
+    DefaultStageName     = jsonLoader->GetOrDefault<std::string>("DefaultStageName", std::string("Stage_4"), FILEKEY);
 
     m_WasLoad = true;
 }

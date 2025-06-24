@@ -8,11 +8,12 @@
 class CurrentGameData
 {
 public:
-    std::string                             m_Name;
-    int                                     m_WinPointMax;
-    std::unordered_map<std::string, int>    m_TeamPointMap;
-    float                                   m_PlayTimeMaxSec;
-    float                                   m_PlayTimeCounterSec;
+    std::string                             m_Name{};
+    int                                     m_WinPointMax{};
+    std::string                             m_WinnerTeam{};
+    std::unordered_map<std::string, int>    m_TeamPointMap{};
+    float                                   m_PlayTimeMaxSec{};
+    float                                   m_PlayTimeCounterSec{};
 public:
     CurrentGameData(const GAME_MODE_DESC& desc = {}, std::vector<std::string> teamNames = {});
 };
@@ -25,6 +26,11 @@ public:
 
     void Update() override;
     void Draw() override;
+
+    std::string     GetWinnerTeamName();
+    float           GetPlayTimeSec();
+    float           GetPlayTimeMaxSec();
+    int             GetWinPointMax();
 
 private:
 

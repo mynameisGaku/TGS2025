@@ -4,6 +4,7 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/math/Random.h"
 #include "src/util/singleton/singleton.h"
+#include "src/common/game/GameManager.h"
 
 #include "vendor/ImGui/imgui.h"
 

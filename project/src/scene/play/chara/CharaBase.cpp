@@ -324,8 +324,6 @@ void CharaBase::Init(std::string tag)
 
 void CharaBase::Update() {
 
-	HitGroundProcess();
-
 	// デバッグ機能
 	if (CheckHitKey(KEY_INPUT_R))
 	{
@@ -369,9 +367,11 @@ void CharaBase::Update() {
 	m_IsCatching = false;
 
 	m_Stamina = m_pStamina->GetCurrent();
-	m_HitPoint = (int)m_pHP->GetCurrent();
+	m_HitPoint = m_pHP->GetCurrent();
 
 	Object3D::Update();
+
+	HitGroundProcess();
 
 	invincibleUpdate();
 }
@@ -479,55 +479,60 @@ void CharaBase::HitGroundProcess() {
 		return;
 
 	// 地形(StageObject)と当たり判定する
+	Vector3 p1, p2;
+
+	ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
+
+	static const float DOWN_OFFSET = 0.0f;
+
+	p1 = transform->Global().position - Vector3::SetY(DOWN_OFFSET);
+	p2 = capsuleCol->OffsetWorld();
+
+	const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
+
+	Vector3 pushVec;
+	if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
 	{
-		Vector3 p1, p2;
+		// 押し出しベクトルで位置を補正
+		const Vector3 pushVecNorm = pushVec.Normalize();
+		const float pushVecLength = pushVec.GetLength();
 
-		ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
+		transform->position += (pushVecNorm * pushVecLength) * Vector3::Horizontal;	// 水平方向のみに補正
 
-		static const float DOWN_OFFSET = 10.0f;
-
-		p1 = transform->Global().position + Vector3::SetY(37);
-		p2 = capsuleCol->OffsetWorld() - Vector3::SetY(DOWN_OFFSET);
-
-		const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
-
-		Vector3 pushVec;
-		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+		// Y成分が上方向なら接地とみなす
+		if ((m_pPhysics->velocity.y <= 0.0f) and (pushVec.y > 0))
 		{
-			// 押し出しベクトルで位置を補正
-			transform->position += pushVec;
+			land();
+			// 直す
+			//transform->position -= pushVec.Normalize() * DOWN_OFFSET;
+			//transform->position.y += pushVec.y - DOWN_OFFSET;	// Y成分だけ補正
 
-			// Y成分が上方向なら接地とみなす
-			if ((m_pPhysics->velocity.y <= 0.0f) and (pushVec.y > 0))
-			{
-				land();
-				transform->position -= pushVec.Normalize() * DOWN_OFFSET;
-				m_pPhysics->velocity.y = 0.0f;
-				m_pPhysics->resistance.y = 0.0f;
-			}
-			else
-			{
-				m_IsLanding = false;
-
-				// Y成分が下方向なら頭上ヒット（天井にぶつかった）
-				if (pushVec.y < -0.1f)
-				{
-					m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
-					m_IsJumping = false;
-				}
-			}
+			transform->position += (pushVecNorm * (pushVecLength - radius - DOWN_OFFSET)) * Vector3::UnitY;	// Y成分だけ補正
+			m_pPhysics->velocity.y = 0.0f;
+			m_pPhysics->resistance.y = 0.0f;
 		}
 		else
 		{
 			m_IsLanding = false;
-		}
 
-		// 衝突していなければ、通常の空中挙動へ
-		if (not m_IsLanding)
-		{
-			m_pPhysics->SetGravity(GRAVITY);
-			m_pPhysics->SetFriction(Vector3::Zero);
+			// Y成分が下方向なら頭上ヒット（天井にぶつかった）
+			if (pushVec.y < -0.1f)
+			{
+				m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
+				m_IsJumping = false;
+			}
 		}
+	}
+	else
+	{
+		m_IsLanding = false;
+	}
+
+	// 衝突していなければ、通常の空中挙動へ
+	if (not m_IsLanding)
+	{
+		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 }
 

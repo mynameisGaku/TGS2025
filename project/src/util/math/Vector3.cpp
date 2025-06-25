@@ -439,7 +439,7 @@ float Vector3::GetLength() const
 }
 
 //------------------------------------------------------------------------------
-Vector3 Vector3::Normalize()
+Vector3 Vector3::Normalize() const
 {
 	Vector3 ret;
 

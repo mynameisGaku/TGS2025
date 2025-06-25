@@ -82,7 +82,7 @@ public:
 		@brief		このベクトルを正規化します。
 		@details	ベクトルの長さが 0 の場合は正規化を行いません。
 	*/
-	Vector3 Normalize();
+	Vector3 Normalize() const;
 
 	/**
 		@brief		このベクトルを指定された最大値と最小値の範囲にクランプします。

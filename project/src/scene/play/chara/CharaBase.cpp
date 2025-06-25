@@ -490,8 +490,8 @@ void CharaBase::HitGroundProcess() {
 	const float radius = capsuleCol->Radius();
 
 	//=== 地面との判定 ===
-	static const float RAY_START_OFFSET = 0.0f;
-	static const float RAY_END_OFFSET = 300.0f;
+	static const float RAY_START_OFFSET = -50.0f;
+	static const float RAY_END_OFFSET = 100.0f;
 
 
 	const Vector3 rayStart = headPos + Vector3::SetY(RAY_START_OFFSET);
@@ -512,9 +512,11 @@ void CharaBase::HitGroundProcess() {
 	}
 
 	//=== 壁との判定 ===
+	static const float CAPSULE_OFFSET = 50.0f;	// カプセルのオフセット
+
 	Vector3 pushVec;
 
-	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius), headPos - Vector3::SetY(radius), radius, &pushVec))
+	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius + CAPSULE_OFFSET), headPos - Vector3::SetY(radius), radius, &pushVec))
 	{
 		// 押し出しベクトルで位置を補正
 		const Vector3 pushVecNorm = pushVec.Normalize();

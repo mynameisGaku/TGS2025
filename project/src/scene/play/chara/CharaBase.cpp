@@ -489,28 +489,24 @@ void CharaBase::HitGroundProcess() {
 
 	static const float DOWN_OFFSET = 0.0f;
 
-	Vector3 headPos = capsuleCol->OffsetWorld();
-	Vector3 footPos = transform->position - Vector3::SetY(DOWN_OFFSET);
-
 	const float radius = capsuleCol->Radius();
 	Vector3 hitPos;
-
 
 	//=== すり抜け判定 ===
 	static const float CENTER_OFFSET = 50.0f;	// 中心のオフセット
 	const Vector3 moveDir = Vector3::Normalize(transform->position - m_lastUpdatePosition);
 	const Vector3 centerPos = transform->position + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
-	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET + moveDir * radius);
+	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
 
 	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
 	{
-		//transform->position = Vector3(0, 0, 0);	// レイのヒット位置へ移動
-		transform->position = (m_lastUpdatePosition) - moveDir * radius;	// レイのヒット位置へ移動
-		//transform->position = hitPos + (dir * radius * 2.0f);	// レイのヒット位置へ移動
-		//transform->position = hitPos;	// レイのヒット位置へ移動
+		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
 	}
 
-	//=== 地面との判定 ===
+	//=== 地面との判定 ===s
+	Vector3 headPos = capsuleCol->OffsetWorld();
+	Vector3 footPos = transform->position - Vector3::SetY(DOWN_OFFSET);
+
 	static const float RAY_START_OFFSET = -50.0f;
 	static const float RAY_END_OFFSET = 100.0f;
 

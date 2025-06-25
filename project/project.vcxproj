@@ -408,6 +408,7 @@
     <ClCompile Include="src\util\math\Vector4.cpp" />
     <ClCompile Include="src\util\object2D\Object2D.cpp" />
     <ClCompile Include="src\util\object3D\Object3D.cpp" />
+    <ClCompile Include="src\util\screen\ScreenManager.cpp" />
     <ClCompile Include="src\util\shadow_map\ShadowMap.cpp" />
     <ClCompile Include="src\util\singleton\singleton.cpp" />
     <ClCompile Include="src\util\sound\SoundBase.cpp" />
@@ -592,6 +593,7 @@
     <ClInclude Include="src\util\object3D\Object3D.h" />
     <ClInclude Include="src\util\pool\Pool.h" />
     <ClInclude Include="src\util\ptr\PtrUtil.h" />
+    <ClInclude Include="src\util\screen\ScreenManager.h" />
     <ClInclude Include="src\util\shadow_map\ShadowMap.h" />
     <ClInclude Include="src\util\singleton\singleton.h" />
     <ClInclude Include="src\util\sound\SoundBase.h" />

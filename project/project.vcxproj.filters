@@ -370,6 +370,9 @@
     <Filter Include="src%28application%29\scene\result">
       <UniqueIdentifier>{973ef84f-fb75-4cc1-8ffc-d8ddaeb7d857}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\screen">
+      <UniqueIdentifier>{8447248d-e52b-44d1-8d01-54f34daf90aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1247,6 +1250,9 @@
     <ClCompile Include="src\util\singleton\singleton.cpp">
       <Filter>src%28application%29\util\singleton</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\screen\ScreenManager.cpp">
+      <Filter>src%28application%29\util\screen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1950,6 +1956,9 @@
     </ClInclude>
     <ClInclude Include="src\util\singleton\singleton.h">
       <Filter>src%28application%29\util\singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\screen\ScreenManager.h">
+      <Filter>src%28application%29\util\screen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

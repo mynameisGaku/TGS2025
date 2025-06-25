@@ -1,13 +1,23 @@
 #include "UI_CrossHair.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/common/camera/CameraManager.h"
+#include "src/util/screen/ScreenManager.h"
 
 UI_CrossHair::UI_CrossHair(const RectTransform& trs, int index)
 {
-	SetTransform(trs);
-	SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eRight);
-
 	charaIndex = index;
+
+	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
+	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
+	Vector2 size = endPos - beginPos;
+
+	RectTransform rectTrs = trs;
+	rectTrs.anchor.SetBegin(beginPos);
+	rectTrs.anchor.SetEnd(endPos);
+
+	SetTransform(rectTrs);
+
+	SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eRight);
 
 	hCrossHair = -1;
 	hCrossHairFrame = -1;
@@ -35,23 +45,23 @@ UI_CrossHair::~UI_CrossHair()
 
 void UI_CrossHair::Update()
 {
-	if (charaIndex >= 0) {
+	//if (charaIndex >= 0) {
 
-		if (CameraManager::IsScreenDivision()) {
-			SetIsDraw(true);
-			Vector2 cameraDiv = CameraManager::GetDivedByCameraNum();
-			rectTransform->position = Vector2(cameraDiv.x * charaIndex + cameraDiv.x * 0.5f, WindowSetting::Inst().height_half);
-		}
-		else if (charaIndex == 0) {
-			SetIsDraw(true);
-			Vector2 drawPos = CameraManager::GetScreenDivisionPos_CameraIndex(charaIndex);
-			Vector2 drawSize = CameraManager::GetScreenDivisionSize();
-			rectTransform->position = (drawPos + drawSize) * 0.5f;
-		}
-		else {
-			SetIsDraw(false);
-		}
-	}
+	//	if (CameraManager::IsScreenDivision()) {
+	//		SetIsDraw(true);
+	//		Vector2 cameraDiv = CameraManager::GetDivedByCameraNum();
+	//		rectTransform->position = Vector2(cameraDiv.x * charaIndex + cameraDiv.x * 0.5f, WindowSetting::Inst().height_half);
+	//	}
+	//	else if (charaIndex == 0) {
+	//		SetIsDraw(true);
+	//		Vector2 drawPos = CameraManager::GetScreenDivisionPos_CameraIndex(charaIndex);
+	//		Vector2 drawSize = CameraManager::GetScreenDivisionSize();
+	//		rectTransform->position = (drawPos + drawSize) * 0.5f;
+	//	}
+	//	else {
+	//		SetIsDraw(false);
+	//	}
+	//}
 	UI_Canvas::Update();
 }
 
@@ -64,22 +74,6 @@ void UI_CrossHair::Draw()
 	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average(), 0.0f, hCrossHairFrame, true);
 	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average(), 0.0f, hCrossHair, true);
 
-	////------------------------------------------------------------
-	//// 槍投げクールタイム用クロスヘア描画
-
-	//int bright = 200 + 55 * int(1 - coolTime);
-	//SetDrawBright(bright, bright, bright);
-
-	//gauge.DrawRectRotaGraphGauge(drawPos, coolTime, 1.0f, 0.0f, hCrossHairOutSideGauge, -1, -1, 1.0f, alpha, Gauge::ScrollType::VERTICAL, 1.0f, 1.0f, hCrossHairOutSideGaugeBack, alpha);
-
-	////------------------------------------------------------------
-	//// 槍チャージ用クロスヘア描画
-
-	//if (charge < 1.0f)
-	//	SetDrawBright(255, 50 * (1 - charge), 50 * (1 - charge));
-	//else
-	//	SetDrawBright(200, 0, 200);
-
 	if (value != nullptr)
 	{
 		float norm = *value / valueMax;
@@ -89,9 +83,6 @@ void UI_CrossHair::Draw()
 		else
 			gauge.DrawRectRotaGraphGauge(globalTrs.position, 1.0f - norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, scrollType);
 	}
-	//SetDrawBright(255, 255, 255);
-
-	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void UI_CrossHair::SetHandle_CrossHair(const std::string& path)

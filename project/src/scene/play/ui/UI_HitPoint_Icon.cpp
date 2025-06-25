@@ -1,5 +1,6 @@
 #include "UI_HitPoint_Icon.h"
 #include "src/common/camera/CameraManager.h"
+#include "src/util/screen/ScreenManager.h"
 
 UI_HitPoint_Icon::UI_HitPoint_Icon() : 
 	UI_HitPoint_Icon(RectTransform(), -1)
@@ -9,7 +10,16 @@ UI_HitPoint_Icon::UI_HitPoint_Icon() :
 UI_HitPoint_Icon::UI_HitPoint_Icon(const RectTransform& trs, int index)
 {
 	charaIndex = index;
-	SetTransform(trs);
+
+	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
+	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
+	Vector2 size = endPos - beginPos;
+
+	RectTransform rectTrs = trs;
+	rectTrs.anchor.SetBegin(beginPos);
+	rectTrs.anchor.SetEnd(endPos);
+
+	SetTransform(rectTrs);
 	SetValue(nullptr, 0.0f, 0.0f, 0.0f);
 }
 
@@ -20,21 +30,6 @@ UI_HitPoint_Icon::~UI_HitPoint_Icon()
 
 void UI_HitPoint_Icon::Update()
 {
-	if (charaIndex >= 0) {
-
-		if (CameraManager::IsScreenDivision()) {
-			SetIsDraw(true);
-			float scrWidth = (WindowSetting::Inst().width / CameraManager::AllCameras().size()) * charaIndex;
-			*rectTransform = RectTransform(Anchor::Preset::LeftDown, Vector2(scrWidth, 0.0f), 0.0f, Vector2::Ones * 2.0f);
-		}
-		else if (charaIndex == 0) {
-			SetIsDraw(true);
-		}
-		else {
-			SetIsDraw(false);
-		}
-	}
-
 	UI_Canvas::Update();
 }
 

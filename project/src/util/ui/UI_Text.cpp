@@ -201,7 +201,7 @@ Vector2 UI_Text::DisplacementByAnchorPoint() {
 	Vector2 offset = Vector2::Zero;	// 差
 
 	// アンカーポイントによって横の中心点をズラす
-	switch (Anchor::PlacementHorizontal(rectTransform->preset)) {
+	switch (Anchor::PlacementHorizontal(rectTransform->anchor.GetPreset())) {
 	case Anchor::Placement::LEFT:	offset.x = 0.0f;				break;
 	case Anchor::Placement::MIDDLE:	offset.x = -textSize.x * 0.5f;	break;
 	case Anchor::Placement::RIGHT:	offset.x = -textSize.x;			break;
@@ -209,7 +209,7 @@ Vector2 UI_Text::DisplacementByAnchorPoint() {
 	}
 
 	// アンカーポイントによって縦の中心点をズラす
-	switch (Anchor::PlacementVertical(rectTransform->preset)) {
+	switch (Anchor::PlacementVertical(rectTransform->anchor.GetPreset())) {
 	case Anchor::Placement::UP:		offset.y = 0.0f;						break;
 	case Anchor::Placement::MIDDLE:	offset.y = -textSize.y * 0.5f - ADJUST;	break;
 	case Anchor::Placement::DOWN:	offset.y = -textSize.y;					break;

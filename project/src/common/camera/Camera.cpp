@@ -155,8 +155,6 @@ void Camera::rendering() {
 	if (StageObjectManager::CollCheckLine(cameraPos, targetPos, &hitPos))
 		cameraPos = hitPos + apprach;
 
-	//cameraPos = StageObjectManager::CollCheckCapsule_Hitpos(cameraPos, targetPos, 32.0f, &hitPos);
-
 	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY, m_CameraRotMat));
 }
 

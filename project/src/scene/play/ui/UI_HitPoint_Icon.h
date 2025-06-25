@@ -12,8 +12,6 @@ public:
 
 	void SetValue(float* value, float valueMin, float valueMax, float dispNum);
 
-	void SetDiffSize(const Vector2& diffSize);
-
 private:
 	int charaIndex;
 

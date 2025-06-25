@@ -478,54 +478,56 @@ void CharaBase::HitGroundProcess() {
 	if (physics == nullptr)
 		return;
 
-	// 地形(StageObject)と当たり判定する
-	Vector3 p1, p2;
-
 	ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
+	if (capsuleCol == nullptr)
+		return;
 
 	static const float DOWN_OFFSET = 0.0f;
 
-	p1 = transform->Global().position - Vector3::SetY(DOWN_OFFSET);
-	p2 = capsuleCol->OffsetWorld();
+	Vector3 headPos = capsuleCol->OffsetWorld();
+	Vector3 footPos = transform->position - Vector3::SetY(DOWN_OFFSET);
 
-	const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
+	const float radius = capsuleCol->Radius();
 
-	Vector3 pushVec;
-	if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+	//=== 地面との判定 ===
+	static const float RAY_START_OFFSET = 0.0f;
+	static const float RAY_END_OFFSET = 300.0f;
+
+
+	const Vector3 rayStart = headPos + Vector3::SetY(RAY_START_OFFSET);
+	const Vector3 rayEnd = footPos - Vector3::SetY(RAY_END_OFFSET);
+	Vector3 hitPos;
+
+	if (StageObjectManager::CollCheckCapsule_Under(rayStart, rayEnd, &hitPos))
 	{
-		// 押し出しベクトルで位置を補正
-		const Vector3 pushVecNorm = pushVec.Normalize();
-		const float pushVecLength = pushVec.GetLength();
-
-		transform->position += (pushVecNorm * pushVecLength) * Vector3::Horizontal;	// 水平方向のみに補正
-
-		// Y成分が上方向なら接地とみなす
-		if ((m_pPhysics->velocity.y <= 0.0f) and (pushVec.y > 0))
+		if (m_pPhysics->velocity.y <= 0.0f)
 		{
 			land();
-			// 直す
-			//transform->position -= pushVec.Normalize() * DOWN_OFFSET;
-			//transform->position.y += pushVec.y - DOWN_OFFSET;	// Y成分だけ補正
-
-			transform->position += (pushVecNorm * (pushVecLength - radius - DOWN_OFFSET)) * Vector3::UnitY;	// Y成分だけ補正
-			m_pPhysics->velocity.y = 0.0f;
-			m_pPhysics->resistance.y = 0.0f;
-		}
-		else
-		{
-			m_IsLanding = false;
-
-			// Y成分が下方向なら頭上ヒット（天井にぶつかった）
-			if (pushVec.y < -0.1f)
-			{
-				m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
-				m_IsJumping = false;
-			}
+			transform->position = hitPos;
 		}
 	}
 	else
 	{
 		m_IsLanding = false;
+	}
+
+	//=== 壁との判定 ===
+	Vector3 pushVec;
+
+	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius), headPos - Vector3::SetY(radius), radius, &pushVec))
+	{
+		// 押し出しベクトルで位置を補正
+		const Vector3 pushVecNorm = pushVec.Normalize();
+		const float pushVecLength = pushVec.GetLength();
+
+		transform->position += (pushVecNorm * pushVecLength);
+
+		// Y成分が下方向なら頭上ヒット（天井にぶつかった）
+		if (pushVec.y < -0.1f)
+		{
+			m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
+			m_IsJumping = false;
+		}
 	}
 
 	// 衝突していなければ、通常の空中挙動へ
@@ -1862,6 +1864,8 @@ void CharaBase::land()
 {
 	m_IsLanding = true;
 	m_IsJumping = false;
+	m_pPhysics->velocity.y = 0.0f;
+	m_pPhysics->resistance.y = 0.0f;
 	m_pPhysics->SetGravity(Vector3::Zero);
 	m_pPhysics->SetFriction(FRICTION);
 }

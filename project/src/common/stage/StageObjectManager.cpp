@@ -234,18 +234,36 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 	return hitFlag;
 }
 
-bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos)
+bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos)
 {
+	Vector3 nearestPos = Vector3::Zero;
+	float nearestDist = 0.0f;
+	bool isHit = false;
+
 	for (const auto& obj : *stageObjects) {
 
 		MV1_COLL_RESULT_POLY hit;
 		hit = MV1CollCheck_Line(obj->Model(), 0, begin, end);
 		if (hit.HitFlag > 0) {
-			if (hitPos != nullptr)	// 引数にポインタが入っていたら、代入をする
-				*hitPos = hit.HitPosition;
-			return true;
+
+			float dist = ((Vector3)hit.HitPosition - begin).GetLengthSquared();
+			if ((not isHit) || nearestDist > dist)
+			{
+				nearestPos = hit.HitPosition;
+				nearestDist = dist;
+			}
+			isHit = true;
 		}
 	}
+
+	if (isHit)
+	{
+		if (hitPos != nullptr)	// 引数にポインタが入っていたら、代入をする
+			*hitPos = nearestPos;
+
+		return true;
+	}
+
 	return false;
 }
 

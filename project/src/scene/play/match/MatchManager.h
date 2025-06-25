@@ -27,6 +27,8 @@ public:
     void Update() override;
     void Draw() override;
 
+    void ReloadCurrentGameData();
+
     std::string     GetWinnerTeamName();
     float           GetPlayTimeSec();
     float           GetPlayTimeMaxSec();

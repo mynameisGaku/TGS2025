@@ -124,6 +124,11 @@ void MatchManager::Draw()
         m_pFsm->ImGuiDebugRender();
 }
 
+void MatchManager::ReloadCurrentGameData()
+{
+    m_GameData = CurrentGameData(SceneManager::CommonScene()->FindGameObject<GameManager>()->GetCurrentGameModeData());
+}
+
 std::string MatchManager::GetWinnerTeamName()
 {
     return m_GameData.m_WinnerTeam == "" ? "No Winner." : m_GameData.m_WinnerTeam;
@@ -162,6 +167,8 @@ void MatchManager::ImGuiInit()
 {
 #ifdef _DEBUG
     ImGuiRoot* matchRoot = ImGuiManager::AddRoot(new ImGuiRoot("Match"));  // マッチのトップ
+    std::function<void()> func = [&] {ReloadCurrentGameData(); };
+    matchRoot->Add(new ImGuiNode_Button("Reload GameData", func));
 
     for (auto& team : m_pTeamManager->GetTeams())
     {
@@ -226,8 +233,8 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
         //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
         //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 

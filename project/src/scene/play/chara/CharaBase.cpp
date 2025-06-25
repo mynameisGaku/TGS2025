@@ -150,6 +150,8 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_UI_CrossHair);
 	PtrUtil::SafeDelete(m_UI_BallChargeMeter);
 	PtrUtil::SafeDelete(m_UI_HitPointIcon);
+	PtrUtil::SafeDelete(m_Alarm);
+	PtrUtil::SafeDelete(m_TackleIntervalAlarm);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
@@ -166,6 +168,8 @@ void CharaBase::Init(std::string tag)
 {
 	m_Alarm = new Alarm;
 	m_Alarm->Reset();
+	m_TackleIntervalAlarm = new Alarm;
+	m_TackleIntervalAlarm->Reset();
 
 	m_CharaTag = tag;
 	m_pStatusTracker = new StatusTracker();
@@ -275,6 +279,7 @@ void CharaBase::Init(std::string tag)
 	m_Timeline->SetFunction("SetCanRot", &CharaBase::setCanRot);
 	m_Timeline->SetFunction("SetVelocity", &CharaBase::setVelocity);
 	m_Timeline->SetFunction("ThrowBall", &CharaBase::throwBall);
+	m_Timeline->SetFunction("Invincible", &CharaBase::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -334,6 +339,9 @@ void CharaBase::Update() {
 		m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 	}
 
+	m_Alarm->Update();
+	m_TackleIntervalAlarm->Update();
+
 	m_FSM->Update();
 	m_SubFSM->Update();
 	m_Timeline->Update();
@@ -380,17 +388,10 @@ void CharaBase::Draw()
 {
 	Object3D::Draw();
 
-	/*for (int i = 0; i < 5; i++)
+	if (m_IsInvincible)
 	{
-		m_pTrail[i]->Draw();
-	}*/
-
-	if (m_pHP->IsDead())
-	{
-		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
+		DrawSphere3D(transform->position, 100, 64, 0xffff00, 0x000000, false);
 	}
-
-	
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -728,7 +729,7 @@ void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float fo
 
 	Knockback(other, force_vertical, force_horizontal);
 
-	SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
+	SetInvincible(CHARADEFINE_REF.GetTackleInvincibleTime, true);
 
 	DropBall(transform->position, BALL_REF.DropForce_Vertical, BALL_REF.DropForce_Horizontal);
 
@@ -772,6 +773,12 @@ void CharaBase::Knockback(const Vector3& other, float force_vertical, float forc
 	Vector3 impact = impactVertical + impactHorizontal;
 
 	m_pPhysics->velocity += impact;
+}
+
+
+bool CharaBase::IsFinishTackleIntervalAlarm()
+{
+	return m_TackleIntervalAlarm->IsFinish();
 }
 
 //========================================================================
@@ -1644,12 +1651,12 @@ void CharaBase::StateTackle(FSMSignal sig)
 	{
 		m_Timeline->Play("Tackle");
 
+		m_CanTackle = false;
+		m_CanCatch = false;
 		m_CanMove = false;
-		m_CanRot = false;
+		m_CanRot = true;
 
 		m_Tackler->SetColliderActive(true);
-
-		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1671,8 +1678,11 @@ void CharaBase::StateTackle(FSMSignal sig)
 		m_Timeline->Stop();
 		m_Tackler->SetColliderActive(false);
 		m_IsTackling = false;
+		m_CanTackle = true;
+		m_CanCatch = true;
 		m_CanMove = true;
 		m_CanRot = true;
+		m_TackleIntervalAlarm->Set(CHARADEFINE_REF.TackleInterval);
 	}
 	break;
 	}
@@ -1720,6 +1730,7 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_CanTackle = false;
 		m_CanMove = false;
 		m_CanRot = false;
 		m_pPhysics->SetGravity(Vector3::Zero);
@@ -1823,6 +1834,9 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 		}
 
 		catchUpdate();
+
+		// 吸い込み中はタックルできません
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1831,6 +1845,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanTackle = true;
 		m_Catcher->SetColliderActive(false);
 
 		if (m_CharaTag == "Blue")
@@ -2002,7 +2017,7 @@ void CharaBase::tackleUpdate()
 	if (m_Animator->IsFinished())
 	{
 		// あと隙
-		m_Alarm->Set(0.1f); // magic:>
+		m_Alarm->Set(CHARADEFINE_REF.TackleRecovery); // magic:>
 	}
 }
 
@@ -2260,4 +2275,9 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 	{
 		throwBallHoming();
 	}
+}
+
+void CharaBase::invincible(const nlohmann::json& argument)
+{
+	SetInvincible(argument.at("TimeSec").get<float>(), true);
 }

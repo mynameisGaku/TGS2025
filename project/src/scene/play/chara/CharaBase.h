@@ -140,6 +140,9 @@ public:
 	// ▼タックル
 	void Tackle();
 
+	/// <summary>
+	/// タックル食らった時に呼び出す関数。無敵付与もされます
+	/// </summary>
 	void GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback);
 
 	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
@@ -225,6 +228,8 @@ public:
 	// 無敵中か
 	inline bool IsInvincible() const { return m_IsInvincible; }
 
+	bool IsFinishTackleIntervalAlarm();
+
 	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);
@@ -299,6 +304,7 @@ private:
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
 	Alarm*			m_Alarm;				// アラーム
+	Alarm*			m_TackleIntervalAlarm;	// タックルできる間隔アラーム
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_HitPoint;
@@ -311,6 +317,7 @@ private:
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
 	float			m_InvincibleTimer;		// 無敵残り時間
 	float			m_Stamina;				// 
+	float			m_TackleInterval;		// タックルできるまでの間隔(秒)
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -367,4 +374,5 @@ private:
 	void setCanRot(const nlohmann::json& argument);
 	void setVelocity(const nlohmann::json& argument);
 	void throwBall(const nlohmann::json& argument);
+	void invincible(const nlohmann::json & argument);
 };

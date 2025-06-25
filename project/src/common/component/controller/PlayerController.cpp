@@ -110,7 +110,7 @@ void PlayerController::Update() {
 
 	////////////////////////////////////////////////////
 	// ƒ^ƒbƒNƒ‹
-	if (chara->CanTackle())
+	if (chara->CanTackle() && chara->IsFinishTackleIntervalAlarm())
 	{
 		if (InputManager::Push("Tackle", padNumber))
 		{

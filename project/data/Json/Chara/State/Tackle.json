@@ -16,6 +16,14 @@
       }
     },
     {
+      "Name": "Invincible",
+      "Start": 3.0,
+      "End": 14.0,
+      "Argument": {
+        "TimeSec": 0.001
+      }
+    },
+    {
       "Name": "MoveToPosition",
       "Start": 1.8,
       "End": 4.4,
@@ -73,6 +81,13 @@
           "Y": 0,
           "Z": 40
         }
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 13.5,
+      "Argument": {
+        "Speed": 0.2
       }
     }
   ]

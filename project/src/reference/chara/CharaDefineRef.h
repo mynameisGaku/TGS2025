@@ -31,29 +31,26 @@ public:
         instance = nullptr;
     }
 
-    int                         Max;
-    std::vector<std::string>    Tags;
-    float                       CatchRadius;
-    float                       EmoteInterval;
-    float                       MoveSpeed;
-    float                       RotSpeed;
-    float                       JumpPower;
-    float                       TackleRadius;
-    float                       TackleInvincibleDurationSec;
-    float                       TackleForce_Vertical;
-    float                       TackleForce_Horizontal;
+    int                         Max{};
+    std::vector<std::string>    Tags{};
+    float                       CatchRadius{};
+    float                       EmoteInterval{};
+    float                       MoveSpeed{};
+    float                       RotSpeed{};
+    float                       JumpPower{};
+    float                       TackleRadius{};
+    float                       TackleInterval{};         // タックルできるまでの間隔(秒)
+    float                       TackleRecovery{};         // 後隙(秒)
+    float                       TackleForce_Vertical{};
+    float                       TackleForce_Horizontal{};
+    float                       GetTackleInvincibleTime{};  // タックルを食らったときに付与される無敵時間(秒)
     
     void Load(bool ForceLoad = false);
 private:
 
     bool                m_WasLoad = false; // ロード済みか？ 重複回避用
 
-    CharaDefineRef() :
-        Max(0),
-        Tags({}),
-        CatchRadius(0.0f),
-        EmoteInterval(0.0f),
-        JumpPower(0.0f)
+    CharaDefineRef()
     { /*DO NOTHING*/
     }
 

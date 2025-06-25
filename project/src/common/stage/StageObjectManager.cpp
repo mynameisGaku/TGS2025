@@ -196,7 +196,7 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 	return hitFlag;
 }
 
-bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos)
+bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos)
 {
 	Vector3 nearestPos = Vector3::Zero;
 	float nearestDist = 0.0f;

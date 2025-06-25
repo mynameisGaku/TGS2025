@@ -57,7 +57,7 @@ namespace StageObjectManager {
 	bool CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push);
 	bool CollCheckCapsule_Hitpos(const Vector3& p1, const Vector3& p2, float r, Vector3* hitPos);
 
-	bool CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
+	bool CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
 	bool CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push = nullptr);
 
 	/// <summary>

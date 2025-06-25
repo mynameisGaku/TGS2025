@@ -299,6 +299,7 @@ private:
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
 	Alarm*			m_Alarm;				// アラーム
+	Vector3			m_lastUpdatePosition;	// 前回更新時の最終位置
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_HitPoint;

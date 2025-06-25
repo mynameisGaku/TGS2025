@@ -95,6 +95,7 @@ CharaBase::CharaBase()
 	m_Stamina = 0.0f;
 
 	m_Alarm = nullptr;
+	m_lastUpdatePosition = Vector3::Zero;
 	m_InvincibleTimer = 0.0f;
 	m_IsDamage = false;
 	m_IsTackling = false;
@@ -166,6 +167,8 @@ void CharaBase::Init(std::string tag)
 {
 	m_Alarm = new Alarm;
 	m_Alarm->Reset();
+
+	m_lastUpdatePosition = Vector3::Zero;
 
 	m_CharaTag = tag;
 	m_pStatusTracker = new StatusTracker();
@@ -374,6 +377,8 @@ void CharaBase::Update() {
 	HitGroundProcess();
 
 	invincibleUpdate();
+
+	m_lastUpdatePosition = transform->position;
 }
 
 void CharaBase::Draw()
@@ -488,17 +493,31 @@ void CharaBase::HitGroundProcess() {
 	Vector3 footPos = transform->position - Vector3::SetY(DOWN_OFFSET);
 
 	const float radius = capsuleCol->Radius();
+	Vector3 hitPos;
+
+
+	//=== すり抜け判定 ===
+	static const float CENTER_OFFSET = 50.0f;	// 中心のオフセット
+	const Vector3 moveDir = Vector3::Normalize(transform->position - m_lastUpdatePosition);
+	const Vector3 centerPos = transform->position + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
+	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET + moveDir * radius);
+
+	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
+	{
+		//transform->position = Vector3(0, 0, 0);	// レイのヒット位置へ移動
+		transform->position = (m_lastUpdatePosition) - moveDir * radius;	// レイのヒット位置へ移動
+		//transform->position = hitPos + (dir * radius * 2.0f);	// レイのヒット位置へ移動
+		//transform->position = hitPos;	// レイのヒット位置へ移動
+	}
 
 	//=== 地面との判定 ===
 	static const float RAY_START_OFFSET = -50.0f;
 	static const float RAY_END_OFFSET = 100.0f;
 
-
 	const Vector3 rayStart = headPos + Vector3::SetY(RAY_START_OFFSET);
 	const Vector3 rayEnd = footPos - Vector3::SetY(RAY_END_OFFSET);
-	Vector3 hitPos;
 
-	if (StageObjectManager::CollCheckCapsule_Under(rayStart, rayEnd, &hitPos))
+	if (StageObjectManager::CollCheckRay(rayStart, rayEnd, &hitPos))
 	{
 		if (m_pPhysics->velocity.y <= 0.0f)
 		{
@@ -531,6 +550,7 @@ void CharaBase::HitGroundProcess() {
 			m_IsJumping = false;
 		}
 	}
+
 
 	// 衝突していなければ、通常の空中挙動へ
 	if (not m_IsLanding)

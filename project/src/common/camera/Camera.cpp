@@ -19,6 +19,7 @@
 #include "src/util/input/MouseController.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/setting/window/WindowSetting.h"
+#include "src/scene/play/chara/CharaBase.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -150,11 +151,24 @@ void Camera::rendering() {
 	}
 
 	Vector3 hitPos = Vector3::Zero;
-	Vector3 apprach = (targetPos - cameraPos).Normalize() * 16.0f;
 
-	if (StageObjectManager::CollCheckLine(cameraPos, targetPos, &hitPos))
-		cameraPos = hitPos + apprach;
-
+	if (m_pFollowerChara != nullptr)
+	{
+		Vector3 followerPos = m_pFollowerChara->transform->Global().position + Vector3::UnitY * 150.0f;
+		if (StageObjectManager::CollCheckLine(cameraPos, followerPos, &hitPos))
+		{
+			Vector3 apprach = (followerPos - cameraPos).Normalize() * 16.0f;
+			cameraPos = hitPos + apprach;
+		}
+	}
+	else
+	{
+		if (StageObjectManager::CollCheckLine(cameraPos, targetPos, &hitPos))
+		{
+			Vector3 apprach = (targetPos - cameraPos).Normalize() * 16.0f;
+			cameraPos = hitPos + apprach;
+		}
+	}
 	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY, m_CameraRotMat));
 }
 

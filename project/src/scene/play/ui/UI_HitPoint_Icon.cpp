@@ -20,6 +20,8 @@ UI_HitPoint_Icon::UI_HitPoint_Icon(const RectTransform& trs, int index)
 
 	SetTransform(rectTrs);
 	SetValue(nullptr, 0.0f, 0.0f, 0.0f);
+
+	needRelocation = false;
 }
 
 UI_HitPoint_Icon::~UI_HitPoint_Icon()
@@ -29,6 +31,12 @@ UI_HitPoint_Icon::~UI_HitPoint_Icon()
 
 void UI_HitPoint_Icon::Update()
 {
+	// 画面分割数切り替え時にアンカーの位置を更新(デバッグ用)
+	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
+	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
+	rectTransform->anchor.SetBegin(beginPos);
+	rectTransform->anchor.SetEnd(endPos);
+
 	UI_Canvas::Update();
 }
 

@@ -21,4 +21,6 @@ private:
 	float m_DispNum;
 
 	Vector2 m_DiffSize;
+
+	bool needRelocation;
 };

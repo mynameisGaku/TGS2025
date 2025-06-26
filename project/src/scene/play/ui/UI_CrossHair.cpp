@@ -44,6 +44,12 @@ UI_CrossHair::~UI_CrossHair()
 
 void UI_CrossHair::Update()
 {
+	// 画面分割数切り替え時にアンカーの位置を更新(デバッグ用)
+	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
+	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
+	rectTransform->anchor.SetBegin(beginPos);
+	rectTransform->anchor.SetEnd(endPos);
+
 	UI_Canvas::Update();
 }
 

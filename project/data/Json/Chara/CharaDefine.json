@@ -11,8 +11,10 @@
     "RotSpeed": 15.0,
     "JumpPower": 20.0,
     "TackleRadius": 150.0,
-    "TackleInvincibleDurationSec": 1.5,
+    "TackleInterval": 2.5,
+    "TackleRecovery": 0.15,
     "TackleForce_Horizontal": 15.0,
-    "TackleForce_Vertical": 35.0
+    "TackleForce_Vertical": 35.0,
+    "GetTackleInvincibleTime": 1.5
   }
 }

@@ -28,9 +28,42 @@
       "GameModeName": "Debug",
       "PlayTimeMaxSec": 99999999,
       "WinPointMax": 99999999
+    },
+    {
+      "GameModeName": "WinnerTest1",
+      "PlayTimeMaxSec": 99999999,
+      "WinPointMax": 1
+    },
+    {
+      "GameModeName": "WinnerTest2",
+      "PlayTimeMaxSec": 99999999,
+      "WinPointMax": 2
+    },
+    {
+      "GameModeName": "TimeTest",
+      "PlayTimeMaxSec": 1,
+      "WinPointMax": 99999999
     }
   ],
 
   "GameStartCountMaxSec": 5.0,
-  "GameEndCountMaxSec": 5.0
+  "GameEndCountMaxSec": 5.0,
+  "DefaultStageName": "Stage_3",
+  "StageNames": [
+    {
+      "Name": "Stage_0"
+    },
+    {
+      "Name": "Stage_1"
+    },
+    {
+      "Name": "Stage_2"
+    },
+    {
+      "Name": "Stage_3"
+    },
+    {
+      "Name": "TestStage"
+    }
+  ]
 }

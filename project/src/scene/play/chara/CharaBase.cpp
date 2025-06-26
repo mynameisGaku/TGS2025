@@ -95,6 +95,7 @@ CharaBase::CharaBase()
 	m_Stamina = 0.0f;
 
 	m_Alarm = nullptr;
+	m_lastUpdatePosition = Vector3::Zero;
 	m_InvincibleTimer = 0.0f;
 	m_IsDamage = false;
 	m_IsTackling = false;
@@ -150,6 +151,8 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_UI_CrossHair);
 	PtrUtil::SafeDelete(m_UI_BallChargeMeter);
 	PtrUtil::SafeDelete(m_UI_HitPointIcon);
+	PtrUtil::SafeDelete(m_Alarm);
+	PtrUtil::SafeDelete(m_TackleIntervalAlarm);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
@@ -166,6 +169,10 @@ void CharaBase::Init(std::string tag)
 {
 	m_Alarm = new Alarm;
 	m_Alarm->Reset();
+	m_TackleIntervalAlarm = new Alarm;
+	m_TackleIntervalAlarm->Reset();
+
+	m_lastUpdatePosition = Vector3::Zero;
 
 	m_CharaTag = tag;
 	m_pStatusTracker = new StatusTracker();
@@ -281,6 +288,7 @@ void CharaBase::Init(std::string tag)
 	m_Timeline->SetFunction("SetCanRot", &CharaBase::setCanRot);
 	m_Timeline->SetFunction("SetVelocity", &CharaBase::setVelocity);
 	m_Timeline->SetFunction("ThrowBall", &CharaBase::throwBall);
+	m_Timeline->SetFunction("Invincible", &CharaBase::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -330,8 +338,6 @@ void CharaBase::Init(std::string tag)
 
 void CharaBase::Update() {
 
-	HitGroundProcess();
-
 	// デバッグ機能
 	if (CheckHitKey(KEY_INPUT_R))
 	{
@@ -339,6 +345,9 @@ void CharaBase::Update() {
 		m_Animator->DeleteAnimInfos();
 		m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 	}
+
+	m_Alarm->Update();
+	m_TackleIntervalAlarm->Update();
 
 	m_FSM->Update();
 	m_SubFSM->Update();
@@ -375,28 +384,25 @@ void CharaBase::Update() {
 	m_IsCatching = false;
 
 	m_Stamina = m_pStamina->GetCurrent();
-	m_HitPoint = (int)m_pHP->GetCurrent();
+	m_HitPoint = m_pHP->GetCurrent();
 
 	Object3D::Update();
 
+	HitGroundProcess();
+
 	invincibleUpdate();
+
+	m_lastUpdatePosition = transform->position;
 }
 
 void CharaBase::Draw()
 {
 	Object3D::Draw();
 
-	/*for (int i = 0; i < 5; i++)
+	if (m_IsInvincible)
 	{
-		m_pTrail[i]->Draw();
-	}*/
-
-	if (m_pHP->IsDead())
-	{
-		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
+		DrawSphere3D(transform->position, 100, 64, 0xffff00, 0x000000, false);
 	}
-
-	
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -484,56 +490,76 @@ void CharaBase::HitGroundProcess() {
 	if (physics == nullptr)
 		return;
 
-	// 地形(StageObject)と当たり判定する
+	ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
+	if (capsuleCol == nullptr)
+		return;
+
+	static const float DOWN_OFFSET = 0.0f;
+
+	const float radius = capsuleCol->Radius();
+	Vector3 hitPos;
+
+	//=== すり抜け判定 ===
+	static const float CENTER_OFFSET = 50.0f;	// 中心のオフセット
+	const Vector3 moveDir = Vector3::Normalize(transform->position - m_lastUpdatePosition);
+	const Vector3 centerPos = transform->position + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
+	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
+
+	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
 	{
-		Vector3 p1, p2;
+		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
+	}
 
-		ColliderCapsule* capsuleCol = GetComponent<ColliderCapsule>();
+	//=== 地面との判定 ===s
+	Vector3 headPos = capsuleCol->OffsetWorld();
+	Vector3 footPos = transform->position - Vector3::SetY(DOWN_OFFSET);
 
-		static const float DOWN_OFFSET = 10.0f;
+	static const float RAY_START_OFFSET = -50.0f;
+	static const float RAY_END_OFFSET = 100.0f;
 
-		p1 = transform->Global().position + Vector3::SetY(37);
-		p2 = capsuleCol->OffsetWorld() - Vector3::SetY(DOWN_OFFSET);
+	const Vector3 rayStart = headPos + Vector3::SetY(RAY_START_OFFSET);
+	const Vector3 rayEnd = footPos - Vector3::SetY(RAY_END_OFFSET);
 
-		const float radius = capsuleCol ? capsuleCol->Radius() : 20.0f;
-
-		Vector3 pushVec;
-		if (StageObjectManager::CollCheckCapsule(p1, p2, radius, &pushVec))
+	if (StageObjectManager::CollCheckRay(rayStart, rayEnd, &hitPos))
+	{
+		if (m_pPhysics->velocity.y <= 0.0f)
 		{
-			// 押し出しベクトルで位置を補正
-			transform->position += pushVec;
-
-			// Y成分が上方向なら接地とみなす
-			if ((m_pPhysics->velocity.y <= 0.0f) and (pushVec.y > 0))
-			{
-				land();
-				transform->position -= pushVec.Normalize() * DOWN_OFFSET;
-				m_pPhysics->velocity.y = 0.0f;
-				m_pPhysics->resistance.y = 0.0f;
-			}
-			else
-			{
-				m_IsLanding = false;
-
-				// Y成分が下方向なら頭上ヒット（天井にぶつかった）
-				if (pushVec.y < -0.1f)
-				{
-					m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
-					m_IsJumping = false;
-				}
-			}
+			land();
+			transform->position = hitPos;
 		}
-		else
+	}
+	else
+	{
+		m_IsLanding = false;
+	}
+
+	//=== 壁との判定 ===
+	static const float CAPSULE_OFFSET = 50.0f;	// カプセルのオフセット
+
+	Vector3 pushVec;
+
+	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius + CAPSULE_OFFSET), headPos - Vector3::SetY(radius), radius, &pushVec))
+	{
+		// 押し出しベクトルで位置を補正
+		const Vector3 pushVecNorm = pushVec.Normalize();
+		const float pushVecLength = pushVec.GetLength();
+
+		transform->position += (pushVecNorm * pushVecLength);
+
+		// Y成分が下方向なら頭上ヒット（天井にぶつかった）
+		if (pushVec.y < -0.1f)
 		{
-			m_IsLanding = false;
+			m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
+			m_IsJumping = false;
 		}
+	}
 
-		// 衝突していなければ、通常の空中挙動へ
-		if (not m_IsLanding)
-		{
-			m_pPhysics->SetGravity(GRAVITY);
-			m_pPhysics->SetFriction(Vector3::Zero);
-		}
+
+	// 衝突していなければ、通常の空中挙動へ
+	if (not m_IsLanding)
+	{
+		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 }
 
@@ -734,7 +760,7 @@ void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float fo
 
 	Knockback(other, force_vertical, force_horizontal);
 
-	SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
+	SetInvincible(CHARADEFINE_REF.GetTackleInvincibleTime, true);
 
 	DropBall(transform->position, BALL_REF.DropForce_Vertical, BALL_REF.DropForce_Horizontal);
 
@@ -778,6 +804,12 @@ void CharaBase::Knockback(const Vector3& other, float force_vertical, float forc
 	Vector3 impact = impactVertical + impactHorizontal;
 
 	m_pPhysics->velocity += impact;
+}
+
+
+bool CharaBase::IsFinishTackleIntervalAlarm()
+{
+	return m_TackleIntervalAlarm->IsFinish();
 }
 
 //========================================================================
@@ -1650,12 +1682,12 @@ void CharaBase::StateTackle(FSMSignal sig)
 	{
 		m_Timeline->Play("Tackle");
 
+		m_CanTackle = false;
+		m_CanCatch = false;
 		m_CanMove = false;
-		m_CanRot = false;
+		m_CanRot = true;
 
 		m_Tackler->SetColliderActive(true);
-
-		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1677,8 +1709,12 @@ void CharaBase::StateTackle(FSMSignal sig)
 		m_Timeline->Stop();
 		m_Tackler->SetColliderActive(false);
 		m_IsTackling = false;
+		m_CanTackle = true;
+		m_CanCatch = true;
 		m_CanMove = true;
 		m_CanRot = true;
+		m_TackleIntervalAlarm->Set(CHARADEFINE_REF.TackleInterval);
+		m_Animator->SetPlaySpeed(1.0f);
 	}
 	break;
 	}
@@ -1726,6 +1762,7 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_CanTackle = false;
 		m_CanMove = false;
 		m_CanRot = false;
 		m_pPhysics->SetGravity(Vector3::Zero);
@@ -1829,6 +1866,9 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 		}
 
 		catchUpdate();
+
+		// 吸い込み中はタックルできません
+		m_CanTackle = false;
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -1837,6 +1877,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_CanTackle = true;
 		m_Catcher->SetColliderActive(false);
 
 		if (m_CharaTag == "Blue")
@@ -1863,6 +1904,8 @@ void CharaBase::land()
 {
 	m_IsLanding = true;
 	m_IsJumping = false;
+	m_pPhysics->velocity.y = 0.0f;
+	m_pPhysics->resistance.y = 0.0f;
 	m_pPhysics->SetGravity(Vector3::Zero);
 	m_pPhysics->SetFriction(FRICTION);
 }
@@ -2008,7 +2051,7 @@ void CharaBase::tackleUpdate()
 	if (m_Animator->IsFinished())
 	{
 		// あと隙
-		m_Alarm->Set(0.1f); // magic:>
+		m_Alarm->Set(CHARADEFINE_REF.TackleRecovery); // magic:>
 	}
 }
 
@@ -2266,4 +2309,9 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 	{
 		throwBallHoming();
 	}
+}
+
+void CharaBase::invincible(const nlohmann::json& argument)
+{
+	SetInvincible(argument.at("TimeSec").get<float>(), true);
 }

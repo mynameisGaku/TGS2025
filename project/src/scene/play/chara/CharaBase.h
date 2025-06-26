@@ -224,6 +224,8 @@ public:
 	inline bool CanTackle() const { return m_CanTackle; }
 	// 無敵中か
 	inline bool IsInvincible() const { return m_IsInvincible; }
+	// タックル後の間隔アラームが鳴っているか
+	bool IsFinishTackleIntervalAlarm();
 
 	//=======================================================================================
 	// ▼各ステート
@@ -299,6 +301,8 @@ private:
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
 	StatusTracker*	m_pStatusTracker;		// ステータスの統計
 	Alarm*			m_Alarm;				// アラーム
+	Alarm*			m_TackleIntervalAlarm;	// タックル後の間隔アラーム
+	Vector3			m_lastUpdatePosition;	// 前回更新時の最終位置
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_HitPoint;
@@ -367,4 +371,5 @@ private:
 	void setCanRot(const nlohmann::json& argument);
 	void setVelocity(const nlohmann::json& argument);
 	void throwBall(const nlohmann::json& argument);
+	void invincible(const nlohmann::json& argument);
 };

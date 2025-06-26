@@ -220,7 +220,6 @@
     <None Include="data\Json\Stage\Stage_1.json" />
     <None Include="data\Json\Stage\Stage_2.json" />
     <None Include="data\Json\Stage\Stage_3.json" />
-    <None Include="data\Json\Stage\Stage_4.json" />
     <None Include="data\Json\Stage\TestStage.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
@@ -392,6 +391,7 @@
     <ClCompile Include="src\util\fx\post_effect\bloom\BloomManager.cpp" />
     <ClCompile Include="src\util\fx\trail\trail3D\Trail3D.cpp" />
     <ClCompile Include="src\util\gauge\gauge.cpp" />
+    <ClCompile Include="src\util\history\HIstory.cpp" />
     <ClCompile Include="src\util\input\InputManager.cpp" />
     <ClCompile Include="src\util\input\KeyController.cpp" />
     <ClCompile Include="src\util\input\KeyDefine.cpp" />
@@ -569,6 +569,7 @@
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h" />
     <ClInclude Include="src\util\gauge\gauge.h" />
+    <ClInclude Include="src\util\history\History.h" />
     <ClInclude Include="src\util\input\InputManager.h" />
     <ClInclude Include="src\util\input\KeyController.h" />
     <ClInclude Include="src\util\input\KeyDefine.h" />

@@ -13,17 +13,15 @@ Alarm::~Alarm()
 
 void Alarm::Update()
 {
-    if (not m_Finish)
+    if (m_TimerSec > 0.0f)
     {
         m_TimerSec -= GTime.deltaTime;
-        if (m_TimerSec < 0.0f)
-        {
-            m_Finish = true;
-        }
+        m_Finish = false;
     }
     else
     {
         m_TimerSec = 0.0f;
+        m_Finish = true;
     }
 }
 

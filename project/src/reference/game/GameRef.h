@@ -28,6 +28,8 @@ public:
     std::unordered_map<std::string, GameModeDesc>   GameModeDescs;
     std::vector<std::string>                        GameModeNames;
     std::vector<std::string>                        TeamNames;
+    std::vector<std::string>                        StageNames;
+    std::string                                     DefaultStageName;
 
     float GameStartCountMaxSec;
     float GameEndCountMaxSec;

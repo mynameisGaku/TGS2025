@@ -2,6 +2,7 @@
 #include "src/common/game/GameManager.h"
 #include <src/util/time/GameTime.h>
 #include <src/util/debug/imgui/imGuiManager.h>
+#include "src/util/history/History.h"
 
 //=== キャラ ===
 #include "src/util/math/MathUtil.h"
@@ -123,6 +124,31 @@ void MatchManager::Draw()
         m_pFsm->ImGuiDebugRender();
 }
 
+void MatchManager::ReloadCurrentGameData()
+{
+    m_GameData = CurrentGameData(SceneManager::CommonScene()->FindGameObject<GameManager>()->GetCurrentGameModeData());
+}
+
+std::string MatchManager::GetWinnerTeamName()
+{
+    return m_GameData.m_WinnerTeam == "" ? "No Winner." : m_GameData.m_WinnerTeam;
+}
+
+float MatchManager::GetPlayTimeSec()
+{
+    return m_PlayTimeCounter;
+}
+
+float MatchManager::GetPlayTimeMaxSec()
+{
+    return m_GameData.m_PlayTimeMaxSec;
+}
+
+int MatchManager::GetWinPointMax()
+{
+    return m_GameData.m_WinPointMax;
+}
+
 void MatchManager::init()
 {
     m_pFsm = new TinyFSM<MatchManager>(this);
@@ -141,6 +167,8 @@ void MatchManager::ImGuiInit()
 {
 #ifdef _DEBUG
     ImGuiRoot* matchRoot = ImGuiManager::AddRoot(new ImGuiRoot("Match"));  // マッチのトップ
+    std::function<void()> func = [&] {ReloadCurrentGameData(); };
+    matchRoot->Add(new ImGuiNode_Button("Reload GameData", func));
 
     for (auto& team : m_pTeamManager->GetTeams())
     {
@@ -259,6 +287,13 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
     break;
     case FSMSignal::SIG_Update:
     {
+        m_PlayTimeCounter += GTime.deltaTime;
+
+        if (m_PlayTimeCounter >= m_GameData.m_PlayTimeMaxSec)
+        {
+            m_pFsm->ChangeState(&MatchManager::StatePhaseGameOver);
+        }
+
         for (auto& teamName : GAME_REF.TeamNames)
         {
             if (m_pTeamManager->GetTeam(teamName)->GetTotalPoint() < m_GameData.m_WinPointMax)
@@ -282,13 +317,37 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
 
 void MatchManager::StatePhaseGameOver(FSMSignal sig)
 {
+    std::string winner = "";
+    int high = 0;
     switch (sig)
     {
     case FSMSignal::SIG_Enter:
     {
+        // 勝利チームを求める
+        for (int i = 0; i < GAME_REF.TeamNames.size(); i++)
+        {
+            // 要素1
+            Team* team = m_pTeamManager->GetTeam(GAME_REF.TeamNames[i]);
 
-    }
-    break;
+            // 勝利ポイントを超えているか
+            if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
+            {
+                // 超えてたらこのチームが勝者 ( 現状同時に勝利ポイントを超過する可能性アリ )
+                winner = team->GetTeamName();
+                break;
+            }
+
+            // 超えてなければ現状の最高ポイントを超えているかを見る
+            if (team->GetTotalPoint() > high)
+            {
+                winner = team->GetTeamName();
+                high = team->GetTotalPoint();
+            }
+        }
+
+        m_GameData.m_WinnerTeam = winner;
+
+        break;
     case FSMSignal::SIG_Update:
     {
         m_pFsm->ChangeState(&MatchManager::StatePhaseEnd);
@@ -304,6 +363,7 @@ void MatchManager::StatePhaseGameOver(FSMSignal sig)
 
     }
     break;
+    }
     }
 }
 

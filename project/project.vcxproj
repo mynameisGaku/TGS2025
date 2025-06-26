@@ -514,6 +514,11 @@
     <ClInclude Include="src\scene\play\crystal\CrystalFragment.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentManager.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h" />
+    <ClInclude Include="src\scene\play\force_field\ConstantPointForce.h" />
+    <ClInclude Include="src\scene\play\force_field\ForceBase.h" />
+    <ClInclude Include="src\scene\play\force_field\ForceFieldBase.h" />
+    <ClInclude Include="src\scene\play\force_field\ForceFieldCorn.h" />
+    <ClInclude Include="src\scene\play\force_field\ForceFieldSphere.h" />
     <ClInclude Include="src\scene\play\match\MatchManager.h" />
     <ClInclude Include="src\scene\play\playScene.h" />
     <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h" />

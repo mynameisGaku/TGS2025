@@ -373,6 +373,9 @@
     <Filter Include="src%28application%29\util\history">
       <UniqueIdentifier>{53739a9d-bdd5-413d-8af2-2868256227e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\force_field">
+      <UniqueIdentifier>{926d2b3c-5b5b-41e5-b718-2fe53fbfcf8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1956,6 +1959,21 @@
     </ClInclude>
     <ClInclude Include="src\util\history\History.h">
       <Filter>src%28application%29\util\history</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldBase.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldSphere.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldCorn.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceBase.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ConstantPointForce.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

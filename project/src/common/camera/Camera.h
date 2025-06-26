@@ -105,6 +105,8 @@ public:
 	/// </summary>
 	void SetAnimation(const CameraDefine::CameraAnimData& animData);
 
+	inline void SetFollowerChara(const CharaBase* chara) { m_pFollowerChara = chara; }
+
 	//================================================================================
 	// Å•ÉQÉbÉ^Å[
 

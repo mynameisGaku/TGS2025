@@ -42,6 +42,7 @@ namespace
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 2.0f;
 	static const float CHARGE_BALLSPEED = 1.5f;
+	static const Vector3 CHARA_GRAVITY = GRAVITY * 3.0f;
 }
 
 CharaBase::CharaBase()
@@ -163,6 +164,10 @@ CharaBase::~CharaBase()
 	}*/
 
 	PtrUtil::SafeDelete(m_EffectTransform);
+
+	Camera* camera = CameraManager::GetCamera(m_Index);
+	if (camera != nullptr)
+		camera->SetFollowerChara(nullptr);
 }
 
 void CharaBase::Init(std::string tag)
@@ -563,7 +568,7 @@ void CharaBase::HitGroundProcess() {
 	// 衝突していなければ、通常の空中挙動へ
 	if (not m_IsLanding)
 	{
-		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
 		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 }
@@ -681,7 +686,7 @@ void CharaBase::DropBall(const Vector3& other, float force_vertical, float force
 		return;
 
 	m_pBall->ChangeState(Ball::State::S_LANDED);
-	m_pBall->GetComponent<Physics>()->SetGravity(GRAVITY);
+	m_pBall->GetComponent<Physics>()->SetGravity(CHARA_GRAVITY);
 	m_pBall->Knockback(other, force_vertical, force_horizontal);
 	m_pBall->SetOwner(nullptr);
 	m_pBall = nullptr;
@@ -1790,8 +1795,8 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	{
 		m_CanMove = true;
 		m_CanRot = true;
-		m_pPhysics->SetGravity(GRAVITY);
-		m_pPhysics->SetGravity(FRICTION);
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_pPhysics->SetFriction(FRICTION);
 	}
 	break;
 	}

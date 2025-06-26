@@ -42,6 +42,7 @@ namespace
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 1.0f;
 	static const float CHARGE_BALLSPEED = 1.5f;
+	static const float ARM_HEIGHT = 100.0f;	// 腕の高さ
 }
 
 CharaBase::CharaBase()
@@ -174,7 +175,7 @@ void CharaBase::Init(std::string tag)
 	m_pStatusTracker = new StatusTracker();
 	m_pPhysics = GetComponent<Physics>();
 	m_Catcher = Instantiate<Catcher>();
-	m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
+	m_Catcher->transform->position = Vector3(0.0f, ARM_HEIGHT, 0.0f);
 	m_Catcher->transform->scale = Vector3::Ones * CHARADEFINE_REF.CatchRadius * 2.0f;
 	m_Catcher->transform->SetParent(transform);
 	m_Catcher->Init(tag);
@@ -443,7 +444,12 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
+			// ボールが転がり中なら当たらない
 			if (ball->GetState() == Ball::S_LANDED)
+				return;
+
+			// キャッチ可能なら当たらない
+			if (m_IsCatching == true && m_Catcher->CanCatch(ball))
 				return;
 
 			if (m_IsInvincible)
@@ -726,7 +732,6 @@ void CharaBase::CatchSuccess(const Vector3& velocity)
 	m_pPhysics->SetGravity(Vector3::Zero);
 	m_pPhysics->SetFriction(Vector3::Zero);
 
-	transform->rotation.y = atan2f(transform->position.x - velocity.x, transform->position.z - velocity.z);
 	m_pPhysics->velocity.y = 10.0f;
 	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 

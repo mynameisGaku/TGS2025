@@ -4,6 +4,7 @@
 
 class ColliderCapsule;
 class CharaBase;
+class Ball;
 
 /// <summary>
 /// キャラクターの吸引キャッチの当たり判定のクラス
@@ -29,6 +30,8 @@ public:
 	void SetParent(CharaBase* parent) { m_Parent = parent; }
 
 	bool IsColliderActive() const;
+	// キャッチ角度内にボールがあるかどうか
+	bool CanCatch(Ball* ball) const;
 private:
 	ColliderCapsule* m_Collider;	// 当たり判定
 	CharaBase* m_Parent;			// 親キャラクター

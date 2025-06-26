@@ -347,6 +347,9 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragment.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentManager.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
+    <ClCompile Include="src\scene\play\force_field\ForceFieldBase.cpp" />
+    <ClCompile Include="src\scene\play\force_field\ForceFieldCorn.cpp" />
+    <ClCompile Include="src\scene\play\force_field\ForceFieldSphere.cpp" />
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
     <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp" />

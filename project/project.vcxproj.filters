@@ -1253,6 +1253,15 @@
     <ClCompile Include="src\util\history\HIstory.cpp">
       <Filter>src%28application%29\util\history</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldBase.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldCorn.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldSphere.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">

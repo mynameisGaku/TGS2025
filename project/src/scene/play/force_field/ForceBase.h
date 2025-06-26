@@ -2,12 +2,20 @@
 #include <memory>
 
 class ForceFieldBase;
+class Object3D;
 
 class ForceBase
 {
 public:
-	ForceBase(const std::unique_ptr<ForceFieldBase>* pForceField) : m_pForceField(pForceField) {}
-	virtual void AddForce() {}
+	ForceBase() : m_pForceField(nullptr) {}
+	virtual ~ForceBase() {}
+
+	void SetForceField(ForceFieldBase* pForceField)
+	{
+		m_pForceField = pForceField;
+	}
+
+	virtual void AddForce(Object3D* target) {}
 private:
-	const std::unique_ptr<ForceFieldBase>* m_pForceField; // 力場のポインタ
+	const ForceFieldBase* m_pForceField; // 力場のポインタ
 };

@@ -43,6 +43,7 @@ void CameraManager::Init() {
 
 	Camera* mainCamera = CreateCamera();
 	Camera* camera2P = CreateCamera();
+	//Camera* camera3P = CreateCamera();
 
 #ifdef IMGUI
 	InitImGuiNode();

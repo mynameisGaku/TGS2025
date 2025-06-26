@@ -13,7 +13,6 @@ UI_HitPoint_Icon::UI_HitPoint_Icon(const RectTransform& trs, int index)
 
 	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
 	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
-	Vector2 size = endPos - beginPos;
 
 	RectTransform rectTrs = trs;
 	rectTrs.anchor.SetBegin(beginPos);

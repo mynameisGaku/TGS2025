@@ -9,7 +9,6 @@ UI_CrossHair::UI_CrossHair(const RectTransform& trs, int index)
 
 	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
 	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
-	Vector2 size = endPos - beginPos;
 
 	RectTransform rectTrs = trs;
 	rectTrs.anchor.SetBegin(beginPos);
@@ -45,23 +44,6 @@ UI_CrossHair::~UI_CrossHair()
 
 void UI_CrossHair::Update()
 {
-	//if (charaIndex >= 0) {
-
-	//	if (CameraManager::IsScreenDivision()) {
-	//		SetIsDraw(true);
-	//		Vector2 cameraDiv = CameraManager::GetDivedByCameraNum();
-	//		rectTransform->position = Vector2(cameraDiv.x * charaIndex + cameraDiv.x * 0.5f, WindowSetting::Inst().height_half);
-	//	}
-	//	else if (charaIndex == 0) {
-	//		SetIsDraw(true);
-	//		Vector2 drawPos = CameraManager::GetScreenDivisionPos_CameraIndex(charaIndex);
-	//		Vector2 drawSize = CameraManager::GetScreenDivisionSize();
-	//		rectTransform->position = (drawPos + drawSize) * 0.5f;
-	//	}
-	//	else {
-	//		SetIsDraw(false);
-	//	}
-	//}
 	UI_Canvas::Update();
 }
 

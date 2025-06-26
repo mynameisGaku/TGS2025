@@ -80,11 +80,13 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 	//=== ƒLƒƒƒbƒ`¬Œ÷ˆ— ===
 	EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
 
+	float charge = ball->GetChargeRate();
+
 	m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
 	m_Parent->SetBall(ball);
 	ball->SetOwner(m_Parent);
 	ball->PickUp();
-	ball->SetChargeRate(0.1f);
+	ball->SetChargeRate(charge);
 	m_Parent->GetStatusTracker()->AddCatchCount(1);
 
 	Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());

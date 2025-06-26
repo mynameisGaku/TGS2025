@@ -123,6 +123,8 @@ void Ball::Init(std::string charaTag)
 		tag = ColDefine::Tag::tNone;
 		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
 	}
+
+	targets.push_back(ColDefine::Tag::tWindArea);
 	
 	m_Collider->SetTag(tag);
 	m_Collider->SetTargetTags(targets);

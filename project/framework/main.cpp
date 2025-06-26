@@ -141,6 +141,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		AppUpdate();
 		ClearDrawScreen();
 		AppDraw();
+		DrawEffekseer2D();
 		if (ProcessMessage() == -1 || IsExit())
 			break;
 		ScreenFlip();

@@ -22,10 +22,8 @@ void EffectBase::Update() {
 	if (IsActive() == false)
 		return;
 
-	//SetPlaySpeed(info.playSpeed);
-
 	if (IsPlaying() == false)
-		Stop();
+		Stop();		
 }
 
 void EffectBase::Play3D(const EffectDefine::EffectInfo& _info, const Transform& trs, const std::string& _label, const bool& loop) {
@@ -201,7 +199,7 @@ bool EffectBase::IsPlaying() const {
 		break;
 	}
 
-	return result;
+	return (info.isLoop || result);
 }
 
 bool EffectBase::CheckConsistency(const std::string& typeName, const std::string& _label) const {

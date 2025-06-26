@@ -40,7 +40,7 @@ namespace
 	static const float CATCH_STAMINA_MIN = 0.0f;	// キャッチを開始するのに必要な残スタミナ
 	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
-	static const float CHARGE_TIME = 1.0f;
+	static const float CHARGE_TIME = 2.0f;
 	static const float CHARGE_BALLSPEED = 1.5f;
 }
 
@@ -88,7 +88,7 @@ CharaBase::CharaBase()
 	m_pTargetBall		= nullptr;
 
 	m_UI_CrossHair = nullptr;
-	m_UI_BallChargeMeter = nullptr;
+	//m_UI_BallChargeMeter = nullptr;
 	m_UI_HitPointIcon = nullptr;
 
 	m_HitPoint = 0;
@@ -149,7 +149,7 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_Timeline);
 
 	PtrUtil::SafeDelete(m_UI_CrossHair);
-	PtrUtil::SafeDelete(m_UI_BallChargeMeter);
+	//PtrUtil::SafeDelete(m_UI_BallChargeMeter);
 	PtrUtil::SafeDelete(m_UI_HitPointIcon);
 	PtrUtil::SafeDelete(m_Alarm);
 	PtrUtil::SafeDelete(m_TackleIntervalAlarm);
@@ -204,9 +204,9 @@ void CharaBase::Init(std::string tag)
 
 	//===== ボールチャージメーターUIの初期化 =====//
 
-	m_UI_BallChargeMeter = new UI_CrossHair(RectTransform(Anchor::Preset::Middle), m_Index);
-	m_UI_BallChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
-	m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
+	//m_UI_BallChargeMeter = new UI_CrossHair(RectTransform(Anchor::Preset::Middle), m_Index);
+	//m_UI_BallChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
+	//m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
 
 	//===== HPアイコンの初期化 =====//
 
@@ -385,6 +385,11 @@ void CharaBase::Update() {
 
 	m_Stamina = m_pStamina->GetCurrent();
 	m_HitPoint = m_pHP->GetCurrent();
+
+	if (m_BallChargeRate > 0.0f)
+		m_UI_CrossHair->SetIsDraw(false);
+	else
+		m_UI_CrossHair->SetIsDraw(true);
 
 	Object3D::Update();
 

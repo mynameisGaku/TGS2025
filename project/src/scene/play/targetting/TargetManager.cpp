@@ -4,6 +4,9 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/common/setting/window/WindowSetting.h"
+#include "src/util/fx/effect/EffectManager.h"
+#include "src/util/string/StringUtil.h"
+#include "src/util/screen/ScreenManager.h"
 
 TargetManager::TargetManager() {
 
@@ -92,13 +95,29 @@ void TargetManager::Draw() {
 		if (targetCamera == nullptr)
 			continue;
 
+		const Ball* haveBall = chara->GetHaveBall();
+		const Ball* lastBall = chara->LastBall();
+
+		// ボールをチャージしている場合
+		if (haveBall != nullptr && chara->IsCharging()) {
+			RectTransform markerRect = RectTransform(Anchor::Preset::Middle);
+			Vector2 beginPos = ScreenManager::GetScreenBeginPos(index);
+			Vector2 endPos = ScreenManager::GetScreenEndPos(index);
+			markerRect.anchor.SetBegin(beginPos);
+			markerRect.anchor.SetEnd(endPos);
+			EffectBase* lockOn = EffectManager::Play2D_Loop("LockOnMarker_001.efk", markerRect, StringUtil::FormatToString("LockOn %d", index));
+
+			lockOn->SetPlaySpeed(2.0f - chara->GetBallChargeRate() * 2.0f + 0.1f);
+			lockOn->SetScale2D(1.0f - chara->GetBallChargeRate() * 0.25f);
+		}
+		else {
+			EffectManager::Stop("LockOnMarker_001.efk", StringUtil::FormatToString("LockOn %d", index));
+		}
+
 		// 描画が完了していない場合
 		// 警告マーカーを描画するのは相手方のカメラなので、相手方の描画が終わるのを待つ
 		if (not targetCamera->IsDrawEnd())
 			continue;
-
-		const Ball* haveBall = chara->GetHaveBall();
-		const Ball* lastBall = chara->LastBall();
 
 		// ボールをチャージしている場合
 		if (haveBall != nullptr && chara->IsCharging()) {

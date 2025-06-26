@@ -213,6 +213,7 @@
     <None Include="data\Json\Effect\Hit_NoColor.json" />
     <None Include="data\Json\Effect\Hit_Red.json" />
     <None Include="data\Json\Effect\Hit_Wall.json" />
+    <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Effect\Template.json" />
     <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Sound\SoundData.json" />

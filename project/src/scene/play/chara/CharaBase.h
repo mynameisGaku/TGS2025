@@ -194,6 +194,8 @@ public:
 	inline Ball* GetHaveBall() const { return m_pBall; }
 	inline const Ball* GetTargetBall() const { return m_pTargetBall; }
 
+	inline float GetBallChargeRate() const { return m_BallChargeRate; }
+
 	// ボールをチャージしているかどうか
 	inline bool	IsCharging()	const { return m_IsCharging;}			
 	// 着地中
@@ -333,7 +335,7 @@ private:
 	bool			m_IsDamage;				// ダメージ喰らい中か
 
 	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
-	UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
+	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
 	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
 
 	void land();

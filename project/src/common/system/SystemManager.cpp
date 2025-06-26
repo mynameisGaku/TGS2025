@@ -179,6 +179,8 @@ void SystemManager::LoadUpdate() {
 			EffectManager::LoadFromJson("data/json/effect/Ball_Outline_Red_Holding.json");
 			EffectManager::LoadFromJson("data/json/effect/Ball_Outline_Blue_Holding.json");
 			EffectManager::LoadFromJson("data/json/effect/DropDust.json");
+			EffectManager::LoadFromJson("data/json/effect/LockOnMarker.json");
+			EffectManager::LoadFromJson("data/json/effect/LockOnMarker_001.json");
 		}
 		break;
 

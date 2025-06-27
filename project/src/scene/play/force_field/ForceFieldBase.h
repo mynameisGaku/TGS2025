@@ -6,6 +6,10 @@
 class ForceBase;
 class ColliderBase;
 
+/// <summary>
+/// 範囲内のオブジェクトにルールに従って力を加える
+/// </summary>
+/// <author>佐藤紘斗</author>
 class ForceFieldBase : public Object3D
 {
 public:

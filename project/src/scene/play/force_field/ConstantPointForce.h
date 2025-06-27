@@ -4,6 +4,7 @@
 /// <summary>
 /// ˆê’è‘¬“x‚Å’†S‚É‹ß‚Ã‚­or—£‚ê‚é
 /// </summary>
+/// <author>²“¡h“l</author>
 class ConstantPointForce : public ForceBase
 {
 public:

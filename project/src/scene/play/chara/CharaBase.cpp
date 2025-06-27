@@ -191,7 +191,7 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
 
-	m_UI_CrossHair = new UI_CrossHair(RectTransform(), m_Index);
+	m_UI_CrossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle), m_Index);
 	m_UI_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
 	m_UI_CrossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
 	m_UI_CrossHair->SetHandle_CrossHairFrame		("data/texture/UI/CrossHair/CrossHairFrame.png");
@@ -202,7 +202,7 @@ void CharaBase::Init(std::string tag)
 	//m_UI_BallChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
 	//m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
 
-	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(), m_Index);
+	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2::Zero, 0.0f, Vector2::Ones * 2.0f), m_Index);
 	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
 	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 
@@ -558,7 +558,7 @@ void CharaBase::HitGroundProcess() {
 	// Õ“Ë‚µ‚Ä‚¢‚È‚¯‚ê‚ÎA’Êí‚Ì‹ó’†‹““®‚Ö
 	if (not m_IsLanding)
 	{
-		m_pPhysics->SetGravity(GRAVITY);
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
 		m_pPhysics->SetFriction(Vector3::Zero);
 	}
 }
@@ -676,7 +676,7 @@ void CharaBase::DropBall(const Vector3& other, float force_vertical, float force
 		return;
 
 	m_pBall->ChangeState(Ball::State::S_LANDED);
-	m_pBall->GetComponent<Physics>()->SetGravity(GRAVITY);
+	m_pBall->GetComponent<Physics>()->SetGravity(CHARA_GRAVITY);
 	m_pBall->Knockback(other, force_vertical, force_horizontal);
 	m_pBall->SetOwner(nullptr);
 	m_pBall = nullptr;
@@ -1778,8 +1778,8 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	{
 		m_CanMove = true;
 		m_CanRot = true;
-		m_pPhysics->SetGravity(GRAVITY);
-		m_pPhysics->SetGravity(FRICTION);
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_pPhysics->SetFriction(FRICTION);
 	}
 	break;
 	}

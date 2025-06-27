@@ -124,7 +124,18 @@ bool Catcher::IsColliderActive() const
 bool Catcher::CanCatch(Ball* ball) const
 {
 	static const float CATCH_ANGLE_THRESHOLD = MathUtil::ToRadians(30.0f); // キャッチ可能な角度の閾値
-	const Vector3 forward = CameraManager::GetCamera(m_Parent->GetIndex())->transform->Forward();
+
+	Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
+	Vector3 forward;
+	if (camera == nullptr)
+	{
+		forward = m_Parent->transform->Forward();
+	}
+	else
+	{
+		forward = camera->transform->Forward();
+	}
+
 	const Vector3 ballLastPosition = ball->transform->position - ball->GetComponent<Physics>()->velocity;
 	const Vector3 toBall = Vector3::Normalize(ballLastPosition - m_Parent->transform->position);
 

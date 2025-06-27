@@ -30,18 +30,18 @@ void Catcher::Init(std::string tag)
 
 	if (tag == "Red")
 	{
-		param.tag = ColDefine::Tag::tCatchRed;
-		param.targetTags = { ColDefine::Tag::tBallRed, ColDefine::Tag::tBallBlue };
+		param.tag = ColDefine::Tag::tCatch;
+		param.targetTags = { ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
 	}
 	else if (tag == "Blue")
 	{
-		param.tag = ColDefine::Tag::tCatchBlue;
-		param.targetTags = { ColDefine::Tag::tBallRed, ColDefine::Tag::tBallBlue };
+		param.tag = ColDefine::Tag::tCatch;
+		param.targetTags = { ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
 	}
 	else
 	{
-		param.tag = ColDefine::Tag::tCatchRed;
-		param.targetTags = { ColDefine::Tag::tBallRed, ColDefine::Tag::tBallBlue };
+		param.tag = ColDefine::Tag::tCatch;
+		param.targetTags = { ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
 	}
 
 	m_Collider->BaseInit(param);

@@ -171,15 +171,15 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamChara.tag = ColDefine::Tag::tCharaRed;
-		colParamChara.targetTags = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tBallBlue, ColDefine::Tag::tTackleBlue, ColDefine::Tag::tTackleRed};
+		colParamChara.tag = ColDefine::Tag::tChara;
+		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tBlue };
 	}
 	else if (tag == "Blue")
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
 
-		colParamChara.tag = ColDefine::Tag::tCharaBlue;
-		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed, ColDefine::Tag::tTackleRed, ColDefine::Tag::tTackleBlue };
+		colParamChara.tag = ColDefine::Tag::tChara;
+		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tRed };
 	}
 	colParamChara.targetTags.push_back(ColDefine::Tag::tWindArea);
 

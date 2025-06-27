@@ -109,19 +109,19 @@ void Ball::Init(std::string charaTag)
 	
 	if (charaTag == "Red")
 	{
-		tag = ColDefine::Tag::tBallRed;
-		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		tag = ColDefine::Tag::tBall;
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
 	}
 	else if (charaTag == "Blue")
 	{
-		tag = ColDefine::Tag::tBallBlue;
-		targets = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		tag = ColDefine::Tag::tBall;
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tRed };
 	}
 	else
 	{
 		// tag‚ª•s³‚È‚çƒŒƒbƒh‚Á‚Ä‚±‚Æ‚É‚·‚é
-		tag = ColDefine::Tag::tNone;
-		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		tag = ColDefine::Tag::tBall;
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
 	}
 
 	targets.push_back(ColDefine::Tag::tWindArea);
@@ -273,7 +273,11 @@ void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRa
 	m_HormingCurveScale = curveScale;
 	m_HomingProgress = 0.0f;
 
-	const Vector3 direction = Vector3::Normalize(target->transform->position - transform->position);
+	Vector3 direction = Vector3::Normalize((transform->position + transform->Forward() * 100.0f) - transform->position);
+	
+	if (target != nullptr)
+		direction = Vector3::Normalize(target->transform->position - transform->position);
+
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
 

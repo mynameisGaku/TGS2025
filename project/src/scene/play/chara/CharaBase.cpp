@@ -407,7 +407,7 @@ void CharaBase::Draw()
 void CharaBase::CollisionEvent(const CollisionData& colData) {
 
 	// 当たった相手がキャラクターの場合
-	if (colData.Other()->Tag() == ColDefine::Tag::tCharaRed) {
+	if (colData.Other()->Tag() == ColDefine::Tag::tChara) {
 
 		// 相手の情報
 		CharaBase* chara = colData.Other()->Parent<CharaBase>();
@@ -442,17 +442,21 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		}
 	}
 	// ボールの場合
-	else if (colData.Other()->Tag() == ColDefine::Tag::tBallBlue || colData.Other()->Tag() == ColDefine::Tag::tBallRed)
+	else if (colData.Other()->Tag() == ColDefine::Tag::tBall)
 	{
 		// 相手の情報
 		Ball* ball = colData.Other()->Parent<Ball>();
 
+		// ボールが転がり中なら当たらない
+		if (ball->GetState() == Ball::S_LANDED)
+		{
+			SetBall(ball);
+			Catch();
+			return;
+		}
+
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
-			// ボールが転がり中なら当たらない
-			if (ball->GetState() == Ball::S_LANDED)
-				return;
-
 			// キャッチ可能なら当たらない
 			if (m_IsCatching == true && m_Catcher->CanCatch(ball))
 				return;
@@ -475,6 +479,9 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			getHit(ball);
 			m_pHP->Damage_UseDefault();
 			m_pStatusTracker->AddGetHitCount(1);
+
+			if (not ball->GetLastOwner())
+				return;
 
 			ball->GetLastOwner()->GetStatusTracker()->AddHitCount(1);
 			if (m_pHP->IsDead())
@@ -814,7 +821,7 @@ void CharaBase::Knockback(const Vector3& other, float force_vertical, float forc
 
 bool CharaBase::IsFinishTackleIntervalAlarm()
 {
-	return false;
+	return true;
 }
 
 void CharaBase::StateActionIdle(FSMSignal sig)
@@ -2086,23 +2093,28 @@ void CharaBase::throwBallHoming()
 
 	const CharaBase* targetChara = nullptr;
 	Camera* camera = CameraManager::GetCamera(m_Index);
-	assert(camera != nullptr);
 
-	targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+	if (camera != nullptr)
+		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
 
 	if (m_IsLanding == true)
 		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
 	else
 	{
-		// 自分の向きとターゲットの向きを比較して、投げる角度を調整
-		Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
-		float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
+		if (targetChara != nullptr)
+		{
+			// 自分の向きとターゲットの向きを比較して、投げる角度を調整
+			Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
+			float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
 
-		// 角度を90度単位で丸める
-		float angleRound = roundf(angle / (DX_PI_F * 0.5f));
-		angle = angleRound * (DX_PI_F * 0.5f);
+			// 角度を90度単位で丸める
+			float angleRound = roundf(angle / (DX_PI_F * 0.5f));
+			angle = angleRound * (DX_PI_F * 0.5f);
 
-		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+			m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+		}
+		else
+		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
 	}
 
 	releaseBall();

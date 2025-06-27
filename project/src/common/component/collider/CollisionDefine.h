@@ -25,16 +25,14 @@ namespace ColDefine {
 	// 当たり判定の系統
 	enum class Tag {
 		tNone = -1,
-		tCharaRed,	// 赤チームキャラ
-		tCharaBlue,	// 青チームキャラ
-		tBallRed,	// 赤チームボール
-		tBallBlue,	// 青チームボール
-		tCatchRed,	// 赤チームキャッチ
-		tCatchBlue,	// 青チームキャッチ
-		tTackleRed,	// 赤チームタックル
-		tTackleBlue,// 青チームタックル
+		tChara,		// キャラ
+		tBall,		// ボール
+		tCatch,		// キャッチ
+		tTackle,	// タックル
 		tTerrain,	// 地形
 		tWindArea,	// 風エリア
+		tRed,		// 赤チーム
+		tBlue,		// 青チーム
 		tMax,
 	};
 

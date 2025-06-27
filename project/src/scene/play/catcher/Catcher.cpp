@@ -5,17 +5,30 @@
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/common/component/physics/Physics.h"
+#include "src/util/input/PadController.h"
+#include "src/util/math/Vector3Util.h"
 
+// カメラ
 #include "src/common/camera/CameraManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/shake/Shake.h"
-#include "src/util/input/PadController.h"
-#include <src/util/math/Vector3Util.h>
+
+// 力場
+#include "src/scene/play/force_field/ForceFieldManager.h"
+#include "src/scene/play/force_field/ForceFieldCorn.h"
+#include "src/scene/play/force_field/ConstantPointForce.h"
+
+namespace
+{
+	static const float ARM_HEIGHT = 150.0f;
+}
 
 Catcher::Catcher()
 {
-	m_Collider = nullptr;
-	m_Parent = nullptr;
+	m_pCollider = nullptr;
+	m_pParent = nullptr;
+	m_pForceFieldManager = nullptr;
+	m_pWindArea = nullptr;
 }
 
 Catcher::~Catcher()
@@ -24,7 +37,7 @@ Catcher::~Catcher()
 
 void Catcher::Init(std::string tag)
 {
-	m_Collider = AddComponent<ColliderCapsule>();
+	m_pCollider = AddComponent<ColliderCapsule>();
 
 	ColDefine::ColBaseParam param;
 
@@ -44,17 +57,48 @@ void Catcher::Init(std::string tag)
 		param.targetTags = { ColDefine::Tag::tBallRed, ColDefine::Tag::tBallBlue };
 	}
 
-	m_Collider->BaseInit(param);
+	m_pCollider->BaseInit(param);
+
+	m_pForceFieldManager = FindGameObject<ForceFieldManager>();
 }
 
 void Catcher::Update()
 {
 	Object3D::Update();
+
+	if (m_pWindArea)
+	{
+		Camera* camera = CameraManager::GetCamera(m_pParent->GetIndex());
+		Vector3 rot;
+		if (camera == nullptr)
+		{
+			rot = m_pParent->transform->rotation;
+		}
+		else
+		{
+			rot = Vector3Util::DirToEuler(camera->TargetLay().Normalize());
+		}
+
+		m_pWindArea->transform->position = m_pParent->transform->position + Vector3::SetY(ARM_HEIGHT);
+		m_pWindArea->transform->rotation = rot;
+	}
 }
 
 void Catcher::Draw()
 {
-	Object3D::Draw();
+	Object3D::Draw();/*
+
+	Camera* camera = CameraManager::GetCamera(m_pParent->GetIndex());
+	Vector3 forward;
+	if (camera == nullptr)
+	{
+		forward = m_pParent->transform->Forward();
+	}
+	else
+	{
+		forward = camera->TargetLay();
+	}
+	DrawCone3D(transform->position, transform->position + forward * 100.0f, 30.0f, 8, 0x00FFFF, 0x000000, true);*/
 }
 
 void Catcher::CollisionEvent(const CollisionData& colData)
@@ -65,7 +109,7 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 		return;
 
 	bool isCatch = false;
-	if (m_Parent->GetCharaTag() != ball->GetCharaTag())
+	if (m_pParent->GetCharaTag() != ball->GetCharaTag())
 	{
 		isCatch = true;
 	}
@@ -78,18 +122,18 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 	if (not CanCatch(ball)) return;
 
 	//=== キャッチ成功処理 ===
-	EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
+	EffectManager::Play3D("Catch_Success.efk", m_pParent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
 
 	float charge = ball->GetChargeRate();
 
-	m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
-	m_Parent->SetBall(ball);
-	ball->SetOwner(m_Parent);
+	m_pParent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
+	m_pParent->SetBall(ball);
+	ball->SetOwner(m_pParent);
 	ball->PickUp();
 	ball->SetChargeRate(charge);
-	m_Parent->GetStatusTracker()->AddCatchCount(1);
+	m_pParent->GetStatusTracker()->AddCatchCount(1);
 
-	Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
+	Camera* camera = CameraManager::GetCamera(m_pParent->GetIndex());
 
 	if (camera != nullptr) {
 
@@ -108,36 +152,48 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 		camera->SetAnimation(cameraAnimData);
 	}
 
-	PadController::SetVibration(m_Parent->GetIndex() + 1, 250, 4.0f);
+	PadController::SetVibration(m_pParent->GetIndex() + 1, 250, 4.0f);
 }
 
 void Catcher::SetColliderActive(bool isActive)
 {
-	m_Collider->SetIsActive(isActive);
+	if (IsColliderActive() != isActive)
+	{
+		if (isActive)
+		{
+			createWindArea();
+		}
+		else
+		{
+			deleteWindArea();
+		}
+	}
+
+	m_pCollider->SetIsActive(isActive);
 }
 
 bool Catcher::IsColliderActive() const
 {
-	return m_Collider->IsActive();
+	return m_pCollider->IsActive();
 }
 
 bool Catcher::CanCatch(Ball* ball) const
 {
-	static const float CATCH_ANGLE_THRESHOLD = MathUtil::ToRadians(30.0f); // キャッチ可能な角度の閾値
+	static const float CATCH_ANGLE_THRESHOLD = MathUtil::ToRadians(45.0f); // キャッチ可能な角度の閾値
 
-	Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
+	Camera* camera = CameraManager::GetCamera(m_pParent->GetIndex());
 	Vector3 forward;
 	if (camera == nullptr)
 	{
-		forward = m_Parent->transform->Forward();
+		forward = m_pParent->transform->Forward();
 	}
 	else
 	{
-		forward = camera->transform->Forward();
+		forward = camera->TargetLay().Normalize();
 	}
 
 	const Vector3 ballLastPosition = ball->transform->position - ball->GetComponent<Physics>()->velocity;
-	const Vector3 toBall = Vector3::Normalize(ballLastPosition - m_Parent->transform->position);
+	const Vector3 toBall = Vector3::Normalize(ballLastPosition - m_pParent->transform->position);
 
 	if (Vector3Util::AngleBetween(forward, toBall) > CATCH_ANGLE_THRESHOLD)
 	{
@@ -146,4 +202,20 @@ bool Catcher::CanCatch(Ball* ball) const
 	}
 
 	return true;
+}
+
+void Catcher::createWindArea()
+{
+	m_pWindArea = m_pForceFieldManager->CreateForceFieldCorn(Transform(m_pParent->transform->position + Vector3::SetY(ARM_HEIGHT)), 2000.0f, MathUtil::ToRadians(30.0f));
+	m_pWindArea->SetColTag(ColDefine::Tag::tWindArea);
+	m_pWindArea->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed, ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCharaRed });
+
+	std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-1000.0f);
+	m_pWindArea->SetForce(std::move(force));
+}
+
+void Catcher::deleteWindArea()
+{
+	m_pForceFieldManager->DeleteForceField(m_pWindArea);
+	m_pWindArea = nullptr;
 }

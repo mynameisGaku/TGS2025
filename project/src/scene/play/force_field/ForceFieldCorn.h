@@ -11,6 +11,8 @@ public:
 	ForceFieldCorn(float radius, float cornAngle) : ForceFieldSphere(radius), m_CornAngle(cornAngle) {}
 	~ForceFieldCorn() {}
 
+	void Draw() override;
+
 	/// <summary>
 	/// “–‚½‚è”»’èˆ—
 	/// </summary>

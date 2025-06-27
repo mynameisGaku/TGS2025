@@ -65,3 +65,18 @@ ForceFieldCorn* const ForceFieldManager::CreateForceFieldCorn(const Transform& t
 	m_ForceFields.push_back(forceField);
 	return forceField;
 }
+
+void ForceFieldManager::DeleteForceField(ForceFieldBase* target)
+{
+	for (auto itr = m_ForceFields.begin(); itr != m_ForceFields.end(); itr++)
+	{
+		ForceFieldBase* forceField = (*itr);
+
+		if (forceField == target)
+		{
+			delete forceField;
+			m_ForceFields.erase(itr);
+			return;
+		}
+	}
+}

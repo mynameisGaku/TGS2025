@@ -43,6 +43,11 @@ public:
     /// </summary>
     std::string GetTeamName() const;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    bool IsCharaIDInPool(int id);
+
 private:
     friend class TeamManager;
 
@@ -50,11 +55,6 @@ private:
     /// ‚·‚Å‚É“o˜^‚³‚ê‚½ID‚©Šm”F‚·‚é
     /// </summary>
     bool queryIsRegistered(int id);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    bool isCharaIDInPool(int id);
 
     class CharaBase* getCharaFromID(int id);
 

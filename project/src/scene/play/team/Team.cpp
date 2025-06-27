@@ -26,7 +26,7 @@ int Team::GetTotalPoint()
     int result = 0;
     for (auto& id : m_CharaIDs)
     {
-        if (not isCharaIDInPool(id))
+        if (not IsCharaIDInPool(id))
             continue;
 
         auto chara = getCharaFromID(id);
@@ -52,7 +52,7 @@ std::pair<int, int> Team::GetHighestPointHolderIDandPoint()
 
    for (auto& id : m_CharaIDs)  
    {  
-       if (!isCharaIDInPool(id))
+       if (!IsCharaIDInPool(id))
            continue;  
 
        auto chara = getCharaFromID(id);  
@@ -76,7 +76,7 @@ std::vector<std::pair<int, int>> Team::GetTeamRanking()
 
    for (auto& id : m_CharaIDs)  
    {  
-       if (!isCharaIDInPool(id))
+       if (!IsCharaIDInPool(id))
            continue;  
 
        auto chara = getCharaFromID(id);  
@@ -114,7 +114,7 @@ bool Team::queryIsRegistered(int _id)
     return false;
 }
 
-bool Team::isCharaIDInPool(int id)  
+bool Team::IsCharaIDInPool(int id)  
 {  
   auto charaPool = m_pCharaManager->GetCharaPool();  
   return charaPool->QueryWasRegister(id);  

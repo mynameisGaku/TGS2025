@@ -38,6 +38,20 @@ std::list<Team*> TeamManager::GetTeams()
     return m_Teams;
 }
 
+const std::string TeamManager::GetTeamName(int charaID) const
+{
+    for (const auto& team : m_Teams)
+    {
+        for (const int id : team->GetCharaIDs())
+        {
+            if (charaID == id)
+                return team->GetTeamName();
+        }
+    }
+
+	return std::string();
+}
+
 void TeamManager::init()
 {
     for (auto& name : GAME_REF.TeamNames)

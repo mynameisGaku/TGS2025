@@ -18,6 +18,11 @@ public:
 
     std::list<Team*> GetTeams();
 
+	/// <summary>
+	/// ƒLƒƒƒ‰‚ÌID‚©‚çƒ`[ƒ€–¼‚ğæ“¾
+	/// </summary>
+	const std::string GetTeamName(int charaID) const;
+
 private:
     void init();
 

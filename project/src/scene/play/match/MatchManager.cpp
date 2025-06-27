@@ -26,6 +26,11 @@
 //=== カメラ ===
 #include "src/common/camera/CameraManager.h"
 
+//=== UI ===
+#include "src/scene/play/ui/UI_GameScore.h"
+
+#include <src/util/color/ColorUtil.h>
+
 //-----------------------------------------
 //  CurrentGameData
 //-----------------------------------------
@@ -53,10 +58,35 @@ MatchManager::MatchManager()
 MatchManager::~MatchManager()
 {
     delete m_pFsm;
+
+    m_UI_GameScore->SetMatchManager(nullptr);
+    delete m_UI_GameScore;
 }
 
 void MatchManager::Update()
 {
+    if (m_pTeamManager && m_UI_GameScore)
+    {
+        for (const auto& team : m_pTeamManager->GetTeams())
+        {
+            for (int id : team->GetCharaIDs())
+            {
+                const std::string teamName = team->GetTeamName();
+
+                const CharaBase* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
+               
+                if (chara == nullptr)
+                    continue;  // キャラが存在しない場合はスキップ
+                if (chara->GetStatusTracker() == nullptr)
+                    continue;  // ステータストラッカーが存在しない場合はスキップ
+
+                int killCount = chara->GetStatusTracker()->Get_KillCount();
+
+                m_UI_GameScore->SetUserScore(teamName, id, killCount);
+            }
+        }
+    }
+
     m_pFsm->Update();
 
 #ifdef IMGUI
@@ -149,6 +179,42 @@ int MatchManager::GetWinPointMax()
     return m_GameData.m_WinPointMax;
 }
 
+std::vector<std::pair<int, int>> MatchManager::GetRanking() const {
+
+	std::vector<std::pair<int, int>> ranking;
+
+    for (const auto chara : m_pCharaManager->GetCharaPool()->GetAllItems())
+    {
+        if (chara->m_pObject == nullptr)
+			continue;  // キャラが存在しない場合はスキップ
+
+		if (chara->m_pObject->GetStatusTracker() == nullptr)
+			continue;  // ステータストラッカーが存在しない場合はスキップ
+
+        int charaPoints = chara->m_pObject->GetStatusTracker()->Get_KillCount();
+        ranking.emplace_back(chara->m_Index, charaPoints);
+    }
+
+    // ポイントの降順でソート  
+    std::sort(ranking.begin(), ranking.end(), [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+        return a.second > b.second;
+        });
+
+    return ranking;
+}
+
+const std::string MatchManager::GetTeamName(int charaID) const {
+
+	std::string teamName = "";
+
+	if (m_pTeamManager == nullptr)
+        return teamName;
+
+	teamName = m_pTeamManager->GetTeamName(charaID);
+
+    return teamName;
+}
+
 void MatchManager::init()
 {
     m_pFsm = new TinyFSM<MatchManager>(this);
@@ -233,10 +299,10 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
-        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
-        //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
-        //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();
 
@@ -244,6 +310,27 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         m_GameData = CurrentGameData(SceneManager::CommonScene()->FindGameObject<GameManager>()->GetCurrentGameModeData());
 
         ImGuiInit();
+
+        m_UI_GameScore = new UI_GameScore(RectTransform(Anchor::Preset::MiddleUp));
+        m_UI_GameScore->SetMatchManager(this);
+
+        for (const auto& team : m_pTeamManager->GetTeams())
+        {
+            for (int id : team->GetCharaIDs())
+            {
+				const std::string teamName = team->GetTeamName();
+                
+                const CharaBase* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
+                if (chara == nullptr)
+                    continue;  // キャラが存在しない場合はスキップ
+                if (chara->GetStatusTracker() == nullptr)
+					continue;  // ステータストラッカーが存在しない場合はスキップ
+
+				int killCount = chara->GetStatusTracker()->Get_KillCount();
+
+               m_UI_GameScore->AddUserScore(teamName, id, killCount, ColorUtil::ColorFromString(teamName));
+            }
+        }
     }
     break;
     case FSMSignal::SIG_Update:

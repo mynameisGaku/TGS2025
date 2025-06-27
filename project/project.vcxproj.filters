@@ -373,6 +373,9 @@
     <Filter Include="src%28application%29\util\history">
       <UniqueIdentifier>{53739a9d-bdd5-413d-8af2-2868256227e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\color">
+      <UniqueIdentifier>{f47aaeb0-77c5-4f82-93b7-2eb1410bb430}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1254,6 +1257,9 @@
       <Filter>src%28application%29\util\history</Filter>
     </ClCompile>
     <ClCompile Include="src\util\screen\ScreenManager.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1962,5 +1968,11 @@
       <Filter>src%28application%29\util\history</Filter>
     </ClInclude>
     <ClInclude Include="src\util\screen\ScreenManager.h" />
+    <ClInclude Include="src\scene\play\ui\UI_GameScore.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\color\ColorUtil.h">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

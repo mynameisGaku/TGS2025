@@ -18,6 +18,8 @@ public:
     CurrentGameData(const GAME_MODE_DESC& desc = {}, std::vector<std::string> teamNames = {});
 };
 
+class UI_GameScore;
+
 class MatchManager : public GameObject
 {
 public:
@@ -33,6 +35,9 @@ public:
     float           GetPlayTimeSec();
     float           GetPlayTimeMaxSec();
     int             GetWinPointMax();
+
+	std::vector<std::pair<int, int>> GetRanking() const;
+	const std::string GetTeamName(int charaID) const;
 
 private:
 
@@ -66,6 +71,8 @@ private:
     class CharaManager* m_pCharaManager;
     class BallManager* m_pBallManager;
     class TeamManager* m_pTeamManager;
+
+    UI_GameScore* m_UI_GameScore;
 
     void addCharacter(const std::string& team, const Transform& trs, bool isAI);
 };

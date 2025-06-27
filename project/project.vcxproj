@@ -357,6 +357,7 @@
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
     <ClCompile Include="src\util\alarm\Alarm.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
@@ -526,6 +527,7 @@
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
     <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h" />
     <ClInclude Include="src\scene\play\ui\UI_CrossHair.h" />
+    <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
     <ClInclude Include="src\util\alarm\Alarm.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />
@@ -534,6 +536,7 @@
     <ClInclude Include="src\util\behavior_tree\BehaviorTask.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorTree.h" />
     <ClInclude Include="src\util\blur_screen\BlurScreen.h" />
+    <ClInclude Include="src\util\color\ColorUtil.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiFunc.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiManager.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h" />

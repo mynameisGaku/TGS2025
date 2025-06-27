@@ -49,7 +49,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	SetDrawOrder(targetManager, 1000);
 
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
-	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(), 1000.0f, MathUtil::ToRadians(30.0f));
+	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(Vector3(0, 500, 0), Vector3::Zero, Vector3::Ones), 1000.0f, MathUtil::ToRadians(30.0f));
 	forceField->SetColTag(ColDefine::Tag::tWindArea);
 	forceField->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed, ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed });
 

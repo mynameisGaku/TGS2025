@@ -46,7 +46,9 @@ ForceFieldSphere* const ForceFieldManager::CreateForceFieldSphere(const Transfor
 {
 	ForceFieldSphere* forceField = new ForceFieldSphere(radius);
 
-	*forceField->transform = trs; // Transform‚ðÝ’è
+	forceField->transform->position = trs.position;
+	forceField->transform->rotation = trs.rotation;
+	forceField->transform->scale = trs.scale;
 
 	m_ForceFields.push_back(forceField);
 	return forceField;
@@ -56,7 +58,9 @@ ForceFieldCorn* const ForceFieldManager::CreateForceFieldCorn(const Transform& t
 {
 	ForceFieldCorn* forceField = new ForceFieldCorn(radius, cornAngle);
 
-	*forceField->transform = trs; // Transform‚ðÝ’è
+	forceField->transform->position = trs.position;
+	forceField->transform->rotation = trs.rotation;
+	forceField->transform->scale = trs.scale;
 
 	m_ForceFields.push_back(forceField);
 	return forceField;

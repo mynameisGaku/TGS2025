@@ -12,7 +12,7 @@ ForceFieldBase::ForceFieldBase()
 
 ForceFieldBase::~ForceFieldBase()
 {
-	m_Force.release();
+	m_Force.reset();
 }
 
 void ForceFieldBase::SetColTag(const ColDefine::Tag& tag)

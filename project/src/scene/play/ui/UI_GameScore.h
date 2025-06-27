@@ -15,6 +15,7 @@ public:
 	void Draw() override;
 
 	inline void SetMatchManager(const MatchManager* matchManager) { m_pMatchManager = matchManager; }
+	inline void SetAchievedScore(int score) { m_AchievedScore = score; }
 
 	void SetUserScore(const std::string& teamName, int id, int score);
 	void AddUserScore(const std::string& teamName, int id, int score, int backColor);
@@ -24,7 +25,8 @@ private:
 	std::unordered_map<std::string, int> m_BackColors;
 
 	std::unordered_map<int, std::pair<std::string, int>> m_UserScores;
-	int size;
+	int m_Size;
+	int m_AchievedScore;
 
 	const MatchManager* m_pMatchManager;
 };

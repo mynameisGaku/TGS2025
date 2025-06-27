@@ -1,6 +1,7 @@
 #include "UI_GameScore.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/scene/play/match/MatchManager.h"
+#include "src/util/string/StringUtil.h"
 
 UI_GameScore::UI_GameScore() : UI_GameScore(RectTransform())
 {
@@ -9,7 +10,8 @@ UI_GameScore::UI_GameScore() : UI_GameScore(RectTransform())
 UI_GameScore::UI_GameScore(const RectTransform& trs)
 {
 	m_pMatchManager = nullptr;
-	size = 0;
+	m_Size = 0;
+	m_AchievedScore = -1;
 	SetTransform(trs);
 }
 
@@ -31,16 +33,16 @@ void UI_GameScore::Update()
 void UI_GameScore::Draw()
 {
 	int index = 0;
-	const float adjust = 90.0f;
+	const Vector2 adjust = Vector2(120.0f, 80.0f);
 	const RectTransform globalTrs = rectTransform->Global();
 
 	for (const auto& it : m_BackColors) {
 
 		DrawBoxAA(
-			globalTrs.position.x - adjust + (adjust * index),
-			globalTrs.position.y - adjust * 0.5f,
-			globalTrs.position.x + adjust * index,
-			globalTrs.position.y + adjust * 0.5f,
+			globalTrs.position.x - adjust.x + (adjust.x * index),
+			globalTrs.position.y - adjust.y * 0.5f,
+			globalTrs.position.x + adjust.x * index,
+			globalTrs.position.y + adjust.y * 0.5f,
 			it.second, true);
 
 		index++;
@@ -49,13 +51,34 @@ void UI_GameScore::Draw()
 	index = 0;
 
 	for (const auto& it : m_TotalScores) {
+
+		std::string scoreText = StringUtil::FormatToString("%3d", it.second);
+		int width = GetDrawStringWidth(scoreText.c_str(), scoreText.length());
+
 		DrawFormatStringF(
-			globalTrs.position.x - adjust + (adjust * index),
-			globalTrs.position.y + adjust * 0.1f,
-			0xFFFFFF, "%3d",
-			it.second);
+			globalTrs.position.x - width * 0.5f - adjust.x + (adjust.x * index),
+			globalTrs.position.y + adjust.y * 0.1f,
+			0xFFFFFF, scoreText.c_str());
 
 		index++;
+	}
+
+	if (m_AchievedScore > 0)
+	{
+		DrawBoxAA(
+			globalTrs.position.x - adjust.x,
+			globalTrs.position.y + adjust.y * 0.5f,
+			globalTrs.position.x + adjust.x,
+			globalTrs.position.y + adjust.y,
+			0x999999, true);
+
+		std::string scoreText = StringUtil::FormatToString("必要スコア:%3d", m_AchievedScore);
+		int width = GetDrawStringWidth(scoreText.c_str(), scoreText.length());
+
+		DrawFormatStringF(
+			globalTrs.position.x - width * 0.5f,
+			globalTrs.position.y + adjust.y * 0.55f,
+			0xFFFFFF, scoreText.c_str());
 	}
 
 	if (m_pMatchManager == nullptr)
@@ -116,5 +139,5 @@ void UI_GameScore::AddUserScore(const std::string& teamName, int id, int score, 
 	}
 
 	m_BackColors[teamName] = backColor;
-	size++;
+	m_Size++;
 }

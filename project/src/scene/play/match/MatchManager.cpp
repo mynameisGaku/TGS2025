@@ -85,6 +85,8 @@ void MatchManager::Update()
                 m_UI_GameScore->SetUserScore(teamName, id, killCount);
             }
         }
+
+        m_UI_GameScore->SetAchievedScore(m_GameData.m_WinPointMax);
     }
 
     m_pFsm->Update();
@@ -313,6 +315,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
         m_UI_GameScore = new UI_GameScore(RectTransform(Anchor::Preset::MiddleUp));
         m_UI_GameScore->SetMatchManager(this);
+		m_UI_GameScore->SetAchievedScore(m_GameData.m_WinPointMax);
 
         for (const auto& team : m_pTeamManager->GetTeams())
         {

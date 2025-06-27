@@ -1,11 +1,17 @@
 #pragma once
 #include "src/scene/play/force_field/ForceFieldSphere.h"
 
+/// <summary>
+/// ƒR[ƒ“”ÍˆÍ‚Ì—Íê
+/// </summary>
+/// <author>²“¡h“l</author>
 class ForceFieldCorn : public ForceFieldSphere
 {
 public:
 	ForceFieldCorn(float radius, float cornAngle) : ForceFieldSphere(radius), m_CornAngle(cornAngle) {}
 	~ForceFieldCorn() {}
+
+	void Draw() override;
 
 	/// <summary>
 	/// “–‚½‚è”»’èˆ—

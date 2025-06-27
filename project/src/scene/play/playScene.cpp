@@ -51,7 +51,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
 	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(Vector3(0, 500, 0), Vector3::Zero, Vector3::Ones), 1000.0f, MathUtil::ToRadians(30.0f));
 	forceField->SetColTag(ColDefine::Tag::tWindArea);
-	forceField->SetColTargetTags({ ColDefine::Tag::tBall, ColDefine::Tag::tChara, ColDefine::Tag::tCatch });
+	forceField->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed, ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCharaRed });
 
 	std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-500.0f);
 	forceField->SetForce(std::move(force));

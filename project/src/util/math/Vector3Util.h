@@ -14,7 +14,7 @@ public:
 	{
 		Vector3 euler;
 
-		euler.x = Vec2ToRad(Vector3(dir.x, 0.0f, dir.z).GetLength(), dir.y);
+		euler.x = -Vec2ToRad(Vector3(dir.x, 0.0f, dir.z).GetLength(), dir.y);
 		euler.y = Vec2ToRad(dir.z, dir.x);
 		euler.z = 0;
 

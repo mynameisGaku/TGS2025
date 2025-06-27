@@ -3,6 +3,10 @@
 class ForceFieldBase;
 class Object3D;
 
+/// <summary>
+/// 力場内でオブジェクトをどう動かすか定義する基底クラス
+/// </summary>
+/// <author>佐藤紘斗</author>
 class ForceBase
 {
 public:

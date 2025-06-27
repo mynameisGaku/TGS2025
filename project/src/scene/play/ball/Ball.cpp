@@ -292,6 +292,9 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	if (colData.Other()->Parent<Catcher>() != nullptr)
 		return;
 
+	if (colData.Other()->Tag() == ColDefine::Tag::tWindArea)
+		return;
+
 	if (m_State == S_THROWN)
 	{
 		if (m_IsHoming) homingDeactivate();
@@ -434,7 +437,7 @@ void Ball::homingProcess()
 	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
 	const Vector3 dirRot = Vector3Util::DirToEuler(dir) + Vector3(0.0f, 0.0f, m_HormingCurveAngle);
-	const MATRIX dirRotMat = (dirRot * Vector3(-1, 1, 1)).ToRotationMatrix();
+	const MATRIX dirRotMat = (dirRot).ToRotationMatrix();
 
 	const Vector3 middle = (m_HomingTargetPos + m_HomingOrigin) / 2.0f;
 	const Vector3 middleToCurrent = transform->position - middle;

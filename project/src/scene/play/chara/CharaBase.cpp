@@ -163,6 +163,10 @@ CharaBase::~CharaBase()
 	}*/
 
 	PtrUtil::SafeDelete(m_EffectTransform);
+
+	Camera* camera = CameraManager::GetCamera(m_Index);
+	if (camera != nullptr)
+		camera->SetFollowerChara(nullptr);
 }
 
 void CharaBase::Init(std::string tag)

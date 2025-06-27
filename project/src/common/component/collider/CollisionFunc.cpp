@@ -27,7 +27,6 @@ CollisionData* ColFunction::ColCheck(ColliderBase* col1, ColliderBase* col2) {
 
 	case Shape::sCapsule:
 		switch (col2->Shape()) {
-		case Shape::sSphere:	return new CollisionData(ColCheck_SphereToCapsule(dynamic_cast<ColliderSphere*>(col2),		dynamic_cast<ColliderCapsule*>(col1)));	break;
 		case Shape::sCapsule:	return new CollisionData(ColCheck_CapsuleToCapsule(dynamic_cast<ColliderCapsule*>(col1),	dynamic_cast<ColliderCapsule*>(col2)));	break;
 		default:				return nullptr;
 		}

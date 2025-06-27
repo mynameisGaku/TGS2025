@@ -28,7 +28,7 @@
 //=== óÕèÍ ===
 #include "src/scene/play/force_field/ForceFieldManager.h"
 #include "src/scene/play/force_field/ForceFieldSphere.h"
-#include "src/scene/play/force_field/ForceBase.h"
+#include "src/scene/play/force_field/ConstantPointForce.h"
 
 using namespace KeyDefine;
 
@@ -46,13 +46,13 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);
 
-	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
-	ForceFieldSphere* forceField = forceFieldManager->CreateForceFieldSphere(Transform(Vector3(0, 0, 0), Vector3(0, 0 ,0), Vector3(1, 1, 1) * 100.0f), 100.0f);
-	forceField->SetColTag(ColDefine::Tag::tWindArea);
-	forceField->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed });
+	//ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
+	//ForceFieldSphere* forceField = forceFieldManager->CreateForceFieldSphere(Transform(), 1000.0f);
+	//forceField->SetColTag(ColDefine::Tag::tWindArea);
+	//forceField->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed, ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed });
 
-	std::unique_ptr<ForceBase> force = std::make_unique<ForceBase>();
-	forceField->SetForce(std::move(force));
+	//std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-50.0f);
+	//forceField->SetForce(std::move(force));
 
 	// ÉuÉãÅ[ÉÄ
 	m_BloomManager = Instantiate<BloomManager>();

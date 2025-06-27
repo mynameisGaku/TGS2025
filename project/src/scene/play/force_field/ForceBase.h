@@ -1,5 +1,4 @@
 #pragma once
-#include <memory>
 
 class ForceFieldBase;
 class Object3D;
@@ -16,6 +15,6 @@ public:
 	}
 
 	virtual void AddForce(Object3D* target) {}
-private:
+protected:
 	const ForceFieldBase* m_pForceField; // —Íê‚Ìƒ|ƒCƒ“ƒ^
 };

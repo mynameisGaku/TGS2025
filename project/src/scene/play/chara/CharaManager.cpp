@@ -181,6 +181,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 		colParamChara.tag = ColDefine::Tag::tCharaBlue;
 		colParamChara.targetTags = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tBallRed, ColDefine::Tag::tTackleRed, ColDefine::Tag::tTackleBlue };
 	}
+	colParamChara.targetTags.push_back(ColDefine::Tag::tWindArea);
 
 	//newChara->SetTrailImage(m_hTrails[tag]);
 	newChara->SetTrailImage(m_hTrails["Plain_Distortion_Thin"]);

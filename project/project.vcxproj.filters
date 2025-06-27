@@ -1262,6 +1262,9 @@
     <ClCompile Include="src\scene\play\force_field\ForceFieldSphere.cpp">
       <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldManager.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1982,6 +1985,9 @@
       <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\force_field\ConstantPointForce.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h">
       <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClInclude>
   </ItemGroup>

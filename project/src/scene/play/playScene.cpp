@@ -25,6 +25,11 @@
 //=== ステージ ===
 #include "src/common/stage/StageObjectManager.h"
 
+//=== 力場 ===
+#include "src/scene/play/force_field/ForceFieldManager.h"
+#include "src/scene/play/force_field/ForceFieldSphere.h"
+#include "src/scene/play/force_field/ForceBase.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
@@ -33,13 +38,21 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	// gameM->SetGameModeName("FreeForAll");
 	// ゲームモードは GameRef.json 内を参照してください
 	gameM->SetGameModeName("Debug");
-	
+
 	Instantiate<CollisionManager>();
 
 	Instantiate<MatchManager>();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);
+
+	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
+	ForceFieldSphere* forceField = forceFieldManager->CreateForceFieldSphere(Transform(Vector3(0, 0, 0), Vector3(0, 0 ,0), Vector3(1, 1, 1) * 100.0f), 100.0f);
+	forceField->SetColTag(ColDefine::Tag::tWindArea);
+	forceField->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed });
+
+	std::unique_ptr<ForceBase> force = std::make_unique<ForceBase>();
+	forceField->SetForce(std::move(force));
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();

@@ -349,6 +349,7 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldBase.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldCorn.cpp" />
+    <ClCompile Include="src\scene\play\force_field\ForceFieldManager.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldSphere.cpp" />
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
@@ -521,6 +522,7 @@
     <ClInclude Include="src\scene\play\force_field\ForceBase.h" />
     <ClInclude Include="src\scene\play\force_field\ForceFieldBase.h" />
     <ClInclude Include="src\scene\play\force_field\ForceFieldCorn.h" />
+    <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h" />
     <ClInclude Include="src\scene\play\force_field\ForceFieldSphere.h" />
     <ClInclude Include="src\scene\play\match\MatchManager.h" />
     <ClInclude Include="src\scene\play\playScene.h" />

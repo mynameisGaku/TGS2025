@@ -43,6 +43,7 @@ public:
     float                       TackleRecovery{};         // 後隙(秒)
     float                       TackleForce_Vertical{};
     float                       TackleForce_Horizontal{};
+    float                       TackleInvincibleDurationSec{};
     float                       GetTackleInvincibleTime{};  // タックルを食らったときに付与される無敵時間(秒)
     
     void Load(bool ForceLoad = false);

@@ -34,6 +34,7 @@ namespace ColDefine {
 		tTackleRed,	// 赤チームタックル
 		tTackleBlue,// 青チームタックル
 		tTerrain,	// 地形
+		tWindArea,	// 風エリア
 		tMax,
 	};
 

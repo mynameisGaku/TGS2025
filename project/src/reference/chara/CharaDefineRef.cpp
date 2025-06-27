@@ -33,6 +33,7 @@ void CharaDefineRef::Load(bool ForceLoad)
     TackleInterval = jsonLoader->GetOrDefault<float>("Param.TackleInterval", 0.0f, FILEKEY);
     TackleForce_Horizontal = jsonLoader->GetOrDefault<float>("Param.TackleForce_Horizontal", 0.0f, FILEKEY);
     TackleForce_Vertical = jsonLoader->GetOrDefault<float>("Param.TackleForce_Vertical", 0.0f, FILEKEY);
+    TackleInvincibleDurationSec = jsonLoader->GetOrDefault<float>("Param.TackleInvincibleDurationSec", 0.0f, FILEKEY);
     GetTackleInvincibleTime = jsonLoader->GetOrDefault<float>("Param.GetTackleInvincibleTime", 0.0f, FILEKEY);
 
     // ƒ[ƒh‚µ‚½‚æ

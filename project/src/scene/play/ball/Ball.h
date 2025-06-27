@@ -73,6 +73,7 @@ public:
 	void PickUp();
 
 	void SetChargeRate(float rate) { m_ChargeRate = rate; }
+	float GetChargeRate() const { return m_ChargeRate; }
 
 	void ChangeState(const State& state) { changeState(state); }
 

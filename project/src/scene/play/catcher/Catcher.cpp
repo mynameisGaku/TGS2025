@@ -10,6 +10,7 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/shake/Shake.h"
 #include "src/util/input/PadController.h"
+#include <src/util/math/Vector3Util.h>
 
 Catcher::Catcher()
 {
@@ -44,7 +45,6 @@ void Catcher::Init(std::string tag)
 	}
 
 	m_Collider->BaseInit(param);
-	m_Collider->SetDraw(true);
 }
 
 void Catcher::Update()
@@ -74,38 +74,41 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 		isCatch = true;
 	}
 
-	if (isCatch)
-	{
-		EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
+	if (not isCatch) return;
+	if (not CanCatch(ball)) return;
 
-		m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
-		m_Parent->SetBall(ball);
-		ball->SetOwner(m_Parent);
-		ball->PickUp();
-		ball->SetChargeRate(0.1f);
-		m_Parent->GetStatusTracker()->AddCatchCount(1);
+	//=== キャッチ成功処理 ===
+	EffectManager::Play3D("Catch_Success.efk", m_Parent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
 
-		Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
+	float charge = ball->GetChargeRate();
 
-		if (camera != nullptr) {
+	m_Parent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
+	m_Parent->SetBall(ball);
+	ball->SetOwner(m_Parent);
+	ball->PickUp();
+	ball->SetChargeRate(charge);
+	m_Parent->GetStatusTracker()->AddCatchCount(1);
 
-			// カメラ振動処理
-			Shake* cameraShake = camera->GetComponent<Shake>();
-			if (cameraShake != nullptr)
-				cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 5.0f, Vector3(0.15f), 0.5f);
+	Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
 
-			CameraDefine::CameraAnimData cameraAnimData;
+	if (camera != nullptr) {
 
-			cameraAnimData.SetAnim(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.6f, 0.2f, 0.5f);
-			cameraAnimData.SetRotMat(Vector3::Zero, Vector3(0.0f, 0.0f, MathUtil::ToRadians(-8.0f)), 0.2f, 0.5f);
-			cameraAnimData.SetHoldTime(0.35f);
+		// カメラ振動処理
+		Shake* cameraShake = camera->GetComponent<Shake>();
+		if (cameraShake != nullptr)
+			cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 5.0f, Vector3(0.15f), 0.5f);
 
-			// カメラの位置を調整
-			camera->SetAnimation(cameraAnimData);
-		}
+		CameraDefine::CameraAnimData cameraAnimData;
 
-		PadController::SetVibration(m_Parent->GetIndex() + 1, 250, 4.0f);
+		cameraAnimData.SetAnim(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.6f, 0.2f, 0.5f);
+		cameraAnimData.SetRotMat(Vector3::Zero, Vector3(0.0f, 0.0f, MathUtil::ToRadians(-8.0f)), 0.2f, 0.5f);
+		cameraAnimData.SetHoldTime(0.35f);
+
+		// カメラの位置を調整
+		camera->SetAnimation(cameraAnimData);
 	}
+
+	PadController::SetVibration(m_Parent->GetIndex() + 1, 250, 4.0f);
 }
 
 void Catcher::SetColliderActive(bool isActive)
@@ -116,4 +119,31 @@ void Catcher::SetColliderActive(bool isActive)
 bool Catcher::IsColliderActive() const
 {
 	return m_Collider->IsActive();
+}
+
+bool Catcher::CanCatch(Ball* ball) const
+{
+	static const float CATCH_ANGLE_THRESHOLD = MathUtil::ToRadians(30.0f); // キャッチ可能な角度の閾値
+
+	Camera* camera = CameraManager::GetCamera(m_Parent->GetIndex());
+	Vector3 forward;
+	if (camera == nullptr)
+	{
+		forward = m_Parent->transform->Forward();
+	}
+	else
+	{
+		forward = camera->transform->Forward();
+	}
+
+	const Vector3 ballLastPosition = ball->transform->position - ball->GetComponent<Physics>()->velocity;
+	const Vector3 toBall = Vector3::Normalize(ballLastPosition - m_Parent->transform->position);
+
+	if (Vector3Util::AngleBetween(forward, toBall) > CATCH_ANGLE_THRESHOLD)
+	{
+		// キャッチ可能な角度ではない
+		return false;
+	}
+
+	return true;
 }

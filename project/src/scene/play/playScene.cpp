@@ -4,6 +4,7 @@
 #include "src/util/input/InputManager.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/common/component/collider/CollisionManager.h"
+#include "src/util/math/MathUtil.h"
 
 //=== エフェクト ===
 #include "src/scene/play/targetting/TargetManager.h"
@@ -25,6 +26,12 @@
 //=== ステージ ===
 #include "src/common/stage/StageObjectManager.h"
 
+//=== 力場 ===
+#include "src/scene/play/force_field/ForceFieldManager.h"
+#include "src/scene/play/force_field/ForceFieldSphere.h"
+#include "src/scene/play/force_field/ForceFieldCorn.h"
+#include "src/scene/play/force_field/ConstantPointForce.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
@@ -33,13 +40,21 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	// gameM->SetGameModeName("FreeForAll");
 	// ゲームモードは GameRef.json 内を参照してください
 	gameM->SetGameModeName("Debug");
-	
+
 	Instantiate<CollisionManager>();
 
 	Instantiate<MatchManager>();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);
+
+	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
+	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(), 1000.0f, MathUtil::ToRadians(30.0f));
+	forceField->SetColTag(ColDefine::Tag::tWindArea);
+	forceField->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed, ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed });
+
+	std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-500.0f);
+	forceField->SetForce(std::move(force));
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();

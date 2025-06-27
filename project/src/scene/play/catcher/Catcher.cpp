@@ -208,7 +208,7 @@ void Catcher::createWindArea()
 {
 	m_pWindArea = m_pForceFieldManager->CreateForceFieldCorn(Transform(m_pParent->transform->position + Vector3::SetY(ARM_HEIGHT)), 2000.0f, MathUtil::ToRadians(30.0f));
 	m_pWindArea->SetColTag(ColDefine::Tag::tWindArea);
-	m_pWindArea->SetColTargetTags({ ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed, ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCharaRed });
+	m_pWindArea->SetColTargetTags({ ColDefine::Tag::tBall, ColDefine::Tag::tChara });
 
 	std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-1000.0f);
 	m_pWindArea->SetForce(std::move(force));

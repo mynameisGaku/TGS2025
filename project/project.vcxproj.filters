@@ -376,6 +376,18 @@
     <Filter Include="src%28application%29\scene\play\force_field">
       <UniqueIdentifier>{926d2b3c-5b5b-41e5-b718-2fe53fbfcf8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\hint">
+      <UniqueIdentifier>{772421e4-cb68-474c-a3fe-625161810d96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Input">
+      <UniqueIdentifier>{d0bb40e9-5ba5-444e-a19b-0ea2dd2ce6e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\reference\input">
+      <UniqueIdentifier>{40987d2c-35ca-414b-8c30-ce92c351fee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\enum">
+      <UniqueIdentifier>{38163138-5967-4c20-8ca8-9c94953a686b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -650,6 +662,13 @@
     </None>
     <None Include="window.ini">
       <Filter>ini</Filter>
+    </None>
+    <None Include="data\Json\Effect\LockOnMarker.json" />
+    <None Include="data\Json\Input\PhysicalKey.json">
+      <Filter>data\Json\Input</Filter>
+    </None>
+    <None Include="data\Json\Input\VirtualKey.json">
+      <Filter>data\Json\Input</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1267,6 +1286,11 @@
     </ClCompile>
     <ClCompile Include="src\scene\play\force_field\ConstantPointForce.cpp">
       <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
+    <ClCompile Include="src\util\screen\ScreenManager.cpp" />
+    <ClCompile Include="src\reference\input\InputRef.cpp">
+      <Filter>src%28application%29\reference\input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1992,6 +2016,15 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h">
       <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
+    <ClInclude Include="src\util\color\ColorUtil.h" />
+    <ClInclude Include="src\util\screen\ScreenManager.h" />
+    <ClInclude Include="src\reference\input\InputRef.h">
+      <Filter>src%28application%29\reference\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\enum\EnumUtil.h">
+      <Filter>src%28application%29\util\enum</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

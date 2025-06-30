@@ -216,6 +216,8 @@
     <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Effect\Template.json" />
     <None Include="data\Json\Game\GameRef.json" />
+    <None Include="data\Json\Input\PhysicalKey.json" />
+    <None Include="data\Json\Input\VirtualKey.json" />
     <None Include="data\Json\Sound\SoundData.json" />
     <None Include="data\Json\Stage\Stage_0.json" />
     <None Include="data\Json\Stage\Stage_1.json" />
@@ -333,6 +335,7 @@
     <ClCompile Include="src\reference\crystal\CrystalFragmentRef.cpp" />
     <ClCompile Include="src\reference\crystal\CrystalFragmentSpawnerRef.cpp" />
     <ClCompile Include="src\reference\game\GameRef.cpp" />
+    <ClCompile Include="src\reference\input\InputRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
@@ -507,6 +510,7 @@
     <ClInclude Include="src\reference\crystal\CrystalFragmentRef.h" />
     <ClInclude Include="src\reference\crystal\CrystalFragmentSpawnerRef.h" />
     <ClInclude Include="src\reference\game\GameRef.h" />
+    <ClInclude Include="src\reference\input\InputRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ball\Ball.h" />
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />
@@ -564,6 +568,7 @@
     <ClInclude Include="src\util\debug\imgui\imGuiRoot.h" />
     <ClInclude Include="src\util\easing\easing.h" />
     <ClInclude Include="src\util\easing\EasingUtils.h" />
+    <ClInclude Include="src\util\enum\EnumUtil.h" />
     <ClInclude Include="src\util\exception\Exception.h" />
     <ClInclude Include="src\util\fader\Fader.h" />
     <ClInclude Include="src\util\file\csv\csvReader.h" />

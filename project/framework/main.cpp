@@ -41,6 +41,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/reference/crystal/CrystalFragmentRef.h"
 #include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
 #include <src/reference/game/GameRef.h>
+#include "src/reference/input/InputRef.h"
 #include <src/util/time/GameTime.h>
 
 #define CoGVersion (2.2)
@@ -185,6 +186,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	GAME_REF.Destroy();
 	wSetting.Destroy();
 	GTime.Destroy();
+	InputRef::Inst().Destroy();
 
 #ifdef IMGUI
 

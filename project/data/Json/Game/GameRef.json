@@ -49,21 +49,24 @@
   "GameStartCountMaxSec": 5.0,
   "GameEndCountMaxSec": 5.0,
   "DefaultStageName": "Stage_3",
-  "StageNames": [
-    {
-      "Name": "Stage_0"
-    },
-    {
-      "Name": "Stage_1"
-    },
-    {
-      "Name": "Stage_2"
-    },
-    {
-      "Name": "Stage_3"
-    },
-    {
-      "Name": "TestStage"
-    }
-  ]
+    "StageNames": [
+        {
+            "Name": "Stage_0"
+        },
+        {
+            "Name": "Stage_1"
+        },
+        {
+            "Name": "Stage_2"
+        },
+        {
+            "Name": "Stage_3"
+        },
+        {
+            "Name": "Stage_4"
+        },
+        {
+            "Name": "TestStage"
+        }
+    ]
 }

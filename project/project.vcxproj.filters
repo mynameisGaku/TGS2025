@@ -388,6 +388,9 @@
     <Filter Include="src%28application%29\util\enum">
       <UniqueIdentifier>{38163138-5967-4c20-8ca8-9c94953a686b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\ui\button_hint">
+      <UniqueIdentifier>{70f34ecb-bb79-4b0a-b335-3c719549edca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1292,6 +1295,9 @@
     <ClCompile Include="src\reference\input\InputRef.cpp">
       <Filter>src%28application%29\reference\input</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ui\button_hint\UI_ButtonHint.cpp">
+      <Filter>src%28application%29\scene\play\ui\button_hint</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2025,6 +2031,9 @@
     </ClInclude>
     <ClInclude Include="src\util\enum\EnumUtil.h">
       <Filter>src%28application%29\util\enum</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\button_hint\UI_ButtonHint.h">
+      <Filter>src%28application%29\scene\play\ui\button_hint</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

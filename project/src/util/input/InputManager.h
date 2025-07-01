@@ -121,6 +121,9 @@ namespace InputManager {
 	/// </summary>
 	Vector3 AnalogStick(int padNumber = DX_INPUT_PAD1);
 
+	std::pair<int, int> GetImagePair(const KeyDefine::KeyCode& keyCode);
+	std::pair<int, int> GetImagePair(const std::string& keyName);
+
 #ifdef _DEBUG
 
 	//==========================================================================================

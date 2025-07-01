@@ -388,6 +388,12 @@
     <Filter Include="src%28application%29\util\enum">
       <UniqueIdentifier>{38163138-5967-4c20-8ca8-9c94953a686b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\color">
+      <UniqueIdentifier>{f8ee4a14-5cc0-45fb-bbb1-b906145f1357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\screen">
+      <UniqueIdentifier>{53d64be1-4031-4379-932b-4bc767548c1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -663,12 +669,14 @@
     <None Include="window.ini">
       <Filter>ini</Filter>
     </None>
-    <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Input\PhysicalKey.json">
       <Filter>data\Json\Input</Filter>
     </None>
     <None Include="data\Json\Input\VirtualKey.json">
       <Filter>data\Json\Input</Filter>
+    </None>
+    <None Include="data\Json\Effect\LockOnMarker.json">
+      <Filter>data\Json\Effect</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1287,10 +1295,17 @@
     <ClCompile Include="src\scene\play\force_field\ConstantPointForce.cpp">
       <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
-    <ClCompile Include="src\util\screen\ScreenManager.cpp" />
     <ClCompile Include="src\reference\input\InputRef.cpp">
       <Filter>src%28application%29\reference\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameTime.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\screen\ScreenManager.cpp">
+      <Filter>src%28application%29\util\screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2017,14 +2032,23 @@
     <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h">
       <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
-    <ClInclude Include="src\util\color\ColorUtil.h" />
-    <ClInclude Include="src\util\screen\ScreenManager.h" />
     <ClInclude Include="src\reference\input\InputRef.h">
       <Filter>src%28application%29\reference\input</Filter>
     </ClInclude>
     <ClInclude Include="src\util\enum\EnumUtil.h">
       <Filter>src%28application%29\util\enum</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameTime.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameScore.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\color\ColorUtil.h">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\screen\ScreenManager.h">
+      <Filter>src%28application%29\util\screen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@
 #include "src/common/component/controller/AIController.h"
 #include "src/common/component/controller/DebugController.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
+#include "src/reference/match/MatchRef.h"
 
 //=== ƒ`[ƒ€ ===
 #include "src/scene/play/team/Team.h"
@@ -154,6 +155,11 @@ void MatchManager::Draw()
 {
     if (not CameraManager::IsScreenDivision())
         m_pFsm->ImGuiDebugRender();
+
+    if (m_pFsm->GetCurrentState() == &MatchManager::StatePhaseGameOver)
+    {
+        DrawFormatString(300, 450, 0xFF0000, "GameOver");
+    }
 }
 
 void MatchManager::ReloadCurrentGameData()
@@ -429,9 +435,8 @@ void MatchManager::StatePhaseGameOver(FSMSignal sig)
     case FSMSignal::SIG_Update:
     {
         m_GameOverEndCounterSec += GTime.deltaTime;
-        m_pFsm->ChangeState(&MatchManager::StatePhaseEnd);
 
-        if (m_GameOverEndCounterSec >= 3.0f)
+        if (m_GameOverEndCounterSec >= MATCH_REF.GameOver_Duration)
         {
             m_pFsm->ChangeState(&MatchManager::StatePhaseEnd);
         }

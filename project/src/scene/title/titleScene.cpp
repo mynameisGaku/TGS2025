@@ -42,7 +42,7 @@ void TitleScene::Draw() {
 
 	SceneBase::Draw();
 	
-	DrawString(100, 400, "Push [P]Key To Play", GetColor(255, 255, 255));
+	DrawString(100, 400, "Push [Z]Key To Play", GetColor(255, 255, 255));
 
 }
 

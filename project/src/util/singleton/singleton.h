@@ -47,7 +47,7 @@ private:
 
 	static void destroy()
 	{
-		instance.release();
+		instance.reset();
 	}
 
 	static std::unique_ptr<C> instance;

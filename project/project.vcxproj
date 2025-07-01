@@ -216,6 +216,7 @@
     <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Effect\Template.json" />
     <None Include="data\Json\Game\GameRef.json" />
+    <None Include="data\Json\Match\Match.json" />
     <None Include="data\Json\Sound\SoundData.json" />
     <None Include="data\Json\Stage\Stage_0.json" />
     <None Include="data\Json\Stage\Stage_1.json" />
@@ -333,6 +334,7 @@
     <ClCompile Include="src\reference\crystal\CrystalFragmentRef.cpp" />
     <ClCompile Include="src\reference\crystal\CrystalFragmentSpawnerRef.cpp" />
     <ClCompile Include="src\reference\game\GameRef.cpp" />
+    <ClCompile Include="src\reference\match\MatchRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
@@ -507,6 +509,7 @@
     <ClInclude Include="src\reference\crystal\CrystalFragmentRef.h" />
     <ClInclude Include="src\reference\crystal\CrystalFragmentSpawnerRef.h" />
     <ClInclude Include="src\reference\game\GameRef.h" />
+    <ClInclude Include="src\reference\match\MatchRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ball\Ball.h" />
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />

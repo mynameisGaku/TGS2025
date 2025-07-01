@@ -376,6 +376,12 @@
     <Filter Include="src%28application%29\scene\play\force_field">
       <UniqueIdentifier>{926d2b3c-5b5b-41e5-b718-2fe53fbfcf8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\reference\match">
+      <UniqueIdentifier>{c76b0be0-66fa-450d-8d02-b40533b8a2bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Match">
+      <UniqueIdentifier>{fe62f756-9d0e-488e-872e-1c600a973726}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -650,6 +656,10 @@
     </None>
     <None Include="window.ini">
       <Filter>ini</Filter>
+    </None>
+    <None Include="data\Json\Effect\LockOnMarker.json" />
+    <None Include="data\Json\Match\Match.json">
+      <Filter>data\Json\Match</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1268,6 +1278,9 @@
     <ClCompile Include="src\scene\play\force_field\ConstantPointForce.cpp">
       <Filter>src%28application%29\scene\play\force_field</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
+    <ClCompile Include="src\util\screen\ScreenManager.cpp" />
+    <ClCompile Include="src\reference\match\MatchRef.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1992,6 +2005,12 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h">
       <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
+    <ClInclude Include="src\util\color\ColorUtil.h" />
+    <ClInclude Include="src\util\screen\ScreenManager.h" />
+    <ClInclude Include="src\reference\match\MatchRef.h">
+      <Filter>src%28application%29\reference\match</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

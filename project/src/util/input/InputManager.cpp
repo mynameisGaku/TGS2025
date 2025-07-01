@@ -7,6 +7,10 @@
 #include "src/util/input/KeyController.h"
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
+#include "src/util/enum/EnumUtil.h"
+
+// 参照
+#include "src/reference/input/InputRef.h"
 
 // ◇デバッグ
 #include "src/util/debug/imgui/imGuiManager.h"
@@ -22,6 +26,8 @@ namespace {
 	std::unordered_map<KeyCode, InputData>* isBeforeInputs;	// 1フレーム前に入力しているか
 
 	std::list<InputData> keyCodes;	// 直近に押されたキー情報を保持する
+
+	InputRef* pRef;
 }
 
 void InputManager::Init() {
@@ -35,6 +41,9 @@ void InputManager::Init() {
 	PadController::Init();
 	MouseController::Init();
 
+	pRef = &InputRef::Inst();
+	pRef->Load(true);
+
 	//==========================================================================================
 	// ▼仮想ボタンを割り当てる
 
@@ -42,36 +51,15 @@ void InputManager::Init() {
 		keyList = new std::unordered_map<std::string, std::vector<KeyCode>>();
 
 		auto& key = (*keyList);
-
-		key["Select"] = { KeyCode::Z, KeyCode::ButtonA };
-		key["Cancel"] = { KeyCode::X, KeyCode::ButtonB };
-		key["Pause"] = { KeyCode::Escape, KeyCode::Start };
-		key["TargetCamera"] = { KeyCode::MiddleClick, KeyCode::RightThumb };
-		key["Skip"] = { KeyCode::Z, KeyCode::Space, KeyCode::ButtonA, KeyCode::LeftClick };
-
-		key["Up"] = { KeyCode::Up, KeyCode::UpArrow };
-		key["Down"] = { KeyCode::Down, KeyCode::DownArrow };
-		key["Left"] = { KeyCode::Left, KeyCode::LeftArrow };
-		key["Right"] = { KeyCode::Right, KeyCode::RightArrow };
-
-		key["Throw"] = { KeyCode::LeftClick, KeyCode::RightTrigger };
-		key["Catch"] = { KeyCode::RightClick, KeyCode::LeftTrigger };
-		key["Jump"] = { KeyCode::Space, KeyCode::ButtonA };
-		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftShoulder };
-		key["Teleport"] = { KeyCode::E, KeyCode::ButtonY };
-		key["Feint"] = { KeyCode::F, KeyCode::ButtonX };
-		key["Tackle"] = { KeyCode::LeftControl, KeyCode::ButtonB };
-
-		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
-		key["MoveUp"] = { KeyCode::W };
-		key["MoveDown"] = { KeyCode::S };
-		key["MoveLeft"] = { KeyCode::A };
-		key["MoveRight"] = { KeyCode::D };
-
-		key["TargetCamera"] = { KeyCode::LeftClick, KeyCode::RightTrigger };
-
-		key["AnyKey"] = { KeyCode::Z, KeyCode::Space, KeyCode::Enter,
-			KeyCode::ButtonA, KeyCode::ButtonB, KeyCode::ButtonX, KeyCode::ButtonY };
+		for (auto& vir : pRef->VirtualKeys)
+		{
+			std::vector<KeyCode> codes;
+			for (auto& keyparam : vir.KeyParams)
+			{
+				codes.push_back(EnumUtil::ConvertFromString(keyparam, KeyCode::None));
+			}
+			key[vir.KeyName] = codes;
+		}
 	}
 
 	//==========================================================================================

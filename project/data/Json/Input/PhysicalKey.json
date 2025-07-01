@@ -1,0 +1,499 @@
+{
+  "Params": [
+    {
+      "Device": "Key",
+      "KeyParam": 30,
+      "KeyName": "A"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 48,
+      "KeyName": "B"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 46,
+      "KeyName": "C"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 32,
+      "KeyName": "D"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 18,
+      "KeyName": "E"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 33,
+      "KeyName": "F"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 34,
+      "KeyName": "G"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 35,
+      "KeyName": "H"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 23,
+      "KeyName": "I"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 36,
+      "KeyName": "J"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 37,
+      "KeyName": "K"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 38,
+      "KeyName": "L"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 50,
+      "KeyName": "M"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 49,
+      "KeyName": "N"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 24,
+      "KeyName": "O"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 25,
+      "KeyName": "P"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 16,
+      "KeyName": "Q"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 19,
+      "KeyName": "R"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 31,
+      "KeyName": "S"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 20,
+      "KeyName": "T"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 22,
+      "KeyName": "U"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 47,
+      "KeyName": "V"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 17,
+      "KeyName": "W"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 45,
+      "KeyName": "X"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 21,
+      "KeyName": "Y"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 44,
+      "KeyName": "Z"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 11,
+      "KeyName": "Alpha0"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 2,
+      "KeyName": "Alpha1"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 3,
+      "KeyName": "Alpha2"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 4,
+      "KeyName": "Alpha3"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 5,
+      "KeyName": "Alpha4"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 6,
+      "KeyName": "Alpha5"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 7,
+      "KeyName": "Alpha6"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 8,
+      "KeyName": "Alpha7"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 9,
+      "KeyName": "Alpha8"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 10,
+      "KeyName": "Alpha9"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 59,
+      "KeyName": "F1"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 60,
+      "KeyName": "F2"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 61,
+      "KeyName": "F3"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 62,
+      "KeyName": "F4"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 63,
+      "KeyName": "F5"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 64,
+      "KeyName": "F6"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 65,
+      "KeyName": "F7"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 66,
+      "KeyName": "F8"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 67,
+      "KeyName": "F9"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 68,
+      "KeyName": "F10"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 87,
+      "KeyName": "F11"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 88,
+      "KeyName": "F12"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 14,
+      "KeyName": "BackSpace"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 15,
+      "KeyName": "Tab"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 28,
+      "KeyName": "Enter"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 42,
+      "KeyName": "LeftShift"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 54,
+      "KeyName": "RightShift"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 29,
+      "KeyName": "LeftControl"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 157,
+      "KeyName": "RightControl"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 1,
+      "KeyName": "Escape"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 57,
+      "KeyName": "Space"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 201,
+      "KeyName": "PageUp"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 209,
+      "KeyName": "PageDown"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 207,
+      "KeyName": "End"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 199,
+      "KeyName": "Home"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 200,
+      "KeyName": "UpArrow"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 208,
+      "KeyName": "DownArrow"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 203,
+      "KeyName": "LeftArrow"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 205,
+      "KeyName": "RightArrow"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 210,
+      "KeyName": "Insert"
+    },
+    {
+      "Device": "Key",
+      "KeyParam": 211,
+      "KeyName": "Delete"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 0,
+      "KeyName": "Up"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 1,
+      "KeyName": "Down"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 2,
+      "KeyName": "Left"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 3,
+      "KeyName": "Right"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 4,
+      "KeyName": "Start"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 5,
+      "KeyName": "Back"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "LeftStickUp"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "LeftStickDown"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "LeftStickLeft"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "LeftStickRight"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "RightStickUp"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "RightStickDown"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "RightStickLeft"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "RightStickRight"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 6,
+      "KeyName": "LeftThumb"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 7,
+      "KeyName": "RightThumb"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 8,
+      "KeyName": "LeftShoulder"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 9,
+      "KeyName": "RightShoulder"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "LeftTrigger"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": -1,
+      "KeyName": "RightTrigger"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 12,
+      "KeyName": "ButtonA"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 13,
+      "KeyName": "ButtonB"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 14,
+      "KeyName": "ButtonX"
+    },
+    {
+      "Device": "Pad",
+      "KeyParam": 15,
+      "KeyName": "ButtonY"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 1,
+      "KeyName": "LeftClick"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 2,
+      "KeyName": "RightClick"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 4,
+      "KeyName": "MiddleClick"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 1,
+      "KeyName": "MouseButton1"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 2,
+      "KeyName": "MouseButton2"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 4,
+      "KeyName": "MouseButton3"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 8,
+      "KeyName": "MouseButton4"
+    },
+    {
+      "Device": "Mouse",
+      "KeyParam": 16,
+      "KeyName": "MouseButton5"
+    }
+  ]
+}

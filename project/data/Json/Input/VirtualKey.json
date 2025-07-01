@@ -1,0 +1,92 @@
+{
+	"Params": [
+		{
+			"KeyName": "Select",
+			"KeyParams": [ "Z", "ButtonA" ]
+		},
+		{
+			"KeyName": "Cancel",
+			"KeyParams": [ "X", "ButtonB" ]
+		},
+		{
+			"KeyName": "Pause",
+			"KeyParams": [ "Escape", "Start" ]
+		},
+		{
+			"KeyName": "TargetCamera",
+			"KeyParams": [ "LeftClick", "RightTrigger" ]
+		},
+		{
+			"KeyName": "Skip",
+			"KeyParams": [ "Z", "Space", "ButtonA", "LeftClick" ]
+		},
+		{
+			"KeyName": "Up",
+			"KeyParams": [ "Up", "UpArrow" ]
+		},
+		{
+			"KeyName": "Down",
+			"KeyParams": [ "Down", "DownArrow" ]
+		},
+		{
+			"KeyName": "Left",
+			"KeyParams": [ "Left", "LeftArrow" ]
+		},
+		{
+			"KeyName": "Right",
+			"KeyParams": [ "Right", "RightArrow" ]
+		},
+		{
+			"KeyName": "Throw",
+			"KeyParams": [ "LeftClick", "RightTrigger" ]
+		},
+		{
+			"KeyName": "Catch",
+			"KeyParams": [ "RightClick", "LeftTrigger" ]
+		},
+		{
+			"KeyName": "Jump",
+			"KeyParams": [ "Space", "ButtonA" ]
+		},
+		{
+			"KeyName": "Slide",
+			"KeyParams": [ "LeftShift", "LeftShoulder" ]
+		},
+		{
+			"KeyName": "Teleport",
+			"KeyParams": [ "E", "ButtonY" ]
+		},
+		{
+			"KeyName": "Feint",
+			"KeyParams": [ "F", "ButtonX" ]
+		},
+		{
+			"KeyName": "Tackle",
+			"KeyParams": [ "LeftControl", "ButtonB" ]
+		},
+		{
+			"KeyName": "Movement",
+			"KeyParams": [ "W", "S", "A", "D" ]
+		},
+		{
+			"KeyName": "MoveUp",
+			"KeyParams": [ "W" ]
+		},
+		{
+			"KeyName": "MoveDown",
+			"KeyParams": [ "S" ]
+		},
+		{
+			"KeyName": "MoveLeft",
+			"KeyParams": [ "A" ]
+		},
+		{
+			"KeyName": "MoveRight",
+			"KeyParams": [ "D" ]
+		},
+		{
+			"KeyName": "AnyKey",
+			"KeyParams": [ "Z", "Space", "Enter", "ButtonA", "ButtonB", "ButtonX", "ButtonY" ]
+		}
+	]
+}

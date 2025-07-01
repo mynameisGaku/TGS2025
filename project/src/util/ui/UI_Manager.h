@@ -113,4 +113,11 @@ namespace UI_Manager {
 	/// 描画優先度に応じた並び替えを行う処理
 	/// </summary>
 	void UI_Canvas_CombSort(std::vector<UI_Canvas*>& ui);
+
+	/// <summary>
+	/// 画面分割によるアンカー位置の設定を行う
+	/// </summary>
+	/// <param name="ui">アンカー位置の設定を行うUIのポインター</param>
+	/// <param name="cameraIndex">カメラの番号</param>
+	void SetAnchorPositionByScreenSplit(UI_Canvas* ui, int cameraIndex);
 };

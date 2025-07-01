@@ -32,6 +32,8 @@
 #include "src/scene/play/force_field/ForceFieldCorn.h"
 #include "src/scene/play/force_field/ConstantPointForce.h"
 
+#include "src/scene/play/ui/UI_GameTime.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)

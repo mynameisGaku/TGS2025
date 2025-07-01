@@ -1283,6 +1283,9 @@
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameTime.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2015,6 +2018,9 @@
       <Filter>src%28application%29\util\screen</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameTime.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>

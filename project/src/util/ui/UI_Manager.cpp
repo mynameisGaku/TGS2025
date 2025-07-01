@@ -2,6 +2,7 @@
 
 // ”Ä—p
 #include "src/util/ptr/PtrUtil.h"
+#include "src/util/screen/ScreenManager.h"
 
 namespace {
 
@@ -197,4 +198,16 @@ void UI_Manager::UI_Canvas_CombSort(std::vector<UI_Canvas*>& ui) {
 		if (h > 1) h = (h * 10) / 13;
 		if (h == 0) h = 1;
 	}
+}
+
+void UI_Manager::SetAnchorPositionByScreenSplit(UI_Canvas* ui, int cameraIndex) {
+
+	if (ui == nullptr)
+		return;
+
+	Vector2 beginPos = ScreenManager::GetScreenBeginPos(cameraIndex);
+	Vector2 endPos = ScreenManager::GetScreenEndPos(cameraIndex);
+
+	ui->rectTransform->anchor.SetBegin(beginPos);
+	ui->rectTransform->anchor.SetEnd(endPos);
 }

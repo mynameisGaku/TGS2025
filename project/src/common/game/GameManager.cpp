@@ -3,6 +3,8 @@
 #include "vendor/ImGui/imgui.h"
 #include <algorithm>
 
+#include "src/util/time/GameTime.h" 
+
 GameManager::GameManager()
 {
     init();
@@ -14,6 +16,10 @@ GameManager::~GameManager()
 
 void GameManager::Update()
 {
+	m_GameTime -= GTime.DeltaTime();
+    if (m_GameTime <= 0.0f)
+		m_GameTime = 0.0f;
+
     DrawImGuiDebugger();
 }
 
@@ -92,4 +98,6 @@ void GameManager::init()
     m_CurrentStageName  = GAME_REF.DefaultStageName;
 
     std::sort(m_GameModeNames.begin(), m_GameModeNames.end());
+
+    m_GameTime = m_GameModeDescs[m_GameModeNames[0]].PlayTimeMaxSec;
 }

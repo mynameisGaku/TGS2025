@@ -32,6 +32,8 @@
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
 #include <src/reference/ball/BallRef.h>
 
+#include "src/scene/play/ui/UI_GameTime.h"
+
 using namespace KeyDefine;
 
 namespace
@@ -202,13 +204,11 @@ void CharaBase::Init(std::string tag)
 	m_UI_CrossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
 	m_UI_CrossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
 
-	//m_UI_BallChargeMeter = new UI_CrossHair(RectTransform(), m_Index);
-	//m_UI_BallChargeMeter->SetScroll(&m_BallChargeRate, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
-	//m_UI_BallChargeMeter->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/BallChargeMeter_00.png");
-
 	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2::Zero, 0.0f, Vector2::Ones * 2.0f), m_Index);
 	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
 	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+
+	UI_GameTime* gameTime = new UI_GameTime(RectTransform(Anchor::Preset::RightDown, Vector2(0.0f, -165.0f)), m_Index);
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {

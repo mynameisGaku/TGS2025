@@ -384,12 +384,25 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
             m_pFsm->ChangeState(&MatchManager::StatePhaseGameOver);
         }
 
+        bool isGameOver = false;
+
         for (auto& teamName : GAME_REF.TeamNames)
         {
             if (m_pTeamManager->GetTeam(teamName)->GetTotalPoint() < m_GameData.m_WinPointMax)
                 continue;
 
-            m_pFsm->ChangeState(&MatchManager::StatePhaseGameOver);
+            isGameOver = true;
+            break;
+        }
+        if (CheckHitKey(KEY_INPUT_5))
+        {
+            isGameOver = true;
+        }
+
+        if (isGameOver)
+        {
+            gameOver();
+            return;
         }
     }
     break;
@@ -407,40 +420,21 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
 
 void MatchManager::StatePhaseGameOver(FSMSignal sig)
 {
-    std::string winner = "";
-    int high = 0;
     switch (sig)
     {
     case FSMSignal::SIG_Enter:
     {
-        // 勝利チームを求める
-        for (int i = 0; i < GAME_REF.TeamNames.size(); i++)
-        {
-            // 要素1
-            Team* team = m_pTeamManager->GetTeam(GAME_REF.TeamNames[i]);
-
-            // 勝利ポイントを超えているか
-            if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
-            {
-                // 超えてたらこのチームが勝者 ( 現状同時に勝利ポイントを超過する可能性アリ )
-                winner = team->GetTeamName();
-                break;
-            }
-
-            // 超えてなければ現状の最高ポイントを超えているかを見る
-            if (team->GetTotalPoint() > high)
-            {
-                winner = team->GetTeamName();
-                high = team->GetTotalPoint();
-            }
-        }
-
-        m_GameData.m_WinnerTeam = winner;
 
         break;
     case FSMSignal::SIG_Update:
     {
+        m_GameOverEndCounterSec += GTime.deltaTime;
         m_pFsm->ChangeState(&MatchManager::StatePhaseEnd);
+
+        if (m_GameOverEndCounterSec >= 3.0f)
+        {
+            m_pFsm->ChangeState(&MatchManager::StatePhaseEnd);
+        }
     }
     break;
     case FSMSignal::SIG_AfterUpdate:
@@ -512,5 +506,41 @@ void MatchManager::addCharacter(const std::string& team, const Transform& trs, b
         chara->AddComponent<AIController>()->Init();
 
     m_pTeamManager->RegisterCharaToTeam(chara);
+}
+
+void MatchManager::findWinner()
+{
+    std::string winner = "";
+    int high = 0;
+
+    // 勝利チームを求める
+    for (int i = 0; i < GAME_REF.TeamNames.size(); i++)
+    {
+        // 要素1
+        Team* team = m_pTeamManager->GetTeam(GAME_REF.TeamNames[i]);
+
+        // 勝利ポイントを超えているか
+        if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
+        {
+            // 超えてたらこのチームが勝者 ( 現状同時に勝利ポイントを超過する可能性アリ )
+            winner = team->GetTeamName();
+            break;
+        }
+
+        // 超えてなければ現状の最高ポイントを超えているかを見る
+        if (team->GetTotalPoint() > high)
+        {
+            winner = team->GetTeamName();
+            high = team->GetTotalPoint();
+        }
+    }
+
+    m_GameData.m_WinnerTeam = winner;
+}
+
+void MatchManager::gameOver()
+{
+    findWinner();
+    m_pFsm->ChangeState(&MatchManager::StatePhaseGameOver);
 }
 

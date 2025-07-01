@@ -74,5 +74,10 @@ private:
 
     UI_GameScore* m_UI_GameScore;
 
+    // キャラクターを試合に追加する
     void addCharacter(const std::string& team, const Transform& trs, bool isAI);
+    // 勝利チームを見つける
+    void findWinner();
+    // 試合終了、その時点の1位の勝利で結果を確定する
+    void gameOver();
 };

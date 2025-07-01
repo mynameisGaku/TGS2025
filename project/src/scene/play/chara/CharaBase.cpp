@@ -32,8 +32,6 @@
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
 #include <src/reference/ball/BallRef.h>
 
-#include "src/scene/play/ui/UI_GameTime.h"
-
 using namespace KeyDefine;
 
 namespace
@@ -197,19 +195,25 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
 
-	m_UI_CrossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle), m_Index);
-	m_UI_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
-	m_UI_CrossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
-	m_UI_CrossHair->SetHandle_CrossHairFrame		("data/texture/UI/CrossHair/CrossHairFrame.png");
-	m_UI_CrossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
-	m_UI_CrossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+	const std::string sIndex = std::to_string(m_Index + 1) + "P";
 
-	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2::Zero, 0.0f, Vector2::Ones * 2.0f), m_Index);
-	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
-	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+	UI_CrossHair* ui_CrossHair = UI_Manager::Find<UI_CrossHair>("CrossHair_" + sIndex);
+	if (ui_CrossHair != nullptr)
+	{
+		ui_CrossHair->SetHandle_CrossHair("data/texture/UI/CrossHair/CrossHair.png");
+		ui_CrossHair->SetHandle_CrossHairFrame("data/texture/UI/CrossHair/CrossHairFrame.png");
+		ui_CrossHair->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/CrossHairOutSide.png");
+		ui_CrossHair->SetHandle_CrossHairOutSideBack("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+		ui_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
+	}
 
-	UI_GameTime* gameTime = new UI_GameTime(RectTransform(Anchor::Preset::RightDown, Vector2(0.0f, -165.0f)), m_Index);
-
+	UI_HitPoint_Icon* ui_HitPoint_Icon = UI_Manager::Find<UI_HitPoint_Icon>("HitPoint_Icon_" + sIndex);
+	if (ui_HitPoint_Icon != nullptr)
+	{
+		ui_HitPoint_Icon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
+		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+	}
+	
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
 		{ "mixamorig9:Hips", "HipsTrail" },

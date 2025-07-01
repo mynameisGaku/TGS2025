@@ -59,8 +59,11 @@ MatchManager::~MatchManager()
 {
     delete m_pFsm;
 
-    m_UI_GameScore->SetMatchManager(nullptr);
-    delete m_UI_GameScore;
+    if (m_UI_GameScore != nullptr)
+    {
+        m_UI_GameScore->SetMatchManager(nullptr);
+        delete m_UI_GameScore;
+    }
 }
 
 void MatchManager::Update()
@@ -301,10 +304,10 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         // ’Ç‰Á‚Å‚«‚é‚ÌŠm”F‚µ‚½‚æ
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();
 

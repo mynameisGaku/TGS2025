@@ -68,6 +68,16 @@ namespace UI_Manager {
 	/// <returns>存在すればその実態を返す。無ければnullptrを返す。</returns>
 	UI_Canvas* Find(const std::string& tag);
 
+	template<class C>
+	C* Find(const std::string& tag)
+	{
+		UI_Canvas* ui = Find(tag);
+		if (ui == nullptr)
+			return nullptr;
+
+		return dynamic_cast<C*>(ui);
+	}
+
 	//================================================================================
 	// ▼セッター
 

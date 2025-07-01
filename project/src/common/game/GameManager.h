@@ -31,7 +31,6 @@ public:
     void SetGameResult(const ResultData& data);
 
     std::string GetCurrentStageName() const;
-    float GetCurrentGameTime() const { return m_GameTime; }
 
 private:
 
@@ -48,5 +47,4 @@ private:
     std::string                                     m_CurrentStageName;
     std::string                                     m_CurrentGameMode;
     ResultData                                      m_ResultData;
-	float 									        m_GameTime;
 };

@@ -1298,7 +1298,7 @@
     <ClCompile Include="src\reference\input\InputRef.cpp">
       <Filter>src%28application%29\reference\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\UI_GameTime.cpp">
+    <ClCompile Include="src\scene\play\ui\UI_MatchTime.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp">
@@ -1306,6 +1306,9 @@
     </ClCompile>
     <ClCompile Include="src\util\screen\ScreenManager.cpp">
       <Filter>src%28application%29\util\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2038,7 +2041,7 @@
     <ClInclude Include="src\util\enum\EnumUtil.h">
       <Filter>src%28application%29\util\enum</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_GameTime.h">
+    <ClInclude Include="src\scene\play\ui\UI_MatchTime.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h">
@@ -2049,6 +2052,9 @@
     </ClInclude>
     <ClInclude Include="src\util\screen\ScreenManager.h">
       <Filter>src%28application%29\util\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

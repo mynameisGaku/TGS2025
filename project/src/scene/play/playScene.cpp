@@ -32,12 +32,18 @@
 #include "src/scene/play/force_field/ForceFieldCorn.h"
 #include "src/scene/play/force_field/ConstantPointForce.h"
 
-#include "src/scene/play/ui/UI_GameTime.h"
+#include "src/scene/play/ui/UI_Setter_PlayScene.h"
 
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
+	CameraManager::SetIsScreenDivision(true);
+
+	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
+	for (int i = 0; i < CAMERA_NUM; i++)
+		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
+
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
 	// gameM->SetGameModeName("FreeForAll");
 	// ゲームモードは GameRef.json 内を参照してください
@@ -45,6 +51,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	Instantiate<CollisionManager>();
 
+	Instantiate<UI_Setter_PlayScene>();
 	Instantiate<MatchManager>();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
@@ -64,14 +71,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	//StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 	StageObjectManager::LoadFromJson("data/json/Stage/" + gameM->GetCurrentStageName() + ".json");
-
-	CameraManager::SetIsScreenDivision(true);
-
-	const int camNum = (int)CameraManager::AllCameras().size();
-
-	for (int i = 0; i < camNum; i++) {
-		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
-	}
 }
 
 PlayScene::~PlayScene()

@@ -13,14 +13,14 @@ public:
 	void SetValue(float* value, float valueMin, float valueMax, float dispNum);
 
 private:
-	int charaIndex;
+	int m_CharaIndex;
 
-	float* m_Value;
+	float* m_pValue;
 	float m_ValueMin;
 	float m_ValueMax;
 	float m_DispNum;
 
 	Vector2 m_DiffSize;
 
-	bool needRelocation;
+	bool m_NeedRelocation;
 };

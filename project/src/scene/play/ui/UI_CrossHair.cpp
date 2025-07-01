@@ -1,20 +1,13 @@
 #include "UI_CrossHair.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/common/camera/CameraManager.h"
-#include "src/util/screen/ScreenManager.h"
+#include "src/util/ui/UI_Manager.h"
 
 UI_CrossHair::UI_CrossHair(const RectTransform& trs, int index)
 {
-	charaIndex = index;
-
-	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
-	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
-
-	RectTransform rectTrs = trs;
-	rectTrs.anchor.SetBegin(beginPos);
-	rectTrs.anchor.SetEnd(endPos);
-
-	SetTransform(rectTrs);
+	m_CharaIndex = index;
+	SetTransform(trs);
+	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
 
 	SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eRight);
 
@@ -24,7 +17,7 @@ UI_CrossHair::UI_CrossHair(const RectTransform& trs, int index)
 	hCrossHairOutSide = -1;
 	hCrossHairOutSideBack = -1;
 
-	gauge = Gauge();
+	m_Gauge = Gauge();
 }
 
 UI_CrossHair::~UI_CrossHair()
@@ -45,10 +38,7 @@ UI_CrossHair::~UI_CrossHair()
 void UI_CrossHair::Update()
 {
 	// 画面分割数切り替え時にアンカーの位置を更新(デバッグ用)
-	Vector2 beginPos = ScreenManager::GetScreenBeginPos(charaIndex);
-	Vector2 endPos = ScreenManager::GetScreenEndPos(charaIndex);
-	rectTransform->anchor.SetBegin(beginPos);
-	rectTransform->anchor.SetEnd(endPos);
+	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
 
 	UI_Canvas::Update();
 }
@@ -62,14 +52,14 @@ void UI_CrossHair::Draw()
 	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average(), 0.0f, hCrossHairFrame, true);
 	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average(), 0.0f, hCrossHair, true);
 
-	if (value != nullptr)
+	if (m_pValue != nullptr)
 	{
-		float norm = *value / valueMax;
+		float norm = *m_pValue / m_ValueMax;
 
-		if (isDispMode)
-			gauge.DrawRectRotaGraphGauge(globalTrs.position, norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, scrollType);
+		if (m_IsDispMode)
+			m_Gauge.DrawRectRotaGraphGauge(globalTrs.position, norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, m_ScrollType);
 		else
-			gauge.DrawRectRotaGraphGauge(globalTrs.position, 1.0f - norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, scrollType);
+			m_Gauge.DrawRectRotaGraphGauge(globalTrs.position, 1.0f - norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, m_ScrollType);
 	}
 }
 
@@ -105,13 +95,13 @@ void UI_CrossHair::SetHandle_CrossHairOutSideBack(const std::string& path)
 	hCrossHairOutSideBack = ResourceLoader::LoadGraph(path);
 }
 
-void UI_CrossHair::SetScroll(float* value, float min, float max, Gauge::ScrollType scroll, bool dispMode) {
+void UI_CrossHair::SetScroll(float* m_Value, float min, float max, Gauge::ScrollType scroll, bool dispMode) {
 
-	this->value = value;
-	valueMin = min;
-	valueMax = max;
+	this->m_pValue = m_Value;
+	m_ValueMin = min;
+	m_ValueMax = max;
 
-	isDispMode = dispMode;
+	m_IsDispMode = dispMode;
 
-	scrollType = scroll;
+	m_ScrollType = scroll;
 }

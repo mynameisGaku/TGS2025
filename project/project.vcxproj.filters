@@ -400,6 +400,9 @@
     <Filter Include="src%28application%29\reference\UI">
       <UniqueIdentifier>{4eb87772-e531-4b19-b103-600cd3d7f22d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\movable_area">
+      <UniqueIdentifier>{5dd55688-be26-45af-ab6f-56c5f0608d54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1328,6 +1331,9 @@
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp">
       <Filter>src%28application%29\scene\play\hint</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\movable\MovableArea.cpp">
+      <Filter>src%28application%29\scene\play\movable_area</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2082,6 +2088,9 @@
     </ClInclude>
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h">
       <Filter>src%28application%29\scene\play\hint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\movable\MovableArea.h">
+      <Filter>src%28application%29\scene\play\movable_area</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

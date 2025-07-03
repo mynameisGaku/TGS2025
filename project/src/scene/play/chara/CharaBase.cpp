@@ -30,8 +30,10 @@
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
-#include "src/scene/play/ui/UI_ButtonHint.h"
+
 #include <src/reference/ball/BallRef.h>
+
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
 
 using namespace KeyDefine;
 
@@ -101,6 +103,8 @@ CharaBase::CharaBase()
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
+
+	m_pCharaSpawnPointManager = nullptr;
 
 #if FALSE
 	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
@@ -207,7 +211,9 @@ void CharaBase::Init(std::string tag)
 		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 	}
 
-	m_UI_ButtonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), m_Index);
+	m_UI_ButtonHint = UI_Manager::Find<UI_ButtonHint>("ButtonHint_" + sIndex);
+
+	m_pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
@@ -520,6 +526,18 @@ void CharaBase::HitGroundProcess() {
 	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
 	{
 		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
+	}
+
+	//=== 場外判定 ===
+	if (StageObjectManager::CollCheck_MovableArea(centerPos))
+	{
+		if (m_pCharaSpawnPointManager != nullptr) {
+			CharaSpawnPoint* spawnPoint = m_pCharaSpawnPointManager->Get_Near(transform->position);
+			transform->position = spawnPoint->transform->position;
+			spawnPoint->Use();
+		}
+		else
+			transform->position = Vector3::SetY(CENTER_OFFSET);
 	}
 
 	//=== 地面との判定 ===s
@@ -2327,6 +2345,9 @@ void CharaBase::invincible(const nlohmann::json& argument)
 
 void CharaBase::buttonHintUpdate()
 {
+	if (m_UI_ButtonHint == nullptr)
+		return;
+
 	// ボタンヒント
 	{
 		if (m_CanCatch)

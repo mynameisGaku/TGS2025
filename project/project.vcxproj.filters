@@ -1280,7 +1280,12 @@
     </ClCompile>
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
     <ClCompile Include="src\util\screen\ScreenManager.cpp" />
-    <ClCompile Include="src\reference\match\MatchRef.cpp" />
+    <ClCompile Include="src\reference\match\MatchRef.cpp">
+      <Filter>src%28application%29\reference\match</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameOver.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2011,6 +2016,9 @@
     <ClInclude Include="src\util\screen\ScreenManager.h" />
     <ClInclude Include="src\reference\match\MatchRef.h">
       <Filter>src%28application%29\reference\match</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameOver.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

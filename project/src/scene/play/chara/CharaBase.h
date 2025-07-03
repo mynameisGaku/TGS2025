@@ -25,6 +25,7 @@ class Trail3D;
 
 class UI_CrossHair;
 class UI_HitPoint_Icon;
+class UI_GameOver;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -337,6 +338,7 @@ private:
 	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
 	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
 	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
+	UI_GameOver* // 頑張れ～
 
 	void land();
 

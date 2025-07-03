@@ -362,6 +362,7 @@
     <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_GameOver.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
@@ -539,6 +540,7 @@
     <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
+    <ClInclude Include="src\scene\play\ui\UI_GameOver.h" />
     <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h" />
     <ClInclude Include="src\scene\play\ui\UI_CrossHair.h" />
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />

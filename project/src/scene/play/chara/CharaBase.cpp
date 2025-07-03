@@ -25,6 +25,7 @@
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
 #include "src/scene/play/tackler/Tackler.h"
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
@@ -484,7 +485,20 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			{
 				m_pStatusTracker->AddDeathCount(1);
 				ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
-				Respawn(Vector3::Zero, Vector3::Zero);
+
+				CharaSpawnPointManager* cspm = FindGameObject<CharaSpawnPointManager>();
+
+				if (cspm == nullptr)
+				{
+					Respawn(Vector3::Zero, Vector3::Zero);
+				}
+				else
+				{
+					CharaSpawnPoint* csp = cspm->Get_Random();
+					Vector3 position = csp->transform->position;
+					Respawn(position, Vector3::Zero);
+					csp->Use();
+				}
 			}
 		}
 	}

@@ -6,6 +6,7 @@
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
 #include "src/scene/play/ui/UI_GameScore.h"
 #include "src/scene/play/ui/UI_MatchTime.h"
+#include "src/scene/play/ui/UI_StartCount.h"
 
 UI_Setter_PlayScene::UI_Setter_PlayScene()
 {
@@ -26,9 +27,13 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_MatchTime* matchTime = new UI_MatchTime(RectTransform(Anchor::Preset::RightDown, Vector2(0.0f, -165.0f)), i - 1);
 		matchTime->SetTag("MatchTime_" + sPlayerNum);
 
+		UI_StartCount* startCount = new UI_StartCount(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i - 1);
+		startCount->SetTag("StartCount_" + sPlayerNum);
+
 		m_UIs[crossHair->GetTag()] = crossHair;
 		m_UIs[hitPointIcon->GetTag()] = hitPointIcon;
 		m_UIs[matchTime->GetTag()] = matchTime;
+		m_UIs[startCount->GetTag()] = startCount;
 	}
 }
 

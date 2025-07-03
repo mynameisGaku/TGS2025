@@ -30,7 +30,6 @@
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
-#include "src/scene/play/ui/UI_StartCount.h"
 #include <src/reference/ball/BallRef.h>
 
 using namespace KeyDefine;

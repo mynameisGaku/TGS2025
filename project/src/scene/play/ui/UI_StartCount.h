@@ -17,4 +17,8 @@ public:
 private:
 	MatchManager* m_pMatchManager;
 	int m_CharaIndex;
+	int m_Count;
+	float m_Scale;
+
+	bool isStart() const;
 };

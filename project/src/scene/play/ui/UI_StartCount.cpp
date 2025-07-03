@@ -12,6 +12,8 @@ UI_StartCount::UI_StartCount(const RectTransform& trs, int index)
 {
 	m_pMatchManager = nullptr;
 	m_CharaIndex = index;
+	m_Count = 0;
+	m_Scale = 5.0f;
 
 	SetTransform(trs);
 	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
@@ -26,13 +28,6 @@ void UI_StartCount::Update()
 	// 画面分割数切り替え時にアンカーの位置を更新(デバッグ用)
 	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
 
-	UI_Canvas::Update();
-}
-
-void UI_StartCount::Draw()
-{
-	UI_Canvas::Draw();
-
 	if (m_pMatchManager == nullptr) {
 		m_pMatchManager = FindGameObject<MatchManager>();
 
@@ -42,27 +37,41 @@ void UI_StartCount::Draw()
 
 	float timer = m_pMatchManager->GetReadyTimerSec();
 
-	int count = (int)ceilf(timer);
+	m_Count = (int)ceilf(timer);
+
+	UI_Canvas::Update();
+}
+
+void UI_StartCount::Draw()
+{
+	UI_Canvas::Draw();
 
 	std::string text;
 
-	if (count == 0)
-	{ 
-		text = "行け！";
+	if (m_Count > 0)
+	{
+		text = StringUtil::FormatToString("%d", m_Count).c_str();
 	}
 	else
 	{
-		text = StringUtil::FormatToString("%d", count).c_str();
+		text = "行け！";
 	}
 
-	int width = GetDrawStringWidth(text.c_str(), text.length());
+	int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * m_Scale);
 
 	const Vector2 adjust = Vector2(0, 0);
 	const RectTransform globalTrs = rectTransform->Global();
 
-	DrawFormatString(
+	DrawExtendFormatString(
 		globalTrs.position.x - width * 0.5f,	// 中央揃え
 		globalTrs.position.y - adjust.y * 0.5f,
+		m_Scale,
+		m_Scale,
 		GetColor(255, 255, 255),
 		text.c_str());
+}
+
+bool UI_StartCount::isStart() const
+{
+	return m_Count <= 0;
 }

@@ -346,3 +346,19 @@ float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const Co
 	p1 = s1.getPoint(t1);
 	return (p2 - p1).GetLength();
 }
+
+float ColFunction::CollCheck_PointToAABB(const Vector3& point, const ColDefine::AABB& aabb)
+{
+
+	FLOAT SqLen = 0;   // 長さのべき乗の値を格納
+	int i;
+	for (i = 0; i < 3; i++)
+	{
+		// 各軸で点が最小値以下もしくは最大値以上ならば、差を考慮
+		if (point.Get(i) < aabb.p.Get(i) - aabb.hl.Get(i))  // i=0はX、1はY、2はZの意味です
+			SqLen += (point.Get(i) - aabb.p.Get(i) - aabb.hl.Get(i)) * (point.Get(i) - aabb.p.Get(i) - aabb.hl.Get(i));
+		if (point.Get(i) > aabb.p.Get(i) + aabb.hl.Get(i))
+			SqLen += (point.Get(i) - aabb.p.Get(i) + aabb.hl.Get(i)) * (point.Get(i) - aabb.p.Get(i) + aabb.hl.Get(i));
+	}
+	return sqrt(SqLen);
+}

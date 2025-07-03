@@ -32,6 +32,8 @@
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
 #include <src/reference/ball/BallRef.h>
 
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
+
 using namespace KeyDefine;
 
 namespace
@@ -213,6 +215,8 @@ void CharaBase::Init(std::string tag)
 		ui_HitPoint_Icon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
 		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 	}
+
+	m_pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 	
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
@@ -523,6 +527,19 @@ void CharaBase::HitGroundProcess() {
 	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
 	{
 		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
+	}
+
+	//=== 移動可能範囲との判定 ===
+	
+	if (StageObjectManager::CollCheck_MovableArea(centerPos))
+	{
+		if (m_pCharaSpawnPointManager != nullptr) {
+			CharaSpawnPoint* spawnPoint = m_pCharaSpawnPointManager->Get_Near(transform->position);
+			transform->position = spawnPoint->transform->position;
+			spawnPoint->Use();
+		}
+		else
+			transform->position = Vector3::SetY(CENTER_OFFSET);
 	}
 
 	//=== 地面との判定 ===s

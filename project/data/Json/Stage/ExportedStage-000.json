@@ -1,0 +1,1130 @@
+{
+  "Objects": [
+    {
+      "Name": "MovableArea",
+      "Type": "Cube",
+      "Tag": "MovableArea",
+      "Position": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 100.0,
+        "y": 25.0,
+        "z": 65.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "MovableArea": {
+
+      },
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (26)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -329.999939,
+        "y": 600.0,
+        "z": -1050.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 12.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (11)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": 1050.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 9.0,
+        "y": 0.99,
+        "z": 2.8
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (28)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -1336.99988,
+        "y": 245.0,
+        "z": -50.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.487470329
+      },
+      "Scale": {
+        "x": 15.4,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (33)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": -50.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 15.0,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (15)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -4730.0,
+        "y": 600.0,
+        "z": -50.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 4.0,
+        "y": 12.0,
+        "z": 68.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (12)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 2560.0,
+        "y": 183.0,
+        "z": -1409.99988
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.693264,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.41,
+        "y": 3.0,
+        "z": 2.74
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (07)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -229.999924,
+        "y": 600.0,
+        "z": -1550.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.57079637,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (22)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -582.999939,
+        "y": 183.0,
+        "z": 519.9997
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.41,
+        "y": 3.0,
+        "z": 2.74
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (14)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 1177.0,
+        "y": 245.0,
+        "z": -2584.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.795715
+      },
+      "Scale": {
+        "x": 15.4,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (29)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": -1150.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 9.0,
+        "y": 0.99,
+        "z": 2.8
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (08)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 3390.00024,
+        "y": 183.0,
+        "z": 890.0001
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.8976228,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.41,
+        "y": 3.0,
+        "z": 2.74
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (24)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -329.999939,
+        "y": 600.0,
+        "z": 950.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 12.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (20)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": 1750.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 15.0,
+        "y": 12.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (21)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 516.000061,
+        "y": 183.0,
+        "z": -698.999756
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.41,
+        "y": 3.0,
+        "z": 2.74
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (23)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -1036.99988,
+        "y": 245.0,
+        "z": 2484.00049
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.487470329
+      },
+      "Scale": {
+        "x": 15.4,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (10)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 4870.0,
+        "y": 600.0,
+        "z": -50.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 4.0,
+        "y": 12.0,
+        "z": 68.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (16)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -1036.99988,
+        "y": 245.0,
+        "z": -2584.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.487470329
+      },
+      "Scale": {
+        "x": 15.4,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (17)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -229.999924,
+        "y": 600.0,
+        "z": 1450.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.57079637,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (9)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 1477.0,
+        "y": 245.0,
+        "z": -50.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.795715
+      },
+      "Scale": {
+        "x": 15.4,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (25)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 1177.0,
+        "y": 245.0,
+        "z": 2484.00049
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 5.795715
+      },
+      "Scale": {
+        "x": 15.4,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 300.0,
+        "y": 1.0,
+        "z": 300.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (34)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 370.000061,
+        "y": 600.0,
+        "z": 1450.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.57079637,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (5)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": -1850.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 15.0,
+        "y": 12.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (32)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -3259.99976,
+        "y": 183.0,
+        "z": -1050.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.8976228,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.41,
+        "y": 3.0,
+        "z": 2.74
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (31)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 470.000061,
+        "y": 600.0,
+        "z": 950.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 12.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (35)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": -2550.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 9.0,
+        "y": 0.99,
+        "z": 12.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (19)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -2538.0,
+        "y": 183.0,
+        "z": 1288.99915
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 5.693264,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 7.41,
+        "y": 3.0,
+        "z": 2.74
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (27)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 370.000061,
+        "y": 600.0,
+        "z": -1550.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.57079637,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (06)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": -3250.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 100.0,
+        "y": 12.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (30)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 470.000061,
+        "y": 600.0,
+        "z": -1050.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 12.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (18)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": 3150.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 100.0,
+        "y": 12.0,
+        "z": 4.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (13)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 70.00008,
+        "y": 600.0,
+        "z": 2450.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 9.0,
+        "y": 0.99,
+        "z": 12.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "CharaSpawnPoint (2)",
+      "Type": "CharaSpawnPoint",
+      "Tag": "CharaSpawnPoint",
+      "Position": {
+        "x": 104.0,
+        "y": 649.500061,
+        "z": -2549.99951
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": {
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWNER_POSITION": null,
+        "SPAWNER_NAME": null
+      },
+      "BallSpawnerDesc": null,
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (18)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 0.0,
+        "y": 100.0,
+        "z": 2492.00049
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 0.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
+        "SPAWN_AMOUNT_ONCE_MAX": 0,
+        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "CharaSpawnPoint (1)",
+      "Type": "CharaSpawnPoint",
+      "Tag": "CharaSpawnPoint",
+      "Position": {
+        "x": -3655.789,
+        "y": 50.0,
+        "z": -1281.16687
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": {
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWNER_POSITION": null,
+        "SPAWNER_NAME": null
+      },
+      "BallSpawnerDesc": null,
+      "IsCollision": false
+    },
+    {
+      "Name": "CharaSpawnPoint",
+      "Type": "CharaSpawnPoint",
+      "Tag": "CharaSpawnPoint",
+      "Position": {
+        "x": 3827.18115,
+        "y": 50.0,
+        "z": 1219.84253
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": {
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWNER_POSITION": null,
+        "SPAWNER_NAME": null
+      },
+      "BallSpawnerDesc": null,
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (16)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 0.0,
+        "y": 723.0,
+        "z": -29.9995422
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 0.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
+        "SPAWN_AMOUNT_ONCE_MAX": 0,
+        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (17)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 0.0,
+        "y": 100.0,
+        "z": -2576.99976
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 0.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
+        "SPAWN_AMOUNT_ONCE_MAX": 0,
+        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (19)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -2820.0,
+        "y": 100.0,
+        "z": 1650.00073
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 0.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
+        "SPAWN_AMOUNT_ONCE_MAX": 0,
+        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "CharaSpawnPoint (3)",
+      "Type": "CharaSpawnPoint",
+      "Tag": "CharaSpawnPoint",
+      "Position": {
+        "x": 63.0,
+        "y": 649.500061,
+        "z": 2410.00049
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": {
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWNER_POSITION": null,
+        "SPAWNER_NAME": null
+      },
+      "BallSpawnerDesc": null,
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (15)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 0.0,
+        "y": 136.0,
+        "z": -29.9995422
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 0.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
+        "SPAWN_AMOUNT_ONCE_MAX": 0,
+        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (20)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 2817.0,
+        "y": 100.0,
+        "z": -1797.99951
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 0.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
+        "SPAWN_AMOUNT_ONCE_MAX": 0,
+        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    }
+  ]
+}

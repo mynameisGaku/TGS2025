@@ -62,6 +62,8 @@ namespace StageObjectManager {
 	bool CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
 	bool CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push = nullptr);
 
+	bool CollCheck_MovableArea(const Vector3& point);
+
 	/// <summary>
 	/// 描画用モデルと当たり判定用モデルを切り替える
 	/// </summary>

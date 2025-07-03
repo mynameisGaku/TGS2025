@@ -48,7 +48,7 @@
 
   "GameStartCountMaxSec": 5.0,
   "GameEndCountMaxSec": 5.0,
-  "DefaultStageName": "Stage_3",
+  "DefaultStageName": "ExportedStage-000",
   "StageNames": [
     {
       "Name": "Stage_0"
@@ -64,6 +64,9 @@
     },
     {
       "Name": "TestStage"
+    },
+    {
+      "Name": "ExportedStage-000"
     }
   ]
 }

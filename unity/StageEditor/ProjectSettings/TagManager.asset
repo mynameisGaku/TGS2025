@@ -7,6 +7,8 @@ TagManager:
   - BallSpawner
   - CharaSpawnPoint
   - CharaSpawner
+  - MovableArea
+  - MoveableArea
   layers:
   - Default
   - TransparentFX

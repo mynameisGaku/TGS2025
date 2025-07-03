@@ -11,6 +11,7 @@
 
 class CharaHP;
 class CharaStamina;
+class CharaSpawnPointManager;
 class Ball;
 class BallManager;
 class Physics;
@@ -282,7 +283,6 @@ private:
 	friend class CharaManager;
 	friend class UI_CrossHair;
 
-
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
 	Ball*			m_pHitBall;				// あてられたボールのポインター
@@ -337,6 +337,8 @@ private:
 	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
 	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
 	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
+
+	CharaSpawnPointManager* m_pCharaSpawnPointManager;
 
 	void land();
 

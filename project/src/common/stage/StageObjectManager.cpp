@@ -20,6 +20,10 @@
 #include "src/scene/play/chara/CharaSpawnPoint.h"
 #include "src/scene/play/ball/BallSpawner.h"
 
+// 移動可能範囲
+#include "src/scene/play/movable/MovableArea.h"
+#include "src/common/component/collider/CollisionFunc.h"
+
 using namespace StageDefine;
 
 namespace {
@@ -31,6 +35,7 @@ namespace {
 	std::string* csvFilePath_StageObjModel;	// ステージオブジェクトのモデルデータを持つファイルパス
 
 	std::vector<StageObject*>* stageObjects;	// ステージオブジェクト
+	std::vector<MovableArea*>* movableAreas;
 
 	static unsigned int productionID;	// 製造番号
 	bool canSaveCsv;			// CSVデータを保存できるか
@@ -41,6 +46,9 @@ void StageObjectManager::Init() {
 
 	if (stageObjects == nullptr)
 		stageObjects = new std::vector<StageObject*>();
+
+	if (movableAreas == nullptr)
+		movableAreas = new std::vector<MovableArea*>();
 
 	if (csvFilePath_StageObjData == nullptr)
 		csvFilePath_StageObjData = new std::string;
@@ -84,6 +92,12 @@ void StageObjectManager::Update() {
 			itr->Update();
 	}
 
+	if (movableAreas != nullptr)
+	{
+		for (auto area : *movableAreas)
+			area->Update();
+	}
+
 #ifdef IMGUI
 	UpdateImGui();
 #endif // IMGUI
@@ -105,6 +119,12 @@ void StageObjectManager::Draw() {
 			itr->Draw();
 	}
 
+	if (movableAreas != nullptr)
+	{
+		for (auto area : *movableAreas)
+			area->Draw();
+	}
+
 #else
 
 	for (auto itr : *stageObjects)
@@ -122,6 +142,7 @@ void StageObjectManager::Release() {
 	EraseAll();
 
 	PtrUtil::SafeDelete(stageObjects);
+	PtrUtil::SafeDelete(movableAreas);
 	PtrUtil::SafeDelete(csvFilePath_StageObjData);
 	PtrUtil::SafeDelete(csvFilePath_StageObjModel);
 }
@@ -305,6 +326,24 @@ bool StageObjectManager::CollCheckCapsule_Horizon(const Vector3& begin, const Ve
 	return hitFlag;
 }
 
+bool StageObjectManager::CollCheck_MovableArea(const Vector3& point)
+{
+	Vector3 nearestPos = Vector3::Zero;
+	float nearestDist = 0.0f;
+	bool isHit = false;
+
+	for (const auto& obj : *movableAreas) {
+
+		if (not obj->IsTag("MovableArea"))
+			continue;
+
+		if (ColFunction::CollCheck_PointToAABB(point, obj->GetAABB()) > 0.0f)
+			isHit = true;
+	}
+
+	return isHit;
+}
+
 void StageObjectManager::LoadToCsv(const std::string& filename) {
 
 	if (stageObjects == nullptr)
@@ -411,6 +450,18 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 
 			// 登録
 			AddBallSpawner(info.hModel, tr, bdesc);
+		}
+		else if (obj.contains("MovableArea") && !obj.at("MovableArea").is_null())
+		{
+			// MovableArea
+			info.hModel = ResourceLoader::MV1LoadModel("data/model/stage/Cube.mv1");
+			ColDefine::AABB aabb = ColDefine::AABB(tr.position, (tr.scale * 100.0f) * 0.5f);
+			MovableArea* movableArea = new MovableArea(aabb);
+			movableArea->SetModel(info.hModel);
+			movableArea->SetTransform(tr);
+			movableArea->SetTag("MovableArea");
+
+			movableAreas->push_back(movableArea);
 		}
 		else
 		{

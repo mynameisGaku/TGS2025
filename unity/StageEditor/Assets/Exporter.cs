@@ -71,6 +71,15 @@ public class SceneExporterWindow : EditorWindow
                         ballSpawnerDesc = obj.AddComponent<BallSpawnerDesc>();
                     }
                 }
+                else if (obj.tag == "MovableArea")
+                {
+                    meshName = "MovableArea";
+                    ballSpawnerDesc = obj.gameObject.GetComponent<BallSpawnerDesc>();
+                    if (ballSpawnerDesc == null)
+                    {
+                        ballSpawnerDesc = obj.AddComponent<BallSpawnerDesc>();
+                    }
+                }
                 else
                 {
                     meshName = "Unknown";

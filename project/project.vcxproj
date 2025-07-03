@@ -357,6 +357,7 @@
     <ClCompile Include="src\scene\play\force_field\ForceFieldManager.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldSphere.cpp" />
     <ClCompile Include="src\scene\play\match\MatchManager.cpp" />
+    <ClCompile Include="src\scene\play\movable\MovableArea.cpp" />
     <ClCompile Include="src\scene\play\playScene.cpp" />
     <ClCompile Include="src\scene\play\status_tracker\StatusTracker.cpp" />
     <ClCompile Include="src\scene\play\tackler\Tackler.cpp" />
@@ -535,6 +536,7 @@
     <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h" />
     <ClInclude Include="src\scene\play\force_field\ForceFieldSphere.h" />
     <ClInclude Include="src\scene\play\match\MatchManager.h" />
+    <ClInclude Include="src\scene\play\movable\MovableArea.h" />
     <ClInclude Include="src\scene\play\playScene.h" />
     <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h" />
     <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h" />

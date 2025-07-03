@@ -98,6 +98,6 @@ namespace ColDefine {
 		inline float lenY() const { return hl.y * 2.0f; };
 		inline float lenZ() const { return hl.z * 2.0f; };
 
-		inline float len(int i) { return *((&hl.x) + i) * 2.0f; }
+		inline float len(int i) const { return *((&hl.x) + i) * 2.0f; }
 	};
 }

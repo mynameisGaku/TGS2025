@@ -19,6 +19,7 @@ private:
 	int m_CharaIndex;
 	int m_Count;
 	float m_Scale;
+	float m_Time;
 
 	bool isStart() const;
 };

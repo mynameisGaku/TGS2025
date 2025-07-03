@@ -283,6 +283,8 @@ void CharaBase::Init(std::string tag)
 	m_Timeline->SetFunction("SetCanRot", &CharaBase::setCanRot);
 	m_Timeline->SetFunction("SetVelocity", &CharaBase::setVelocity);
 	m_Timeline->SetFunction("ThrowBall", &CharaBase::throwBall);
+	m_Timeline->SetFunction("PlayFootSound", &CharaBase::playFootStepSound);
+	m_Timeline->SetFunction("PlayTinyFootSound", &CharaBase::playTinyFootStepSound);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -637,6 +639,8 @@ void CharaBase::SetBall(Ball* ball)
 	if (m_pBall == nullptr)
 		return;
 
+	playPickupBallSound();
+
 	m_pBall->transform->position = transform->Global().position;
 	m_pBall->transform->rotation = transform->Global().rotation;
 	m_pBall->Reset(m_CharaTag);
@@ -775,6 +779,8 @@ void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float fo
 
 	DropBall(transform->position, BALL_REF.DropForce_Vertical, BALL_REF.DropForce_Horizontal);
 
+	SoundManager::Play("SE_tackle_hit.mp3", "SE_tackle_hit.mp3");
+
 	m_FSM->ChangeState(&CharaBase::StateDamageToDown);
 }
 
@@ -903,6 +909,7 @@ void CharaBase::StateActionIdleToJump(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("ActionIdleToJump");
+		playJumpNormalSound();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -929,6 +936,7 @@ void CharaBase::StateActionIdleToRun(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("ActionIdleToRun");
+		m_Timeline->Play("ActionIdleToRun");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1224,6 +1232,7 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	{
 		m_Animator->Play("FallToCrouch");
 		m_CanTackle = true;
+		playLandingSound();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1262,6 +1271,8 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	{
 		m_Timeline->Play("FallToRoll");
 		m_CanTackle = true;
+		playLandingSound();
+		playLandingRollSound();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1488,6 +1499,7 @@ void CharaBase::StateRunToJump(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Animator->Play("RunToJump");
+		playJumpDashSound();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1700,6 +1712,8 @@ void CharaBase::StateTackle(FSMSignal sig)
 		m_CanRot = false;
 
 		m_Tackler->SetColliderActive(true);
+
+		playTackleSound();
 
 		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
@@ -2141,33 +2155,40 @@ void CharaBase::playThrowSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
-    std::string base = "SE_throw_";
+	std::string base = "SE_throw_";
 	std::string power = "";
 	std::string num = "00";
 	std::string fileType = ".mp3";
 
-    if (m_BallChargeRate < 0.2f)
-    {
-        power += "weak_";
-    }
-    else if (m_BallChargeRate < 0.8f)
-    {
-        power += "normal_";
-    }
-    else
-    {
-        power += "strong_";
-    }
+	std::string impactSoundName = "SE_throw_impact_";
+	std::string impactPower = "normal";
 
-    if (rand < 50)
-    {
-        num = "01";
-    }
+	if (m_BallChargeRate < 0.5f)
+	{
+		power += "weak_";
+	}
+	else if (m_BallChargeRate < 1.0f)
+	{
+		power += "normal_";
+	}
+	else
+	{
+		impactPower = "strong";
+		power += "strong_";
+	}
 
-    std::string soundName = base + power + num + fileType;
+	if (rand < 50)
+	{
+		num = "01";
+	}
+
+	std::string soundName = base + power + num + fileType;
+	std::string soundName2 = impactSoundName + impactPower + fileType;
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
+	if (not SoundManager::IsPlaying(soundName2, soundName2))
+		SoundManager::Play(soundName2, soundName2);
 }
 
 void CharaBase::playGetHitSound()
@@ -2178,9 +2199,17 @@ void CharaBase::playGetHitSound()
 	std::string num = "00";
 	std::string fileType = ".mp3";
 
-	if (rand < 50)
+	if (rand < 33)
+	{
+		num = "00";
+	}
+	else if (rand < 66)
 	{
 		num = "01";
+	}
+	else
+	{
+		num = "02";
 	}
 
 	std::string soundName = base + num + fileType;
@@ -2208,10 +2237,6 @@ void CharaBase::playGetHitSound()
 
 }
 
-void CharaBase::playFootStepSound()
-{
-}
-
 void CharaBase::playCatchBallSound()
 {
 	int rand = Random.GetIntRange(0, 100);
@@ -2224,28 +2249,28 @@ void CharaBase::playCatchBallSound()
 	{
 		num = "00";
 	}
-    else if (rand < 66)
-    {
-        num = "01";
-    }
-    else
-    {
-        num = "02";
-    }
+	else if (rand < 66)
+	{
+		num = "01";
+	}
+	else
+	{
+		num = "02";
+	}
 
 	std::string base2 = "SE_catch_success_";
 	std::string num2 = "";
-    if (rand < 50)
-    {
-        num2 = "00";
-    }
-    else
-    {
-        num2 = "01";
-    }
+	if (rand < 50)
+	{
+		num2 = "00";
+	}
+	else
+	{
+		num2 = "01";
+	}
 
 	std::string soundName = base + num + fileType;
-    std::string soundName2 = base2 + num2 + fileType;
+	std::string soundName2 = base2 + num2 + fileType;
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
@@ -2255,10 +2280,99 @@ void CharaBase::playCatchBallSound()
 
 void CharaBase::playPickupBallSound()
 {
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_pickup_";
+	std::string num = "";
+	std::string fileType = ".mp3";
+
+	if (rand < 33)
+	{
+		num = "00";
+	}
+	else if (rand < 66)
+	{
+		num = "01";
+	}
+	else
+	{
+		num = "02";
+	}
+
+	std::string soundName = base + num + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
 }
 
 void CharaBase::playVacuumSound()
 {
+}
+
+void CharaBase::playJumpNormalSound()
+{
+	std::string base = "SE_jump_normal";
+	std::string fileType = ".mp3";
+
+	std::string soundName = base + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playJumpDashSound()
+{
+	std::string base = "SE_jump_dash";
+	std::string fileType = ".mp3";
+
+	std::string soundName = base + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playLandingSound()
+{
+	std::string base = "SE_landing";
+	std::string fileType = ".mp3";
+
+	std::string soundName = base + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playLandingRollSound()
+{
+	std::string base = "SE_landing_roll";
+	std::string fileType = ".mp3";
+
+	std::string soundName = base + fileType;
+
+	if (not SoundManager::IsPlaying(soundName, soundName))
+		SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playTackleSound()
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_landing_roll";
+	std::string fileType = ".mp3";
+	std::string num = "";
+
+	if (rand < 50)
+	{
+		num = "00";
+	}
+	else
+	{
+		num = "01";
+	}
+
+	std::string soundName = base + fileType;
+
+	SoundManager::Play(soundName, soundName);
 }
 
 void CharaBase::setAnimationSpeed(const nlohmann::json& argument)
@@ -2323,6 +2437,66 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 
 void CharaBase::invincible(const nlohmann::json& argument)
 {
+}
+
+void CharaBase::playFootStepSound(const nlohmann::json& argument)
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_footsound_";
+	std::string num = "00";
+	std::string fileType = ".mp3";
+
+	if (rand < 25)
+	{
+		num = "00";
+	}
+	else if (rand < 50)
+	{
+		num = "01";
+	}
+	else if (rand < 75)
+	{
+		num = "02";
+	}
+	else
+	{
+		num = "03";
+	}
+
+	std::string soundName = base + num + fileType;
+
+	SoundManager::Play(soundName, soundName);
+}
+
+void CharaBase::playTinyFootStepSound(const nlohmann::json& argument)
+{
+	int rand = Random.GetIntRange(0, 100);
+
+	std::string base = "SE_tiny_footsound_";
+	std::string num = "00";
+	std::string fileType = ".mp3";
+
+	if (rand < 25)
+	{
+		num = "00";
+	}
+	else if (rand < 50)
+	{
+		num = "01";
+	}
+	else if (rand < 75)
+	{
+		num = "02";
+	}
+	else
+	{
+		num = "03";
+	}
+
+	std::string soundName = base + num + fileType;
+
+	SoundManager::Play(soundName, soundName);
 }
 
 void CharaBase::buttonHintUpdate()

@@ -184,6 +184,7 @@
     <None Include="data\Json\Chara\State\ActionIdle.json" />
     <None Include="data\Json\Chara\State\ActionIdleEmote.json" />
     <None Include="data\Json\Chara\State\ActionIdleToJump.json" />
+    <None Include="data\Json\Chara\State\ActionIdleToRun.json" />
     <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json" />
     <None Include="data\Json\Chara\State\AimToThrow.json" />
     <None Include="data\Json\Chara\State\Fall.json" />

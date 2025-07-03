@@ -164,4 +164,10 @@ public:
 	static void RotLimitAssing(float* rot);
 
 	static int CalcList(const std::list<int>& list);
+
+	static void SquareAssing(float* value);
+
+	static void AddIterationAssing(float* value, int iteration);
+
+	static void AddIterationAssingRate(float* value, int iteration, float rate);
 };

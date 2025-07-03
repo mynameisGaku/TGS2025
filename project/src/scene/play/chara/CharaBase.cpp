@@ -30,9 +30,8 @@
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
+#include "src/scene/play/ui/UI_ButtonHint.h"
 #include <src/reference/ball/BallRef.h>
-
-#include "src/scene/play/chara/CharaSpawnPointManager.h"
 
 using namespace KeyDefine;
 
@@ -91,10 +90,6 @@ CharaBase::CharaBase()
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
 
-	m_UI_CrossHair = nullptr;
-	//m_UI_BallChargeMeter = nullptr;
-	m_UI_HitPointIcon = nullptr;
-
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
 
@@ -151,10 +146,6 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_FSM);
 	PtrUtil::SafeDelete(m_SubFSM);
 	PtrUtil::SafeDelete(m_Timeline);
-
-	PtrUtil::SafeDelete(m_UI_CrossHair);
-	//PtrUtil::SafeDelete(m_UI_BallChargeMeter);
-	PtrUtil::SafeDelete(m_UI_HitPointIcon);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
@@ -216,8 +207,8 @@ void CharaBase::Init(std::string tag)
 		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 	}
 
-	m_pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
-	
+	m_UI_ButtonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), m_Index);
+
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
 		{ "mixamorig9:Hips", "HipsTrail" },
@@ -391,6 +382,8 @@ void CharaBase::Update() {
 	HitGroundProcess();
 
 	invincibleUpdate();
+	
+	buttonHintUpdate();
 
 	m_lastUpdatePosition = transform->position;
 }
@@ -527,19 +520,6 @@ void CharaBase::HitGroundProcess() {
 	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
 	{
 		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
-	}
-
-	//=== 移動可能範囲との判定 ===
-	
-	if (StageObjectManager::CollCheck_MovableArea(centerPos))
-	{
-		if (m_pCharaSpawnPointManager != nullptr) {
-			CharaSpawnPoint* spawnPoint = m_pCharaSpawnPointManager->Get_Near(transform->position);
-			transform->position = spawnPoint->transform->position;
-			spawnPoint->Use();
-		}
-		else
-			transform->position = Vector3::SetY(CENTER_OFFSET);
 	}
 
 	//=== 地面との判定 ===s
@@ -1534,6 +1514,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
+		m_IsSliding = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1551,6 +1532,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_IsSliding = false;
 	}
 	break;
 	}
@@ -1568,6 +1550,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	{
 		m_Animator->Play("Slide");
 		m_CanMove = false;
+		m_IsSliding = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1586,6 +1569,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_CanMove = true;
+		m_IsSliding = false;
 	}
 	break;
 	}
@@ -2339,4 +2323,49 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 
 void CharaBase::invincible(const nlohmann::json& argument)
 {
+}
+
+void CharaBase::buttonHintUpdate()
+{
+	// ボタンヒント
+	{
+		if (m_CanCatch)
+		{
+			if(not m_IsCatching)
+				m_UI_ButtonHint->Activate("LeftTrigger");
+			else 
+				m_UI_ButtonHint->PushKey("LeftTrigger");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("LeftTrigger");
+
+		if (m_CanTackle)
+			m_UI_ButtonHint->Activate("ButtonB");
+		else
+			m_UI_ButtonHint->Deactivate("ButtonB");
+
+		if (m_CanThrow)
+		{
+			if (not m_IsCharging)
+				m_UI_ButtonHint->Activate("RightTrigger");
+			else
+				m_UI_ButtonHint->PushKey("RightTrigger");
+
+			m_UI_ButtonHint->Activate("ButtonX");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("RightTrigger");
+
+		if (m_IsLanding)
+		{
+			m_UI_ButtonHint->Activate("ButtonA");
+
+			if (not m_IsSliding)
+				m_UI_ButtonHint->Activate("LeftShoulder");
+			else
+				m_UI_ButtonHint->PushKey("LeftShoulder");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("ButtonA");
+	}
 }

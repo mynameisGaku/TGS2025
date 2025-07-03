@@ -14,6 +14,7 @@
 
 // ◇デバッグ
 #include "src/util/debug/imgui/imGuiManager.h"
+#include <src/util/file/resource_loader/resourceLoader.h>
 
 using namespace KeyDefine;
 
@@ -28,6 +29,13 @@ namespace {
 	std::list<InputData> keyCodes;	// 直近に押されたキー情報を保持する
 
 	InputRef* pRef;
+
+	struct BUTTON_IMAGE
+	{
+		int hImage = -1;
+		int hPushImage = -1;
+	};
+	std::unordered_map<std::string, BUTTON_IMAGE>* pButtonImageMap;
 }
 
 void InputManager::Init() {
@@ -44,21 +52,55 @@ void InputManager::Init() {
 	pRef = &InputRef::Inst();
 	pRef->Load(true);
 
+	pButtonImageMap = new std::unordered_map<std::string, BUTTON_IMAGE>;
+
+	// 画像読み込み & マップ登録
+	const std::string image_path	= "data/Img/UI/ButtonHint/";
+	std::string push				= "_Push";
+	std::string device_type_str		= "None";
+	std::string file_extension		= ".png";
+	for (auto& phys : pRef->PhysicalKeys)
+	{
+		std::string key = phys.KeyName;
+
+		BUTTON_IMAGE button;
+		KeyDefine::DeviceType device = EnumUtil::ToEnum(phys.DeviceName, KeyDefine::DeviceType::None);
+
+		switch (device)
+		{
+		case KeyDefine::DeviceType::Key:
+			device_type_str = "Key/";
+			break;
+		case KeyDefine::DeviceType::Pad:
+			device_type_str = "Pad/";
+			break;
+		case KeyDefine::DeviceType::Mouse:
+			device_type_str = "Mouse/";
+			break;
+		}
+
+		std::string hImagePath = image_path + device_type_str + phys.KeyName + file_extension;
+		std::string hPushImagePath = image_path + device_type_str + phys.KeyName + push + file_extension;
+		button.hImage = ResourceLoader::LoadGraph(hImagePath);
+		button.hPushImage = ResourceLoader::LoadGraph(hPushImagePath);
+		(*pButtonImageMap)[key] = button;
+	}
+
 	//==========================================================================================
 	// ▼仮想ボタンを割り当てる
 
 	if (keyList == nullptr) {
 		keyList = new std::unordered_map<std::string, std::vector<KeyCode>>();
 
-		auto& key = (*keyList);
 		for (auto& vir : pRef->VirtualKeys)
 		{
 			std::vector<KeyCode> codes;
 			for (auto& keyparam : vir.KeyParams)
 			{
-				codes.push_back(EnumUtil::ConvertFromString(keyparam, KeyCode::None));
+				KeyCode e = EnumUtil::ToEnum(keyparam, KeyCode::None);
+				codes.push_back(e);
 			}
-			key[vir.KeyName] = codes;
+			(*keyList)[vir.KeyName] = codes;
 		}
 	}
 
@@ -465,6 +507,19 @@ Vector3 InputManager::AnalogStick(int padNumber) {
 	if (analog.GetLength() > 1.0f) analog = analog.Normalize();	// 1を超えないようにリミッターをかける
 
 	return analog;
+}
+
+std::pair<int, int> InputManager::GetImagePair(const KeyDefine::KeyCode& keyCode)
+{
+	return GetImagePair(EnumUtil::ToString(keyCode));
+}
+
+std::pair<int, int> InputManager::GetImagePair(const std::string& keyName)
+{
+	std::pair<int, int> ret{};
+	ret.first = (*pButtonImageMap)[keyName].hImage;
+	ret.second = (*pButtonImageMap)[keyName].hPushImage;
+	return ret;
 }
 
 #ifdef _DEBUG

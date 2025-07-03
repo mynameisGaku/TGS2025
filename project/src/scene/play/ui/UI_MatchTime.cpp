@@ -40,7 +40,8 @@ void UI_MatchTime::Draw()
 			return;
 	}
 
-	std::string text = StringUtil::FormatToString("Žc‚èŽžŠÔ:%0.2f", m_pMatchManager->GetPlayTimeMaxSec() - m_pMatchManager->GetPlayTimeSec()).c_str();
+	float matchTime = m_pMatchManager->GetPlayTimeMaxSec() - m_pMatchManager->GetPlayTimeSec();
+	std::string text = StringUtil::FormatToString("Žc‚èŽžŠÔ:%0.2f", matchTime).c_str();
 	int width = GetDrawStringWidth(text.c_str(), text.length());
 
 	const Vector2 adjust = Vector2(0, 0);
@@ -53,9 +54,15 @@ void UI_MatchTime::Draw()
 		globalTrs.position.y + adjust.y * 0.5f,
 		GetColor(120, 120, 120), true);
 
+	uint32_t color = 0xffffff;
+	if (matchTime < 10)
+		color = 0xff0000;
+	else if (matchTime < 60)
+		color = 0xffff00;
+
 	DrawFormatString(
 		globalTrs.position.x - width,
 		globalTrs.position.y - adjust.y * 0.5f,
-		GetColor(255, 255, 255),
+		color,
 		text.c_str());
 }

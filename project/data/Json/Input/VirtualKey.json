@@ -87,6 +87,10 @@
 		{
 			"KeyName": "AnyKey",
 			"KeyParams": [ "Z", "Space", "Enter", "ButtonA", "ButtonB", "ButtonX", "ButtonY" ]
+		},
+		{
+			"KeyName": "Reload",
+			"KeyParams": [ "R" ]
 		}
 	]
 }

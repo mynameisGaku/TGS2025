@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <stdarg.h>
+#include <Windows.h>
 
 class StringUtil
 {
@@ -37,5 +38,18 @@ public:
 		va_end(valist);
 
 		return static_cast<std::string>(buffer);
+	}
+
+	static std::string UTF8ToShiftJis(std::string data)
+	{
+		wchar_t str2[512];
+		char sjis[512];
+
+		//UTF-8‚©‚çShift-JIS‚É•ÏŠ·
+		MultiByteToWideChar(CP_UTF8, 0, data.c_str(), strlen(data.c_str()) + size_t(1), str2, MAX_PATH);
+		WideCharToMultiByte(CP_ACP, 0, str2, sizeof(str2) / sizeof(str2[0]), sjis, sizeof(sjis), NULL, NULL);
+
+		return sjis;
+
 	}
 };

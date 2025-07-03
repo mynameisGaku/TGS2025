@@ -198,6 +198,11 @@ int MatchManager::GetWinPointMax()
     return m_GameData.m_WinPointMax;
 }
 
+float MatchManager::GetReadyTimerSec()
+{
+    return m_ReadyEndCounterSec;
+}
+
 std::vector<std::pair<int, int>> MatchManager::GetRanking() const {
 
 	std::vector<std::pair<int, int>> ranking;

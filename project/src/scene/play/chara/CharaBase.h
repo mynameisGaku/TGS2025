@@ -8,6 +8,7 @@
 
 #include "src/util/math/Vector2.h"
 #include "src/util/alarm/Alarm.h"
+#include <src/scene/play/ui/UI_ButtonHint.h>
 
 class CharaHP;
 class CharaStamina;
@@ -23,9 +24,6 @@ class Timeline;
 class StatusTracker;
 class EffectBase;
 class Trail3D;
-
-class UI_CrossHair;
-class UI_HitPoint_Icon;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -333,10 +331,9 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
+	bool			m_IsSliding = false;
 
-	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
-	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
-	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
+	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
 
 	CharaSpawnPointManager* m_pCharaSpawnPointManager;
 
@@ -348,6 +345,8 @@ private:
 	void catchUpdate();
 	void jumpUpdate();
 	void tackleUpdate();
+
+	void buttonHintUpdate();
 
 	void getHit(Ball* hit);
 

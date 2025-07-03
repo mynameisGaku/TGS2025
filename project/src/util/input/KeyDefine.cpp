@@ -29,9 +29,9 @@ void KeyDefine::Init() {
     for (auto& phys : pRef->PhysicalKeys)
     {
         DeviceType device{};
-        device = EnumUtil::ConvertFromString(phys.DeviceName, DeviceType::None);
+        device = EnumUtil::ToEnum(phys.DeviceName, DeviceType::None);
         KeyCode keyCode{};
-        keyCode = EnumUtil::ConvertFromString(phys.KeyName, KeyCode::None);
+        keyCode = EnumUtil::ToEnum(phys.KeyName, KeyCode::None);
         int* param = new int{ -1 };
         *param = phys.KeyParam;
         key[keyCode] = InputData(param, keyCode, device);

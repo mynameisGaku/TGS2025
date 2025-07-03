@@ -8,6 +8,15 @@
     }
   ],
 
+  "Languages": [
+    {
+      "lang": "jp"
+    },
+    {
+      "lang": "en"
+    }
+  ],
+
   "GameModeDescs": [
     {
       "GameModeName": "1v1",
@@ -41,7 +50,7 @@
     },
     {
       "GameModeName": "TimeTest",
-      "PlayTimeMaxSec": 1,
+      "PlayTimeMaxSec": 15,
       "WinPointMax": 99999999
     }
   ],

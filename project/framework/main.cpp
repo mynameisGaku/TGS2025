@@ -43,6 +43,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include <src/reference/game/GameRef.h>
 #include "src/reference/input/InputRef.h"
 #include <src/util/time/GameTime.h>
+#include <src/reference/ui/UI_ButtonHintRef.h>
 
 #define CoGVersion (2.2)
 
@@ -187,6 +188,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	wSetting.Destroy();
 	GTime.Destroy();
 	InputRef::Inst().Destroy();
+	UI_ButtonHintRef::Inst().Destroy();
 
 #ifdef IMGUI
 

@@ -21,6 +21,10 @@ public:
 	void AddUserScore(const std::string& teamName, int id, int score, int backColor);
 
 private:
+
+	void drawTotalScore(const Vector2 position);
+	void drawUserScores();
+
 	std::unordered_map<std::string, int> m_TotalScores;
 	std::unordered_map<std::string, int> m_BackColors;
 

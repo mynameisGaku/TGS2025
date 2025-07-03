@@ -814,10 +814,10 @@
       },
       "CharaSpawnPointDesc": null,
       "BallSpawnerDesc": {
-        "INTERVAL_SEC": 0.0,
-        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
-        "SPAWN_AMOUNT_ONCE_MAX": 0,
-        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
         "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
         "SPAWN_AMOUNT_INITIAL": 0,
         "SPAWN_RANGE": {
@@ -916,10 +916,10 @@
       },
       "CharaSpawnPointDesc": null,
       "BallSpawnerDesc": {
-        "INTERVAL_SEC": 0.0,
-        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
-        "SPAWN_AMOUNT_ONCE_MAX": 0,
-        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
         "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
         "SPAWN_AMOUNT_INITIAL": 0,
         "SPAWN_RANGE": {
@@ -996,10 +996,10 @@
       },
       "CharaSpawnPointDesc": null,
       "BallSpawnerDesc": {
-        "INTERVAL_SEC": 0.0,
-        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
-        "SPAWN_AMOUNT_ONCE_MAX": 0,
-        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
         "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
         "SPAWN_AMOUNT_INITIAL": 0,
         "SPAWN_RANGE": {
@@ -1067,10 +1067,10 @@
       },
       "CharaSpawnPointDesc": null,
       "BallSpawnerDesc": {
-        "INTERVAL_SEC": 0.0,
-        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
-        "SPAWN_AMOUNT_ONCE_MAX": 0,
-        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
         "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
         "SPAWN_AMOUNT_INITIAL": 0,
         "SPAWN_RANGE": {
@@ -1107,10 +1107,10 @@
       },
       "CharaSpawnPointDesc": null,
       "BallSpawnerDesc": {
-        "INTERVAL_SEC": 0.0,
-        "INTERVAL_SEC_RANDOM_RANGE": 0.0,
-        "SPAWN_AMOUNT_ONCE_MAX": 0,
-        "SPAWN_AMOUNT_ONCE_MIN": 0,
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
         "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
         "SPAWN_AMOUNT_INITIAL": 0,
         "SPAWN_RANGE": {

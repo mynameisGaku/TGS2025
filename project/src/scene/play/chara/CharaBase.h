@@ -360,10 +360,14 @@ private:
 	//=== サウンド再生 ===
 	void playThrowSound();
 	void playGetHitSound();
-	void playFootStepSound();
 	void playCatchBallSound();
 	void playPickupBallSound();
 	void playVacuumSound();
+	void playJumpNormalSound();
+	void playJumpDashSound();
+	void playLandingSound();
+	void playLandingRollSound();
+	void playTackleSound();
 
 	//=== タイムライン用 ===
 	void setAnimationSpeed(const nlohmann::json& argument);
@@ -375,4 +379,6 @@ private:
 	void setVelocity(const nlohmann::json& argument);
 	void throwBall(const nlohmann::json& argument);
 	void invincible(const nlohmann::json& argument);
+	void playFootStepSound(const nlohmann::json& argument);
+	void playTinyFootStepSound(const nlohmann::json& argument);
 };

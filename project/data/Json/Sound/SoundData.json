@@ -54,20 +54,44 @@
         },
         {
           "FileName": "footsound_01.mp3",
-          "Name": "footsound_00",
+          "Name": "footsound_01",
           "Volume": 100,
           "IsLoop": false
         },
         {
           "FileName": "footsound_02.mp3",
-          "Name": "footsound_00",
+          "Name": "footsound_02",
           "Volume": 100,
           "IsLoop": false
         },
         {
           "FileName": "footsound_03.mp3",
-          "Name": "footsound_00",
+          "Name": "footsound_03",
           "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_00.mp3",
+          "Name": "tiny_footsound_00",
+          "Volume": 65,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_01.mp3",
+          "Name": "tiny_footsound_01",
+          "Volume": 65,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_02.mp3",
+          "Name": "tiny_footsound_02",
+          "Volume": 65,
+          "IsLoop": false
+        },
+        {
+          "FileName": "footsound_03.mp3",
+          "Name": "tiny_footsound_03",
+          "Volume": 65,
           "IsLoop": false
         },
         {
@@ -79,6 +103,12 @@
         {
           "FileName": "hit_01.mp3",
           "Name": "hit_01",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "hit_02.mp3",
+          "Name": "hit_02",
           "Volume": 200,
           "IsLoop": false
         },
@@ -134,6 +164,78 @@
           "FileName": "throw_weak_01.mp3",
           "Name": "throw_weak_01",
           "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "pickup_00.mp3",
+          "Name": "pickup_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "pickup_01.mp3",
+          "Name": "pickup_01",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "pickup_02.mp3",
+          "Name": "pickup_02",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_impact_normal.mp3",
+          "Name": "throw_impact_normal",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_impact_strong.mp3",
+          "Name": "throw_impact_strong",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "jump_dash.mp3",
+          "Name": "jump_dash",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "jump_normal.mp3",
+          "Name": "jump_normal",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "landing.mp3",
+          "Name": "landing",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "landing_roll.mp3",
+          "Name": "landing_roll",
+          "Volume": 80,
+          "IsLoop": false
+        },
+        {
+          "FileName": "tackle_00.mp3",
+          "Name": "tackle_00",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "tackle_01.mp3",
+          "Name": "tackle_01",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "tackle_hit.mp3",
+          "Name": "tackle_hit",
+          "Volume": 120,
           "IsLoop": false
         }
       ]

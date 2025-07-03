@@ -30,10 +30,8 @@
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
+#include "src/scene/play/ui/UI_ButtonHint.h"
 #include <src/reference/ball/BallRef.h>
-
-#include "src/scene/play/ui/UI_GameTime.h"
-#include "src/scene/play/ui/button_hint/UI_ButtonHint.h"
 
 using namespace KeyDefine;
 
@@ -156,7 +154,6 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_UI_CrossHair);
 	//PtrUtil::SafeDelete(m_UI_BallChargeMeter);
 	PtrUtil::SafeDelete(m_UI_HitPointIcon);
-	PtrUtil::SafeDelete(m_UI_ButtonHint);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
@@ -199,20 +196,26 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
 
-	m_UI_CrossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle), m_Index);
-	m_UI_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
-	m_UI_CrossHair->SetHandle_CrossHair				("data/texture/UI/CrossHair/CrossHair.png");
-	m_UI_CrossHair->SetHandle_CrossHairFrame		("data/texture/UI/CrossHair/CrossHairFrame.png");
-	m_UI_CrossHair->SetHandle_CrossHairOutSide		("data/texture/UI/CrossHair/CrossHairOutSide.png");
-	m_UI_CrossHair->SetHandle_CrossHairOutSideBack	("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+	const std::string sIndex = std::to_string(m_Index + 1) + "P";
 
-	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2::Zero, 0.0f, Vector2::Ones * 2.0f), m_Index);
-	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
-	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+	UI_CrossHair* ui_CrossHair = UI_Manager::Find<UI_CrossHair>("CrossHair_" + sIndex);
+	if (ui_CrossHair != nullptr)
+	{
+		ui_CrossHair->SetHandle_CrossHair("data/texture/UI/CrossHair/CrossHair.png");
+		ui_CrossHair->SetHandle_CrossHairFrame("data/texture/UI/CrossHair/CrossHairFrame.png");
+		ui_CrossHair->SetHandle_CrossHairOutSide("data/texture/UI/CrossHair/CrossHairOutSide.png");
+		ui_CrossHair->SetHandle_CrossHairOutSideBack("data/texture/UI/CrossHair/CrossHairOutSideBack.png");
+		ui_CrossHair->SetScroll(&m_Stamina, 0.0f, m_pStamina->GetMax(), Gauge::ScrollType::eUp, false);
+	}
+
+	UI_HitPoint_Icon* ui_HitPoint_Icon = UI_Manager::Find<UI_HitPoint_Icon>("HitPoint_Icon_" + sIndex);
+	if (ui_HitPoint_Icon != nullptr)
+	{
+		ui_HitPoint_Icon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
+		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+	}
 
 	m_UI_ButtonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), m_Index);
-
-	UI_GameTime* gameTime = new UI_GameTime(RectTransform(Anchor::Preset::RightDown, Vector2(0.0f, -165.0f)), m_Index);
 
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>> frameAndTrailNames = {
@@ -387,40 +390,8 @@ void CharaBase::Update() {
 	HitGroundProcess();
 
 	invincibleUpdate();
-
-	// ボタンヒント
-	{
-		if (m_CanCatch)
-			m_UI_ButtonHint->Activate("LeftTrigger");
-		else
-			m_UI_ButtonHint->Deactivate("LeftTrigger");
-
-		if(m_CanTackle)
-			m_UI_ButtonHint->Activate("ButtonB");
-		else
-			m_UI_ButtonHint->Deactivate("ButtonB");
-
-		if(m_CanThrow)
-		{
-			m_UI_ButtonHint->Activate("RightTrigger");
-			m_UI_ButtonHint->Activate("ButtonX");
-		}
-		else
-			m_UI_ButtonHint->Deactivate("RightTrigger");
-
-		if(m_IsLanding)
-		{
-			m_UI_ButtonHint->Activate("ButtonA");
-
-			if(not m_IsSliding)
-				m_UI_ButtonHint->Activate("LeftShoulder");
-			else
-				m_UI_ButtonHint->Deactivate("LeftShoulder");
-		}
-		else
-			m_UI_ButtonHint->Deactivate("ButtonA");
-	}
-
+	
+	buttonHintUpdate();
 
 	m_lastUpdatePosition = transform->position;
 }
@@ -854,13 +825,14 @@ void CharaBase::Knockback(const Vector3& other, float force_vertical, float forc
 	m_pPhysics->velocity += impact;
 }
 
+//========================================================================
+// メインステート
+
 bool CharaBase::IsFinishTackleIntervalAlarm()
 {
 	return true;
 }
 
-//========================================================================
-// メインステート
 void CharaBase::StateActionIdle(FSMSignal sig)
 {
 	switch (sig)
@@ -2173,43 +2145,34 @@ void CharaBase::releaseBall()
 	m_BallChargeRate = 0.0f;
 }
 
-Vector2 CharaBase::getRootScreenPos()
-{
-	int root = MV1SearchFrame(Model(), "Ch06");
-	Vector3 rootPos = MV1GetFramePosition(Model(), root);
-	Vector3 screenPos = ConvWorldPosToScreenPos(rootPos);
-	Vector2 screenPosVec2 = Vector2(screenPos.x, screenPos.y);
-	return screenPosVec2;
-}
-
 void CharaBase::playThrowSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
-	std::string base = "SE_throw_";
+    std::string base = "SE_throw_";
 	std::string power = "";
 	std::string num = "00";
 	std::string fileType = ".mp3";
 
-	if (m_BallChargeRate < 0.2f)
-	{
-		power += "weak_";
-	}
-	else if (m_BallChargeRate < 0.8f)
-	{
-		power += "normal_";
-	}
-	else
-	{
-		power += "strong_";
-	}
+    if (m_BallChargeRate < 0.2f)
+    {
+        power += "weak_";
+    }
+    else if (m_BallChargeRate < 0.8f)
+    {
+        power += "normal_";
+    }
+    else
+    {
+        power += "strong_";
+    }
 
-	if (rand < 50)
-	{
-		num = "01";
-	}
+    if (rand < 50)
+    {
+        num = "01";
+    }
 
-	std::string soundName = base + power + num + fileType;
+    std::string soundName = base + power + num + fileType;
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
@@ -2269,28 +2232,28 @@ void CharaBase::playCatchBallSound()
 	{
 		num = "00";
 	}
-	else if (rand < 66)
-	{
-		num = "01";
-	}
-	else
-	{
-		num = "02";
-	}
+    else if (rand < 66)
+    {
+        num = "01";
+    }
+    else
+    {
+        num = "02";
+    }
 
 	std::string base2 = "SE_catch_success_";
 	std::string num2 = "";
-	if (rand < 50)
-	{
-		num2 = "00";
-	}
-	else
-	{
-		num2 = "01";
-	}
+    if (rand < 50)
+    {
+        num2 = "00";
+    }
+    else
+    {
+        num2 = "01";
+    }
 
 	std::string soundName = base + num + fileType;
-	std::string soundName2 = base2 + num2 + fileType;
+    std::string soundName2 = base2 + num2 + fileType;
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
@@ -2368,4 +2331,45 @@ void CharaBase::throwBall(const nlohmann::json& argument)
 
 void CharaBase::invincible(const nlohmann::json& argument)
 {
+}
+
+void CharaBase::buttonHintUpdate()
+{
+	// ボタンヒント
+	{
+		if (m_CanCatch)
+		{
+			if(not m_IsCatching)
+			m_UI_ButtonHint->Activate("LeftTrigger");
+			else 
+			m_UI_ButtonHint->PushKey("LeftTrigger");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("LeftTrigger");
+
+		if (m_CanTackle)
+			m_UI_ButtonHint->Activate("ButtonB");
+		else
+			m_UI_ButtonHint->Deactivate("ButtonB");
+
+		if (m_CanThrow)
+		{
+			m_UI_ButtonHint->Activate("RightTrigger");
+			m_UI_ButtonHint->Activate("ButtonX");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("RightTrigger");
+
+		if (m_IsLanding)
+		{
+			m_UI_ButtonHint->Activate("ButtonA");
+
+			if (not m_IsSliding)
+				m_UI_ButtonHint->Activate("LeftShoulder");
+			else
+				m_UI_ButtonHint->PushKey("LeftShoulder");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("ButtonA");
+	}
 }

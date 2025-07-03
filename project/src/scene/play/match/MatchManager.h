@@ -18,6 +18,7 @@ public:
     CurrentGameData(const GAME_MODE_DESC& desc = {}, std::vector<std::string> teamNames = {});
 };
 
+class UI_Canvas;
 class UI_GameScore;
 
 class MatchManager : public GameObject
@@ -73,6 +74,10 @@ private:
     class TeamManager* m_pTeamManager;
 
     UI_GameScore* m_UI_GameScore;
+	UI_Canvas* m_UI_Result_Won;     // Ÿ—˜‰‰o‰æ‘œ
+	UI_Canvas* m_UI_Result_Lost;    // ”s–k‰‰o‰æ‘œ
+    float m_GameEndTime;
+    bool m_IsFadeEnd;
 
     void addCharacter(const std::string& team, const Transform& trs, bool isAI);
 };

@@ -21,7 +21,7 @@
     {
       "GameModeName": "1v1",
       "PlayTimeMaxSec": 300,
-      "WinPointMax": 10
+      "WinPointMax": 1
     },
     {
       "GameModeName": "2v2",

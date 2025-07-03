@@ -394,14 +394,11 @@
     <Filter Include="src%28application%29\util\screen">
       <UniqueIdentifier>{53d64be1-4031-4379-932b-4bc767548c1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\ui\button_hint">
-      <UniqueIdentifier>{1b715c90-32cf-44e7-90a0-21cfc0758201}</UniqueIdentifier>
+    <Filter Include="data\Json\UI">
+      <UniqueIdentifier>{a6cdba49-e0ce-4969-b408-ce56578d4665}</UniqueIdentifier>
     </Filter>
     <Filter Include="src%28application%29\reference\ui">
-      <UniqueIdentifier>{ffa394f7-7f60-444f-ac7c-67356fa78a2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="data\Json\UI">
-      <UniqueIdentifier>{01bbaa48-a42f-4951-a1bc-c8e31b709cd9}</UniqueIdentifier>
+      <UniqueIdentifier>{456666d9-2df1-4636-987e-cea60d70312f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1310,7 +1307,7 @@
     <ClCompile Include="src\reference\input\InputRef.cpp">
       <Filter>src%28application%29\reference\input</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\UI_GameTime.cpp">
+    <ClCompile Include="src\scene\play\ui\UI_MatchTime.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp">
@@ -1319,8 +1316,11 @@
     <ClCompile Include="src\util\screen\ScreenManager.cpp">
       <Filter>src%28application%29\util\screen</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\button_hint\UI_ButtonHint.cpp">
-      <Filter>src%28application%29\scene\play\ui\button_hint</Filter>
+    <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_ButtonHint.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp">
       <Filter>src%28application%29\reference\ui</Filter>
@@ -2056,7 +2056,7 @@
     <ClInclude Include="src\util\enum\EnumUtil.h">
       <Filter>src%28application%29\util\enum</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_GameTime.h">
+    <ClInclude Include="src\scene\play\ui\UI_MatchTime.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h">
@@ -2068,8 +2068,11 @@
     <ClInclude Include="src\util\screen\ScreenManager.h">
       <Filter>src%28application%29\util\screen</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\button_hint\UI_ButtonHint.h">
-      <Filter>src%28application%29\scene\play\ui\button_hint</Filter>
+    <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_ButtonHint.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h">
       <Filter>src%28application%29\reference\ui</Filter>

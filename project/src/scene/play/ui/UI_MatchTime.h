@@ -3,18 +3,18 @@
 #include <unordered_map>
 #include <vector>
 
-class GameManager;
+class MatchManager;
 
-class UI_GameTime : public UI_Canvas {
+class UI_MatchTime : public UI_Canvas {
 public:
-	UI_GameTime();
-	UI_GameTime(const RectTransform& trs, int index);
-	~UI_GameTime();
+	UI_MatchTime();
+	UI_MatchTime(const RectTransform& trs, int index);
+	~UI_MatchTime();
 
 	void Update() override;
 	void Draw() override;
 
 private:
-	const GameManager* m_pGameManager;
+	MatchManager* m_pMatchManager;
 	int m_CharaIndex;
 };

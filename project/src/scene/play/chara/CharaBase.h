@@ -334,12 +334,12 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
-	bool			m_IsSliding;			// スライディング中か
+	bool			m_IsSliding = false;	// スライディング中か
 
 	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
 	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
 	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
-	UI_ButtonHint* m_UI_ButtonHint;			// ボタンヒントUI
+	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
 
 	void land();
 
@@ -350,6 +350,8 @@ private:
 	void jumpUpdate();
 	void tackleUpdate();
 
+	void buttonHintUpdate();
+
 	void getHit(Ball* hit);
 
 	// キャラの正面に方向指定ボールを投げる
@@ -358,8 +360,6 @@ private:
 	void throwBallHoming();
 	// ボールを手放す処理
 	void releaseBall();
-
-	Vector2 getRootScreenPos();
 
 	//=== サウンド再生 ===
 	void playThrowSound();

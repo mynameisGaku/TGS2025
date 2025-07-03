@@ -28,8 +28,12 @@
 
 //=== UI ===
 #include "src/scene/play/ui/UI_GameScore.h"
+#include "src/util/screen/ScreenManager.h"
 
-#include <src/util/color/ColorUtil.h>
+#include "src/util/color/ColorUtil.h"
+
+#include "src/util/input/InputManager.h"
+#include "src/util/fader/Fader.h"
 
 //-----------------------------------------
 //  CurrentGameData
@@ -59,8 +63,21 @@ MatchManager::~MatchManager()
 {
     delete m_pFsm;
 
-    m_UI_GameScore->SetMatchManager(nullptr);
-    delete m_UI_GameScore;
+    if (m_UI_GameScore != nullptr)
+    {
+        m_UI_GameScore->SetMatchManager(nullptr);
+        delete m_UI_GameScore;
+    }
+
+    if (m_UI_Result_Won != nullptr)
+    {
+        delete m_UI_Result_Won;
+    }
+
+    if (m_UI_Result_Lost != nullptr)
+    {
+        delete m_UI_Result_Lost;
+    }
 }
 
 void MatchManager::Update()
@@ -229,6 +246,8 @@ void MatchManager::init()
     m_pFsm->RegisterStateName(&MatchManager::StatePhaseGameOver, "GameOver");
     m_pFsm->RegisterStateName(&MatchManager::StatePhaseEnd, "End");
 #endif
+
+    m_IsFadeEnd = false;
 }
 
 void MatchManager::ImGuiInit()
@@ -301,10 +320,10 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();
 
@@ -463,12 +482,61 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
     {
     case FSMSignal::SIG_Enter:
     {
-        SceneManager::ChangeScene("TitleScene");
+        // 勝利演出画像を設定
+        if (m_UI_Result_Won == nullptr)
+        {
+            m_UI_Result_Won = new UI_Canvas();
+            m_UI_Result_Won->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
+            m_UI_Result_Won->SetTag("UI_Result_Won");
+            m_UI_Result_Won->SetImage(LoadGraph("data/texture/UI/Result/YouWon.png"));
+            m_UI_Result_Won->SetEasing(UI_Canvas::eAlpha, 0, 255, 1.0f, EasingType::Linear);
+            m_UI_Result_Won->SetEasing(UI_Canvas::eScale, Vector2::Zero, Vector2::Ones, 1.0f, EasingType::Linear);
+        }
+
+        // 敗北演出画像を設定
+        if (m_UI_Result_Lost == nullptr)
+        {
+            m_UI_Result_Lost = new UI_Canvas();
+            m_UI_Result_Lost->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
+            m_UI_Result_Lost->SetTag("UI_Result_Lost");
+            m_UI_Result_Lost->SetImage(LoadGraph("data/texture/UI/Result/YouLost.png"));
+            m_UI_Result_Lost->SetEasing(UI_Canvas::eAlpha, 0, 255, 1.0f, EasingType::Linear);
+            m_UI_Result_Lost->SetEasing(UI_Canvas::eScale, Vector2::Zero, Vector2::Ones, 1.0f, EasingType::Linear);
+        }
+
+        // 勝利チームに応じて、描画位置を変化させる(今のところベタ打ち)
+        // TO:DO チームと画面分割先を紐づける
+        if (m_GameData.m_WinnerTeam == "Red")
+        {
+            m_UI_Result_Won->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(0));
+            m_UI_Result_Won->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(0));
+
+            m_UI_Result_Lost->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(1));
+            m_UI_Result_Lost->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(1));
+        }
+        else
+        {
+            m_UI_Result_Won->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(1));
+            m_UI_Result_Won->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(1));
+
+            m_UI_Result_Lost->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(0));
+            m_UI_Result_Lost->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(0));
+        }
     }
     break;
     case FSMSignal::SIG_Update:
     {
+        // 演出が終了して、ボタンが押された場合
+        if (m_UI_Result_Won != nullptr && not m_UI_Result_Won->IsAllEasingRun() && 
+            m_UI_Result_Lost != nullptr && not m_UI_Result_Lost->IsAllEasingRun() &&
+            InputManager::Push("AnyKey"))
+        {
+            Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
+            m_IsFadeEnd = true;
+        }
 
+        if (m_IsFadeEnd && not Fader::IsPlaying())
+            SceneManager::ChangeScene("TitleScene");
     }
     break;
     case FSMSignal::SIG_AfterUpdate:

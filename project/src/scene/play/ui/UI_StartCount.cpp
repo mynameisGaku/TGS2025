@@ -40,22 +40,25 @@ void UI_StartCount::Draw()
 			return;
 	}
 
-	int count = 0;
+	float timer = m_pMatchManager->GetReadyTimerSec();
 
-	std::string text = StringUtil::FormatToString("%d", count).c_str();
+	int count = (int)ceilf(timer);
+
+	std::string text;
+
+	if (count == 0)
+	{ 
+		text = "s‚¯I";
+	}
+	else
+	{
+		text = StringUtil::FormatToString("%d", count).c_str();
+	}
+
 	int width = GetDrawStringWidth(text.c_str(), text.length());
 
 	const Vector2 adjust = Vector2(0, 0);
 	const RectTransform globalTrs = rectTransform->Global();
-
-	/*
-	DrawBoxAA(
-		globalTrs.position.x - width,
-		globalTrs.position.y - adjust.y * 0.5f,
-		globalTrs.position.x,
-		globalTrs.position.y + adjust.y * 0.5f,
-		GetColor(120, 120, 120), true);
-		*/
 
 	DrawFormatString(
 		globalTrs.position.x - width * 0.5f,	// ’†‰›‘µ‚¦

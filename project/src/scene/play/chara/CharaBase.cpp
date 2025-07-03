@@ -30,6 +30,7 @@
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
+#include "src/scene/play/ui/UI_StartCount.h"
 #include <src/reference/ball/BallRef.h>
 
 using namespace KeyDefine;
@@ -89,10 +90,6 @@ CharaBase::CharaBase()
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
 
-	m_UI_CrossHair = nullptr;
-	//m_UI_BallChargeMeter = nullptr;
-	m_UI_HitPointIcon = nullptr;
-
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
 
@@ -149,10 +146,6 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_FSM);
 	PtrUtil::SafeDelete(m_SubFSM);
 	PtrUtil::SafeDelete(m_Timeline);
-
-	PtrUtil::SafeDelete(m_UI_CrossHair);
-	//PtrUtil::SafeDelete(m_UI_BallChargeMeter);
-	PtrUtil::SafeDelete(m_UI_HitPointIcon);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();

@@ -394,12 +394,6 @@
     <Filter Include="src%28application%29\util\screen">
       <UniqueIdentifier>{53d64be1-4031-4379-932b-4bc767548c1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\Json\UI">
-      <UniqueIdentifier>{a6cdba49-e0ce-4969-b408-ce56578d4665}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src%28application%29\reference\ui">
-      <UniqueIdentifier>{456666d9-2df1-4636-987e-cea60d70312f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -683,9 +677,6 @@
     </None>
     <None Include="data\Json\Effect\LockOnMarker.json">
       <Filter>data\Json\Effect</Filter>
-    </None>
-    <None Include="data\Json\UI\ButtonHint.json">
-      <Filter>data\Json\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1319,11 +1310,8 @@
     <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\UI_ButtonHint.cpp">
+    <ClCompile Include="src\scene\play\ui\UI_StartCount.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp">
-      <Filter>src%28application%29\reference\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2071,11 +2059,8 @@
     <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_ButtonHint.h">
+    <ClInclude Include="src\scene\play\ui\UI_StartCount.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h">
-      <Filter>src%28application%29\reference\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

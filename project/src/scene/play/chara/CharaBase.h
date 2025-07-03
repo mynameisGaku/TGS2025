@@ -23,10 +23,6 @@ class StatusTracker;
 class EffectBase;
 class Trail3D;
 
-class UI_CrossHair;
-class UI_HitPoint_Icon;
-class UI_ButtonHint;
-
 /// <summary>
 /// キャラクターに関する基底クラス
 /// </summary>
@@ -334,12 +330,6 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
-	bool			m_IsSliding = false;	// スライディング中か
-
-	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
-	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
-	UI_HitPoint_Icon* m_UI_HitPointIcon;	// 体力のUI
-	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
 
 	void land();
 
@@ -349,8 +339,6 @@ private:
 	void catchUpdate();
 	void jumpUpdate();
 	void tackleUpdate();
-
-	void buttonHintUpdate();
 
 	void getHit(Ball* hit);
 

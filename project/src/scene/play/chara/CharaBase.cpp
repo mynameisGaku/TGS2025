@@ -90,10 +90,6 @@ CharaBase::CharaBase()
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
 
-	m_UI_CrossHair = nullptr;
-	//m_UI_BallChargeMeter = nullptr;
-	m_UI_HitPointIcon = nullptr;
-
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
 
@@ -150,10 +146,6 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_FSM);
 	PtrUtil::SafeDelete(m_SubFSM);
 	PtrUtil::SafeDelete(m_Timeline);
-
-	PtrUtil::SafeDelete(m_UI_CrossHair);
-	//PtrUtil::SafeDelete(m_UI_BallChargeMeter);
-	PtrUtil::SafeDelete(m_UI_HitPointIcon);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();

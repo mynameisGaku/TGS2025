@@ -36,6 +36,7 @@ public:
     float           GetPlayTimeSec();
     float           GetPlayTimeMaxSec();
     int             GetWinPointMax();
+    float           GetReadyTimerSec();
 
 	std::vector<std::pair<int, int>> GetRanking() const;
 	const std::string GetTeamName(int charaID) const;

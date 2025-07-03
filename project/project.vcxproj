@@ -371,6 +371,7 @@
     <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_StartCount.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
     <ClCompile Include="src\util\alarm\Alarm.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
@@ -552,6 +553,7 @@
     <ClInclude Include="src\scene\play\ui\UI_CrossHair.h" />
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
     <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h" />
+    <ClInclude Include="src\scene\play\ui\UI_StartCount.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
     <ClInclude Include="src\util\alarm\Alarm.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />

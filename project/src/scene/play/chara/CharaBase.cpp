@@ -2332,9 +2332,9 @@ void CharaBase::buttonHintUpdate()
 		if (m_CanCatch)
 		{
 			if(not m_IsCatching)
-			m_UI_ButtonHint->Activate("LeftTrigger");
+				m_UI_ButtonHint->Activate("LeftTrigger");
 			else 
-			m_UI_ButtonHint->PushKey("LeftTrigger");
+				m_UI_ButtonHint->PushKey("LeftTrigger");
 		}
 		else
 			m_UI_ButtonHint->Deactivate("LeftTrigger");
@@ -2346,7 +2346,11 @@ void CharaBase::buttonHintUpdate()
 
 		if (m_CanThrow)
 		{
-			m_UI_ButtonHint->Activate("RightTrigger");
+			if (not m_IsCharging)
+				m_UI_ButtonHint->Activate("RightTrigger");
+			else
+				m_UI_ButtonHint->PushKey("RightTrigger");
+
 			m_UI_ButtonHint->Activate("ButtonX");
 		}
 		else

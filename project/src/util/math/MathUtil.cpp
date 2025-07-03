@@ -260,3 +260,26 @@ int MathUtil::CalcList(const std::list<int>& list)
 	return result;
 }
 
+void MathUtil::SquareAssing(float* value)
+{
+    *value = (*value) * (*value);
+}
+
+void MathUtil::AddIterationAssing(float* value, int iteration)
+{
+    float v = *value;
+    for (int i = 0; i < iteration; i++)
+    {
+        *value += v;
+    }
+}
+
+void MathUtil::AddIterationAssingRate(float* value, int iteration, float rate)
+{
+	float v = *value;
+	for (int i = 0; i < iteration; ++i)
+	{
+		*value += v * rate;
+	}
+}
+

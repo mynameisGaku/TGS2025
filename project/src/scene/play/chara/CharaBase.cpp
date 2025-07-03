@@ -33,6 +33,7 @@
 #include <src/reference/ball/BallRef.h>
 
 #include "src/scene/play/ui/UI_GameTime.h"
+#include "src/scene/play/ui/button_hint/UI_ButtonHint.h"
 
 using namespace KeyDefine;
 
@@ -155,6 +156,7 @@ CharaBase::~CharaBase()
 	PtrUtil::SafeDelete(m_UI_CrossHair);
 	//PtrUtil::SafeDelete(m_UI_BallChargeMeter);
 	PtrUtil::SafeDelete(m_UI_HitPointIcon);
+	PtrUtil::SafeDelete(m_UI_ButtonHint);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
@@ -207,6 +209,8 @@ void CharaBase::Init(std::string tag)
 	m_UI_HitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2::Zero, 0.0f, Vector2::Ones * 2.0f), m_Index);
 	m_UI_HitPointIcon->SetValue(&m_HitPoint, 0.0f, m_pHP->GetMax(), m_pHP->GetMax());
 	m_UI_HitPointIcon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
+
+	m_UI_ButtonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), m_Index);
 
 	UI_GameTime* gameTime = new UI_GameTime(RectTransform(Anchor::Preset::RightDown, Vector2(0.0f, -165.0f)), m_Index);
 
@@ -383,6 +387,40 @@ void CharaBase::Update() {
 	HitGroundProcess();
 
 	invincibleUpdate();
+
+	// ボタンヒント
+	{
+		if (m_CanCatch)
+			m_UI_ButtonHint->Activate("LeftTrigger");
+		else
+			m_UI_ButtonHint->Deactivate("LeftTrigger");
+
+		if(m_CanTackle)
+			m_UI_ButtonHint->Activate("ButtonB");
+		else
+			m_UI_ButtonHint->Deactivate("ButtonB");
+
+		if(m_CanThrow)
+		{
+			m_UI_ButtonHint->Activate("RightTrigger");
+			m_UI_ButtonHint->Activate("ButtonX");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("RightTrigger");
+
+		if(m_IsLanding)
+		{
+			m_UI_ButtonHint->Activate("ButtonA");
+
+			if(not m_IsSliding)
+				m_UI_ButtonHint->Activate("LeftShoulder");
+			else
+				m_UI_ButtonHint->Deactivate("LeftShoulder");
+		}
+		else
+			m_UI_ButtonHint->Deactivate("ButtonA");
+	}
+
 
 	m_lastUpdatePosition = transform->position;
 }
@@ -816,14 +854,13 @@ void CharaBase::Knockback(const Vector3& other, float force_vertical, float forc
 	m_pPhysics->velocity += impact;
 }
 
-//========================================================================
-// メインステート
-
 bool CharaBase::IsFinishTackleIntervalAlarm()
 {
 	return true;
 }
 
+//========================================================================
+// メインステート
 void CharaBase::StateActionIdle(FSMSignal sig)
 {
 	switch (sig)
@@ -1513,6 +1550,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
+		m_IsSliding = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1530,6 +1568,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_IsSliding = false;
 	}
 	break;
 	}
@@ -1547,6 +1586,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	{
 		m_Animator->Play("Slide");
 		m_CanMove = false;
+		m_IsSliding = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1565,6 +1605,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_CanMove = true;
+		m_IsSliding = false;
 	}
 	break;
 	}
@@ -2132,34 +2173,43 @@ void CharaBase::releaseBall()
 	m_BallChargeRate = 0.0f;
 }
 
+Vector2 CharaBase::getRootScreenPos()
+{
+	int root = MV1SearchFrame(Model(), "Ch06");
+	Vector3 rootPos = MV1GetFramePosition(Model(), root);
+	Vector3 screenPos = ConvWorldPosToScreenPos(rootPos);
+	Vector2 screenPosVec2 = Vector2(screenPos.x, screenPos.y);
+	return screenPosVec2;
+}
+
 void CharaBase::playThrowSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
-    std::string base = "SE_throw_";
+	std::string base = "SE_throw_";
 	std::string power = "";
 	std::string num = "00";
 	std::string fileType = ".mp3";
 
-    if (m_BallChargeRate < 0.2f)
-    {
-        power += "weak_";
-    }
-    else if (m_BallChargeRate < 0.8f)
-    {
-        power += "normal_";
-    }
-    else
-    {
-        power += "strong_";
-    }
+	if (m_BallChargeRate < 0.2f)
+	{
+		power += "weak_";
+	}
+	else if (m_BallChargeRate < 0.8f)
+	{
+		power += "normal_";
+	}
+	else
+	{
+		power += "strong_";
+	}
 
-    if (rand < 50)
-    {
-        num = "01";
-    }
+	if (rand < 50)
+	{
+		num = "01";
+	}
 
-    std::string soundName = base + power + num + fileType;
+	std::string soundName = base + power + num + fileType;
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
@@ -2219,28 +2269,28 @@ void CharaBase::playCatchBallSound()
 	{
 		num = "00";
 	}
-    else if (rand < 66)
-    {
-        num = "01";
-    }
-    else
-    {
-        num = "02";
-    }
+	else if (rand < 66)
+	{
+		num = "01";
+	}
+	else
+	{
+		num = "02";
+	}
 
 	std::string base2 = "SE_catch_success_";
 	std::string num2 = "";
-    if (rand < 50)
-    {
-        num2 = "00";
-    }
-    else
-    {
-        num2 = "01";
-    }
+	if (rand < 50)
+	{
+		num2 = "00";
+	}
+	else
+	{
+		num2 = "01";
+	}
 
 	std::string soundName = base + num + fileType;
-    std::string soundName2 = base2 + num2 + fileType;
+	std::string soundName2 = base2 + num2 + fileType;
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);

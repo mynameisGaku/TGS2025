@@ -224,6 +224,7 @@
     <None Include="data\Json\Stage\Stage_2.json" />
     <None Include="data\Json\Stage\Stage_3.json" />
     <None Include="data\Json\Stage\TestStage.json" />
+    <None Include="data\Json\UI\ButtonHint.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
     <None Include="data\Model\Stage\Cube.mv1" />
@@ -336,6 +337,7 @@
     <ClCompile Include="src\reference\crystal\CrystalFragmentSpawnerRef.cpp" />
     <ClCompile Include="src\reference\game\GameRef.cpp" />
     <ClCompile Include="src\reference\input\InputRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
@@ -363,6 +365,7 @@
     <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
+    <ClCompile Include="src\scene\play\ui\button_hint\UI_ButtonHint.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_GameTime.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp" />
@@ -512,6 +515,7 @@
     <ClInclude Include="src\reference\crystal\CrystalFragmentSpawnerRef.h" />
     <ClInclude Include="src\reference\game\GameRef.h" />
     <ClInclude Include="src\reference\input\InputRef.h" />
+    <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ball\Ball.h" />
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />
@@ -541,6 +545,7 @@
     <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
+    <ClInclude Include="src\scene\play\ui\button_hint\UI_ButtonHint.h" />
     <ClInclude Include="src\scene\play\ui\UI_GameTime.h" />
     <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h" />
     <ClInclude Include="src\scene\play\ui\UI_CrossHair.h" />

@@ -334,6 +334,7 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
+	bool			m_IsSliding;			// スライディング中か
 
 	UI_CrossHair* m_UI_CrossHair;			// クロスヘアのUI
 	//UI_CrossHair* m_UI_BallChargeMeter;		// ボールチャージ量のUI
@@ -357,6 +358,8 @@ private:
 	void throwBallHoming();
 	// ボールを手放す処理
 	void releaseBall();
+
+	Vector2 getRootScreenPos();
 
 	//=== サウンド再生 ===
 	void playThrowSound();

@@ -8,6 +8,15 @@
     }
   ],
 
+  "Languages": [
+    {
+      "lang": "jp"
+    },
+    {
+      "lang": "en"
+    }
+  ],
+
   "GameModeDescs": [
     {
       "GameModeName": "1v1",

@@ -92,15 +92,15 @@ void InputManager::Init() {
 	if (keyList == nullptr) {
 		keyList = new std::unordered_map<std::string, std::vector<KeyCode>>();
 
-		auto& key = (*keyList);
 		for (auto& vir : pRef->VirtualKeys)
 		{
 			std::vector<KeyCode> codes;
 			for (auto& keyparam : vir.KeyParams)
 			{
-				codes.push_back(EnumUtil::ToEnum(keyparam, KeyCode::None));
+				KeyCode e = EnumUtil::ToEnum(keyparam, KeyCode::None);
+				codes.push_back(e);
 			}
-			key[vir.KeyName] = codes;
+			(*keyList)[vir.KeyName] = codes;
 		}
 	}
 

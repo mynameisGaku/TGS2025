@@ -50,7 +50,7 @@
     },
     {
       "GameModeName": "TimeTest",
-      "PlayTimeMaxSec": 1,
+      "PlayTimeMaxSec": 15,
       "WinPointMax": 99999999
     }
   ],

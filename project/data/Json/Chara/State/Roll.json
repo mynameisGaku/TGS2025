@@ -12,7 +12,7 @@
             "Name": "SetCanMove",
             "Start": 0.0,
             "Argument": {
-                "CanMove": false
+                "CanMove": true
             }
         },
         {

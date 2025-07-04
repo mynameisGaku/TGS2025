@@ -229,6 +229,10 @@ public:
 	// タックル後の間隔アラームが鳴っているか
 	bool IsFinishTackleIntervalAlarm();
 
+	inline bool IsSliding() const { return m_IsSliding; }
+
+	inline bool CanSlide() const { return m_CanSlide; }
+
 	//=======================================================================================
 	// ▼各ステート
 	void StateActionIdle(FSMSignal sig);
@@ -334,7 +338,8 @@ private:
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
     bool			m_IsSliding = false;	// スライディング中か
-    bool			m_IsInhibitionSpeed;	// スピード抑制するか
+    bool			m_IsInhibitionSpeed;	// スピード抑制するか]
+    bool			m_CanSlide;				// スライディング可能か
 
 	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
 

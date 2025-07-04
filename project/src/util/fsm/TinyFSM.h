@@ -277,30 +277,17 @@ public:
 		m_name = name;
 	}
 	// 過去10回の遷移ログを確認する allowNumberで許容回数設定可能
-	bool HasTransitionWithInThePast10Times(void(T::*state)(FSMSignal), int allowNumber)
+	bool HasTransitionWithInThePast10Times(void(T::*state)(FSMSignal), int allowNumber = -1)
 	{
 		int count = 0;
 		for (const auto& log : m_transitLog)
 		{
-			if (log.state == state && count > allowNumber)
-			{
-				return true;
-			}
-			count++;
-		}
-		return false;
-	}
-	bool HasTransitionWithInThePast(void(T::* state)(FSMSignal), int times) const
-	{
-		int count = 0;
-		for (const auto& log : m_transitLog)
-		{
-			if (count >= times)
-				return false;
-
 			if (log.state == state)
 			{
-				return true;
+				if (allowNumber < 0)
+					return true;
+				if (count >= allowNumber)
+					return true;
 			}
 			count++;
 		}

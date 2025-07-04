@@ -92,8 +92,9 @@ CharaBase::CharaBase()
 	m_IsTargeting		= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
-    m_IsInhibitionSpeed = true;
-    m_SpawnPointManager = nullptr;
+	m_IsInhibitionSpeed = true;
+	m_SpawnPointManager = nullptr;
+	m_CanSlide			= false;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -677,12 +678,13 @@ void CharaBase::Jump()
 {
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
 	m_IsJumping = true;
+
 	m_IsInhibitionSpeed = !m_IsSliding;
 }
 
 void CharaBase::Slide()
 {
-	if (m_FSM->GetCurrentState() == &CharaBase::StateSlideToRun)
+	if (not m_CanSlide || m_FSM->GetCurrentState() == &CharaBase::StateSlideToRun)
 	{
 		return;
 	}
@@ -1419,6 +1421,7 @@ void CharaBase::StateRoll(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Roll");
+		m_CanSlide = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1433,7 +1436,6 @@ void CharaBase::StateRoll(FSMSignal sig)
 	{
 		m_Timeline->Stop();
 		m_CanMove = true;
-		m_CanRot = true;
 	}
 	break;
 	}
@@ -1600,9 +1602,11 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
 
-		if (not m_FSM->HasTransitionWithInThePast(&CharaBase::StateSlide, 1))
-			m_pPhysics->velocity = m_pPhysics->velocity * 1.5f;
+		float accel = 1.2f;
+		if (not m_FSM->HasTransitionWithInThePast10Times(&CharaBase::StateSlide))
+			accel = 2.0f;
 
+		m_pPhysics->velocity = m_pPhysics->velocity * accel;
 		m_IsSliding = true;
 		m_CanMove = false;
 	}
@@ -1647,9 +1651,9 @@ void CharaBase::StateSlide(FSMSignal sig)
 	case FSMSignal::SIG_Update: // 更新
 	{
 		slideUpdate();
-		if (m_SlideTimer <= 0.0f)
+		if (m_SlideTimer <= 0.0f || m_pPhysics->velocity.GetLengthSquared() <= 0.3f)
 		{
-			m_FSM->ChangeState(&CharaBase::StateSlideToRun); // ステートを変更
+			m_FSM->ChangeState(&CharaBase::StateRoll); // ステートを変更
 		}
 	}
 	break;
@@ -2031,6 +2035,13 @@ void CharaBase::idleUpdate()
 
 void CharaBase::runUpdate()
 {
+	if (m_pPhysics->velocity.GetLengthSquared() >= m_MoveSpeed * 0.4f)
+	{
+		m_CanSlide = true;
+	}
+	else
+		m_CanSlide = false;
+
 	if (m_IsJumping)
 	{
 		m_FSM->ChangeState(&CharaBase::StateRunToJump); // ステートを変更
@@ -2066,11 +2077,6 @@ void CharaBase::slideUpdate()
 		if (m_SlideTimer < 0.0f)
 		{
 			m_SlideTimer = 0.0f;
-			m_pPhysics->SetFriction(FRICTION);
-		}
-		else
-		{
-			m_pPhysics->SetFriction(FRICTION / 10.0f);
 		}
 	}
 
@@ -2502,7 +2508,7 @@ void CharaBase::endRoll(const nlohmann::json& argument)
 void CharaBase::setCanMove(const nlohmann::json& argument)
 {
 	m_CanMove = argument.at("CanMove").get<bool>();
-	m_CanRot = m_CanMove;
+	//m_CanRot = m_CanMove;
 }
 
 void CharaBase::setCanRot(const nlohmann::json& argument)

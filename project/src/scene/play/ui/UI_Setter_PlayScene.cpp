@@ -8,6 +8,7 @@
 #include "src/scene/play/ui/UI_MatchTime.h"
 #include "src/scene/play/ui/UI_ButtonHint.h"
 #include "src/scene/play/ui/UI_StartCount.h"
+#include "src/scene/play/ui/UI_Fade.h"
 
 UI_Setter_PlayScene::UI_Setter_PlayScene()
 {
@@ -34,11 +35,15 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_StartCount* startCount = new UI_StartCount(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
 		startCount->SetTag("StartCount_" + sPlayerNum);
 
+		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
+		fade->SetTag("Fade_" + sPlayerNum);
+
 		m_UIs[crossHair->GetTag()]		= crossHair;
 		m_UIs[hitPointIcon->GetTag()]	= hitPointIcon;
 		m_UIs[matchTime->GetTag()]		= matchTime;
 		m_UIs[buttonHint->GetTag()]		= buttonHint;
 		m_UIs[startCount->GetTag()]		= startCount;
+		m_UIs[fade->GetTag()]			= fade;
 	}
 }
 

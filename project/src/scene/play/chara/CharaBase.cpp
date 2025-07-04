@@ -89,10 +89,11 @@ CharaBase::CharaBase()
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
 	m_hTrailImage		= -1;
-	m_IsTargeting			= false;
+	m_IsTargeting		= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
 	m_SpawnPointManager = nullptr;
+	m_TackleIntervalAlarm = nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -105,6 +106,7 @@ CharaBase::CharaBase()
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
+	m_RespawnFSM = new TinyFSM<CharaBase>(this);
 
 	m_pCharaSpawnPointManager = nullptr;
 
@@ -353,11 +355,12 @@ void CharaBase::Update() {
 	}
 	if (InputManager::Push(KeyDefine::KeyCode::ButtonY))
 	{
-		respawnByPoint();
+		StartRespawn();
 	}
 
 	m_FSM->Update();
 	m_SubFSM->Update();
+	m_RespawnFSM->Update();
 	m_Timeline->Update();
 
 	// ボールの更新
@@ -509,15 +512,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 				{
 					ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
 				}
-
-				if (m_SpawnPointManager == nullptr)
-				{
-					Respawn(Vector3::Zero, Vector3::Zero);
-				}
-				else
-				{
-					respawnByPoint();
-				}
+				StartRespawn();
 			}
 		}
 	}
@@ -746,7 +741,7 @@ void CharaBase::Catch()
 	}
 }
 
-void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
+void CharaBase::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
@@ -848,6 +843,11 @@ void CharaBase::invincibleUpdate()
 		m_IsInvincible = false;
 		m_InvincibleTimer = 0.0f;
 	}
+}
+
+void CharaBase::StartRespawn()
+{
+
 }
 
 void CharaBase::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
@@ -2194,7 +2194,7 @@ void CharaBase::respawnByPoint()
 {
 	CharaSpawnPoint* csp = m_SpawnPointManager->Get_LowUsageRate();
 	Vector3 position = csp->transform->position;
-	Respawn(position, Vector3::Zero);
+	respawn(position, Vector3::Zero);
 	csp->Use();
 }
 

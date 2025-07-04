@@ -152,20 +152,12 @@ private:
 public:
 	//=======================================================================================
 	// ▼リスポーン
-	
-	/// <summary>
-	/// この関数を呼び出すと、パラメータがリセットされ、指定位置にリスポーンする。
-	/// ToDo : リスポーンステートを作る
-	/// </summary>
-	/// <param name="pos">リスポーン時位置</param>
-	/// <param name="rot">リスポーン時回転</param>
-	void Respawn(const Vector3& pos, const Vector3& rot);
-
-	void SetTrailImage(int hImage);
+	void StartRespawn();
 
 	//=======================================================================================
 	// ▼演出
 
+	void SetTrailImage(int hImage);
 	Vector2 Target(const Ball* ball);
 
 	//=======================================================================================
@@ -278,6 +270,10 @@ public:
 	void SubStateHoldToAim(FSMSignal sig);
 	void SubStateCatch(FSMSignal sig);
 
+	void RespawnStateNone(FSMSignal sig);
+	void RespawnStateFadeOut(FSMSignal sig);
+	void RespawnStateFadeIn(FSMSignal sig);
+
 private:
 	friend class CharaManager;
 	friend class UI_CrossHair;
@@ -297,6 +293,7 @@ private:
 	EffectBase*		m_pCatchDustEffect;		// キャッチの粉エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
+	TinyFSM<CharaBase>* m_RespawnFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
@@ -358,6 +355,13 @@ private:
 	void throwBallHoming();
 	// ボールを手放す処理
 	void releaseBall();
+	/// <summary>
+	/// この関数を呼び出すと、パラメータがリセットされ、指定位置にリスポーンする。
+	/// ToDo : リスポーンステートを作る
+	/// </summary>
+	/// <param name="pos">リスポーン時位置</param>
+	/// <param name="rot">リスポーン時回転</param>
+	void respawn(const Vector3& pos, const Vector3& rot);
 	// リスポーン地点からリスポーン
 	void respawnByPoint();
 	

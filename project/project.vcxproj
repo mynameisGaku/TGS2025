@@ -348,6 +348,7 @@
     <ClCompile Include="src\scene\play\chara\CharaBase.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaManager.cpp" />
+    <ClCompile Include="src\scene\play\chara\CharaRespawnState.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaSpawnPoint.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaSpawnPointManager.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaStamina.cpp" />

@@ -25,6 +25,7 @@ class StatusTracker;
 class EffectBase;
 class Trail3D;
 class CharaSpawnPointManager;
+class UI_FadeBase;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -332,7 +333,8 @@ private:
 	bool			m_IsDamage;				// ダメージ喰らい中か
 	bool			m_IsSliding = false;
 
-	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
+	UI_ButtonHint* m_pUI_ButtonHint;			// ボタンヒントUI
+	UI_FadeBase* m_pUI_Fade;
 
 	CharaSpawnPointManager* m_pCharaSpawnPointManager;
 

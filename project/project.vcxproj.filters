@@ -1337,6 +1337,12 @@
     <ClCompile Include="src\scene\play\movable\MovableArea.cpp">
       <Filter>src%28application%29\scene\play\movable_area</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaRespawnState.cpp">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_Fade.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2094,6 +2100,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\movable\MovableArea.h">
       <Filter>src%28application%29\scene\play\movable_area</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_Fade.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

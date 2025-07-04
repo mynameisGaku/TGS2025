@@ -35,7 +35,7 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_StartCount* startCount = new UI_StartCount(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
 		startCount->SetTag("StartCount_" + sPlayerNum);
 
-		UI_FadeBlack* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
+		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		fade->SetTag("Fade_" + sPlayerNum);
 
 		m_UIs[crossHair->GetTag()]		= crossHair;

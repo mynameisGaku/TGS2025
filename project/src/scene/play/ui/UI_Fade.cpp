@@ -50,15 +50,12 @@ void UI_FadeBase::Update()
 	switch (m_FadeState)
 	{
 	case UI_FadeBase::st_NONE:
-		if (IsFadeEnd()) StartFadeOut();
 		break;
 	case UI_FadeBase::st_FADEOUT:
 		fadeOut(rate);
-		if (IsFadeEnd()) StartFadeIn();
 		break;
 	case UI_FadeBase::st_FADEIN:
 		fadeIn(rate);
-		if (IsFadeEnd()) StartFadeOut();
 		break;
 	default:
 		break;

@@ -1,4 +1,5 @@
 #include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/ui/UI_Fade.h"
 
 void CharaBase::RespawnStateNone(FSMSignal sig)
 {
@@ -30,11 +31,15 @@ void CharaBase::RespawnStateFadeOut(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		transform->scale = Vector3(0.5f);
+		m_pUI_Fade->StartFadeOut();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		m_RespawnFSM->ChangeState(&CharaBase::RespawnStateFadeIn);
+		if (m_pUI_Fade->IsFadeEnd())
+		{
+			m_RespawnFSM->ChangeState(&CharaBase::RespawnStateFadeIn);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -63,11 +68,15 @@ void CharaBase::RespawnStateFadeIn(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		transform->scale = Vector3(1.0f);
+		m_pUI_Fade->StartFadeIn();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		m_RespawnFSM->ChangeState(&CharaBase::RespawnStateNone);
+		if (m_pUI_Fade->IsFadeEnd())
+		{
+			m_RespawnFSM->ChangeState(&CharaBase::RespawnStateNone);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新

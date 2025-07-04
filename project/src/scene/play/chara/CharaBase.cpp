@@ -35,6 +35,7 @@
 #include <src/reference/ball/BallRef.h>
 
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
+#include "src/scene/play/ui/UI_Fade.h"
 
 using namespace KeyDefine;
 
@@ -94,6 +95,7 @@ CharaBase::CharaBase()
 	m_pTargetBall		= nullptr;
     m_IsInhibitionSpeed = true;
     m_SpawnPointManager = nullptr;
+	m_TackleIntervalAlarm = nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -106,10 +108,14 @@ CharaBase::CharaBase()
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
+	m_RespawnFSM = new TinyFSM<CharaBase>(this);
 
 	m_pCharaSpawnPointManager = nullptr;
 
 #if TRUE
+
+	m_pUI_ButtonHint = nullptr;
+	m_pUI_Fade = nullptr;
 	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdle, "StateActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleEmote, "StateActionIdleEmote");
@@ -217,7 +223,8 @@ void CharaBase::Init(std::string tag)
 		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 	}
 
-	m_UI_ButtonHint = UI_Manager::Find<UI_ButtonHint>("ButtonHint_" + sIndex);
+	m_pUI_ButtonHint = UI_Manager::Find<UI_ButtonHint>("ButtonHint_" + sIndex);
+	m_pUI_Fade = UI_Manager::Find<UI_FadeBlack>("Fade_" + sIndex);
 
 	m_pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
@@ -356,9 +363,14 @@ void CharaBase::Update() {
 		m_Animator->DeleteAnimInfos();
 		m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 	}
+	if (CheckHitKey(KEY_INPUT_Y))
+	{
+		StartRespawn();
+	}
 
 	m_FSM->Update();
 	m_SubFSM->Update();
+	m_RespawnFSM->Update();
 	m_Timeline->Update();
 
 	m_FSM->ImGuiDebugRender();
@@ -525,15 +537,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 				{
 					ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
 				}
-
-				if (m_SpawnPointManager == nullptr)
-				{
-					Respawn(Vector3::Zero, Vector3::Zero);
-				}
-				else
-				{
-					respawnByPoint();
-				}
+				StartRespawn();
 			}
 		}
 	}
@@ -779,7 +783,7 @@ void CharaBase::Catch()
 	}
 }
 
-void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
+void CharaBase::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
@@ -881,6 +885,11 @@ void CharaBase::invincibleUpdate()
 		m_IsInvincible = false;
 		m_InvincibleTimer = 0.0f;
 	}
+}
+
+void CharaBase::StartRespawn()
+{
+	m_RespawnFSM->ChangeState(&CharaBase::RespawnStateFadeOut); // ステートを変更
 }
 
 void CharaBase::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
@@ -2235,7 +2244,7 @@ void CharaBase::respawnByPoint()
 {
 	CharaSpawnPoint* csp = m_SpawnPointManager->Get_LowUsageRate();
 	Vector3 position = csp->transform->position;
-	Respawn(position, Vector3::Zero);
+	respawn(position, Vector3::Zero);
 	csp->Use();
 }
 
@@ -2589,7 +2598,7 @@ void CharaBase::playTinyFootStepSound(const nlohmann::json& argument)
 
 void CharaBase::buttonHintUpdate()
 {
-	if (m_UI_ButtonHint == nullptr)
+	if (m_pUI_ButtonHint == nullptr)
 		return;
 
 	// ボタンヒント
@@ -2597,40 +2606,40 @@ void CharaBase::buttonHintUpdate()
 		if (m_CanCatch)
 		{
 			if(not m_IsCatching)
-				m_UI_ButtonHint->Activate("LeftTrigger");
+				m_pUI_ButtonHint->Activate("LeftTrigger");
 			else 
-				m_UI_ButtonHint->PushKey("LeftTrigger");
+				m_pUI_ButtonHint->PushKey("LeftTrigger");
 		}
 		else
-			m_UI_ButtonHint->Deactivate("LeftTrigger");
+			m_pUI_ButtonHint->Deactivate("LeftTrigger");
 
 		if (m_CanTackle)
-			m_UI_ButtonHint->Activate("ButtonB");
+			m_pUI_ButtonHint->Activate("ButtonB");
 		else
-			m_UI_ButtonHint->Deactivate("ButtonB");
+			m_pUI_ButtonHint->Deactivate("ButtonB");
 
 		if (m_CanThrow)
 		{
 			if (not m_IsCharging)
-				m_UI_ButtonHint->Activate("RightTrigger");
+				m_pUI_ButtonHint->Activate("RightTrigger");
 			else
-				m_UI_ButtonHint->PushKey("RightTrigger");
+				m_pUI_ButtonHint->PushKey("RightTrigger");
 
-			m_UI_ButtonHint->Activate("ButtonX");
+			m_pUI_ButtonHint->Activate("ButtonX");
 		}
 		else
-			m_UI_ButtonHint->Deactivate("RightTrigger");
+			m_pUI_ButtonHint->Deactivate("RightTrigger");
 
 		if (m_IsLanding)
 		{
-			m_UI_ButtonHint->Activate("ButtonA");
+			m_pUI_ButtonHint->Activate("ButtonA");
 
 			if (not m_IsSliding)
-				m_UI_ButtonHint->Activate("LeftShoulder");
+				m_pUI_ButtonHint->Activate("LeftShoulder");
 			else
-				m_UI_ButtonHint->PushKey("LeftShoulder");
+				m_pUI_ButtonHint->PushKey("LeftShoulder");
 		}
 		else
-			m_UI_ButtonHint->Deactivate("ButtonA");
+			m_pUI_ButtonHint->Deactivate("ButtonA");
 	}
 }

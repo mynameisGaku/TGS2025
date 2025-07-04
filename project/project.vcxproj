@@ -369,6 +369,7 @@
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_ButtonHint.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_Fade.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_MatchTime.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_CrossHair.cpp" />
@@ -552,6 +553,7 @@
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
     <ClInclude Include="src\scene\play\ui\UI_ButtonHint.h" />
+    <ClInclude Include="src\scene\play\ui\UI_Fade.h" />
     <ClInclude Include="src\scene\play\ui\UI_MatchTime.h" />
     <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h" />
     <ClInclude Include="src\scene\play\ui\UI_CrossHair.h" />

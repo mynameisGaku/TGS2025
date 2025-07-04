@@ -305,7 +305,7 @@ private:
 	Vector3			m_lastUpdatePosition;	// 前回更新時の最終位置
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
-	float			m_HitPoint;
+    float			m_HitPoint;				// ヒットポイント
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
@@ -314,7 +314,7 @@ private:
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
 	float			m_InvincibleTimer;		// 無敵残り時間
-	float			m_Stamina;				// 
+    float			m_Stamina;				// スタミナ
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -331,7 +331,8 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
-	bool			m_IsSliding = false;
+    bool			m_IsSliding = false;	// スライディング中か
+    bool			m_IsInhibitionSpeed;	// スピード抑制するか
 
 	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
 

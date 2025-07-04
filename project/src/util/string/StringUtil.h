@@ -46,7 +46,7 @@ public:
 		char sjis[512];
 
 		//UTF-8‚©‚çShift-JIS‚É•ÏŠ·
-		MultiByteToWideChar(CP_UTF8, 0, data.c_str(), strlen(data.c_str()) + size_t(1), str2, MAX_PATH);
+		MultiByteToWideChar(CP_UTF8, 0, data.c_str(), int(strlen(data.c_str())) + 1, str2, MAX_PATH);
 		WideCharToMultiByte(CP_ACP, 0, str2, sizeof(str2) / sizeof(str2[0]), sjis, sizeof(sjis), NULL, NULL);
 
 		return sjis;

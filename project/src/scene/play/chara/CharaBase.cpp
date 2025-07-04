@@ -88,9 +88,10 @@ CharaBase::CharaBase()
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
 	m_hTrailImage		= -1;
-	m_IsTargeting			= false;
+	m_IsTargeting		= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
+	m_IsInhibitionSpeed = true;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -106,36 +107,37 @@ CharaBase::CharaBase()
 
 	m_pCharaSpawnPointManager = nullptr;
 
-#if FALSE
+#if TRUE
 	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdle, "StateActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleEmote, "StateActionIdleEmote");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToJump, "StateActionIdleToJump");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToRun, "StateActionIdleToRun");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToStandingIdle, "StateActionIdleToStandingIdle");
-
+	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToTackle, "StateActionIdleToTackle");
+	m_FSM->RegisterStateName(&CharaBase::StateAimToThrow, "StateAimToThrow");
 	m_FSM->RegisterStateName(&CharaBase::StateAirSpin, "StateAirSpin");
-
 	m_FSM->RegisterStateName(&CharaBase::StateCrouchToActionIdle, "StateCrouchToActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateCrouchToRun, "StateCrouchToRun");
-
 	m_FSM->RegisterStateName(&CharaBase::StateDamageToDown, "StateDamageToDown");
-
 	m_FSM->RegisterStateName(&CharaBase::StateFall, "StateFall");
 	m_FSM->RegisterStateName(&CharaBase::StateFallToCrouch, "StateFallToCrouch");
-	m_FSM->RegisterStateName(&CharaBase::StateFallToRollToIdle, "StateFallToRollToIdle");
-
+	m_FSM->RegisterStateName(&CharaBase::StateFallToRoll, "StateFallToRoll");
+	m_FSM->RegisterStateName(&CharaBase::StateFeint, "StateFeint");
+	m_FSM->RegisterStateName(&CharaBase::StateRoll, "StateRoll");
+	m_FSM->RegisterStateName(&CharaBase::StateRollToActionIdle, "StateRollToActionIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateRollToRun, "StateRollToRun");
 	m_FSM->RegisterStateName(&CharaBase::StateRun, "StateRun");
 	m_FSM->RegisterStateName(&CharaBase::StateRunToActionIdle, "StateRunToActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateRunToJump, "StateRunToJump");
 	m_FSM->RegisterStateName(&CharaBase::StateRunToSlide, "StateRunToSlide");
-
+	m_FSM->RegisterStateName(&CharaBase::StateRunToTackle, "StateRunToTackle");
 	m_FSM->RegisterStateName(&CharaBase::StateSlide, "StateSlide");
 	m_FSM->RegisterStateName(&CharaBase::StateSlideToRun, "StateSlideToRun");
-
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdle, "StateStandingIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleEmote, "StateStandingIdleEmote");
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateTackle, "StateTackle");
 #endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
@@ -268,6 +270,9 @@ void CharaBase::Init(std::string tag)
 	}
 	trail->Finalize(Model(), descs, m_hTrailImage);
 
+	m_FSM->SetName("CharaFSM : " + std::to_string(m_Index));
+	m_SubFSM->SetName("CharaSubFSM : " + std::to_string(m_Index));
+
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
 	m_EffectTransform->position.y = 160.0f;
@@ -352,6 +357,8 @@ void CharaBase::Update() {
 	m_SubFSM->Update();
 	m_Timeline->Update();
 
+	m_FSM->ImGuiDebugRender();
+
 	// ボールの更新
 	if (m_pBall)
 	{
@@ -394,6 +401,19 @@ void CharaBase::Update() {
 	buttonHintUpdate();
 
 	m_lastUpdatePosition = transform->position;
+
+	// NaN/Infのチェック
+	if (MathUtil::IsNaNOrInf(static_cast<double>(transform->position.x)) ||
+		MathUtil::IsNaNOrInf(static_cast<double>(transform->position.y)) ||
+		MathUtil::IsNaNOrInf(static_cast<double>(transform->position.z)))
+	{
+		std::string output = "chara nan or inf : " + std::to_string(m_Index) + "\n";
+		OutputDebugString(output.c_str());
+		transform->position = Vector3::Zero;
+		m_pPhysics->velocity = Vector3::Zero;
+		m_pPhysics->resistance = Vector3::Zero;
+		m_pPhysics->angularVelocity = Vector3::Zero;
+	}
 }
 
 void CharaBase::Draw()
@@ -535,8 +555,13 @@ void CharaBase::HitGroundProcess() {
 	{
 		if (m_pCharaSpawnPointManager != nullptr) {
 			CharaSpawnPoint* spawnPoint = m_pCharaSpawnPointManager->Get_Near(transform->position);
-			transform->position = spawnPoint->transform->position;
-			spawnPoint->Use();
+			if (spawnPoint)
+			{
+				transform->position = spawnPoint->transform->position;
+				spawnPoint->Use();
+			}
+			else
+				transform->position = Vector3::Zero;
 		}
 		else
 			transform->position = Vector3::SetY(CENTER_OFFSET);
@@ -601,21 +626,32 @@ void CharaBase::Move(const Vector3& dir)
 
 	if (m_CanRot)
 	{
-		float currentRot = transform->rotation.y;	// 現在の向き
-		float terminusRot = atan2f(dir.x, dir.z);	// 終点の向き
-
-		// 徐々に終点の向きへ合わせる
+		float currentRot = transform->rotation.y;
+		float terminusRot = atan2f(dir.x, dir.z);
 		transform->rotation.y = MathUtil::RotAngle(currentRot, terminusRot, m_RotSpeed);
 	}
 
-	if (m_CanMove)
+	if (!m_CanMove)
+		return;
+
+	const Vector3 normDir = Vector3::Normalize(dir);
+
+	if (m_IsJumping && not m_IsInhibitionSpeed)
 	{
-		const Vector3 normDir = Vector3::Normalize(dir);
-		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * GTime.deltaTime;	// 時間経過率を適応した移動速度
+		Vector3 currentVelocity = m_pPhysics->velocity;
+		float speed = Vector3(currentVelocity.x, 0.0f, currentVelocity.z).GetLength();
 
-		Vector3 velocity = normDir * deltaTimeMoveSpeed * Vector3::Horizontal;	// スティックの傾きの方向への速度
+		Vector3 newVelocity = normDir * speed;
 
-		// 速度を適応させる
+		// 速度のY成分はそのまま
+		m_pPhysics->velocity.x = newVelocity.x;
+		m_pPhysics->velocity.z = newVelocity.z;
+	}
+	else
+	{
+		const float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * GTime.deltaTime;
+		Vector3 velocity = normDir * deltaTimeMoveSpeed * Vector3::Horizontal;
+
 		m_pPhysics->velocity.x = velocity.x;
 		m_pPhysics->velocity.z = velocity.z;
 	}
@@ -625,6 +661,7 @@ void CharaBase::Jump()
 {
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
 	m_IsJumping = true;
+	m_IsInhibitionSpeed = !m_IsSliding;
 }
 
 void CharaBase::Slide()
@@ -1235,6 +1272,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_SlideTimer = 0.0f;
 		m_Timeline->Stop();
 		m_CanTackle = false;
 	}
@@ -1544,7 +1582,12 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
+
+		if (not m_FSM->HasTransitionWithInThePast(&CharaBase::StateSlide, 1))
+			m_pPhysics->velocity = m_pPhysics->velocity * 1.5f;
+
 		m_IsSliding = true;
+		m_CanMove = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1563,6 +1606,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_IsSliding = false;
+		m_CanMove = true;
 	}
 	break;
 	}
@@ -1598,6 +1642,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_SlideTimer = 0.0f;
 		m_CanMove = true;
 		m_IsSliding = false;
 	}

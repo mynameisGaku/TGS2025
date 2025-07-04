@@ -292,6 +292,7 @@
     <ClCompile Include="src\common\camera\CamState_Aim.cpp" />
     <ClCompile Include="src\common\camera\CamState_Chase.cpp" />
     <ClCompile Include="src\common\camera\CamState_Debug.cpp" />
+    <ClCompile Include="src\common\camera\CamState_Performance.cpp" />
     <ClCompile Include="src\common\component\animator\AnimationEvent.cpp" />
     <ClCompile Include="src\common\component\animator\Animator.cpp" />
     <ClCompile Include="src\common\component\animator\AnimatorJson.cpp" />
@@ -331,6 +332,7 @@
     <ClCompile Include="src\reference\ball\BallRef.cpp" />
     <ClCompile Include="src\reference\bloom\BloomRef.cpp" />
     <ClCompile Include="src\reference\camera\CameraDefineRef.cpp" />
+    <ClCompile Include="src\reference\camera\CameraPerformanceRef.cpp" />
     <ClCompile Include="src\reference\chara\CharaDefineRef.cpp" />
     <ClCompile Include="src\reference\chara\CharaHPRef.cpp" />
     <ClCompile Include="src\reference\chara\CharaStaminaRef.cpp" />
@@ -374,6 +376,8 @@
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_StartCount.cpp" />
+    <ClCompile Include="src\scene\result\resultScene.cpp" />
+    <ClCompile Include="src\scene\result\ui\UI_Setter_ResultScene.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
     <ClCompile Include="src\util\alarm\Alarm.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
@@ -512,6 +516,7 @@
     <ClInclude Include="src\reference\ball\BallRef.h" />
     <ClInclude Include="src\reference\bloom\BloomRef.h" />
     <ClInclude Include="src\reference\camera\CameraDefineRef.h" />
+    <ClInclude Include="src\reference\camera\CameraPerformanceRef.h" />
     <ClInclude Include="src\reference\chara\CharaDefineRef.h" />
     <ClInclude Include="src\reference\chara\CharaHPRef.h" />
     <ClInclude Include="src\reference\chara\CharaStaminaRef.h" />
@@ -557,6 +562,8 @@
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
     <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h" />
     <ClInclude Include="src\scene\play\ui\UI_StartCount.h" />
+    <ClInclude Include="src\scene\result\resultScene.h" />
+    <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
     <ClInclude Include="src\util\alarm\Alarm.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />

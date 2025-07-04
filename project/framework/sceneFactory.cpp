@@ -6,6 +6,7 @@
 #include "src/scene/boot/bootScene.h"
 #include "src/scene/title/titleScene.h"
 #include "src/scene/play/playScene.h"
+#include "src/scene/result/resultScene.h"
 
 SceneBase* SceneFactory::CreateFirst()
 {
@@ -19,6 +20,9 @@ SceneBase * SceneFactory::Create(const std::string& name)
 	}
 	if (name == "PlayScene") {
 		return new PlayScene(name);
+	}
+	if (name == "ResultScene") {
+		return new ResultScene(name);
 	}
 	MessageBox(NULL, ("éüÇÃÉVÅ[ÉìÇÕÇ†ÇËÇ‹ÇπÇÒ\n" + name).c_str(), "SceneFactory", MB_ICONERROR | MB_OK);
 	assert(false);

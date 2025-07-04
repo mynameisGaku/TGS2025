@@ -403,6 +403,9 @@
     <Filter Include="src%28application%29\scene\play\movable_area">
       <UniqueIdentifier>{5dd55688-be26-45af-ab6f-56c5f0608d54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\result\ui">
+      <UniqueIdentifier>{2f0cbc60-a68f-4e27-ab2f-9a2edd78af30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1337,6 +1340,18 @@
     <ClCompile Include="src\scene\play\movable\MovableArea.cpp">
       <Filter>src%28application%29\scene\play\movable_area</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\result\resultScene.cpp">
+      <Filter>src%28application%29\scene\result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Setter_ResultScene.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\camera\CamState_Performance.cpp">
+      <Filter>src%28application%29\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\camera\CameraPerformanceRef.cpp">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2094,6 +2109,15 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\movable\MovableArea.h">
       <Filter>src%28application%29\scene\play\movable_area</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\resultScene.h">
+      <Filter>src%28application%29\scene\result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\camera\CameraPerformanceRef.h">
+      <Filter>src%28application%29\reference\camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

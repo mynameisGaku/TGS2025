@@ -25,12 +25,17 @@ public:
 
     struct ResultData
     {
-        std::unordered_map<std::string, int> PointMap;
+		std::vector<std::string> WinnerTeamName;
+        std::vector<int> MVP_CharaIndex;
+        std::vector<int> TotalPoint;
     };
 
     void SetGameResult(const ResultData& data);
 
     std::string GetCurrentStageName() const;
+
+    inline ResultData GetResultData() const { return m_ResultData; }
+	inline ResultData GetResultDataPrev() const { return m_ResultDataPrev; }
 
 private:
 
@@ -47,4 +52,5 @@ private:
     std::string                                     m_CurrentStageName;
     std::string                                     m_CurrentGameMode;
     ResultData                                      m_ResultData;
+    ResultData                                      m_ResultDataPrev;
 };

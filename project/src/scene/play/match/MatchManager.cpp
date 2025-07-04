@@ -423,7 +423,22 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
     break;
     case FSMSignal::SIG_Exit:
     {
+        GameManager::ResultData resultData;
 
+        for (auto& teamName : GAME_REF.TeamNames)
+        {
+			Team* team = m_pTeamManager->GetTeam(teamName);
+
+            if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
+            {
+				resultData.WinnerTeamName.push_back(teamName);
+				resultData.TotalPoint.push_back(team->GetTotalPoint());
+                resultData.MVP_CharaIndex.push_back(team->GetHighestPointHolderIDandPoint().first);
+            }
+        }
+
+		GameManager* gameManager = SceneManager::CommonScene()->FindGameObject<GameManager>();
+        gameManager->SetGameResult(resultData);
     }
     break;
     }
@@ -541,7 +556,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
         }
 
         if (m_IsFadeEnd && not Fader::IsPlaying())
-            SceneManager::ChangeScene("TitleScene");
+            SceneManager::ChangeScene("ResultScene");
     }
     break;
     case FSMSignal::SIG_AfterUpdate:

@@ -89,6 +89,7 @@ CharaBase::CharaBase()
 	m_IsTargeting			= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
+	m_SpawnPointManager = nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -187,6 +188,8 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->Init(tag);
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
+
+	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
 	const std::string sIndex = std::to_string(m_Index + 1) + "P";
 
@@ -477,27 +480,26 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			m_pHP->Damage_UseDefault();
 			m_pStatusTracker->AddGetHitCount(1);
 
-			if (not ball->GetLastOwner())
-				return;
+			if (ball->GetLastOwner())
+			{
+				ball->GetLastOwner()->GetStatusTracker()->AddHitCount(1);
+			}
 
-			ball->GetLastOwner()->GetStatusTracker()->AddHitCount(1);
 			if (m_pHP->IsDead())
 			{
 				m_pStatusTracker->AddDeathCount(1);
-				ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
+				if (ball->GetLastOwner())
+				{
+					ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
+				}
 
-				CharaSpawnPointManager* cspm = FindGameObject<CharaSpawnPointManager>();
-
-				if (cspm == nullptr)
+				if (m_SpawnPointManager == nullptr)
 				{
 					Respawn(Vector3::Zero, Vector3::Zero);
 				}
 				else
 				{
-					CharaSpawnPoint* csp = cspm->Get_Random();
-					Vector3 position = csp->transform->position;
-					Respawn(position, Vector3::Zero);
-					csp->Use();
+					respawnByPoint();
 				}
 			}
 		}
@@ -724,6 +726,7 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 	m_IsJumping = false;
 	m_IsLanding = true;
 	transform->position = pos;
+	m_lastUpdatePosition = transform->position;
 	transform->rotation = rot;
 	// キャッチャーの位置を更新
 	if (m_Catcher)
@@ -2140,6 +2143,14 @@ void CharaBase::releaseBall()
 	m_pBall = nullptr;
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
+}
+
+void CharaBase::respawnByPoint()
+{
+	CharaSpawnPoint* csp = m_SpawnPointManager->Get_LowUsageRate();
+	Vector3 position = csp->transform->position;
+	Respawn(position, Vector3::Zero);
+	csp->Use();
 }
 
 void CharaBase::playThrowSound()

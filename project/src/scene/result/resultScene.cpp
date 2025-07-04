@@ -18,18 +18,25 @@
 
 ResultScene::ResultScene(const std::string& name) : SceneBase(true, name) {
 
+	CameraManager::SetIsScreenDivision(true);
 	Fader::FadeIn(1.0f, EasingType::Linear);
 
 	SettingManager* settingManager = Instantiate<SettingManager>();
 
 	Instantiate<UI_Setter_ResultScene>();
 
-	Camera* mainCamera = CameraManager::MainCamera();
-	mainCamera->SetPerformance("ResultScene");
+	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
+
+	for (int i = 0; i < CAMERA_NUM; ++i) {
+		Camera* camera = CameraManager::GetCamera(i);
+		if (camera)
+			camera->SetPerformance("ResultScene");
+	}
 }
 
 ResultScene::~ResultScene() {
 
+	CameraManager::SetIsScreenDivision(false);
 }
 
 void ResultScene::Update() {

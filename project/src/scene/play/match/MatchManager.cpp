@@ -432,6 +432,7 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
             if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
             {
 				resultData.WinnerTeamName.push_back(teamName);
+				resultData.WinnerTeamColor.push_back(ColorUtil::ColorFromString(teamName));
 				resultData.TotalPoint.push_back(team->GetTotalPoint());
                 resultData.MVP_CharaIndex.push_back(team->GetHighestPointHolderIDandPoint().first);
             }

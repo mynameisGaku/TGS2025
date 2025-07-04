@@ -403,6 +403,9 @@
     <Filter Include="src%28application%29\scene\play\movable_area">
       <UniqueIdentifier>{5dd55688-be26-45af-ab6f-56c5f0608d54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\result\ui">
+      <UniqueIdentifier>{04f105dc-3db9-4a39-a8ba-0af76cc95d93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1343,6 +1346,21 @@
     <ClCompile Include="src\scene\play\ui\UI_Fade.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\result\resultScene.cpp">
+      <Filter>src%28application%29\scene\result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Setter_ResultScene.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\camera\CamState_Performance.cpp">
+      <Filter>src%28application%29\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\camera\CameraPerformanceRef.cpp">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Winner_Team.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2103,6 +2121,18 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\ui\UI_Fade.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\resultScene.h">
+      <Filter>src%28application%29\scene\result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\camera\CameraPerformanceRef.h">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Winner_Team.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

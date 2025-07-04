@@ -26,6 +26,7 @@ public:
     struct ResultData
     {
 		std::vector<std::string> WinnerTeamName;
+		std::vector<int> WinnerTeamColor;
         std::vector<int> MVP_CharaIndex;
         std::vector<int> TotalPoint;
     };

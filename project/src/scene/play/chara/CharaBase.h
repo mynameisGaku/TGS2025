@@ -24,6 +24,8 @@ class Timeline;
 class StatusTracker;
 class EffectBase;
 class Trail3D;
+class CharaSpawnPointManager;
+class UI_FadeBase;
 
 /// <summary>
 /// キャラクターに関する基底クラス
@@ -151,20 +153,12 @@ private:
 public:
 	//=======================================================================================
 	// ▼リスポーン
-	
-	/// <summary>
-	/// この関数を呼び出すと、パラメータがリセットされ、指定位置にリスポーンする。
-	/// ToDo : リスポーンステートを作る
-	/// </summary>
-	/// <param name="pos">リスポーン時位置</param>
-	/// <param name="rot">リスポーン時回転</param>
-	void Respawn(const Vector3& pos, const Vector3& rot);
-
-	void SetTrailImage(int hImage);
+	void StartRespawn();
 
 	//=======================================================================================
 	// ▼演出
 
+	void SetTrailImage(int hImage);
 	Vector2 Target(const Ball* ball);
 
 	//=======================================================================================
@@ -277,6 +271,10 @@ public:
 	void SubStateHoldToAim(FSMSignal sig);
 	void SubStateCatch(FSMSignal sig);
 
+	void RespawnStateNone(FSMSignal sig);
+	void RespawnStateFadeOut(FSMSignal sig);
+	void RespawnStateFadeIn(FSMSignal sig);
+
 private:
 	friend class CharaManager;
 	friend class UI_CrossHair;
@@ -296,6 +294,7 @@ private:
 	EffectBase*		m_pCatchDustEffect;		// キャッチの粉エフェクト
 	TinyFSM<CharaBase>* m_FSM;				// ステートマシン
 	TinyFSM<CharaBase>* m_SubFSM;			// ステートマシン
+	TinyFSM<CharaBase>* m_RespawnFSM;			// ステートマシン
 	Animator*		m_Animator;				// アニメーション
 	Transform*		m_EffectTransform;		// エフェクト出すトランスフォーム
 	Timeline<CharaBase>* m_Timeline;		// アニメーションに合わせて動くタイムライン
@@ -303,9 +302,10 @@ private:
 	Alarm*			m_Alarm;				// アラーム
 	Alarm*			m_TackleIntervalAlarm;	// タックル後の間隔アラーム
 	Vector3			m_lastUpdatePosition;	// 前回更新時の最終位置
+	CharaSpawnPointManager* m_SpawnPointManager;	// リスポーン地点
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
-	float			m_HitPoint;
+    float			m_HitPoint;				// ヒットポイント
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
@@ -314,7 +314,7 @@ private:
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
 	float			m_InvincibleTimer;		// 無敵残り時間
-	float			m_Stamina;				// 
+    float			m_Stamina;				// スタミナ
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -331,9 +331,11 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
-	bool			m_IsSliding = false;
+    bool			m_IsSliding = false;	// スライディング中か
+    bool			m_IsInhibitionSpeed;	// スピード抑制するか
 
-	UI_ButtonHint* m_UI_ButtonHint = nullptr;			// ボタンヒントUI
+	UI_ButtonHint* m_pUI_ButtonHint;			// ボタンヒントUI
+	UI_FadeBase* m_pUI_Fade;
 
 	CharaSpawnPointManager* m_pCharaSpawnPointManager;
 
@@ -356,7 +358,16 @@ private:
 	void throwBallHoming();
 	// ボールを手放す処理
 	void releaseBall();
-
+	/// <summary>
+	/// この関数を呼び出すと、パラメータがリセットされ、指定位置にリスポーンする。
+	/// ToDo : リスポーンステートを作る
+	/// </summary>
+	/// <param name="pos">リスポーン時位置</param>
+	/// <param name="rot">リスポーン時回転</param>
+	void respawn(const Vector3& pos, const Vector3& rot);
+	// リスポーン地点からリスポーン
+	void respawnByPoint();
+	
 	//=== サウンド再生 ===
 	void playThrowSound();
 	void playGetHitSound();

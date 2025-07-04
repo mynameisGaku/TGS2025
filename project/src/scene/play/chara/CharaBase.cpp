@@ -25,6 +25,7 @@
 #include "src/util/math/Random.h"
 #include "src/util/sound/SoundManager.h"
 #include "src/scene/play/tackler/Tackler.h"
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
@@ -34,6 +35,7 @@
 #include <src/reference/ball/BallRef.h>
 
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
+#include "src/scene/play/ui/UI_Fade.h"
 
 using namespace KeyDefine;
 
@@ -88,9 +90,12 @@ CharaBase::CharaBase()
 	m_pCatchDustEffect	= nullptr;
 	m_CatchTimer		= 0.0f;
 	m_hTrailImage		= -1;
-	m_IsTargeting			= false;
+	m_IsTargeting		= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
+    m_IsInhibitionSpeed = true;
+    m_SpawnPointManager = nullptr;
+	m_TackleIntervalAlarm = nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -103,39 +108,44 @@ CharaBase::CharaBase()
 
 	m_FSM = new TinyFSM<CharaBase>(this);
 	m_SubFSM = new TinyFSM<CharaBase>(this);
+	m_RespawnFSM = new TinyFSM<CharaBase>(this);
 
 	m_pCharaSpawnPointManager = nullptr;
 
-#if FALSE
+#if TRUE
+
+	m_pUI_ButtonHint = nullptr;
+	m_pUI_Fade = nullptr;
 	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdle, "StateActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleEmote, "StateActionIdleEmote");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToJump, "StateActionIdleToJump");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToRun, "StateActionIdleToRun");
 	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToStandingIdle, "StateActionIdleToStandingIdle");
-
+	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToTackle, "StateActionIdleToTackle");
+	m_FSM->RegisterStateName(&CharaBase::StateAimToThrow, "StateAimToThrow");
 	m_FSM->RegisterStateName(&CharaBase::StateAirSpin, "StateAirSpin");
-
 	m_FSM->RegisterStateName(&CharaBase::StateCrouchToActionIdle, "StateCrouchToActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateCrouchToRun, "StateCrouchToRun");
-
 	m_FSM->RegisterStateName(&CharaBase::StateDamageToDown, "StateDamageToDown");
-
 	m_FSM->RegisterStateName(&CharaBase::StateFall, "StateFall");
 	m_FSM->RegisterStateName(&CharaBase::StateFallToCrouch, "StateFallToCrouch");
-	m_FSM->RegisterStateName(&CharaBase::StateFallToRollToIdle, "StateFallToRollToIdle");
-
+	m_FSM->RegisterStateName(&CharaBase::StateFallToRoll, "StateFallToRoll");
+	m_FSM->RegisterStateName(&CharaBase::StateFeint, "StateFeint");
+	m_FSM->RegisterStateName(&CharaBase::StateRoll, "StateRoll");
+	m_FSM->RegisterStateName(&CharaBase::StateRollToActionIdle, "StateRollToActionIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateRollToRun, "StateRollToRun");
 	m_FSM->RegisterStateName(&CharaBase::StateRun, "StateRun");
 	m_FSM->RegisterStateName(&CharaBase::StateRunToActionIdle, "StateRunToActionIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateRunToJump, "StateRunToJump");
 	m_FSM->RegisterStateName(&CharaBase::StateRunToSlide, "StateRunToSlide");
-
+	m_FSM->RegisterStateName(&CharaBase::StateRunToTackle, "StateRunToTackle");
 	m_FSM->RegisterStateName(&CharaBase::StateSlide, "StateSlide");
 	m_FSM->RegisterStateName(&CharaBase::StateSlideToRun, "StateSlideToRun");
-
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdle, "StateStandingIdle");
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleEmote, "StateStandingIdleEmote");
 	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
+	m_FSM->RegisterStateName(&CharaBase::StateTackle, "StateTackle");
 #endif // FALSE
 
 	m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
@@ -192,6 +202,8 @@ void CharaBase::Init(std::string tag)
 	m_Tackler->SetColliderActive(false);
 	m_Tackler->SetParent(this);
 
+	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
+
 	const std::string sIndex = std::to_string(m_Index + 1) + "P";
 
 	UI_CrossHair* ui_CrossHair = UI_Manager::Find<UI_CrossHair>("CrossHair_" + sIndex);
@@ -211,7 +223,8 @@ void CharaBase::Init(std::string tag)
 		ui_HitPoint_Icon->SetImage(LoadGraph("data/texture/ui/HP/HitPoint.png"));
 	}
 
-	m_UI_ButtonHint = UI_Manager::Find<UI_ButtonHint>("ButtonHint_" + sIndex);
+	m_pUI_ButtonHint = UI_Manager::Find<UI_ButtonHint>("ButtonHint_" + sIndex);
+	m_pUI_Fade = UI_Manager::Find<UI_FadeBlack>("Fade_" + sIndex);
 
 	m_pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
@@ -267,6 +280,9 @@ void CharaBase::Init(std::string tag)
 		descs.push_back(desc2);
 	}
 	trail->Finalize(Model(), descs, m_hTrailImage);
+
+	m_FSM->SetName("CharaFSM : " + std::to_string(m_Index));
+	m_SubFSM->SetName("CharaSubFSM : " + std::to_string(m_Index));
 
 	m_EffectTransform = new Transform();
 	m_EffectTransform->SetParent(transform);
@@ -347,10 +363,17 @@ void CharaBase::Update() {
 		m_Animator->DeleteAnimInfos();
 		m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 	}
+	if (CheckHitKey(KEY_INPUT_Y))
+	{
+		StartRespawn();
+	}
 
 	m_FSM->Update();
 	m_SubFSM->Update();
+	m_RespawnFSM->Update();
 	m_Timeline->Update();
+
+	m_FSM->ImGuiDebugRender();
 
 	// ボールの更新
 	if (m_pBall)
@@ -394,6 +417,19 @@ void CharaBase::Update() {
 	buttonHintUpdate();
 
 	m_lastUpdatePosition = transform->position;
+
+	// NaN/Infのチェック
+	if (MathUtil::IsNaNOrInf(static_cast<double>(transform->position.x)) ||
+		MathUtil::IsNaNOrInf(static_cast<double>(transform->position.y)) ||
+		MathUtil::IsNaNOrInf(static_cast<double>(transform->position.z)))
+	{
+		std::string output = "chara nan or inf : " + std::to_string(m_Index) + "\n";
+		OutputDebugString(output.c_str());
+		transform->position = Vector3::Zero;
+		m_pPhysics->velocity = Vector3::Zero;
+		m_pPhysics->resistance = Vector3::Zero;
+		m_pPhysics->angularVelocity = Vector3::Zero;
+	}
 }
 
 void CharaBase::Draw()
@@ -489,15 +525,19 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 			m_pHP->Damage_UseDefault();
 			m_pStatusTracker->AddGetHitCount(1);
 
-			if (not ball->GetLastOwner())
-				return;
+			if (ball->GetLastOwner())
+			{
+				ball->GetLastOwner()->GetStatusTracker()->AddHitCount(1);
+			}
 
-			ball->GetLastOwner()->GetStatusTracker()->AddHitCount(1);
 			if (m_pHP->IsDead())
 			{
 				m_pStatusTracker->AddDeathCount(1);
-				ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
-				Respawn(Vector3::Zero, Vector3::Zero);
+				if (ball->GetLastOwner())
+				{
+					ball->GetLastOwner()->GetStatusTracker()->AddKillCount(1);
+				}
+				StartRespawn();
 			}
 		}
 	}
@@ -535,8 +575,13 @@ void CharaBase::HitGroundProcess() {
 	{
 		if (m_pCharaSpawnPointManager != nullptr) {
 			CharaSpawnPoint* spawnPoint = m_pCharaSpawnPointManager->Get_Near(transform->position);
-			transform->position = spawnPoint->transform->position;
-			spawnPoint->Use();
+			if (spawnPoint)
+			{
+				transform->position = spawnPoint->transform->position;
+				spawnPoint->Use();
+			}
+			else
+				transform->position = Vector3::Zero;
 		}
 		else
 			transform->position = Vector3::SetY(CENTER_OFFSET);
@@ -601,21 +646,32 @@ void CharaBase::Move(const Vector3& dir)
 
 	if (m_CanRot)
 	{
-		float currentRot = transform->rotation.y;	// 現在の向き
-		float terminusRot = atan2f(dir.x, dir.z);	// 終点の向き
-
-		// 徐々に終点の向きへ合わせる
+		float currentRot = transform->rotation.y;
+		float terminusRot = atan2f(dir.x, dir.z);
 		transform->rotation.y = MathUtil::RotAngle(currentRot, terminusRot, m_RotSpeed);
 	}
 
-	if (m_CanMove)
+	if (!m_CanMove)
+		return;
+
+	const Vector3 normDir = Vector3::Normalize(dir);
+
+	if (m_IsJumping && not m_IsInhibitionSpeed)
 	{
-		const Vector3 normDir = Vector3::Normalize(dir);
-		float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * GTime.deltaTime;	// 時間経過率を適応した移動速度
+		Vector3 currentVelocity = m_pPhysics->velocity;
+		float speed = Vector3(currentVelocity.x, 0.0f, currentVelocity.z).GetLength();
 
-		Vector3 velocity = normDir * deltaTimeMoveSpeed * Vector3::Horizontal;	// スティックの傾きの方向への速度
+		Vector3 newVelocity = normDir * speed;
 
-		// 速度を適応させる
+		// 速度のY成分はそのまま
+		m_pPhysics->velocity.x = newVelocity.x;
+		m_pPhysics->velocity.z = newVelocity.z;
+	}
+	else
+	{
+		const float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * GTime.deltaTime;
+		Vector3 velocity = normDir * deltaTimeMoveSpeed * Vector3::Horizontal;
+
 		m_pPhysics->velocity.x = velocity.x;
 		m_pPhysics->velocity.z = velocity.z;
 	}
@@ -625,6 +681,7 @@ void CharaBase::Jump()
 {
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
 	m_IsJumping = true;
+	m_IsInhibitionSpeed = !m_IsSliding;
 }
 
 void CharaBase::Slide()
@@ -726,7 +783,7 @@ void CharaBase::Catch()
 	}
 }
 
-void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
+void CharaBase::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
@@ -737,6 +794,7 @@ void CharaBase::Respawn(const Vector3& pos, const Vector3& rot)
 	m_IsJumping = false;
 	m_IsLanding = true;
 	transform->position = pos;
+	m_lastUpdatePosition = transform->position;
 	transform->rotation = rot;
 	// キャッチャーの位置を更新
 	if (m_Catcher)
@@ -827,6 +885,11 @@ void CharaBase::invincibleUpdate()
 		m_IsInvincible = false;
 		m_InvincibleTimer = 0.0f;
 	}
+}
+
+void CharaBase::StartRespawn()
+{
+	m_RespawnFSM->ChangeState(&CharaBase::RespawnStateFadeOut); // ステートを変更
 }
 
 void CharaBase::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
@@ -1235,6 +1298,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_SlideTimer = 0.0f;
 		m_Timeline->Stop();
 		m_CanTackle = false;
 	}
@@ -1544,7 +1608,12 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
+
+		if (not m_FSM->HasTransitionWithInThePast(&CharaBase::StateSlide, 1))
+			m_pPhysics->velocity = m_pPhysics->velocity * 1.5f;
+
 		m_IsSliding = true;
+		m_CanMove = false;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1563,6 +1632,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	case FSMSignal::SIG_Exit: // 終了
 	{
 		m_IsSliding = false;
+		m_CanMove = true;
 	}
 	break;
 	}
@@ -1598,6 +1668,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_SlideTimer = 0.0f;
 		m_CanMove = true;
 		m_IsSliding = false;
 	}
@@ -2169,6 +2240,14 @@ void CharaBase::releaseBall()
 	m_BallChargeRate = 0.0f;
 }
 
+void CharaBase::respawnByPoint()
+{
+	CharaSpawnPoint* csp = m_SpawnPointManager->Get_LowUsageRate();
+	Vector3 position = csp->transform->position;
+	respawn(position, Vector3::Zero);
+	csp->Use();
+}
+
 void CharaBase::playThrowSound()
 {
 	int rand = Random.GetIntRange(0, 100);
@@ -2519,7 +2598,7 @@ void CharaBase::playTinyFootStepSound(const nlohmann::json& argument)
 
 void CharaBase::buttonHintUpdate()
 {
-	if (m_UI_ButtonHint == nullptr)
+	if (m_pUI_ButtonHint == nullptr)
 		return;
 
 	// ボタンヒント
@@ -2527,40 +2606,40 @@ void CharaBase::buttonHintUpdate()
 		if (m_CanCatch)
 		{
 			if(not m_IsCatching)
-				m_UI_ButtonHint->Activate("LeftTrigger");
+				m_pUI_ButtonHint->Activate("LeftTrigger");
 			else 
-				m_UI_ButtonHint->PushKey("LeftTrigger");
+				m_pUI_ButtonHint->PushKey("LeftTrigger");
 		}
 		else
-			m_UI_ButtonHint->Deactivate("LeftTrigger");
+			m_pUI_ButtonHint->Deactivate("LeftTrigger");
 
 		if (m_CanTackle)
-			m_UI_ButtonHint->Activate("ButtonB");
+			m_pUI_ButtonHint->Activate("ButtonB");
 		else
-			m_UI_ButtonHint->Deactivate("ButtonB");
+			m_pUI_ButtonHint->Deactivate("ButtonB");
 
 		if (m_CanThrow)
 		{
 			if (not m_IsCharging)
-				m_UI_ButtonHint->Activate("RightTrigger");
+				m_pUI_ButtonHint->Activate("RightTrigger");
 			else
-				m_UI_ButtonHint->PushKey("RightTrigger");
+				m_pUI_ButtonHint->PushKey("RightTrigger");
 
-			m_UI_ButtonHint->Activate("ButtonX");
+			m_pUI_ButtonHint->Activate("ButtonX");
 		}
 		else
-			m_UI_ButtonHint->Deactivate("RightTrigger");
+			m_pUI_ButtonHint->Deactivate("RightTrigger");
 
 		if (m_IsLanding)
 		{
-			m_UI_ButtonHint->Activate("ButtonA");
+			m_pUI_ButtonHint->Activate("ButtonA");
 
 			if (not m_IsSliding)
-				m_UI_ButtonHint->Activate("LeftShoulder");
+				m_pUI_ButtonHint->Activate("LeftShoulder");
 			else
-				m_UI_ButtonHint->PushKey("LeftShoulder");
+				m_pUI_ButtonHint->PushKey("LeftShoulder");
 		}
 		else
-			m_UI_ButtonHint->Deactivate("ButtonA");
+			m_pUI_ButtonHint->Deactivate("ButtonA");
 	}
 }

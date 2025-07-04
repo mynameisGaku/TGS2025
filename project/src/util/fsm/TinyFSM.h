@@ -2,6 +2,12 @@
 #include <unordered_map>
 #include <string>
 #include <vendor/imgui/imgui.h>
+#include <list>
+#include <basetsd.h>
+#include <cstdio>
+#include <memory>
+#include <type_traits>
+#include <vadefs.h>
 
 /// <summary>
 /// <para> 実行されているステートへ送る信号。 </para>
@@ -173,6 +179,16 @@ public:
 				}
 			}
 
+			// 遷移ログの表示
+			if (ImGui::TreeNode("Transition Log"))
+			{
+				for (const auto& log : m_transitLog)
+				{
+					const char* stateName = GetStateName(log.state);
+					ImGui::Text("State: %s, Signal: %s", stateName, signalStr);
+				}
+				ImGui::TreePop();
+			}
 			ImGui::TreePop();
 		}
 #endif
@@ -214,6 +230,14 @@ public:
 					m_stateNameMap[state] = buf;
 				}
 			}
+
+			// ログに記録する
+			Log log{};
+			log.signal = m_signal;
+			log.state = state;
+			if (m_transitLog.size() >= LOGMAX)
+				m_transitLog.pop_front();
+			m_transitLog.push_back(log);
 		}
 	}
 
@@ -252,6 +276,36 @@ public:
 	{
 		m_name = name;
 	}
+	// 過去10回の遷移ログを確認する allowNumberで許容回数設定可能
+	bool HasTransitionWithInThePast10Times(void(T::*state)(FSMSignal), int allowNumber)
+	{
+		int count = 0;
+		for (const auto& log : m_transitLog)
+		{
+			if (log.state == state && count > allowNumber)
+			{
+				return true;
+			}
+			count++;
+		}
+		return false;
+	}
+	bool HasTransitionWithInThePast(void(T::* state)(FSMSignal), int times) const
+	{
+		int count = 0;
+		for (const auto& log : m_transitLog)
+		{
+			if (count >= times)
+				return false;
+
+			if (log.state == state)
+			{
+				return true;
+			}
+			count++;
+		}
+		return false;
+	}
 
 private:
 	// 現在、どの段階の処理を行っているか
@@ -274,4 +328,12 @@ private:
 	std::unordered_map<void(T::*)(FSMSignal), std::string> m_stateNameMap;
 	// 統計を取るか
 	bool m_isStatistics;
+	// 遷移ログ
+	const UINT32 LOGMAX = 10;
+	struct Log
+	{
+		void(T::* state)(FSMSignal);
+		FSMSignal signal;
+	};
+	std::list<Log> m_transitLog;
 };

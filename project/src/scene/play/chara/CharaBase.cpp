@@ -351,6 +351,10 @@ void CharaBase::Update() {
 		m_Animator->DeleteAnimInfos();
 		m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 	}
+	if (InputManager::Push(KeyDefine::KeyCode::ButtonY))
+	{
+		respawnByPoint();
+	}
 
 	m_FSM->Update();
 	m_SubFSM->Update();

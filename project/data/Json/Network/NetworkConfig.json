@@ -1,9 +1,10 @@
 {
-  "server-ip": {
+	"ConnectionMax": 6,
+	"IP": {
 	"d1": 192,
 	"d2": 168,
 	"d3": 1,
 	"d4": 2
-  },
-  "server-port": "5050"
+	},
+	"Port": "5050"
 }

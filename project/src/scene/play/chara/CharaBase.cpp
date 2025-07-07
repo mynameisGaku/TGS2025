@@ -558,6 +558,7 @@ void CharaBase::HitGroundProcess() {
 
 	const float radius = capsuleCol->Radius();
 	Vector3 hitPos;
+	Vector3 normal;
 
 	//=== すり抜け判定 ===
 	static const float CENTER_OFFSET = 50.0f;	// 中心のオフセット
@@ -565,9 +566,23 @@ void CharaBase::HitGroundProcess() {
 	const Vector3 centerPos = transform->position + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
 	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
 
-	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
+	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos, &normal))
 	{
-		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
+		Vector3 pos = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;
+		transform->position = pos;	// レイのヒット位置へ移動
+
+		Vector3 vel = m_pPhysics->FlatVelocity();
+
+		Vector3 velEuler = Vector3Util::DirToEuler(vel);
+		Vector3 normalEuler = Vector3Util::DirToEuler(-normal);
+
+		float angle = normalEuler.y - velEuler.y;
+
+		Vector3 jumpDir = Vector3(0, 0, 1) * MGetRotX(MathUtil::ToRadians(-90.0f)) * MGetRotZ(angle) * MGetRotY(normalEuler.y);
+
+		m_pPhysics->velocity = jumpDir * 30.0f;
+
+		m_FSM->ChangeState(&CharaBase::StateAirSpin);
 	}
 
 	//=== 場外判定 ===

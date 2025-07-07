@@ -4,6 +4,7 @@
 #include "src/common/system/SystemManager.h"
 #include "src/common/load_screen/LoadScreen.h"
 #include "src/common/game/GameManager.h"
+#include "src/common/network/NetworkManager.h"
 
 BootScene::BootScene(std::string name) : SceneBase(true, name)
 {
@@ -15,6 +16,8 @@ BootScene::BootScene(std::string name) : SceneBase(true, name)
 	common->SetDrawOrder(loadScreen, 10000);
 
 	gameM = common->Instantiate<GameManager>();
+
+	NetworkManager* netM = common->Instantiate<NetworkManager>();
 }
 
 BootScene::~BootScene()

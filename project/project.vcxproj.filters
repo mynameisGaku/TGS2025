@@ -1364,6 +1364,9 @@
     <ClCompile Include="src\common\network\NetworkInstance.cpp">
       <Filter>src%28application%29\common\network</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\file\json\RawJson.cpp">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2133,6 +2136,9 @@
     </ClInclude>
     <ClInclude Include="src\common\network\NetworkInstance.h">
       <Filter>src%28application%29\common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\RawJson.h">
+      <Filter>src%28application%29\util\file\json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

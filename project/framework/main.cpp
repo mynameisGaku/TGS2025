@@ -44,6 +44,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include "src/reference/input/InputRef.h"
 #include <src/util/time/GameTime.h>
 #include <src/reference/ui/UI_ButtonHintRef.h>
+#include <src/reference/network/NetworkRef.h>
 
 #define CoGVersion (2.2)
 
@@ -186,9 +187,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	CRYSTALFRAGMENTSPAWNER_REF.Destroy();
 	GAME_REF.Destroy();
 	wSetting.Destroy();
-	GTime.Destroy();
-	InputRef::Inst().Destroy();
+    GTime.Destroy();
+    InputRef::Inst().Destroy();
 	UI_ButtonHintRef::Inst().Destroy();
+	NetworkRef::Inst().Destroy();
 
 #ifdef IMGUI
 

@@ -4,6 +4,7 @@
 
 class SystemManager;
 class GameManager;
+class NetworkManager;
 
 class BootScene : public SceneBase {
 public:

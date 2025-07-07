@@ -3,7 +3,7 @@
 #include <src/common/network/NetworkInstance.h>
 #include <vector>
 
-class NetworkManager
+class NetworkManager : public GameObject
 {
 public:
     NetworkManager();
@@ -13,5 +13,6 @@ public:
     void Draw() override;
 
 private:
-    std::vector<NetworkInstance> m_NetworkInstances;
+
+    std::vector<NetworkInstance*> m_NetworkInstances;
 };

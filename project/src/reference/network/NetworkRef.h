@@ -5,8 +5,8 @@
 class NetworkRef
 {
 private:
-    const std::string PATH = "data/Json/Network/NetwokConfig.json";
-    const std::string FILEKEY = "NetwokConfig";
+    const std::string PATH = "data/Json/Network/NetworkConfig.json";
+    const std::string FILEKEY = "NetworkConfig";
 public:
     static NetworkRef& Inst();
     static void Destroy();
@@ -19,9 +19,10 @@ public:
         UCHAR d3;
         UCHAR d4;
     }IP;
-    IP IpAddress;
+    IP Host_IPAddress;
     USHORT Port;
     USHORT ConnectionMax;
+    BOOL IsHost;
 
 private:
     static NetworkRef* instance;

@@ -1,21 +1,57 @@
 #pragma once
+#include <string>
+#include <src/reference/network/NetworkRef.h>
+#include <DxLib.h>
 
+/// <summary>
+/// 接続１つにつき、１インスタンス
+/// </summary>
 class NetworkInstance
 {
+private:
+	friend class NetworkManager;
+
+	// 受け取れるメッセージの最大サイズ
+	static const int MAX_MESSAGE_SIZE = 1024;
 public:
-    typedef struct 
-    {
-        unsigned char d1;
-        unsigned char d2;
-        unsigned char d3;
-        unsigned char d4;
-    } IP;
-    IP IpAddress;
-    unsigned short Port;
 
-    NetworkInstance() : IpAddress{ 0, 0, 0, 0 }, Port(0) {}
-    NetworkInstance(unsigned char d1, unsigned char d2, unsigned char d3, unsigned char d4, unsigned short port)
-        : IpAddress{ d1, d2, d3, d4 }, Port(port) {
-    }
+	void Update();
 
+	// ネットハンドルを取得
+	int NetHandle();
+
+	// ハンドルをセット
+	void SetHandle(int hNet);
+
+	// バッファにメッセージを格納する
+	void SetMessageToBuffer(const char* message)
+	{
+		strncpy_s(m_MessageBuf, message, MAX_MESSAGE_SIZE - 1);
+		m_MessageBuf[MAX_MESSAGE_SIZE - 1] = '\0'; // Ensure null termination
+		m_NeedCheck = true;
+	}
+
+	// 先頭アドレスが返ります
+	char* GetMessageBuffer()
+	{
+		return &m_MessageBuf[0];
+	}
+
+	// チェック必要状態にする
+	const void NeedCheck() const { m_NeedCheck = true; }
+
+	// 初期状態にクリア
+	void Reset();
+
+	void SetIP(const IPDATA& ip);
+
+    bool CompareCurrentIP(const IPDATA& other) const;
+    bool ComparePrevIP(const IPDATA& other) const;
+
+private:
+	int m_hNet{};								// ハンドラ
+	char m_MessageBuf[MAX_MESSAGE_SIZE]{};		// メッセージのバッファ
+	mutable bool m_NeedCheck{};					// チェック必要状態かどうか
+	NetworkRef::IP m_CurrentIP{};				// 現在のIPアドレス
+	NetworkRef::IP m_PrevIP{};					// 前回接続していたIPアドレス
 };

@@ -18,8 +18,10 @@
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/common/setting/window/WindowSetting.h"
 #include "src/scene/play/chara/CharaBase.h"
+
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -38,15 +40,11 @@ Camera::Camera() {
 	m_Fsm->ChangeState(&Camera::DebugState); // ステートを変更
 	
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
-
-	m_CameraWork = nullptr;
-	//m_CameraWork = new CsvReader("data/csv/CameraWork.csv");
 }
 
 Camera::~Camera() {
 
 	PtrUtil::SafeDelete(m_Fsm);
-	PtrUtil::SafeDelete(m_CameraWork);
 
 	RemoveComponent<Shake>();
 }
@@ -310,8 +308,13 @@ void Camera::updateAnimation() {
 
 void Camera::SetPerformance(const std::string& perfType) {
 
-	//stateManager->ChangeState(State::sPerformance);
-	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
+	auto perfData = CAMERA_PERFORMANCE_REF.GetPerfDatas(perfType);
+	if (perfData.empty())
+		return;
+
+	m_PerformanceDatas = perfData;	// パフォーマンスデータを設定
+
+	ChangeState(&Camera::PerformanceState);
 }
 
 void Camera::SetAnimation(const CameraAnimData& animData) {
@@ -368,8 +371,6 @@ bool Camera::IsRightView(const Vector3& pos) const {
 	float dot = Vector3::Dot(toPos, cameraDir);	// 内積を計算
 	if (dot > 0.0f)	// 内積が正なら、カメラの前方にある
 		return true;
-
-	return false;
 
 	return false;
 }

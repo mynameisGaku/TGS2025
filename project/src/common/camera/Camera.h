@@ -140,7 +140,7 @@ public:
 	/// カメラワークの情報を取得する
 	/// </summary>
 	/// <returns>カメラワーク情報のCsvデータ</returns>
-	inline const CsvReader* CameraWorkData() const { return m_CameraWork; }
+	inline const std::vector<CameraDefine::PerformanceData> GetPerformanceDatas() const { return m_PerformanceDatas; }
 
 	/// <summary>
 	/// カメラの位置(絶対座標)
@@ -194,6 +194,11 @@ public:
 	/// 狙うステート
 	/// </summary>
 	void AimState(FSMSignal sig);
+
+	/// <summary>
+	/// 演出ステート
+	/// </summary>
+	void PerformanceState(FSMSignal sig);
 
 private:
 
@@ -258,7 +263,7 @@ private:
 
 	Shake* m_pShake;	// シェイクコンポーネント
 
-	CsvReader* m_CameraWork;	// カメラ演出情報
+	std::vector<CameraDefine::PerformanceData> m_PerformanceDatas;	// 演出のデータ
 	const Transform* m_pHolder;	// カメラの保有者
 	int m_CharaIndex;			// キャラクターの番号
 

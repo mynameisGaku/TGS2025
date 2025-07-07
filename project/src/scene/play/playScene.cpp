@@ -84,6 +84,13 @@ void PlayScene::Update()
 		SceneManager::ChangeScene("TitleScene");
 	}
 
+	if (InputManager::Push(KeyCode::R)) {
+		auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
+		gameM->SetGameModeName("1v1");
+		auto matchM = FindGameObject<MatchManager>();
+		matchM->ReloadCurrentGameData();
+	}
+
 	SceneBase::Update();
 }
 
@@ -106,4 +113,5 @@ void PlayScene::Draw()
 		Settings_json::Inst()->RenderImGuiFileManager();
 
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
+	DrawString(100, 500, "Push [R]Key To Result", GetColor(255, 255, 255));
 }

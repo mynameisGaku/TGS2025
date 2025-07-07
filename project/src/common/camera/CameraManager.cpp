@@ -9,6 +9,7 @@
 // ◇演出・機能
 #include "src/util/debug/imgui/imGuiManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/util/string/StringUtil.h"
 #include "src/util/input/InputManager.h"
 #include "src/common/setting/window/WindowSetting.h"
@@ -29,6 +30,7 @@ namespace {
 void CameraManager::Init() {
 
 	CAMERADEFINE_REF.Load();
+	CAMERA_PERFORMANCE_REF.Load();
 
 	isScreenDivision = false;
 

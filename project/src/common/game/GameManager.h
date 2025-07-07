@@ -26,9 +26,9 @@ public:
     struct ResultData
     {
 		std::vector<std::string> WinnerTeamName;
-		std::vector<int> WinnerTeamColor;
-        std::vector<int> MVP_CharaIndex;
+		std::vector<int> TeamColor;
         std::vector<int> TotalPoint;
+        std::vector<std::pair<int, int>> Chara_TopScore;
     };
 
     void SetGameResult(const ResultData& data);

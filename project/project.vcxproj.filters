@@ -1361,6 +1361,9 @@
     <ClCompile Include="src\scene\result\ui\UI_Winner_Team.cpp">
       <Filter>src%28application%29\scene\result\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Ranking.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2132,6 +2135,9 @@
       <Filter>src%28application%29\reference\camera</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\result\ui\UI_Winner_Team.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Ranking.h">
       <Filter>src%28application%29\scene\result\ui</Filter>
     </ClInclude>
   </ItemGroup>

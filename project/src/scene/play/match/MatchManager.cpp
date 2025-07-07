@@ -428,16 +428,15 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
         for (auto& teamName : GAME_REF.TeamNames)
         {
 			Team* team = m_pTeamManager->GetTeam(teamName);
-
             if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
             {
 				resultData.WinnerTeamName.push_back(teamName);
-				resultData.WinnerTeamColor.push_back(ColorUtil::ColorFromString(teamName));
 				resultData.TotalPoint.push_back(team->GetTotalPoint());
-                resultData.MVP_CharaIndex.push_back(team->GetHighestPointHolderIDandPoint().first);
             }
+		    resultData.TeamColor.push_back(ColorUtil::ColorFromString(teamName));
         }
 
+        resultData.Chara_TopScore = GetRanking();
 		GameManager* gameManager = SceneManager::CommonScene()->FindGameObject<GameManager>();
         gameManager->SetGameResult(resultData);
     }

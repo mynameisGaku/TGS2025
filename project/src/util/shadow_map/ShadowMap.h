@@ -19,7 +19,7 @@ namespace ShadowMap {
 	/// <summary>
 	/// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ‚Å‰eŒvZ‚ğs‚¤
 	/// </summary>
-	void DrawBegin();
+	void DrawBegin(int cameraIndex = 0);
 
 	/// <summary>
 	/// ‰e‚Ì•`‰æ‚ğI—¹‚·‚é

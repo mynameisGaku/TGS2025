@@ -102,6 +102,7 @@ void SystemManager::Update() {
 #endif // _DEBUG
 
 	GameObject::Update();
+
 }
 
 void SystemManager::Draw() {
@@ -187,7 +188,7 @@ void SystemManager::LoadUpdate() {
 	case ltFader:			Fader::Init();			break;
 	case ltCameraManager:	CameraManager::Init();	break;
 	case ltLightManager:	LightManager::Init();	break;
-	//case ltShadowMap:		ShadowMap::Init();		break;
+	case ltShadowMap:		ShadowMap::Init();		break;
 	case ltStage:			Stage::Init();			break;
 	case ltStageManager:
 		StageObjectManager::Init();

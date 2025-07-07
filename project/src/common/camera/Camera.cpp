@@ -97,8 +97,8 @@ void Camera::Update() {
 void Camera::Draw() {
 
 	// Šù‚É•`‰æÏ‚È‚ç
-	if (m_DrawFlag)
-		return;
+	//if (m_DrawFlag)
+	//	return;
 
 	// •`‰æ‚Ì—L–³
 	if (not m_IsView) {
@@ -111,7 +111,7 @@ void Camera::Draw() {
 	// ƒJƒƒ‰•`‰æ
 	rendering();
 	
-	m_DrawFlag = true;	// •`‰æŠ®—¹
+	//m_DrawFlag = true;	// •`‰æŠ®—¹
 }
 
 void Camera::drawVirtualCamera() {

@@ -38,7 +38,7 @@ using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
-	CameraManager::SetIsScreenDivision(true);
+	//CameraManager::SetIsScreenDivision(true);
 
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 	for (int i = 0; i < CAMERA_NUM; i++)
@@ -109,8 +109,8 @@ void PlayScene::Draw()
 
 	SceneBase::Draw();
 
-	if (not CameraManager::IsScreenDivision())
-		Settings_json::Inst()->RenderImGuiFileManager();
+	//if (not CameraManager::IsScreenDivision())
+	//	Settings_json::Inst()->RenderImGuiFileManager();
 
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 	DrawString(100, 500, "Push [R]Key To Result", GetColor(255, 255, 255));

@@ -3,11 +3,12 @@
 // ◇汎用
 #include "framework/myDxLib.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/common/camera/CameraManager.h"
 
 namespace {
 
-	static const Vector3 SHADOW_MAP_DRAW_AREA = Vector3(-1200.0f);
-	static const Vector3 SHADOW_MAP_DRAW_OFFSET = Vector3(0.0f, 0.0f, 500.0f);
+	static const Vector3 SHADOW_MAP_DRAW_AREA = Vector3(-2000.0f);
+	static const Vector3 SHADOW_MAP_DRAW_OFFSET = Vector3(.0f, 0.0f, 1000.0f);
 
 	int hShadowMap = -1;		// シャドウマップのハンドラ
 	bool isActive = false;		// 稼働しているか
@@ -25,22 +26,26 @@ void ShadowMap::Init() {
 	SetIsActive(true);
 }
 
-void ShadowMap::DrawBegin() {
+void ShadowMap::DrawBegin(int cameraIndex) {
 
 	if (isActive == false)
 		return;
 
 	// カメラの座標
-	Vector3 camPos = GetCameraPosition();
+	Camera* camera = CameraManager::GetCamera(cameraIndex);
+	if (camera == nullptr) {
+		return; // カメラが存在しない場合は何もしない
+	}
 
-	// Direct3Dで自動適用されるビューポート行列を取得する
-	MATRIX camM = GetCameraAPIViewportMatrix();
+	Vector3 camPos = camera->transform->Global().position;
 
-	// 相対座標とビューボート行列で影計算範囲を求める
-	Vector3 offset = VTransform(SHADOW_MAP_DRAW_OFFSET, camM);
+	VECTOR offset = VTransform(SHADOW_MAP_DRAW_OFFSET, GetCameraAPIViewportMatrix());
 
 	// 影計算をするエリア範囲
-	SetShadowMapDrawArea(hShadowMap, camPos + offset, camPos + SHADOW_MAP_DRAW_AREA);
+	SetShadowMapDrawArea(hShadowMap, camPos - VGet(500, 500, 500), camPos + offset);
+
+	// 影計算をするエリア範囲
+	SetShadowMapDrawArea(hShadowMap, camPos, camPos - offset);
 
 	ShadowMap_DrawSetup(hShadowMap);
 }

@@ -54,6 +54,8 @@ public:
 	/// </summary>
 	void HitGroundProcess();
 
+	void climb(Vector3& normal);
+
 	//=======================================================================================
 	// ▼移動
 
@@ -333,6 +335,7 @@ private:
 	bool			m_IsDamage;				// ダメージ喰らい中か
     bool			m_IsSliding = false;	// スライディング中か
     bool			m_IsInhibitionSpeed;	// スピード抑制するか
+	bool			m_CanClimb;				// 壁登りできるか
 
 	UI_ButtonHint* m_pUI_ButtonHint;			// ボタンヒントUI
 	UI_FadeBase* m_pUI_Fade;

@@ -86,6 +86,7 @@ CharaBase::CharaBase()
 	m_IsInvincible		= false;
 	m_CanClimb			= true;
 	m_IsClimb			= false;
+	m_IsWall			= false;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
 	m_pCatchReadyEffect	= nullptr;
@@ -301,6 +302,7 @@ void CharaBase::Init(std::string tag)
 	m_Timeline = new Timeline<CharaBase>(this, m_Animator);
 	m_Timeline->SetFunction("SetAnimationSpeed", &CharaBase::setAnimationSpeed);
 	m_Timeline->SetFunction("MoveToPosition", &CharaBase::moveToPosition);
+	m_Timeline->SetFunction("MoveToWallPosition", &CharaBase::moveToWallPosition);
 	m_Timeline->SetFunction("ChangeToRoll", &CharaBase::changeToRoll);
 	m_Timeline->SetFunction("EndRoll", &CharaBase::endRoll);
 	m_Timeline->SetFunction("SetCanMove", &CharaBase::setCanMove);
@@ -448,7 +450,14 @@ void CharaBase::Draw()
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
 
-	DrawSphere3D(m_wallPosition, 20.0f, 4, 0xFF00FF, 0xFF00FF, FALSE);
+	if (m_IsWall)
+	{
+		DrawSphere3D(m_wallPosition, 20.0f, 4, 0xFF00FF, 0xFF00FF, FALSE);
+	}
+	else
+	{
+		DrawSphere3D(m_wallPosition, 20.0f, 4, 0x500050, 0xFF00FF, FALSE);
+	}
 		
 
 }
@@ -574,8 +583,6 @@ void CharaBase::HitGroundProcess() {
 	{
 		Vector3 pos = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;
 		transform->position = pos;	// レイのヒット位置へ移動
-
-		climb(normal);
 	}
 
 	//=== 場外判定 ===
@@ -652,14 +659,11 @@ void CharaBase::HitGroundProcess() {
 		if (StageObjectManager::CollCheckRay(wallRayStart, wallRayStart + wallRayDir * wallRayLength, &hitPos, &normal))
 		{
 			m_wallPosition = hitPos;
+			m_wallNormal = normal;
 			wallHit = true;
 		}
 	}
-
-	if (not wallHit)
-	{
-		m_wallPosition = Vector3::Zero;
-	}
+	m_IsWall = wallHit;
 
 	// 衝突していなければ、通常の空中挙動へ
 	if (not m_IsLanding)
@@ -684,11 +688,26 @@ void CharaBase::climb(Vector3& normal)
 	Vector3 jumpDir = Vector3(0, 0, 1) * MGetRotX(MathUtil::ToRadians(-90.0f)) * MGetRotZ(angle) * MGetRotY(normalEuler.y);
 
 	m_pPhysics->velocity.y = 0.0f;
-	m_pPhysics->velocity += jumpDir * CHARADEFINE_REF.ClimbPower;
+	m_pPhysics->velocity = jumpDir * CHARADEFINE_REF.ClimbPower;
 
-	m_FSM->ChangeState(&CharaBase::StateClimb);
+	transform->rotation.y = normalEuler;
 
-	m_CanClimb = false;
+	if (angle < -DX_PI_F / 4)
+	{
+		m_FSM->ChangeState(&CharaBase::StateWallStepRight);
+	}
+	else if (angle > DX_PI_F / 4)
+	{
+		m_FSM->ChangeState(&CharaBase::StateWallStepLeft);
+	}
+	else
+	{
+		m_FSM->ChangeState(&CharaBase::StateClimb);
+	}
+	
+
+	m_ActionStartPosition = transform->position;
+	m_ActionWallPosition = m_wallPosition;
 }
 
 void CharaBase::Move(const Vector3& dir)
@@ -743,6 +762,13 @@ void CharaBase::Slide()
 	}
 
 	m_SlideTimer = SLIDE_TIME;
+}
+
+void CharaBase::WallAction()
+{
+	if (not m_IsWall) return;
+
+	climb(m_wallNormal);
 }
 
 void CharaBase::GenerateBall()
@@ -2642,6 +2668,19 @@ void CharaBase::moveToPosition(const nlohmann::json& argument)
 	float lastProgress = argument.at("LastProgress").get<float>();
 	Vector3 dest = argument.at("Position").get<Vector3>();
 	dest = VTransform(dest, transform->RotationMatrix());
+
+	Vector3 add = dest * progress;
+	Vector3 sub = dest * lastProgress;
+
+	transform->position += add;
+	transform->position -= sub;
+}
+
+void CharaBase::moveToWallPosition(const nlohmann::json& argument)
+{
+	float progress = argument.at("Progress").get<float>();
+	float lastProgress = argument.at("LastProgress").get<float>();
+	Vector3 dest = m_ActionWallPosition - m_ActionStartPosition;
 
 	Vector3 add = dest * progress;
 	Vector3 sub = dest * lastProgress;

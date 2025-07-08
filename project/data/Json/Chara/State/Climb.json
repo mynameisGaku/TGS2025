@@ -14,6 +14,13 @@
             "Argument": {
                 "Speed": 1.0
             }
+        },
+        {
+            "Name": "MoveToWallPosition",
+            "Start": 8.5,
+            "End": 12.0,
+            "Argument": {
+            }
         }
     ]
 }

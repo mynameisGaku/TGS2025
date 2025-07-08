@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef _DEBUG
+#ifdef DEBUG
 #ifndef IMGUI
 #define IMGUI
 #endif

@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "src/util/time/GameTime.h" 
+#include <src/util/logger/Logger.h>
 
 GameManager::GameManager()
 {

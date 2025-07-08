@@ -1,15 +1,17 @@
 #pragma once
 
 #include <framework/gameObject.h>
+#include <vendor/nlohmann/json.hpp>
 #include <vector>
 #include <mutex>
 #include <string>
+#include <src/common/network/user/User.h>
 
 // パケットの種類を表す識別子
 enum PacketType
 {
-	PACKET_MESSAGE = 1, // テキストメッセージ
-	PACKET_JSON = 2,    // JSON形式のデータ
+	PACKET_MESSAGE = 1,	// テキストメッセージ
+	PACKET_JSON = 2,	// JSON形式のデータ
 };
 
 #pragma pack(push, 1)
@@ -50,10 +52,27 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	static void HostCommandProcess(nlohmann::json& json, SOCKET sock);
+	static void ClientCommandProcess(nlohmann::json& json, SOCKET sock);
+
+
+	/// <summary>
+	/// Jsonを送信
+	/// </summary>
+	/// <param name="json">ダンプ後の文字列</param>
 	void SendJson(const std::string& json);
+
+	void SendAddUser(const std::string& name);
+
+	void GetUUIDFromHost();
 
 	static SOCKET g_ListenSock;					// サーバーが接続を待ち受けるためのソケット
 	static std::vector<ClientInfo*> g_Clients;	// サーバーに接続中のクライアント一覧
 	static std::mutex g_Mutex;					// ミューテックス
 	static SOCKET g_Sock;						// クライアントが接続に使用するソケット
+	static bool g_Running;
+	static UINT g_UUIDGenerator;
+	static std::vector<User> g_Users;
+
+	void subscribe(const std::string& name);
 };

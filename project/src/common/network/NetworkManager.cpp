@@ -5,16 +5,21 @@
 
 #include "NetworkManager.h"
 #include <src/reference/network/NetworkRef.h>
-#include <src/util/file/json/RawJson.h>
 #include <src/util/ptr/PtrUtil.h>
 #include <src/util/logger/Logger.h>
 #include <process.h>
+#include <src/common/game/GameManager.h>
+#include <vendor/nlohmann/json.hpp>
+#include <src/util/editbox/editbox.hpp>
+#include <src/scene/play/chara/CharaManager.h>
 
 // --- 静的メンバの初期化 ---
 SOCKET NetworkManager::g_ListenSock = INVALID_SOCKET;
 std::vector<ClientInfo*> NetworkManager::g_Clients;
 std::mutex NetworkManager::g_Mutex;
 SOCKET NetworkManager::g_Sock = INVALID_SOCKET;
+bool NetworkManager::g_Running = false;
+UINT NetworkManager::g_UUIDGenerator = 0;
 
 // --- コンストラクタ ---
 NetworkManager::NetworkManager()
@@ -53,7 +58,7 @@ NetworkManager::NetworkManager()
         // サーバーに接続
         if (connect(g_Sock, (SOCKADDR*)&addr, sizeof(addr)) != 0)
         {
-            Logger::FormatDebugLog("接続失敗: IP[%s], PORT[%d], エラーコード: %d", net.HostIP, net.Port, WSAGetLastError());
+            Logger::FormatDebugLog("接続失敗: IP[%s], PORT[%d], エラーコード: %d", net.HostIP.c_str(), net.Port, WSAGetLastError());
             MessageBoxA(NULL, "サーバーへの接続に失敗しました。", "接続エラー", MB_OK | MB_ICONERROR);
             __debugbreak();
         }
@@ -89,8 +94,16 @@ NetworkManager::NetworkManager()
         Logger::FormatDebugLog("サーバー起動: ポート %d で待機中...", ntohs(addr.sin_port));
 
         // 接続受付処理を別スレッドで行う
+        g_Running = true;
         _beginthreadex(NULL, 0, HostAcceptThread, NULL, 0, NULL);
     }
+
+    // ユーザー情報登録
+    // ダイアログボックスを表示してユーザー名を入力してもらう
+    DialogBox(NULL, TEXT("DLG1"), 0, (DLGPROC)DlgProc1);
+
+    // サーバーへユーザー情報を送信、追加してもらう
+    subscribe(*nameText);
 }
 
 // --- デストラクタ ---
@@ -99,6 +112,9 @@ NetworkManager::~NetworkManager()
     auto& net = NetworkRef::Inst();
     if (!net.IsNetworkEnable)
         return;
+
+
+    g_Running = false;
 
     // サーバーの待ち受けソケットを閉じる
     closesocket(g_ListenSock);
@@ -144,6 +160,38 @@ void NetworkManager::SendJson(const std::string& json)
             send(client->sock, json.c_str(), header.size, 0);
         }
     }
+}
+
+void NetworkManager::subscribe(const std::string& name)
+{
+    auto& net = NetworkRef::Inst();
+    if (net.IsHost)
+    {
+        User user{};
+        user.Name = name;
+        user.UUID = ++g_UUIDGenerator;
+        g_Users.push_back(user);
+    }
+    else
+    {
+        SendAddUser(name);
+    }
+}
+
+void NetworkManager::SendAddUser(const std::string& name)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
+    // JSON形式でユーザー追加のコマンドを作成
+    nlohmann::json json;
+    json["Command"] = "AddUser";
+    json["NeedReply"] = true;
+    json["Name"] = name;
+    // JSONを文字列に変換
+    std::string jsonStr = json.dump();
+    // JSONを送信
+    SendJson(jsonStr);
 }
 
 // --- 全クライアントにデータを送信する関数 ---
@@ -194,7 +242,7 @@ unsigned __stdcall ClientThread(void* param)
 
             std::string fullMsg = "[" + info->name + "] " + msg;
             PacketHeader h = { PACKET_MESSAGE, (int)fullMsg.size() + 1 };
-            Broadcast(h, fullMsg.c_str(), sock);
+            Broadcast(h, fullMsg.c_str());
             delete[] msg;
         }
         // JSONパケットの処理
@@ -202,9 +250,11 @@ unsigned __stdcall ClientThread(void* param)
         {
             char* jsonData = new char[header.size];
             recv(sock, jsonData, header.size, MSG_WAITALL);
-            auto json = RawJson::CreateObject({ {jsonData, header.size} });
-            Logger::FormatDebugLog("[受信] JSON: %s", json);
+
+            nlohmann::json json = nlohmann::json::parse(jsonData);
             delete[] jsonData;
+
+            NetworkManager::HostCommandProcess(json, sock);
         }
         else
         {
@@ -234,6 +284,8 @@ unsigned __stdcall RecvThread(void* param)
     if (!net.IsNetworkEnable)
         return -1;
 
+    SOCKET sock = (SOCKET)param;
+
     while (true)
     {
         PacketHeader header;
@@ -254,9 +306,11 @@ unsigned __stdcall RecvThread(void* param)
         {
             char* jsonData = new char[header.size];
             recv(NetworkManager::g_Sock, jsonData, header.size, MSG_WAITALL);
-            auto json = RawJson::CreateObject({ {jsonData, header.size} });
-            Logger::FormatDebugLog("[受信] JSON: %s", json);
+
+            nlohmann::json json = nlohmann::json::parse(jsonData);
             delete[] jsonData;
+
+            NetworkManager::ClientCommandProcess(json, sock);
         }
         else
         {
@@ -272,16 +326,18 @@ unsigned __stdcall HostAcceptThread(void* param)
 {
     SOCKET listenSock = NetworkManager::g_ListenSock;
 
-    while (true)
+    while (NetworkManager::g_Running)
     {
         int addrLen = sizeof(SOCKADDR_IN);
         SOCKADDR_IN clientAddr;
         SOCKET clientSock = accept(listenSock, (SOCKADDR*)&clientAddr, &addrLen);
         if (clientSock == INVALID_SOCKET)
         {
+            if (!NetworkManager::g_Running) break; // 終了直後のエラーは無視
             Logger::FormatDebugLog("accept失敗: %d", WSAGetLastError());
             continue;
         }
+
         Logger::FormatDebugLog("クライアント接続受付完了");
         _beginthreadex(NULL, 0, ClientThread, (void*)clientSock, 0, NULL);
     }

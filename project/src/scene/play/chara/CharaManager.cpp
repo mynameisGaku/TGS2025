@@ -242,6 +242,10 @@ CharaBase* CharaManager::NearestEnemy(int index) {
 		return nullptr;
 
 	for (const auto& it : m_pPool->GetAllItems()) {
+
+		if (it->m_pObject == nullptr)
+			continue;
+
 		// ”Ô†‚ª“¯‚¶‚à‚µ‚­‚ÍAƒ`[ƒ€‚ª“¯‚¶ê‡
 		if (it->m_Index == index || it->m_pObject->m_CharaTag == chara->m_CharaTag)
 			continue;

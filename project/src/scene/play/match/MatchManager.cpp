@@ -37,6 +37,7 @@
 
 #include "src/util/input/InputManager.h"
 #include "src/util/fader/Fader.h"
+#include <src/reference/network/NetworkRef.h>
 
 //-----------------------------------------
 //  CurrentGameData

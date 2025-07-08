@@ -36,6 +36,8 @@
 
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
 #include "src/scene/play/ui/UI_Fade.h"
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
 
 using namespace KeyDefine;
 
@@ -367,6 +369,8 @@ void CharaBase::Update() {
 	{
 		StartRespawn();
 	}
+
+	static int c;
 
 	m_FSM->Update();
 	m_SubFSM->Update();

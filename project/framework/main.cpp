@@ -53,6 +53,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include <src/util/time/GameTime.h>
 #include <src/reference/ui/UI_ButtonHintRef.h>
 #include <src/reference/network/NetworkRef.h>
+#include <src/util/editbox/editbox.hpp>
+#include <src/util/ptr/PtrUtil.h>
 
 #define CoGVersion (2.2)
 
@@ -199,6 +201,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     InputRef::Inst().Destroy();
 	UI_ButtonHintRef::Inst().Destroy();
 	NetworkRef::Inst().Destroy();
+
+	PtrUtil::SafeDelete(nameText);
 
 #ifdef IMGUI
 

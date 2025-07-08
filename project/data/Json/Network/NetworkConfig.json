@@ -1,6 +1,6 @@
 {
 	"IsNetworkEnable": true,
-	"IsHost": true,
+	"IsHost": false,
 
 	"ConnectionMax": 6,
 

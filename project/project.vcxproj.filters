@@ -406,6 +406,21 @@
     <Filter Include="src%28application%29\scene\result\ui">
       <UniqueIdentifier>{04f105dc-3db9-4a39-a8ba-0af76cc95d93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\reference\network">
+      <UniqueIdentifier>{6d3db3db-8c6d-4ae2-8b3f-b3a25151a928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\network">
+      <UniqueIdentifier>{575111af-2388-4217-838d-9df95eb8caf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Network">
+      <UniqueIdentifier>{78d0fbb3-7773-4490-9d54-2daa54ddc796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\editbox">
+      <UniqueIdentifier>{47099012-6ae7-494c-b6a6-4854b730b6bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\network\user">
+      <UniqueIdentifier>{0a08ac82-66ce-4f27-8bf6-96ed814b0cb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -695,6 +710,12 @@
     </None>
     <None Include="data\Json\Chara\State\ActionIdleToRun.json">
       <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Network\NetworkConfig.json">
+      <Filter>data\Json\Network</Filter>
+    </None>
+    <None Include="src\util\editbox\resource.aps">
+      <Filter>src%28application%29\util\editbox</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1363,6 +1384,18 @@
     </ClCompile>
     <ClCompile Include="src\scene\result\ui\UI_Ranking.cpp">
       <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\network\NetworkManager.cpp">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\network\NetworkRef.cpp">
+      <Filter>src%28application%29\reference\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\network\ClientCommandProcess.cpp">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\network\HostCommandProcess.cpp">
+      <Filter>src%28application%29\common\network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2140,5 +2173,25 @@
     <ClInclude Include="src\scene\result\ui\UI_Ranking.h">
       <Filter>src%28application%29\scene\result\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\common\network\NetworkManager.h">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\network\NetworkRef.h">
+      <Filter>src%28application%29\reference\network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\editbox\editbox.hpp">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\editbox\resource.h">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\network\user\User.h">
+      <Filter>src%28application%29\common\network\user</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\util\editbox\resource.rc">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

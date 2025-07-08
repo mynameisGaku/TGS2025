@@ -14,6 +14,9 @@
 #include "src/common/component/controller/DebugController.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 
+//=== スポナー ===
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
+
 //=== チーム ===
 #include "src/scene/play/team/Team.h"
 #include "src/scene/play/team/TeamManager.h"
@@ -321,13 +324,17 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
         m_pTeamManager = Instantiate<TeamManager>();
 
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        auto spawnerManager = FindGameObject<CharaSpawnPointManager>();
+        auto spawner1 = spawnerManager->Get_Near(Vector3(500, 0, 500));
+        auto spawner2 = spawnerManager->Get_Near(Vector3(-500, 0, -500));
+
+        addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
         //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
         //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();

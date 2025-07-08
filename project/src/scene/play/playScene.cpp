@@ -45,9 +45,9 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
 
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
-	// gameM->SetGameModeName("FreeForAll");
+	gameM->SetGameModeName("FreeForAll");
 	// ゲームモードは GameRef.json 内を参照してください
-	gameM->SetGameModeName("Debug");
+	//gameM->SetGameModeName("Debug");
 
 	Instantiate<CollisionManager>();
 
@@ -105,6 +105,8 @@ void PlayScene::Draw()
 	if (not CameraManager::IsScreenDivision())
 		Settings_json::Inst()->RenderImGuiFileManager();
 
+#ifdef DEBUG
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 	DrawString(100, 500, "Push [R]Key To Result", GetColor(255, 255, 255));
+#endif
 }

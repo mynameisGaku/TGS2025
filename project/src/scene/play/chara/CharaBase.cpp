@@ -452,14 +452,14 @@ void CharaBase::Draw()
 
 	if (m_IsWall)
 	{
-		DrawSphere3D(m_wallPosition, 20.0f, 4, 0xFF00FF, 0xFF00FF, FALSE);
+		DrawSphere3D(m_WallPosition, 20.0f, 4, 0xFF00FF, 0xFF00FF, FALSE);
 	}
 	else
 	{
-		DrawSphere3D(m_wallPosition, 20.0f, 4, 0x500050, 0xFF00FF, FALSE);
+		DrawSphere3D(m_WallPosition, 20.0f, 4, 0x100010, 0x100010, FALSE);
 	}
-		
 
+	DrawSphere3D(m_ActionWallPosition, 20.0f, 4, 0x00FFFF, 0x00FFFF, FALSE);
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -658,8 +658,8 @@ void CharaBase::HitGroundProcess() {
 		const float wallRayLength = WALL_CAPSULE_RADIUS * 1.5f;	// 90ìxÇÃäpÇ≈Ç‡ìñÇƒÇÈÇΩÇﬂÅA1.414î{ÇÊÇËëÂÇ´Ç≠Ç∑ÇÈ
 		if (StageObjectManager::CollCheckRay(wallRayStart, wallRayStart + wallRayDir * wallRayLength, &hitPos, &normal))
 		{
-			m_wallPosition = hitPos;
-			m_wallNormal = normal;
+			m_WallPosition = hitPos;
+			m_WallNormal = normal;
 			wallHit = true;
 		}
 	}
@@ -677,11 +677,24 @@ void CharaBase::climb(Vector3& normal)
 {
 	if (not m_CanClimb) return;
 	if (m_IsLanding) return;
+	if (normal.GetLengthSquared() <= 0.0f) return;
+
+	Vector3 normalEuler = Vector3Util::DirToEuler(-normal);
+
+	static const float ANGLE_LIMIT = MathUtil::ToRadians(30.0f);
+
+	if (fabsf(normalEuler.x) > ANGLE_LIMIT)
+	{
+		return;
+	}
 
 	Vector3 vel = m_pPhysics->FlatVelocity();
+	if (not vel)
+	{
+		vel = transform->Forward();
+	}
 
 	Vector3 velEuler = Vector3Util::DirToEuler(vel);
-	Vector3 normalEuler = Vector3Util::DirToEuler(-normal);
 
 	float angle = normalEuler.y - velEuler.y;
 
@@ -690,7 +703,7 @@ void CharaBase::climb(Vector3& normal)
 	m_pPhysics->velocity.y = 0.0f;
 	m_pPhysics->velocity = jumpDir * CHARADEFINE_REF.ClimbPower;
 
-	transform->rotation.y = normalEuler;
+	transform->rotation.y = normalEuler.y;
 
 	if (angle < -DX_PI_F / 4)
 	{
@@ -706,8 +719,9 @@ void CharaBase::climb(Vector3& normal)
 	}
 	
 
-	m_ActionStartPosition = transform->position;
-	m_ActionWallPosition = m_wallPosition;
+	m_ActionPosition = transform->position;
+	m_ActionWallPosition = m_WallPosition;
+	m_ActionWallNormal = m_WallNormal;
 }
 
 void CharaBase::Move(const Vector3& dir)
@@ -768,7 +782,7 @@ void CharaBase::WallAction()
 {
 	if (not m_IsWall) return;
 
-	climb(m_wallNormal);
+	climb(m_WallNormal);
 }
 
 void CharaBase::GenerateBall()
@@ -2680,7 +2694,7 @@ void CharaBase::moveToWallPosition(const nlohmann::json& argument)
 {
 	float progress = argument.at("Progress").get<float>();
 	float lastProgress = argument.at("LastProgress").get<float>();
-	Vector3 dest = m_ActionWallPosition - m_ActionStartPosition;
+	Vector3 dest = m_ActionWallPosition - m_ActionPosition;
 
 	Vector3 add = dest * progress;
 	Vector3 sub = dest * lastProgress;

@@ -237,6 +237,9 @@ public:
 
 	void StateAirSpin(FSMSignal sig);
 
+	void StateClimb(FSMSignal sig);
+	void StateClimbToFall(FSMSignal sig);
+
 	void StateCrouchToActionIdle(FSMSignal sig);
 	void StateCrouchToRun(FSMSignal sig);
 
@@ -266,6 +269,9 @@ public:
 	void StateStandingIdleToActionIdle(FSMSignal sig);
 
 	void StateTackle(FSMSignal sig);
+
+	void StateWallStepLeft(FSMSignal sig);
+	void StateWallStepRight(FSMSignal sig);
 
 	void SubStateNone(FSMSignal sig);
 	void SubStateGetBall(FSMSignal sig);
@@ -336,6 +342,7 @@ private:
     bool			m_IsSliding = false;	// スライディング中か
     bool			m_IsInhibitionSpeed;	// スピード抑制するか
 	bool			m_CanClimb;				// 壁登りできるか
+	bool			m_IsClimb;				// 壁登り中か
 
 	UI_ButtonHint* m_pUI_ButtonHint;			// ボタンヒントUI
 	UI_FadeBase* m_pUI_Fade;

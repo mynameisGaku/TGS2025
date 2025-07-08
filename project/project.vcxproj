@@ -187,6 +187,8 @@
     <None Include="data\Json\Chara\State\ActionIdleToRun.json" />
     <None Include="data\Json\Chara\State\ActionIdleToStandingIdle.json" />
     <None Include="data\Json\Chara\State\AimToThrow.json" />
+    <None Include="data\Json\Chara\State\Climb.json" />
+    <None Include="data\Json\Chara\State\ClimbToFall.json" />
     <None Include="data\Json\Chara\State\Fall.json" />
     <None Include="data\Json\Chara\State\FallToRoll.json" />
     <None Include="data\Json\Chara\State\Roll.json" />
@@ -196,6 +198,8 @@
     <None Include="data\Json\Chara\State\RunToActionIdle.json" />
     <None Include="data\Json\Chara\State\StandingIdleToActionIdle.json" />
     <None Include="data\Json\Chara\State\Tackle.json" />
+    <None Include="data\Json\Chara\State\WallStepLeft.json" />
+    <None Include="data\Json\Chara\State\WallStepRight.json" />
     <None Include="data\Json\Crystal\CrystalFragment.json" />
     <None Include="data\Json\Crystal\CrystalFragmentSpawner.json" />
     <None Include="data\Json\Effect\Ball_Outline.json" />

@@ -84,6 +84,8 @@ CharaBase::CharaBase()
 	m_CanHold			= true;
 	m_CanTackle			= true;
 	m_IsInvincible		= false;
+	m_CanClimb			= true;
+	m_IsClimb			= false;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
 	m_pCatchReadyEffect	= nullptr;
@@ -658,9 +660,10 @@ void CharaBase::climb(Vector3& normal)
 
 	Vector3 jumpDir = Vector3(0, 0, 1) * MGetRotX(MathUtil::ToRadians(-90.0f)) * MGetRotZ(angle) * MGetRotY(normalEuler.y);
 
-	m_pPhysics->velocity = jumpDir * 30.0f; // Magic:(
+	m_pPhysics->velocity.y = 0.0f;
+	m_pPhysics->velocity += jumpDir * CHARADEFINE_REF.ClimbPower;
 
-	m_FSM->ChangeState(&CharaBase::StateAirSpin);
+	m_FSM->ChangeState(&CharaBase::StateClimb);
 
 	m_CanClimb = false;
 }
@@ -1188,6 +1191,65 @@ void CharaBase::StateAirSpin(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateClimb(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("Climb");
+
+		m_IsClimb = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateClimbToFall); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_IsClimb = false;
+		m_CanMove = true;
+	}
+	break;
+	}
+}
+
+void CharaBase::StateClimbToFall(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("ClimbToFall");
+		m_pPhysics->SetGravity(Vector3::Zero);
+		m_pPhysics->velocity = m_pPhysics->FlatVelocity();
+		m_IsClimb = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
 	}
 	break;
 	}
@@ -1853,6 +1915,54 @@ void CharaBase::StateTackle(FSMSignal sig)
 		m_IsTackling = false;
 		m_CanMove = true;
 		m_CanRot = true;
+	}
+	break;
+	}
+}
+
+void CharaBase::StateWallStepLeft(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("WallStepLeft");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateWallStepRight(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("WallStepRight");
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
 	}
 	break;
 	}

@@ -1,0 +1,19 @@
+{
+    "Animation": "Climb",
+    "Events": [
+        {
+            "Name": "SetCanMove",
+            "Start": 0.0,
+            "Argument": {
+                "CanMove": false
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        }
+    ]
+}

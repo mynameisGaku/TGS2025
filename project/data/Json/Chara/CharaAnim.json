@@ -151,7 +151,41 @@
 			}
 		},
 		"Tackle": {
-			
+
+		},
+		"Climb": {
+			"IsFixedRoot": {
+				"Y": true,
+				"Z": true
+			},
+			"Offset": {
+				"Y": 100.0,
+				"Z": 10.0
+			},
+			"StartFrame": 10.0,
+			"EndFrame": 22.0
+		},
+		"ClimbToFall": {
+			"IsFixedRoot": {
+				"Y": true
+			},
+			"Offset": {
+				"Y": 100.0
+			}
+		},
+		"WallStepLeft": {
+			"IsFixedRoot": {
+				"X": true,
+				"Y": true,
+				"Z": true
+			}
+		},
+		"WallStepRight": {
+			"IsFixedRoot": {
+				"X": true,
+				"Y": true,
+				"Z": true
+			}
 		}
 	}
 }

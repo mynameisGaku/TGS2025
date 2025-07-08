@@ -84,13 +84,6 @@ void PlayScene::Update()
 		SceneManager::ChangeScene("TitleScene");
 	}
 
-	if (InputManager::Push(KeyCode::R)) {
-		auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
-		gameM->SetGameModeName("1v1");
-		auto matchM = FindGameObject<MatchManager>();
-		matchM->ReloadCurrentGameData();
-	}
-
 	SceneBase::Update();
 }
 

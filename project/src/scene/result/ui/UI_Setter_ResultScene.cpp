@@ -5,6 +5,8 @@
 UI_Setter_ResultScene::UI_Setter_ResultScene()
 {
 	UI_Winner_Team* winner = new UI_Winner_Team();
+	winner->rectTransform->scale = Vector2::Ones * 2.0f;
+	
 	UI_Ranking* ranking = new UI_Ranking();
 
 	m_UIs["UI_Winner_Team"] = winner;

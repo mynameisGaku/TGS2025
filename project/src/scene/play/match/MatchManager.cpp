@@ -325,9 +325,9 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
-        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
         //addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
         //addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
         m_pBallManager = Instantiate<BallManager>();
@@ -423,6 +423,7 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
     break;
     case FSMSignal::SIG_Exit:
     {
+		// ゲーム終了時に、勝利チームの情報をGameManagerに渡す
         GameManager::ResultData resultData;
 
         for (auto& teamName : GAME_REF.TeamNames)
@@ -431,12 +432,17 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
             if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
             {
 				resultData.WinnerTeamName.push_back(teamName);
-				resultData.TotalPoint.push_back(team->GetTotalPoint());
+    			resultData.WinnerCharaIDs = team->GetCharaIDs();
             }
-		    resultData.TeamColor.push_back(ColorUtil::ColorFromString(teamName));
+            resultData.TeamName.push_back(teamName);
+			resultData.TeamTotalPoint[teamName] = team->GetTotalPoint();
+		    resultData.TeamColor[teamName]      = (ColorUtil::ColorFromString(teamName));
+
+            for (const auto& charaID : team->GetCharaIDs())
+                resultData.CharaInTeamName[charaID] = teamName;
         }
 
-        resultData.Chara_TopScore = GetRanking();
+        resultData.Ranking = GetRanking();
 		GameManager* gameManager = SceneManager::CommonScene()->FindGameObject<GameManager>();
         gameManager->SetGameResult(resultData);
     }

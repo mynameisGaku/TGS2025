@@ -403,14 +403,8 @@
     <Filter Include="src%28application%29\scene\play\movable_area">
       <UniqueIdentifier>{5dd55688-be26-45af-ab6f-56c5f0608d54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\network">
-      <UniqueIdentifier>{5f745347-565f-4b7c-ac03-99b07ba0858d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="data\Json\Network">
-      <UniqueIdentifier>{62211d72-bcd1-4415-98a8-781a4738495f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src%28application%29\reference\network">
-      <UniqueIdentifier>{d78c3759-fb48-4a30-8bc3-feb9918fe4eb}</UniqueIdentifier>
+    <Filter Include="src%28application%29\scene\result\ui">
+      <UniqueIdentifier>{04f105dc-3db9-4a39-a8ba-0af76cc95d93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -701,9 +695,6 @@
     </None>
     <None Include="data\Json\Chara\State\ActionIdleToRun.json">
       <Filter>data\Json\Chara\State</Filter>
-    </None>
-    <None Include="data\Json\Network\NetworkConfig.json">
-      <Filter>data\Json\Network</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1355,14 +1346,23 @@
     <ClCompile Include="src\scene\play\ui\UI_Fade.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\network\NetworkManager.cpp">
-      <Filter>src%28application%29\common\network</Filter>
+    <ClCompile Include="src\scene\result\resultScene.cpp">
+      <Filter>src%28application%29\scene\result</Filter>
     </ClCompile>
-    <ClCompile Include="src\reference\network\NetworkRef.cpp">
-      <Filter>src%28application%29\reference\network</Filter>
+    <ClCompile Include="src\scene\result\ui\UI_Setter_ResultScene.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\file\json\RawJson.cpp">
-      <Filter>src%28application%29\util\file\json</Filter>
+    <ClCompile Include="src\common\camera\CamState_Performance.cpp">
+      <Filter>src%28application%29\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\camera\CameraPerformanceRef.cpp">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Winner_Team.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Ranking.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2125,14 +2125,20 @@
     <ClInclude Include="src\scene\play\ui\UI_Fade.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\network\NetworkManager.h">
-      <Filter>src%28application%29\common\network</Filter>
+    <ClInclude Include="src\scene\result\resultScene.h">
+      <Filter>src%28application%29\scene\result</Filter>
     </ClInclude>
-    <ClInclude Include="src\reference\network\NetworkRef.h">
-      <Filter>src%28application%29\reference\network</Filter>
+    <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\file\json\RawJson.h">
-      <Filter>src%28application%29\util\file\json</Filter>
+    <ClInclude Include="src\reference\camera\CameraPerformanceRef.h">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Winner_Team.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Ranking.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

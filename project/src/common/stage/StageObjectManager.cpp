@@ -127,8 +127,11 @@ void StageObjectManager::Draw() {
 
 #else
 
-	for (auto itr : *stageObjects)
-		itr->Draw();
+	if(stageObjects)
+	{
+		for (auto itr : *stageObjects)
+			itr->Draw();
+	}
 
 #endif
 
@@ -139,6 +142,7 @@ void StageObjectManager::Release() {
 
 	//SaveToCsv();
 	//SaveToJson();
+	EraseAll();
 	EraseAll();
 
 	PtrUtil::SafeDelete(stageObjects);
@@ -718,7 +722,7 @@ void StageObjectManager::ShiftID(int id) {
 }
 
 void StageObjectManager::DrawEditMode() {
-
+#ifdef IMGUI
 	ImGuiRoot* stageObjTree = ImGuiManager::FindRoot("StageObject");
 	if (stageObjTree == nullptr)
 		return;
@@ -747,6 +751,7 @@ void StageObjectManager::DrawEditMode() {
 
 		itr->Draw();
 	}
+#endif
 }
 
 void StageObjectManager::SaveAndLoad() {

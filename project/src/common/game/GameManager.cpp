@@ -75,6 +75,7 @@ GAME_MODE_DESC GameManager::GetCurrentGameModeData()
 
 void GameManager::SetGameResult(const ResultData& data)
 {
+	m_ResultDataPrev = m_ResultData;
     m_ResultData = data;
 }
 

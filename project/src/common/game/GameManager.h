@@ -7,6 +7,8 @@
 #include "src/util/fsm/TinyFSM.h"
 #include "src/reference/game/GameRef.h"
 
+class CharaBase;
+
 /// <summary>
 /// ゲームの進行を管理するマネージャー
 /// </summary>
@@ -25,12 +27,23 @@ public:
 
     struct ResultData
     {
-        std::unordered_map<std::string, int> PointMap;
+		std::vector<std::string> WinnerTeamName;// 勝利チームの名前
+		std::vector<int> WinnerCharaIDs;        // チームごとのキャラID
+
+		std::vector<std::string> TeamName;                   // 各種チームの名前
+		std::unordered_map<std::string, int> TeamColor;      // 各種チームのカラー
+        std::unordered_map<std::string, int> TeamTotalPoint; // 各種チームの総合得点
+
+        std::vector<std::pair<int, int>> Ranking;            // ランキングデータ。 [順位].first = キャラID、[順位].second = スコア
+        std::unordered_map<int, std::string> CharaInTeamName;// キャラIDと所属しているチームの紐づけ
     };
 
     void SetGameResult(const ResultData& data);
 
     std::string GetCurrentStageName() const;
+
+    inline ResultData GetResultData() const { return m_ResultData; }
+	inline ResultData GetResultDataPrev() const { return m_ResultDataPrev; }
 
 private:
 
@@ -47,4 +60,5 @@ private:
     std::string                                     m_CurrentStageName;
     std::string                                     m_CurrentGameMode;
     ResultData                                      m_ResultData;
+    ResultData                                      m_ResultDataPrev;
 };

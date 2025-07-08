@@ -12,17 +12,11 @@ public:
     static void Destroy();
     void Load(bool forceLoad = false);
 
-    typedef struct
-    {
-        UCHAR d1;
-        UCHAR d2;
-        UCHAR d3;
-        UCHAR d4;
-    }IP;
-    IP Host_IPAddress;
+    std::string HostIP;
     USHORT Port;
     USHORT ConnectionMax;
     BOOL IsHost;
+    BOOL IsNetworkEnable;
 
 private:
     static NetworkRef* instance;

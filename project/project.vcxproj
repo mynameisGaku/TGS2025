@@ -320,7 +320,6 @@
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
-    <ClCompile Include="src\common\network\NetworkInstance.cpp" />
     <ClCompile Include="src\common\network\NetworkManager.cpp" />
     <ClCompile Include="src\common\setting\sensi\SensiSetting.cpp" />
     <ClCompile Include="src\common\setting\SettingBase.cpp" />
@@ -504,7 +503,6 @@
     <ClInclude Include="src\common\light\LightDefine.h" />
     <ClInclude Include="src\common\light\LightManager.h" />
     <ClInclude Include="src\common\load_screen\LoadScreen.h" />
-    <ClInclude Include="src\common\network\NetworkInstance.h" />
     <ClInclude Include="src\common\network\NetworkManager.h" />
     <ClInclude Include="src\common\setting\sensi\SensiSetting.h" />
     <ClInclude Include="src\common\setting\SettingBase.h" />

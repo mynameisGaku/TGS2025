@@ -1,125 +1,290 @@
+#define WIN32_LEAN_AND_MEAN
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h>
+
 #include "NetworkManager.h"
 #include <src/reference/network/NetworkRef.h>
-#include <cassert>
 #include <src/util/file/json/RawJson.h>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/util/logger/Logger.h>
+#include <process.h>
 
+// --- 静的メンバの初期化 ---
+SOCKET NetworkManager::g_ListenSock = INVALID_SOCKET;
+std::vector<ClientInfo*> NetworkManager::g_Clients;
+std::mutex NetworkManager::g_Mutex;
+SOCKET NetworkManager::g_Sock = INVALID_SOCKET;
+
+// --- コンストラクタ ---
 NetworkManager::NetworkManager()
 {
-	auto& net = NetworkRef::Inst();
-	net.Load(true);
+    auto& net = NetworkRef::Inst();
+    net.Load(true);
 
-	m_NetworkInstances.reserve((size_t)net.ConnectionMax);
-	for (USHORT i = 0; i < net.ConnectionMax; i++)
-	{
-		m_NetworkInstances.push_back(new NetworkInstance());
-	}
+    if (!net.IsNetworkEnable)
+        return;
 
-	if (net.IsHost)
-	{
-		// サーバー側の処理
-		if (PreparationListenNetWork(net.Port) == -1)
-			assert(!"接続待機状態にできませんでした。");
-	}
-	else
-	{
-		// クライアント側の処理
-		IPDATA ip{
-			net.Host_IPAddress.d1,
-			net.Host_IPAddress.d2,
-			net.Host_IPAddress.d3,
-			net.Host_IPAddress.d4};
+    // WinSockの初期化
+    WSADATA wsa;
+    if (WSAStartup(MAKEWORD(2, 0), &wsa) != 0)
+    {
+        Logger::FormatDebugLog("WSAStartup 失敗: %d", WSAGetLastError());
+        __debugbreak();
+    }
 
-		if (ConnectNetWork(ip, net.Port) == -1)
-			assert(!"サーバーに接続できませんでした。");
-	}
+    // --- クライアントとして起動 ---
+    if (!net.IsHost)
+    {
+        // サーバー接続用ソケットの作成
+        g_Sock = socket(AF_INET, SOCK_STREAM, 0);
+        if (g_Sock == INVALID_SOCKET)
+        {
+            Logger::FormatDebugLog("ソケット作成失敗: エラーコード: %d", WSAGetLastError());
+            __debugbreak();
+        }
+
+        // サーバーのアドレス情報を設定
+        SOCKADDR_IN addr{};
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(net.Port);
+        inet_pton(AF_INET, net.HostIP.c_str(), &addr.sin_addr);
+
+        // サーバーに接続
+        if (connect(g_Sock, (SOCKADDR*)&addr, sizeof(addr)) != 0)
+        {
+            Logger::FormatDebugLog("接続失敗: IP[%s], PORT[%d], エラーコード: %d", net.HostIP, net.Port, WSAGetLastError());
+            MessageBoxA(NULL, "サーバーへの接続に失敗しました。", "接続エラー", MB_OK | MB_ICONERROR);
+            __debugbreak();
+        }
+
+        Logger::FormatDebugLog("サーバーに接続しました");
+
+        // 接続成功メッセージをサーバーに送信
+        const char* joinMsg = "[System] クライアントが接続しました";
+        PacketHeader header = { PACKET_MESSAGE, (int)strlen(joinMsg) + 1 };
+        send(g_Sock, (char*)&header, sizeof(header), 0);
+        send(g_Sock, joinMsg, header.size, 0);
+
+        // サーバーからの受信処理を別スレッドで開始
+        _beginthreadex(NULL, 0, RecvThread, NULL, 0, NULL);
+    }
+    else
+    {
+        // --- サーバー（ホスト）として起動 ---
+
+        // クライアント受付用のソケットを作成
+        g_ListenSock = socket(AF_INET, SOCK_STREAM, 0);
+
+        // ローカルアドレス構成
+        SOCKADDR_IN addr{};
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(net.Port);
+        addr.sin_addr.s_addr = INADDR_ANY;
+
+        // ソケットにポートを割り当てて、接続待ち状態に
+        bind(g_ListenSock, (SOCKADDR*)&addr, sizeof(addr));
+        listen(g_ListenSock, SOMAXCONN);
+
+        Logger::FormatDebugLog("サーバー起動: ポート %d で待機中...", ntohs(addr.sin_port));
+
+        // 接続受付処理を別スレッドで行う
+        _beginthreadex(NULL, 0, HostAcceptThread, NULL, 0, NULL);
+    }
 }
 
+// --- デストラクタ ---
 NetworkManager::~NetworkManager()
 {
-	StopListenNetWork();
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
 
-	for (auto& inst : m_NetworkInstances)
-	{
-		if (inst != nullptr)
-		{
-			delete inst;
-			inst = nullptr;
-		}
-	}
-	m_NetworkInstances.clear();
+    // サーバーの待ち受けソケットを閉じる
+    closesocket(g_ListenSock);
+    WSACleanup();
+
+    // クライアント情報を解放
+    for (auto client : g_Clients)
+        delete client;
+    g_Clients.clear();
 }
 
-void NetworkManager::Update()
+// --- 更新処理 ---
+void NetworkManager::Update() {}
+
+// --- 描画処理 ---
+void NetworkManager::Draw() {}
+
+void NetworkManager::SendJson(const std::string& json)
 {
-	// 新たな接続が無いか確認する
-	int NetHandle = GetNewAcceptNetWork();
-	if (NetHandle != -1)
-	{
-		for (auto& netinst : m_NetworkInstances)
-		{
-			IPDATA ip{};
-			GetNetWorkIP(NetHandle, &ip);
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
 
-			if (netinst->NetHandle() == -1)
-			{
-				netinst->SetHandle(NetHandle);
-				netinst->SetIP(ip);
-				break;
-			}
-		}
-	}
+    PacketHeader header;
+    header.type = PACKET_JSON;
+    header.size = static_cast<int>(json.size()) + 1;
 
-	// 接続されているネットワークの更新
-	for (auto& netinst : m_NetworkInstances)
-	{
-		if (netinst->NetHandle() != -1)
-		{
-			// 受信しているかどうか確認
-			INT dataLength = GetNetWorkDataLength(netinst->NetHandle());
-			if (dataLength == 0)
-				continue;
+    // --- クライアントの場合 ---
+    if (!net.IsHost && g_Sock != INVALID_SOCKET)
+    {
+        send(g_Sock, reinterpret_cast<const char*>(&header), sizeof(header), 0);
+        send(g_Sock, json.c_str(), header.size, 0);
+        return;
+    }
 
-			char buf[NetworkInstance::MAX_MESSAGE_SIZE]{};
-
-			// データ受信
-			NetWorkRecv(netinst->NetHandle(), buf, dataLength);
-
-			// 受信したデータを処理
-			netinst->SetMessageToBuffer(buf);
-
-			// 「確認よろしく」状態にする
-			netinst->NeedCheck();
-		}
-		netinst->Update();
-	}
-
-	int lost = GetLostNetWork();
-	if (lost != -1)
-	{
-		for (auto& netinst : m_NetworkInstances)
-		{
-			if (netinst->NetHandle() == lost)
-			{
-				CloseNetWork(netinst->NetHandle());
-				netinst->SetHandle(-1); // 接続を削除
-				break;
-			}
-		}
-	}
+    // --- ホストの場合（全クライアントに送信） ---
+    if (net.IsHost)
+    {
+        std::lock_guard<std::mutex> lock(g_Mutex);
+        for (auto& client : g_Clients)
+        {
+            send(client->sock, reinterpret_cast<const char*>(&header), sizeof(header), 0);
+            send(client->sock, json.c_str(), header.size, 0);
+        }
+    }
 }
 
-void NetworkManager::Draw()
+// --- 全クライアントにデータを送信する関数 ---
+void Broadcast(PacketHeader header, const void* data, SOCKET exclude)
 {
-	// デバッグ
-	int c = 0;
-	for (auto& netinst : m_NetworkInstances)
-	{
-		DrawFormatString(700, 100 + c * 40, 0xffffff, "NetHandle: %d", netinst->NetHandle());
-		DrawFormatString(400, 100 + c * 40, 0xffffff, "IP: %d.%d.%d.%d",
-		netinst->m_CurrentIP.d1,
-		netinst->m_CurrentIP.d2,
-		netinst->m_CurrentIP.d3,
-		netinst->m_CurrentIP.d4);
-		c++;
-	}
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
+
+    std::lock_guard<std::mutex> lock(NetworkManager::g_Mutex);
+    for (auto& client : NetworkManager::g_Clients)
+    {
+        if (client->sock != exclude)
+        {
+            send(client->sock, (char*)&header, sizeof(header), 0);
+            send(client->sock, (const char*)data, header.size, 0);
+        }
+    }
+}
+
+// --- サーバー側：クライアントごとの受信処理スレッド ---
+unsigned __stdcall ClientThread(void* param)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return -1;
+
+    SOCKET sock = (SOCKET)param;
+    ClientInfo* info = new ClientInfo{ sock, "Unknown" };
+
+    {
+        std::lock_guard<std::mutex> lock(NetworkManager::g_Mutex);
+        NetworkManager::g_Clients.push_back(info);
+    }
+
+    while (true)
+    {
+        PacketHeader header;
+        // パケットヘッダーを受信
+        int res = recv(sock, (char*)&header, sizeof(header), MSG_WAITALL);
+        if (res <= 0) break;
+
+        // メッセージパケットの処理
+        if (header.type == PACKET_MESSAGE)
+        {
+            char* msg = new char[header.size];
+            recv(sock, msg, header.size, MSG_WAITALL);
+
+            std::string fullMsg = "[" + info->name + "] " + msg;
+            PacketHeader h = { PACKET_MESSAGE, (int)fullMsg.size() + 1 };
+            Broadcast(h, fullMsg.c_str(), sock);
+            delete[] msg;
+        }
+        // JSONパケットの処理
+        else if (header.type == PACKET_JSON)
+        {
+            char* jsonData = new char[header.size];
+            recv(sock, jsonData, header.size, MSG_WAITALL);
+            auto json = RawJson::CreateObject({ {jsonData, header.size} });
+            Logger::FormatDebugLog("[受信] JSON: %s", json);
+            delete[] jsonData;
+        }
+        else
+        {
+            Logger::FormatDebugLog("[受信] 不明なパケットタイプ: %d", header.type);
+            break;
+        }
+    }
+
+    Logger::FormatDebugLog("[切断] %s", info->name.c_str());
+    closesocket(sock);
+
+    // クライアント情報を削除
+    {
+        std::lock_guard<std::mutex> lock(NetworkManager::g_Mutex);
+        auto& clients = NetworkManager::g_Clients;
+        clients.erase(std::remove(clients.begin(), clients.end(), info), clients.end());
+    }
+
+    delete info;
+    return 0;
+}
+
+// --- クライアント側：サーバーからの受信処理スレッド ---
+unsigned __stdcall RecvThread(void* param)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return -1;
+
+    while (true)
+    {
+        PacketHeader header;
+        // パケットヘッダーの受信
+        int res = recv(NetworkManager::g_Sock, (char*)&header, sizeof(header), MSG_WAITALL);
+        if (res <= 0) break;
+
+        // メッセージ
+        if (header.type == PACKET_MESSAGE)
+        {
+            char* msg = new char[header.size];
+            recv(NetworkManager::g_Sock, msg, header.size, MSG_WAITALL);
+            Logger::FormatDebugLog("[受信] %s", msg);
+            delete[] msg;
+        }
+        // JSON
+        else if (header.type == PACKET_JSON)
+        {
+            char* jsonData = new char[header.size];
+            recv(NetworkManager::g_Sock, jsonData, header.size, MSG_WAITALL);
+            auto json = RawJson::CreateObject({ {jsonData, header.size} });
+            Logger::FormatDebugLog("[受信] JSON: %s", json);
+            delete[] jsonData;
+        }
+        else
+        {
+            Logger::FormatDebugLog("[受信] 不明なパケットタイプ: %d", header.type);
+        }
+    }
+
+    Logger::FormatDebugLog("サーバーとの接続が切断されました");
+    return 0;
+}
+
+unsigned __stdcall HostAcceptThread(void* param)
+{
+    SOCKET listenSock = NetworkManager::g_ListenSock;
+
+    while (true)
+    {
+        int addrLen = sizeof(SOCKADDR_IN);
+        SOCKADDR_IN clientAddr;
+        SOCKET clientSock = accept(listenSock, (SOCKADDR*)&clientAddr, &addrLen);
+        if (clientSock == INVALID_SOCKET)
+        {
+            Logger::FormatDebugLog("accept失敗: %d", WSAGetLastError());
+            continue;
+        }
+        Logger::FormatDebugLog("クライアント接続受付完了");
+        _beginthreadex(NULL, 0, ClientThread, (void*)clientSock, 0, NULL);
+    }
+
+    return 0;
 }

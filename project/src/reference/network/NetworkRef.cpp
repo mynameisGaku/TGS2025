@@ -33,15 +33,12 @@ void NetworkRef::Load(bool forceLoad)
 	jsonLoader->LoadSettingJson(PATH, FILEKEY, true);
 	auto json = jsonLoader->GetJson(FILEKEY);
 
-	Host_IPAddress.d1 = json["HostIP"]["d1"].get<UCHAR>();
-	Host_IPAddress.d2 = json["HostIP"]["d2"].get<UCHAR>();
-	Host_IPAddress.d3 = json["HostIP"]["d3"].get<UCHAR>();
-	Host_IPAddress.d4 = json["HostIP"]["d4"].get<UCHAR>();
-
+	HostIP = json["HostIP"].get<std::string>();
 	Port = json["Port"].get<USHORT>();
 	ConnectionMax = json["ConnectionMax"].get<USHORT>();
 
 	IsHost = json["IsHost"].get<bool>();
+    IsNetworkEnable = json["IsNetworkEnable"].get<bool>();
 
 	m_WasLoad = true;
 }

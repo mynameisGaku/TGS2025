@@ -311,6 +311,7 @@ private:
 	Alarm*			m_TackleIntervalAlarm;	// タックル後の間隔アラーム
 	Vector3			m_lastUpdatePosition;	// 前回更新時の最終位置
 	CharaSpawnPointManager* m_SpawnPointManager;	// リスポーン地点
+	Vector3			m_wallPosition;			// アクションできる壁の位置
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
     float			m_HitPoint;				// ヒットポイント

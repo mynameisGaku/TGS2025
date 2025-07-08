@@ -448,7 +448,9 @@ void CharaBase::Draw()
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
 
-	
+	DrawSphere3D(m_wallPosition, 20.0f, 4, 0xFF00FF, 0xFF00FF, FALSE);
+		
+
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -637,6 +639,27 @@ void CharaBase::HitGroundProcess() {
 		}
 	}
 
+	// 壁アクション判定処理
+	static const float WALL_CAPSULE_RADIUS = 150.0f;
+
+	bool wallHit = false;
+
+	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius), footPos + Vector3::SetY(radius), WALL_CAPSULE_RADIUS, &pushVec))
+	{
+		const Vector3 wallRayStart = transform->position + Vector3::SetY(CENTER_OFFSET);
+		const Vector3 wallRayDir = -pushVec.Normalize();
+		const float wallRayLength = WALL_CAPSULE_RADIUS * 1.5f;	// 90度の角でも当てるため、1.414倍より大きくする
+		if (StageObjectManager::CollCheckRay(wallRayStart, wallRayStart + wallRayDir * wallRayLength, &hitPos, &normal))
+		{
+			m_wallPosition = hitPos;
+			wallHit = true;
+		}
+	}
+
+	if (not wallHit)
+	{
+		m_wallPosition = Vector3::Zero;
+	}
 
 	// 衝突していなければ、通常の空中挙動へ
 	if (not m_IsLanding)

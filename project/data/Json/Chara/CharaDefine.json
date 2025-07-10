@@ -16,6 +16,7 @@
     "TackleForce_Horizontal": 15.0,
     "TackleForce_Vertical": 35.0,
     "TackleInvincibleDurationSec": 5.0,
-    "GetTackleInvincibleTime": 1.5
+    "GetTackleInvincibleTime": 1.5,
+    "ClimbPower": 25.0
   }
 }

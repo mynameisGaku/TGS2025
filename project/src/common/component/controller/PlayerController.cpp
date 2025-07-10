@@ -78,6 +78,7 @@ void PlayerController::Update() {
 	{
 		//if (chara->CanMove() && not chara->IsJumping())
 			chara->Jump();
+			chara->WallAction();
 	}
 
 	////////////////////////////////////////////////////
@@ -104,8 +105,7 @@ void PlayerController::Update() {
 	Vector3 stick = InputManager::AnalogStick(padNumber) * MGetRotY(camera->transform->rotation.y);
 	if (stick.GetLengthSquared() > 0.0f)
 	{
-		if (chara->CanMove())
-			chara->Move(stick);
+		chara->Move(stick);
 	}
 
 	////////////////////////////////////////////////////

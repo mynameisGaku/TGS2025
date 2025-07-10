@@ -14,9 +14,9 @@
 #include "src/util/sound/SoundManager.h"
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/util/fader/Fader.h"
-#include "src/common/camera/CameraManager.h"
+//#include "src/common/camera/CameraManager.h"
 #include "src/common/light/LightManager.h"
-#include "src/util/shadow_map/ShadowMap.h"
+//#include "src/util/shadow_map/ShadowMap.h"
 #include "src/common/stage/Stage.h"
 #include "src/common/stage/StageObjectManager.h"
 #include "src/util/ui/UI_Manager.h"
@@ -46,7 +46,7 @@ SystemManager::~SystemManager() {
 	SoundManager::Release();
 	EffectManager::Release();
 	Fader::Release();
-	CameraManager::Release();
+	//CameraManager::Release();
 	LightManager::Release();
 	Stage::Release();
 	StageObjectManager::Release();
@@ -83,7 +83,7 @@ void SystemManager::Update() {
 	SoundManager::Update();
 	EffectManager::Update();
 	Fader::Update();
-	CameraManager::Update();
+	//CameraManager::Update();
 	LightManager::Update();
 	Stage::Update();
 	StageObjectManager::Update();
@@ -128,7 +128,7 @@ void SystemManager::DrawBefore() {
 	if (isLoading)
 		return;
 
-	CameraManager::Draw();
+	//CameraManager::Draw();
 	LightManager::Draw();
 	Stage::Draw();
 	StageObjectManager::Draw();
@@ -186,9 +186,9 @@ void SystemManager::LoadUpdate() {
 		break;
 
 	case ltFader:			Fader::Init();			break;
-	case ltCameraManager:	CameraManager::Init();	break;
+	//case ltCameraManager:	CameraManager::Init();	break;
 	case ltLightManager:	LightManager::Init();	break;
-	case ltShadowMap:		ShadowMap::Init();		break;
+	//case ltShadowMap:		ShadowMap::Init();		break;
 	case ltStage:			Stage::Init();			break;
 	case ltStageManager:
 		StageObjectManager::Init();
@@ -242,7 +242,7 @@ void SystemManager::Debug() {
 
 void DrawBefore() {
 
-	CameraManager::Draw();
+	//CameraManager::Draw();
 	LightManager::Draw();
 	Stage::Draw();
 	StageObjectManager::Draw();

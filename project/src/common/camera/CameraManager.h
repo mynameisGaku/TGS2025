@@ -44,28 +44,34 @@ namespace CameraManager {
 	void ChangeStateCamera(int number, void(Camera::* state)(FSMSignal));
 
 	/// <summary>
-	/// カメラ描画を指定された位置とサイズで分割します
+	/// 画面を分割して定義された領域に描画をする
 	/// </summary>
-	/// <param name="x">分割領域の左上隅のX座標</param>
-	/// <param name="y">分割領域の左上隅のY座標</param>
-	/// <param name="w">分割領域の幅</param>
-	/// <param name="h">分割領域の高さ</param>
-	void CameraScreenDivision(int x, int y, int w, int h);
+	/// <param name="index">描画するカメラ番号</param>
+	void DrawScreenDivsition(int index);
 
 	/// <summary>
-	/// カメラ描画を指定された位置とサイズで分割してから、描画します
+	/// 画面を分割して指定された領域に描画すり
 	/// </summary>
-	/// <param name="x">分割領域の左上隅のX座標</param>
-	/// <param name="y">分割領域の左上隅のY座標</param>
-	/// <param name="w">分割領域の幅</param>
-	/// <param name="h">分割領域の高さ</param>
-	/// <param name="number">描画を行うカメラの番号</param>
-	void CameraScreenDivisionDraw(int x, int y, int w, int h, int number);
+	/// <param name="x">描画領域の左上隅のX座標</param>
+	/// <param name="y">描画領域の左上隅のY座標</param>
+	/// <param name="w">描画領域の幅</param>
+	/// <param name="h">描画領域の高さ</param>
+	/// <param name="index">描画するカメラ番号</param>
+	void DrawScreenDivsition(int x, int y, int w, int h, int index);
 
 	/// <summary>
-	/// 画面分割を適用する
+	/// 指定したインデックスに基づいて、画面分割領域の位置とサイズを取得する
 	/// </summary>
-	void ApplyScreenDivision();
+	/// <param name="index">描画するカメラ番号</param>
+	/// <param name="pos">分割領域の左上座標を格納するためのポインタ</param>
+	/// <param name="size">分割領域のサイズを格納するためのポインタ</param>
+	void GetScreenDivision(int index, Vector2* pos, Vector2* size);
+
+	/// <summary>
+	/// 指定したインデックスに対して画面分割を適用する
+	/// </summary>
+	/// <param name="index">描画するカメラ番号</param>
+	void ApplyScreenDivision(int index);
 
 	/// <summary>
 	/// 既定の画面サイズに戻す

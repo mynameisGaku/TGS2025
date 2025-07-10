@@ -23,17 +23,17 @@ namespace {
 
 void Stage::Init() {
 
-	if (ground == nullptr)
-		ground = new Object3D(MV1LoadModel("data/model/Stage/Ground_000.mv1"), Transform(Vector3::Zero, Vector3::Zero, Vector3(20.0f)));
+	//if (ground == nullptr)
+	//	ground = new Object3D(MV1LoadModel("data/model/Stage/Ground_000.mv1"), Transform(Vector3::Zero, Vector3::Zero, Vector3(20.0f)));
 
 	if (sky == nullptr)
 		sky = new Object3D(MV1LoadModel("data/model/Stage/Sky_000.mv1"), Transform(Vector3::Zero, Vector3::Zero, Vector3(1.0f)));
 
-	if (wall == nullptr)
-		wall = new Object3D(MV1LoadModel("data/model/Stage/StageCollider.mv1"), Transform(Vector3::Zero, Vector3::Zero, Vector3(STAGE_RANGE / 50.0f)));
+	//if (wall == nullptr)
+	//	wall = new Object3D(MV1LoadModel("data/model/Stage/StageCollider.mv1"), Transform(Vector3::Zero, Vector3::Zero, Vector3(STAGE_RANGE / 50.0f)));
 
-	MV1SetupCollInfo(ground->Model(), -1, 8, 8, 8);	//コリジョン情報を構築する
-	MV1RefreshCollInfo(ground->Model(), -1);		//コリジョン情報を更新する
+	//MV1SetupCollInfo(ground->Model(), -1, 8, 8, 8);	//コリジョン情報を構築する
+	//MV1RefreshCollInfo(ground->Model(), -1);		//コリジョン情報を更新する
 
 }
 

@@ -7,22 +7,23 @@
 
 namespace {
 
-	static const Vector3 SHADOW_MAP_DRAW_AREA = Vector3(-2000.0f);
-	static const Vector3 SHADOW_MAP_DRAW_OFFSET = Vector3(.0f, 0.0f, 1000.0f);
+	static const Vector3 SHADOW_MAP_DRAW_AREA = Vector3(2500.0f);	// 影描画を行う範囲
+	static const Vector3 SHADOW_MAP_DRAW_OFFSET = Vector3(0.0f, 0.0f, 2500.0f);	// カメラからどの位置まで影描画を行うか
 
 	int hShadowMap = -1;		// シャドウマップのハンドラ
 	bool isActive = false;		// 稼働しているか
 }
 
-void ShadowMap::Init() {
+void ShadowMap::Init(int sizeX, int sizeY) {
 
 	// シャドウマップを生成する
 	if (hShadowMap == -1)
-		hShadowMap = MakeShadowMap(4096, 4096);
+		hShadowMap = MakeShadowMap(sizeX, sizeY);
 
 	// 影を出すライトを決める(真下に向ける)
 	SetShadowMapLightDirection(hShadowMap, VGet(0.5, -1.0f, 0.0f));
 
+	// 稼働中に設定
 	SetIsActive(true);
 }
 
@@ -31,21 +32,18 @@ void ShadowMap::DrawBegin(int cameraIndex) {
 	if (isActive == false)
 		return;
 
-	// カメラの座標
 	Camera* camera = CameraManager::GetCamera(cameraIndex);
-	if (camera == nullptr) {
-		return; // カメラが存在しない場合は何もしない
-	}
+	if (not camera)
+		return;
 
 	Vector3 camPos = camera->transform->Global().position;
+	Vector3 offset = VTransform(SHADOW_MAP_DRAW_OFFSET, GetCameraViewMatrix());
 
-	VECTOR offset = VTransform(SHADOW_MAP_DRAW_OFFSET, GetCameraAPIViewportMatrix());
+	Vector3 minPosition = camPos - SHADOW_MAP_DRAW_AREA;// 影描画開始地点
+	Vector3 maxPosition = camPos + offset;				// 影描画終了地点
 
 	// 影計算をするエリア範囲
-	SetShadowMapDrawArea(hShadowMap, camPos - VGet(500, 500, 500), camPos + offset);
-
-	// 影計算をするエリア範囲
-	SetShadowMapDrawArea(hShadowMap, camPos, camPos - offset);
+	SetShadowMapDrawArea(hShadowMap, minPosition, maxPosition);
 
 	ShadowMap_DrawSetup(hShadowMap);
 }
@@ -62,6 +60,14 @@ void ShadowMap::DrawEnd() {
 void ShadowMap::CleanUp() {
 
 	SetUseShadowMap(0, -1);
+}
+
+void ShadowMap::Draw(void (*func)(), int cameraIndex) {
+
+	ShadowMap::DrawBegin(cameraIndex);
+	func();
+	ShadowMap::DrawEnd();
+	func();
 }
 
 void ShadowMap::Release() {

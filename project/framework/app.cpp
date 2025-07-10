@@ -7,7 +7,10 @@
 #include "src/common/game/GameManager.h"
 
 #include "vendor/ImGui/imgui.h"
-int hShadow = -1;
+
+#include "src/common/camera/CameraMAnager.h"
+#include "src/util/shadow_map/ShadowMap.h"
+#include "src/common/system/SystemManager.h"
 
 bool exitFlag = false;
 
@@ -16,11 +19,9 @@ void AppInit()
 	SceneManager::Start();
 	exitFlag = false;
 
-	// シャドウマップを生成する
-	hShadow = MakeShadowMap(4096, 4096);
+	CameraManager::Init();
 
-	// 影を出すライトを決める(真下に向ける)
-	SetShadowMapLightDirection(hShadow, VGet(0.5, -1.0f, 0.0f));
+	ShadowMap::Init(4096, 4096);
 }
 
 void AppUpdate()
@@ -30,26 +31,44 @@ void AppUpdate()
 
 	GTime.Update();
 	SceneManager::Update();
+	CameraManager::Update();
 
 	Random.SetSeed(Random.GetInt());
 }
 
 void AppDraw()
 {
-	VECTOR camPos = GetCameraPosition();
-	//MATRIX camM = MGetRotY(GetCameraAPIViewportMatrix());
-	VECTOR offset = VTransform(VGet(0, 0, 500), GetCameraAPIViewportMatrix());
+	const int cameraNum = (int)CameraManager::AllCameras().size();
 
-	// 影計算をするエリア範囲
-	SetShadowMapDrawArea(hShadow, camPos - VGet(500, 500, 500), camPos + offset);
+	if (cameraNum > 1) {
+		for (int i = 0; i < cameraNum; i++) {
 
-	ShadowMap_DrawSetup(hShadow);
-	SceneManager::Draw();
-	ShadowMap_DrawEnd();
+			CameraManager::DrawScreenDivsition(i);
 
-	SetUseShadowMap(0, hShadow);
-	SceneManager::Draw();
-	SetUseShadowMap(0, -1);
+			ShadowMap::DrawBegin(i);
+			SceneManager::Draw();
+			ShadowMap::DrawEnd();
+
+			CameraManager::ApplyScreenDivision(i);
+			SceneManager::Draw();
+
+			ShadowMap::CleanUp();
+		}
+	}
+	else {
+		CameraManager::Draw();
+
+		ShadowMap::DrawBegin();
+		SceneManager::Draw();
+		ShadowMap::DrawEnd();
+
+		CameraManager::ApplyScreenDivision(0);
+		CameraManager::Draw();
+		SceneManager::Draw();
+		ShadowMap::CleanUp();
+	}
+
+	//SetCameraPositionAndTarget_UpVecY(CameraManager::MainCamera()->WorldPos(), CameraManager::MainCamera()->Target());
 }
 
 void AppRelease()

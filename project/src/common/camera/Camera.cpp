@@ -29,6 +29,7 @@ using namespace CameraDefine;
 Camera::Camera() {
 
 	Reset();
+	SetDrawAreaDefault();
 
 	m_pShake = AddComponent<Shake>();
 	m_pShake->Init(this);
@@ -136,7 +137,23 @@ void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
     m_Fsm->ChangeState(state);
 }
 
+void Camera::ApplyDrawArea() const {
+
+	const int x = screenPosX;
+	const int y = screenPosY;
+	const int w = screenPosX + screenSizeX;
+	const int h = screenPosY + screenSizeY;
+
+	DxLib::SetDrawArea(x, y, w, h);
+
+	const float centerX = (x + w) * 0.5f;
+	const float centerY = h * 0.5f;
+	SetCameraScreenCenter(centerX, centerY);
+}
+
 void Camera::rendering() {
+
+	ApplyDrawArea();
 
 	Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
 	Vector3 targetPos = m_Target * m_pShake->Matrix();
@@ -320,6 +337,25 @@ void Camera::SetPerformance(const std::string& perfType) {
 void Camera::SetAnimation(const CameraAnimData& animData) {
 
 	m_AnimData = animData;
+}
+
+void Camera::SetDrawArea(int x, int y, int w, int h) {
+
+	screenPosX = x;
+	screenPosY = y;
+	screenSizeX = w;
+	screenSizeY = h;
+
+	ApplyDrawArea();
+}
+
+void Camera::SetDrawAreaDefault() {
+
+	WindowSetting& wSetting = WindowSetting::Inst();
+	const int width = wSetting.width;
+	const int height = wSetting.height;
+
+	SetDrawArea(0, 0, width, height);
 }
 
 const Vector3 Camera::WorldPos() const {

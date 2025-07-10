@@ -98,14 +98,15 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	// ToDo:ƒŒƒCƒ„[ŠÇ—
-	m_BloomManager->SetDrawScreenToEmitter();
-	EffectManager::Draw();
-	m_BloomManager->SetDrawScreenToBack();
+	//m_BloomManager->SetDrawScreenToEmitter();
+	//EffectManager::Draw();
+	//m_BloomManager->SetDrawScreenToBack();
 
-	if (CameraManager::IsScreenDivision())
-		CameraManager::ApplyScreenDivision();
+	//if (CameraManager::IsScreenDivision())
+	//	CameraManager::ApplyScreenDivision(0);
 	
 	EffectManager::Draw();
+	CameraManager::ApplyScreenDivision(0);
 
 	SceneBase::Draw();
 

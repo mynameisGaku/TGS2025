@@ -9,7 +9,7 @@ namespace ShadowMap {
 	/// <summary>
 	/// ‰Šú‰»ˆ—
 	/// </summary>
-	void Init();
+	void Init(int sizeX, int sizeY);
 
 	/// <summary>
 	/// ‰ğ•úˆ—
@@ -32,13 +32,19 @@ namespace ShadowMap {
 	void CleanUp();
 
 	/// <summary>
-	/// Šˆ“®‚·‚é‚©‚ğİ’è‚·‚é
+	/// ‰e•`‰æ‚ğ“K‰‚·‚é
 	/// </summary>
-	/// <param name="value">true‚È‚çUpdate‚âDraw‚ğŒÄ‚Ño‚·</param>
+	/// <param name="">•`‰æŠÖ”</param>
+	void Draw(void (*func)(), int cameraIndex = 0);
+
+	/// <summary>
+	/// ‰Ò“­‚·‚é‚©‚ğİ’è‚·‚é
+	/// </summary>
+	/// <param name="value">true‚È‚çUpdate‚âDraw‚Ìˆ—‚ğs‚¤‚±‚Æ‚ª‚Å‚«‚é</param>
 	void SetIsActive(bool value);
 
 	/// <summary>
-	/// Šˆ“®‚µ‚Ä‚¢‚é‚©‚ğæ“¾‚·‚é
+	/// ‰Ò“­‚µ‚Ä‚¢‚é‚©‚ğæ“¾‚·‚é
 	/// </summary>
 	bool IsActive();
 }

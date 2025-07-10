@@ -724,6 +724,7 @@ void CharaBase::climb(Vector3& normal)
 	m_ActionPosition = transform->position;
 	m_ActionWallPosition = m_WallPosition;
 	m_ActionWallNormal = m_WallNormal;
+	m_CanClimb = false;
 }
 
 void CharaBase::Move(const Vector3& dir)
@@ -768,6 +769,15 @@ void CharaBase::Jump()
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
 	m_IsJumping = true;
 	m_IsInhibitionSpeed = !m_IsSliding;
+
+	if (m_IsClimb)
+	{
+		m_FSM->ChangeState(&CharaBase::StateRunToJump);
+		m_pPhysics->velocity += m_ActionWallNormal * 10.0f;	// Magic:(
+		lookVelocity();
+
+		m_CanClimb = false;
+	}
 }
 
 void CharaBase::Slide()
@@ -783,6 +793,7 @@ void CharaBase::Slide()
 void CharaBase::WallAction()
 {
 	if (not m_IsWall) return;
+	if (m_IsClimb) return;
 
 	climb(m_WallNormal);
 }
@@ -1285,6 +1296,7 @@ void CharaBase::StateClimb(FSMSignal sig)
 		m_IsClimb = false;
 		m_CanMove = true;
 		m_CanRot = true;
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -1316,6 +1328,7 @@ void CharaBase::StateClimbToFall(FSMSignal sig)
 		m_IsClimb = false;
 		m_CanMove = true;
 		m_CanRot = true;
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -2011,6 +2024,7 @@ void CharaBase::StateWallStepLeft(FSMSignal sig)
 		m_CanMove = true;
 		m_CanRot = true;
 		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -2041,6 +2055,7 @@ void CharaBase::StateWallStepRight(FSMSignal sig)
 		m_CanMove = true;
 		m_CanRot = true;
 		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -2460,6 +2475,11 @@ void CharaBase::respawnByPoint()
 	Vector3 position = csp->transform->position;
 	respawn(position, Vector3::Zero);
 	csp->Use();
+}
+
+void CharaBase::lookVelocity()
+{
+	transform->rotation.y = Vector3Util::DirToEuler(m_pPhysics->velocity);
 }
 
 void CharaBase::playThrowSound()

@@ -388,6 +388,8 @@ private:
 	void respawn(const Vector3& pos, const Vector3& rot);
 	// リスポーン地点からリスポーン
 	void respawnByPoint();
+	// 進行方向を見る
+	void lookVelocity();
 	
 	//=== サウンド再生 ===
 	void playThrowSound();

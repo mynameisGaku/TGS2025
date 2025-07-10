@@ -47,7 +47,7 @@ namespace CameraManager {
 	/// 画面を分割して定義された領域に描画をする
 	/// </summary>
 	/// <param name="index">描画するカメラ番号</param>
-	void DrawScreenDivsition(int index);
+	void DrawScreenDivsition(int index = -1);
 
 	/// <summary>
 	/// 画面を分割して指定された領域に描画すり
@@ -71,7 +71,7 @@ namespace CameraManager {
 	/// 指定したインデックスに対して画面分割を適用する
 	/// </summary>
 	/// <param name="index">描画するカメラ番号</param>
-	void ApplyScreenDivision(int index);
+	void ApplyScreenDivision(int index = -1);
 
 	/// <summary>
 	/// 既定の画面サイズに戻す

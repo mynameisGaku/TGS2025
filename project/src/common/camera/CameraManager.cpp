@@ -21,6 +21,7 @@ namespace {
 	std::vector<Camera*>* cameras;	// カメラ
 	bool isScreenDivision;			// 画面分割の有無
 	bool initialized = false;	// 初期化済みかどうか
+	int m_CurrentDreaCameraIndex = 0;
 
 	static int screenDivBeginX = 0;	// 画面分割の開始X座標
 	static int screenDivBeginY = 0;	// 画面分割の開始Y座標
@@ -45,8 +46,10 @@ void CameraManager::Init() {
 	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
 	Camera* mainCamera = CreateCamera();
-	//Camera* camera2P = CreateCamera();
+	Camera* camera2P = CreateCamera();
 	//Camera* camera3P = CreateCamera();
+
+	m_CurrentDreaCameraIndex = 0;
 
 #ifdef IMGUI
 	InitImGuiNode();
@@ -59,6 +62,8 @@ void CameraManager::Update() {
 
 	if (cameras == nullptr)
 		return;
+
+	m_CurrentDreaCameraIndex = 0;
 
 	for (const auto& c : *cameras) {
 		c->Update();
@@ -162,8 +167,9 @@ void CameraManager::DrawScreenDivsition(int x, int y, int w, int h, int index) {
 	if (CheckNumber(index) == false)
 		return;
 
-	(*cameras)[index]->SetDrawArea(x, y, w, h);
 	(*cameras)[index]->Draw();
+	(*cameras)[index]->SetDrawArea(x, y, w, h);
+	m_CurrentDreaCameraIndex = index;
 }
 
 void CameraManager::GetScreenDivision(int index, Vector2* pos, Vector2* size) {
@@ -189,6 +195,11 @@ void CameraManager::ApplyScreenDivision(int index) {
 
 	if (not initialized)
 		Init();
+
+	if (index == -1) {
+		(*cameras)[m_CurrentDreaCameraIndex]->ApplyDrawArea();
+		return;
+	}
 
 	if (CheckNumber(index) == false)
 		return;

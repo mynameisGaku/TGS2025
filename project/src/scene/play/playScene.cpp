@@ -38,7 +38,7 @@ using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
-	//CameraManager::SetIsScreenDivision(true);
+	CameraManager::SetIsScreenDivision(true);
 
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 	for (int i = 0; i < CAMERA_NUM; i++)
@@ -99,14 +99,11 @@ void PlayScene::Draw()
 {
 	// ToDo:ƒŒƒCƒ„[ŠÇ—
 	//m_BloomManager->SetDrawScreenToEmitter();
-	//EffectManager::Draw();
+	EffectManager::Draw();
 	//m_BloomManager->SetDrawScreenToBack();
 
 	//if (CameraManager::IsScreenDivision())
-	//	CameraManager::ApplyScreenDivision(0);
-	
-	EffectManager::Draw();
-	CameraManager::ApplyScreenDivision(0);
+	//	CameraManager::ApplyScreenDivision();
 
 	SceneBase::Draw();
 

@@ -40,32 +40,37 @@ void AppDraw()
 {
 	const int cameraNum = (int)CameraManager::AllCameras().size();
 
-	if (cameraNum > 1) {
+	if (cameraNum > 1 && CameraManager::IsScreenDivision()) {
 		for (int i = 0; i < cameraNum; i++) {
 
 			CameraManager::DrawScreenDivsition(i);
 
 			ShadowMap::DrawBegin(i);
-			SceneManager::Draw();
+				SceneManager::Draw();
+
 			ShadowMap::DrawEnd();
+				CameraManager::DrawScreenDivsition(i);
+				SceneManager::Draw();
 
-			CameraManager::ApplyScreenDivision(i);
-			SceneManager::Draw();
-
-			ShadowMap::CleanUp();
+		ShadowMap::CleanUp();
 		}
 	}
 	else {
+
 		CameraManager::Draw();
+		CameraManager::DefaultScreenSize();
 
 		ShadowMap::DrawBegin();
-		SceneManager::Draw();
+			SceneManager::Draw();
+	
 		ShadowMap::DrawEnd();
-
-		CameraManager::ApplyScreenDivision(0);
-		CameraManager::Draw();
-		SceneManager::Draw();
+	
+			CameraManager::Draw();
+			CameraManager::DefaultScreenSize();
+			SceneManager::Draw();
+	
 		ShadowMap::CleanUp();
+
 	}
 
 	//SetCameraPositionAndTarget_UpVecY(CameraManager::MainCamera()->WorldPos(), CameraManager::MainCamera()->Target());

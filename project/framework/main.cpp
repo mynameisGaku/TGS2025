@@ -78,7 +78,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetGraphMode((int)wSetting.width, (int)wSetting.height, 32);
 	SetOutApplicationLogValidFlag(FALSE); // ログを出さない
 
-	SetMainWindowText(wSetting.name.c_str());
+    SYSTEMTIME t;
+	GetSystemTime(&t);
+	std::string wndname = wSetting.name + std::to_string(t.wMilliseconds);
+
+	SetMainWindowText(wndname.c_str());
 	SetWindowSizeExtendRate((double)wSetting.extend);
 	ChangeWindowMode(wSetting.isWindow); // Windowモードの場合
 

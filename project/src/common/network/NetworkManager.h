@@ -55,24 +55,31 @@ public:
 	static void HostCommandProcess(nlohmann::json& json, SOCKET sock);
 	static void ClientCommandProcess(nlohmann::json& json, SOCKET sock);
 
-
 	/// <summary>
 	/// Jsonを送信
 	/// </summary>
 	/// <param name="json">ダンプ後の文字列</param>
 	void SendJson(const std::string& json);
 
+	/// <summary>
+	/// ユーザー情報を追加する
+	/// </summary>
+	/// <param name="name">追加するユーザーの名前</param>
 	void SendAddUser(const std::string& name);
 
-	void GetUUIDFromHost();
+	void SendTransform(const class Transform& trs, UINT uuid);
 
-	static SOCKET g_ListenSock;					// サーバーが接続を待ち受けるためのソケット
-	static std::vector<ClientInfo*> g_Clients;	// サーバーに接続中のクライアント一覧
-	static std::mutex g_Mutex;					// ミューテックス
-	static SOCKET g_Sock;						// クライアントが接続に使用するソケット
-	static bool g_Running;
-	static UINT g_UUIDGenerator;
-	static std::vector<User> g_Users;
+	void SendTransitToPlay();
+
+
+	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット
+	static std::vector<ClientInfo*> g_Clients;			// サーバーに接続中のクライアント一覧
+	static std::mutex				g_Mutex;			// ミューテックス
+	static SOCKET					g_Sock;				// クライアントが接続に使用するソケット
+	static bool						g_Running;			// 実行中か
+	static UINT						g_UUIDGenerator;	// UUIDのジェネレーター 1から始まる
+	static std::vector<User>		g_Users;			// ホストで管理されるユーザー情報
+	static UINT						g_MyUUID;			// 自分のUUID クライアントが自身のUUIDを知るためにあるよ
 
 	void subscribe(const std::string& name);
 };

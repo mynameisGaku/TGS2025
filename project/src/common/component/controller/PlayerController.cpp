@@ -9,6 +9,7 @@
 #include "src/util/fsm/StateManager.h"
 #include "src/util/math/Vector3.h"
 #include "src/common/component/physics/Physics.h"
+#include <src/reference/network/NetworkRef.h>
 
 PlayerController::PlayerController() {
 
@@ -41,6 +42,13 @@ void PlayerController::Update() {
 	//	}*/
 	//}
 	//else
+	
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (not chara->GetUser().IsHost)
+			return;
+	}
 
 	if(chara->CanThrow() && chara->IsHoldingBall())
 	{

@@ -28,6 +28,21 @@ public:
 	/// <param name="trs">生成時のトランスフォーム</param>
 	/// <returns>生成されたキャラのポインタ</returns>
 	CharaBase* Create(const std::string& tag, const Transform& trs);
+	
+	/// <summary>
+	/// キャラを生成する
+	/// </summary>
+	/// <param name="tag">
+	/// <para>生成したいキャラのタグを指定</para>
+	/// <para> (tag)プレイヤー	: tPlayer</para>
+	/// <para> (tag)エネミー	: tEnemy </para>
+	/// </param>
+	/// <param name="user">ユーザー情報</param>
+	/// <param name="trs">生成時のトランスフォーム</param>
+	/// <returns>生成されたキャラのポインタ</returns>
+	CharaBase* Create(const std::string& tag, const Transform& trs, const User& user);
+
+
 	const CharaBase* CharaInst(int index);
 
 	/// <summary>
@@ -41,6 +56,8 @@ public:
 	/// </summary>
 	/// <returns>プール</returns>
 	Pool<CharaBase>* GetCharaPool() const { return m_pPool; }
+
+    CharaBase* GetFromUUID(UINT uuid);
 
 private:
 

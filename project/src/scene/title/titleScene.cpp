@@ -11,6 +11,8 @@
 
 #include "src/common/setting/SettingManager.h"
 #include "src/util/easing/easing.h"
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
 
 TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 
@@ -31,7 +33,15 @@ void TitleScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push("AnyKey")) {
+	if (InputManager::Push("AnyKey"))
+	{
+		auto& net = NetworkRef::Inst();
+		if (net.IsNetworkEnable)
+		{
+			NetworkManager* nm = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+			nm->SendTransitToPlay();
+		}
+		
 		SceneManager::ChangeScene("PlayScene");
 	}
 

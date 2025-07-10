@@ -6,4 +6,6 @@ typedef struct
 {
 	UINT			UUID;
 	std::string		Name;
+	SOCKET			Socket;
+	bool			IsHost;
 }User;

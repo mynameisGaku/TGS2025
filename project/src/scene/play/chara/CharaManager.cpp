@@ -217,7 +217,14 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	return newChara;
 }
 
-const CharaBase* CharaManager::CharaInst(int index) 
+CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs, const User& user)
+{
+	auto c = Create(tag, trs);
+	c->SetUser(user);
+	return c;
+}
+
+const CharaBase* CharaManager::CharaInst(int index)
 {
 #ifdef USE_POOL
 	if ((uint32_t)index > m_pPool->GetCapacity())
@@ -256,6 +263,22 @@ CharaBase* CharaManager::NearestEnemy(int index) {
 	}
 
 	return nullptr;
+}
+
+CharaBase* CharaManager::GetFromUUID(UINT uuid)
+{
+#ifdef USE_POOL
+    for (const auto& item : m_pPool->GetAllItems())
+    {
+        if (item->m_pObject == nullptr)
+            continue;
+        if (item->m_pObject->GetUser().UUID == uuid)
+        {
+            return item->m_pObject;
+        }
+    }
+	return nullptr;
+#endif
 }
 
 CharaBase* CharaManager::initfunc(uint32_t index, CharaBase* pChara)

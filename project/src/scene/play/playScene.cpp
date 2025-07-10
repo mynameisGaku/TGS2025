@@ -33,6 +33,7 @@
 #include "src/scene/play/force_field/ConstantPointForce.h"
 
 #include "src/scene/play/ui/UI_Setter_PlayScene.h"
+#include <src/reference/network/NetworkRef.h>
 
 using namespace KeyDefine;
 
@@ -71,6 +72,10 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	//StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 	StageObjectManager::LoadFromJson("data/json/Stage/" + gameM->GetCurrentStageName() + ".json");
+
+    auto& net = NetworkRef::Inst();
+    if (net.IsNetworkEnable)
+        CameraManager::SetIsScreenDivision(false);
 }
 
 PlayScene::~PlayScene()

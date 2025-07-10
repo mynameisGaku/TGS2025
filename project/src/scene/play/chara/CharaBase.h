@@ -9,6 +9,7 @@
 #include "src/util/math/Vector2.h"
 #include "src/util/alarm/Alarm.h"
 #include <src/scene/play/ui/UI_ButtonHint.h>
+#include <src/common/network/user/User.h>
 
 class CharaHP;
 class CharaStamina;
@@ -159,7 +160,11 @@ public:
 	// ▼演出
 
 	void SetTrailImage(int hImage);
-	Vector2 Target(const Ball* ball);
+    Vector2 Target(const Ball* ball);
+
+    //=======================================================================================
+    // ▼ユーザー
+	void SetUser(const User& user) { m_User = user; }
 
 	//=======================================================================================
 	// ▼ゲッター
@@ -221,6 +226,8 @@ public:
 	inline bool IsInvincible() const { return m_IsInvincible; }
 	// タックル後の間隔アラームが鳴っているか
 	bool IsFinishTackleIntervalAlarm();
+	// ユーザー取得
+	inline User GetUser() const { return m_User; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -305,7 +312,7 @@ private:
 	CharaSpawnPointManager* m_SpawnPointManager;	// リスポーン地点
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
-    float			m_HitPoint;				// ヒットポイント
+	float			m_HitPoint;				// ヒットポイント
 	float			m_BallChargeRate;		// ボールのチャージ加速度
 	float			m_MoveSpeed;			// 移動速度
 	float			m_RotSpeed;				// 回転速度
@@ -314,7 +321,7 @@ private:
 	float			m_SlideTimer;			// スライディング残り時間タイマー
 	float			m_CatchTimer;			// キャッチの残り時間タイマー
 	float			m_InvincibleTimer;		// 無敵残り時間
-    float			m_Stamina;				// スタミナ
+	float			m_Stamina;				// スタミナ
 	bool			m_IsCharging;			// ボールをチャージしているかどうか
 	bool			m_IsLanding;			// 着地中
 	bool			m_CanMove;				// 移動可能か
@@ -331,8 +338,9 @@ private:
 	bool			m_IsTackling;			// タックル中か
 	bool			m_IsInvincible;			// 無敵か
 	bool			m_IsDamage;				// ダメージ喰らい中か
-    bool			m_IsSliding = false;	// スライディング中か
-    bool			m_IsInhibitionSpeed;	// スピード抑制するか
+	bool			m_IsSliding = false;	// スライディング中か
+	bool			m_IsInhibitionSpeed;	// スピード抑制するか
+	User			m_User;					// ネットワークユーザー情報
 
 	UI_ButtonHint* m_pUI_ButtonHint;			// ボタンヒントUI
 	UI_FadeBase* m_pUI_Fade;

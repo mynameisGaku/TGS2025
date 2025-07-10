@@ -38,6 +38,7 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/fader/Fader.h"
 #include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
 
 //-----------------------------------------
 //  CurrentGameData
@@ -329,8 +330,30 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         auto spawner1 = spawnerManager->Get_Near(Vector3(500, 0, 500));
         auto spawner2 = spawnerManager->Get_Near(Vector3(-500, 0, -500));
 
-        addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+        // Networkが有効なら、NetworkManagerに登録されているg_Usersを元にキャラを生成する
+        auto& net = NetworkRef::Inst();
+        if (net.IsNetworkEnable)
+        {
+            NetworkManager* netManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+            UINT i = 0;
+            for (auto& user : netManager->g_Users)
+            {
+                i++;
+
+                std::string teamColor = "Red";
+                CharaSpawnPoint* useSpawner = spawner1;
+                if (i % 2 == 0)
+                {
+                    teamColor = "Blue";
+                    useSpawner = spawner2;
+                }
+
+                addCharacter(user, teamColor, useSpawner->transform->Global(), false);
+            }
+        }
+
+        //addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+        //addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
         //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
@@ -593,6 +616,22 @@ void MatchManager::addCharacter(const std::string& team, const Transform& trs, b
     chara->SetMoveSpeed(CHARADEFINE_REF.MoveSpeed);
     chara->SetRotSpeed(MathUtil::ToRadians(CHARADEFINE_REF.RotSpeed));
 
+    registerChara(isAI, chara);
+
+}
+
+void MatchManager::addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI)
+{
+    CharaBase* chara = m_pCharaManager->Create(team, trs, user);
+
+    chara->SetMoveSpeed(CHARADEFINE_REF.MoveSpeed);
+    chara->SetRotSpeed(MathUtil::ToRadians(CHARADEFINE_REF.RotSpeed));
+
+    registerChara(isAI, chara);
+}
+
+void MatchManager::registerChara(bool isAI, CharaBase* chara)
+{
     std::unordered_map<int, int> padNumMap =
     {
         {0, DX_INPUT_PAD1},

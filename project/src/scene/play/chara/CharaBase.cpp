@@ -95,8 +95,8 @@ CharaBase::CharaBase()
 	m_IsTargeting		= false;
 	m_IsTargeted		= false;
 	m_pTargetBall		= nullptr;
-    m_IsInhibitionSpeed = true;
-    m_SpawnPointManager = nullptr;
+	m_IsInhibitionSpeed = true;
+	m_SpawnPointManager = nullptr;
 	m_TackleIntervalAlarm = nullptr;
 
 	m_HitPoint = 0;
@@ -370,7 +370,18 @@ void CharaBase::Update() {
 		StartRespawn();
 	}
 
-	static int c;
+	if (CheckHitKey(KEY_INPUT_SLASH))
+	{
+        auto& net = NetworkRef::Inst();
+        if (net.IsNetworkEnable)
+        {
+            NetworkManager* netManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+            if (netManager)
+            {
+                netManager->SendTransform(transform->Global(), m_User.UUID);
+            }
+        }
+	}
 
 	m_FSM->Update();
 	m_SubFSM->Update();

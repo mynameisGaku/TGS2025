@@ -4,6 +4,7 @@
 #include "src/common/game/GameManager.h"
 #include "src/util/fsm/TinyFSM.h"
 #include <src/util/transform/Transform.h>
+#include <src/common/network/user/User.h>
 
 class CurrentGameData
 {
@@ -81,4 +82,8 @@ private:
     bool m_IsFadeEnd;
 
     void addCharacter(const std::string& team, const Transform& trs, bool isAI);
+    void addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI);
+
+    void registerChara(bool isAI, CharaBase* chara);
+
 };

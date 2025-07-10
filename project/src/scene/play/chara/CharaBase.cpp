@@ -666,7 +666,7 @@ void CharaBase::HitGroundProcess() {
 	m_IsWall = wallHit;
 
 	// 衝突していなければ、通常の空中挙動へ
-	if (not m_IsLanding)
+	if (not m_IsLanding && not m_IsClimb)
 	{
 		m_pPhysics->SetGravity(CHARA_GRAVITY);
 		m_pPhysics->SetFriction(Vector3::Zero);
@@ -701,16 +701,18 @@ void CharaBase::climb(Vector3& normal)
 	Vector3 jumpDir = Vector3(0, 0, 1) * MGetRotX(MathUtil::ToRadians(-90.0f)) * MGetRotZ(angle) * MGetRotY(normalEuler.y);
 
 	m_pPhysics->velocity.y = 0.0f;
-	m_pPhysics->velocity = jumpDir * CHARADEFINE_REF.ClimbPower;
+	m_pPhysics->velocity = jumpDir * CHARADEFINE_REF.ClimbPower;	// Magic:(
 
 	transform->rotation.y = normalEuler.y;
 
 	if (angle < -DX_PI_F / 4)
 	{
+		m_pPhysics->SetGravity(CHARA_GRAVITY / 4.0f);
 		m_FSM->ChangeState(&CharaBase::StateWallStepRight);
 	}
 	else if (angle > DX_PI_F / 4)
 	{
+		m_pPhysics->SetGravity(CHARA_GRAVITY / 4.0f);
 		m_FSM->ChangeState(&CharaBase::StateWallStepLeft);
 	}
 	else
@@ -1282,6 +1284,7 @@ void CharaBase::StateClimb(FSMSignal sig)
 	{
 		m_IsClimb = false;
 		m_CanMove = true;
+		m_CanRot = true;
 	}
 	break;
 	}
@@ -1990,6 +1993,8 @@ void CharaBase::StateWallStepLeft(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("WallStepLeft");
+
+		m_IsClimb = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2002,6 +2007,10 @@ void CharaBase::StateWallStepLeft(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
 	}
 	break;
 	}
@@ -2014,6 +2023,8 @@ void CharaBase::StateWallStepRight(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("WallStepRight");
+
+		m_IsClimb = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2026,6 +2037,10 @@ void CharaBase::StateWallStepRight(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
 	}
 	break;
 	}

@@ -1,5 +1,26 @@
 {
     "Animation": "WallStepRight",
     "Events": [
+        {
+            "Name": "SetCanMove",
+            "Start": 0.0,
+            "Argument": {
+                "CanMove": false
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        },
+        {
+            "Name": "MoveToWallPosition",
+            "Start": 8.5,
+            "End": 13.5,
+            "Argument": {
+            }
+        }
     ]
 }

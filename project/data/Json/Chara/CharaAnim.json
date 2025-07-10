@@ -182,7 +182,8 @@
 			"Offset": {
 				"Y": 100.0,
 				"Z": 10.0
-			}
+			},
+			"StartFrame": 8.0
 		},
 		"WallStepRight": {
 			"IsFixedRoot": {
@@ -193,7 +194,8 @@
 			"Offset": {
 				"Y": 100.0,
 				"Z": 10.0
-			}
+			},
+			"StartFrame": 8.0
 		}
 	}
 }

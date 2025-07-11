@@ -69,6 +69,11 @@ public:
 	/// </summary>
 	inline void SetAxisDraw(const bool& value) { isAxisDraw = value; }
 
+	/// <summary>
+	/// モデルのスケールを設定する
+	/// </summary>
+	void SetModelScale(const Vector3& scale) { modelScale = scale; }
+
 	//==========================================================================================
 	// ▼ゲッター
 
@@ -86,6 +91,7 @@ protected:
 	// ▼メンバ変数
 
 	int hModel;			// モデルのハンドル
+	Vector3 modelScale;		// モデルのスケール
 
 	bool isModelDraw;	// モデルの描画の有無
 	bool isAxisDraw;	// 座標軸線の描画の有無

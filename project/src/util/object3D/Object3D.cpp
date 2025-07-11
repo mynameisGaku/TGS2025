@@ -13,6 +13,7 @@ Object3D::Object3D(const int& model, const Transform& _transform) {
 
 	isModelDraw = true;
 	isAxisDraw = false;
+	modelScale = Vector3::Ones;
 }
 
 Object3D::~Object3D() {
@@ -40,7 +41,7 @@ void Object3D::Draw() {
 	if (hModel < 0 || isModelDraw == false)
 		return;
 
-	MV1SetMatrix(hModel, transform->Global().Matrix());	// MATRIXをモデルに適応
+	MV1SetMatrix(hModel, MGetScale(modelScale) * transform->Global().Matrix());	// MATRIXをモデルに適応
 	MV1DrawModel(hModel);		// モデルの描画
 }
 

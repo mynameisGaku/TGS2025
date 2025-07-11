@@ -10,6 +10,8 @@
 #include <vendor/nlohmann/json.hpp>
 #include <src/util/transform/Transform.h>
 #include <src/scene/play/chara/CharaManager.h>
+#include <src/util/file/json/VectorJson.h>
+#include <src/common/load_screen/LoadScreen.h>
 
 using JSON = nlohmann::json;
 
@@ -59,15 +61,9 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 			}
 
 			// リストの最後尾に新たに追加する
-			JSON add;
-			add["Name"] = user.Name;
-			add["UUID"] = user.UUID;
-			add["Socket"] = user.Socket;
-			add["IsHost"] = user.IsHost;
 			reply["Added_ID"] = user.UUID;
 
 			// 追加したユーザーデータを配列に追加
-			reply["Users"].push_back(add);
 			std::string str = reply.dump();
 
 
@@ -83,29 +79,23 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 	else if (command == "SetTransform")
 	{
 		Transform trs;
-		trs.position.x = json["Position"]["x"].get<float>();
-		trs.position.y = json["Position"]["y"].get<float>();
-		trs.position.z = json["Position"]["z"].get<float>();
-		trs.rotation.x = json["Rotation"]["x"].get<float>();
-		trs.rotation.y = json["Rotation"]["y"].get<float>();
-		trs.rotation.z = json["Rotation"]["z"].get<float>();
-		trs.scale.x = json["Scale"]["x"].get<float>();
-		trs.scale.y = json["Scale"]["y"].get<float>();
-		trs.scale.z = json["Scale"]["z"].get<float>();
-        CharaManager* cm = FindGameObject<CharaManager>();
-        if (not cm)
-            return;
-        auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
-        if (not c)
-            return;
+		from_json(json["Position"], trs.position);
+		from_json(json["Rotation"], trs.rotation);
+		from_json(json["Scale"], trs.scale);
+		auto cm = FindGameObject<CharaManager>();
+		if (not cm)
+			return;
+		auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
+		if (not c)
+			return;
 		if (not c->transform)
 			return;
-        *c->transform = trs;
+		*c->transform = trs;
 	}
 	else if (command == "TransitToPlay")
 	{
 		// ゲーム開始のコマンドを受け取ったら、全クライアントに通知
-		JSON broadcast;
+		JSON broadcast{};
 		broadcast["Command"] = "TransitToPlay";
 		std::string str = broadcast.dump();
 		PacketHeader header{};
@@ -113,11 +103,64 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		header.size = static_cast<int>(str.size()) + 1;
 		Broadcast(header, str.c_str(), sock);
 
-		SceneManager::ChangeScene("PlayScene");
+        SceneManager::ChangeScene("PlayScene");
+        SceneManager::CommonScene()->FindGameObject<LoadScreen>()->FadeOut(0.1f);
 	}
 	else if (command == "SetUserData")
 	{
 		Logger::FormatDebugLog("[受信] ユーザーデータ更新要求");
+	}
+	else if (command == "ChangeState")
+	{
+		std::string str = json.dump();
+
+		// 送信主以外のクライアントに対しても、同じく変更を要求する
+		PacketHeader header{};
+		header.type = PACKET_JSON;
+		header.size = static_cast<int>(str.size()) + 1;
+		Broadcast(header, str.c_str(), sock);
+
+		// ホスト側にいる対象者のステートを変更する
+		UINT uuid = json.at("UUID").get<UINT>();
+		std::string state = json.at("State").get<std::string>();
+
+		CharaManager* cm = FindGameObject<CharaManager>();
+		if (not cm)
+			return;
+		auto c = cm->GetFromUUID(uuid);
+		if (not c)
+			return;
+		if (not c->m_FSM)
+			return;
+		c->m_FSM->ChangeStateByName(state);
+
+		Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %d. State: %s", uuid, state.c_str());
+	}
+	else if (command == "ChangeSubState")
+	{
+		std::string str = json.dump();
+
+		// 送信主以外のクライアントに対しても、同じく変更を要求する
+		PacketHeader header{};
+		header.type = PACKET_JSON;
+		header.size = static_cast<int>(str.size()) + 1;
+		Broadcast(header, str.c_str(), sock);
+
+		// ホスト側にいる対象者のステートを変更する
+		UINT uuid = json.at("UUID").get<UINT>();
+		std::string state = json.at("State").get<std::string>();
+
+		CharaManager* cm = FindGameObject<CharaManager>();
+		if (not cm)
+			return;
+		auto c = cm->GetFromUUID(uuid);
+		if (not c)
+			return;
+		if (not c->m_SubFSM)
+			return;
+		c->m_SubFSM->ChangeStateByName(state);
+
+		Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %d. State: %s", uuid, state.c_str());
 	}
 	else
 	{

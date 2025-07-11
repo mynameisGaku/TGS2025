@@ -11,6 +11,8 @@
 #include <string>
 #include <src/util/transform/Transform.h>
 #include <src/scene/play/chara/CharaManager.h>
+#include <src/util/file/json/VectorJson.h>
+#include <src/common/load_screen/LoadScreen.h>
 
 using JSON = nlohmann::json;
 
@@ -31,6 +33,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 
 	if (command == "SetUserData")
 	{
+		g_Users.clear();
 		for (auto& data : json["Users"])
 		{
 			User user{};
@@ -47,31 +50,56 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 			g_MyUUID = json.at("Added_ID").get<UINT>();
 		}
 	}
-    else if (command == "SetTransform")
+	else if (command == "SetTransform")
+	{
+		Transform trs;
+		from_json(json["Position"], trs.position);
+		from_json(json["Rotation"], trs.rotation);
+		from_json(json["Scale"], trs.scale);
+		auto cm = FindGameObject<CharaManager>();
+		if (not cm)
+			return;
+		auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
+		if (not c)
+			return;
+		if (not c->transform)
+			return;
+		*c->transform = trs;
+	}
+	else if (command == "TransitToPlay")
+	{
+		SceneManager::ChangeScene("PlayScene");
+		SceneManager::CommonScene()->FindGameObject<LoadScreen>()->FadeOut(0.1f);
+	}
+	else if (command == "ChangeState")
+	{
+		UINT uuid = json.at("UUID").get<UINT>();
+		std::string state = json.at("State").get<std::string>();
+
+		CharaManager* cm = FindGameObject<CharaManager>();
+		if (not cm)
+			return;
+		auto c = cm->GetFromUUID(uuid);
+		if (not c)
+			return;
+		if (not c->m_FSM)
+			return;
+		c->m_FSM->ChangeStateByName(state);
+    }
+    else if (command == "ChangeSubState")
     {
-        Transform trs;
-        trs.position.x = json["Position"]["x"].get<float>();
-        trs.position.y = json["Position"]["y"].get<float>();
-        trs.position.z = json["Position"]["z"].get<float>();
-        trs.rotation.x = json["Rotation"]["x"].get<float>();
-        trs.rotation.y = json["Rotation"]["y"].get<float>();
-        trs.rotation.z = json["Rotation"]["z"].get<float>();
-        trs.scale.x = json["Scale"]["x"].get<float>();
-        trs.scale.y = json["Scale"]["y"].get<float>();
-        trs.scale.z = json["Scale"]["z"].get<float>();
-        auto cm = FindGameObject<CharaManager>();
+        UINT uuid = json.at("UUID").get<UINT>();
+        std::string state = json.at("State").get<std::string>();
+
+        CharaManager* cm = FindGameObject<CharaManager>();
         if (not cm)
             return;
-        auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
+        auto c = cm->GetFromUUID(uuid);
         if (not c)
             return;
-        if (not c->transform)
+        if (not c->m_SubFSM)
             return;
-        *c->transform = trs;
-    }
-    else if (command == "TransitToPlay")
-    {
-        SceneManager::ChangeScene("PlayScene");
+        c->m_SubFSM->ChangeStateByName(state);
     }
 	else
 	{

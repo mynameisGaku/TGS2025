@@ -60,6 +60,11 @@ public:
 	/// </summary>
 	/// <param name="json">ダンプ後の文字列</param>
 	void SendJson(const std::string& json);
+	/// <summary>
+	/// Jsonを送信
+	/// </summary>
+	/// <param name="json">jsonデータ</param>
+	void SendJson(const nlohmann::json& json);
 
 	/// <summary>
 	/// ユーザー情報を追加する
@@ -70,6 +75,9 @@ public:
 	void SendTransform(const class Transform& trs, UINT uuid);
 
 	void SendTransitToPlay();
+
+    void SendChangeState(const std::string& state, UINT uuid);
+    void SendChangeSubState(const std::string& state, UINT uuid);
 
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット

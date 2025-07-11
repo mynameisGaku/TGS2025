@@ -285,6 +285,7 @@ public:
 private:
 	friend class CharaManager;
 	friend class UI_CrossHair;
+	friend class NetworkManager;
 
 	Ball*			m_pBall;				// 所有しているボールのポインター
 	Ball*			m_pLastBall;			// 最後に投げたボールのポインター
@@ -310,6 +311,7 @@ private:
 	Alarm*			m_TackleIntervalAlarm;	// タックル後の間隔アラーム
 	Vector3			m_lastUpdatePosition;	// 前回更新時の最終位置
 	CharaSpawnPointManager* m_SpawnPointManager;	// リスポーン地点
+	NetworkManager* m_pNetManager;			// ネットワーク関連
 	int				m_hTrailImage;			// トレイルの画像ハンドル
 	int				m_Index;				// 自身のインデックス
 	float			m_HitPoint;				// ヒットポイント
@@ -400,4 +402,10 @@ private:
 	void invincible(const nlohmann::json& argument);
 	void playFootStepSound(const nlohmann::json& argument);
 	void playTinyFootStepSound(const nlohmann::json& argument);
+
+	void main_changeStateNetwork(void(CharaBase::* state)(FSMSignal));
+	void sub_changeStateNetwork(void(CharaBase::* state)(FSMSignal));
+	void respawn_changeStateNetwork(void(CharaBase::* state)(FSMSignal));
+	void sendChangeStateToNetwork(const std::string& state);
+	void sendChangeSubStateToNetwork(const std::string& state);
 };

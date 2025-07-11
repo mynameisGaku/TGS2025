@@ -165,6 +165,11 @@ void NetworkManager::SendJson(const std::string& json)
 	}
 }
 
+void NetworkManager::SendJson(const nlohmann::json& json)
+{
+	SendJson(json.dump());
+}
+
 void NetworkManager::subscribe(const std::string& name)
 {
 	auto& net = NetworkRef::Inst();
@@ -232,17 +237,17 @@ void NetworkManager::SendTransform(const Transform& trs, UINT uuid)
 	// TransformデータをJSON形式に変換
 	nlohmann::json json;
 	json["Command"] = "SetTransform";
-	json["Position"]["x"] = trs.position.x;
-	json["Position"]["y"] = trs.position.y;
-    json["Position"]["z"] = trs.position.z;
-    json["Rotation"]["x"] = trs.rotation.x;
-    json["Rotation"]["y"] = trs.rotation.y;
-    json["Rotation"]["z"] = trs.rotation.z;
-	json["Scale"]["x"] = trs.scale.x;
-	json["Scale"]["y"] = trs.scale.y;
-	json["Scale"]["z"] = trs.scale.z;
-    json["UUID"] = uuid;
-    json["NeedReply"] = false;
+	json["Position"]["X"] = trs.position.x;
+	json["Position"]["Y"] = trs.position.y;
+	json["Position"]["Z"] = trs.position.z;
+	json["Rotation"]["X"] = trs.rotation.x;
+	json["Rotation"]["Y"] = trs.rotation.y;
+	json["Rotation"]["Z"] = trs.rotation.z;
+	json["Scale"]["X"] = trs.scale.x;
+	json["Scale"]["Y"] = trs.scale.y;
+	json["Scale"]["Z"] = trs.scale.z;
+	json["UUID"] = uuid;
+	json["NeedReply"] = false;
 	// JSONを文字列に変換
 	std::string jsonStr = json.dump();
 	// JSONを送信
@@ -251,16 +256,50 @@ void NetworkManager::SendTransform(const Transform& trs, UINT uuid)
 
 void NetworkManager::SendTransitToPlay()
 {
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// ゲーム開始のコマンドをJSON形式で作成
+	nlohmann::json json;
+	json["Command"] = "TransitToPlay";
+	json["NeedReply"] = false;
+	// JSONを文字列に変換
+	std::string jsonStr = json.dump();
+	// JSONを送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendChangeState(const std::string& state, UINT uuid)
+{
     auto& net = NetworkRef::Inst();
     if (!net.IsNetworkEnable)
         return;
-    // ゲーム開始のコマンドをJSON形式で作成
+	// ステート変更のコマンド作成
+	nlohmann::json json;
+	json["Command"] = "ChangeState";
+	json["NeedReply"] = false;
+	json["UUID"] = uuid;
+	json["State"] = state;
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendChangeSubState(const std::string& state, UINT uuid)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
+    // ステート変更のコマンド作成
     nlohmann::json json;
-    json["Command"] = "TransitToPlay";
+    json["Command"] = "ChangeSubState";
     json["NeedReply"] = false;
-    // JSONを文字列に変換
+    json["UUID"] = uuid;
+    json["State"] = state;
+    // ダンプ
     std::string jsonStr = json.dump();
-    // JSONを送信
+    // 送信
     SendJson(jsonStr);
 }
 
@@ -334,6 +373,20 @@ unsigned __stdcall ClientThread(void* param)
 	}
 
 	Logger::FormatDebugLog("[切断] %s", info->name.c_str());
+
+	// ユーザー情報から削除
+	{
+		std::lock_guard<std::mutex> lock(NetworkManager::g_Mutex);
+		auto it = std::find_if(NetworkManager::g_Users.begin(), NetworkManager::g_Users.end(), [info](const User& user) {
+			return user.Socket == info->sock;
+		});
+
+		if (it != NetworkManager::g_Users.end()) {
+			Logger::FormatDebugLog("[削除] ユーザー: %s, UUID: %u", it->Name.c_str(), it->UUID);
+			NetworkManager::g_Users.erase(it);
+		}
+	}
+
 	closesocket(sock);
 
 	// クライアント情報を削除

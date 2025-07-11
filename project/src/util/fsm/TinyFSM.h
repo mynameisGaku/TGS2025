@@ -228,6 +228,7 @@ public:
 					char buf[64];
 					snprintf(buf, sizeof(buf), "State_%p", reinterpret_cast<void*>(*reinterpret_cast<uintptr_t*>(&state)));
 					m_stateNameMap[state] = buf;
+					m_stateNameMapKeyStr[buf] = state;
 				}
 			}
 
@@ -239,6 +240,20 @@ public:
 				m_transitLog.pop_front();
 			m_transitLog.push_back(log);
 		}
+	}
+
+	/// <summary>
+	/// ステート変更 string版
+	/// RegisterStateName関数によって登録されたステートに遷移する。
+	/// 登録されていない場合は遷移せず、エラーログを出力します。
+	/// </summary>
+	/// <param name="name">登録したステート名</param>
+	void ChangeStateByName(const std::string& name)
+	{
+		if (m_stateNameMapKeyStr.find(name) != m_stateNameMapKeyStr.end())
+			return;
+
+		ChangeState(m_stateNameMapKeyStr[name]);
 	}
 
 	// 現在のステート
@@ -270,6 +285,7 @@ public:
 	void RegisterStateName(void(T::* state)(FSMSignal), const std::string& name)
 	{
 		m_stateNameMap[state] = name;
+		m_stateNameMapKeyStr[name] = state;
 	}
 	// ステートマシンに名前を付ける
 	void SetName(const std::string& name)
@@ -307,6 +323,11 @@ public:
 		return false;
 	}
 
+	std::string GetStateNameFromMap(void(T::* state)(FSMSignal))
+	{
+		return m_stateNameMap[state];
+	}
+
 private:
 	// 現在、どの段階の処理を行っているか
 	FSMSignal m_signal;
@@ -326,6 +347,7 @@ private:
 	std::unordered_map<void(T::*)(FSMSignal), int>* m_transitCounters;
 	// 各ステートの名前 (デバッグ用)
 	std::unordered_map<void(T::*)(FSMSignal), std::string> m_stateNameMap;
+	std::unordered_map<std::string, void(T::*)(FSMSignal)> m_stateNameMapKeyStr;
 	// 統計を取るか
 	bool m_isStatistics;
 	// 遷移ログ

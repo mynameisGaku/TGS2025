@@ -55,6 +55,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include <src/reference/network/NetworkRef.h>
 #include <src/util/editbox/editbox.hpp>
 #include <src/util/ptr/PtrUtil.h>
+#include <src/reference/camera/CameraPerformanceRef.h>
 
 #define CoGVersion (2.2)
 
@@ -194,6 +195,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Settings_ini::Inst().Destroy();
 	BLOOM_REF.Destroy();
 	CAMERADEFINE_REF.Destroy();
+	CAMERA_PERFORMANCE_REF.Destroy();
 	CHARADEFINE_REF.Destroy();
 	CHARAHP_REF.Destroy();
 	CHARASTAMINA_REF.Destroy();

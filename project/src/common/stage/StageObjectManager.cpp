@@ -127,8 +127,11 @@ void StageObjectManager::Draw() {
 
 #else
 
-	for (auto itr : *stageObjects)
-		itr->Draw();
+	if(stageObjects)
+	{
+		for (auto itr : *stageObjects)
+			itr->Draw();
+	}
 
 #endif
 
@@ -139,6 +142,7 @@ void StageObjectManager::Release() {
 
 	//SaveToCsv();
 	//SaveToJson();
+	EraseAll();
 	EraseAll();
 
 	PtrUtil::SafeDelete(stageObjects);
@@ -255,9 +259,10 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 	return hitFlag;
 }
 
-bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos)
+bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos, Vector3* normal)
 {
 	Vector3 nearestPos = Vector3::Zero;
+	Vector3 nearestNormal = Vector3::Zero;
 	float nearestDist = 0.0f;
 	bool isHit = false;
 
@@ -271,6 +276,7 @@ bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, 
 			if ((not isHit) || nearestDist > dist)
 			{
 				nearestPos = hit.HitPosition;
+				nearestNormal = hit.Normal;
 				nearestDist = dist;
 			}
 			isHit = true;
@@ -281,6 +287,8 @@ bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, 
 	{
 		if (hitPos != nullptr)	// 引数にポインタが入っていたら、代入をする
 			*hitPos = nearestPos;
+		if (normal != nullptr)	// 引数にポインタが入っていたら、代入をする
+			*normal = nearestNormal;
 
 		return true;
 	}
@@ -718,7 +726,7 @@ void StageObjectManager::ShiftID(int id) {
 }
 
 void StageObjectManager::DrawEditMode() {
-
+#ifdef IMGUI
 	ImGuiRoot* stageObjTree = ImGuiManager::FindRoot("StageObject");
 	if (stageObjTree == nullptr)
 		return;
@@ -747,6 +755,7 @@ void StageObjectManager::DrawEditMode() {
 
 		itr->Draw();
 	}
+#endif
 }
 
 void StageObjectManager::SaveAndLoad() {

@@ -84,6 +84,9 @@ CharaBase::CharaBase()
 	m_CanHold			= true;
 	m_CanTackle			= true;
 	m_IsInvincible		= false;
+	m_CanClimb			= true;
+	m_IsClimb			= false;
+	m_IsWall			= false;
 	m_pHitBall			= nullptr;
 	m_pStatusTracker	= nullptr;
 	m_pCatchReadyEffect	= nullptr;
@@ -299,6 +302,7 @@ void CharaBase::Init(std::string tag)
 	m_Timeline = new Timeline<CharaBase>(this, m_Animator);
 	m_Timeline->SetFunction("SetAnimationSpeed", &CharaBase::setAnimationSpeed);
 	m_Timeline->SetFunction("MoveToPosition", &CharaBase::moveToPosition);
+	m_Timeline->SetFunction("MoveToWallPosition", &CharaBase::moveToWallPosition);
 	m_Timeline->SetFunction("ChangeToRoll", &CharaBase::changeToRoll);
 	m_Timeline->SetFunction("EndRoll", &CharaBase::endRoll);
 	m_Timeline->SetFunction("SetCanMove", &CharaBase::setCanMove);
@@ -446,7 +450,16 @@ void CharaBase::Draw()
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
 	}
 
-	
+	if (m_IsWall)
+	{
+		DrawSphere3D(m_WallPosition, 20.0f, 4, 0xFF00FF, 0xFF00FF, FALSE);
+	}
+	else
+	{
+		DrawSphere3D(m_WallPosition, 20.0f, 4, 0x100010, 0x100010, FALSE);
+	}
+
+	DrawSphere3D(m_ActionWallPosition, 20.0f, 4, 0x00FFFF, 0x00FFFF, FALSE);
 }
 
 void CharaBase::CollisionEvent(const CollisionData& colData) {
@@ -558,6 +571,7 @@ void CharaBase::HitGroundProcess() {
 
 	const float radius = capsuleCol->Radius();
 	Vector3 hitPos;
+	Vector3 normal;
 
 	//=== すり抜け判定 ===
 	static const float CENTER_OFFSET = 50.0f;	// 中心のオフセット
@@ -565,9 +579,10 @@ void CharaBase::HitGroundProcess() {
 	const Vector3 centerPos = transform->position + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
 	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
 
-	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos))
+	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos, &normal))
 	{
-		transform->position = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;	// レイのヒット位置へ移動
+		Vector3 pos = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;
+		transform->position = pos;	// レイのヒット位置へ移動
 	}
 
 	//=== 場外判定 ===
@@ -631,13 +646,85 @@ void CharaBase::HitGroundProcess() {
 		}
 	}
 
+	// 壁アクション判定処理
+	static const float WALL_CAPSULE_RADIUS = 150.0f;
+
+	bool wallHit = false;
+
+	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius), footPos + Vector3::SetY(radius), WALL_CAPSULE_RADIUS, &pushVec))
+	{
+		const Vector3 wallRayStart = transform->position + Vector3::SetY(CENTER_OFFSET);
+		const Vector3 wallRayDir = -pushVec.Normalize();
+		const float wallRayLength = WALL_CAPSULE_RADIUS * 1.5f;	// 90度の角でも当てるため、1.414倍より大きくする
+		if (StageObjectManager::CollCheckRay(wallRayStart, wallRayStart + wallRayDir * wallRayLength, &hitPos, &normal))
+		{
+			m_WallPosition = hitPos;
+			m_WallNormal = normal;
+			wallHit = true;
+		}
+	}
+	m_IsWall = wallHit;
 
 	// 衝突していなければ、通常の空中挙動へ
-	if (not m_IsLanding)
+	if (not m_IsLanding && not m_IsClimb)
 	{
 		m_pPhysics->SetGravity(CHARA_GRAVITY);
 		m_pPhysics->SetFriction(Vector3::Zero);
 	}
+}
+
+void CharaBase::climb(Vector3& normal)
+{
+	if (not m_CanClimb) return;
+	if (m_IsLanding) return;
+	if (normal.GetLengthSquared() <= 0.0f) return;
+
+	Vector3 normalEuler = Vector3Util::DirToEuler(-normal);
+
+	static const float ANGLE_LIMIT = MathUtil::ToRadians(30.0f);
+
+	if (fabsf(normalEuler.x) > ANGLE_LIMIT)
+	{
+		return;
+	}
+
+	Vector3 vel = m_pPhysics->FlatVelocity();
+	if (not vel)
+	{
+		vel = transform->Forward();
+	}
+
+	Vector3 velEuler = Vector3Util::DirToEuler(vel);
+
+	float angle = normalEuler.y - velEuler.y;
+
+	Vector3 jumpDir = Vector3(0, 0, 1) * MGetRotX(MathUtil::ToRadians(-90.0f)) * MGetRotZ(angle) * MGetRotY(normalEuler.y);
+
+	m_pPhysics->velocity.y = 0.0f;
+	m_pPhysics->velocity = jumpDir * CHARADEFINE_REF.ClimbPower;	// Magic:(
+
+	transform->rotation.y = normalEuler.y;
+
+	if (angle < -DX_PI_F / 4)
+	{
+		m_pPhysics->SetGravity(CHARA_GRAVITY / 4.0f);
+		m_FSM->ChangeState(&CharaBase::StateWallStepRight);
+	}
+	else if (angle > DX_PI_F / 4)
+	{
+		m_pPhysics->SetGravity(CHARA_GRAVITY / 4.0f);
+		m_FSM->ChangeState(&CharaBase::StateWallStepLeft);
+	}
+	else
+	{
+		m_FSM->ChangeState(&CharaBase::StateClimb);
+	}
+	
+
+	m_ActionPosition = transform->position;
+	m_ActionWallPosition = m_WallPosition;
+	m_ActionWallNormal = m_WallNormal;
+	m_CanClimb = false;
 }
 
 void CharaBase::Move(const Vector3& dir)
@@ -682,6 +769,15 @@ void CharaBase::Jump()
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
 	m_IsJumping = true;
 	m_IsInhibitionSpeed = !m_IsSliding;
+
+	if (m_IsClimb)
+	{
+		m_FSM->ChangeState(&CharaBase::StateRunToJump);
+		m_pPhysics->velocity += m_ActionWallNormal * 10.0f;	// Magic:(
+		lookVelocity();
+
+		m_CanClimb = false;
+	}
 }
 
 void CharaBase::Slide()
@@ -692,6 +788,14 @@ void CharaBase::Slide()
 	}
 
 	m_SlideTimer = SLIDE_TIME;
+}
+
+void CharaBase::WallAction()
+{
+	if (not m_IsWall) return;
+	if (m_IsClimb) return;
+
+	climb(m_WallNormal);
 }
 
 void CharaBase::GenerateBall()
@@ -1163,6 +1267,68 @@ void CharaBase::StateAirSpin(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
+	}
+	break;
+	}
+}
+
+void CharaBase::StateClimb(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("Climb");
+
+		m_IsClimb = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateClimbToFall); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
+		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
+void CharaBase::StateClimbToFall(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("ClimbToFall");
+		m_pPhysics->SetGravity(Vector3::Zero);
+		m_pPhysics->velocity = m_pPhysics->FlatVelocity();
+		m_IsClimb = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
+		m_Timeline->Stop();
 	}
 	break;
 	}
@@ -1833,6 +1999,68 @@ void CharaBase::StateTackle(FSMSignal sig)
 	}
 }
 
+void CharaBase::StateWallStepLeft(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("WallStepLeft");
+
+		m_IsClimb = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
+void CharaBase::StateWallStepRight(FSMSignal sig)
+{
+	switch (sig)
+	{
+	case FSMSignal::SIG_Enter: // 開始
+	{
+		m_Timeline->Play("WallStepRight");
+
+		m_IsClimb = true;
+	}
+	break;
+	case FSMSignal::SIG_Update: // 更新
+	{
+		if (m_Animator->IsFinished())
+		{
+			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+		}
+	}
+	break;
+	case FSMSignal::SIG_Exit: // 終了
+	{
+		m_IsClimb = false;
+		m_CanMove = true;
+		m_CanRot = true;
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_Timeline->Stop();
+	}
+	break;
+	}
+}
+
 //========================================================================
 // サブステート
 
@@ -2012,6 +2240,7 @@ void CharaBase::land()
 {
 	m_IsLanding = true;
 	m_IsJumping = false;
+	m_CanClimb = true;
 	m_pPhysics->velocity.y = 0.0f;
 	m_pPhysics->resistance.y = 0.0f;
 	m_pPhysics->SetGravity(Vector3::Zero);
@@ -2246,6 +2475,11 @@ void CharaBase::respawnByPoint()
 	Vector3 position = csp->transform->position;
 	respawn(position, Vector3::Zero);
 	csp->Use();
+}
+
+void CharaBase::lookVelocity()
+{
+	transform->rotation.y = Vector3Util::DirToEuler(m_pPhysics->velocity);
 }
 
 void CharaBase::playThrowSound()
@@ -2483,6 +2717,19 @@ void CharaBase::moveToPosition(const nlohmann::json& argument)
 	float lastProgress = argument.at("LastProgress").get<float>();
 	Vector3 dest = argument.at("Position").get<Vector3>();
 	dest = VTransform(dest, transform->RotationMatrix());
+
+	Vector3 add = dest * progress;
+	Vector3 sub = dest * lastProgress;
+
+	transform->position += add;
+	transform->position -= sub;
+}
+
+void CharaBase::moveToWallPosition(const nlohmann::json& argument)
+{
+	float progress = argument.at("Progress").get<float>();
+	float lastProgress = argument.at("LastProgress").get<float>();
+	Vector3 dest = m_ActionWallPosition - m_ActionPosition;
 
 	Vector3 add = dest * progress;
 	Vector3 sub = dest * lastProgress;

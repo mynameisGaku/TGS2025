@@ -696,6 +696,18 @@
     <None Include="data\Json\Chara\State\ActionIdleToRun.json">
       <Filter>data\Json\Chara\State</Filter>
     </None>
+    <None Include="data\Json\Chara\State\Climb.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ClimbToFall.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\WallStepLeft.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\WallStepRight.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

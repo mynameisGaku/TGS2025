@@ -206,6 +206,9 @@ bool Catcher::CanCatch(Ball* ball) const
 
 void Catcher::createWindArea()
 {
+	if (not m_pForceFieldManager)
+		return;
+
 	m_pWindArea = m_pForceFieldManager->CreateForceFieldCorn(Transform(m_pParent->transform->position + Vector3::SetY(ARM_HEIGHT)), 2000.0f, MathUtil::ToRadians(30.0f));
 	m_pWindArea->SetColTag(ColDefine::Tag::tWindArea);
 	m_pWindArea->SetColTargetTags({ ColDefine::Tag::tBall, ColDefine::Tag::tChara });
@@ -216,6 +219,9 @@ void Catcher::createWindArea()
 
 void Catcher::deleteWindArea()
 {
+	if (not m_pForceFieldManager)
+		return;
+
 	m_pForceFieldManager->DeleteForceField(m_pWindArea);
 	m_pWindArea = nullptr;
 }

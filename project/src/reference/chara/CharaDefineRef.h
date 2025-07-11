@@ -45,6 +45,7 @@ public:
     float                       TackleForce_Horizontal{};
     float                       TackleInvincibleDurationSec{};
     float                       GetTackleInvincibleTime{};  // タックルを食らったときに付与される無敵時間(秒)
+    float                       ClimbPower{};   // 壁登りのジャンプ力
     
     void Load(bool ForceLoad = false);
 private:

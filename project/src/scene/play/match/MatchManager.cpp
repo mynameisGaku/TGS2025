@@ -14,6 +14,9 @@
 #include "src/common/component/controller/DebugController.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 
+//=== スポナー ===
+#include "src/scene/play/chara/CharaSpawnPointManager.h"
+
 //=== チーム ===
 #include "src/scene/play/team/Team.h"
 #include "src/scene/play/team/TeamManager.h"
@@ -321,8 +324,12 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
         m_pTeamManager = Instantiate<TeamManager>();
 
-        addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
-        addCharacter("Blue", Transform(Vector3(150.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+        auto spawnerManager = FindGameObject<CharaSpawnPointManager>();
+        auto spawner1 = spawnerManager->Get_Near(Vector3(500, 0, 500));
+        auto spawner2 = spawnerManager->Get_Near(Vector3(-500, 0, -500));
+
+        addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+        addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
 
         // 追加できるの確認したよ
         //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
@@ -423,6 +430,7 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
     break;
     case FSMSignal::SIG_Exit:
     {
+		// ゲーム終了時に、勝利チームの情報をGameManagerに渡す
         GameManager::ResultData resultData;
 
         for (auto& teamName : GAME_REF.TeamNames)
@@ -431,12 +439,17 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
             if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
             {
 				resultData.WinnerTeamName.push_back(teamName);
-				resultData.TotalPoint.push_back(team->GetTotalPoint());
+    			resultData.WinnerCharaIDs = team->GetCharaIDs();
             }
-		    resultData.TeamColor.push_back(ColorUtil::ColorFromString(teamName));
+            resultData.TeamName.push_back(teamName);
+			resultData.TeamTotalPoint[teamName] = team->GetTotalPoint();
+		    resultData.TeamColor[teamName]      = (ColorUtil::ColorFromString(teamName));
+
+            for (const auto& charaID : team->GetCharaIDs())
+                resultData.CharaInTeamName[charaID] = teamName;
         }
 
-        resultData.Chara_TopScore = GetRanking();
+        resultData.Ranking = GetRanking();
 		GameManager* gameManager = SceneManager::CommonScene()->FindGameObject<GameManager>();
         gameManager->SetGameResult(resultData);
     }

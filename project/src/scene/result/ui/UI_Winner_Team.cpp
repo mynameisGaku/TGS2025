@@ -32,9 +32,15 @@ void UI_Winner_Team::Draw()
 			Vector2 screenBegin = ScreenManager::GetScreenBeginPos(i);
 			Vector2 screenEnd = ScreenManager::GetScreenEndPos(i);
 			Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
+
 			const std::string text = (resultData.WinnerTeamName[0] + " Team Won!");
 			const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
-			DrawExtendFormatString(screenCenter.x - width * 0.5f, screenCenter.y + 30.0f, rectTransform->scale.x, rectTransform->scale.y, resultData.TeamColor[0], text.c_str());
+			const std::string teamName = resultData.CharaInTeamName.at(resultData.WinnerCharaIDs[0]);
+			const int color = resultData.TeamColor.at(teamName);
+
+			const Vector2 base = Vector2(screenCenter.x - width * 0.5f, screenCenter.y - 200.0f);
+
+			DrawExtendFormatString(base.x, base.y, rectTransform->scale.x, rectTransform->scale.y, color, text.c_str());
 		}
 	}
 	else

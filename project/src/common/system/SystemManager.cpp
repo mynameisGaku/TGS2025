@@ -67,8 +67,9 @@ void SystemManager::Start() {
 		loadScreen->FadeIn(0.1f);
 		loadScreen->SetIsPushFadeOut(true);
 	}
-
+#ifdef IMGUI
 	ImGuiManager::AddNode(new ImGuiNode_SliderFloat("TimeScale", &GTime.timeScale, 0.0f, 2.0f));
+#endif
 }
 
 void SystemManager::Update() {

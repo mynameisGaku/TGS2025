@@ -41,9 +41,10 @@ void TitleScene::Update() {
 void TitleScene::Draw() {
 
 	SceneBase::Draw();
-	
-	DrawString(100, 400, "Push [P]Key To Play", GetColor(255, 255, 255));
 
+#ifdef TRUE //DEBUG
+	DrawString(100, 400, "Push [Z]Key To Play", GetColor(255, 255, 255));
+#endif
 }
 
 void TitleScene::BeforePlayUpdate()

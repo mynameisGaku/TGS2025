@@ -335,7 +335,6 @@ void Animator::Play(std::string label, float speed) {
 		current->SetBlendRate(1.0f);
 	}
 
-#if FALSE
 	// 再生開始地点を設定する
 	if (anim.startFrame < 0) {
 		current->SetFrame(0.0f);
@@ -343,6 +342,8 @@ void Animator::Play(std::string label, float speed) {
 	else {
 		current->SetFrame(anim.startFrame);
 	}
+
+#if FALSE
 
 	// 再生終了地点を設定する
 	if (anim.endFrame <= 0)

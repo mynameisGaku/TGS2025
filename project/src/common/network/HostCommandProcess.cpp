@@ -98,6 +98,8 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
         auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
         if (not c)
             return;
+		if (not c->transform)
+			return;
         *c->transform = trs;
 	}
 	else if (command == "TransitToPlay")

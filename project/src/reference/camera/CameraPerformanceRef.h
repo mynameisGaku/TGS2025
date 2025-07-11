@@ -60,6 +60,7 @@ private:
 
 	~CameraPerformanceRef()
 	{ /*DO NOTHING*/
+		m_PerfDataMap.clear();
 	}
 };
 

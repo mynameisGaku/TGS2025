@@ -35,6 +35,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #include "src/reference/bloom/BloomRef.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/reference/chara/CharaDefineRef.h"
 #include "src/reference/chara/CharaHPRef.h"
 #include "src/reference/chara/CharaStaminaRef.h"
@@ -189,6 +190,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	GTime.Destroy();
 	InputRef::Inst().Destroy();
 	UI_ButtonHintRef::Inst().Destroy();
+	CameraPerformanceRef::Inst()->Destroy();
 
 #ifdef IMGUI
 

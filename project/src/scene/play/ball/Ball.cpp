@@ -292,6 +292,9 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	if (colData.Other()->Parent<Catcher>() != nullptr)
 		return;
 
+	if (colData.Other()->Parent<CharaBase>() == m_Owner)
+		return;
+
 	if (colData.Other()->Tag() == ColDefine::Tag::tWindArea)
 		return;
 

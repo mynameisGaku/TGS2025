@@ -505,11 +505,12 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 		// 相手の情報
 		Ball* ball = colData.Other()->Parent<Ball>();
 
-		// ボールが転がり中なら当たらない
+		// ボールが転がり中なら無視する
 		if (ball->GetState() == Ball::S_LANDED)
 		{
-			SetBall(ball);
-			Catch();
+			// ボールを所持していない場合、自動で取得する
+			if (m_pBall == nullptr)
+				m_Catcher->CatchSuccese(ball);
 			return;
 		}
 

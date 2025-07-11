@@ -34,6 +34,10 @@ public:
 	bool IsColliderActive() const;
 	// キャッチ角度内にボールがあるかどうか
 	bool CanCatch(Ball* ball) const;
+
+	// キャッチ成功処理
+	void CatchSuccese(Ball* ball);
+
 private:
 	ColliderCapsule* m_pCollider;	// 当たり判定
 	CharaBase* m_pParent;			// 親キャラクター

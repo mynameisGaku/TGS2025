@@ -170,7 +170,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	if (tag == "Red")
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/NoFaceGuy.mv1");
-		newChara->SetModelScale(Vector3::Ones);
+		newChara->SetModelScale(Vector3::Ones * 50.0f);
 
 		colParamChara.tag = ColDefine::Tag::tChara;
 		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tBlue };

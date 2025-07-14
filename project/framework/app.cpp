@@ -8,6 +8,9 @@
 
 #include "vendor/ImGui/imgui.h"
 
+#include "src/common/camera/CameraMAnager.h"
+#include "src/util/shadow_map/ShadowMap.h"
+#include "src/common/system/SystemManager.h"
 
 bool exitFlag = false;
 
@@ -15,6 +18,10 @@ void AppInit()
 {
 	SceneManager::Start();
 	exitFlag = false;
+
+	CameraManager::Init();
+
+	ShadowMap::Init(4096, 4096);
 }
 
 void AppUpdate()
@@ -24,13 +31,49 @@ void AppUpdate()
 
 	GTime.Update();
 	SceneManager::Update();
+	CameraManager::Update();
 
 	Random.SetSeed(Random.GetInt());
 }
 
 void AppDraw()
 {
-	SceneManager::Draw();
+	const int cameraNum = (int)CameraManager::AllCameras().size();
+
+	if (cameraNum > 1 && CameraManager::IsScreenDivision()) {
+		for (int i = 0; i < cameraNum; i++) {
+
+			CameraManager::DrawScreenDivsition(i);
+
+			ShadowMap::DrawBegin(i);
+				SceneManager::Draw();
+
+			ShadowMap::DrawEnd();
+				CameraManager::DrawScreenDivsition(i);
+				SceneManager::Draw();
+
+		ShadowMap::CleanUp();
+		}
+	}
+	else {
+
+		CameraManager::Draw();
+		CameraManager::DefaultScreenSize();
+
+		ShadowMap::DrawBegin();
+			SceneManager::Draw();
+	
+		ShadowMap::DrawEnd();
+	
+			CameraManager::Draw();
+			CameraManager::DefaultScreenSize();
+			SceneManager::Draw();
+	
+		ShadowMap::CleanUp();
+
+	}
+
+	//SetCameraPositionAndTarget_UpVecY(CameraManager::MainCamera()->WorldPos(), CameraManager::MainCamera()->Target());
 }
 
 void AppRelease()

@@ -174,8 +174,8 @@ void MatchManager::Update()
 
 void MatchManager::Draw()
 {
-    if (not CameraManager::IsScreenDivision())
-        m_pFsm->ImGuiDebugRender();
+    //if (not CameraManager::IsScreenDivision())
+    //    m_pFsm->ImGuiDebugRender();
 }
 
 void MatchManager::ReloadCurrentGameData()

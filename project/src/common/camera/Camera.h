@@ -63,6 +63,11 @@ public:
 	/// <param name="state">ステートの関数ポインタ</param>
 	void ChangeState(void(Camera::*state)(FSMSignal));
 
+	/// <summary>
+	/// 描画領域を適用する
+	/// </summary>
+	void ApplyDrawArea() const;
+
 	//================================================================================
 	// ▼セッター
 
@@ -106,6 +111,20 @@ public:
 	void SetAnimation(const CameraDefine::CameraAnimData& animData);
 
 	inline void SetFollowerChara(const CharaBase* chara) { m_pFollowerChara = chara; }
+
+	/// <summary>
+	/// 描画範囲を設定する
+	/// </summary>
+	/// <param name="x">描画開始地点(X軸)</param>
+	/// <param name="y">描画開始地点(Y軸)</param>
+	/// <param name="w">描画の大きさ(X軸)</param>
+	/// <param name="h">描画の大きさ(Y軸)</param>
+	void SetDrawArea(int x, int y, int w, int h);
+
+	/// <summary>
+	/// 既定の描画範囲を設定する
+	/// </summary>
+	void SetDrawAreaDefault();
 
 	//================================================================================
 	// ▼ゲッター
@@ -269,6 +288,9 @@ private:
 
 	float m_EasingTime;				// イージング用タイマー
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
+
+	int screenPosX, screenPosY;		// 描画範囲(始点)
+	int screenSizeX, screenSizeY;	// 描画範囲(大きさ)
 
 	bool m_IsView;		// 描画しているか
 	bool m_DrawFlag;	// 描画が完了しているか

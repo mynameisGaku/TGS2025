@@ -122,37 +122,8 @@ void Catcher::CollisionEvent(const CollisionData& colData)
 	if (not CanCatch(ball)) return;
 
 	//=== キャッチ成功処理 ===
-	EffectManager::Play3D("Catch_Success.efk", m_pParent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
 
-	float charge = ball->GetChargeRate();
-
-	m_pParent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
-	m_pParent->SetBall(ball);
-	ball->SetOwner(m_pParent);
-	ball->PickUp();
-	ball->SetChargeRate(charge);
-	m_pParent->GetStatusTracker()->AddCatchCount(1);
-
-	Camera* camera = CameraManager::GetCamera(m_pParent->GetIndex());
-
-	if (camera != nullptr) {
-
-		// カメラ振動処理
-		Shake* cameraShake = camera->GetComponent<Shake>();
-		if (cameraShake != nullptr)
-			cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 5.0f, Vector3(0.15f), 0.5f);
-
-		CameraDefine::CameraAnimData cameraAnimData;
-
-		cameraAnimData.SetAnim(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.6f, 0.2f, 0.5f);
-		cameraAnimData.SetRotMat(Vector3::Zero, Vector3(0.0f, 0.0f, MathUtil::ToRadians(-8.0f)), 0.2f, 0.5f);
-		cameraAnimData.SetHoldTime(0.35f);
-
-		// カメラの位置を調整
-		camera->SetAnimation(cameraAnimData);
-	}
-
-	PadController::SetVibration(m_pParent->GetIndex() + 1, 250, 4.0f);
+	CatchSuccese(ball);
 }
 
 void Catcher::SetColliderActive(bool isActive)
@@ -202,6 +173,44 @@ bool Catcher::CanCatch(Ball* ball) const
 	}
 
 	return true;
+}
+
+void Catcher::CatchSuccese(Ball* ball) {
+
+	if (ball == nullptr)
+		return;
+
+	EffectManager::Play3D("Catch_Success.efk", m_pParent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
+
+	float charge = ball->GetChargeRate();
+
+	m_pParent->CatchSuccess(ball->GetComponent<Physics>()->velocity);
+	m_pParent->SetBall(ball);
+	ball->SetOwner(m_pParent);
+	ball->PickUp();
+	ball->SetChargeRate(charge);
+	m_pParent->GetStatusTracker()->AddCatchCount(1);
+
+	Camera* camera = CameraManager::GetCamera(m_pParent->GetIndex());
+
+	if (camera != nullptr) {
+
+		// カメラ振動処理
+		Shake* cameraShake = camera->GetComponent<Shake>();
+		if (cameraShake != nullptr)
+			cameraShake->SetParam({ Shake::Type::tHorizontal, Shake::Type::tDepth }, 5.0f, Vector3(0.15f), 0.5f);
+
+		CameraDefine::CameraAnimData cameraAnimData;
+
+		cameraAnimData.SetAnim(CAMERADEFINE_REF.m_OffsetChase, CAMERADEFINE_REF.m_OffsetChase * 0.6f, 0.2f, 0.5f);
+		cameraAnimData.SetRotMat(Vector3::Zero, Vector3(0.0f, 0.0f, MathUtil::ToRadians(-8.0f)), 0.2f, 0.5f);
+		cameraAnimData.SetHoldTime(0.35f);
+
+		// カメラの位置を調整
+		camera->SetAnimation(cameraAnimData);
+	}
+
+	PadController::SetVibration(m_pParent->GetIndex() + 1, 250, 4.0f);
 }
 
 void Catcher::createWindArea()

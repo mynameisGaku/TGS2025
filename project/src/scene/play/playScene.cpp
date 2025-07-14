@@ -96,19 +96,17 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	// ToDo:ƒŒƒCƒ„[ŠÇ—
-	m_BloomManager->SetDrawScreenToEmitter();
+	//m_BloomManager->SetDrawScreenToEmitter();
 	EffectManager::Draw();
-	m_BloomManager->SetDrawScreenToBack();
+	//m_BloomManager->SetDrawScreenToBack();
 
-	if (CameraManager::IsScreenDivision())
-		CameraManager::ApplyScreenDivision();
-	
-	EffectManager::Draw();
+	//if (CameraManager::IsScreenDivision())
+	//	CameraManager::ApplyScreenDivision();
 
 	SceneBase::Draw();
 
-	if (not CameraManager::IsScreenDivision())
-		Settings_json::Inst()->RenderImGuiFileManager();
+	//if (not CameraManager::IsScreenDivision())
+	//	Settings_json::Inst()->RenderImGuiFileManager();
 
 #ifdef DEBUG
 	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));

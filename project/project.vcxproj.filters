@@ -406,6 +406,9 @@
     <Filter Include="src%28application%29\scene\result\ui">
       <UniqueIdentifier>{04f105dc-3db9-4a39-a8ba-0af76cc95d93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\enemy">
+      <UniqueIdentifier>{b1fd8ebe-6446-4842-82cd-35e85d24cd87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -2151,6 +2154,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\result\ui\UI_Ranking.h">
       <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\enemy\Enemy.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -81,12 +81,12 @@ void TargetManager::Draw() {
 		if (targetIndex == -1)
 			continue;
 
-		Pool<CharaBase>* charaPool = charaManager->GetCharaPool();
+		Pool<Chara>* charaPool = charaManager->GetCharaPool();
 		if (charaPool == nullptr)
 			continue;
 
 		// ‘_‚Á‚Ä‚¢‚éƒLƒƒƒ‰
-		CharaBase* chara = charaPool->Get(index);
+		Chara* chara = charaPool->Get(index);
 		if (chara == nullptr)
 			continue;
 
@@ -150,12 +150,12 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
 	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
 
-	Pool<CharaBase>* charaPool = charaManager->GetCharaPool();
+	Pool<Chara>* charaPool = charaManager->GetCharaPool();
 	if (charaPool == nullptr)
 		return;
 
 	// ‘_‚í‚ê‚Ä‚¢‚éƒLƒƒƒ‰
-	CharaBase* charaTarget = charaPool->Get(targetCharaID);
+	Chara* charaTarget = charaPool->Get(targetCharaID);
 	if (charaTarget == nullptr)
 		return;
 
@@ -221,12 +221,12 @@ void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 	const float circleRadius = 32.0f;
 	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
 	
-	Pool<CharaBase>* charaPool = charaManager->GetCharaPool();
+	Pool<Chara>* charaPool = charaManager->GetCharaPool();
 	if (charaPool == nullptr)
 		return;
 
 	// ‘_‚í‚ê‚Ä‚¢‚éƒLƒƒƒ‰
-	CharaBase* charaTarget = charaPool->Get(targetCharaID);
+	Chara* charaTarget = charaPool->Get(targetCharaID);
 	if (charaTarget == nullptr)
 		return;
 

@@ -84,6 +84,6 @@ private:
     void addCharacter(const std::string& team, const Transform& trs, bool isAI);
     void addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI);
 
-    void registerChara(bool isAI, CharaBase* chara);
+    void registerChara(bool isAI, Chara* chara);
 
 };

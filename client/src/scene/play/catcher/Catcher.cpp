@@ -1,6 +1,6 @@
 #include "src/scene/play/catcher/Catcher.h"
 #include "src/common/component/collider/ColliderCapsule.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/util/fx/effect/EffectManager.h"

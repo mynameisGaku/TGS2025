@@ -1,4 +1,4 @@
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/util/input/InputManager.h"
 #include "src/util/fx/effect/EffectManager.h"
 
@@ -53,7 +53,7 @@ namespace
 	static const float ARM_HEIGHT = 100.0f;	// 腕の高さ
 }
 
-CharaBase::CharaBase()
+Chara::Chara()
 {
 	m_pStamina			= Instantiate<CharaStamina>();
 	m_pHP				= Instantiate<CharaHP>();
@@ -111,9 +111,9 @@ CharaBase::CharaBase()
 	m_IsDamage = false;
 	m_IsTackling = false;
 
-	m_FSM = new TinyFSM<CharaBase>(this);
-	m_SubFSM = new TinyFSM<CharaBase>(this);
-	m_RespawnFSM = new TinyFSM<CharaBase>(this);
+	m_FSM = new TinyFSM<Chara>(this);
+	m_SubFSM = new TinyFSM<Chara>(this);
+	m_RespawnFSM = new TinyFSM<Chara>(this);
 
 	m_pCharaSpawnPointManager = nullptr;
 
@@ -121,48 +121,48 @@ CharaBase::CharaBase()
 	m_pUI_Fade = nullptr;
 #if TRUE
 	// この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	m_FSM->RegisterStateName(&CharaBase::StateActionIdle, "StateActionIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateActionIdleEmote, "StateActionIdleEmote");
-	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToJump, "StateActionIdleToJump");
-	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToRun, "StateActionIdleToRun");
-	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToStandingIdle, "StateActionIdleToStandingIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateActionIdleToTackle, "StateActionIdleToTackle");
-	m_FSM->RegisterStateName(&CharaBase::StateAimToThrow, "StateAimToThrow");
-	m_FSM->RegisterStateName(&CharaBase::StateAirSpin, "StateAirSpin");
-	m_FSM->RegisterStateName(&CharaBase::StateCrouchToActionIdle, "StateCrouchToActionIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateCrouchToRun, "StateCrouchToRun");
-	m_FSM->RegisterStateName(&CharaBase::StateDamageToDown, "StateDamageToDown");
-	m_FSM->RegisterStateName(&CharaBase::StateFall, "StateFall");
-	m_FSM->RegisterStateName(&CharaBase::StateFallToCrouch, "StateFallToCrouch");
-	m_FSM->RegisterStateName(&CharaBase::StateFallToRoll, "StateFallToRoll");
-	m_FSM->RegisterStateName(&CharaBase::StateFeint, "StateFeint");
-	m_FSM->RegisterStateName(&CharaBase::StateRoll, "StateRoll");
-	m_FSM->RegisterStateName(&CharaBase::StateRollToActionIdle, "StateRollToActionIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateRollToRun, "StateRollToRun");
-	m_FSM->RegisterStateName(&CharaBase::StateRun, "StateRun");
-	m_FSM->RegisterStateName(&CharaBase::StateRunToActionIdle, "StateRunToActionIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateRunToJump, "StateRunToJump");
-	m_FSM->RegisterStateName(&CharaBase::StateRunToSlide, "StateRunToSlide");
-	m_FSM->RegisterStateName(&CharaBase::StateRunToTackle, "StateRunToTackle");
-	m_FSM->RegisterStateName(&CharaBase::StateSlide, "StateSlide");
-	m_FSM->RegisterStateName(&CharaBase::StateSlideToRun, "StateSlideToRun");
-	m_FSM->RegisterStateName(&CharaBase::StateStandingIdle, "StateStandingIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleEmote, "StateStandingIdleEmote");
-	m_FSM->RegisterStateName(&CharaBase::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
-	m_FSM->RegisterStateName(&CharaBase::StateTackle, "StateTackle");
+	m_FSM->RegisterStateName(&Chara::StateActionIdle, "StateActionIdle");
+	m_FSM->RegisterStateName(&Chara::StateActionIdleEmote, "StateActionIdleEmote");
+	m_FSM->RegisterStateName(&Chara::StateActionIdleToJump, "StateActionIdleToJump");
+	m_FSM->RegisterStateName(&Chara::StateActionIdleToRun, "StateActionIdleToRun");
+	m_FSM->RegisterStateName(&Chara::StateActionIdleToStandingIdle, "StateActionIdleToStandingIdle");
+	m_FSM->RegisterStateName(&Chara::StateActionIdleToTackle, "StateActionIdleToTackle");
+	m_FSM->RegisterStateName(&Chara::StateAimToThrow, "StateAimToThrow");
+	m_FSM->RegisterStateName(&Chara::StateAirSpin, "StateAirSpin");
+	m_FSM->RegisterStateName(&Chara::StateCrouchToActionIdle, "StateCrouchToActionIdle");
+	m_FSM->RegisterStateName(&Chara::StateCrouchToRun, "StateCrouchToRun");
+	m_FSM->RegisterStateName(&Chara::StateDamageToDown, "StateDamageToDown");
+	m_FSM->RegisterStateName(&Chara::StateFall, "StateFall");
+	m_FSM->RegisterStateName(&Chara::StateFallToCrouch, "StateFallToCrouch");
+	m_FSM->RegisterStateName(&Chara::StateFallToRoll, "StateFallToRoll");
+	m_FSM->RegisterStateName(&Chara::StateFeint, "StateFeint");
+	m_FSM->RegisterStateName(&Chara::StateRoll, "StateRoll");
+	m_FSM->RegisterStateName(&Chara::StateRollToActionIdle, "StateRollToActionIdle");
+	m_FSM->RegisterStateName(&Chara::StateRollToRun, "StateRollToRun");
+	m_FSM->RegisterStateName(&Chara::StateRun, "StateRun");
+	m_FSM->RegisterStateName(&Chara::StateRunToActionIdle, "StateRunToActionIdle");
+	m_FSM->RegisterStateName(&Chara::StateRunToJump, "StateRunToJump");
+	m_FSM->RegisterStateName(&Chara::StateRunToSlide, "StateRunToSlide");
+	m_FSM->RegisterStateName(&Chara::StateRunToTackle, "StateRunToTackle");
+	m_FSM->RegisterStateName(&Chara::StateSlide, "StateSlide");
+	m_FSM->RegisterStateName(&Chara::StateSlideToRun, "StateSlideToRun");
+	m_FSM->RegisterStateName(&Chara::StateStandingIdle, "StateStandingIdle");
+	m_FSM->RegisterStateName(&Chara::StateStandingIdleEmote, "StateStandingIdleEmote");
+	m_FSM->RegisterStateName(&Chara::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
+	m_FSM->RegisterStateName(&Chara::StateTackle, "StateTackle");
 
-	m_SubFSM->RegisterStateName(&CharaBase::SubStateCatch, "SubStateCatch");
-	m_SubFSM->RegisterStateName(&CharaBase::SubStateGetBall, "SubStateGetBall");
-	m_SubFSM->RegisterStateName(&CharaBase::SubStateHold, "SubStateHold");
-	m_SubFSM->RegisterStateName(&CharaBase::SubStateHoldToAim, "SubStateHoldToAim");
-	m_SubFSM->RegisterStateName(&CharaBase::SubStateNone, "SubStateNone");
+	m_SubFSM->RegisterStateName(&Chara::SubStateCatch, "SubStateCatch");
+	m_SubFSM->RegisterStateName(&Chara::SubStateGetBall, "SubStateGetBall");
+	m_SubFSM->RegisterStateName(&Chara::SubStateHold, "SubStateHold");
+	m_SubFSM->RegisterStateName(&Chara::SubStateHoldToAim, "SubStateHoldToAim");
+	m_SubFSM->RegisterStateName(&Chara::SubStateNone, "SubStateNone");
 #endif // FALSE
 
-	main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
-	sub_changeStateNetwork(&CharaBase::SubStateNone); // ステートを変更
+	main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
+	sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
 }
 
-CharaBase::~CharaBase()
+Chara::~Chara()
 {
 	std::string output = "cha delete : " + std::to_string(m_Index) + "\n";
 	OutputDebugString(output.c_str());
@@ -186,7 +186,7 @@ CharaBase::~CharaBase()
 		camera->SetFollowerChara(nullptr);
 }
 
-void CharaBase::Init(std::string tag)
+void Chara::Init(std::string tag)
 {
 	m_Alarm = new Alarm;
 	m_Alarm->Reset();
@@ -311,18 +311,18 @@ void CharaBase::Init(std::string tag)
 
 	m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
 
-	m_Timeline = new Timeline<CharaBase>(this, m_Animator);
-	m_Timeline->SetFunction("SetAnimationSpeed", &CharaBase::setAnimationSpeed);
-	m_Timeline->SetFunction("MoveToPosition", &CharaBase::moveToPosition);
-	m_Timeline->SetFunction("MoveToWallPosition", &CharaBase::moveToWallPosition);
-	m_Timeline->SetFunction("ChangeToRoll", &CharaBase::changeToRoll);
-	m_Timeline->SetFunction("EndRoll", &CharaBase::endRoll);
-	m_Timeline->SetFunction("SetCanMove", &CharaBase::setCanMove);
-	m_Timeline->SetFunction("SetCanRot", &CharaBase::setCanRot);
-	m_Timeline->SetFunction("SetVelocity", &CharaBase::setVelocity);
-	m_Timeline->SetFunction("ThrowBall", &CharaBase::throwBall);
-	m_Timeline->SetFunction("PlayFootSound", &CharaBase::playFootStepSound);
-	m_Timeline->SetFunction("PlayTinyFootSound", &CharaBase::playTinyFootStepSound);
+	m_Timeline = new Timeline<Chara>(this, m_Animator);
+	m_Timeline->SetFunction("SetAnimationSpeed", &Chara::setAnimationSpeed);
+	m_Timeline->SetFunction("MoveToPosition", &Chara::moveToPosition);
+	m_Timeline->SetFunction("MoveToWallPosition", &Chara::moveToWallPosition);
+	m_Timeline->SetFunction("ChangeToRoll", &Chara::changeToRoll);
+	m_Timeline->SetFunction("EndRoll", &Chara::endRoll);
+	m_Timeline->SetFunction("SetCanMove", &Chara::setCanMove);
+	m_Timeline->SetFunction("SetCanRot", &Chara::setCanRot);
+	m_Timeline->SetFunction("SetVelocity", &Chara::setVelocity);
+	m_Timeline->SetFunction("ThrowBall", &Chara::throwBall);
+	m_Timeline->SetFunction("PlayFootSound", &Chara::playFootStepSound);
+	m_Timeline->SetFunction("PlayTinyFootSound", &Chara::playTinyFootStepSound);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 #if FALSE
@@ -377,7 +377,7 @@ void CharaBase::Init(std::string tag)
 	}
 }
 
-void CharaBase::Update() {
+void Chara::Update() {
 
 	// デバッグ機能
 	if (CheckHitKey(KEY_INPUT_R))
@@ -469,7 +469,7 @@ void CharaBase::Update() {
 	}
 }
 
-void CharaBase::Draw()
+void Chara::Draw()
 {
 	Object3D::Draw();
 
@@ -495,13 +495,13 @@ void CharaBase::Draw()
 	DrawSphere3D(m_ActionWallPosition, 20.0f, 4, 0x00FFFF, 0x00FFFF, FALSE);
 }
 
-void CharaBase::CollisionEvent(const CollisionData& colData) {
+void Chara::CollisionEvent(const CollisionData& colData) {
 
 	// 当たった相手がキャラクターの場合
 	if (colData.Other()->Tag() == ColDefine::Tag::tChara) {
 
 		// 相手の情報
-		CharaBase* chara = colData.Other()->Parent<CharaBase>();
+		Chara* chara = colData.Other()->Parent<Chara>();
 
 		if (chara != nullptr) {
 			Vector3 myPos = transform->Global().position;			// 自身の座標
@@ -590,7 +590,7 @@ void CharaBase::CollisionEvent(const CollisionData& colData) {
 	}
 }
 
-void CharaBase::HitGroundProcess() {
+void Chara::HitGroundProcess() {
 
 	// 物理挙動
 	Physics* physics = m_pPhysics;
@@ -707,7 +707,7 @@ void CharaBase::HitGroundProcess() {
 	}
 }
 
-void CharaBase::climb(Vector3& normal)
+void Chara::climb(Vector3& normal)
 {
 	if (not m_CanClimb) return;
 	if (m_IsLanding) return;
@@ -742,16 +742,16 @@ void CharaBase::climb(Vector3& normal)
 	if (angle < -DX_PI_F / 4)
 	{
 		m_pPhysics->SetGravity(CHARA_GRAVITY / 4.0f);
-		m_FSM->ChangeState(&CharaBase::StateWallStepRight);
+		m_FSM->ChangeState(&Chara::StateWallStepRight);
 	}
 	else if (angle > DX_PI_F / 4)
 	{
 		m_pPhysics->SetGravity(CHARA_GRAVITY / 4.0f);
-		m_FSM->ChangeState(&CharaBase::StateWallStepLeft);
+		m_FSM->ChangeState(&Chara::StateWallStepLeft);
 	}
 	else
 	{
-		m_FSM->ChangeState(&CharaBase::StateClimb);
+		m_FSM->ChangeState(&Chara::StateClimb);
 	}
 	
 
@@ -761,7 +761,7 @@ void CharaBase::climb(Vector3& normal)
 	m_CanClimb = false;
 }
 
-void CharaBase::Move(const Vector3& dir)
+void Chara::Move(const Vector3& dir)
 {
 	m_IsMove = dir.GetLengthSquared() > 0;
 
@@ -798,7 +798,7 @@ void CharaBase::Move(const Vector3& dir)
 	}
 }
 
-void CharaBase::Jump()
+void Chara::Jump()
 {
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
 	m_IsJumping = true;
@@ -806,7 +806,7 @@ void CharaBase::Jump()
 
 	if (m_IsClimb)
 	{
-		m_FSM->ChangeState(&CharaBase::StateRunToJump);
+		m_FSM->ChangeState(&Chara::StateRunToJump);
 		m_pPhysics->velocity += m_ActionWallNormal * 10.0f;	// Magic:(
 		lookVelocity();
 
@@ -814,9 +814,9 @@ void CharaBase::Jump()
 	}
 }
 
-void CharaBase::Slide()
+void Chara::Slide()
 {
-	if (m_FSM->GetCurrentState() == &CharaBase::StateSlideToRun)
+	if (m_FSM->GetCurrentState() == &Chara::StateSlideToRun)
 	{
 		return;
 	}
@@ -824,7 +824,7 @@ void CharaBase::Slide()
 	m_SlideTimer = SLIDE_TIME;
 }
 
-void CharaBase::WallAction()
+void Chara::WallAction()
 {
 	if (not m_IsWall) return;
 	if (m_IsClimb) return;
@@ -832,7 +832,7 @@ void CharaBase::WallAction()
 	climb(m_WallNormal);
 }
 
-void CharaBase::GenerateBall()
+void Chara::GenerateBall()
 {
 	if (not m_CanCatch) return;
 
@@ -845,7 +845,7 @@ void CharaBase::GenerateBall()
 	SetBall(m_pBallManager->CreateBall(transform->Global().position));
 }
 
-void CharaBase::SetBall(Ball* ball)
+void Chara::SetBall(Ball* ball)
 {
 	m_pBall = ball;
 
@@ -861,30 +861,30 @@ void CharaBase::SetBall(Ball* ball)
 	m_IsCharging = false;
 }
 
-void CharaBase::StartBallCharge()
+void Chara::StartBallCharge()
 {
 	m_IsCharging = true;
-	sub_changeStateNetwork(&CharaBase::SubStateHoldToAim); // ステートを変更
+	sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ステートを変更
 }
 
-void CharaBase::StartThrow()
+void Chara::StartThrow()
 {
 	if (m_pBall == nullptr)
 		return;
 	if (not m_CanThrow)
 		return;
 
-	main_changeStateNetwork(&CharaBase::StateAimToThrow); // ステートを変更
+	main_changeStateNetwork(&Chara::StateAimToThrow); // ステートを変更
 }
 
-void CharaBase::Feint()
+void Chara::Feint()
 {
 	if (not m_CanThrow)
 		return;
-	main_changeStateNetwork(&CharaBase::StateFeint); // ステートを変更
+	main_changeStateNetwork(&Chara::StateFeint); // ステートを変更
 }
 
-void CharaBase::TeleportToLastBall()
+void Chara::TeleportToLastBall()
 {
 	if (m_pLastBall == nullptr) return;
 	transform->position = m_pLastBall->transform->position;
@@ -896,10 +896,10 @@ void CharaBase::TeleportToLastBall()
 
 	m_pLastBall = nullptr;
 	m_pPhysics->velocity.y = CHARADEFINE_REF.JumpPower;
-	main_changeStateNetwork(&CharaBase::StateAirSpin);
+	main_changeStateNetwork(&Chara::StateAirSpin);
 }
 
-void CharaBase::DropBall(const Vector3& other, float force_vertical, float force_horizontal)
+void Chara::DropBall(const Vector3& other, float force_vertical, float force_horizontal)
 {
 	if (not m_pBall)
 		return;
@@ -911,7 +911,7 @@ void CharaBase::DropBall(const Vector3& other, float force_vertical, float force
 	m_pBall = nullptr;
 }
 
-void CharaBase::Catch()
+void Chara::Catch()
 {
 	if (not m_CanCatch) return;
 
@@ -921,7 +921,7 @@ void CharaBase::Catch()
 	}
 }
 
-void CharaBase::respawn(const Vector3& pos, const Vector3& rot)
+void Chara::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
@@ -941,17 +941,17 @@ void CharaBase::respawn(const Vector3& pos, const Vector3& rot)
 	}
 }
 
-void CharaBase::SetTrailImage(int hImage)
+void Chara::SetTrailImage(int hImage)
 {
 	m_hTrailImage = hImage;
 }
 
-Vector2 CharaBase::Target(const Ball* ball)
+Vector2 Chara::Target(const Ball* ball)
 {
 	return Vector2();
 }
 
-void CharaBase::CatchSuccess(const Vector3& velocity)
+void Chara::CatchSuccess(const Vector3& velocity)
 {
 	m_CanCatch = false;
 	m_CanMove = false;
@@ -966,10 +966,10 @@ void CharaBase::CatchSuccess(const Vector3& velocity)
 	m_pPhysics->velocity.y = 10.0f;
 	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 
-	sub_changeStateNetwork(&CharaBase::SubStateGetBall); // ステートを変更
+	sub_changeStateNetwork(&Chara::SubStateGetBall); // ステートを変更
 }
 
-void CharaBase::Tackle()
+void Chara::Tackle()
 {
 	if (not m_CanTackle)
 		return;
@@ -980,7 +980,7 @@ void CharaBase::Tackle()
 	transform->rotation.y = terminusRot;
 }
 
-void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback)
+void Chara::GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback)
 {
 	if (m_IsInvincible && not isForceKnockback)
 	{
@@ -995,10 +995,10 @@ void CharaBase::GetTackle(const Vector3& other, float force_horizontal, float fo
 
 	SoundManager::Play("SE_tackle_hit.mp3", "SE_tackle_hit.mp3");
 
-	main_changeStateNetwork(&CharaBase::StateDamageToDown);
+	main_changeStateNetwork(&Chara::StateDamageToDown);
 }
 
-void CharaBase::SetInvincible(float duration_sec, bool isOverride)
+void Chara::SetInvincible(float duration_sec, bool isOverride)
 {
 	if (!isOverride 
 		&& m_InvincibleTimer > 0.0f
@@ -1011,7 +1011,7 @@ void CharaBase::SetInvincible(float duration_sec, bool isOverride)
 	m_IsInvincible = true;
 }
 
-void CharaBase::invincibleUpdate()
+void Chara::invincibleUpdate()
 {
 	if (m_InvincibleTimer > 0.0f)
 	{
@@ -1025,12 +1025,12 @@ void CharaBase::invincibleUpdate()
 	}
 }
 
-void CharaBase::StartRespawn()
+void Chara::StartRespawn()
 {
-	respawn_changeStateNetwork(&CharaBase::RespawnStateFadeOut); // ステートを変更
+	respawn_changeStateNetwork(&Chara::RespawnStateFadeOut); // ステートを変更
 }
 
-void CharaBase::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
+void Chara::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
 {
 	Vector3 otherToMe = transform->position - other;
 	otherToMe.y += 20.0f;
@@ -1045,12 +1045,12 @@ void CharaBase::Knockback(const Vector3& other, float force_vertical, float forc
 //========================================================================
 // メインステート
 
-bool CharaBase::IsFinishTackleIntervalAlarm()
+bool Chara::IsFinishTackleIntervalAlarm()
 {
 	return true;
 }
 
-void CharaBase::StateActionIdle(FSMSignal sig)
+void Chara::StateActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1070,11 +1070,11 @@ void CharaBase::StateActionIdle(FSMSignal sig)
 			int rand = GetRand(99);
 			if (rand < 50)
 			{
-				main_changeStateNetwork(&CharaBase::StateActionIdleToStandingIdle); // ステートを変更
+				main_changeStateNetwork(&Chara::StateActionIdleToStandingIdle); // ステートを変更
 			}
 			else
 			{
-				main_changeStateNetwork(&CharaBase::StateActionIdleEmote); // ステートを変更
+				main_changeStateNetwork(&Chara::StateActionIdleEmote); // ステートを変更
 			}
 		}
 	}
@@ -1091,7 +1091,7 @@ void CharaBase::StateActionIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateActionIdleEmote(FSMSignal sig)
+void Chara::StateActionIdleEmote(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1105,7 +1105,7 @@ void CharaBase::StateActionIdleEmote(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1121,7 +1121,7 @@ void CharaBase::StateActionIdleEmote(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateActionIdleToJump(FSMSignal sig)
+void Chara::StateActionIdleToJump(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1148,7 +1148,7 @@ void CharaBase::StateActionIdleToJump(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateActionIdleToRun(FSMSignal sig)
+void Chara::StateActionIdleToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1163,7 +1163,7 @@ void CharaBase::StateActionIdleToRun(FSMSignal sig)
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateRun); // ステートを変更
+			main_changeStateNetwork(&Chara::StateRun); // ステートを変更
 			m_Animator->Play("Run");
 			//m_Animator->SetCurrentFrame(3.0f);
 		}
@@ -1180,7 +1180,7 @@ void CharaBase::StateActionIdleToRun(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
+void Chara::StateActionIdleToStandingIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1194,7 +1194,7 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateStandingIdleEmote); // ステートを変更
+			main_changeStateNetwork(&Chara::StateStandingIdleEmote); // ステートを変更
 		}
 	}
 	break;
@@ -1210,7 +1210,7 @@ void CharaBase::StateActionIdleToStandingIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateActionIdleToTackle(FSMSignal sig)
+void Chara::StateActionIdleToTackle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1224,7 +1224,7 @@ void CharaBase::StateActionIdleToTackle(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateStandingIdleEmote); // ステートを変更
+			main_changeStateNetwork(&Chara::StateStandingIdleEmote); // ステートを変更
 		}
 	}
 	break;
@@ -1240,13 +1240,13 @@ void CharaBase::StateActionIdleToTackle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateAimToThrow(FSMSignal sig)
+void Chara::StateAimToThrow(FSMSignal sig)
 {
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		sub_changeStateNetwork(&CharaBase::SubStateNone); // ステートを変更
+		sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
 		m_Timeline->Play("AimToThrow");
 		m_CanCatch = false;
 		m_CanHold = false;
@@ -1258,7 +1258,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1278,7 +1278,7 @@ void CharaBase::StateAimToThrow(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateAirSpin(FSMSignal sig)
+void Chara::StateAirSpin(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1291,7 +1291,7 @@ void CharaBase::StateAirSpin(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateFall); // ステートを変更
+			main_changeStateNetwork(&Chara::StateFall); // ステートを変更
 		}
 	}
 	break;
@@ -1306,7 +1306,7 @@ void CharaBase::StateAirSpin(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateClimb(FSMSignal sig)
+void Chara::StateClimb(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1321,7 +1321,7 @@ void CharaBase::StateClimb(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&CharaBase::StateClimbToFall); // ステートを変更
+			m_FSM->ChangeState(&Chara::StateClimbToFall); // ステートを変更
 		}
 	}
 	break;
@@ -1336,7 +1336,7 @@ void CharaBase::StateClimb(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateClimbToFall(FSMSignal sig)
+void Chara::StateClimbToFall(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1352,7 +1352,7 @@ void CharaBase::StateClimbToFall(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&CharaBase::StateActionIdle); // ステートを変更
+			m_FSM->ChangeState(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1368,7 +1368,7 @@ void CharaBase::StateClimbToFall(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateCrouchToActionIdle(FSMSignal sig)
+void Chara::StateCrouchToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1382,7 +1382,7 @@ void CharaBase::StateCrouchToActionIdle(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1397,7 +1397,7 @@ void CharaBase::StateCrouchToActionIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateCrouchToRun(FSMSignal sig)
+void Chara::StateCrouchToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1411,7 +1411,7 @@ void CharaBase::StateCrouchToRun(FSMSignal sig)
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateRun); // ステートを変更
+			main_changeStateNetwork(&Chara::StateRun); // ステートを変更
 		}
 	}
 	break;
@@ -1426,7 +1426,7 @@ void CharaBase::StateCrouchToRun(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateDamageToDown(FSMSignal sig)
+void Chara::StateDamageToDown(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1444,7 +1444,7 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateCrouchToActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1463,7 +1463,7 @@ void CharaBase::StateDamageToDown(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateFall(FSMSignal sig)
+void Chara::StateFall(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1479,16 +1479,16 @@ void CharaBase::StateFall(FSMSignal sig)
 		{
 			if (m_IsMove)
 			{
-				main_changeStateNetwork(&CharaBase::StateFallToRoll); // ステートを変更
+				main_changeStateNetwork(&Chara::StateFallToRoll); // ステートを変更
 			}
 			else
 			{
-				main_changeStateNetwork(&CharaBase::StateFallToCrouch); // ステートを変更
+				main_changeStateNetwork(&Chara::StateFallToCrouch); // ステートを変更
 			}
 		}
 		if (m_IsTackling)
 		{
-			main_changeStateNetwork(&CharaBase::StateTackle);
+			main_changeStateNetwork(&Chara::StateTackle);
 		}
 	}
 	break;
@@ -1506,7 +1506,7 @@ void CharaBase::StateFall(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateFallToCrouch(FSMSignal sig)
+void Chara::StateFallToCrouch(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1521,16 +1521,16 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	{
 		if (m_IsTackling)
 		{
-			main_changeStateNetwork(&CharaBase::StateTackle);
+			main_changeStateNetwork(&Chara::StateTackle);
 		}
 
 		if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
 		{
-			main_changeStateNetwork(&CharaBase::StateCrouchToRun); // ステートを変更
+			main_changeStateNetwork(&Chara::StateCrouchToRun); // ステートを変更
 		}
 		else
 		{
-			main_changeStateNetwork(&CharaBase::StateCrouchToActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1545,7 +1545,7 @@ void CharaBase::StateFallToCrouch(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateFallToRoll(FSMSignal sig)
+void Chara::StateFallToRoll(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1561,7 +1561,7 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	{
 		if (m_IsTackling)
 		{
-			main_changeStateNetwork(&CharaBase::StateTackle);
+			main_changeStateNetwork(&Chara::StateTackle);
 		}
 	}
 	break;
@@ -1580,13 +1580,13 @@ void CharaBase::StateFallToRoll(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateFeint(FSMSignal sig)
+void Chara::StateFeint(FSMSignal sig)
 {
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		sub_changeStateNetwork(&CharaBase::SubStateNone); // ステートを変更
+		sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
 		m_Timeline->Play("AimToThrow");
 		m_CanCatch = false;
 		m_CanHold = false;
@@ -1598,7 +1598,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1608,7 +1608,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了
 	{
-		sub_changeStateNetwork(&CharaBase::SubStateHoldToAim); // ステートを変更
+		sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ステートを変更
 
 		m_CanCatch = true;
 		m_CanHold = true;
@@ -1621,7 +1621,7 @@ void CharaBase::StateFeint(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRoll(FSMSignal sig)
+void Chara::StateRoll(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1648,7 +1648,7 @@ void CharaBase::StateRoll(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRollToActionIdle(FSMSignal sig)
+void Chara::StateRollToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1664,7 +1664,7 @@ void CharaBase::StateRollToActionIdle(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1680,7 +1680,7 @@ void CharaBase::StateRollToActionIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRollToRun(FSMSignal sig)
+void Chara::StateRollToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1696,7 +1696,7 @@ void CharaBase::StateRollToRun(FSMSignal sig)
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateRun); // ステートを変更
+			main_changeStateNetwork(&Chara::StateRun); // ステートを変更
 
 			m_Animator->Play("Run");
 
@@ -1717,7 +1717,7 @@ void CharaBase::StateRollToRun(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRun(FSMSignal sig)
+void Chara::StateRun(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1744,7 +1744,7 @@ void CharaBase::StateRun(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRunToActionIdle(FSMSignal sig)
+void Chara::StateRunToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1758,7 +1758,7 @@ void CharaBase::StateRunToActionIdle(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1774,7 +1774,7 @@ void CharaBase::StateRunToActionIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRunToJump(FSMSignal sig)
+void Chara::StateRunToJump(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1800,7 +1800,7 @@ void CharaBase::StateRunToJump(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRunToSlide(FSMSignal sig)
+void Chara::StateRunToSlide(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1809,7 +1809,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
 
-		if (not m_FSM->HasTransitionWithInThePast(&CharaBase::StateSlide, 1))
+		if (not m_FSM->HasTransitionWithInThePast(&Chara::StateSlide, 1))
 			m_pPhysics->velocity = m_pPhysics->velocity * 1.5f;
 
 		m_IsSliding = true;
@@ -1821,7 +1821,7 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 		slideUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateSlide); // ステートを変更
+			main_changeStateNetwork(&Chara::StateSlide); // ステートを変更
 		}
 	}
 	break;
@@ -1838,11 +1838,11 @@ void CharaBase::StateRunToSlide(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateRunToTackle(FSMSignal sig)
+void Chara::StateRunToTackle(FSMSignal sig)
 {
 }
 
-void CharaBase::StateSlide(FSMSignal sig)
+void Chara::StateSlide(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1858,7 +1858,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 		slideUpdate();
 		if (m_SlideTimer <= 0.0f)
 		{
-			main_changeStateNetwork(&CharaBase::StateSlideToRun); // ステートを変更
+			main_changeStateNetwork(&Chara::StateSlideToRun); // ステートを変更
 		}
 	}
 	break;
@@ -1876,7 +1876,7 @@ void CharaBase::StateSlide(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateSlideToRun(FSMSignal sig)
+void Chara::StateSlideToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1890,7 +1890,7 @@ void CharaBase::StateSlideToRun(FSMSignal sig)
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateRun); // ステートを変更
+			main_changeStateNetwork(&Chara::StateRun); // ステートを変更
 		}
 	}
 	break;
@@ -1905,7 +1905,7 @@ void CharaBase::StateSlideToRun(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateStandingIdle(FSMSignal sig)
+void Chara::StateStandingIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1930,7 +1930,7 @@ void CharaBase::StateStandingIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateStandingIdleEmote(FSMSignal sig)
+void Chara::StateStandingIdleEmote(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1944,7 +1944,7 @@ void CharaBase::StateStandingIdleEmote(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateStandingIdleToActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateStandingIdleToActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1959,7 +1959,7 @@ void CharaBase::StateStandingIdleEmote(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
+void Chara::StateStandingIdleToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -1973,7 +1973,7 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+			main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -1989,7 +1989,7 @@ void CharaBase::StateStandingIdleToActionIdle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateTackle(FSMSignal sig)
+void Chara::StateTackle(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2017,7 +2017,7 @@ void CharaBase::StateTackle(FSMSignal sig)
 		if (m_Animator->IsFinished())
 		{
 			if (m_Alarm->IsFinish())
-				main_changeStateNetwork(&CharaBase::StateActionIdle); // ステートを変更
+				main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
 		}
 	}
 	break;
@@ -2033,7 +2033,7 @@ void CharaBase::StateTackle(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateWallStepLeft(FSMSignal sig)
+void Chara::StateWallStepLeft(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2048,7 +2048,7 @@ void CharaBase::StateWallStepLeft(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+			m_FSM->ChangeState(&Chara::StateFall); // ステートを変更
 		}
 	}
 	break;
@@ -2064,7 +2064,7 @@ void CharaBase::StateWallStepLeft(FSMSignal sig)
 	}
 }
 
-void CharaBase::StateWallStepRight(FSMSignal sig)
+void Chara::StateWallStepRight(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2079,7 +2079,7 @@ void CharaBase::StateWallStepRight(FSMSignal sig)
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&CharaBase::StateFall); // ステートを変更
+			m_FSM->ChangeState(&Chara::StateFall); // ステートを変更
 		}
 	}
 	break;
@@ -2098,7 +2098,7 @@ void CharaBase::StateWallStepRight(FSMSignal sig)
 //========================================================================
 // サブステート
 
-void CharaBase::SubStateNone(FSMSignal sig)
+void Chara::SubStateNone(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2111,11 +2111,11 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	{
 		if (m_CanCatch && m_IsCatching)
 		{
-			sub_changeStateNetwork(&CharaBase::SubStateCatch); // ステートを変更
+			sub_changeStateNetwork(&Chara::SubStateCatch); // ステートを変更
 		}
 		else if (m_CanHold && m_pBall != nullptr)
 		{
-			sub_changeStateNetwork(&CharaBase::SubStateHold); // ステートを変更
+			sub_changeStateNetwork(&Chara::SubStateHold); // ステートを変更
 		}
 	}
 	break;
@@ -2130,7 +2130,7 @@ void CharaBase::SubStateNone(FSMSignal sig)
 	}
 }
 
-void CharaBase::SubStateGetBall(FSMSignal sig)
+void Chara::SubStateGetBall(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2147,7 +2147,7 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	{
 		if (m_Animator->IsFinishedSub("mixamorig9:Spine"))
 		{
-			sub_changeStateNetwork(&CharaBase::SubStateHold); // ステートを変更
+			sub_changeStateNetwork(&Chara::SubStateHold); // ステートを変更
 		}
 	}
 	break;
@@ -2166,7 +2166,7 @@ void CharaBase::SubStateGetBall(FSMSignal sig)
 	}
 }
 
-void CharaBase::SubStateHold(FSMSignal sig)
+void Chara::SubStateHold(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2179,7 +2179,7 @@ void CharaBase::SubStateHold(FSMSignal sig)
 	{
 		if (m_pBall == nullptr)
 		{
-			sub_changeStateNetwork(&CharaBase::SubStateNone); // ステートを変更
+			sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
 		}
 	}
 	break;
@@ -2194,7 +2194,7 @@ void CharaBase::SubStateHold(FSMSignal sig)
 	}
 }
 
-void CharaBase::SubStateHoldToAim(FSMSignal sig)
+void Chara::SubStateHoldToAim(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2223,7 +2223,7 @@ void CharaBase::SubStateHoldToAim(FSMSignal sig)
 	}
 }
 
-void CharaBase::SubStateCatch(FSMSignal sig)
+void Chara::SubStateCatch(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -2236,7 +2236,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 	{
 		if (not m_IsCatching)
 		{
-			sub_changeStateNetwork(&CharaBase::SubStateNone); // ステートを変更
+			sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
 		}
 
 		catchUpdate();
@@ -2270,7 +2270,7 @@ void CharaBase::SubStateCatch(FSMSignal sig)
 //========================================================================
 // private関数
 
-void CharaBase::land()
+void Chara::land()
 {
 	m_IsLanding = true;
 	m_IsJumping = false;
@@ -2281,55 +2281,55 @@ void CharaBase::land()
 	m_pPhysics->SetFriction(FRICTION);
 }
 
-void CharaBase::idleUpdate()
+void Chara::idleUpdate()
 {
 	if (m_IsJumping)
 	{
-		main_changeStateNetwork(&CharaBase::StateActionIdleToJump); // ステートを変更
+		main_changeStateNetwork(&Chara::StateActionIdleToJump); // ステートを変更
 	}
 	else if (not m_IsLanding)
 	{
-		main_changeStateNetwork(&CharaBase::StateFall); // ステートを変更
+		main_changeStateNetwork(&Chara::StateFall); // ステートを変更
 	}
 	else if (m_IsMove)
 	{
-		main_changeStateNetwork(&CharaBase::StateActionIdleToRun); // ステートを変更
+		main_changeStateNetwork(&Chara::StateActionIdleToRun); // ステートを変更
 	}
 	else if (m_IsTackling)
 	{
-		main_changeStateNetwork(&CharaBase::StateTackle);
+		main_changeStateNetwork(&Chara::StateTackle);
 	}
 }
 
-void CharaBase::runUpdate()
+void Chara::runUpdate()
 {
 	if (m_IsJumping)
 	{
-		main_changeStateNetwork(&CharaBase::StateRunToJump); // ステートを変更
+		main_changeStateNetwork(&Chara::StateRunToJump); // ステートを変更
 	}
 	else if (not m_IsLanding)
 	{
-		main_changeStateNetwork(&CharaBase::StateFall); // ステートを変更
+		main_changeStateNetwork(&Chara::StateFall); // ステートを変更
 	}
 	else if (not m_IsMove)
 	{
-		main_changeStateNetwork(&CharaBase::StateRunToActionIdle); // ステートを変更
+		main_changeStateNetwork(&Chara::StateRunToActionIdle); // ステートを変更
 	}
 	else if (m_SlideTimer > 0.0f)
 	{
-		main_changeStateNetwork(&CharaBase::StateRunToSlide); // ステートを変更
+		main_changeStateNetwork(&Chara::StateRunToSlide); // ステートを変更
 	}
 	else if (m_IsTackling)
 	{
-		main_changeStateNetwork(&CharaBase::StateTackle);
+		main_changeStateNetwork(&Chara::StateTackle);
 	}
 }
 
-void CharaBase::slideUpdate()
+void Chara::slideUpdate()
 {
 	if (m_pPhysics->velocity.y > 0.0f)
 	{
-		main_changeStateNetwork(&CharaBase::StateRunToJump); // ステートを変更
+		main_changeStateNetwork(&Chara::StateRunToJump); // ステートを変更
 	}
 
 	if (m_SlideTimer > 0.0f)
@@ -2348,11 +2348,11 @@ void CharaBase::slideUpdate()
 
 	if (m_IsTackling)
 	{
-		main_changeStateNetwork(&CharaBase::StateTackle);
+		main_changeStateNetwork(&Chara::StateTackle);
 	}
 }
 
-void CharaBase::catchUpdate()
+void Chara::catchUpdate()
 {
 	if (m_IsCatching)
 	{
@@ -2399,7 +2399,7 @@ void CharaBase::catchUpdate()
 	}
 }
 
-void CharaBase::jumpUpdate()
+void Chara::jumpUpdate()
 {
 	if (m_Animator->IsFinished())
 	{
@@ -2408,16 +2408,16 @@ void CharaBase::jumpUpdate()
 
 	if (not m_IsJumping)
 	{
-		main_changeStateNetwork(&CharaBase::StateFall); // ステートを変更
+		main_changeStateNetwork(&Chara::StateFall); // ステートを変更
 	}
 
 	if (m_IsTackling)
 	{
-		main_changeStateNetwork(&CharaBase::StateTackle);
+		main_changeStateNetwork(&Chara::StateTackle);
 	}
 }
 
-void CharaBase::tackleUpdate()
+void Chara::tackleUpdate()
 {
 	if (m_Animator->IsFinished())
 	{
@@ -2426,9 +2426,9 @@ void CharaBase::tackleUpdate()
 	}
 }
 
-void CharaBase::getHit(Ball* hit)
+void Chara::getHit(Ball* hit)
 {
-	main_changeStateNetwork(&CharaBase::StateDamageToDown);
+	main_changeStateNetwork(&Chara::StateDamageToDown);
 
 	Vector3 dif = hit->GetComponent<Physics>()->velocity * -1.0f;
 
@@ -2441,7 +2441,7 @@ void CharaBase::getHit(Ball* hit)
 	playGetHitSound();
 }
 
-void CharaBase::throwBallForward()
+void Chara::throwBallForward()
 {
 	if (m_pBall == nullptr)
 		return;
@@ -2454,7 +2454,7 @@ void CharaBase::throwBallForward()
 	releaseBall();
 }
 
-void CharaBase::throwBallHoming()
+void Chara::throwBallHoming()
 {
 	if (m_pBall == nullptr)
 		return;
@@ -2462,7 +2462,7 @@ void CharaBase::throwBallHoming()
 	Vector3 forward = transform->Forward();
 	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
 
-	const CharaBase* targetChara = nullptr;
+	const Chara* targetChara = nullptr;
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
 	if (camera != nullptr)
@@ -2491,7 +2491,7 @@ void CharaBase::throwBallHoming()
 	releaseBall();
 }
 
-void CharaBase::releaseBall()
+void Chara::releaseBall()
 {
 	m_pStatusTracker->AddThrowCount(1);
 
@@ -2503,7 +2503,7 @@ void CharaBase::releaseBall()
 	m_BallChargeRate = 0.0f;
 }
 
-void CharaBase::respawnByPoint()
+void Chara::respawnByPoint()
 {
 	CharaSpawnPoint* csp = m_SpawnPointManager->Get_LowUsageRate();
 	Vector3 position = csp->transform->position;
@@ -2511,12 +2511,12 @@ void CharaBase::respawnByPoint()
 	csp->Use();
 }
 
-void CharaBase::lookVelocity()
+void Chara::lookVelocity()
 {
 	transform->rotation.y = Vector3Util::DirToEuler(m_pPhysics->velocity);
 }
 
-void CharaBase::playThrowSound()
+void Chara::playThrowSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2556,7 +2556,7 @@ void CharaBase::playThrowSound()
 		SoundManager::Play(soundName2, soundName2);
 }
 
-void CharaBase::playGetHitSound()
+void Chara::playGetHitSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2602,7 +2602,7 @@ void CharaBase::playGetHitSound()
 
 }
 
-void CharaBase::playCatchBallSound()
+void Chara::playCatchBallSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2643,7 +2643,7 @@ void CharaBase::playCatchBallSound()
 		SoundManager::Play(soundName2, soundName2);
 }
 
-void CharaBase::playPickupBallSound()
+void Chara::playPickupBallSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2670,11 +2670,11 @@ void CharaBase::playPickupBallSound()
 		SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::playVacuumSound()
+void Chara::playVacuumSound()
 {
 }
 
-void CharaBase::playJumpNormalSound()
+void Chara::playJumpNormalSound()
 {
 	std::string base = "SE_jump_normal";
 	std::string fileType = ".mp3";
@@ -2685,7 +2685,7 @@ void CharaBase::playJumpNormalSound()
 		SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::playJumpDashSound()
+void Chara::playJumpDashSound()
 {
 	std::string base = "SE_jump_dash";
 	std::string fileType = ".mp3";
@@ -2696,7 +2696,7 @@ void CharaBase::playJumpDashSound()
 		SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::playLandingSound()
+void Chara::playLandingSound()
 {
 	std::string base = "SE_landing";
 	std::string fileType = ".mp3";
@@ -2707,7 +2707,7 @@ void CharaBase::playLandingSound()
 		SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::playLandingRollSound()
+void Chara::playLandingRollSound()
 {
 	std::string base = "SE_landing_roll";
 	std::string fileType = ".mp3";
@@ -2718,7 +2718,7 @@ void CharaBase::playLandingRollSound()
 		SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::playTackleSound()
+void Chara::playTackleSound()
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2740,12 +2740,12 @@ void CharaBase::playTackleSound()
 	SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::setAnimationSpeed(const nlohmann::json& argument)
+void Chara::setAnimationSpeed(const nlohmann::json& argument)
 {
 	m_Animator->SetPlaySpeed(argument.at("Speed").get<float>());
 }
 
-void CharaBase::moveToPosition(const nlohmann::json& argument)
+void Chara::moveToPosition(const nlohmann::json& argument)
 {
 	float progress = argument.at("Progress").get<float>();
 	float lastProgress = argument.at("LastProgress").get<float>();
@@ -2759,7 +2759,7 @@ void CharaBase::moveToPosition(const nlohmann::json& argument)
 	transform->position -= sub;
 }
 
-void CharaBase::moveToWallPosition(const nlohmann::json& argument)
+void Chara::moveToWallPosition(const nlohmann::json& argument)
 {
 	float progress = argument.at("Progress").get<float>();
 	float lastProgress = argument.at("LastProgress").get<float>();
@@ -2772,52 +2772,52 @@ void CharaBase::moveToWallPosition(const nlohmann::json& argument)
 	transform->position -= sub;
 }
 
-void CharaBase::changeToRoll(const nlohmann::json& argument)
+void Chara::changeToRoll(const nlohmann::json& argument)
 {
-	main_changeStateNetwork(&CharaBase::StateRoll); // ステートを変更
+	main_changeStateNetwork(&Chara::StateRoll); // ステートを変更
 }
 
-void CharaBase::endRoll(const nlohmann::json& argument)
+void Chara::endRoll(const nlohmann::json& argument)
 {
 	if (m_IsMove)
 	{
-		main_changeStateNetwork(&CharaBase::StateRollToRun); // ステートを変更
+		main_changeStateNetwork(&Chara::StateRollToRun); // ステートを変更
 	}
 	else
 	{
-		main_changeStateNetwork(&CharaBase::StateRollToActionIdle); // ステートを変更
+		main_changeStateNetwork(&Chara::StateRollToActionIdle); // ステートを変更
 	}
 }
 
-void CharaBase::setCanMove(const nlohmann::json& argument)
+void Chara::setCanMove(const nlohmann::json& argument)
 {
 	m_CanMove = argument.at("CanMove").get<bool>();
 	m_CanRot = m_CanMove;
 }
 
-void CharaBase::setCanRot(const nlohmann::json& argument)
+void Chara::setCanRot(const nlohmann::json& argument)
 {
 	m_CanRot = argument.at("CanRot").get<bool>();
 }
 
-void CharaBase::setVelocity(const nlohmann::json& argument)
+void Chara::setVelocity(const nlohmann::json& argument)
 {
 	m_pPhysics->velocity = argument.at("Velocity").get<Vector3>();
 }
 
-void CharaBase::throwBall(const nlohmann::json& argument)
+void Chara::throwBall(const nlohmann::json& argument)
 {
-	if (m_FSM->GetCurrentState() == &CharaBase::StateAimToThrow)
+	if (m_FSM->GetCurrentState() == &Chara::StateAimToThrow)
 	{
 		throwBallHoming();
 	}
 }
 
-void CharaBase::invincible(const nlohmann::json& argument)
+void Chara::invincible(const nlohmann::json& argument)
 {
 }
 
-void CharaBase::playFootStepSound(const nlohmann::json& argument)
+void Chara::playFootStepSound(const nlohmann::json& argument)
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2847,7 +2847,7 @@ void CharaBase::playFootStepSound(const nlohmann::json& argument)
 	SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::playTinyFootStepSound(const nlohmann::json& argument)
+void Chara::playTinyFootStepSound(const nlohmann::json& argument)
 {
 	int rand = Random.GetIntRange(0, 100);
 
@@ -2877,7 +2877,7 @@ void CharaBase::playTinyFootStepSound(const nlohmann::json& argument)
 	SoundManager::Play(soundName, soundName);
 }
 
-void CharaBase::main_changeStateNetwork(void(CharaBase::*state)(FSMSignal sig))
+void Chara::main_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 {
 	m_FSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
@@ -2885,7 +2885,7 @@ void CharaBase::main_changeStateNetwork(void(CharaBase::*state)(FSMSignal sig))
 		sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
 }
 
-void CharaBase::sub_changeStateNetwork(void(CharaBase::*state)(FSMSignal sig))
+void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 {
 	m_SubFSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
@@ -2893,7 +2893,7 @@ void CharaBase::sub_changeStateNetwork(void(CharaBase::*state)(FSMSignal sig))
 		sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
 }
 
-void CharaBase::respawn_changeStateNetwork(void(CharaBase::*state)(FSMSignal sig))
+void Chara::respawn_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 {
 	m_RespawnFSM->ChangeState(state);
 	//auto& net = NetworkRef::Inst();
@@ -2901,7 +2901,7 @@ void CharaBase::respawn_changeStateNetwork(void(CharaBase::*state)(FSMSignal sig
 }
 
 
-void CharaBase::sendChangeStateToNetwork(const std::string& state)
+void Chara::sendChangeStateToNetwork(const std::string& state)
 {
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)
@@ -2909,7 +2909,7 @@ void CharaBase::sendChangeStateToNetwork(const std::string& state)
 	m_pNetManager->SendChangeState(state, m_User.UUID);
 }
 
-void CharaBase::sendChangeSubStateToNetwork(const std::string& state)
+void Chara::sendChangeSubStateToNetwork(const std::string& state)
 {
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)
@@ -2917,7 +2917,7 @@ void CharaBase::sendChangeSubStateToNetwork(const std::string& state)
 	m_pNetManager->SendChangeSubState(state, m_User.UUID);
 }
 
-void CharaBase::buttonHintUpdate()
+void Chara::buttonHintUpdate()
 {
 	if (m_pUI_ButtonHint == nullptr)
 		return;

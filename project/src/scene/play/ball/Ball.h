@@ -5,7 +5,7 @@
 
 class Physics;
 class ColliderCapsule;
-class CharaBase;
+class Chara;
 class Collider;
 class BallManager;
 class Trail3D;
@@ -40,9 +40,9 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void Throw(CharaBase* owner, float chargeRate);
-	void ThrowDirection(const Vector3& direction, CharaBase*owner, float chargeRate);
-	void ThrowHoming(const CharaBase* target, CharaBase* owner,  float chargeRate, float curveAngle, float curveScale);
+	void Throw(Chara* owner, float chargeRate);
+	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);
+	void ThrowHoming(const Chara* target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
 
 	State GetState() const { return m_State; }
 
@@ -54,7 +54,7 @@ public:
 
 	std::string GetCharaTag() const { return m_CharaTag; }
 
-	CharaBase* GetLastOwner() const { return m_LastOwner; }
+	Chara* GetLastOwner() const { return m_LastOwner; }
 
 	/// <summary>
 	/// 有効か？
@@ -68,7 +68,7 @@ public:
 
 	void SetTrailImage(int hImage);
 
-	void SetOwner(CharaBase* pChara);
+	void SetOwner(Chara* pChara);
 
 	void PickUp();
 
@@ -87,8 +87,8 @@ private:
 	ColliderCapsule*	m_Collider;
 	State				m_State;
 	State				m_StatePrev;
-	CharaBase*			m_Owner;
-	CharaBase*			m_LastOwner;
+	Chara*			m_Owner;
+	Chara*			m_LastOwner;
 	std::string			m_CharaTag;
 	uint32_t			m_Index;
 	float				m_LifeTime;
@@ -99,7 +99,7 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	const CharaBase*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
+	const Chara*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
 	Vector3				m_HomingOrigin;			// ホーミング開始地点
 	Vector3				m_HomingTargetPos;		// ホーミング対象の座標
 	bool				m_IsHoming;	// ホーミング中か

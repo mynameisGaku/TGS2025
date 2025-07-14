@@ -6,7 +6,7 @@
 #include "src/common/stage/Stage.h"
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
 #include "src/reference/chara/CharaDefineRef.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/ball/BallManager.h"
@@ -223,7 +223,7 @@ void Ball::Draw()
 	Object3D::Draw();
 }
 
-void Ball::Throw(CharaBase* owner, float chargeRate)
+void Ball::Throw(Chara* owner, float chargeRate)
 {
 	changeState(S_THROWN);
 
@@ -241,7 +241,7 @@ void Ball::Throw(CharaBase* owner, float chargeRate)
 	m_ChargeRate = chargeRate;
 }
 
-void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float chargeRate)
+void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRate)
 {
 	Throw(owner, chargeRate);
 
@@ -263,7 +263,7 @@ void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float char
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
-void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(const Chara* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
 	m_IsHoming			= true;
 	m_DoRefreshHoming = true;
@@ -292,7 +292,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	if (colData.Other()->Parent<Catcher>() != nullptr)
 		return;
 
-	if (colData.Other()->Parent<CharaBase>() == m_Owner)
+	if (colData.Other()->Parent<Chara>() == m_Owner)
 		return;
 
 	if (colData.Other()->Tag() == ColDefine::Tag::tWindArea)
@@ -373,7 +373,7 @@ void Ball::SetTrailImage(int hImage)
 	m_hTrailImage = hImage;
 }
 
-void Ball::SetOwner(CharaBase* pChara)
+void Ball::SetOwner(Chara* pChara)
 {
 	m_Owner = pChara;
 	m_LastOwner = m_Owner;

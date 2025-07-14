@@ -95,7 +95,7 @@ void MatchManager::Update()
             {
                 const std::string teamName = team->GetTeamName();
 
-                const CharaBase* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
+                const Chara* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
                
                 if (chara == nullptr)
                     continue;  // キャラが存在しない場合はスキップ
@@ -378,7 +378,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
             {
 				const std::string teamName = team->GetTeamName();
                 
-                const CharaBase* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
+                const Chara* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
                 if (chara == nullptr)
                     continue;  // キャラが存在しない場合はスキップ
                 if (chara->GetStatusTracker() == nullptr)
@@ -611,7 +611,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 
 void MatchManager::addCharacter(const std::string& team, const Transform& trs, bool isAI)
 {
-    CharaBase* chara = m_pCharaManager->Create(team, trs);
+    Chara* chara = m_pCharaManager->Create(team, trs);
 
     chara->SetMoveSpeed(CHARADEFINE_REF.MoveSpeed);
     chara->SetRotSpeed(MathUtil::ToRadians(CHARADEFINE_REF.RotSpeed));
@@ -622,7 +622,7 @@ void MatchManager::addCharacter(const std::string& team, const Transform& trs, b
 
 void MatchManager::addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI)
 {
-    CharaBase* chara = m_pCharaManager->Create(team, trs, user);
+    Chara* chara = m_pCharaManager->Create(team, trs, user);
 
     chara->SetMoveSpeed(CHARADEFINE_REF.MoveSpeed);
     chara->SetRotSpeed(MathUtil::ToRadians(CHARADEFINE_REF.RotSpeed));
@@ -630,7 +630,7 @@ void MatchManager::addCharacter(const User& user, const std::string& team, const
     registerChara(isAI, chara);
 }
 
-void MatchManager::registerChara(bool isAI, CharaBase* chara)
+void MatchManager::registerChara(bool isAI, Chara* chara)
 {
     std::unordered_map<int, int> padNumMap =
     {

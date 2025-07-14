@@ -1,6 +1,6 @@
 #include "TeamManager.h"
 #include "src/reference/game/GameRef.h"
-#include "src/scene//play/chara/CharaBase.h"
+#include "src/scene//play/chara/Chara.h"
 
 TeamManager::TeamManager()
 {
@@ -11,7 +11,7 @@ TeamManager::~TeamManager()
 {
 }
 
-void TeamManager::RegisterCharaToTeam(CharaBase* pChara)
+void TeamManager::RegisterCharaToTeam(Chara* pChara)
 {
     for (auto& teamData : m_Teams)
     {

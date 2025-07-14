@@ -6,7 +6,7 @@
 #include <string>
 #include "src/util/fsm/TinyFSM.h"
 
-class CharaBase;
+class Chara;
 
 /// <summary>
 /// キャラクターを操作するクラス（AIが操作する）
@@ -46,7 +46,7 @@ public:
 	// ▼ゲッター
 
 private:
-	CharaBase* m_Chara;	// 保有者(CharaBase)
+	Chara* m_Chara;	// 保有者(CharaBase)
 
 	bool m_DoMove;	// 移動するかどうか
 	bool m_DoAttack;	// 攻撃するかどうか

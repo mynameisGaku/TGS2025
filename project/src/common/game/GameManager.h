@@ -7,7 +7,7 @@
 #include <src/util/fsm/TinyFSM.h>
 #include <src/reference/game/GameRef.h>
 
-class CharaBase;
+class Chara;
 
 /// <summary>
 /// ゲームの進行を管理するマネージャー

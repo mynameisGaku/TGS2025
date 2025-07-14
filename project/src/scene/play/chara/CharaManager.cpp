@@ -25,7 +25,7 @@ CharaManager::CharaManager()
 	m_hTrails["Plain_Distortion_Thin"] = LoadGraph("data/img/trail/Trail_Plain_Distortion_Thin.png");
 
 #ifdef USE_POOL
-	m_pPool = new Pool<CharaBase>(m_Max);
+	m_pPool = new Pool<Chara>(m_Max);
 #else
 	m_Charas.clear();
 #endif
@@ -129,7 +129,7 @@ void CharaManager::Draw()
 #endif
 }
 
-CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs) 
+Chara* CharaManager::Create(const std::string& tag, const Transform& trs) 
 {
 	//////////////////////////////////////////////////////////////
 	// 例外処理
@@ -143,7 +143,7 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	if (m_Charas.size() >= CHARA_NUM)
 		return nullptr;
 #endif
-	CharaBase* newChara = nullptr;
+	Chara* newChara = nullptr;
 
 	//////////////////////////////////////////////////////////////
 	// インデックス取得・インスタンスの生成
@@ -217,14 +217,14 @@ CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs)
 	return newChara;
 }
 
-CharaBase* CharaManager::Create(const std::string& tag, const Transform& trs, const User& user)
+Chara* CharaManager::Create(const std::string& tag, const Transform& trs, const User& user)
 {
 	auto c = Create(tag, trs);
 	c->SetUser(user);
 	return c;
 }
 
-const CharaBase* CharaManager::CharaInst(int index)
+const Chara* CharaManager::CharaInst(int index)
 {
 #ifdef USE_POOL
 	if ((uint32_t)index > m_pPool->GetCapacity())
@@ -242,9 +242,9 @@ const CharaBase* CharaManager::CharaInst(int index)
 #endif
 }
 
-CharaBase* CharaManager::NearestEnemy(int index) {
+Chara* CharaManager::NearestEnemy(int index) {
 
-	const CharaBase* chara = CharaInst(index);
+	const Chara* chara = CharaInst(index);
 	if (chara == nullptr)
 		return nullptr;
 
@@ -265,7 +265,7 @@ CharaBase* CharaManager::NearestEnemy(int index) {
 	return nullptr;
 }
 
-CharaBase* CharaManager::GetFromUUID(UINT uuid)
+Chara* CharaManager::GetFromUUID(UINT uuid)
 {
 #ifdef USE_POOL
     for (const auto& item : m_pPool->GetAllItems())
@@ -281,7 +281,7 @@ CharaBase* CharaManager::GetFromUUID(UINT uuid)
 #endif
 }
 
-CharaBase* CharaManager::initfunc(uint32_t index, CharaBase* pChara)
+Chara* CharaManager::initfunc(uint32_t index, Chara* pChara)
 {
 	return nullptr;
 }

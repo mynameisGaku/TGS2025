@@ -20,7 +20,7 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/common/setting/window/WindowSetting.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 
 
 using namespace KeyDefine;

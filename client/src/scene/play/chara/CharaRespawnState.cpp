@@ -1,7 +1,7 @@
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/scene/play/ui/UI_Fade.h"
 
-void CharaBase::RespawnStateNone(FSMSignal sig)
+void Chara::RespawnStateNone(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -24,7 +24,7 @@ void CharaBase::RespawnStateNone(FSMSignal sig)
 	}
 }
 
-void CharaBase::RespawnStateFadeOut(FSMSignal sig)
+void Chara::RespawnStateFadeOut(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -38,7 +38,7 @@ void CharaBase::RespawnStateFadeOut(FSMSignal sig)
 	{
 		if (m_pUI_Fade->IsFadeEnd())
 		{
-			m_RespawnFSM->ChangeState(&CharaBase::RespawnStateFadeIn);
+			m_RespawnFSM->ChangeState(&Chara::RespawnStateFadeIn);
 		}
 	}
 	break;
@@ -61,7 +61,7 @@ void CharaBase::RespawnStateFadeOut(FSMSignal sig)
 	}
 }
 
-void CharaBase::RespawnStateFadeIn(FSMSignal sig)
+void Chara::RespawnStateFadeIn(FSMSignal sig)
 {
 	switch (sig)
 	{
@@ -75,7 +75,7 @@ void CharaBase::RespawnStateFadeIn(FSMSignal sig)
 	{
 		if (m_pUI_Fade->IsFadeEnd())
 		{
-			m_RespawnFSM->ChangeState(&CharaBase::RespawnStateNone);
+			m_RespawnFSM->ChangeState(&Chara::RespawnStateNone);
 		}
 	}
 	break;

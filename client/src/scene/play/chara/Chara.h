@@ -31,11 +31,11 @@ class UI_FadeBase;
 /// <summary>
 /// キャラクターに関する基底クラス
 /// </summary>
-class CharaBase : public Object3D
+class Chara : public Object3D
 {
 public:
-	CharaBase();
-	virtual ~CharaBase();
+	Chara();
+	virtual ~Chara();
 
 	void Init(std::string tag);
 	void Update() override;
@@ -313,12 +313,12 @@ private:
 	Tackler*				m_Tackler;				// タックルの当たり判定
 	EffectBase*				m_pCatchReadyEffect;	// キャッチの準備エフェクト
 	EffectBase*				m_pCatchDustEffect;		// キャッチの粉エフェクト
-	TinyFSM<CharaBase>*		m_FSM;					// ステートマシン
-	TinyFSM<CharaBase>*		m_SubFSM;				// ステートマシン
-	TinyFSM<CharaBase>*		m_RespawnFSM;			// ステートマシン
+	TinyFSM<Chara>*		m_FSM;					// ステートマシン
+	TinyFSM<Chara>*		m_SubFSM;				// ステートマシン
+	TinyFSM<Chara>*		m_RespawnFSM;			// ステートマシン
 	Animator*				m_Animator;				// アニメーション
 	Transform*				m_EffectTransform;		// エフェクト出すトランスフォーム
-	Timeline<CharaBase>*	m_Timeline;				// アニメーションに合わせて動くタイムライン
+	Timeline<Chara>*	m_Timeline;				// アニメーションに合わせて動くタイムライン
 	StatusTracker*			m_pStatusTracker;		// ステータスの統計
 	Alarm*					m_Alarm;				// アラーム
 	Alarm*					m_TackleIntervalAlarm;	// タックル後の間隔アラーム
@@ -427,9 +427,9 @@ private:
 	void playFootStepSound(const nlohmann::json& argument);
 	void playTinyFootStepSound(const nlohmann::json& argument);
 
-	void main_changeStateNetwork(void(CharaBase::* state)(FSMSignal));
-	void sub_changeStateNetwork(void(CharaBase::* state)(FSMSignal));
-	void respawn_changeStateNetwork(void(CharaBase::* state)(FSMSignal));
+	void main_changeStateNetwork(void(Chara::* state)(FSMSignal));
+	void sub_changeStateNetwork(void(Chara::* state)(FSMSignal));
+	void respawn_changeStateNetwork(void(Chara::* state)(FSMSignal));
 	void sendChangeStateToNetwork(const std::string& state);
 	void sendChangeSubStateToNetwork(const std::string& state);
 };

@@ -1,6 +1,6 @@
 #include "src/scene/play/tackler/Tackler.h"
 #include "src/common/component/collider/ColliderCapsule.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/reference/chara/CharaDefineRef.h"
 #include "src/common/stage/StageObjectManager.h"
 
@@ -53,7 +53,7 @@ void Tackler::Draw()
 void Tackler::CollisionEvent(const CollisionData& colData)
 {
 	// ‚ ‚½‚Á‚½‘ŠŽè‚ªƒLƒƒƒ‰‚È‚ç
-	CharaBase* chara = colData.Other()->Parent<CharaBase>();
+	Chara* chara = colData.Other()->Parent<Chara>();
 	if (chara not_eq nullptr)
 	{
 		if (chara == m_Parent)

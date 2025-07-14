@@ -3,7 +3,7 @@
 #include <string>
 
 class ColliderCapsule;
-class CharaBase;
+class Chara;
 
 class Tackler : public Object3D
 {
@@ -22,10 +22,10 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 
 	void SetColliderActive(bool isActive);
-	void SetParent(CharaBase* parent) { m_Parent = parent; }
+	void SetParent(Chara* parent) { m_Parent = parent; }
 
 	bool IsColliderActive() const;
 private:
 	ColliderCapsule* m_Collider;	// 当たり判定
-	CharaBase* m_Parent;			// 親キャラクター
+	Chara* m_Parent;			// 親キャラクター
 };

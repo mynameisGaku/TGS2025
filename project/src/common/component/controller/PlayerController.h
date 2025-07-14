@@ -7,7 +7,7 @@
 #include "src/util/input/KeyDefine.h"
 #include "src/util/math/vector3.h"
 
-class CharaBase;
+class Chara;
 
 class PlayerController : public Component {
 public:
@@ -70,7 +70,7 @@ public:
 	bool IsMoveButton() const;
 
 private:
-	CharaBase* chara;	// 保有者(CharaBase)
+	Chara* chara;	// 保有者(CharaBase)
 
 	int padNumber;		// 操作してるパッドの番号
 };

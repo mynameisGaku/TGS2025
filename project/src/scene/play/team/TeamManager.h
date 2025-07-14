@@ -12,7 +12,7 @@ public:
     /// <summary>
     /// キャラのタグとインデックスをチームに登録
     /// </summary>
-    void RegisterCharaToTeam(class CharaBase* pChara);
+    void RegisterCharaToTeam(class Chara* pChara);
 
     Team* GetTeam(const std::string& name);
 

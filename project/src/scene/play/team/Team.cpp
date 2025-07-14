@@ -120,8 +120,8 @@ bool Team::IsCharaIDInPool(int id)
   return charaPool->QueryWasRegister(id);  
 }
 
-CharaBase* Team::getCharaFromID(int id)
+Chara* Team::getCharaFromID(int id)
 {
-    Pool<CharaBase>* charaPool = m_pCharaManager->GetCharaPool();
+    Pool<Chara>* charaPool = m_pCharaManager->GetCharaPool();
     return charaPool->Get(id);
 }

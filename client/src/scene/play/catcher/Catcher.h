@@ -3,7 +3,7 @@
 #include <string>
 
 class ColliderCapsule;
-class CharaBase;
+class Chara;
 class Ball;
 class ForceFieldManager;
 class ForceFieldCorn;
@@ -29,7 +29,7 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 
 	void SetColliderActive(bool isActive);
-	void SetParent(CharaBase* parent) { m_pParent = parent; }
+	void SetParent(Chara* parent) { m_pParent = parent; }
 
 	bool IsColliderActive() const;
 	// キャッチ角度内にボールがあるかどうか
@@ -40,7 +40,7 @@ public:
 
 private:
 	ColliderCapsule* m_pCollider;	// 当たり判定
-	CharaBase* m_pParent;			// 親キャラクター
+	Chara* m_pParent;			// 親キャラクター
 	ForceFieldManager* m_pForceFieldManager;	// 吸込み用、力場マネージャー
 	ForceFieldCorn* m_pWindArea;	// 吸込みエリア
 

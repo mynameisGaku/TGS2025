@@ -14,7 +14,7 @@
 #include "src/util/math/Vector2.h"
 
 class StateManager;
-class CharaBase;
+class Chara;
 
 /// <summary>
 /// カメラのクラス
@@ -110,7 +110,7 @@ public:
 	/// </summary>
 	void SetAnimation(const CameraDefine::CameraAnimData& animData);
 
-	inline void SetFollowerChara(const CharaBase* chara) { m_pFollowerChara = chara; }
+	inline void SetFollowerChara(const Chara* chara) { m_pFollowerChara = chara; }
 
 	/// <summary>
 	/// 描画範囲を設定する
@@ -174,7 +174,7 @@ public:
 	/// <summary>
 	/// 注視しているキャラクター
 	/// </summary>
-	inline const CharaBase* TargetChara() const { return m_pTargetChara; }
+	inline const Chara* TargetChara() const { return m_pTargetChara; }
 
 	/// <summary>
 	/// 描画が終了したかどうかを判定
@@ -295,6 +295,6 @@ private:
 	bool m_IsView;		// 描画しているか
 	bool m_DrawFlag;	// 描画が完了しているか
 
-	const CharaBase* m_pFollowerChara;	// 追尾しているキャラ
-	const CharaBase* m_pTargetChara;	// 注視しているキャラ
+	const Chara* m_pFollowerChara;	// 追尾しているキャラ
+	const Chara* m_pTargetChara;	// 注視しているキャラ
 };

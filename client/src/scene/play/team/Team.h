@@ -56,7 +56,7 @@ private:
     /// </summary>
     bool queryIsRegistered(int id);
 
-    class CharaBase* getCharaFromID(int id);
+    class Chara* getCharaFromID(int id);
 
     std::vector<int>                m_CharaIDs;
     std::string                     m_TeamName;

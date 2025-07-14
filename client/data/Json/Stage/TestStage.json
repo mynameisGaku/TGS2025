@@ -1,0 +1,1331 @@
+{
+  "Objects": [
+    {
+      "Name": "BallSpawner (27)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 995.4941,
+        "y": 59.0000038,
+        "z": 2287.987
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (26)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -1043.6626,
+        "y": 59.0000038,
+        "z": -4041.18579
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (25)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 878.533569,
+        "y": 59.0000038,
+        "z": 9122.679
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (24)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 6705.649,
+        "y": 59.0000038,
+        "z": 8404.911
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (23)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 13374.623,
+        "y": 59.0000038,
+        "z": 7578.487
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (22)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 9741.369,
+        "y": 59.0000038,
+        "z": 9485.242
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (21)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 9131.433,
+        "y": 59.0000038,
+        "z": 3676.971
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (20)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 10955.0137,
+        "y": 59.00153,
+        "z": 2500.06665
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (19)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 9684.135,
+        "y": 59.0000038,
+        "z": 315.2303
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (18)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 11702.3691,
+        "y": 59.0000038,
+        "z": -1900.846
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (17)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 9221.861,
+        "y": 59.0000038,
+        "z": -3881.475
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (16)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 12346.1367,
+        "y": 59.00153,
+        "z": -5600.95459
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (15)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 7027.57129,
+        "y": 59.00153,
+        "z": -8069.994
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (14)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 8631.733,
+        "y": 59.0000038,
+        "z": -11329.5322
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (13)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 1817.77344,
+        "y": 59.0000038,
+        "z": -11141.7041
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (12)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -4987.502,
+        "y": 59.0000038,
+        "z": -7732.142
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (11)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -6011.44238,
+        "y": 59.0000038,
+        "z": -2648.41235
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (10)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -6969.47,
+        "y": 59.0000038,
+        "z": 2348.11328
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (9)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -3028.35547,
+        "y": 59.0000038,
+        "z": 4209.111
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (8)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -322.372437,
+        "y": 59.00153,
+        "z": -766.4776
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (7)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 485.9933,
+        "y": 59.0000038,
+        "z": 7843.457
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (6)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 6467.5835,
+        "y": 59.00153,
+        "z": 225.124451
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (5)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 5630.77539,
+        "y": 59.0000038,
+        "z": 4303.36963
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (4)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 2548.65234,
+        "y": 59.0000038,
+        "z": -4428.923
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (3)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 846.075134,
+        "y": 59.0000038,
+        "z": 976.5349
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (2)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": -1850.54211,
+        "y": 59.0000038,
+        "z": -1725.58569
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner (1)",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 1454.97021,
+        "y": 59.0000038,
+        "z": 2895.734
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "BallSpawner",
+      "Type": "BallSpawner",
+      "Tag": "BallSpawner",
+      "Position": {
+        "x": 3056.0437,
+        "y": 59.0000038,
+        "z": -153.2425
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": {
+        "INTERVAL_SEC": 1.0,
+        "INTERVAL_SEC_RANDOM_RANGE": 0.5,
+        "SPAWN_AMOUNT_ONCE_MAX": 1,
+        "SPAWN_AMOUNT_ONCE_MIN": 1,
+        "SPAWN_AMOUNT_ONCE_RANDOM_RANGE": 0,
+        "SPAWN_AMOUNT_INITIAL": 0,
+        "SPAWN_RANGE": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "SPAWN_INITIAL_VELOCITY": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "IsCollision": false
+    },
+    {
+      "Name": "Cube (8)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 9230.0,
+        "y": 0.0,
+        "z": 5900.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.785398066
+      },
+      "Scale": {
+        "x": 14.63,
+        "y": 14.63,
+        "z": 14.63
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (7)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 9230.0,
+        "y": 0.0,
+        "z": 1670.00012
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.785398066
+      },
+      "Scale": {
+        "x": 11.4,
+        "y": 11.4,
+        "z": 11.4
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (6)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 9230.0,
+        "y": 0.0,
+        "z": -1990.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.785398066
+      },
+      "Scale": {
+        "x": 8.43,
+        "y": 8.43,
+        "z": 8.43
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (5)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 9180.0,
+        "y": 0.0,
+        "z": -5740.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.785398066
+      },
+      "Scale": {
+        "x": 5.96,
+        "y": 5.96,
+        "z": 5.96
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (4)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -4070.0,
+        "y": 302.0,
+        "z": 5900.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 14.63,
+        "y": 14.63,
+        "z": 14.63
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (3)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -4070.0,
+        "y": 302.0,
+        "z": 1670.00012
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 11.4,
+        "y": 11.4,
+        "z": 11.4
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (2)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -4070.0,
+        "y": 302.0,
+        "z": -1990.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 8.43,
+        "y": 8.43,
+        "z": 8.43
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube (1)",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": -4120.0,
+        "y": 302.0,
+        "z": -5740.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 5.96,
+        "y": 5.96,
+        "z": 5.96
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    },
+    {
+      "Name": "Cube",
+      "Type": "Cube",
+      "Tag": "Untagged",
+      "Position": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 300.0,
+        "y": 1.0,
+        "z": 300.0
+      },
+      "CharaSpawnPointDesc": null,
+      "BallSpawnerDesc": null,
+      "IsCollision": true
+    }
+  ]
+}

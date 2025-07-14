@@ -1,0 +1,10 @@
+{
+	"IsNetworkEnable": true,
+	"IsHost": false,
+
+	"ConnectionMax": 6,
+
+	"HostIP": "172.16.66.209",
+
+	"Port": 5050
+}

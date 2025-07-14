@@ -1,0 +1,36 @@
+{
+    "Animation": "RollToActionIdle",
+    "Events": [
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 14.0,
+            "End": 24.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 55
+                }
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 24.0,
+            "End": 30.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 13
+                }
+            }
+        }
+    ]
+}

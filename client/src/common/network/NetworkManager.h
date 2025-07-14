@@ -72,12 +72,35 @@ public:
 	/// <param name="name">追加するユーザーの名前</param>
 	void SendAddUser(const std::string& name);
 
-	void SendTransform(const class Transform& trs, UINT uuid);
+	/// <summary>
+	/// シーンをプレイシーンに遷移させる
+	/// </summary>
+	void SendSceneTransitToPlay();
 
-	void SendTransitToPlay();
-
-    void SendChangeState(const std::string& state, UINT uuid);
-    void SendChangeSubState(const std::string& state, UINT uuid);
+	/// <summary>
+	/// キャラのトランスフォームを送信
+	/// <para>Clientの場合: サーバーに送信</para>
+	/// <para>Hostの場合: クライアント全体に送信</para>
+	/// </summary>
+	/// <param name="trs">適用するトランスフォーム</param>
+	/// <param name="uuid">ターゲットの固有ID</param>
+	void SendCharaTransform(const class Transform& trs, const std::string& uuid);
+	/// <summary>
+	///	キャラのステート変更依頼を送信
+	/// <para>Clientの場合: サーバーに送信</para>
+	/// <para>Hostの場合: クライアント全体に送信</para>
+	/// </summary>
+	/// <param name="state">変更先のステート</param>
+	/// <param name="uuid">ターゲットの固有ID</param>
+	void SendCharaChangeState(const std::string& state, const std::string& uuid);
+	/// <summary>
+	/// キャラのサブステート変更依頼を送信
+	/// <para>Clientの場合: サーバーに送信</para>
+	/// <para>Hostの場合: クライアント全体に送信</para>
+    /// </summary>
+    /// <param name="state">変更先のステート</param>
+	/// <param name="uuid">ターゲットの固有ID</param>
+	void SendCharaChangeSubState(const std::string& state, const std::string& uuid);
 
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット
@@ -85,9 +108,8 @@ public:
 	static std::mutex				g_Mutex;			// ミューテックス
 	static SOCKET					g_Sock;				// クライアントが接続に使用するソケット
 	static bool						g_Running;			// 実行中か
-	static UINT						g_UUIDGenerator;	// UUIDのジェネレーター 1から始まる
 	static std::vector<User>		g_Users;			// ホストで管理されるユーザー情報
-	static UINT						g_MyUUID;			// 自分のUUID クライアントが自身のUUIDを知るためにあるよ
+	static std::string				g_MyUUID;			// 自分のUUID クライアントが自身のUUIDを知るためにあるよ
 
 	void subscribe(const std::string& name);
 };

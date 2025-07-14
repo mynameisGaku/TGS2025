@@ -12,6 +12,7 @@
 #include <src/scene/play/chara/CharaManager.h>
 #include <src/util/file/json/VectorJson.h>
 #include <src/common/load_screen/LoadScreen.h>
+#include <src/reference/network/NetworkRef.h>
 
 using JSON = nlohmann::json;
 
@@ -37,7 +38,7 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		std::string name = json.at("Name").get<std::string>();
 		User user{};
 		user.Name = name;
-		user.UUID = ++g_UUIDGenerator;
+		user.UUID = json.at("UUID").get<std::string>();
 		user.Socket = sock;
 		user.IsHost = false;
 		g_Users.push_back(user);
@@ -85,7 +86,7 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		auto cm = FindGameObject<CharaManager>();
 		if (not cm)
 			return;
-		auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
+		auto c = cm->GetFromUUID(json["UUID"].get<std::string>());
 		if (not c)
 			return;
 		if (not c->transform)
@@ -121,7 +122,7 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		Broadcast(header, str.c_str(), sock);
 
 		// ホスト側にいる対象者のステートを変更する
-		UINT uuid = json.at("UUID").get<UINT>();
+		std::string uuid = json.at("UUID").get<std::string>();
 		std::string state = json.at("State").get<std::string>();
 
 		CharaManager* cm = FindGameObject<CharaManager>();
@@ -134,7 +135,7 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 			return;
 		c->m_FSM->ChangeStateByName(state);
 
-		Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %d. State: %s", uuid, state.c_str());
+		Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %s. State: %s", uuid.c_str(), state.c_str());
 	}
 	else if (command == "ChangeSubState")
 	{
@@ -147,7 +148,7 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		Broadcast(header, str.c_str(), sock);
 
 		// ホスト側にいる対象者のステートを変更する
-		UINT uuid = json.at("UUID").get<UINT>();
+		std::string uuid = json.at("UUID").get<std::string>();
 		std::string state = json.at("State").get<std::string>();
 
 		CharaManager* cm = FindGameObject<CharaManager>();
@@ -160,7 +161,7 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 			return;
 		c->m_SubFSM->ChangeStateByName(state);
 
-		Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %d. State: %s", uuid, state.c_str());
+		Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %s. State: %s", uuid.c_str(), state.c_str());
 	}
 	else
 	{

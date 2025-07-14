@@ -391,13 +391,11 @@ void Chara::Update() {
 		StartRespawn();
 	}
 
-	if (CheckHitKey(KEY_INPUT_SLASH))
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
 	{
-		auto& net = NetworkRef::Inst();
-		if (net.IsNetworkEnable)
-		{
-			m_pNetManager->SendTransform(transform->Global(), m_User.UUID);
-		}
+		if (m_User.UUID == m_pNetManager->g_MyUUID)
+			m_pNetManager->SendCharaTransform(transform->Global(), m_pNetManager->g_MyUUID);
 	}
 
 	m_FSM->Update();
@@ -2906,7 +2904,7 @@ void Chara::sendChangeStateToNetwork(const std::string& state)
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)
 		return;
-	m_pNetManager->SendChangeState(state, m_User.UUID);
+	m_pNetManager->SendCharaChangeState(state, m_User.UUID);
 }
 
 void Chara::sendChangeSubStateToNetwork(const std::string& state)
@@ -2914,7 +2912,7 @@ void Chara::sendChangeSubStateToNetwork(const std::string& state)
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)
 		return;
-	m_pNetManager->SendChangeSubState(state, m_User.UUID);
+	m_pNetManager->SendCharaChangeSubState(state, m_User.UUID);
 }
 
 void Chara::buttonHintUpdate()

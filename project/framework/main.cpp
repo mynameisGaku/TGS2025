@@ -82,7 +82,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     SYSTEMTIME t;
 	GetSystemTime(&t);
-	std::string wndname = wSetting.name + std::to_string(t.wMilliseconds);
+
+	auto& net = NetworkRef::Inst();
+	net.Load(true);
+	std::string isHost = net.IsHost ? "[HOST]" : "[CLIENT]";
+	std::string wndname = isHost + wSetting.name + std::to_string(t.wMilliseconds);
 
 	SetMainWindowText(wndname.c_str());
 	SetWindowSizeExtendRate((double)wSetting.extend);

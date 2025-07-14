@@ -647,10 +647,25 @@ void MatchManager::registerChara(bool isAI, Chara* chara)
         {10, DX_INPUT_PAD11},
     };
 
-    if (not isAI)
-        chara->AddComponent<PlayerController>()->Init(padNumMap[chara->GetIndex()]);
+    auto& net = NetworkRef::Inst();
+    if (net.IsNetworkEnable)
+    {
+        if (chara->GetUser().UUID == net.UUID)
+        {
+            chara->AddComponent<PlayerController>()->Init(padNumMap[0]);
+        }
+        else
+        {
+            // ネットワークモードの場合、クライアントと紐づいているキャラ以外はコントローラーが不要なので何もつけない
+        }
+    }
     else
-        chara->AddComponent<AIController>()->Init();
+    {
+        if (not isAI)
+            chara->AddComponent<PlayerController>()->Init(padNumMap[chara->GetIndex()]);
+        else
+            chara->AddComponent<AIController>()->Init();
+    }
 
     m_pTeamManager->RegisterCharaToTeam(chara);
 }

@@ -1,10 +1,8 @@
 {
-	"IsNetworkEnable": true,
-	"IsHost": false,
-
-	"ConnectionMax": 6,
-
-	"HostIP": "172.16.66.209",
-
-	"Port": 5050
+  "ConnectionMax": 6,
+  "HostIP": "172.16.70.120",
+  "IsHost": true,
+  "IsNetworkEnable": true,
+  "Port": 5050,
+  "UUID": "784822525"
 }

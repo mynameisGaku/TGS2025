@@ -20,9 +20,8 @@ std::vector<ClientInfo*> NetworkManager::g_Clients;
 std::mutex NetworkManager::g_Mutex;
 SOCKET NetworkManager::g_Sock = INVALID_SOCKET;
 bool NetworkManager::g_Running = false;
-UINT NetworkManager::g_UUIDGenerator = 0;
 std::vector<User> NetworkManager::g_Users;
-UINT NetworkManager::g_MyUUID = 0;
+std::string NetworkManager::g_MyUUID = "";
 
 // --- コンストラクタ ---
 NetworkManager::NetworkManager()
@@ -177,10 +176,12 @@ void NetworkManager::subscribe(const std::string& name)
 	{
 		User user{};
 		user.Name	= name;
-		user.UUID	= ++g_UUIDGenerator;
+		user.UUID	= net.UUID;
 		user.Socket	= g_ListenSock;
 		user.IsHost = true; // ホストは自分自身をホストとして登録
 		g_Users.push_back(user);
+
+		g_MyUUID = user.UUID;
 
 		nlohmann::json broadcast;
 
@@ -223,13 +224,14 @@ void NetworkManager::SendAddUser(const std::string& name)
 	json["Command"]		= "AddUser";
 	json["NeedReply"]	= true;
 	json["Name"]		= name;
+	json["UUID"]		= net.UUID;
 	// JSONを文字列に変換
 	std::string jsonStr = json.dump();
 	// JSONを送信
 	SendJson(jsonStr);
 }
 
-void NetworkManager::SendTransform(const Transform& trs, UINT uuid)
+void NetworkManager::SendCharaTransform(const Transform& trs, const std::string& uuid)
 {
 	auto& net = NetworkRef::Inst();
 	if (!net.IsNetworkEnable)
@@ -254,7 +256,7 @@ void NetworkManager::SendTransform(const Transform& trs, UINT uuid)
 	SendJson(jsonStr);
 }
 
-void NetworkManager::SendTransitToPlay()
+void NetworkManager::SendSceneTransitToPlay()
 {
 	auto& net = NetworkRef::Inst();
 	if (!net.IsNetworkEnable)
@@ -269,7 +271,7 @@ void NetworkManager::SendTransitToPlay()
 	SendJson(jsonStr);
 }
 
-void NetworkManager::SendChangeState(const std::string& state, UINT uuid)
+void NetworkManager::SendCharaChangeState(const std::string& state, const std::string& uuid)
 {
     auto& net = NetworkRef::Inst();
     if (!net.IsNetworkEnable)
@@ -286,7 +288,7 @@ void NetworkManager::SendChangeState(const std::string& state, UINT uuid)
 	SendJson(jsonStr);
 }
 
-void NetworkManager::SendChangeSubState(const std::string& state, UINT uuid)
+void NetworkManager::SendCharaChangeSubState(const std::string& state, const std::string& uuid)
 {
     auto& net = NetworkRef::Inst();
     if (!net.IsNetworkEnable)

@@ -43,13 +43,6 @@ void PlayerController::Update() {
 	//}
 	//else
 	
-	auto& net = NetworkRef::Inst();
-	if (net.IsNetworkEnable)
-	{
-		if (not chara->GetUser().IsHost)
-			return;
-	}
-
 	if(chara->CanThrow() && chara->IsHoldingBall())
 	{
 		if (not chara->IsChargingBall())

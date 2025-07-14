@@ -1,5 +1,8 @@
 #include <src/reference/network/NetworkRef.h>
 #include <src/util/file/json/settings_json.h>
+#include <src/util/math/Random.h>
+#include <fstream>
+
 
 NetworkRef* NetworkRef::instance = nullptr;
 
@@ -39,6 +42,30 @@ void NetworkRef::Load(bool forceLoad)
 
 	IsHost = json["IsHost"].get<bool>();
     IsNetworkEnable = json["IsNetworkEnable"].get<bool>();
+
+	// uuidを持っているか？
+	if (json["UUID"].is_null())
+	{
+        // uuidを生成してクライアントに登録
+		std::string uuid = "";
+
+        // 最大桁数を3ケタとし、１ケタ、２ケタの場合は00Xや0XXのように、0をつける  
+        auto formatToThreeDigits = [](int number) -> std::string {
+            std::ostringstream oss;
+            oss << std::setw(3) << std::setfill('0') << number;
+            return oss.str();
+            };
+
+		for (int i = 0; i < 3; i++)
+		{
+			uuid += formatToThreeDigits(Random.GetIntRange(0, 999));
+		}
+		json["UUID"] = uuid;
+
+        std::ofstream file(PATH);
+        file << json;
+    }
+    UUID = json["UUID"].get<std::string>();
 
 	m_WasLoad = true;
 }

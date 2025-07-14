@@ -15,6 +15,7 @@
 
 class StateManager;
 class Chara;
+class NetworkManager;
 
 /// <summary>
 /// カメラのクラス
@@ -296,5 +297,7 @@ private:
 	bool m_DrawFlag;	// 描画が完了しているか
 
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
-	const Chara* m_pTargetChara;	// 注視しているキャラ
+    const Chara* m_pTargetChara;	// 注視しているキャラ
+
+    NetworkManager* m_pNetworkManager; // 現在のクライアントのUUIDをもらうためのネトマネ
 };

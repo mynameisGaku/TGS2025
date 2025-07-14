@@ -13,6 +13,7 @@ public:
     void Load(bool forceLoad = false);
 
     std::string HostIP;
+    std::string UUID;
     USHORT Port;
     USHORT ConnectionMax;
     BOOL IsHost;

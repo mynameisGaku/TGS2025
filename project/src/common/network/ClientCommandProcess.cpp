@@ -38,7 +38,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		{
 			User user{};
 			user.Name = data["Name"].get<std::string>();
-			user.UUID = data["UUID"].get<UINT>();
+			user.UUID = data["UUID"].get<std::string>();
 			user.Socket = data["Socket"].get<UINT>();
 			user.IsHost = data["IsHost"].get<bool>();
 			g_Users.push_back(user);
@@ -47,7 +47,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		if (json.contains("Added_ID"))
 		{
 			// 追加されたユーザー = 自分なので、自身のMyUUIDにセット
-			g_MyUUID = json.at("Added_ID").get<UINT>();
+			g_MyUUID = json.at("Added_ID").get<std::string>();
 		}
 	}
 	else if (command == "SetTransform")
@@ -59,7 +59,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		auto cm = FindGameObject<CharaManager>();
 		if (not cm)
 			return;
-		auto c = cm->GetFromUUID(json["UUID"].get<UINT>());
+		auto c = cm->GetFromUUID(json["UUID"].get<std::string>());
 		if (not c)
 			return;
 		if (not c->transform)
@@ -73,7 +73,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 	}
 	else if (command == "ChangeState")
 	{
-		UINT uuid = json.at("UUID").get<UINT>();
+		std::string uuid = json.at("UUID").get<std::string>();
 		std::string state = json.at("State").get<std::string>();
 
 		CharaManager* cm = FindGameObject<CharaManager>();
@@ -88,7 +88,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
     }
     else if (command == "ChangeSubState")
     {
-        UINT uuid = json.at("UUID").get<UINT>();
+		std::string uuid = json.at("UUID").get<std::string>();
         std::string state = json.at("State").get<std::string>();
 
         CharaManager* cm = FindGameObject<CharaManager>();

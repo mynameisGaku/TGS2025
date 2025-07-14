@@ -357,7 +357,7 @@
     <ClCompile Include="src\scene\play\ball\BallManager.cpp" />
     <ClCompile Include="src\scene\play\ball\BallSpawner.cpp" />
     <ClCompile Include="src\scene\play\catcher\Catcher.cpp" />
-    <ClCompile Include="src\scene\play\chara\CharaBase.cpp" />
+    <ClCompile Include="src\scene\play\chara\Chara.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaManager.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaRespawnState.cpp" />
@@ -548,7 +548,7 @@
     <ClInclude Include="src\scene\play\ball\BallManager.h" />
     <ClInclude Include="src\scene\play\ball\BallSpawner.h" />
     <ClInclude Include="src\scene\play\catcher\Catcher.h" />
-    <ClInclude Include="src\scene\play\chara\CharaBase.h" />
+    <ClInclude Include="src\scene\play\chara\Chara.h" />
     <ClInclude Include="src\scene\play\chara\CharaHP.h" />
     <ClInclude Include="src\scene\play\chara\CharaManager.h" />
     <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h" />
@@ -744,4 +744,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -265,7 +265,7 @@ Chara* CharaManager::NearestEnemy(int index) {
 	return nullptr;
 }
 
-Chara* CharaManager::GetFromUUID(UINT uuid)
+Chara* CharaManager::GetFromUUID(const std::string& uuid)
 {
 #ifdef USE_POOL
     for (const auto& item : m_pPool->GetAllItems())

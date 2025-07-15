@@ -57,7 +57,7 @@ public:
 	/// <returns>ƒv[ƒ‹</returns>
 	Pool<Chara>* GetCharaPool() const { return m_pPool; }
 
-    Chara* GetFromUUID(UINT uuid);
+    Chara* GetFromUUID(const std::string& uuid);
 
 private:
 

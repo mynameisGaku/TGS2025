@@ -348,12 +348,17 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
                     useSpawner = spawner2;
                 }
 
-                addCharacter(user, teamColor, useSpawner->transform->Global(), false);
+                auto c = addCharacter(user, teamColor, useSpawner->transform->Global(), false);
+
+                if (i - 1 > 0)
+                    CameraManager::CreateCamera(c->GetIndex());
             }
         }
-
-        //addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
-        //addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+        else
+        {
+            addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+            addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+        }
 
         // 追加できるの確認したよ
         //addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
@@ -609,7 +614,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
     }
 }
 
-void MatchManager::addCharacter(const std::string& team, const Transform& trs, bool isAI)
+Chara* MatchManager::addCharacter(const std::string& team, const Transform& trs, bool isAI)
 {
     Chara* chara = m_pCharaManager->Create(team, trs);
 
@@ -618,9 +623,10 @@ void MatchManager::addCharacter(const std::string& team, const Transform& trs, b
 
     registerChara(isAI, chara);
 
+    return chara;
 }
 
-void MatchManager::addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI)
+Chara* MatchManager::addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI)
 {
     Chara* chara = m_pCharaManager->Create(team, trs, user);
 
@@ -628,6 +634,8 @@ void MatchManager::addCharacter(const User& user, const std::string& team, const
     chara->SetRotSpeed(MathUtil::ToRadians(CHARADEFINE_REF.RotSpeed));
 
     registerChara(isAI, chara);
+    
+    return chara;
 }
 
 void MatchManager::registerChara(bool isAI, Chara* chara)
@@ -647,10 +655,25 @@ void MatchManager::registerChara(bool isAI, Chara* chara)
         {10, DX_INPUT_PAD11},
     };
 
-    if (not isAI)
-        chara->AddComponent<PlayerController>()->Init(padNumMap[chara->GetIndex()]);
+    auto& net = NetworkRef::Inst();
+    if (net.IsNetworkEnable)
+    {
+        if (chara->GetUser().UUID == net.UUID)
+        {
+            chara->AddComponent<PlayerController>()->Init(padNumMap[0]);
+        }
+        else
+        {
+            // ネットワークモードの場合、クライアントと紐づいているキャラ以外はコントローラーが不要なので何もつけない
+        }
+    }
     else
-        chara->AddComponent<AIController>()->Init();
+    {
+        if (not isAI)
+            chara->AddComponent<PlayerController>()->Init(padNumMap[chara->GetIndex()]);
+        else
+            chara->AddComponent<AIController>()->Init();
+    }
 
     m_pTeamManager->RegisterCharaToTeam(chara);
 }

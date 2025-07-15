@@ -39,7 +39,7 @@ void TitleScene::Update() {
 		if (net.IsNetworkEnable)
 		{
 			NetworkManager* nm = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
-			nm->SendTransitToPlay();
+			nm->SendSceneTransitToPlay();
 		}
 		
 		SceneManager::ChangeScene("PlayScene");

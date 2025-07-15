@@ -3,6 +3,5 @@
   "HostIP": "172.16.70.120",
   "IsHost": true,
   "IsNetworkEnable": true,
-  "Port": 5050,
-  "UUID": "DEBUG_CLIENT"
+  "Port": 5050
 }

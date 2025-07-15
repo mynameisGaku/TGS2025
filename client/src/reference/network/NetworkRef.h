@@ -5,7 +5,7 @@
 class NetworkRef
 {
 private:
-    const std::string PATH = "data/Json/Network/NetworkConfig.json";
+    const std::string PATH = "network.json";
     const std::string FILEKEY = "NetworkConfig";
 public:
     static NetworkRef& Inst();
@@ -13,6 +13,7 @@ public:
     void Load(bool forceLoad = false);
 
     std::string HostIP;
+    std::string UUID;
     USHORT Port;
     USHORT ConnectionMax;
     BOOL IsHost;

@@ -21,6 +21,7 @@
 #include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/common/setting/window/WindowSetting.h"
 #include "src/scene/play/chara/Chara.h"
+#include "src/common/network/NetworkManager.h"
 
 
 using namespace KeyDefine;
@@ -41,6 +42,8 @@ Camera::Camera() {
 	m_Fsm->ChangeState(&Camera::DebugState); // ステートを変更
 	
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
+
+	m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
 }
 
 Camera::~Camera() {

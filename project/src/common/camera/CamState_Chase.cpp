@@ -15,6 +15,7 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
+#include "src/common/network/NetworkManager.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -49,10 +50,11 @@ void Camera::ChaseState(FSMSignal sig)
 		if (charaM == nullptr)
 			return;
 
-		// ’Ç]‚·‚éƒLƒƒƒ‰
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
+        // ’Ç]‚·‚éƒLƒƒƒ‰
+        m_pFollowerChara = charaM->GetFromUUID(m_pNetworkManager->g_MyUUID);
 		if (m_pFollowerChara == nullptr)
 			return;
+		m_CharaIndex = m_pFollowerChara->GetIndex();
 
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 

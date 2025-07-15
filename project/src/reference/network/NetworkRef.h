@@ -5,7 +5,7 @@
 class NetworkRef
 {
 private:
-    const std::string PATH = "data/Json/Network/NetworkConfig.json";
+    const std::string PATH = "network.json";
     const std::string FILEKEY = "NetworkConfig";
 public:
     static NetworkRef& Inst();

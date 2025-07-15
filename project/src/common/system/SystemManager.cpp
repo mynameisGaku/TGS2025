@@ -69,6 +69,7 @@ void SystemManager::Start() {
 	}
 #ifdef IMGUI
 	ImGuiManager::AddNode(new ImGuiNode_SliderFloat("TimeScale", &GTime.timeScale, 0.0f, 2.0f));
+	ImGuiManager::AddNode(new ImGuiNode_Button("NextStep", []() {GTime.SetNextStepTimeScale(1.0f); }));
 #endif
 }
 

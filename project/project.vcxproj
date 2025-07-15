@@ -223,7 +223,6 @@
     <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Input\PhysicalKey.json" />
     <None Include="data\Json\Input\VirtualKey.json" />
-    <None Include="data\Json\Network\NetworkConfig.json" />
     <None Include="data\Json\Sound\SoundData.json" />
     <None Include="data\Json\Stage\Stage_0.json" />
     <None Include="data\Json\Stage\Stage_1.json" />
@@ -237,7 +236,7 @@
     <None Include="data\Model\Stage\Cube_col.mv1" />
     <None Include="data\Model\Stage\Ground_000.mv1" />
     <None Include="data\Model\Stage\Sky_000.mv1" />
-    <None Include="imgui.ini" />
+    <None Include="network.json" />
     <None Include="src\util\editbox\resource.aps" />
     <None Include="window.ini" />
   </ItemGroup>
@@ -472,6 +471,7 @@
     <ClCompile Include="vendor\ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_tables.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\uuid4\uuid4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h" />
@@ -737,6 +737,7 @@
     <ClInclude Include="vendor\nlohmann\ordered_map.hpp" />
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="vendor\uuid4\uuid4.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc" />

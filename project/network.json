@@ -1,0 +1,8 @@
+{
+  "ConnectionMax": 6,
+  "HostIP": "172.16.70.120",
+  "IsHost": true,
+  "IsNetworkEnable": true,
+  "Port": 5050,
+  "UUID": "98400d07-c8a5-4c50-893c-25987c42303d"
+}

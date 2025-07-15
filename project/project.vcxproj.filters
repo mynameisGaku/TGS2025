@@ -358,9 +358,6 @@
     <Filter Include="src%28application%29\scene\play\catcher">
       <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ini">
-      <UniqueIdentifier>{70787b9f-905b-4ebf-b40b-52bbdcba4047}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\util\exception">
       <UniqueIdentifier>{8a59f6d4-07cc-4719-9d51-71d53cddeb3f}</UniqueIdentifier>
     </Filter>
@@ -412,14 +409,17 @@
     <Filter Include="src%28application%29\common\network">
       <UniqueIdentifier>{a7f0f2a5-b388-4014-afe6-f37e21ed581e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\Json\Network">
-      <UniqueIdentifier>{3bf87af5-1457-41f5-b0b3-545498ba79ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\common\network\user">
       <UniqueIdentifier>{aa0218c4-31a7-4f35-bad8-9a553b34c8c1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src%28application%29\util\editbox">
       <UniqueIdentifier>{09805924-a4fd-4f60-a45a-e84489f34156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user_config">
+      <UniqueIdentifier>{70787b9f-905b-4ebf-b40b-52bbdcba4047}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\uuid4">
+      <UniqueIdentifier>{e7789334-0a12-405f-9cc8-37bbff2f2fac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -690,12 +690,6 @@
     <None Include="data\Json\Stage\TestStage.json">
       <Filter>data\Json\Stage</Filter>
     </None>
-    <None Include="imgui.ini">
-      <Filter>ini</Filter>
-    </None>
-    <None Include="window.ini">
-      <Filter>ini</Filter>
-    </None>
     <None Include="data\Json\Input\PhysicalKey.json">
       <Filter>data\Json\Input</Filter>
     </None>
@@ -723,11 +717,14 @@
     <None Include="data\Json\Chara\State\WallStepRight.json">
       <Filter>data\Json\Chara\State</Filter>
     </None>
-    <None Include="data\Json\Network\NetworkConfig.json">
-      <Filter>data\Json\Network</Filter>
-    </None>
     <None Include="src\util\editbox\resource.aps">
       <Filter>src%28application%29\util\editbox</Filter>
+    </None>
+    <None Include="network.json">
+      <Filter>user_config</Filter>
+    </None>
+    <None Include="window.ini">
+      <Filter>user_config</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1408,6 +1405,9 @@
     </ClCompile>
     <ClCompile Include="src\common\network\NetworkManager.cpp">
       <Filter>src%28application%29\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\uuid4\uuid4.cpp">
+      <Filter>vendor\uuid4</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2199,6 +2199,9 @@
     </ClInclude>
     <ClInclude Include="vendor\nlohmann\json_fwd.hpp">
       <Filter>vendor\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\uuid4\uuid4.h">
+      <Filter>vendor\uuid4</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

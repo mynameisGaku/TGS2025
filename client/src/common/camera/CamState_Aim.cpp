@@ -15,6 +15,7 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
+#include <src/reference/network/NetworkRef.h>
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -43,8 +44,14 @@ void Camera::AimState(FSMSignal sig)
 		if (charaM == nullptr)
 			return;
 
-		// ’Ç]‚·‚éƒLƒƒƒ‰
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// ’Ç]‚·‚éƒLƒƒƒ‰
+		if (NetworkRef::Inst().IsNetworkEnable)
+			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
+		else
+			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
+		if (m_pFollowerChara == nullptr)
+			return;
+		m_CharaIndex = m_pFollowerChara->GetIndex();
+
 		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// ’‹‚·‚éƒLƒƒƒ‰
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
@@ -70,7 +77,14 @@ void Camera::AimState(FSMSignal sig)
 		if (charaM == nullptr)
 			return;
 
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// ’Ç]‚·‚éƒLƒƒƒ‰
+		if (NetworkRef::Inst().IsNetworkEnable)
+			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
+		else
+			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
+		if (m_pFollowerChara == nullptr)
+			return;
+		m_CharaIndex = m_pFollowerChara->GetIndex();
+
 		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// ’‹‚·‚éƒLƒƒƒ‰
 
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {

@@ -16,6 +16,7 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/network/NetworkManager.h"
+#include <src/reference/network/NetworkRef.h>
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -50,8 +51,12 @@ void Camera::ChaseState(FSMSignal sig)
 		if (charaM == nullptr)
 			return;
 
-        // ’Ç]‚·‚éƒLƒƒƒ‰
-        m_pFollowerChara = charaM->GetFromUUID(m_pNetworkManager->g_MyUUID);
+		auto& net = NetworkRef::Inst();
+		// ’Ç]‚·‚éƒLƒƒƒ‰
+		if(net.IsNetworkEnable)
+			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
+		else
+			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
 		if (m_pFollowerChara == nullptr)
 			return;
 		m_CharaIndex = m_pFollowerChara->GetIndex();

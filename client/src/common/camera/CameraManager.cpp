@@ -13,6 +13,8 @@
 #include "src/util/string/StringUtil.h"
 #include "src/util/input/InputManager.h"
 #include "src/common/setting/window/WindowSetting.h"
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/user/User.h>
 
 using namespace CameraDefine;
 
@@ -45,9 +47,11 @@ void CameraManager::Init() {
 	// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ
 	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
-	Camera* mainCamera = CreateCamera();
-	Camera* camera2P = CreateCamera();
-	//Camera* camera3P = CreateCamera();
+	if (not NetworkRef::Inst().IsNetworkEnable)
+	{
+		Camera* mainCamera = CreateCamera();
+		Camera* camera2p = CreateCamera();
+	}
 
 	m_CurrentDreaCameraIndex = 0;
 
@@ -61,6 +65,9 @@ void CameraManager::Init() {
 void CameraManager::Update() {
 
 	if (cameras == nullptr)
+		return;
+
+	if (cameras->empty())
 		return;
 
 	m_CurrentDreaCameraIndex = 0;
@@ -86,6 +93,9 @@ void CameraManager::Draw() {
 	if (cameras == nullptr || isScreenDivision)
 		return;
 
+	if (cameras->empty())
+		return;
+
 	MainCamera()->Draw();
 }
 
@@ -106,8 +116,21 @@ void CameraManager::Release() {
 	PtrUtil::SafeDelete(cameras);
 }
 
-Camera* CameraManager::CreateCamera() {
+Camera* CameraManager::CreateCamera(int charaindex, const User& user) {
 
+	if (cameras == nullptr)
+		return nullptr;
+
+	Camera* newCamera = new Camera();
+	newCamera->SetHolderCharaIndex(charaindex);
+	newCamera->SetUser(user);
+	newCamera->ChangeState(&Camera::ChaseState);
+	cameras->push_back(newCamera);
+	return newCamera;
+}
+
+Camera* CameraManager::CreateCamera()
+{
 	if (cameras == nullptr)
 		return nullptr;
 
@@ -249,6 +272,22 @@ Camera* CameraManager::GetCamera(int index) {
 		return nullptr;
 
 	return (*cameras)[index];
+}
+
+Camera* CameraManager::GetCamera(const User& user)
+{
+	if (cameras == nullptr)
+		return nullptr;
+
+	for (auto& camera : (*cameras))
+	{
+		if (camera->GetUser()->UUID == user.UUID)
+		{
+			return camera;
+		}
+	}
+
+	return nullptr;
 }
 
 std::vector<Camera*> CameraManager::AllCameras() {

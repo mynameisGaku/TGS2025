@@ -350,8 +350,8 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
                 auto c = addCharacter(user, teamColor, useSpawner->transform->Global(), false);
 
-                if (i - 1 > 0)
-                    CameraManager::CreateCamera(c->GetIndex());
+                if (user.UUID == net.UUID)
+                    CameraManager::CreateCamera(c->GetIndex(), user);
             }
         }
         else

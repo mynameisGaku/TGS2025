@@ -1,6 +1,8 @@
 #pragma once
 #include "src/common/camera/Camera.h"
 
+#include "src/common/network/user/User.h"
+
 using namespace CameraDefine;
 
 /// <summary>
@@ -20,7 +22,8 @@ namespace CameraManager {
 	/// カメラの生成を行う
 	/// </summary>
 	/// <returns>生成したカメラの実体</returns>
-	Camera* CreateCamera(int charaindex);
+	Camera* CreateCamera(int charaindex, const User& user);
+	Camera* CreateCamera();
 
 	/// <summary>
 	/// カメラの再初期化を行う
@@ -108,6 +111,13 @@ namespace CameraManager {
 	/// <param name="number">カメラの番号</param>
 	/// <returns>カメラのポインター</returns>
 	Camera* GetCamera(int number);
+
+	/// <summary>
+	/// カメラの情報を取得する
+	/// </summary>
+	/// <param name="user">ユーザーのインスタンス</param>
+	/// <returns>カメラのポインター</returns>
+	Camera* GetCamera(const User& user);
 
 	/// <summary>
 	/// 全てのカメラのリストを取得する

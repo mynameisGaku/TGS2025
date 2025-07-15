@@ -100,7 +100,7 @@ void PlayerController::Update() {
     // ƒLƒƒƒ‰ˆÚ“®‘€ìˆ—
     Camera* camera = nullptr;
     if (NetworkRef::Inst().IsNetworkEnable)
-        camera = CameraManager::GetCamera(0);
+        camera = CameraManager::GetCamera(chara->GetUser());
     else
         camera = CameraManager::GetCamera(chara->GetIndex());
     if (camera == nullptr)

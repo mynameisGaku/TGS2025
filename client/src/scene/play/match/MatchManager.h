@@ -81,8 +81,8 @@ private:
     float m_GameEndTime;
     bool m_IsFadeEnd;
 
-    void addCharacter(const std::string& team, const Transform& trs, bool isAI);
-    void addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI);
+    Chara* addCharacter(const std::string& team, const Transform& trs, bool isAI);
+    Chara* addCharacter(const User& user, const std::string& team, const Transform& trs, bool isAI);
 
     void registerChara(bool isAI, Chara* chara);
 

@@ -3,6 +3,5 @@
   "HostIP": "172.16.70.120",
   "IsHost": false,
   "IsNetworkEnable": true,
-  "Port": 5050,
-  "UUID": "3b9155a2-fade-4fbc-a13e-7753db268743"
+  "Port": 5050
 }

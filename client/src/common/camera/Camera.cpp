@@ -22,6 +22,7 @@
 #include "src/common/setting/window/WindowSetting.h"
 #include "src/scene/play/chara/Chara.h"
 #include "src/common/network/NetworkManager.h"
+#include "src/common/network/User/User.h"
 
 
 using namespace KeyDefine;
@@ -38,8 +39,8 @@ Camera::Camera() {
 	// m_Fsmの初期化
 	m_Fsm = new TinyFSM<Camera>(this);
 	m_Fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	//m_Fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	m_Fsm->ChangeState(&Camera::DebugState); // ステートを変更
+	m_Fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	m_Fsm->ChangeState(&Camera::ChaseState); // ステートを変更
 	
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
@@ -412,4 +413,9 @@ bool Camera::IsRightView(const Vector3& pos) const {
 		return true;
 
 	return false;
+}
+
+User* Camera::GetUser()
+{
+	return &m_User;
 }

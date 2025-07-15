@@ -12,6 +12,7 @@
 #include "src/common/component/collider/CollisionDefine.h"
 #include "src/common/component/shake/Shake.h"
 #include "src/util/math/Vector2.h"
+#include "src/common/network/user/User.h"
 
 class StateManager;
 class Chara;
@@ -88,6 +89,12 @@ public:
 	/// 保有者を設定する
 	/// </summary>
 	inline void SetHolderTrs(const Transform* trs) { m_pHolder = trs; }
+
+	/// <summary>
+	/// 保有者(ユーザー)を設定する
+	/// </summary>
+	/// <param name="user"></param>
+	inline void SetUser(const User& user) { m_User = user; }
 
 	/// <summary>
 	/// 描画を行うかどうかを設定する
@@ -197,6 +204,11 @@ public:
 	/// </summary>
 	bool IsRightView(const Vector3& pos) const;
 
+	/// <summary>
+	/// このカメラを所有しているユーザーを取得する
+	/// </summary>
+	User* GetUser();
+
 	//================================================================================
 	// ▼ステート
 
@@ -286,6 +298,7 @@ private:
 	std::vector<CameraDefine::PerformanceData> m_PerformanceDatas;	// 演出のデータ
 	const Transform* m_pHolder;	// カメラの保有者
 	int m_CharaIndex;			// キャラクターの番号
+	User m_User;				// このカメラを所有しているユーザー
 
 	float m_EasingTime;				// イージング用タイマー
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間

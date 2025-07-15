@@ -12,7 +12,7 @@ BootScene::BootScene(std::string name) : SceneBase(true, name)
 	
 	systemManager = common->Instantiate<SystemManager>();
 
-	LoadScreen* loadScreen = common->Instantiate<LoadScreen>();
+	loadScreen = common->Instantiate<LoadScreen>();
 	common->SetDrawOrder(loadScreen, 10000);
 
 	gameM = common->Instantiate<GameManager>();
@@ -29,7 +29,9 @@ void BootScene::Update()
 	systemManager->LoadUpdate();
 
 	if (systemManager->IsLoadEnd())
+	{
 		SceneManager::ChangeScene("TitleScene"); // ‹N“®‚ªI‚í‚Á‚½‚çTitle‚ğ•\¦
+	}
 }
 
 void BootScene::Draw()

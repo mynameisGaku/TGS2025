@@ -13,6 +13,7 @@
 #include "src/util/string/StringUtil.h"
 #include "src/util/input/InputManager.h"
 #include "src/common/setting/window/WindowSetting.h"
+#include <src/reference/network/NetworkRef.h>
 
 using namespace CameraDefine;
 
@@ -45,9 +46,11 @@ void CameraManager::Init() {
 	// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ
 	SetCameraNearFar(CAMERADEFINE_REF.m_Near, CAMERADEFINE_REF.m_Far);
 
-	Camera* mainCamera = CreateCamera();
-	Camera* camera2P = CreateCamera();
-	//Camera* camera3P = CreateCamera();
+	Camera* mainCamera = CreateCamera(0);
+	if (NetworkRef::Inst().IsNetworkEnable)
+	{
+		Camera* camera2p = CreateCamera(1);
+	}
 
 	m_CurrentDreaCameraIndex = 0;
 
@@ -106,13 +109,13 @@ void CameraManager::Release() {
 	PtrUtil::SafeDelete(cameras);
 }
 
-Camera* CameraManager::CreateCamera() {
+Camera* CameraManager::CreateCamera(int charaindex) {
 
 	if (cameras == nullptr)
 		return nullptr;
 
 	Camera* newCamera = new Camera();
-	newCamera->SetHolderCharaIndex((int)cameras->size());
+	newCamera->SetHolderCharaIndex(charaindex);
 	newCamera->ChangeState(&Camera::ChaseState);
 	cameras->push_back(newCamera);
 	return newCamera;

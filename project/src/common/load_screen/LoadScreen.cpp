@@ -21,7 +21,7 @@ LoadScreen::LoadScreen() {
 	loadText = LOADING_TEXT;
 
 	hBackground = -1;
-	isPushFadeOut = false;
+	canPushFadeOut = false;
 }
 
 LoadScreen::~LoadScreen() {
@@ -163,7 +163,7 @@ void LoadScreen::DrawLoadGauge() {
 void LoadScreen::DrawButtonTip() {
 
 	// ▼ロード終了時にボタンヒントを表示する
-	if (isPushFadeOut && rate >= 1.0f) {
+	if (canPushFadeOut && rate >= 1.0f) {
 		int width = GetDrawStringWidthToHandle(BUTTON_TIP.c_str(), static_cast<int>(BUTTON_TIP.length()), useFont.handle);
 		DrawFormatStringToHandle(static_cast<int>(WindowSetting::Inst().width) - width - 12, static_cast<int>(WindowSetting::Inst().height) - 32, TEXT_COLOR, useFont.handle, BUTTON_TIP.c_str());
 	}
@@ -194,8 +194,8 @@ void LoadScreen::SetBackGround(const std::string& filename, const ScrollType& sc
 
 bool LoadScreen::IsLoadEnd() const {
 
-	if (isPushFadeOut)
-		return (rate >= 1.0f && CheckHitKey(KEY_INPUT_Z) == 1);
+	if (canPushFadeOut)
+		return (rate >= 1.0f);
 
 	return (rate >= 1.0f);
 }

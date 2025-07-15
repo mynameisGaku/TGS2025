@@ -54,6 +54,7 @@ void Camera::ChaseState(FSMSignal sig)
         m_pFollowerChara = charaM->GetFromUUID(m_pNetworkManager->g_MyUUID);
 		if (m_pFollowerChara == nullptr)
 			return;
+		m_CharaIndex = m_pFollowerChara->GetIndex();
 
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 

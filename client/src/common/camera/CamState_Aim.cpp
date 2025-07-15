@@ -42,7 +42,8 @@ void Camera::AimState(FSMSignal sig)
 		CharaManager* charaM = FindGameObject<CharaManager>();
 		if (charaM == nullptr)
 			return;
-		
+
+		// ’Ç]‚·‚éƒLƒƒƒ‰
 		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// ’Ç]‚·‚éƒLƒƒƒ‰
 		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// ’‹‚·‚éƒLƒƒƒ‰
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {

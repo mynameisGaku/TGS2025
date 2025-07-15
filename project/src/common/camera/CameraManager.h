@@ -20,7 +20,7 @@ namespace CameraManager {
 	/// カメラの生成を行う
 	/// </summary>
 	/// <returns>生成したカメラの実体</returns>
-	Camera* CreateCamera();
+	Camera* CreateCamera(int charaindex);
 
 	/// <summary>
 	/// カメラの再初期化を行う

@@ -88,7 +88,10 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
             return;
         auto c = cm->GetFromUUID(json["UUID"].get<std::string>());
         if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", json["UUID"].get<std::string>().c_str());
             return;
+        }
         if (not c->transform)
             return;
         *c->transform = trs;
@@ -130,7 +133,10 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
             return;
         auto c = cm->GetFromUUID(uuid);
         if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
             return;
+        }
         if (not c->m_FSM)
             return;
         c->m_FSM->ChangeStateByName(state);
@@ -156,12 +162,41 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
             return;
         auto c = cm->GetFromUUID(uuid);
         if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
             return;
+        }
         if (not c->m_SubFSM)
             return;
         c->m_SubFSM->ChangeStateByName(state);
 
         Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %s. State: %s", uuid.c_str(), state.c_str());
+    }
+    else if (command == "SetCharaMoveFlag")
+    {
+        std::string str = json.dump();
+
+        // 送信主以外のクライアントに対しても、同じく変更を要求する
+        PacketHeader header{};
+        header.type = PACKET_JSON;
+        header.size = static_cast<int>(str.size()) + 1;
+        Broadcast(header, str.c_str(), sock);
+
+        // ホスト側にいる対象者のステートを変更する
+        std::string uuid = json.at("UUID").get<std::string>();
+        bool moveFlag = json.at("Flag").get<bool>();
+
+        CharaManager* cm = FindGameObject<CharaManager>();
+        if (not cm)
+            return;
+        auto c = cm->GetFromUUID(uuid);
+        if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
+            return;
+        }
+
+        c->SetIsMove(moveFlag);
     }
     else
     {

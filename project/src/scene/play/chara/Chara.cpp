@@ -761,7 +761,17 @@ void Chara::climb(Vector3& normal)
 
 void Chara::Move(const Vector3& dir)
 {
-	m_IsMove = dir.GetLengthSquared() > 0;
+	auto& net = NetworkRef::Inst();
+	if (not net.IsNetworkEnable)
+		m_IsMove = dir.GetLengthSquared() > 0;
+	else
+	{
+		if (net.UUID == m_User.UUID)
+		{
+			m_IsMove = dir.GetLengthSquared() > 0;
+			m_pNetManager->SendSetCharaMoveFlag(m_IsMove, m_User.UUID);
+		}
+	}
 
 	if (m_CanRot)
 	{
@@ -2875,12 +2885,15 @@ void Chara::playTinyFootStepSound(const nlohmann::json& argument)
 	SoundManager::Play(soundName, soundName);
 }
 
-void Chara::main_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
+void Chara::main_changeStateNetwork(void(Chara::* state)(FSMSignal sig))
 {
 	m_FSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-		sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	{
+		if (net.UUID == m_User.UUID)
+			sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	}
 }
 
 void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
@@ -2888,7 +2901,10 @@ void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 	m_SubFSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-		sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	{
+		if (net.UUID == m_User.UUID)
+			sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	}
 }
 
 void Chara::respawn_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
@@ -2896,6 +2912,7 @@ void Chara::respawn_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 	m_RespawnFSM->ChangeState(state);
 	//auto& net = NetworkRef::Inst();
 	//if (net.IsNetworkEnable)
+	//	if (net.UUID == m_User.UUID)
 }
 
 

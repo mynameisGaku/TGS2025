@@ -305,6 +305,23 @@ void NetworkManager::SendCharaChangeSubState(const std::string& state, const std
     SendJson(jsonStr);
 }
 
+void NetworkManager::SendSetCharaMoveFlag(bool flag, const std::string& uuid)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
+    // フラグセットコマンド作成
+    nlohmann::json json;
+    json["Command"] = "SetCharaMoveFlag";
+    json["NeedReply"] = false;
+    json["UUID"] = uuid;
+    json["Flag"] = flag;
+    // ダンプ
+    std::string jsonStr = json.dump();
+    // 送信
+    SendJson(jsonStr);
+}
+
 // --- 全クライアントにデータを送信する関数 ---
 void Broadcast(PacketHeader header, const void* data, SOCKET exclude)
 {

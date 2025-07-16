@@ -101,6 +101,12 @@ public:
     /// <param name="state">変更先のステート</param>
 	/// <param name="uuid">ターゲットの固有ID</param>
 	void SendCharaChangeSubState(const std::string& state, const std::string& uuid);
+	/// <summary>
+	/// キャラが動いているかどうかのフラグを送信
+	/// </summary>
+    /// <param name="flag">フラグの状態</param>
+    /// <param name="uuid">ターゲットの固有ID</param>
+	void SendSetCharaMoveFlag(bool flag, const std::string& uuid);
 
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット

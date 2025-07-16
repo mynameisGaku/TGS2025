@@ -167,11 +167,15 @@ public:
 	// ▼演出
 
 	void SetTrailImage(int hImage);
-    Vector2 Target(const Ball* ball);
+	Vector2 Target(const Ball* ball);
 
-    //=======================================================================================
-    // ▼ユーザー
-	void SetUser(const User& user) { m_User = user; }
+	//=======================================================================================
+	// ▼ユーザー
+	inline void SetUser(const User& user) { m_User = user; }
+
+	//=======================================================================================
+	// ▼移動フラグ
+	inline void SetIsMove(bool flag) { m_IsMove = flag; }
 
 	//=======================================================================================
 	// ▼ゲッター
@@ -333,7 +337,7 @@ private:
 	Vector3					m_ActionWallNormal;		// アクション開始時の壁の法線
 	int						m_hTrailImage;			// トレイルの画像ハンドル
 	int						m_Index;				// 自身のインデックス
-    float					m_HitPoint;				// ヒットポイント
+	float					m_HitPoint;				// ヒットポイント
 	float					m_BallChargeRate;		// ボールのチャージ加速度
 	float					m_MoveSpeed;			// 移動速度
 	float					m_RotSpeed;				// 回転速度
@@ -342,7 +346,7 @@ private:
 	float					m_SlideTimer;			// スライディング残り時間タイマー
 	float					m_CatchTimer;			// キャッチの残り時間タイマー
 	float					m_InvincibleTimer;		// 無敵残り時間
-    float					m_Stamina;				// スタミナ
+	float					m_Stamina;				// スタミナ
 	bool					m_IsCharging;			// ボールをチャージしているかどうか
 	bool					m_IsLanding;			// 着地中
 	bool					m_CanMove;				// 移動可能か
@@ -359,8 +363,8 @@ private:
 	bool					m_IsTackling;			// タックル中か
 	bool					m_IsInvincible;			// 無敵か
 	bool					m_IsDamage;				// ダメージ喰らい中か
-    bool					m_IsSliding = false;	// スライディング中か
-    bool					m_IsInhibitionSpeed;	// スピード抑制するか
+	bool					m_IsSliding = false;	// スライディング中か
+	bool					m_IsInhibitionSpeed;	// スピード抑制するか
 	bool					m_CanClimb;				// 壁登りできるか
 	bool					m_IsClimb;				// 壁登り中か
 	bool					m_IsWall;				// 近くに壁があるか

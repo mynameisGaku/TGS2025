@@ -101,6 +101,23 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
             return;
         c->m_SubFSM->ChangeStateByName(state);
     }
+    else if (command == "SetCharaMoveFlag")
+    {
+        std::string uuid = json.at("UUID").get<std::string>();
+        bool moveFlag = json.at("Flag").get<bool>();
+
+        CharaManager* cm = FindGameObject<CharaManager>();
+        if (not cm)
+            return;
+        auto c = cm->GetFromUUID(uuid);
+        if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
+            return;
+        }
+
+        c->SetIsMove(moveFlag);
+    }
     else
     {
         Logger::FormatDebugLog("[受信] JSON Command: %s", command.c_str());

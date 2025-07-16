@@ -350,6 +350,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
                 auto c = addCharacter(user, teamColor, useSpawner->transform->Global(), false);
 
+                // このクライアントで動作しているキャラ以外のカメラは生成しない。
                 if (user.UUID == net.UUID)
                     CameraManager::CreateCamera(c->GetIndex(), user);
             }

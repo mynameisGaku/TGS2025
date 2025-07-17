@@ -241,14 +241,14 @@ void Chara::Init(std::string tag)
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>>* frameAndTrailNames = new std::vector<std::pair<std::string, std::string>>
 	{
-		{ "mixamorig9:Hips", "HipsTrail" },
-		{ "mixamorig9:Spine2", "Spine1Trail" },
-		{ "mixamorig9:LeftShoulder", "LeftShoulderTrail" },
-		{ "mixamorig9:RightShoulder", "RightShoulderTrail" },
-		{ "mixamorig9:LeftLeg", "LeftLegTrail" },
-		{ "mixamorig9:LeftUpLeg", "LeftUpLegTrail" },
-		{ "mixamorig9:RightLeg", "RightLegTrail" },
-		{ "mixamorig9:RightUpLeg", "RightUpLegTrail"}
+		{ "mixamorig:Hips", "HipsTrail" },
+		{ "mixamorig:Spine2", "Spine1Trail" },
+		{ "mixamorig:LeftShoulder", "LeftShoulderTrail" },
+		{ "mixamorig:RightShoulder", "RightShoulderTrail" },
+		{ "mixamorig:LeftLeg", "LeftLegTrail" },
+		{ "mixamorig:LeftUpLeg", "LeftUpLegTrail" },
+		{ "mixamorig:RightLeg", "RightLegTrail" },
+		{ "mixamorig:RightUpLeg", "RightUpLegTrail"}
 	};
 	ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
 	MODEL_FRAME_TRAIL_RENDERER_DESC desc1;
@@ -306,7 +306,7 @@ void Chara::Init(std::string tag)
 	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
 	m_Animator = AddComponent<Animator>();
-	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
+	m_Animator->Init("mixamorig:Hips", 30.0f, 0.15f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
 	m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
@@ -413,7 +413,7 @@ void Chara::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHandThumb1"));
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand_end"));
 		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
 
 		m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
@@ -1162,7 +1162,7 @@ void Chara::StateActionIdleToRun(FSMSignal sig)
 		if (m_Animator->IsFinished())
 		{
 			main_changeStateNetwork(&Chara::StateRun); // ステートを変更
-			m_Animator->Play("Run");
+			//m_Animator->Play("Run");
 			//m_Animator->SetCurrentFrame(3.0f);
 		}
 	}
@@ -2102,7 +2102,7 @@ void Chara::SubStateNone(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->StopSub("mixamorig9:Spine");
+		m_Animator->StopSub("mixamorig:Spine");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2134,7 +2134,7 @@ void Chara::SubStateGetBall(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_Animator->PlaySub("mixamorig:Spine", "GetBall");
 		m_CanMove = false;
 		m_CanRot = false;
 		m_pPhysics->SetGravity(Vector3::Zero);
@@ -2143,7 +2143,7 @@ void Chara::SubStateGetBall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_Animator->IsFinishedSub("mixamorig9:Spine"))
+		if (m_Animator->IsFinishedSub("mixamorig:Spine"))
 		{
 			sub_changeStateNetwork(&Chara::SubStateHold); // ステートを変更
 		}
@@ -2170,7 +2170,7 @@ void Chara::SubStateHold(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "Hold");
+		m_Animator->PlaySub("mixamorig:Spine", "Hold");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2198,7 +2198,7 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "HoldToAim");
+		m_Animator->PlaySub("mixamorig:Spine", "HoldToAim");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2227,7 +2227,7 @@ void Chara::SubStateCatch(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "Catch");
+		m_Animator->PlaySub("mixamorig:Spine", "Catch");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新

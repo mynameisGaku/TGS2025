@@ -3,15 +3,15 @@
     "Events": [
         {
             "Name": "SetAnimationSpeed",
-            "Start": 0.0,
+            "Start": 18.0,
             "Argument": {
                 "Speed": 1.0
             }
         },
         {
             "Name": "MoveToPosition",
-            "Start": 14.0,
-            "End": 24.0,
+            "Start": 18.0,
+            "End": 28.0,
             "Argument": {
                 "Position": {
                     "X": 0,

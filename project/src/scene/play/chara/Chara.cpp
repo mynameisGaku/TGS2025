@@ -398,6 +398,9 @@ void Chara::Update() {
 			m_pNetManager->SendCharaTransform(transform->Global(), m_pNetManager->g_MyUUID);
 	}
 
+	// 時間が止まってたらアップデートしない
+	if (GTime.DeltaTime() <= 0.0f) return;
+
 	m_FSM->Update();
 	m_SubFSM->Update();
 	m_RespawnFSM->Update();

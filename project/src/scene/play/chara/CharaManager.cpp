@@ -135,7 +135,7 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	// —áŠOˆ—
 
 #ifdef USE_POOL
-	if (m_pPool->CheckActiveObjectByCount(m_pPool->GetCapacity()))
+	if (m_pPool->CheckActiveObjectByCapacity())
 	{
 		return nullptr;
 	}

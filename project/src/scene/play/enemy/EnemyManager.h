@@ -1,5 +1,7 @@
 #pragma once
 #include "framework/gameObject.h"
+#include "src/util/pool/Pool.h"
+#include "src/reference/network/NetworkRef.h"
 
 class Enemy;
 
@@ -19,5 +21,6 @@ public:
 private:
 	int m_Model;
 
-	std::list<Enemy*> m_Enemies;
+	Pool<Enemy>* m_Pool;
+	NetworkRef& m_NetRef;
 };

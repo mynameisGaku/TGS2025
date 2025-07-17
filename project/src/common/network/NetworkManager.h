@@ -126,6 +126,7 @@ public:
     /// <param name="chara">送信元のキャラ</param>
     /// <param name="uuid">ターゲットの固有ID</param>
 	void SendCharaAllFlag(Chara* chara, const std::string& uuid);
+	void SendBallTransform();
 
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット

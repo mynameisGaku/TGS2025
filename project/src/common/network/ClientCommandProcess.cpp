@@ -100,26 +100,26 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		if (not c->m_SubFSM)
 			return;
 		c->m_SubFSM->ChangeStateByName(state);
-    }
-    else if (command == "ChangeRespawnState")
-    {
-        // ホスト側にいる対象者のステートを変更する
-        std::string uuid = json.at("UUID").get<std::string>();
-        std::string state = json.at("State").get<std::string>();
+	}
+	else if (command == "ChangeRespawnState")
+	{
+		// ホスト側にいる対象者のステートを変更する
+		std::string uuid = json.at("UUID").get<std::string>();
+		std::string state = json.at("State").get<std::string>();
 
-        CharaManager* cm = FindGameObject<CharaManager>();
-        if (not cm)
-            return;
-        auto c = cm->GetFromUUID(uuid);
-        if (not c)
-        {
-            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
-            return;
-        }
-        if (not c->m_RespawnFSM)
-            return;
-        c->m_RespawnFSM->ChangeStateByName(state);
-    }
+		CharaManager* cm = FindGameObject<CharaManager>();
+		if (not cm)
+			return;
+		auto c = cm->GetFromUUID(uuid);
+		if (not c)
+		{
+			Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
+			return;
+		}
+		if (not c->m_RespawnFSM)
+			return;
+		c->m_RespawnFSM->ChangeStateByName(state);
+	}
 	else if (command == "SetCharaMoveFlag")
 	{
 		std::string uuid = json.at("UUID").get<std::string>();

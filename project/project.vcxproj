@@ -220,6 +220,7 @@
     <None Include="data\Json\Effect\Hit_Wall.json" />
     <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Effect\Template.json" />
+    <None Include="data\Json\Enemy\BatAnim.json" />
     <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Input\PhysicalKey.json" />
     <None Include="data\Json\Input\VirtualKey.json" />

@@ -79,6 +79,8 @@ Enemy* EnemyManager::Create()
 	enemy->SetModel(m_Model);
 	enemy->SetTransform(Transform(Vector3(), Vector3(), Vector3(5, 5, 5)));
 
+	enemy->Init();
+
 	m_Pool->SetObjectPointer(index, enemy);
 
 	return enemy;

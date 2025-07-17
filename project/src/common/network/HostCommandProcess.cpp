@@ -172,6 +172,35 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 
         Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %s. State: %s", uuid.c_str(), state.c_str());
     }
+    else if (command == "ChangeRespawnState")
+    {
+        std::string str = json.dump();
+
+        // 送信主以外のクライアントに対しても、同じく変更を要求する
+        PacketHeader header{};
+        header.type = PACKET_JSON;
+        header.size = static_cast<int>(str.size()) + 1;
+        Broadcast(header, str.c_str(), sock);
+
+        // ホスト側にいる対象者のステートを変更する
+        std::string uuid = json.at("UUID").get<std::string>();
+        std::string state = json.at("State").get<std::string>();
+
+        CharaManager* cm = FindGameObject<CharaManager>();
+        if (not cm)
+            return;
+        auto c = cm->GetFromUUID(uuid);
+        if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
+            return;
+        }
+        if (not c->m_RespawnFSM)
+            return;
+        c->m_RespawnFSM->ChangeStateByName(state);
+
+        Logger::FormatDebugLog("[受信] ステート変更要求. UUID: %s. State: %s", uuid.c_str(), state.c_str());
+    }
     else if (command == "SetCharaMoveFlag")
     {
         std::string str = json.dump();
@@ -197,6 +226,52 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
         }
 
         c->SetIsMove(moveFlag);
+    }
+    else if (command == "SetCharaAllFlag")
+    {
+        std::string str = json.dump();
+
+        // 送信主以外のクライアントに対しても、同じく変更を要求する
+        PacketHeader header{};
+        header.type = PACKET_JSON;
+        header.size = static_cast<int>(str.size()) + 1;
+        Broadcast(header, str.c_str(), sock);
+
+        // ホスト側にいる対象者のステートを変更する
+        std::string uuid = json.at("UUID").get<std::string>();
+        JSON flags = json["Flags"];
+
+        CharaManager* cm = FindGameObject<CharaManager>();
+        if (not cm)
+            return;
+        auto c = cm->GetFromUUID(uuid);
+        if (not c)
+        {
+            Logger::FormatDebugLog("[受信] 指定のUUIDが見つかりませんでした。. UUID: %s.", uuid.c_str());
+            return;
+        }
+
+        c->m_IsCharging          = flags["IsCharging"];
+        c->m_IsLanding           = flags["IsLanding"];
+        c->m_CanMove             = flags["CanMove"];
+        c->m_CanRot              = flags["CanRot"];
+        c->m_IsMove              = flags["IsMove"];
+        c->m_IsJumping           = flags["IsJumping"];
+        c->m_CanCatch            = flags["CanCatch"];
+        c->m_CanHold             = flags["CanHold"];
+        c->m_CanThrow            = flags["CanThrow"];
+        c->m_IsCatching          = flags["IsCatching"];
+        c->m_IsTargeting         = flags["IsTargeting"];
+        c->m_IsTargeted          = flags["IsTargeted"];
+        c->m_CanTackle           = flags["CanTackle"];
+        c->m_IsTackling          = flags["IsTackling"];
+        c->m_IsInvincible        = flags["IsInvincible"];
+        c->m_IsDamage            = flags["IsDamage"];
+        c->m_IsSliding           = flags["IsSliding"];
+        c->m_IsInhibitionSpeed   = flags["IsInhibitionSpeed"];
+        c->m_CanClimb            = flags["CanClimb"];
+        c->m_IsClimb             = flags["IsClimb"];
+        c->m_IsWall              = flags["IsWall"];
     }
     else
     {

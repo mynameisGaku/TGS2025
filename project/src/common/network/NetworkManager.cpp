@@ -305,6 +305,23 @@ void NetworkManager::SendCharaChangeSubState(const std::string& state, const std
     SendJson(jsonStr);
 }
 
+void NetworkManager::SendCharaChangeRespawnState(const std::string& state, const std::string& uuid)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
+    // ステート変更のコマンド作成
+    nlohmann::json json;
+    json["Command"] = "ChangeRespawnState";
+    json["NeedReply"] = false;
+    json["UUID"] = uuid;
+    json["State"] = state;
+    // ダンプ
+    std::string jsonStr = json.dump();
+    // 送信
+    SendJson(jsonStr);
+}
+
 void NetworkManager::SendSetCharaMoveFlag(bool flag, const std::string& uuid)
 {
     auto& net = NetworkRef::Inst();
@@ -316,6 +333,45 @@ void NetworkManager::SendSetCharaMoveFlag(bool flag, const std::string& uuid)
     json["NeedReply"] = false;
     json["UUID"] = uuid;
     json["Flag"] = flag;
+    // ダンプ
+    std::string jsonStr = json.dump();
+    // 送信
+    SendJson(jsonStr);
+}
+
+void NetworkManager::SendCharaAllFlag(Chara* chara, const std::string& uuid)
+{
+    auto& net = NetworkRef::Inst();
+    if (!net.IsNetworkEnable)
+        return;
+    // フラグセットコマンド作成
+    nlohmann::json json;
+    json["Command"] = "SetCharaAllFlag";
+    json["NeedReply"] = false;
+    json["UUID"] = uuid;
+
+	json["Flags"]["IsCharging"] = chara->m_IsCharging;
+    json["Flags"]["IsLanding"] = chara->m_IsLanding;
+    json["Flags"]["CanMove"] = chara->m_CanMove;
+    json["Flags"]["CanRot"] = chara->m_CanRot;
+    json["Flags"]["IsMove"] = chara->m_IsMove;
+    json["Flags"]["IsJumping"] = chara->m_IsJumping;
+    json["Flags"]["CanCatch"] = chara->m_CanCatch;
+    json["Flags"]["CanHold"] = chara->m_CanHold;
+    json["Flags"]["CanThrow"] = chara->m_CanThrow;
+    json["Flags"]["IsCatching"] = chara->m_IsCatching;
+    json["Flags"]["IsTargeting"] = chara->m_IsTargeting;
+    json["Flags"]["IsTargeted"] = chara->m_IsTargeted;
+    json["Flags"]["CanTackle"] = chara->m_CanTackle;
+    json["Flags"]["IsTackling"] = chara->m_IsTackling;
+    json["Flags"]["IsInvincible"] = chara->m_IsInvincible;
+    json["Flags"]["IsDamage"] = chara->m_IsDamage;
+	json["Flags"]["IsSliding"] = chara->m_IsSliding;
+	json["Flags"]["IsInhibitionSpeed"] = chara->m_IsInhibitionSpeed;
+    json["Flags"]["CanClimb"] = chara->m_CanClimb;
+    json["Flags"]["IsClimb"] = chara->m_IsClimb;
+    json["Flags"]["IsWall"] = chara->m_IsWall;
+
     // ダンプ
     std::string jsonStr = json.dump();
     // 送信

@@ -52,7 +52,9 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	Instantiate<CollisionManager>();
 
-	Instantiate<UI_Setter_PlayScene>();
+	// オフラインプレイのときはいいけど、オンラインのときにカメラ生成がキャラと同時に行われるので
+	// ここでの生成はオンラインのときは無意味。あとで直す
+    Instantiate<UI_Setter_PlayScene>();
 	Instantiate<MatchManager>();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();

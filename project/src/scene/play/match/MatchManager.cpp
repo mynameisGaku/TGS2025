@@ -39,6 +39,7 @@
 #include "src/util/fader/Fader.h"
 #include <src/reference/network/NetworkRef.h>
 #include <src/common/network/NetworkManager.h>
+#include <src/scene/play/ui/UI_Setter_PlayScene.h>
 
 //-----------------------------------------
 //  CurrentGameData

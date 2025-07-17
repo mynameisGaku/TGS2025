@@ -317,19 +317,19 @@ private:
 	Tackler*				m_Tackler;				// タックルの当たり判定
 	EffectBase*				m_pCatchReadyEffect;	// キャッチの準備エフェクト
 	EffectBase*				m_pCatchDustEffect;		// キャッチの粉エフェクト
-	TinyFSM<Chara>*		m_FSM;					// ステートマシン
-	TinyFSM<Chara>*		m_SubFSM;				// ステートマシン
-	TinyFSM<Chara>*		m_RespawnFSM;			// ステートマシン
+	TinyFSM<Chara>*			m_FSM;					// ステートマシン
+	TinyFSM<Chara>*			m_SubFSM;				// ステートマシン
+	TinyFSM<Chara>*			m_RespawnFSM;			// ステートマシン
 	Animator*				m_Animator;				// アニメーション
 	Transform*				m_EffectTransform;		// エフェクト出すトランスフォーム
-	Timeline<Chara>*	m_Timeline;				// アニメーションに合わせて動くタイムライン
+	Timeline<Chara>*		m_Timeline;				// アニメーションに合わせて動くタイムライン
 	StatusTracker*			m_pStatusTracker;		// ステータスの統計
 	Alarm*					m_Alarm;				// アラーム
 	Alarm*					m_TackleIntervalAlarm;	// タックル後の間隔アラーム
 	Vector3					m_lastUpdatePosition;	// 前回更新時の最終位置
 	CharaSpawnPointManager* m_SpawnPointManager;	// リスポーン地点
-	NetworkManager* m_pNetManager;			// ネットワーク関連
-	User			m_User;					// ネットワークユーザー情報
+	NetworkManager*			m_pNetManager;			// ネットワーク関連
+	User					m_User;					// ネットワークユーザー情報
 	Vector3					m_WallPosition;			// アクションできる壁の位置
 	Vector3					m_WallNormal;			// アクションできる壁の法線
 	Vector3					m_ActionPosition;		// アクション開始地点
@@ -436,4 +436,5 @@ private:
 	void respawn_changeStateNetwork(void(Chara::* state)(FSMSignal));
 	void sendChangeStateToNetwork(const std::string& state);
 	void sendChangeSubStateToNetwork(const std::string& state);
+	void sendChangeRespawnStateToNetwork(const std::string& state);
 };

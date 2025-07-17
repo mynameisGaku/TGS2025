@@ -31,12 +31,15 @@ void Chara::RespawnStateFadeOut(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		transform->scale = Vector3(0.5f);
-		m_pUI_Fade->StartFadeOut();
+		if (m_pUI_Fade)
+			m_pUI_Fade->StartFadeOut();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_pUI_Fade->IsFadeEnd())
+		if (not m_pUI_Fade)
+			m_RespawnFSM->ChangeState(&Chara::RespawnStateFadeIn);
+		else if (m_pUI_Fade->IsFadeEnd())
 		{
 			m_RespawnFSM->ChangeState(&Chara::RespawnStateFadeIn);
 		}
@@ -68,12 +71,16 @@ void Chara::RespawnStateFadeIn(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		transform->scale = Vector3(1.0f);
-		m_pUI_Fade->StartFadeIn();
+
+		if (m_pUI_Fade)
+			m_pUI_Fade->StartFadeIn();
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_pUI_Fade->IsFadeEnd())
+		if (not m_pUI_Fade)
+			m_RespawnFSM->ChangeState(&Chara::RespawnStateNone);
+		else if (m_pUI_Fade->IsFadeEnd())
 		{
 			m_RespawnFSM->ChangeState(&Chara::RespawnStateNone);
 		}

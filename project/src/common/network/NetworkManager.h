@@ -7,6 +7,10 @@
 #include <string>
 #include <src/common/network/user/User.h>
 #include <src/scene/play/chara/Chara.h>
+#include <src/common/stage/SpawnerObjectQueue.h>
+#include <src/common/stage/StageObjectManager.h>
+#include <src/scene/play/ball/BallManager.h>
+#include <src/scene/play/spawner/SpawnerDescs.h>
 
 // パケットの種類を表す識別子
 enum PacketType
@@ -126,8 +130,12 @@ public:
     /// <param name="chara">送信元のキャラ</param>
     /// <param name="uuid">ターゲットの固有ID</param>
 	void SendCharaAllFlag(Chara* chara, const std::string& uuid);
-	void SendBallTransform();
-
+	/// <summary>
+	/// ボールスポナー生成命令を送信
+	/// </summary>
+	/// <param name="desc">生成するボールスポナーの記述</param>
+	/// <param name="id">ボールスポナーのid</param>
+	void SendCreateBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id);
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット
 	static std::vector<ClientInfo*> g_Clients;			// サーバーに接続中のクライアント一覧

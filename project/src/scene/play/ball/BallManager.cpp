@@ -131,7 +131,6 @@ void BallManager::Draw()
 
 Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 {
-
 	auto& ref = BALL_REF;
 	// 各種リファレンスを元に初期化
 

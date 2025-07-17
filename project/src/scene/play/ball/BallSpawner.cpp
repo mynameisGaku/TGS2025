@@ -18,9 +18,10 @@ BallSpawner::~BallSpawner()
 {
 }
 
-void BallSpawner::Init(const BALL_SPAWNER_DESC& desc)
+void BallSpawner::Init(const BALL_SPAWNER_DESC& desc, const std::string& id)
 {
 	m_Desc = desc;
+	m_ID = id;
 }
 
 void BallSpawner::Start()
@@ -112,13 +113,14 @@ void BallSpawner::Spawn(int spawnAmount)
 	}
 }
 
-void AddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc)
+BallSpawner* AddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id)
 {
 	BallSpawner* spawner = Instantiate<BallSpawner>();
-	spawner->Init(desc);
+	spawner->Init(desc, id);
 	spawner->SetModel(hModel);
 	spawner->SetTransform(trs);
 	spawner->Activate();
+	return spawner;
 }
 
 //void BallSpawnerPlaceByJson(const std::string& filepath, const std::string& filekey)

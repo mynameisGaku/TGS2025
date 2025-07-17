@@ -40,6 +40,9 @@
 #include <src/reference/network/NetworkRef.h>
 #include <src/common/network/NetworkManager.h>
 #include <src/scene/play/ui/UI_Setter_PlayScene.h>
+#include <src/common/stage/StageObjectManager.h>
+#include <src/common/stage/SpawnerObjectQueue.h>
+#include <src/scene/play/ball/BallSpawner.h>
 
 //-----------------------------------------
 //  CurrentGameData
@@ -331,29 +334,46 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
         auto spawner1 = spawnerManager->Get_Near(Vector3(500, 0, 500));
         auto spawner2 = spawnerManager->Get_Near(Vector3(-500, 0, -500));
 
-        // Networkが有効なら、NetworkManagerに登録されているg_Usersを元にキャラを生成する
+
+        // Networkが有効なら
         auto& net = NetworkRef::Inst();
         if (net.IsNetworkEnable)
         {
             NetworkManager* netManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
-            UINT i = 0;
-            for (auto& user : netManager->g_Users)
+
+            // ホストなら
+            if (net.IsHost)
             {
-                i++;
-
-                std::string teamColor = "Red";
-                CharaSpawnPoint* useSpawner = spawner1;
-                if (i % 2 == 0)
+                // スポナー生成する
+                auto queue = StageObjectManager::GetBallSpawnerQueue();
+                for (auto& bsdesc : queue->Get())
                 {
-                    teamColor = "Blue";
-                    useSpawner = spawner2;
+                    netManager->SendCreateBallSpawner(bsdesc.modelHandle, bsdesc.transform, bsdesc.desc, bsdesc.id);
+                    AddBallSpawner(bsdesc.modelHandle, bsdesc.transform, bsdesc.desc, bsdesc.id);
                 }
+            }
 
-                auto c = addCharacter(user, teamColor, useSpawner->transform->Global(), false);
+            // NetworkManagerに登録されているg_Usersを元にキャラを生成する
+            {
+                UINT i = 0;
+                for (auto& user : netManager->g_Users)
+                {
+                    i++;
 
-                // このクライアントで動作しているキャラ以外のカメラは生成しない。
-                if (user.UUID == net.UUID)
-                    CameraManager::CreateCamera(c->GetIndex(), user);
+                    std::string teamColor = "Red";
+                    CharaSpawnPoint* useSpawner = spawner1;
+                    if (i % 2 == 0)
+                    {
+                        teamColor = "Blue";
+                        useSpawner = spawner2;
+                    }
+
+                    auto c = addCharacter(user, teamColor, useSpawner->transform->Global(), false);
+
+                    // このクライアントで動作しているキャラ以外のカメラは生成しない。
+                    if (user.UUID == net.UUID)
+                        CameraManager::CreateCamera(c->GetIndex(), user);
+                }
             }
         }
         else
@@ -377,23 +397,23 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
         m_UI_GameScore = new UI_GameScore(RectTransform(Anchor::Preset::MiddleUp));
         m_UI_GameScore->SetMatchManager(this);
-		m_UI_GameScore->SetAchievedScore(m_GameData.m_WinPointMax);
+        m_UI_GameScore->SetAchievedScore(m_GameData.m_WinPointMax);
 
         for (const auto& team : m_pTeamManager->GetTeams())
         {
             for (int id : team->GetCharaIDs())
             {
-				const std::string teamName = team->GetTeamName();
-                
+                const std::string teamName = team->GetTeamName();
+
                 const Chara* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
                 if (chara == nullptr)
                     continue;  // キャラが存在しない場合はスキップ
                 if (chara->GetStatusTracker() == nullptr)
-					continue;  // ステータストラッカーが存在しない場合はスキップ
+                    continue;  // ステータストラッカーが存在しない場合はスキップ
 
-				int killCount = chara->GetStatusTracker()->Get_KillCount();
+                int killCount = chara->GetStatusTracker()->Get_KillCount();
 
-               m_UI_GameScore->AddUserScore(teamName, id, killCount, ColorUtil::ColorFromString(teamName));
+                m_UI_GameScore->AddUserScore(teamName, id, killCount, ColorUtil::ColorFromString(teamName));
             }
         }
     }

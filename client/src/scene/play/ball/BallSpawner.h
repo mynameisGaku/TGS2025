@@ -12,7 +12,7 @@ public:
     BallSpawner();
     ~BallSpawner();
 
-    void Init(const BALL_SPAWNER_DESC& desc);
+    void Init(const BALL_SPAWNER_DESC& desc, const std::string& id = "NULL");
     void Start() override;
     void Update() override;
     void Draw() override;
@@ -38,7 +38,8 @@ private:
     BALL_SPAWNER_DESC   m_Desc;             // スポナーの設定
     float               m_SpawnIntervalSec; // 生成までの時間を計測する用タイマー
     bool                m_IsActive;         // Spawnerが有効かどうか
+    std::string         m_ID;
 };
 
-void AddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc);
+BallSpawner* AddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id = "NULL");
 //void BallSpawnerPlaceByJson(const std::string& filepath, const std::string& filekey = "");

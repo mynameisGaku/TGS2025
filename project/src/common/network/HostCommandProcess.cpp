@@ -13,6 +13,7 @@
 #include <src/util/file/json/VectorJson.h>
 #include <src/common/load_screen/LoadScreen.h>
 #include <src/reference/network/NetworkRef.h>
+#include <src/scene/play/ball/BallSpawner.h>
 
 using JSON = nlohmann::json;
 

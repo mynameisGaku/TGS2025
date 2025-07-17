@@ -333,6 +333,7 @@
     <ClCompile Include="src\common\setting\SettingManager.cpp" />
     <ClCompile Include="src\common\setting\volume\VolumeSetting.cpp" />
     <ClCompile Include="src\common\setting\window\WindowSetting.cpp" />
+    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp" />
     <ClCompile Include="src\common\stage\Stage.cpp" />
     <ClCompile Include="src\common\stage\StageObject.cpp" />
     <ClCompile Include="src\common\stage\StageObjectManager.cpp" />
@@ -522,6 +523,7 @@
     <ClInclude Include="src\common\setting\SettingManager.h" />
     <ClInclude Include="src\common\setting\volume\VolumeSetting.h" />
     <ClInclude Include="src\common\setting\window\WindowSetting.h" />
+    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h" />
     <ClInclude Include="src\common\stage\Stage.h" />
     <ClInclude Include="src\common\stage\StageDefine.h" />
     <ClInclude Include="src\common\stage\StageObject.h" />

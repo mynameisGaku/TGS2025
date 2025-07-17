@@ -13,6 +13,7 @@
 #include <src/util/editbox/editbox.hpp>
 #include <src/scene/play/chara/CharaManager.h>
 #include <src/util/transform/Transform.h>
+#include <src/util/file/json/VectorJson.h>
 
 // --- 静的メンバの初期化 ---
 SOCKET NetworkManager::g_ListenSock = INVALID_SOCKET;
@@ -371,6 +372,37 @@ void NetworkManager::SendCharaAllFlag(Chara* chara, const std::string& uuid)
 	json["Flags"]["CanClimb"] = chara->m_CanClimb;
 	json["Flags"]["IsClimb"] = chara->m_IsClimb;
 	json["Flags"]["IsWall"] = chara->m_IsWall;
+
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendCreateBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// ボールスポナー生成コマンド作成
+	nlohmann::json json;
+	json["Command"] = "CreateBallSpawner";
+	json["NeedReply"] = false;
+	json["ID"] = id;
+
+	json["Desc"]["INTERVAL_SEC"]					= desc.INTERVAL_SEC;
+	json["Desc"]["INTERVAL_SEC_RANDOM_RANGE"]		= desc.INTERVAL_SEC_RANDOM_RANGE;
+	json["Desc"]["SPAWN_AMOUNT_ONCE_MAX"]			= desc.SPAWN_AMOUNT_ONCE_MAX;
+	json["Desc"]["SPAWN_AMOUNT_ONCE_MIN"]			= desc.SPAWN_AMOUNT_ONCE_MIN;
+	json["Desc"]["SPAWN_AMOUNT_ONCE_RANDOM_RANGE"]	= desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE;;
+	json["Desc"]["SPAWN_AMOUNT_INITIAL"]			= desc.SPAWN_AMOUNT_INITIAL;
+	to_json(json["Desc"]["SPAWN_RANGE"], desc.SPAWN_RANGE);
+	to_json(json["Desc"]["SPAWN_INITIAL_VELOCITY"], desc.SPAWN_INITIAL_VELOCITY);
+
+	json["Model"] = hModel;
+	to_json(json["Position"], trs.position);
+	to_json(json["Rotation"], trs.rotation);
+	to_json(json["Scale"], trs.scale);
 
 	// ダンプ
 	std::string jsonStr = json.dump();

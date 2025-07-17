@@ -424,12 +424,12 @@ void Chara::Update() {
 		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
 	}
 
-	static const float MOVE_ACCEL = 0.03f;
+	static const float MOVE_ACCEL = 1.8f;
 
 	// ˆÚ“®‘¬“x”{—¦‚ÌXV
 	if (m_IsMove)
 	{
-		m_SpeedScale += MOVE_ACCEL;
+		m_SpeedScale += MOVE_ACCEL * GTime.DeltaTime();
 		if (m_SpeedScale > 1.0f)
 		{
 			m_SpeedScale = 1.0f;
@@ -780,8 +780,8 @@ void Chara::Move(const Vector3& dir)
 
 	if (m_IsJumping && not m_IsInhibitionSpeed)
 	{
-		Vector3 currentVelocity = m_pPhysics->velocity;
-		float speed = Vector3(currentVelocity.x, 0.0f, currentVelocity.z).GetLength();
+		Vector3 currentVelocity = m_pPhysics->FlatVelocity();
+		float speed = currentVelocity.GetLength();
 
 		Vector3 newVelocity = normDir * speed;
 
@@ -791,8 +791,7 @@ void Chara::Move(const Vector3& dir)
 	}
 	else
 	{
-		const float deltaTimeMoveSpeed = m_MoveSpeed * m_SpeedScale * GTime.deltaTime;
-		Vector3 velocity = normDir * deltaTimeMoveSpeed * Vector3::Horizontal;
+		Vector3 velocity = normDir * m_MoveSpeed * m_SpeedScale * Vector3::Horizontal;
 
 		m_pPhysics->velocity.x = velocity.x;
 		m_pPhysics->velocity.z = velocity.z;

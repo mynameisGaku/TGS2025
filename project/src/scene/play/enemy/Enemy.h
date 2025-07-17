@@ -6,5 +6,10 @@
 /// </summary>
 class Enemy : public Object3D
 {
-
+public:
+	Enemy();
+	~Enemy();
+	void Update() override;
+	void Draw() override;
+private:
 };

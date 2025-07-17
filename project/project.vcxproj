@@ -366,6 +366,8 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragment.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentManager.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
+    <ClCompile Include="src\scene\play\enemy\Enemy.cpp" />
+    <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp" />
     <ClCompile Include="src\scene\play\force_field\ConstantPointForce.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldBase.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldCorn.cpp" />
@@ -558,6 +560,7 @@
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentManager.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h" />
     <ClInclude Include="src\scene\play\enemy\Enemy.h" />
+    <ClInclude Include="src\scene\play\enemy\EnemyManager.h" />
     <ClInclude Include="src\scene\play\force_field\ConstantPointForce.h" />
     <ClInclude Include="src\scene\play\force_field\ForceBase.h" />
     <ClInclude Include="src\scene\play\force_field\ForceFieldBase.h" />

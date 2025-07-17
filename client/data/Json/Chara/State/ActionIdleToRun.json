@@ -1,0 +1,17 @@
+{
+  "Animation": "ActionIdleToRun",
+  "Events": [
+    {
+      "Name": "PlayFootSound",
+      "Start": 10.0,
+      "Argument": {
+      }
+    },
+    {
+      "Name": "PlayFootSound",
+      "Start": 20.0,
+      "Argument": {
+      }
+    }
+  ]
+}

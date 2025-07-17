@@ -1,0 +1,40 @@
+{
+    "Gravity": {
+        "X": 0.0,
+        "Y": -0.75,
+        "Z": 0.0
+    },
+    "Friction": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+    },
+    "Bounciness": 0.35,
+
+    "ChargeLevels": [
+        {
+            "ChargeLevel": 0,
+            "Speed": 3000.0,
+            "EffectScale": 1.0,
+            "EffectSpeed": 1.0
+        },
+        {
+            "ChargeLevel": 1,
+            "Speed": 4500.0,
+            "EffectScale": 1.2,
+            "EffectSpeed": 1.2
+        },
+        {
+            "ChargeLevel": 2,
+            "Speed": 6000.0,
+            "EffectScale": 1.4,
+            "EffectSpeed": 1.4
+        }
+    ],
+
+    "DropForce_Vertical": 20.0,
+    "DropForce_Horizontal": 5.0,
+
+    "LifeTimeMax": 15.0,
+    "PoolMax": 50
+}

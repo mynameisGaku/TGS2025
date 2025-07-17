@@ -21,6 +21,11 @@ int GameTime::m_FrameCount = 0;
 int GameTime::m_HitStop = 0;
 bool GameTime::m_InFixedTimeStep = false;
 
+float GameTime::m_NextStepDeltaTime = 0.0f;
+bool GameTime::m_UseNextStepDeltaTime = false;
+float GameTime::m_NextStepTimeScale = 0.0f;
+bool GameTime::m_UseNextStepTimeScale = false;
+
 static std::deque<float> deltaHistory;
 
 void GameTime::initialize()
@@ -39,12 +44,34 @@ void GameTime::Update()
     if (!m_Initialized)
         initialize();
 
+    std::chrono::duration<float> delta;
     auto currentTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<float> delta = currentTime - m_LastTime;
+
+    if (m_UseNextStepDeltaTime)
+    {
+        delta = std::chrono::duration<float>(m_NextStepDeltaTime);
+        m_UseNextStepDeltaTime = false;
+    }
+    else
+    {
+        delta = currentTime - m_LastTime;
+    }
+
+    float scale;
+
+    if (m_UseNextStepTimeScale)
+    {
+        scale = m_NextStepTimeScale;
+        m_UseNextStepTimeScale = false;
+    }
+    else
+    {
+        scale = timeScale;
+    }
 
     // deltaTimeêßå¿Åiç≈ëÂílï‚ê≥Åj
     m_UnscaledDeltaTime = std::min(delta.count(), m_MaximumDeltaTime);
-    m_DeltaTime = m_UnscaledDeltaTime * timeScale;
+    m_DeltaTime = m_UnscaledDeltaTime * scale;
     deltaTime = m_DeltaTime;
     m_LastTime = currentTime;
     m_FrameCount++;
@@ -113,6 +140,18 @@ void GameTime::SetTimeScale(float scale) { timeScale = scale; }
 float GameTime::GetTimeScale() { return timeScale; }
 void GameTime::SetFixedDeltaTime(float fixed) { m_FixedDeltaTime = fixed; }
 void GameTime::SetMaximumDeltaTime(float max) { m_MaximumDeltaTime = max; }
+
+void GameTime::SetNextStepDeltaTime(float delta)
+{
+    m_NextStepDeltaTime = delta;
+    m_UseNextStepDeltaTime = true;
+}
+
+void GameTime::SetNextStepTimeScale(float scale)
+{
+    m_NextStepTimeScale = scale;
+    m_UseNextStepTimeScale = true;
+}
 
 void GameTime::SetHitStop(int frame)
 {

@@ -1,0 +1,22 @@
+{
+  "Param": {
+    "Max": 6,
+    "Tags": [
+      "Red",
+      "Blue"
+    ],
+    "CatchRadius": 250.0,
+    "EmoteInterval": 2.0,
+    "MoveSpeed": 700.0,
+    "RotSpeed": 15.0,
+    "JumpPower": 22.0,
+    "TackleRadius": 150.0,
+    "TackleInterval": 2.5,
+    "TackleRecovery": 0.15,
+    "TackleForce_Horizontal": 15.0,
+    "TackleForce_Vertical": 35.0,
+    "TackleInvincibleDurationSec": 5.0,
+    "GetTackleInvincibleTime": 1.5,
+    "ClimbPower": 25.0
+  }
+}

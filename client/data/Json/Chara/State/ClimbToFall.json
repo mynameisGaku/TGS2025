@@ -1,0 +1,13 @@
+{
+    "Animation": "ClimbToFall",
+    "Events": [
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "End": 0.0,
+            "Argument": {
+                "Speed": 5.0
+            }
+        }
+    ]
+}

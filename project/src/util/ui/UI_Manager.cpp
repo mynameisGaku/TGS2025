@@ -3,6 +3,7 @@
 // ž”Ä—p
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/screen/ScreenManager.h"
+#include "src/util/debug/imgui/imGuiManager.h"
 
 namespace {
 
@@ -43,6 +44,10 @@ void UI_Manager::Update() {
 				itr->Update();
 		}
 	}
+
+#ifdef IMGUI
+	ImGuiManager::AddNode(new ImGuiNode_CheckBox("DrawUI", &isDraw));
+#endif
 }
 
 void UI_Manager::DrawBack() {

@@ -236,7 +236,8 @@
     <None Include="data\Model\Stage\Cube_col.mv1" />
     <None Include="data\Model\Stage\Ground_000.mv1" />
     <None Include="data\Model\Stage\Sky_000.mv1" />
-    <None Include="imgui.ini" />
+    <None Include="network.json" />
+    <None Include="src\util\editbox\resource.aps" />
     <None Include="window.ini" />
   </ItemGroup>
   <ItemGroup>
@@ -324,6 +325,9 @@
     <ClCompile Include="src\common\light\Light.cpp" />
     <ClCompile Include="src\common\light\LightManager.cpp" />
     <ClCompile Include="src\common\load_screen\LoadScreen.cpp" />
+    <ClCompile Include="src\common\network\ClientCommandProcess.cpp" />
+    <ClCompile Include="src\common\network\HostCommandProcess.cpp" />
+    <ClCompile Include="src\common\network\NetworkManager.cpp" />
     <ClCompile Include="src\common\setting\sensi\SensiSetting.cpp" />
     <ClCompile Include="src\common\setting\SettingBase.cpp" />
     <ClCompile Include="src\common\setting\SettingManager.cpp" />
@@ -344,6 +348,7 @@
     <ClCompile Include="src\reference\crystal\CrystalFragmentSpawnerRef.cpp" />
     <ClCompile Include="src\reference\game\GameRef.cpp" />
     <ClCompile Include="src\reference\input\InputRef.cpp" />
+    <ClCompile Include="src\reference\network\NetworkRef.cpp" />
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
@@ -351,7 +356,7 @@
     <ClCompile Include="src\scene\play\ball\BallManager.cpp" />
     <ClCompile Include="src\scene\play\ball\BallSpawner.cpp" />
     <ClCompile Include="src\scene\play\catcher\Catcher.cpp" />
-    <ClCompile Include="src\scene\play\chara\CharaBase.cpp" />
+    <ClCompile Include="src\scene\play\chara\Chara.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaManager.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaRespawnState.cpp" />
@@ -466,6 +471,7 @@
     <ClCompile Include="vendor\ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_tables.cpp" />
     <ClCompile Include="vendor\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\uuid4\uuid4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h" />
@@ -509,6 +515,8 @@
     <ClInclude Include="src\common\light\LightDefine.h" />
     <ClInclude Include="src\common\light\LightManager.h" />
     <ClInclude Include="src\common\load_screen\LoadScreen.h" />
+    <ClInclude Include="src\common\network\NetworkManager.h" />
+    <ClInclude Include="src\common\network\user\User.h" />
     <ClInclude Include="src\common\setting\sensi\SensiSetting.h" />
     <ClInclude Include="src\common\setting\SettingBase.h" />
     <ClInclude Include="src\common\setting\SettingManager.h" />
@@ -532,6 +540,7 @@
     <ClInclude Include="src\reference\crystal\CrystalFragmentSpawnerRef.h" />
     <ClInclude Include="src\reference\game\GameRef.h" />
     <ClInclude Include="src\reference\input\InputRef.h" />
+    <ClInclude Include="src\reference\network\NetworkRef.h" />
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ball\Ball.h" />
@@ -539,7 +548,7 @@
     <ClInclude Include="src\scene\play\ball\BallManager.h" />
     <ClInclude Include="src\scene\play\ball\BallSpawner.h" />
     <ClInclude Include="src\scene\play\catcher\Catcher.h" />
-    <ClInclude Include="src\scene\play\chara\CharaBase.h" />
+    <ClInclude Include="src\scene\play\chara\Chara.h" />
     <ClInclude Include="src\scene\play\chara\CharaHP.h" />
     <ClInclude Include="src\scene\play\chara\CharaManager.h" />
     <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h" />
@@ -601,6 +610,8 @@
     <ClInclude Include="src\util\debug\imgui\imGuiRoot.h" />
     <ClInclude Include="src\util\easing\easing.h" />
     <ClInclude Include="src\util\easing\EasingUtils.h" />
+    <ClInclude Include="src\util\editbox\editbox.hpp" />
+    <ClInclude Include="src\util\editbox\resource.h" />
     <ClInclude Include="src\util\enum\EnumUtil.h" />
     <ClInclude Include="src\util\exception\Exception.h" />
     <ClInclude Include="src\util\fader\Fader.h" />
@@ -727,8 +738,17 @@
     <ClInclude Include="vendor\nlohmann\ordered_map.hpp" />
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="vendor\uuid4\uuid4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\util\editbox\resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

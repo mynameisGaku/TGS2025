@@ -11,7 +11,7 @@ namespace
 EnemyManager::EnemyManager() : 
 	m_NetRef(NetworkRef::Inst())
 {
-	m_Model = ResourceLoader::MV1LoadModel("data/Model/Ball/Ball.mv1");
+	m_Model = ResourceLoader::MV1LoadModel("data/Model/Enemy/Bat/Bat.mv1");
 
 	m_Pool = new Pool<Enemy>(COUNT_MAX);
 }
@@ -77,7 +77,7 @@ Enemy* EnemyManager::Create()
 	Enemy* enemy = m_Pool->Alloc();
 
 	enemy->SetModel(m_Model);
-	enemy->SetTransform(Transform(Vector3(), Vector3(), Vector3(1, 10, 1)));
+	enemy->SetTransform(Transform(Vector3(), Vector3(), Vector3(5, 5, 5)));
 
 	m_Pool->SetObjectPointer(index, enemy);
 

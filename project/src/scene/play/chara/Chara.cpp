@@ -767,7 +767,7 @@ void Chara::Move(const Vector3& dir)
 	{
 		float currentRot = transform->rotation.y;
 		float terminusRot = atan2f(dir.x, dir.z);
-		transform->rotation.y = MathUtil::RotAngle(currentRot, terminusRot, m_RotSpeed);
+		transform->rotation.y = MathUtil::RotAngle(currentRot, terminusRot, m_RotSpeed * GTime.DeltaTime());
 	}
 
 	if (!m_CanMove)

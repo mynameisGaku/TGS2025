@@ -33,6 +33,7 @@
 #include "src/scene/play/force_field/ConstantPointForce.h"
 
 #include "src/scene/play/ui/UI_Setter_PlayScene.h"
+#include "src/util/debug/imgui/imGuiManager.h"
 #include <src/reference/network/NetworkRef.h>
 
 using namespace KeyDefine;
@@ -42,8 +43,21 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	CameraManager::SetIsScreenDivision(true);
 
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
+
 	for (int i = 0; i < CAMERA_NUM; i++)
 		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
+
+
+	ImGuiManager::AddNode(new ImGuiNode_Button("DebugCamera",
+		[CAMERA_NUM]() {
+			for (int i = 0; i < CAMERA_NUM; i++)
+				CameraManager::GetCamera(i)->ChangeState(&Camera::DebugState);
+		}));
+	ImGuiManager::AddNode(new ImGuiNode_Button("ChaseCamera",
+		[CAMERA_NUM]() {
+			for (int i = 0; i < CAMERA_NUM; i++)
+				CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
+		}));
 
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
 	gameM->SetGameModeName("FreeForAll");

@@ -67,8 +67,10 @@ void SystemManager::Start() {
 		loadScreen->FadeIn(0.1f);
 		loadScreen->SetIsPushFadeOut(true);
 	}
+
 #ifdef IMGUI
 	ImGuiManager::AddNode(new ImGuiNode_SliderFloat("TimeScale", &GTime.timeScale, 0.0f, 2.0f));
+	ImGuiManager::AddNode(new ImGuiNode_Button("NextStep", []() {GTime.SetNextStepTimeScale(1.0f); }));
 #endif
 }
 
@@ -78,6 +80,18 @@ void SystemManager::Update() {
 		float rate = (static_cast<float>(loadIndex) / static_cast<int>(LoadingType::ltMax));
 		loadScreen->SetRate(rate);
 		return;
+	}
+
+	if (InputManager::Push("Debug_NextStep"))
+	{
+		if (GTime.timeScale <= 0)
+		{
+			GTime.SetNextStepTimeScale(1.0f);
+		}
+		else
+		{
+			GTime.timeScale = 0;
+		}
 	}
 
 	InputManager::Update();

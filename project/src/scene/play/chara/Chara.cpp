@@ -325,6 +325,7 @@ void Chara::Init(std::string tag)
 	m_Timeline->SetFunction("ThrowBall", &Chara::throwBall);
 	m_Timeline->SetFunction("PlayFootSound", &Chara::playFootStepSound);
 	m_Timeline->SetFunction("PlayTinyFootSound", &Chara::playTinyFootStepSound);
+	m_Timeline->SetFunction("Invincible", &Chara::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 	m_BallTarget = std::make_shared<BallTarget_WithParent>(BallTarget_WithParent(Vector3::SetY(150), transform));
@@ -2831,6 +2832,9 @@ void Chara::throwBall(const nlohmann::json& argument)
 
 void Chara::invincible(const nlohmann::json& argument)
 {
+	std::shared_ptr<BallTarget_WithParent> copy(new BallTarget_WithParent(*m_BallTarget));
+	m_BallTarget.reset();
+	m_BallTarget = std::move(copy);
 }
 
 void Chara::playFootStepSound(const nlohmann::json& argument)

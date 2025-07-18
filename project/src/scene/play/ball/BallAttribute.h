@@ -1,5 +1,7 @@
 #pragma once
 
+class Ball;
+
 /// <summary>
 /// ƒ{[ƒ‹‚É‚½‚¹‚é“ÁêŒø‰Ê
 /// </summary>
@@ -7,11 +9,17 @@
 class BallAttribute
 {
 public:
-	BallAttribute();
+	BallAttribute(Ball* owner);
 	~BallAttribute();
-	
+
 	virtual void Update() {}
+
+	virtual void Throwing() {}
+	virtual void OnHave() {}
 	virtual void OnHit() {}
-private:
+	virtual void OnGround() {}
+
+protected:
+	Ball* owner;
 
 };

@@ -8,6 +8,7 @@ class ColliderCapsule;
 class Chara;
 class Collider;
 class BallManager;
+class BallAttribute;
 class Trail3D;
 
 namespace
@@ -39,6 +40,8 @@ public:
 	void Init(std::string charaTag = "None");
 	void Update() override;
 	void Draw() override;
+
+	void SetAttribute(const BallAttribute& attribute);
 
 	void Throw(Chara* owner, float chargeRate);
 	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);
@@ -81,6 +84,7 @@ public:
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
+	std::vector<BallAttribute*> attributes;
 	Trail3D*			m_pTrail;
 
 	Physics*			m_Physics;

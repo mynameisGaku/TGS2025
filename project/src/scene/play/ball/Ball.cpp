@@ -1,18 +1,24 @@
 #include "src/scene/play/ball/Ball.h"
-#include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/common/component/physics/Physics.h"
+
 #include "src/reference/ball/BallRef.h"
+#include "src/reference/chara/CharaDefineRef.h"
+
+#include "src/common/component/physics/Physics.h"
 #include "src/common/component/collider/ColliderCapsule.h"
 #include "src/common/stage/Stage.h"
-#include "src/util/fx/post_effect/bloom/BloomManager.h"
-#include "src/reference/chara/CharaDefineRef.h"
-#include "src/scene/play/chara/Chara.h"
-#include "src/util/fx/effect/EffectManager.h"
 #include "src/common/stage/StageObjectManager.h"
-#include "src/scene/play/ball/BallManager.h"
 #include "src/common/component/renderer/BallRenderer.h"
+
+#include "src/scene/play/chara/Chara.h"
+#include "src/scene/play/ball/BallManager.h"
+#include "src/scene/play/ball/BallAttribute.h"
+#include "src/scene/play/ball/attribute/BallAttribute_Fire.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
+
+#include "src/util/file/resource_loader/ResourceLoader.h"
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+#include "src/util/fx/effect/EffectManager.h"
 #include "src/util/fx/trail/trail3D/Trail3D.h"
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/Random.h"
@@ -47,6 +53,10 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
+	attributes.clear();
+
+	BallAttribute_Fire* fire = new BallAttribute_Fire(this);
+	attributes.push_back(fire);
 
 	Init();
 }
@@ -57,6 +67,11 @@ Ball::~Ball()
 	{
 		m_Owner->SetLastBall(nullptr);
 	}
+
+	for (auto& attribute : attributes)
+		delete attribute;
+
+	attributes.clear();
 
 	PtrUtil::SafeDelete(m_pTrail);
 }
@@ -161,6 +176,18 @@ void Ball::Update()
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 	}
 
+	if (m_State == Ball::S_OWNED)
+	{
+		for (const auto& attribute : attributes)
+			attribute->OnHave();
+	}
+
+	if (m_State ==  Ball::S_THROWN)
+	{
+		for (const auto& attribute : attributes)
+			attribute->Throwing();
+	}
+
 	if (m_State != S_OWNED)
 	{
 		if(m_IsPickedUp)
@@ -221,6 +248,12 @@ void Ball::Draw()
 	m_pTrail->Draw();
 
 	Object3D::Draw();
+}
+
+void Ball::SetAttribute(const BallAttribute& attribute) {
+
+	BallAttribute* newAttribute = new BallAttribute(attribute);
+	attributes.push_back(newAttribute);
 }
 
 void Ball::Throw(Chara* owner, float chargeRate)
@@ -306,11 +339,16 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		changeState(S_LANDED);
 
+		for (const auto& attribute : attributes)
+			attribute->OnGround();
 
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
 			m_Owner->SetLastBall(nullptr);
 		}
+
+		for (const auto& attribute : attributes)
+			attribute->OnHit();
 
 		// === ‘¼‚Ìƒ{[ƒ‹‚Æ‚ÌÕ“Ë‘Î‰ž ===
 		Ball* otherBall = colData.Other()->Parent<Ball>();
@@ -418,6 +456,9 @@ void Ball::collisionToGround()
 		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
 
 		changeState(S_LANDED);
+
+		for (const auto& attribute : attributes)
+			attribute->OnGround();
 	}
 }
 

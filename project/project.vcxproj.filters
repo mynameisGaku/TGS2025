@@ -421,6 +421,9 @@
     <Filter Include="vendor\uuid4">
       <UniqueIdentifier>{e7789334-0a12-405f-9cc8-37bbff2f2fac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\ball\attribute">
+      <UniqueIdentifier>{6b02f235-817c-41d3-aba0-bc668c99b19b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1409,6 +1412,9 @@
     <ClCompile Include="vendor\uuid4\uuid4.cpp">
       <Filter>vendor\uuid4</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attribute\BallAttribute_Fire.cpp">
+      <Filter>src%28application%29\scene\play\ball\attribute</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2202,6 +2208,9 @@
     </ClInclude>
     <ClInclude Include="vendor\uuid4\uuid4.h">
       <Filter>vendor\uuid4</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\attribute\BallAttribute_Fire.h">
+      <Filter>src%28application%29\scene\play\ball\attribute</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

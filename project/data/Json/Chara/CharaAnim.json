@@ -73,9 +73,8 @@
 			"IsFixedRoot": {
 				"Y": true
 			},
-			"Offset": {
-				"Y": 100.0
-			}
+			"StartFrame": 0.0,
+			"EndFrame": 15.0
 		},
 
 		"CrouchToActionIdle": {
@@ -128,8 +127,8 @@
 		},
 
 		"Hold": {
-			"StartFrame": 16.0,
-			"EndFrame": 16.0,
+			"StartFrame": 0.0,
+			"EndFrame": 56.0,
 			"IsLoop": true
 		},
 

@@ -413,11 +413,11 @@ void Chara::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand_end"));
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
 		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
 
-		m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
-		m_pBall->transform->position *= m;
+		//m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
+		m_pBall->transform->position = VTransform(Vector3::UnitZ, m);
 		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
 	}
 

@@ -12,7 +12,7 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/BallAttribute.h"
-#include "src/scene/play/ball/attribute/BallAttribute_Fire.h"
+#include "src/scene/play/ball/attributes/BallAttribute_Fire.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
 
@@ -53,10 +53,10 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
-	attributes.clear();
+	m_Attributes.clear();
 
 	BallAttribute_Fire* fire = new BallAttribute_Fire(this);
-	attributes.push_back(fire);
+	m_Attributes.push_back(fire);
 
 	Init();
 }
@@ -68,10 +68,10 @@ Ball::~Ball()
 		m_Owner->SetLastBall(nullptr);
 	}
 
-	for (auto& attribute : attributes)
+	for (auto& attribute : m_Attributes)
 		delete attribute;
 
-	attributes.clear();
+	m_Attributes.clear();
 
 	PtrUtil::SafeDelete(m_pTrail);
 }
@@ -157,6 +157,8 @@ void Ball::Update()
 	
 	Object3D::Update();
 
+	for (const auto& attribute : m_Attributes)
+		attribute->Update();
 
 	// エフェクト
 	effectUpdate();
@@ -173,18 +175,20 @@ void Ball::Update()
 	{
 		homingDeactivate();
 		changeState(S_LANDED);
+		for (const auto& attribute : m_Attributes)
+			attribute->OnGround();
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 	}
 
 	if (m_State == Ball::S_OWNED)
 	{
-		for (const auto& attribute : attributes)
+		for (const auto& attribute : m_Attributes)
 			attribute->OnHave();
 	}
 
 	if (m_State ==  Ball::S_THROWN)
 	{
-		for (const auto& attribute : attributes)
+		for (const auto& attribute : m_Attributes)
 			attribute->Throwing();
 	}
 
@@ -253,7 +257,7 @@ void Ball::Draw()
 void Ball::SetAttribute(const BallAttribute& attribute) {
 
 	BallAttribute* newAttribute = new BallAttribute(attribute);
-	attributes.push_back(newAttribute);
+	m_Attributes.push_back(newAttribute);
 }
 
 void Ball::Throw(Chara* owner, float chargeRate)
@@ -339,7 +343,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		changeState(S_LANDED);
 
-		for (const auto& attribute : attributes)
+		for (const auto& attribute : m_Attributes)
 			attribute->OnGround();
 
 		if (m_Owner && m_Owner->LastBall() == this)
@@ -347,7 +351,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 			m_Owner->SetLastBall(nullptr);
 		}
 
-		for (const auto& attribute : attributes)
+		for (const auto& attribute : m_Attributes)
 			attribute->OnHit();
 
 		// === 他のボールとの衝突対応 ===
@@ -457,7 +461,7 @@ void Ball::collisionToGround()
 
 		changeState(S_LANDED);
 
-		for (const auto& attribute : attributes)
+		for (const auto& attribute : m_Attributes)
 			attribute->OnGround();
 	}
 }
@@ -502,6 +506,8 @@ void Ball::homingProcess()
 	if (m_HomingTargetChara->IsTackling())
 	{
 		changeState(S_LANDED);
+		for (const auto& attribute : m_Attributes)
+			attribute->OnGround();
 		m_DoRefreshHoming = false;
 	}
 

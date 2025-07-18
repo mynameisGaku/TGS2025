@@ -3,14 +3,14 @@
 class Ball;
 
 /// <summary>
-/// ボールに持たせる特殊効果
+/// ボールに持たせる特殊効果。ボールの所持中、投擲中、ヒット時、着弾時に応じた処理を行う。
 /// </summary>
 /// <author>佐藤紘斗</author>
 class BallAttribute
 {
 public:
 	BallAttribute(Ball* owner);
-	~BallAttribute();
+	virtual ~BallAttribute();
 
 	virtual void Update() {}
 

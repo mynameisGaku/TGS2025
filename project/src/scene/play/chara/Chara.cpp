@@ -969,6 +969,15 @@ void Chara::CatchSuccess(const Vector3& velocity)
 	sub_changeStateNetwork(&Chara::SubStateGetBall); // ステートを変更
 }
 
+void Chara::Damage(int sub) {
+
+	m_pHP->Damage(sub);
+
+	main_changeStateNetwork(&Chara::StateDamageToDown);
+
+	playGetHitSound();
+}
+
 void Chara::Tackle()
 {
 	if (not m_CanTackle)

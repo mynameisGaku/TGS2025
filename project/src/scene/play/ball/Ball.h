@@ -84,7 +84,7 @@ public:
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
-	std::vector<BallAttribute*> attributes;
+	std::vector<BallAttribute*> m_Attributes;
 	Trail3D*			m_pTrail;
 
 	Physics*			m_Physics;

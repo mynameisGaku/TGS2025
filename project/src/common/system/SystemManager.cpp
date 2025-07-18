@@ -197,6 +197,7 @@ void SystemManager::LoadUpdate() {
 			EffectManager::LoadFromJson("data/json/effect/DropDust.json");
 			EffectManager::LoadFromJson("data/json/effect/LockOnMarker.json");
 			EffectManager::LoadFromJson("data/json/effect/LockOnMarker_001.json");
+			EffectManager::LoadFromJson("data/json/effect/Fire.json");
 		}
 		break;
 

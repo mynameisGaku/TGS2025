@@ -7,8 +7,13 @@ public:
 	BallAttribute_Fire(Ball* owner);
 	~BallAttribute_Fire();
 
+	void Update() override;
+
 	void Throwing() override;
 	void OnHave() override;
 	void OnHit() override;
 	void OnGround() override;
+
+private:
+	float m_Interval;
 };

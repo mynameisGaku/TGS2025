@@ -97,7 +97,12 @@ void CollisionManager::Update() {
 
 void CollisionManager::Draw() {
 
+	for (ColliderBase* col : colliders) {
+		if (col->IsActive() == false)
+			continue;
 
+		col->Draw();
+	}
 }
 
 void CollisionManager::Add(ColliderBase* col) {

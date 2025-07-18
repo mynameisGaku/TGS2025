@@ -1427,6 +1427,9 @@
     <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp">
       <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp">
+      <Filter>src%28application%29\common\stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2229,6 +2232,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\enemy\EnemyManager.h">
       <Filter>src%28application%29\scene\play\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h">
+      <Filter>src%28application%29\common\stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -77,9 +77,15 @@ void PlayerController::Update() {
     // ƒWƒƒƒ“ƒvˆ—
     if (InputManager::Push("Jump", padNumber))
     {
-        //if (chara->CanMove() && not chara->IsJumping())
-        chara->Jump();
-        chara->WallAction();
+#ifndef _DEBUG
+        if (chara->CanMove() && not chara->IsJumping())
+        {
+#endif
+            chara->Jump();
+            chara->WallAction();
+#ifndef _DEBUG
+        }
+#endif
     }
 
     ////////////////////////////////////////////////////

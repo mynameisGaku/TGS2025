@@ -48,7 +48,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	for (int i = 0; i < CAMERA_NUM; i++)
 		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
 
-
+#ifdef _DEBUG
 	ImGuiManager::AddNode(new ImGuiNode_Button("DebugCamera",
 		[CAMERA_NUM]() {
 			for (int i = 0; i < CAMERA_NUM; i++)
@@ -59,11 +59,16 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 			for (int i = 0; i < CAMERA_NUM; i++)
 				CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
 		}));
+#endif
 
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
-	gameM->SetGameModeName("FreeForAll");
-	// ゲームモードは GameRef.json 内を参照してください
-	//gameM->SetGameModeName("Debug");
+
+    // ゲームモードは GameRef.json 内を参照してください
+#ifdef _DEBUG
+    gameM->SetGameModeName("Debug");
+#else
+    gameM->SetGameModeName("FreeForAll");
+#endif
 
 	Instantiate<CollisionManager>();
 

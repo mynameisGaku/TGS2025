@@ -1,7 +1,1 @@
-{
-  "ConnectionMax": 6,
-  "HostIP": "172.16.70.120",
-  "IsHost": true,
-  "IsNetworkEnable": false,
-  "Port": 5050
-}
+{"ConnectionMax":6,"HostIP":"172.16.70.120","IsHost":true,"IsNetworkEnable":false,"Port":5050,"UUID":"4c96ec0e-856e-4788-9930-fe77574c7d17"}

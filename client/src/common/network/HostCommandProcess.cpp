@@ -274,39 +274,6 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		c->m_IsClimb             = flags["IsClimb"];
 		c->m_IsWall              = flags["IsWall"];
 	}
-	else if (command == "CreateBallSpawner")
-	{
-		std::string str = json.dump();
-
-		// 送信主以外のクライアントに対しても、同じく変更を要求する
-		PacketHeader header{};
-		header.type = PACKET_JSON;
-		header.size = static_cast<int>(str.size()) + 1;
-		Broadcast(header, str.c_str(), sock);
-
-		std::string id = json["ID"];
-		JSON bsdesc = json["Desc"];
-		BALL_SPAWNER_DESC desc{};
-
-		desc.INTERVAL_SEC = bsdesc["INTERVAL_SEC"].get<float>();
-		desc.INTERVAL_SEC_RANDOM_RANGE = bsdesc["INTERVAL_SEC_RANDOM_RANGE"].get<float>();
-		desc.SPAWN_AMOUNT_INITIAL = bsdesc["SPAWN_AMOUNT_INITIAL"].get<int>();
-		desc.SPAWN_AMOUNT_ONCE_MAX = bsdesc["SPAWN_AMOUNT_ONCE_MAX"].get<int>();
-		desc.SPAWN_AMOUNT_ONCE_MIN = bsdesc["SPAWN_AMOUNT_ONCE_MIN"].get<int>();
-		desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE= bsdesc["SPAWN_AMOUNT_ONCE_RANDOM_RANGE"].get<int>();
-		from_json(bsdesc["SPAWN_INITIAL_VELOCITY"], desc.SPAWN_INITIAL_VELOCITY);
-		from_json(bsdesc["SPAWN_RANGE"], desc.SPAWN_RANGE);
-		int hModel = json["Model"];
-		Vector3 Position;
-		Vector3 Rotation;
-		Vector3 Scale;
-		from_json(json["Position"], Position);
-		from_json(json["Rotation"], Rotation);
-		from_json(json["Scale"], Scale);
-		Transform trs(Position, Rotation, Scale);
-
-		AddBallSpawner(hModel, trs, desc, id);
-	}
 	else
 	{
 		Logger::FormatDebugLog("未知のCommand: %s", command.c_str());

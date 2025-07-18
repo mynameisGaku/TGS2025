@@ -8,6 +8,8 @@
 #include <fstream>
 
 #include "src/common/camera/CameraManager.h"
+#include <src/reference/network/NetworkRef.h>
+#include <vendor/uuid4/uuid4.h>
 
 BallManager::BallManager()
 {
@@ -162,6 +164,7 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 	if (not m_Textures.empty())
 	{
 		BallTexture tex;
+		std::string mapKey = "";
 
 		if (GetRand(99) < 3)
 		{
@@ -185,11 +188,24 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 			{
 				tex = item.second;
 			}
+			mapKey = item.first;
 		}
 
-		obj->SetTexture(tex);
+		obj->SetTexture(tex, mapKey);
 	}
 	m_pPool->SetObjectPointer(index, obj);
+
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			char BUF[UUID4_LEN];
+			uuid4_init();
+			uuid4_generate(BUF);
+			obj->SetUniqueID(BUF);
+		}
+	}
 
 	return obj;
 #else
@@ -234,6 +250,11 @@ int BallManager::GetTrailImage(const std::string& teamColor)
 		return DX_NONE_GRAPH;
 
 	return m_hTrails[teamColor];
+}
+
+const BallTexture& BallManager::GetBallTexture(std::string key)
+{
+	return m_Textures[key];
 }
 
 Ball* BallManager::initfunc(uint32_t index, Ball* pBall)

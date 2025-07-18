@@ -81,6 +81,12 @@ public:
     /// <summary>DeltaTimeの最大値を設定</summary>
     static void SetMaximumDeltaTime(float maxDelta);
 
+    /// <summary>次の更新時のデルタタイム上書きを設定</summary>
+    static void SetNextStepDeltaTime(float delta);
+
+    /// <summary>次の更新時の時間倍率上書きを設定</summary>
+    static void SetNextStepTimeScale(float scale);
+
     /// <summary>
     /// ヒットストップを設定する
     /// </summary>
@@ -168,6 +174,11 @@ private:
     static int m_FrameCount;
     static int m_HitStop;
     static bool m_InFixedTimeStep;
+
+    static float m_NextStepDeltaTime;
+    static bool m_UseNextStepDeltaTime;
+    static float m_NextStepTimeScale;
+    static bool m_UseNextStepTimeScale;
 };
 
 #define GTime GameTime::Instance()

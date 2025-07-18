@@ -10,6 +10,7 @@
 #include <src/common/stage/SpawnerObjectQueue.h>
 #include <src/common/stage/StageObjectManager.h>
 #include <src/scene/play/ball/BallManager.h>
+#include <src/scene/play/ball/Ball.h>
 #include <src/scene/play/spawner/SpawnerDescs.h>
 
 // パケットの種類を表す識別子
@@ -102,40 +103,47 @@ public:
 	/// キャラのサブステート変更依頼を送信
 	/// <para>Clientの場合: サーバーに送信</para>
 	/// <para>Hostの場合: クライアント全体に送信</para>
-    /// </summary>
-    /// <param name="state">変更先のステート</param>
+	/// </summary>
+	/// <param name="state">変更先のステート</param>
 	/// <param name="uuid">ターゲットの固有ID</param>
-    void SendCharaChangeSubState(const std::string& state, const std::string& uuid);
-    /// <summary>
-    /// キャラのリスポーンステート変更依頼を送信
-    /// <para>Clientの場合: サーバーに送信</para>
-    /// <para>Hostの場合: クライアント全体に送信</para>
-    /// </summary>
-    /// <param name="state">変更先のステート</param>
-    /// <param name="uuid">ターゲットの固有ID</param>
+	void SendCharaChangeSubState(const std::string& state, const std::string& uuid);
+	/// <summary>
+	/// キャラのリスポーンステート変更依頼を送信
+	/// <para>Clientの場合: サーバーに送信</para>
+	/// <para>Hostの場合: クライアント全体に送信</para>
+	/// </summary>
+	/// <param name="state">変更先のステート</param>
+	/// <param name="uuid">ターゲットの固有ID</param>
 	void SendCharaChangeRespawnState(const std::string& state, const std::string& uuid);
 	/// <summary>
-    /// キャラが動いているかどうかのフラグを送信
-    /// <para>Clientの場合: サーバーに送信</para>
-    /// <para>Hostの場合: クライアント全体に送信</para>
+	/// キャラが動いているかどうかのフラグを送信
+	/// <para>Clientの場合: サーバーに送信</para>
+	/// <para>Hostの場合: クライアント全体に送信</para>
 	/// </summary>
-    /// <param name="flag">フラグの状態</param>
-    /// <param name="uuid">ターゲットの固有ID</param>
+	/// <param name="flag">フラグの状態</param>
+	/// <param name="uuid">ターゲットの固有ID</param>
 	void SendSetCharaMoveFlag(bool flag, const std::string& uuid);
 	/// <summary>
-    /// キャラの全フラグを送信
-    /// <para>Clientの場合: サーバーに送信</para>
-    /// <para>Hostの場合: クライアント全体に送信</para>
+	/// キャラの全フラグを送信
+	/// <para>Clientの場合: サーバーに送信</para>
+	/// <para>Hostの場合: クライアント全体に送信</para>
 	/// </summary>
-    /// <param name="chara">送信元のキャラ</param>
-    /// <param name="uuid">ターゲットの固有ID</param>
+	/// <param name="chara">送信元のキャラ</param>
+	/// <param name="uuid">ターゲットの固有ID</param>
 	void SendCharaAllFlag(Chara* chara, const std::string& uuid);
 	/// <summary>
 	/// ボールスポナー生成命令を送信
 	/// </summary>
 	/// <param name="desc">生成するボールスポナーの記述</param>
 	/// <param name="id">ボールスポナーのid</param>
-	void SendCreateBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id);
+	void SendAddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id);
+	/// <summary>
+	/// ホスト側のスポナーから生成したボールを、クライアント側のスポナーで生成するための命令を送信
+	/// </summary>
+	/// <param name="spawnerID">スポナーのID</param>
+	/// <param name="generatedBall">生成されたボール</param>
+	void SendBallSpawnBySpawner(const std::string& spawnerID, Ball& generatedBall);
+
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット
 	static std::vector<ClientInfo*> g_Clients;			// サーバーに接続中のクライアント一覧

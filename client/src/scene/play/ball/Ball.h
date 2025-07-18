@@ -64,7 +64,7 @@ public:
 
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
-	void SetTexture(const BallTexture& texture);
+	void SetTexture(const BallTexture& texture, const std::string& mapKey);
 
 	void SetTrailImage(int hImage);
 
@@ -78,6 +78,16 @@ public:
 	void ChangeState(const State& state) { changeState(state); }
 
 	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
+
+	void SetUniqueID(const std::string& id) { m_UniqueID = id; }
+
+	const std::string& GetUniqueID() const { return m_UniqueID; }
+
+	const uint32_t GetIndex() const { return m_Index; }
+
+	BallRenderer& GetBallRenderer() { return *GetComponent<BallRenderer>(); }
+
+	void SetCharaTag(const std::string& charaTag) { m_CharaTag = charaTag; };
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -90,6 +100,7 @@ private:
 	Chara*			m_Owner;
 	Chara*			m_LastOwner;
 	std::string			m_CharaTag;
+	std::string			m_UniqueID;
 	uint32_t			m_Index;
 	float				m_LifeTime;
 	float				m_LifeTimeMax;

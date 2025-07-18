@@ -14,6 +14,7 @@
 #include <src/util/file/json/VectorJson.h>
 #include <src/common/load_screen/LoadScreen.h>
 #include <src/scene/play/ball/BallSpawner.h>
+#include <src/util/enum/EnumUtil.h>
 
 using JSON = nlohmann::json;
 
@@ -175,7 +176,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		c->m_IsClimb			= flags["IsClimb"];
 		c->m_IsWall				= flags["IsWall"];
 	}
-	else if (command == "CreateBallSpawner")
+	else if (command == "AddBallSpawner")
 	{
 		std::string id = json["ID"];
 		JSON bsdesc = json["Desc"];
@@ -199,6 +200,19 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		Transform trs(Position, Rotation, Scale);
 
 		AddBallSpawner(hModel, trs, desc, id);
+	}
+	else if (command == "BallSpawnBySpawner")
+	{
+		std::string spawnerID		= json["SpawnerID"].get<std::string>();
+		JSON ballJson				= json["Ball"];
+		std::string ballID			= ballJson["ID"].get<std::string>();
+		Ball::State state			= EnumUtil::ToEnum(ballJson["State"].get<std::string>(), Ball::State::S_LANDED);
+		std::string charaTag		= ballJson["CharaTag"].get<std::string>();
+		std::string texKey			= ballJson["TexKey"].get<std::string>();
+		BallManager* ballManager	= FindGameObject<BallManager>();
+		BallTexture ballTexture		= ballManager->GetBallTexture(texKey);
+		BallSpawner* spawner		= GetBallSpawnerFromUniqueID(spawnerID);
+		spawner->ForceSpawn(ballID, charaTag, ballTexture);
 	}
 	else
 	{

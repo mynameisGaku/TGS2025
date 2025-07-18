@@ -14,6 +14,7 @@
 #include <src/scene/play/chara/CharaManager.h>
 #include <src/util/transform/Transform.h>
 #include <src/util/file/json/VectorJson.h>
+#include <src/util/enum/EnumUtil.h>
 
 // --- 静的メンバの初期化 ---
 SOCKET NetworkManager::g_ListenSock = INVALID_SOCKET;
@@ -23,6 +24,8 @@ SOCKET NetworkManager::g_Sock = INVALID_SOCKET;
 bool NetworkManager::g_Running = false;
 std::vector<User> NetworkManager::g_Users;
 std::string NetworkManager::g_MyUUID = "";
+
+using JSON = nlohmann::json;
 
 // --- コンストラクタ ---
 NetworkManager::NetworkManager()
@@ -165,7 +168,7 @@ void NetworkManager::SendJson(const std::string& json)
 	}
 }
 
-void NetworkManager::SendJson(const nlohmann::json& json)
+void NetworkManager::SendJson(const JSON& json)
 {
 	SendJson(json.dump());
 }
@@ -184,14 +187,14 @@ void NetworkManager::subscribe(const std::string& name)
 
 		g_MyUUID = user.UUID;
 
-		nlohmann::json broadcast;
+		JSON broadcast;
 
 		broadcast["Command"] = "SetUserData";
 		// 返信する内容として、既存のキャラデータをリストアップ
 		for (auto& u : g_Users)
 		{
 			// replyに現在存在するユーザーデータを配列として登録
-			nlohmann::json userJson;
+			JSON userJson;
 			userJson["Name"] = u.Name;
 			userJson["UUID"] = u.UUID;
 			userJson["Socket"] = u.Socket;
@@ -221,7 +224,7 @@ void NetworkManager::SendAddUser(const std::string& name)
 	if (!net.IsNetworkEnable)
 		return;
 	// JSON形式でユーザー追加のコマンドを作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"]		= "AddUser";
 	json["NeedReply"]	= true;
 	json["Name"]		= name;
@@ -238,7 +241,7 @@ void NetworkManager::SendCharaTransform(const Transform& trs, const std::string&
 	if (!net.IsNetworkEnable)
 		return;
 	// TransformデータをJSON形式に変換
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "SetTransform";
 	json["Position"]["X"] = trs.position.x;
 	json["Position"]["Y"] = trs.position.y;
@@ -263,7 +266,7 @@ void NetworkManager::SendSceneTransitToPlay()
 	if (!net.IsNetworkEnable)
 		return;
 	// ゲーム開始のコマンドをJSON形式で作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "TransitToPlay";
 	json["NeedReply"] = false;
 	// JSONを文字列に変換
@@ -278,7 +281,7 @@ void NetworkManager::SendCharaChangeState(const std::string& state, const std::s
 	if (!net.IsNetworkEnable)
 		return;
 	// ステート変更のコマンド作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "ChangeState";
 	json["NeedReply"] = false;
 	json["UUID"] = uuid;
@@ -295,7 +298,7 @@ void NetworkManager::SendCharaChangeSubState(const std::string& state, const std
 	if (!net.IsNetworkEnable)
 		return;
 	// ステート変更のコマンド作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "ChangeSubState";
 	json["NeedReply"] = false;
 	json["UUID"] = uuid;
@@ -312,7 +315,7 @@ void NetworkManager::SendCharaChangeRespawnState(const std::string& state, const
 	if (!net.IsNetworkEnable)
 		return;
 	// ステート変更のコマンド作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "ChangeRespawnState";
 	json["NeedReply"] = false;
 	json["UUID"] = uuid;
@@ -329,7 +332,7 @@ void NetworkManager::SendSetCharaMoveFlag(bool flag, const std::string& uuid)
 	if (!net.IsNetworkEnable)
 		return;
 	// フラグセットコマンド作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "SetCharaMoveFlag";
 	json["NeedReply"] = false;
 	json["UUID"] = uuid;
@@ -346,7 +349,7 @@ void NetworkManager::SendCharaAllFlag(Chara* chara, const std::string& uuid)
 	if (!net.IsNetworkEnable)
 		return;
 	// フラグセットコマンド作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "SetCharaAllFlag";
 	json["NeedReply"] = false;
 	json["UUID"] = uuid;
@@ -379,14 +382,14 @@ void NetworkManager::SendCharaAllFlag(Chara* chara, const std::string& uuid)
 	SendJson(jsonStr);
 }
 
-void NetworkManager::SendCreateBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id)
+void NetworkManager::SendAddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id)
 {
 	auto& net = NetworkRef::Inst();
 	if (!net.IsNetworkEnable)
 		return;
 	// ボールスポナー生成コマンド作成
-	nlohmann::json json;
-	json["Command"] = "CreateBallSpawner";
+	JSON json;
+	json["Command"] = "AddBallSpawner";
 	json["NeedReply"] = false;
 	json["ID"] = id;
 
@@ -406,6 +409,33 @@ void NetworkManager::SendCreateBallSpawner(int hModel, const Transform& trs, con
 
 	// ダンプ
 	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendBallSpawnBySpawner(const std::string& spawnerID, Ball& generatedBall)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+
+	JSON json;
+	json["Command"]					= "BallSpawnBySpawner";
+	json["NeedReply"]				= false;
+
+	json["SpawnerID"]				= spawnerID;
+
+	JSON ballJson;
+
+	ballJson["ID"]					= generatedBall.GetUniqueID();
+	ballJson["State"]				= EnumUtil::ToString(generatedBall.GetState());
+	ballJson["CharaTag"]			= generatedBall.GetCharaTag();
+	const auto& ballRenderer		= generatedBall.GetBallRenderer();
+	ballJson["TexKey"]				= ballRenderer.GetTextureKey();
+	json["Ball"]					= ballJson;
+
+	// ダンプ
+	std::string jsonStr			= json.dump();
 	// 送信
 	SendJson(jsonStr);
 }
@@ -467,7 +497,7 @@ unsigned __stdcall ClientThread(void* param)
 			char* jsonData = new char[header.size];
 			recv(sock, jsonData, header.size, MSG_WAITALL);
 
-			nlohmann::json json = nlohmann::json::parse(jsonData);
+			JSON json = JSON::parse(jsonData);
 			delete[] jsonData;
 
 			NetworkManager::HostCommandProcess(json, sock);
@@ -537,7 +567,7 @@ unsigned __stdcall RecvThread(void* param)
 			char* jsonData = new char[header.size];
 			recv(NetworkManager::g_Sock, jsonData, header.size, MSG_WAITALL);
 
-			nlohmann::json json = nlohmann::json::parse(jsonData);
+			JSON json = JSON::parse(jsonData);
 			delete[] jsonData;
 
 			NetworkManager::ClientCommandProcess(json, sock);

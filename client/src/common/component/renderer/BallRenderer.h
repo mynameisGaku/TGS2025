@@ -22,9 +22,11 @@ public:
 	~BallRenderer();
 
 	void InitVertices();
-	void SetTexture(const BallTexture& texture);
+	void SetTexture(const BallTexture& texture, const std::string& mapKey = "");
 	void Update() override;
 	void Draw() override;
+	const BallTexture GetTexture() const;
+	const std::string& GetTextureKey() const { return m_UsingTexKey; }
 private:
 	static const int SLICES_COUNT;	// ‹…‚Ì‰¡•ûŒü‚Ì•ªŠ„”
 	static const int STACKS_COUNT;// ‹…‚Ìc•ûŒü‚Ì•ªŠ„”
@@ -32,13 +34,14 @@ private:
 	static const float FRAME_INTERVAL;
 	static const float TEXTURE_RADIUS;
 	
-	BallTexture m_Texture;
-	int m_Frame;
-	float m_FrameTimer;
-	float m_Radius;
+	BallTexture m_Texture{};
+	int m_Frame{};
+	float m_FrameTimer{};
+	float m_Radius{};
+	std::string m_UsingTexKey{};
 
-	int m_SlicesCount;
-	int m_StacksCount;
+	int m_SlicesCount{};
+	int m_StacksCount{};
 
-	std::vector<std::vector<VERTEX3D>> m_Vertices;
+	std::vector<std::vector<VERTEX3D>> m_Vertices{};
 };

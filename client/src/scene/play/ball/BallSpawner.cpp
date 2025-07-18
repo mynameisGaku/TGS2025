@@ -4,6 +4,9 @@
 #include "src/scene/play/spawner/SpawnerDescs.h"
 #include "src/util/math/MathIncluder.h"
 #include "src/util/time/GameTime.h"
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
+#include <src/common/component/renderer/BallRenderer.h>
 
 BallSpawner::BallSpawner()
 {
@@ -12,6 +15,7 @@ BallSpawner::BallSpawner()
 	m_pGeneratedBall		= nullptr;
 	m_IsActive				= false;
 	m_Desc					= {};
+	m_SpawnIntervalSec		= 0.0f;
 }
 
 BallSpawner::~BallSpawner()
@@ -21,7 +25,21 @@ BallSpawner::~BallSpawner()
 void BallSpawner::Init(const BALL_SPAWNER_DESC& desc, const std::string& id)
 {
 	m_Desc = desc;
-	m_ID = id;
+	m_UniqueID = id;
+
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			m_IsActive = true;
+			m_pNetworkManager = FindGameObject<NetworkManager>();
+		}
+		else
+		{
+			m_IsActive = false;
+		}
+	}
 }
 
 void BallSpawner::Start()
@@ -48,10 +66,10 @@ void BallSpawner::Update()
 		return;
 
 	// インターバルを進める
-	IntervalProcess();
+	intervalProcess();
 
 	// 生成処理
-	if (GenerateProcess()) return;
+	if (generateProcess()) return;
 }
 
 void BallSpawner::Draw()
@@ -59,17 +77,52 @@ void BallSpawner::Draw()
 	Object3D::Draw();
 }
 
-void BallSpawner::OnSpawn(const Vector3& pos)
+void BallSpawner::onSpawn(const Vector3& pos)
 {
-	m_pGeneratedBall = m_pBallManager->CreateBall(pos, true);
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			m_pGeneratedBall = m_pBallManager->CreateBall(pos, true);
+			m_pNetworkManager->SendBallSpawnBySpawner(m_UniqueID, *m_pGeneratedBall);
+		}
+	}
+	else
+	{
+		m_pGeneratedBall = m_pBallManager->CreateBall(pos, true);
+	}
 }
 
-void BallSpawner::IntervalProcess()
+void BallSpawner::ForceSpawn(const std::string& ballID, const std::string& charaTag, const BallTexture& texture)
+{
+	if (m_pGeneratedBall)
+	{
+		m_pGeneratedBall->DestroyMe();
+		m_pGeneratedBall = nullptr;
+	}
+
+	Vector3 random = Vector3
+	(
+		Random.GetFloatRange(-m_Desc.SPAWN_RANGE.x, m_Desc.SPAWN_RANGE.x),
+		Random.GetFloatRange(-m_Desc.SPAWN_RANGE.y, m_Desc.SPAWN_RANGE.y),
+		Random.GetFloatRange(-m_Desc.SPAWN_RANGE.z, m_Desc.SPAWN_RANGE.z)
+	);
+
+	Vector3 spawnPos = transform->position + random;
+
+	m_pGeneratedBall = m_pBallManager->CreateBall(spawnPos, true);
+	m_pGeneratedBall->SetUniqueID(ballID);
+	m_pGeneratedBall->SetCharaTag(charaTag);
+	m_pGeneratedBall->GetBallRenderer().SetTexture(texture);
+}
+
+void BallSpawner::intervalProcess()
 {
 	m_SpawnIntervalSec -= GTime.deltaTime;
 }
 
-bool BallSpawner::GenerateProcess()
+bool BallSpawner::generateProcess()
 {
 	if (m_SpawnIntervalSec > 0.0f)
 		return false;
@@ -88,7 +141,7 @@ bool BallSpawner::GenerateProcess()
 	}
 
 	// 沸かす
-	Spawn(spawnAmount);
+	spawn(spawnAmount);
 
 	// 生成処理終了
 	m_SpawnIntervalSec = m_Desc.INTERVAL_SEC + Random.GetFloatRange(-m_Desc.INTERVAL_SEC_RANDOM_RANGE, m_Desc.INTERVAL_SEC_RANDOM_RANGE);
@@ -96,7 +149,7 @@ bool BallSpawner::GenerateProcess()
 	return true;
 }
 
-void BallSpawner::Spawn(int spawnAmount)
+void BallSpawner::spawn(int spawnAmount)
 {
 	for (int i = 0; i < spawnAmount; ++i)
 	{
@@ -109,7 +162,7 @@ void BallSpawner::Spawn(int spawnAmount)
 
 		Vector3 spawnPos = transform->position + random;
 
-		OnSpawn(spawnPos);
+		onSpawn(spawnPos);
 	}
 }
 
@@ -123,44 +176,15 @@ BallSpawner* AddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER
 	return spawner;
 }
 
-//void BallSpawnerPlaceByJson(const std::string& filepath, const std::string& filekey)
-//{
-//	// 読み込み
-//	{
-//		std::string key = filekey;
-//		if (key == "")
-//			key = filepath;
-//
-//		auto settings_json = Settings_json::Inst();
-//		settings_json->LoadSettingJson(filepath, key, true);
-//		std::vector<nlohmann::json> params = Settings_json::Inst()->Get<std::vector<nlohmann::json>>("Params", key);
-//
-//		for (const auto& param : params)
-//		{
-//			SPAWNER_DESC desc		= {};
-//			BallSpawner* spawner	= Instantiate<BallSpawner>();
-//
-//			desc.INTERVAL_SEC						= param.at("INTERVAL_SEC");
-//			desc.INTERVAL_SEC_RANDOM_RANGE			= param.at("INTERVAL_SEC_RANDOM_RANGE");
-//			desc.SPAWN_AMOUNT_ONCE_MAX				= param.at("SPAWN_AMOUNT_ONCE_MAX");
-//			desc.SPAWN_AMOUNT_ONCE_MIN				= param.at("SPAWN_AMOUNT_ONCE_MIN");
-//			desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE		= param.at("SPAWN_AMOUNT_ONCE_RANDOM_RANGE");
-//			desc.SPAWN_AMOUNT_INITIAL				= param.at("SPAWN_AMOUNT_INITIAL");
-//
-//			auto& range					= param.at("SPAWN_RANGE");
-//			float rx					= range.at("x").get<float>();
-//			float ry					= range.at("y").get<float>();
-//			float rz					= range.at("z").get<float>();
-//			desc.SPAWN_RANGE			= Vector3(rx, ry, rz);			
-//
-//			auto& vel					= param.at("SPAWN_INITIAL_VELOCITY");
-//			float vx					= vel.at("x").get<float>();
-//			float vy					= vel.at("y").get<float>();
-//			float vz					= vel.at("z").get<float>();
-//			desc.SPAWN_INITIAL_VELOCITY	= Vector3(vx, vy, vz);
-//
-//			spawner->Init(desc);
-//			spawner->Activate();
-//		}
-//	}
-//}
+BallSpawner* GetBallSpawnerFromUniqueID(const std::string& id)
+{
+	auto spawners = FindGameObjects<BallSpawner>();
+	for (auto& spawner : spawners)
+	{
+		if (spawner->GetUniqueID() == id)
+		{
+			return spawner;
+		}
+	}
+	return nullptr;
+}

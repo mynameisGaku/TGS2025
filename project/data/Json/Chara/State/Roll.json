@@ -3,29 +3,29 @@
     "Events": [
         {
             "Name": "SetAnimationSpeed",
-            "Start": 0.0,
+            "Start": 31.0,
             "Argument": {
                 "Speed": 1.25
             }
         },
         {
             "Name": "SetCanMove",
-            "Start": 0.0,
+            "Start": 31.0,
             "Argument": {
                 "CanMove": false
             }
         },
         {
             "Name": "SetCanRot",
-            "Start": 0.0,
+            "Start": 31.0,
             "Argument": {
                 "CanRot": true
             }
         },
         {
             "Name": "MoveToPosition",
-            "Start": 0.0,
-            "End": 4.0,
+            "Start": 31.0,
+            "End": 35.0,
             "Argument": {
                 "Position": {
                     "X": 0,
@@ -36,8 +36,8 @@
         },
         {
             "Name": "MoveToPosition",
-            "Start": 4.0,
-            "End": 12.0,
+            "Start": 35.0,
+            "End": 43.0,
             "Argument": {
                 "Position": {
                     "X": 0,
@@ -48,14 +48,14 @@
         },
         {
             "Name": "EndRoll",
-            "Start": 12.0,
+            "Start": 43.0,
             "Argument": {
 
             }
         },
         {
             "Name": "SetCanMove",
-            "Start": 12.0,
+            "Start": 43.0,
             "Argument": {
                 "CanMove": true
             }

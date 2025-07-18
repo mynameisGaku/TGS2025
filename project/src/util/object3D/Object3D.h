@@ -69,6 +69,8 @@ public:
 	/// </summary>
 	inline void SetAxisDraw(const bool& value) { isAxisDraw = value; }
 
+	inline void SetLocalMatrix(const MATRIX& mat) { localMatrix = mat; }
+
 	//==========================================================================================
 	// ▼ゲッター
 
@@ -86,6 +88,8 @@ protected:
 	// ▼メンバ変数
 
 	int hModel;			// モデルのハンドル
+
+	MATRIX localMatrix;
 
 	bool isModelDraw;	// モデルの描画の有無
 	bool isAxisDraw;	// 座標軸線の描画の有無

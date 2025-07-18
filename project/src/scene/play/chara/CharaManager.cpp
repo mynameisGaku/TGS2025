@@ -8,6 +8,7 @@
 #include "src/common/component/physics/Physics.h"
 #include "src/common/component/collider/CollisionDefine.h"
 #include "src/common/component/collider/ColliderCapsule.h"
+#include "src/common/component/material_renderer/MaterialRenderer.h"
 
 #include "src/reference/chara/CharaDefineRef.h"
 
@@ -169,14 +170,14 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 
 	if (tag == "Red")
 	{
-		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
+		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/NoFaceGuy_Original.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tChara;
 		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tBlue };
 	}
 	else if (tag == "Blue")
 	{
-		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/Ch06_nonPBR.mv1");
+		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/NoFaceGuy_Original.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tChara;
 		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tRed };
@@ -187,11 +188,12 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	newChara->SetTrailImage(m_hTrails["Plain_Distortion_Thin"]);
 
 	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
-	int origin = MV1SearchFrame(hModel, "mixamorig9:Hips");
-	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(MathUtil::PI) * MGetTranslate(Vector3(0.0f, 100.0f, 0.0f)));
+	int origin = MV1SearchFrame(hModel, "mixamorig:Hips");
+	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(MathUtil::PI));
 
 	newChara->SetModel(hModel);
 	newChara->SetTransform(trs);
+	newChara->SetLocalMatrix(MGetScale(Vector3::Ones * 50.0f));
 
 	// •¨—‹““®‚ðÝ’è
 	newChara->AddComponent<Physics>()->Init(GRAVITY, FRICTION);
@@ -201,6 +203,10 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	colliderChara->BaseInit(colParamChara);
 	colliderChara->SetOffset(Vector3::SetY(130.0f));
 	//colliderChara->SetDraw(true);
+
+	MaterialRenderer* materialChara = newChara->AddComponent<MaterialRenderer>();
+	materialChara->Init(newChara);
+	materialChara->SetMaterialDifColor(0, GetColorF(0.0f, 0.0f, 1.0f, 1.0f), 0.0f);
 
 	newChara->m_Index = index;
 	newChara->Init(tag);

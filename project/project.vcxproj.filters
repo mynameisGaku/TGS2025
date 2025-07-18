@@ -421,6 +421,12 @@
     <Filter Include="vendor\uuid4">
       <UniqueIdentifier>{e7789334-0a12-405f-9cc8-37bbff2f2fac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\Json\Enemy">
+      <UniqueIdentifier>{1d0b0897-971f-4270-9578-43e654e3415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\enemy">
+      <UniqueIdentifier>{00dba644-cdaf-4da3-a424-f77e2205bdbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -725,6 +731,9 @@
     </None>
     <None Include="window.ini">
       <Filter>user_config</Filter>
+    </None>
+    <None Include="data\Json\Enemy\BatAnim.json">
+      <Filter>data\Json\Enemy</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1409,8 +1418,14 @@
     <ClCompile Include="vendor\uuid4\uuid4.cpp">
       <Filter>vendor\uuid4</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp">
-      <Filter>src%28application%29\common\stage</Filter>
+    <ClCompile Include="src\scene\play\ball\BallTarget.cpp">
+      <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\enemy\Enemy.cpp">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2206,8 +2221,14 @@
     <ClInclude Include="vendor\uuid4\uuid4.h">
       <Filter>vendor\uuid4</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h">
-      <Filter>src%28application%29\common\stage</Filter>
+    <ClInclude Include="src\scene\play\ball\BallTarget.h">
+      <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\enemy\Enemy.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\enemy\EnemyManager.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

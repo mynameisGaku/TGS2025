@@ -1,6 +1,7 @@
 #pragma once
 #include "src/util/object3D/Object3D.h"
 #include "src/common/component/renderer/BallRenderer.h"
+#include <memory>
 #include <string>
 
 class Physics;
@@ -9,6 +10,7 @@ class Chara;
 class Collider;
 class BallManager;
 class Trail3D;
+class BallTarget;
 
 namespace
 {
@@ -42,7 +44,7 @@ public:
 
 	void Throw(Chara* owner, float chargeRate);
 	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);
-	void ThrowHoming(const Chara* target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
+	void ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
 
 	State GetState() const { return m_State; }
 
@@ -97,8 +99,8 @@ private:
 	ColliderCapsule*	m_Collider;
 	State				m_State;
 	State				m_StatePrev;
-	Chara*			m_Owner;
-	Chara*			m_LastOwner;
+	Chara*				m_Owner;
+	Chara*				m_LastOwner;
 	std::string			m_CharaTag;
 	std::string			m_UniqueID;
 	uint32_t			m_Index;
@@ -110,15 +112,18 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	const Chara*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
-	Vector3				m_HomingOrigin;			// ホーミング開始地点
-	Vector3				m_HomingTargetPos;		// ホーミング対象の座標
-	bool				m_IsHoming;	// ホーミング中か
-	bool				m_DoRefreshHoming;	// ホーミング先を更新するか
-	float				m_HomingProgress;
-	float				m_HomingSpeed;
-	float				m_HormingCurveAngle;	// カーブ方向を決める角度
-	float				m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
+	std::shared_ptr<BallTarget> m_HomingTarget;	// ホーミング中のトランスフォームのポインタ
+
+	Vector3	m_HomingOrigin;			// ホーミング開始地点
+	Vector3	m_HomingTargetPos;		// ホーミング対象の座標
+
+	bool	m_IsHoming;				// ホーミング中か
+	bool	m_DoRefreshHoming;		// ホーミング先を更新するか
+
+	float	m_HomingProgress;		// ホーミング進行度(0..1)
+	float	m_HomingSpeed;			// ホーミングの進む速さ
+	float	m_HormingCurveAngle;	// カーブ方向を決める角度
+	float	m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
 
 	void collisionToGround();
 	// 地形との押し出し処理、当たったらtrue

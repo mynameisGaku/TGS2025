@@ -19,6 +19,7 @@
 #include "src/util/math/Vector3Util.h"
 #include "src/util/math/matrix.h"
 #include "src/util/math/MathUtil.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 namespace
 {
@@ -263,20 +264,20 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
-void Ball::ThrowHoming(const Chara* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
+	std::shared_ptr<BallTarget> temp = target;
+	m_HomingTarget = std::move(temp);
+
 	m_IsHoming			= true;
-	m_DoRefreshHoming = true;
+	m_DoRefreshHoming	= true;
+
 	m_HomingOrigin		= transform->position;
-    m_HomingTargetChara = target;
-	m_HormingCurveAngle = curveAngle;
-	m_HormingCurveScale = curveScale;
-	m_HomingProgress = 0.0f;
+	m_HormingCurveAngle	= curveAngle;
+	m_HormingCurveScale	= curveScale;
+	m_HomingProgress	= 0.0f;
 
 	Vector3 direction = Vector3::Normalize((transform->position + transform->Forward() * 100.0f) - transform->position);
-	
-	if (target != nullptr)
-		direction = Vector3::Normalize(target->transform->position - transform->position);
 
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
@@ -429,13 +430,10 @@ void Ball::changeState(const State& s)
 
 void Ball::homingProcess()
 {
-	if (m_HomingTargetChara == nullptr) return;
+	if (m_HomingTarget == nullptr) return;
 
 	// ---- ホーミング補間 ----
-	if (m_DoRefreshHoming)
-	{
-		m_HomingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
-	}
+	m_HomingTargetPos = m_HomingTarget->Position();
 
 	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
@@ -458,17 +456,12 @@ void Ball::homingProcess()
 		delta = m_HomingSpeed / (distance + ((distance * 0.5f * DX_PI_F) - distance) * m_HormingCurveScale) * GTime.DeltaTime();
 	}
 
-	if (m_HomingTargetChara->IsTackling())
-	{
-		changeState(S_LANDED);
-		m_DoRefreshHoming = false;
-	}
-
 	m_HomingProgress += delta;
 
 	if (m_HomingProgress >= 1.0f)
 	{
 		transform->position = m_HomingTargetPos;
+		homingDeactivate();
 	}
 	else
 	{
@@ -534,4 +527,5 @@ void Ball::homingDeactivate()
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
 	m_IsHoming = false;
+	m_HomingTarget.reset();
 }

@@ -726,6 +726,7 @@
     <None Include="window.ini">
       <Filter>user_config</Filter>
     </None>
+    <None Include="data\Json\Enemy\BatAnim.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1408,6 +1409,11 @@
     </ClCompile>
     <ClCompile Include="vendor\uuid4\uuid4.cpp">
       <Filter>vendor\uuid4</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\enemy\Enemy.cpp" />
+    <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp" />
+    <ClCompile Include="src\scene\play\ball\BallTarget.cpp">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2202,6 +2208,11 @@
     </ClInclude>
     <ClInclude Include="vendor\uuid4\uuid4.h">
       <Filter>vendor\uuid4</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\enemy\Enemy.h" />
+    <ClInclude Include="src\scene\play\enemy\EnemyManager.h" />
+    <ClInclude Include="src\scene\play\ball\BallTarget.h">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

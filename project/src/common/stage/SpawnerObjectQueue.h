@@ -6,10 +6,10 @@
 
 typedef struct
 {
-	std::string			id;
-	BALL_SPAWNER_DESC	desc;
-	int					modelHandle;
-	Transform			transform;
+	std::string			id;				// 固有id
+	BALL_SPAWNER_DESC	desc;			// 記述
+	int					modelHandle;	// モデル
+	Transform			transform;		// トランスフォーム
 	
 }BALL_SPAWNER_QUEUE_OBJECT_DESC;
 

@@ -1,20 +1,20 @@
-#include "AbilityFire.h"
+#include "AbilityExplosion.h"
 
 #include "src/scene/play/chara/Chara.h"
 #include "src/common/component/collider/ColliderSphere.h"
 
 #include "src/util/fx/effect/EffectManager.h"
 
-AbilityFire::AbilityFire()
+AbilityExplosion::AbilityExplosion()
 {
 	m_pColSphere = nullptr;
 }
 
-AbilityFire::~AbilityFire()
+AbilityExplosion::~AbilityExplosion()
 {
 }
 
-void AbilityFire::BaseInit(const Vector3& position, float radius, float duration_sec)
+void AbilityExplosion::BaseInit(const Vector3& position, float radius, float duration_sec)
 {
 	transform->position = position;
 
@@ -31,7 +31,7 @@ void AbilityFire::BaseInit(const Vector3& position, float radius, float duration
 	m_Duration_Sec = duration_sec;
 }
 
-void AbilityFire::CollisionEvent(const CollisionData& colData)
+void AbilityExplosion::CollisionEvent(const CollisionData& colData)
 {
 	if (colData.Other()->Tag() == ColDefine::Tag::tChara)
 	{
@@ -40,7 +40,7 @@ void AbilityFire::CollisionEvent(const CollisionData& colData)
 	}
 }
 
-void AbilityFire::Detalis()
+void AbilityExplosion::Detalis()
 {
-	EffectManager::Play3D_Loop("Fire.efk", *transform, "AbilityFire");
+	EffectManager::Play3D_Loop("Explosion.efk", *transform, "AbilityExplosion");
 }

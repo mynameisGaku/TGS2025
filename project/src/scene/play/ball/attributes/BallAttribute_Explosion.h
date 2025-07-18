@@ -1,11 +1,11 @@
 #pragma once
 #include "src/scene/play/ball/BallAttribute.h"
 
-class BallAttribute_Fire : public BallAttribute
+class BallAttribute_Explosion : public BallAttribute
 {
 public:
-	BallAttribute_Fire(Ball* owner);
-	~BallAttribute_Fire();
+	BallAttribute_Explosion(Ball* owner);
+	~BallAttribute_Explosion();
 
 	void Update() override;
 
@@ -15,5 +15,5 @@ public:
 	void OnGround() override;
 
 private:
-	float m_Interval;
+
 };

@@ -3,11 +3,11 @@
 
 class ColliderSphere;
 
-class AbilityFire : public AbilityBase
+class AbilityExplosion : public AbilityBase
 {
 public:
-	AbilityFire();
-	~AbilityFire();
+	AbilityExplosion();
+	~AbilityExplosion();
 
 	void BaseInit(const Vector3& position, float radius, float duration_sec);
 

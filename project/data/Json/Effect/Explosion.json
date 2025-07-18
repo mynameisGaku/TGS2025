@@ -6,7 +6,7 @@
     "defPlaySpeed": 1.0,
     "isLoop": false,
     "fileName": "data/effect/",
-    "typeName": "Fire.efk",
+    "typeName": "Explosion.efk",
     "dimension": "3d"
   }
 }

@@ -12,7 +12,7 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/BallAttribute.h"
-#include "src/scene/play/ball/attributes/BallAttribute_Fire.h"
+#include "src/scene/play/ball/attributes/BallAttribute_Explosion.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
 
@@ -55,7 +55,7 @@ Ball::Ball()
 	m_ChargeRate = 0.0f;
 	m_Attributes.clear();
 
-	BallAttribute_Fire* fire = new BallAttribute_Fire(this);
+	BallAttribute_Explosion* fire = new BallAttribute_Explosion(this);
 	m_Attributes.push_back(fire);
 
 	Init();

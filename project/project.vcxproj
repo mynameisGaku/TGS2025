@@ -351,8 +351,10 @@
     <ClCompile Include="src\reference\network\NetworkRef.cpp" />
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
-    <ClCompile Include="src\scene\play\ability\fire\AbilityFire.cpp" />
-    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Fire.cpp" />
+    <ClCompile Include="src\scene\play\ability\explosion\AbilityExplosion.cpp" />
+    <ClCompile Include="src\scene\play\ability\fire\AttributeFire.cpp" />
+    <ClCompile Include="src\scene\play\ability\fire\BallAttribute_Fire.cpp" />
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Explosion.cpp" />
     <ClCompile Include="src\scene\play\ball\Ball.cpp" />
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
     <ClCompile Include="src\scene\play\ball\BallManager.cpp" />
@@ -546,8 +548,10 @@
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ability\AbilityBase.h" />
-    <ClInclude Include="src\scene\play\ability\fire\AbilityFire.h" />
-    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Fire.h" />
+    <ClInclude Include="src\scene\play\ability\explosion\AbilityExplosion.h" />
+    <ClInclude Include="src\scene\play\ability\fire\AttributeFire.h" />
+    <ClInclude Include="src\scene\play\ability\fire\BallAttribute_Fire.h" />
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Explosion.h" />
     <ClInclude Include="src\scene\play\ball\Ball.h" />
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />
     <ClInclude Include="src\scene\play\ball\BallManager.h" />

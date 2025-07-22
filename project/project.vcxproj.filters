@@ -427,6 +427,12 @@
     <Filter Include="src%28application%29\scene\play\enemy">
       <UniqueIdentifier>{00dba644-cdaf-4da3-a424-f77e2205bdbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\ball\attributes">
+      <UniqueIdentifier>{60d86a86-5919-4da1-b6cf-79c6ca1a1aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\ability">
+      <UniqueIdentifier>{46b28971-23d3-4e08-a593-ba546e14b74c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -909,9 +915,6 @@
       <Filter>src%28application%29\scene\play</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\play\ball\Ball.cpp">
-      <Filter>src%28application%29\scene\play\ball</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\play\ball\BallAttribute.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\play\ball\BallManager.cpp">
@@ -1427,6 +1430,24 @@
     <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp">
       <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Explosion.cpp">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Fire.cpp">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ability\AbilityFire.cpp">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute.cpp">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1478,9 +1499,6 @@
       <Filter>src%28application%29\scene\play</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\ball\Ball.h">
-      <Filter>src%28application%29\scene\play\ball</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\ball\BallAttribute.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\ball\BallManager.h">
@@ -2229,6 +2247,27 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\enemy\EnemyManager.h">
       <Filter>src%28application%29\scene\play\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Explosion.h">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Fire.h">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ability\AbilityExplosion.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ability\AbilityFire.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ability\AbilityBase.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute.h">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

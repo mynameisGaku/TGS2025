@@ -28,7 +28,7 @@ void BallAttribute_Explosion::OnHave()
 void BallAttribute_Explosion::OnHit()
 {
 	AbilityExplosion* explosion = Instantiate<AbilityExplosion>();
-	explosion->BaseInit(owner->transform->position, 256.0f, 2.0f);
+	explosion->BaseInit(owner->transform->position, 512.0f, 2.0f);
 }
 
 void BallAttribute_Explosion::OnGround()

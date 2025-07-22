@@ -22,7 +22,7 @@ void AbilityExplosion::BaseInit(const Vector3& position, float radius, float dur
 	colParam.trs.scale = Vector3::Ones * radius;
 	colParam.tag = ColDefine::Tag::tWindArea;
 	colParam.targetTags = { ColDefine::Tag::tChara };
-	colParam.onlyOnce = false;
+	colParam.onlyOnce = true;
 
 	m_pColSphere = AddComponent<ColliderSphere>();
 	m_pColSphere->BaseInit(colParam);

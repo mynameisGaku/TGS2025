@@ -1,5 +1,5 @@
 #pragma once
-#include "src/scene/play/ball/BallAttribute.h"
+#include "src/scene/play/ball/attributes/BallAttribute.h"
 
 class BallAttribute_Explosion : public BallAttribute
 {

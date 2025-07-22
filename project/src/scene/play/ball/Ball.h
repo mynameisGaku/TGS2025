@@ -43,7 +43,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void SetAttribute(const BallAttribute& attribute);
+	void SetAttribute(BallAttribute* attribute);
 
 	void Throw(Chara* owner, float chargeRate);
 	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);

@@ -91,6 +91,10 @@
 		{
 			"KeyName": "Reload",
 			"KeyParams": [ "R" ]
+		},
+		{
+			"KeyName": "Debug_NextStep",
+			"KeyParams": [ "Enter" ]
 		}
 	]
 }

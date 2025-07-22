@@ -35,6 +35,7 @@
 #include "src/scene/play/ui/UI_Setter_PlayScene.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 #include <src/reference/network/NetworkRef.h>
+#include "src/scene/play/enemy/EnemyManager.h"
 
 using namespace KeyDefine;
 
@@ -66,8 +67,13 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	Instantiate<CollisionManager>();
 
-	Instantiate<UI_Setter_PlayScene>();
+	// オフラインプレイのときはいいけど、オンラインのときにカメラ生成がキャラと同時に行われるので
+	// ここでの生成はオンラインのときは無意味。あとで直す
+    Instantiate<UI_Setter_PlayScene>();
 	Instantiate<MatchManager>();
+
+	EnemyManager* enemyManager = Instantiate<EnemyManager>();
+	enemyManager->Create();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);

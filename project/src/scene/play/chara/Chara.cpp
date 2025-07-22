@@ -26,6 +26,7 @@
 #include "src/util/sound/SoundManager.h"
 #include "src/scene/play/tackler/Tackler.h"
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
@@ -101,6 +102,7 @@ Chara::Chara()
 	m_IsInhibitionSpeed = true;
 	m_SpawnPointManager = nullptr;
 	m_TackleIntervalAlarm = nullptr;
+	m_BallTarget = nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -150,12 +152,18 @@ Chara::Chara()
 	m_FSM->RegisterStateName(&Chara::StateStandingIdleEmote, "StateStandingIdleEmote");
 	m_FSM->RegisterStateName(&Chara::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
 	m_FSM->RegisterStateName(&Chara::StateTackle, "StateTackle");
+	m_FSM->RegisterStateName(&Chara::StateWallStepLeft, "StateWallStepLeft");
+	m_FSM->RegisterStateName(&Chara::StateWallStepRight, "StateWallStepRight");
 
 	m_SubFSM->RegisterStateName(&Chara::SubStateCatch, "SubStateCatch");
 	m_SubFSM->RegisterStateName(&Chara::SubStateGetBall, "SubStateGetBall");
 	m_SubFSM->RegisterStateName(&Chara::SubStateHold, "SubStateHold");
 	m_SubFSM->RegisterStateName(&Chara::SubStateHoldToAim, "SubStateHoldToAim");
 	m_SubFSM->RegisterStateName(&Chara::SubStateNone, "SubStateNone");
+
+	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateFadeIn, "RespawnStateFadeIn");
+	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateFadeOut, "RespawnStateFadeOut");
+	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateNone, "RespawnStateNone");
 #endif // FALSE
 
 	main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
@@ -214,7 +222,16 @@ void Chara::Init(std::string tag)
 
 	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
-	const std::string sIndex = std::to_string(m_Index + 1) + "P";
+	std::string sIndex;
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+    {
+        sIndex = "1P";
+	}
+	else
+	{
+		sIndex = std::to_string(m_Index + 1) + "P";
+	}
 
 	UI_CrossHair* ui_CrossHair = UI_Manager::Find<UI_CrossHair>("CrossHair_" + sIndex);
 	if (ui_CrossHair != nullptr)
@@ -323,7 +340,10 @@ void Chara::Init(std::string tag)
 	m_Timeline->SetFunction("ThrowBall", &Chara::throwBall);
 	m_Timeline->SetFunction("PlayFootSound", &Chara::playFootStepSound);
 	m_Timeline->SetFunction("PlayTinyFootSound", &Chara::playTinyFootStepSound);
+	m_Timeline->SetFunction("Invincible", &Chara::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
+
+	m_BallTarget = std::make_shared<BallTarget_WithParent>(BallTarget_WithParent(Vector3::SetY(150), transform));
 
 #if FALSE
 
@@ -369,7 +389,6 @@ void Chara::Init(std::string tag)
 
 #endif // FALSE
 
-	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
 	{
 		if (not m_pNetManager)
@@ -395,7 +414,10 @@ void Chara::Update() {
 	if (net.IsNetworkEnable)
 	{
 		if (m_User.UUID == m_pNetManager->g_MyUUID)
+		{
 			m_pNetManager->SendCharaTransform(transform->Global(), m_pNetManager->g_MyUUID);
+			m_pNetManager->SendCharaAllFlag(this, m_User.UUID);
+		}
 	}
 
 	// 時間が止まってたらアップデートしない
@@ -450,10 +472,9 @@ void Chara::Update() {
 
 	HitGroundProcess();
 
-	invincibleUpdate();
-	
-	buttonHintUpdate();
+	//=== 座標更新終了後の処理 ===
 
+	m_BallTarget->UpdatePosition();
 	m_lastUpdatePosition = transform->position;
 
 	// NaN/Infのチェック
@@ -468,6 +489,11 @@ void Chara::Update() {
 		m_pPhysics->resistance = Vector3::Zero;
 		m_pPhysics->angularVelocity = Vector3::Zero;
 	}
+
+	//============================
+
+	invincibleUpdate();
+	buttonHintUpdate();
 }
 
 void Chara::Draw()
@@ -764,7 +790,16 @@ void Chara::climb(Vector3& normal)
 
 void Chara::Move(const Vector3& dir)
 {
-	m_IsMove = dir.GetLengthSquared() > 0;
+	auto& net = NetworkRef::Inst();
+	if (not net.IsNetworkEnable)
+		m_IsMove = dir.GetLengthSquared() > 0;
+	else
+	{
+		if (net.UUID == m_User.UUID)
+		{
+			m_IsMove = dir.GetLengthSquared() > 0;
+		}
+	}
 
 	if (m_CanRot)
 	{
@@ -2475,26 +2510,34 @@ void Chara::throwBallHoming()
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
 	if (camera != nullptr)
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
-
-	if (m_IsLanding == true)
-		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
-	else
 	{
-		if (targetChara != nullptr)
+		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+	}
+
+	if (targetChara != nullptr)
+	{
+		std::shared_ptr<BallTarget> target = targetChara->GetBallTarget();
+
+		if (m_IsLanding == true)
+		{
+			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+		}
+		else
 		{
 			// 自分の向きとターゲットの向きを比較して、投げる角度を調整
-			Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
+			Vector3 targetDir = Vector3::Normalize(target->Position() - transform->position);
 			float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
 
 			// 角度を90度単位で丸める
 			float angleRound = roundf(angle / (DX_PI_F * 0.5f));
 			angle = angleRound * (DX_PI_F * 0.5f);
 
-			m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, angle, 0.5f);	// Magic:)
 		}
-		else
-		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+	}
+	else
+	{
+		m_pBall->ThrowDirection(forward, this, m_BallChargeRate);	// Magic:)
 	}
 
 	releaseBall();
@@ -2824,6 +2867,9 @@ void Chara::throwBall(const nlohmann::json& argument)
 
 void Chara::invincible(const nlohmann::json& argument)
 {
+	std::shared_ptr<BallTarget_WithParent> copy(new BallTarget_WithParent(*m_BallTarget));
+	m_BallTarget.reset();
+	m_BallTarget = std::move(copy);
 }
 
 void Chara::playFootStepSound(const nlohmann::json& argument)
@@ -2886,12 +2932,15 @@ void Chara::playTinyFootStepSound(const nlohmann::json& argument)
 	SoundManager::Play(soundName, soundName);
 }
 
-void Chara::main_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
+void Chara::main_changeStateNetwork(void(Chara::* state)(FSMSignal sig))
 {
 	m_FSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-		sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	{
+		if (net.UUID == m_User.UUID)
+			sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	}
 }
 
 void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
@@ -2899,14 +2948,23 @@ void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 	m_SubFSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-		sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	{
+		if (net.UUID == m_User.UUID)
+			sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	}
 }
 
 void Chara::respawn_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 {
 	m_RespawnFSM->ChangeState(state);
-	//auto& net = NetworkRef::Inst();
-	//if (net.IsNetworkEnable)
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (net.UUID == m_User.UUID)
+		{
+
+		}
+	}
 }
 
 
@@ -2919,6 +2977,14 @@ void Chara::sendChangeStateToNetwork(const std::string& state)
 }
 
 void Chara::sendChangeSubStateToNetwork(const std::string& state)
+{
+	auto& net = NetworkRef::Inst();
+	if (not net.IsNetworkEnable)
+		return;
+	m_pNetManager->SendCharaChangeSubState(state, m_User.UUID);
+}
+
+void Chara::sendChangeRespawnStateToNetwork(const std::string& state)
 {
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)

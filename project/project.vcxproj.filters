@@ -421,11 +421,11 @@
     <Filter Include="vendor\uuid4">
       <UniqueIdentifier>{e7789334-0a12-405f-9cc8-37bbff2f2fac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\ball\attributes">
-      <UniqueIdentifier>{6b02f235-817c-41d3-aba0-bc668c99b19b}</UniqueIdentifier>
+    <Filter Include="data\Json\Enemy">
+      <UniqueIdentifier>{1d0b0897-971f-4270-9578-43e654e3415b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\ability">
-      <UniqueIdentifier>{d6711cb7-20d9-48c3-b0f4-127bcb022590}</UniqueIdentifier>
+    <Filter Include="src%28application%29\scene\play\enemy">
+      <UniqueIdentifier>{00dba644-cdaf-4da3-a424-f77e2205bdbf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -731,6 +731,9 @@
     </None>
     <None Include="window.ini">
       <Filter>user_config</Filter>
+    </None>
+    <None Include="data\Json\Enemy\BatAnim.json">
+      <Filter>data\Json\Enemy</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1415,17 +1418,14 @@
     <ClCompile Include="vendor\uuid4\uuid4.cpp">
       <Filter>vendor\uuid4</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Explosion.cpp">
-      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    <ClCompile Include="src\scene\play\ball\BallTarget.cpp">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Fire.cpp">
-      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    <ClCompile Include="src\scene\play\enemy\Enemy.cpp">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp">
-      <Filter>src%28application%29\scene\play\ability</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\play\ability\AbilityFire.cpp">
-      <Filter>src%28application%29\scene\play\ability</Filter>
+    <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2221,20 +2221,14 @@
     <ClInclude Include="vendor\uuid4\uuid4.h">
       <Filter>vendor\uuid4</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Explosion.h">
-      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    <ClInclude Include="src\scene\play\ball\BallTarget.h">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ability\AbilityBase.h">
-      <Filter>src%28application%29\scene\play\ability</Filter>
+    <ClInclude Include="src\scene\play\enemy\Enemy.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Fire.h">
-      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\ability\AbilityExplosion.h">
-      <Filter>src%28application%29\scene\play\ability</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\ability\AbilityFire.h">
-      <Filter>src%28application%29\scene\play\ability</Filter>
+    <ClInclude Include="src\scene\play\enemy\EnemyManager.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

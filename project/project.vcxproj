@@ -220,6 +220,7 @@
     <None Include="data\Json\Effect\Hit_Wall.json" />
     <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Effect\Template.json" />
+    <None Include="data\Json\Enemy\BatAnim.json" />
     <None Include="data\Json\Game\GameRef.json" />
     <None Include="data\Json\Input\PhysicalKey.json" />
     <None Include="data\Json\Input\VirtualKey.json" />
@@ -333,6 +334,7 @@
     <ClCompile Include="src\common\setting\SettingManager.cpp" />
     <ClCompile Include="src\common\setting\volume\VolumeSetting.cpp" />
     <ClCompile Include="src\common\setting\window\WindowSetting.cpp" />
+    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp" />
     <ClCompile Include="src\common\stage\Stage.cpp" />
     <ClCompile Include="src\common\stage\StageObject.cpp" />
     <ClCompile Include="src\common\stage\StageObjectManager.cpp" />
@@ -359,6 +361,7 @@
     <ClCompile Include="src\scene\play\ball\BallAttribute.cpp" />
     <ClCompile Include="src\scene\play\ball\BallManager.cpp" />
     <ClCompile Include="src\scene\play\ball\BallSpawner.cpp" />
+    <ClCompile Include="src\scene\play\ball\BallTarget.cpp" />
     <ClCompile Include="src\scene\play\catcher\Catcher.cpp" />
     <ClCompile Include="src\scene\play\chara\Chara.cpp" />
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp" />
@@ -370,6 +373,8 @@
     <ClCompile Include="src\scene\play\crystal\CrystalFragment.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentManager.cpp" />
     <ClCompile Include="src\scene\play\crystal\CrystalFragmentSpawner.cpp" />
+    <ClCompile Include="src\scene\play\enemy\Enemy.cpp" />
+    <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp" />
     <ClCompile Include="src\scene\play\force_field\ConstantPointForce.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldBase.cpp" />
     <ClCompile Include="src\scene\play\force_field\ForceFieldCorn.cpp" />
@@ -526,6 +531,7 @@
     <ClInclude Include="src\common\setting\SettingManager.h" />
     <ClInclude Include="src\common\setting\volume\VolumeSetting.h" />
     <ClInclude Include="src\common\setting\window\WindowSetting.h" />
+    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h" />
     <ClInclude Include="src\common\stage\Stage.h" />
     <ClInclude Include="src\common\stage\StageDefine.h" />
     <ClInclude Include="src\common\stage\StageObject.h" />
@@ -556,6 +562,7 @@
     <ClInclude Include="src\scene\play\ball\BallAttribute.h" />
     <ClInclude Include="src\scene\play\ball\BallManager.h" />
     <ClInclude Include="src\scene\play\ball\BallSpawner.h" />
+    <ClInclude Include="src\scene\play\ball\BallTarget.h" />
     <ClInclude Include="src\scene\play\catcher\Catcher.h" />
     <ClInclude Include="src\scene\play\chara\Chara.h" />
     <ClInclude Include="src\scene\play\chara\CharaHP.h" />
@@ -566,6 +573,8 @@
     <ClInclude Include="src\scene\play\crystal\CrystalFragment.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentManager.h" />
     <ClInclude Include="src\scene\play\crystal\CrystalFragmentSpawner.h" />
+    <ClInclude Include="src\scene\play\enemy\Enemy.h" />
+    <ClInclude Include="src\scene\play\enemy\EnemyManager.h" />
     <ClInclude Include="src\scene\play\force_field\ConstantPointForce.h" />
     <ClInclude Include="src\scene\play\force_field\ForceBase.h" />
     <ClInclude Include="src\scene\play\force_field\ForceFieldBase.h" />

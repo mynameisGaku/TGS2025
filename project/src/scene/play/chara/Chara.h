@@ -14,18 +14,25 @@
 class CharaHP;
 class CharaStamina;
 class CharaSpawnPointManager;
+
 class Ball;
 class BallManager;
+class BallTarget_WithParent;
+
 class Physics;
+
 class Catcher;
 class Tackler;
+
 class Animator;
 template <class C>
 class Timeline;
+
 class StatusTracker;
+
 class EffectBase;
 class Trail3D;
-class CharaSpawnPointManager;
+
 class UI_FadeBase;
 
 /// <summary>
@@ -172,11 +179,15 @@ public:
 	// ▼演出
 
 	void SetTrailImage(int hImage);
-    Vector2 Target(const Ball* ball);
+	Vector2 Target(const Ball* ball);
 
-    //=======================================================================================
-    // ▼ユーザー
-	void SetUser(const User& user) { m_User = user; }
+	//=======================================================================================
+	// ▼ユーザー
+	inline void SetUser(const User& user) { m_User = user; }
+
+	//=======================================================================================
+	// ▼移動フラグ
+	inline void SetIsMove(bool flag) { m_IsMove = flag; }
 
 	//=======================================================================================
 	// ▼ゲッター
@@ -240,6 +251,8 @@ public:
 	bool IsFinishTackleIntervalAlarm();
 	// ユーザー取得
 	inline User GetUser() const { return m_User; }
+	// ロックオンターゲット取得
+	inline const std::shared_ptr<BallTarget_WithParent>& GetBallTarget() const { return m_BallTarget; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -301,74 +314,91 @@ public:
 	void RespawnStateFadeIn(FSMSignal sig);
 
 private:
+	friend class NetworkManager;
 	friend class CharaManager;
 	friend class UI_CrossHair;
-	friend class NetworkManager;
 
-	Ball*					m_pBall;				// 所有しているボールのポインター
-	Ball*					m_pLastBall;			// 最後に投げたボールのポインター
-	Ball*					m_pHitBall;				// あてられたボールのポインター
-	const Ball*				m_pTargetBall;			// 狙われているボールのポインター
-	BallManager*			m_pBallManager;			// ボールマネージャーのポインター
-	CharaStamina*			m_pStamina;				// スタミナのポインター
-	CharaHP*				m_pHP;					// HPのポインター
-	Physics*				m_pPhysics;				// 物理挙動のポインター
-	std::string				m_CharaTag;				// キャラクターのチームのタグ
-	Catcher*				m_Catcher;				// キャッチの当たり判定
-	Tackler*				m_Tackler;				// タックルの当たり判定
-	EffectBase*				m_pCatchReadyEffect;	// キャッチの準備エフェクト
-	EffectBase*				m_pCatchDustEffect;		// キャッチの粉エフェクト
-	TinyFSM<Chara>*		m_FSM;					// ステートマシン
-	TinyFSM<Chara>*		m_SubFSM;				// ステートマシン
-	TinyFSM<Chara>*		m_RespawnFSM;			// ステートマシン
-	Animator*				m_Animator;				// アニメーション
-	Transform*				m_EffectTransform;		// エフェクト出すトランスフォーム
-	Timeline<Chara>*	m_Timeline;				// アニメーションに合わせて動くタイムライン
-	StatusTracker*			m_pStatusTracker;		// ステータスの統計
-	Alarm*					m_Alarm;				// アラーム
-	Alarm*					m_TackleIntervalAlarm;	// タックル後の間隔アラーム
-	Vector3					m_lastUpdatePosition;	// 前回更新時の最終位置
-	CharaSpawnPointManager* m_SpawnPointManager;	// リスポーン地点
-	NetworkManager* m_pNetManager;			// ネットワーク関連
-	User			m_User;					// ネットワークユーザー情報
-	Vector3					m_WallPosition;			// アクションできる壁の位置
-	Vector3					m_WallNormal;			// アクションできる壁の法線
-	Vector3					m_ActionPosition;		// アクション開始地点
-	Vector3					m_ActionWallPosition;	// アクション開始時の壁の位置
-	Vector3					m_ActionWallNormal;		// アクション開始時の壁の法線
-	int						m_hTrailImage;			// トレイルの画像ハンドル
-	int						m_Index;				// 自身のインデックス
-    float					m_HitPoint;				// ヒットポイント
-	float					m_BallChargeRate;		// ボールのチャージ加速度
-	float					m_MoveSpeed;			// 移動速度
-	float					m_RotSpeed;				// 回転速度
-	float					m_SpeedScale;			// 速度倍率
-	float					m_EmoteTimer;			// 放置アニメーションまでの時間
-	float					m_SlideTimer;			// スライディング残り時間タイマー
-	float					m_CatchTimer;			// キャッチの残り時間タイマー
-	float					m_InvincibleTimer;		// 無敵残り時間
-    float					m_Stamina;				// スタミナ
-	bool					m_IsCharging;			// ボールをチャージしているかどうか
-	bool					m_IsLanding;			// 着地中
-	bool					m_CanMove;				// 移動可能か
-	bool					m_CanRot;				// 回転可能か
-	bool					m_IsMove;				// 移動しようとしているか
-	bool					m_IsJumping;			// ジャンプ中か
-	bool					m_CanCatch;				// キャッチ可能か
-	bool					m_CanHold;				// ボールを持てるか
-	bool					m_CanThrow;				// ボールを投げられるか
-	bool					m_IsCatching;			// キャッチ中か
-	bool 					m_IsTargeting;			// ターゲットを狙っているか
-	bool 					m_IsTargeted;			// ターゲットされているか
-	bool					m_CanTackle;			// タックル可能か
-	bool					m_IsTackling;			// タックル中か
-	bool					m_IsInvincible;			// 無敵か
-	bool					m_IsDamage;				// ダメージ喰らい中か
-    bool					m_IsSliding = false;	// スライディング中か
-    bool					m_IsInhibitionSpeed;	// スピード抑制するか
-	bool					m_CanClimb;				// 壁登りできるか
-	bool					m_IsClimb;				// 壁登り中か
-	bool					m_IsWall;				// 近くに壁があるか
+	NetworkManager*				m_pNetManager;			// ネットワーク関連
+	User						m_User;					// ネットワークユーザー情報
+
+	int							m_Index;				// 自身のインデックス
+	std::string					m_CharaTag;				// キャラクターのチームのタグ
+	StatusTracker*				m_pStatusTracker;		// ステータスの統計
+
+	Ball*						m_pBall;				// 所有しているボールのポインター
+	Ball*						m_pLastBall;			// 最後に投げたボールのポインター
+	Ball*						m_pHitBall;				// あてられたボールのポインター
+	const Ball*					m_pTargetBall;			// 狙われているボールのポインター
+	BallManager*				m_pBallManager;			// ボールマネージャーのポインター
+	float						m_BallChargeRate;		// ボールのチャージ加速度
+
+	std::shared_ptr
+		<BallTarget_WithParent>	m_BallTarget;	// ボールでロックオンできるターゲット
+
+	CharaHP*					m_pHP;					// HPのポインター
+	CharaStamina*				m_pStamina;				// スタミナのポインター
+	float						m_HitPoint;				// ヒットポイント
+	float						m_Stamina;				// スタミナ
+
+	Physics*					m_pPhysics;				// 物理挙動のポインター
+	Vector3						m_lastUpdatePosition;	// 前回更新時の最終位置
+	Vector3						m_WallPosition;			// アクションできる壁の位置
+	Vector3						m_WallNormal;			// アクションできる壁の法線
+	Vector3						m_ActionPosition;		// アクション開始地点
+	Vector3						m_ActionWallPosition;	// アクション開始時の壁の位置
+	Vector3						m_ActionWallNormal;		// アクション開始時の壁の法線
+	float						m_MoveSpeed;			// 移動速度
+	float						m_RotSpeed;				// 回転速度
+	float						m_SpeedScale;			// 速度倍率
+
+	Catcher*					m_Catcher;				// キャッチの当たり判定
+	Tackler*					m_Tackler;				// タックルの当たり判定
+
+	Transform*					m_EffectTransform;		// エフェクト出すトランスフォーム
+	EffectBase*					m_pCatchReadyEffect;	// キャッチの準備エフェクト
+	EffectBase*					m_pCatchDustEffect;		// キャッチの粉エフェクト
+
+	TinyFSM<Chara>*				m_FSM;					// ステートマシン
+	TinyFSM<Chara>*				m_SubFSM;				// ステートマシン
+	TinyFSM<Chara>*				m_RespawnFSM;			// ステートマシン
+
+	Animator*					m_Animator;				// アニメーション
+	Timeline<Chara>*			m_Timeline;				// アニメーションに合わせて動くタイムライン
+
+	Alarm*						m_Alarm;				// アラーム
+	Alarm*						m_TackleIntervalAlarm;	// タックル後の間隔アラーム
+
+	CharaSpawnPointManager*		m_SpawnPointManager;	// リスポーン地点
+
+	int							m_hTrailImage;			// トレイルの画像ハンドル
+
+	float						m_EmoteTimer;			// 放置アニメーションまでの時間
+	float						m_SlideTimer;			// スライディング残り時間タイマー
+	float						m_CatchTimer;			// キャッチの残り時間タイマー
+	float						m_InvincibleTimer;		// 無敵残り時間
+
+	bool						m_IsCharging;			// ボールをチャージしているかどうか
+	bool						m_IsLanding;			// 着地中
+	bool						m_IsMove;				// 移動しようとしているか
+	bool						m_IsJumping;			// ジャンプ中か
+	bool						m_IsCatching;			// キャッチ中か
+	bool 						m_IsTargeting;			// ターゲットを狙っているか
+	bool 						m_IsTargeted;			// ターゲットされているか
+	bool						m_IsTackling;			// タックル中か
+	bool						m_IsInvincible;			// 無敵か
+	bool						m_IsDamage;				// ダメージ喰らい中か
+    bool						m_IsSliding = false;	// スライディング中か
+    bool						m_IsInhibitionSpeed;	// スピード抑制するか
+	bool						m_IsClimb;				// 壁登り中か
+	bool						m_IsWall;				// 近くに壁があるか
+
+	bool						m_CanMove;				// 移動可能か
+	bool						m_CanRot;				// 回転可能か
+	bool						m_CanCatch;				// キャッチ可能か
+	bool						m_CanHold;				// ボールを持てるか
+	bool						m_CanThrow;				// ボールを投げられるか
+	bool						m_CanTackle;			// タックル可能か
+	bool						m_CanClimb;				// 壁登りできるか
 
 	UI_ButtonHint* m_pUI_ButtonHint;			// ボタンヒントUI
 	UI_FadeBase* m_pUI_Fade;
@@ -437,4 +467,5 @@ private:
 	void respawn_changeStateNetwork(void(Chara::* state)(FSMSignal));
 	void sendChangeStateToNetwork(const std::string& state);
 	void sendChangeSubStateToNetwork(const std::string& state);
+	void sendChangeRespawnStateToNetwork(const std::string& state);
 };

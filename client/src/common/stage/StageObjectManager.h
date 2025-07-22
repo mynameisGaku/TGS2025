@@ -10,6 +10,8 @@
 #include "src/common/stage/StageDefine.h"
 #include "src/common/stage/StageObject.h"
 
+class BallSpawnerObjectQueue;
+
 /// <summary>
 /// ステージオブジェクトを管理するクラス
 /// </summary>
@@ -131,6 +133,8 @@ namespace StageObjectManager {
 	/// 配置されているステージオブジェクトの種類名を持つリストを取得
 	/// </summary>
 	std::vector<std::string> StageObjectsTheString();
+
+	BallSpawnerObjectQueue* GetBallSpawnerQueue();
 
 	//==========================================================================================
 	// ▼ステージエディット機能

@@ -1409,6 +1409,9 @@
     <ClCompile Include="vendor\uuid4\uuid4.cpp">
       <Filter>vendor\uuid4</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp">
+      <Filter>src%28application%29\common\stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2202,6 +2205,9 @@
     </ClInclude>
     <ClInclude Include="vendor\uuid4\uuid4.h">
       <Filter>vendor\uuid4</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h">
+      <Filter>src%28application%29\common\stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

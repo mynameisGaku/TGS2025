@@ -1,33 +1,25 @@
 #include "src/scene/play/ball/Ball.h"
-
-#include "src/reference/ball/BallRef.h"
-#include "src/reference/chara/CharaDefineRef.h"
-
+#include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/common/component/physics/Physics.h"
+#include "src/reference/ball/BallRef.h"
 #include "src/common/component/collider/ColliderCapsule.h"
 #include "src/common/stage/Stage.h"
-#include "src/common/stage/StageObjectManager.h"
-#include "src/common/component/renderer/BallRenderer.h"
-
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+#include "src/reference/chara/CharaDefineRef.h"
 #include "src/scene/play/chara/Chara.h"
-
+#include "src/util/fx/effect/EffectManager.h"
+#include "src/common/stage/StageObjectManager.h"
 #include "src/scene/play/ball/BallManager.h"
-#include "src/scene/play/ball/BallAttribute.h"
-#include "src/scene/play/ball/attributes/BallAttribute_Explosion.h"
-#include "src/scene/play/ball/attributes/BallAttribute_Fire.h"
-
+#include "src/common/component/renderer/BallRenderer.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
-
-#include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/util/fx/post_effect/bloom/BloomManager.h"
-#include "src/util/fx/effect/EffectManager.h"
 #include "src/util/fx/trail/trail3D/Trail3D.h"
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/math/Random.h"
 #include "src/util/math/Vector3Util.h"
 #include "src/util/math/matrix.h"
 #include "src/util/math/MathUtil.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 namespace
 {
@@ -56,12 +48,6 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
-	m_Attributes.clear();
-
-	BallAttribute_Explosion* explosion = new BallAttribute_Explosion(this);
-	BallAttribute_Fire* fire = new BallAttribute_Fire(this, 1.0f);
-	m_Attributes.push_back(explosion);
-	m_Attributes.push_back(fire);
 
 	Init();
 }
@@ -72,11 +58,6 @@ Ball::~Ball()
 	{
 		m_Owner->SetLastBall(nullptr);
 	}
-
-	for (auto& attribute : m_Attributes)
-		delete attribute;
-
-	m_Attributes.clear();
 
 	PtrUtil::SafeDelete(m_pTrail);
 }
@@ -162,8 +143,6 @@ void Ball::Update()
 	
 	Object3D::Update();
 
-	for (const auto& attribute : m_Attributes)
-		attribute->Update();
 
 	// エフェクト
 	effectUpdate();
@@ -180,21 +159,7 @@ void Ball::Update()
 	{
 		homingDeactivate();
 		changeState(S_LANDED);
-		for (const auto& attribute : m_Attributes)
-			attribute->OnGround();
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
-	}
-
-	if (m_State == Ball::S_OWNED)
-	{
-		for (const auto& attribute : m_Attributes)
-			attribute->OnHave();
-	}
-
-	if (m_State ==  Ball::S_THROWN)
-	{
-		for (const auto& attribute : m_Attributes)
-			attribute->Throwing();
 	}
 
 	if (m_State != S_OWNED)
@@ -259,12 +224,6 @@ void Ball::Draw()
 	Object3D::Draw();
 }
 
-void Ball::SetAttribute(const BallAttribute& attribute) {
-
-	BallAttribute* newAttribute = new BallAttribute(attribute);
-	m_Attributes.push_back(newAttribute);
-}
-
 void Ball::Throw(Chara* owner, float chargeRate)
 {
 	changeState(S_THROWN);
@@ -305,20 +264,20 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
-void Ball::ThrowHoming(const Chara* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
+	std::shared_ptr<BallTarget> temp = target;
+	m_HomingTarget = std::move(temp);
+
 	m_IsHoming			= true;
-	m_DoRefreshHoming = true;
+	m_DoRefreshHoming	= true;
+
 	m_HomingOrigin		= transform->position;
-    m_HomingTargetChara = target;
-	m_HormingCurveAngle = curveAngle;
-	m_HormingCurveScale = curveScale;
-	m_HomingProgress = 0.0f;
+	m_HormingCurveAngle	= curveAngle;
+	m_HormingCurveScale	= curveScale;
+	m_HomingProgress	= 0.0f;
 
 	Vector3 direction = Vector3::Normalize((transform->position + transform->Forward() * 100.0f) - transform->position);
-	
-	if (target != nullptr)
-		direction = Vector3::Normalize(target->transform->position - transform->position);
 
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
@@ -348,16 +307,11 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		changeState(S_LANDED);
 
-		for (const auto& attribute : m_Attributes)
-			attribute->OnGround();
 
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
 			m_Owner->SetLastBall(nullptr);
 		}
-
-		for (const auto& attribute : m_Attributes)
-			attribute->OnHit();
 
 		// === 他のボールとの衝突対応 ===
 		Ball* otherBall = colData.Other()->Parent<Ball>();
@@ -403,7 +357,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	}
 }
 
-void Ball::SetTexture(const BallTexture& texture)
+void Ball::SetTexture(const BallTexture& texture, const std::string& mapKey)
 {
 	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
 	if (ballRenderer == nullptr)
@@ -412,7 +366,7 @@ void Ball::SetTexture(const BallTexture& texture)
 		ballRenderer->InitVertices();
 	}
 
-	ballRenderer->SetTexture(texture);
+	ballRenderer->SetTexture(texture, mapKey);
 }
 
 void Ball::SetTrailImage(int hImage)
@@ -465,9 +419,6 @@ void Ball::collisionToGround()
 		m_Physics->angularVelocity.x = m_Physics->FlatVelocity().GetLength() * 0.01f;
 
 		changeState(S_LANDED);
-
-		for (const auto& attribute : m_Attributes)
-			attribute->OnGround();
 	}
 }
 
@@ -479,13 +430,10 @@ void Ball::changeState(const State& s)
 
 void Ball::homingProcess()
 {
-	if (m_HomingTargetChara == nullptr) return;
+	if (m_HomingTarget == nullptr) return;
 
 	// ---- ホーミング補間 ----
-	if (m_DoRefreshHoming)
-	{
-		m_HomingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
-	}
+	m_HomingTargetPos = m_HomingTarget->Position();
 
 	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
@@ -508,19 +456,12 @@ void Ball::homingProcess()
 		delta = m_HomingSpeed / (distance + ((distance * 0.5f * DX_PI_F) - distance) * m_HormingCurveScale) * GTime.DeltaTime();
 	}
 
-	if (m_HomingTargetChara->IsTackling())
-	{
-		changeState(S_LANDED);
-		for (const auto& attribute : m_Attributes)
-			attribute->OnGround();
-		m_DoRefreshHoming = false;
-	}
-
 	m_HomingProgress += delta;
 
 	if (m_HomingProgress >= 1.0f)
 	{
 		transform->position = m_HomingTargetPos;
+		homingDeactivate();
 	}
 	else
 	{
@@ -586,4 +527,5 @@ void Ball::homingDeactivate()
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
 	m_IsHoming = false;
+	m_HomingTarget.reset();
 }

@@ -356,7 +356,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	}
 }
 
-void Ball::SetTexture(const BallTexture& texture)
+void Ball::SetTexture(const BallTexture& texture, const std::string& mapKey)
 {
 	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
 	if (ballRenderer == nullptr)
@@ -365,7 +365,7 @@ void Ball::SetTexture(const BallTexture& texture)
 		ballRenderer->InitVertices();
 	}
 
-	ballRenderer->SetTexture(texture);
+	ballRenderer->SetTexture(texture, mapKey);
 }
 
 void Ball::SetTrailImage(int hImage)

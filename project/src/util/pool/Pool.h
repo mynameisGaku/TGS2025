@@ -171,6 +171,15 @@ public:
     }
 
     /// <summary>
+    /// 容量以上のアクティブなオブジェクトが存在するか確認する
+    /// </summary>
+    /// <returns>あればtrue</returns>
+    bool CheckActiveObjectByCapacity()
+    {
+        return CheckActiveObjectByCount(GetCapacity());
+    }
+
+    /// <summary>
     /// すべてのアイテムを削除し、指定キャパシティ分再確保する。
     /// めちゃくちゃ重いので、あまり使わない方が良い。
     /// </summary>

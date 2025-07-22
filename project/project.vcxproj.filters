@@ -427,12 +427,6 @@
     <Filter Include="src%28application%29\scene\play\ability">
       <UniqueIdentifier>{d6711cb7-20d9-48c3-b0f4-127bcb022590}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\play\ability\fire">
-      <UniqueIdentifier>{f9dd973f-aa18-4bb2-b507-4c6a4ca7a117}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src%28application%29\scene\play\ability\explosion">
-      <UniqueIdentifier>{dc502d1b-5f66-4c2a-8f3e-a26e2491d928}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1424,14 +1418,14 @@
     <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Explosion.cpp">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ability\explosion\AbilityExplosion.cpp">
-      <Filter>src%28application%29\scene\play\ability\explosion</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\play\ability\fire\AttributeFire.cpp">
-      <Filter>src%28application%29\scene\play\ability\fire</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\play\ability\fire\BallAttribute_Fire.cpp">
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Fire.cpp">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ability\AbilityFire.cpp">
+      <Filter>src%28application%29\scene\play\ability</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2233,14 +2227,14 @@
     <ClInclude Include="src\scene\play\ability\AbilityBase.h">
       <Filter>src%28application%29\scene\play\ability</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ability\explosion\AbilityExplosion.h">
-      <Filter>src%28application%29\scene\play\ability\explosion</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\ability\fire\AttributeFire.h">
-      <Filter>src%28application%29\scene\play\ability\fire</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\ability\fire\BallAttribute_Fire.h">
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Fire.h">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ability\AbilityExplosion.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ability\AbilityFire.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

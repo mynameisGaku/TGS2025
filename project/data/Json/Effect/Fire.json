@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 50.0,
+    "defMagnification": 50.0,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/",
+    "typeName": "Fire.efk",
+    "dimension": "3d"
+  }
+}

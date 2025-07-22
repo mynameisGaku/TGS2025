@@ -3,7 +3,7 @@
 
 #include "src/util/fx/effect/EffectManager.h"
 
-#include "src/scene/play/ability/explosion/AbilityExplosion.h"
+#include "src/scene/play/ability/AbilityExplosion.h"
 
 BallAttribute_Explosion::BallAttribute_Explosion(Ball* owner) : BallAttribute(owner)
 {
@@ -27,12 +27,10 @@ void BallAttribute_Explosion::OnHave()
 
 void BallAttribute_Explosion::OnHit()
 {
-	AbilityExplosion* fire = Instantiate<AbilityExplosion>();
-	fire->BaseInit(owner->transform->position, 256.0f, 2.0f);
+	AbilityExplosion* explosion = Instantiate<AbilityExplosion>();
+	explosion->BaseInit(owner->transform->position, 256.0f, 2.0f);
 }
 
 void BallAttribute_Explosion::OnGround()
 {
-	AbilityExplosion* fire = Instantiate<AbilityExplosion>();
-	fire->BaseInit(owner->transform->position, 256.0f, 2.0f);
 }

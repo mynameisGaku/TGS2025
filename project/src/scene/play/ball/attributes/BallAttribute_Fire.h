@@ -16,5 +16,6 @@ public:
 
 private:
 	float m_Interval;
+	float m_IntervalMax;
 	bool m_Use;
 };

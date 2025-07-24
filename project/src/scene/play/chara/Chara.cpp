@@ -2506,21 +2506,20 @@ void Chara::throwBallHoming()
 	Vector3 forward = transform->Forward();
 	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
 
-	const Chara* targetChara = nullptr;
 	Camera* camera = CameraManager::GetCamera(m_Index);
+
+	std::shared_ptr<BallTarget> target;
 
 	if (camera != nullptr)
 	{
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+		target = camera->TargetChara()->GetBallTarget();
 	}
 
-	if (targetChara != nullptr)
+	if (target != nullptr)
 	{
-		std::shared_ptr<BallTarget> target = targetChara->GetBallTarget();
-
 		if (m_IsLanding == true)
 		{
-			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);
 		}
 		else
 		{
@@ -2537,7 +2536,7 @@ void Chara::throwBallHoming()
 	}
 	else
 	{
-		m_pBall->ThrowDirection(forward, this, m_BallChargeRate);	// Magic:)
+		m_pBall->ThrowDirection(forward, this, m_BallChargeRate);
 	}
 
 	releaseBall();

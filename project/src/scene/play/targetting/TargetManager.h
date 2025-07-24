@@ -6,8 +6,9 @@ class BallManager;
 class CharaManager;
 
 /// <summary>
-/// 誰がどのキャラを狙っているかを管理する
+/// ロックオン時のUI、被ロックオン時のUIを描画する
 /// </summary>
+/// <author>ミッチ</author>
 class TargetManager : public GameObject {
 public:
 	TargetManager();

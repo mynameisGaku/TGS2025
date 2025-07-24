@@ -1,8 +1,0 @@
-{
-  "Param": {
-    "DownScale": 8,
-    "MinBrightness": 240,
-    "GaussianRate": 200,
-    "AddRate": 50
-   }
-}

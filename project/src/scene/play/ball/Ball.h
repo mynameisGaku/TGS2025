@@ -121,6 +121,7 @@ private:
 	Vector3	m_HomingOrigin;			// ホーミング開始地点
 	Vector3	m_HomingTargetPos;		// ホーミング対象の座標
 
+	bool	m_IsThorwing;			// 投擲中か
 	bool	m_IsHoming;				// ホーミング中か
 	bool	m_DoRefreshHoming;		// ホーミング先を更新するか
 

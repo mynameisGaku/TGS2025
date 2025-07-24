@@ -102,6 +102,7 @@ void Ball::Init(std::string charaTag)
 	if (not m_pManager)
 		m_pManager = FindGameObject<BallManager>();
 
+	m_IsThorwing = false;
 	m_IsHoming = false;
 	m_DoRefreshHoming = false;
 	m_IsActive = true;
@@ -161,8 +162,9 @@ void Ball::Update()
 
 	bool hit = collisionToStage();
 
-	if (m_IsHoming && hit)
+	if ((m_IsHoming || m_IsThorwing) && hit)
 	{
+		m_IsThorwing = false;
 		homingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
@@ -271,6 +273,8 @@ void Ball::Throw(Chara* owner, float chargeRate)
 	m_Owner = owner;
 	m_LastOwner = m_Owner;
 	m_ChargeRate = chargeRate;
+
+	m_IsThorwing = true;
 }
 
 void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRate)
@@ -292,7 +296,7 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 		chargeLevel = 2;
 	}
 
-	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
+	m_Physics->velocity = direction.Normalize() * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
 void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)

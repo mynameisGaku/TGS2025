@@ -93,7 +93,7 @@ void Camera::ChaseState(FSMSignal sig)
 		// Y軸回転に制限をかける
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
 
 		// 注視するキャラが存在、ボタン入力がされた場合
 		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))

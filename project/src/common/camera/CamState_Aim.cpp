@@ -52,7 +52,7 @@ void Camera::AimState(FSMSignal sig)
 			return;
 		m_CharaIndex = m_pFollowerChara->GetIndex();
 
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
@@ -85,7 +85,7 @@ void Camera::AimState(FSMSignal sig)
 			return;
 		m_CharaIndex = m_pFollowerChara->GetIndex();
 
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
 
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);

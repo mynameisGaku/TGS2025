@@ -225,8 +225,8 @@ void Chara::Init(std::string tag)
 	std::string sIndex;
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-    {
-        sIndex = "1P";
+	{
+		sIndex = "1P";
 	}
 	else
 	{
@@ -2537,7 +2537,21 @@ void Chara::throwBallHoming()
 	}
 	else
 	{
-		m_pBall->ThrowDirection(forward, this, m_BallChargeRate);	// Magic:)
+		m_pBall->Throw(this, m_BallChargeRate);	// Magic:)
+
+		Physics* pBallPhysics = m_pBall->GetComponent<Physics>();
+		if (pBallPhysics != nullptr) {
+			int chargeLevel = 0;
+
+			if (m_BallChargeRate < 0.5f)
+					 chargeLevel = 0;
+			else if (m_BallChargeRate < 1.0f)
+				chargeLevel = 1;
+			else
+				chargeLevel = 2;
+			
+			pBallPhysics->velocity += forward.Normalize() * BALL_REF.ChargeLevels[chargeLevel].Speed * 0.025f;
+		}
 	}
 
 	releaseBall();

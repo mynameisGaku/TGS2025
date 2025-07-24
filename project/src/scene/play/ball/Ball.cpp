@@ -9,7 +9,11 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/common/stage/StageObjectManager.h"
+
 #include "src/scene/play/ball/BallManager.h"
+#include "src/scene/play/ball/attributes/BallAttribute.h"
+#include "src/scene/play/ball/attributes/BallAttribute_Explosion.h"
+
 #include "src/common/component/renderer/BallRenderer.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 #include "src/scene/play/catcher/Catcher.h"
@@ -48,6 +52,8 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
+
+	SetAttribute(new BallAttribute_Explosion(this));
 
 	Init();
 }
@@ -160,6 +166,11 @@ void Ball::Update()
 		homingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnGround();
+		}
 	}
 
 	if (m_State != S_OWNED)
@@ -188,6 +199,22 @@ void Ball::Update()
 		}
 	}
 	m_pTrail->Update();
+
+	if (m_State == Ball::S_OWNED)
+	{
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnHave();
+		}
+	}
+
+	if (m_State == Ball::S_THROWN)
+	{
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->Throwing();
+		}
+	}
 }
 
 void Ball::effectUpdate()
@@ -213,7 +240,6 @@ void Ball::effectUpdate()
 	}
 }
 
-
 void Ball::Draw()
 {
 	if (not m_IsActive)
@@ -222,6 +248,11 @@ void Ball::Draw()
 	m_pTrail->Draw();
 
 	Object3D::Draw();
+}
+
+void Ball::SetAttribute(BallAttribute* attribute) {
+
+	m_Attributes.push_back(attribute);
 }
 
 void Ball::Throw(Chara* owner, float chargeRate)
@@ -307,10 +338,14 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		changeState(S_LANDED);
 
-
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
 			m_Owner->SetLastBall(nullptr);
+		}
+
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnHit();
 		}
 
 		// === ‘¼‚Ìƒ{[ƒ‹‚Æ‚ÌÕ“Ë‘Î‰ ===
@@ -357,7 +392,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	}
 }
 
-void Ball::SetTexture(const BallTexture& texture)
+void Ball::SetTexture(const BallTexture& texture, const std::string& mapKey)
 {
 	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
 	if (ballRenderer == nullptr)
@@ -366,7 +401,7 @@ void Ball::SetTexture(const BallTexture& texture)
 		ballRenderer->InitVertices();
 	}
 
-	ballRenderer->SetTexture(texture);
+	ballRenderer->SetTexture(texture, mapKey);
 }
 
 void Ball::SetTrailImage(int hImage)

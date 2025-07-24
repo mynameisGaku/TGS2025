@@ -153,6 +153,11 @@ public:
 	void CatchSuccess(const Vector3& velocity);
 
 	//=======================================================================================
+	// ▼ダメージ
+
+	void Damage(int sub);
+
+	//=======================================================================================
 	// ▼タックル
 	void Tackle();
 
@@ -174,11 +179,15 @@ public:
 	// ▼演出
 
 	void SetTrailImage(int hImage);
-    Vector2 Target(const Ball* ball);
+	Vector2 Target(const Ball* ball);
 
-    //=======================================================================================
-    // ▼ユーザー
-	void SetUser(const User& user) { m_User = user; }
+	//=======================================================================================
+	// ▼ユーザー
+	inline void SetUser(const User& user) { m_User = user; }
+
+	//=======================================================================================
+	// ▼移動フラグ
+	inline void SetIsMove(bool flag) { m_IsMove = flag; }
 
 	//=======================================================================================
 	// ▼ゲッター
@@ -458,4 +467,5 @@ private:
 	void respawn_changeStateNetwork(void(Chara::* state)(FSMSignal));
 	void sendChangeStateToNetwork(const std::string& state);
 	void sendChangeSubStateToNetwork(const std::string& state);
+	void sendChangeRespawnStateToNetwork(const std::string& state);
 };

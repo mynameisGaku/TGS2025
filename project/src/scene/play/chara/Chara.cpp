@@ -152,12 +152,18 @@ Chara::Chara()
 	m_FSM->RegisterStateName(&Chara::StateStandingIdleEmote, "StateStandingIdleEmote");
 	m_FSM->RegisterStateName(&Chara::StateStandingIdleToActionIdle, "StateStandingIdleToActionIdle");
 	m_FSM->RegisterStateName(&Chara::StateTackle, "StateTackle");
+	m_FSM->RegisterStateName(&Chara::StateWallStepLeft, "StateWallStepLeft");
+	m_FSM->RegisterStateName(&Chara::StateWallStepRight, "StateWallStepRight");
 
 	m_SubFSM->RegisterStateName(&Chara::SubStateCatch, "SubStateCatch");
 	m_SubFSM->RegisterStateName(&Chara::SubStateGetBall, "SubStateGetBall");
 	m_SubFSM->RegisterStateName(&Chara::SubStateHold, "SubStateHold");
 	m_SubFSM->RegisterStateName(&Chara::SubStateHoldToAim, "SubStateHoldToAim");
 	m_SubFSM->RegisterStateName(&Chara::SubStateNone, "SubStateNone");
+
+	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateFadeIn, "RespawnStateFadeIn");
+	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateFadeOut, "RespawnStateFadeOut");
+	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateNone, "RespawnStateNone");
 #endif // FALSE
 
 	main_changeStateNetwork(&Chara::StateActionIdle); // ステートを変更
@@ -216,7 +222,16 @@ void Chara::Init(std::string tag)
 
 	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
-	const std::string sIndex = std::to_string(m_Index + 1) + "P";
+	std::string sIndex;
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+    {
+        sIndex = "1P";
+	}
+	else
+	{
+		sIndex = std::to_string(m_Index + 1) + "P";
+	}
 
 	UI_CrossHair* ui_CrossHair = UI_Manager::Find<UI_CrossHair>("CrossHair_" + sIndex);
 	if (ui_CrossHair != nullptr)
@@ -374,7 +389,6 @@ void Chara::Init(std::string tag)
 
 #endif // FALSE
 
-	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
 	{
 		if (not m_pNetManager)
@@ -400,7 +414,10 @@ void Chara::Update() {
 	if (net.IsNetworkEnable)
 	{
 		if (m_User.UUID == m_pNetManager->g_MyUUID)
+		{
 			m_pNetManager->SendCharaTransform(transform->Global(), m_pNetManager->g_MyUUID);
+			m_pNetManager->SendCharaAllFlag(this, m_User.UUID);
+		}
 	}
 
 	// 時間が止まってたらアップデートしない
@@ -773,7 +790,16 @@ void Chara::climb(Vector3& normal)
 
 void Chara::Move(const Vector3& dir)
 {
-	m_IsMove = dir.GetLengthSquared() > 0;
+	auto& net = NetworkRef::Inst();
+	if (not net.IsNetworkEnable)
+		m_IsMove = dir.GetLengthSquared() > 0;
+	else
+	{
+		if (net.UUID == m_User.UUID)
+		{
+			m_IsMove = dir.GetLengthSquared() > 0;
+		}
+	}
 
 	if (m_CanRot)
 	{
@@ -976,6 +1002,15 @@ void Chara::CatchSuccess(const Vector3& velocity)
 	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 
 	sub_changeStateNetwork(&Chara::SubStateGetBall); // ステートを変更
+}
+
+void Chara::Damage(int sub) {
+
+	m_pHP->Damage(sub);
+
+	main_changeStateNetwork(&Chara::StateDamageToDown);
+
+	playGetHitSound();
 }
 
 void Chara::Tackle()
@@ -2896,12 +2931,15 @@ void Chara::playTinyFootStepSound(const nlohmann::json& argument)
 	SoundManager::Play(soundName, soundName);
 }
 
-void Chara::main_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
+void Chara::main_changeStateNetwork(void(Chara::* state)(FSMSignal sig))
 {
 	m_FSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-		sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	{
+		if (net.UUID == m_User.UUID)
+			sendChangeStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	}
 }
 
 void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
@@ -2909,14 +2947,23 @@ void Chara::sub_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 	m_SubFSM->ChangeState(state);
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-		sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	{
+		if (net.UUID == m_User.UUID)
+			sendChangeSubStateToNetwork(m_FSM->GetStateNameFromMap(state));
+	}
 }
 
 void Chara::respawn_changeStateNetwork(void(Chara::*state)(FSMSignal sig))
 {
 	m_RespawnFSM->ChangeState(state);
-	//auto& net = NetworkRef::Inst();
-	//if (net.IsNetworkEnable)
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (net.UUID == m_User.UUID)
+		{
+
+		}
+	}
 }
 
 
@@ -2929,6 +2976,14 @@ void Chara::sendChangeStateToNetwork(const std::string& state)
 }
 
 void Chara::sendChangeSubStateToNetwork(const std::string& state)
+{
+	auto& net = NetworkRef::Inst();
+	if (not net.IsNetworkEnable)
+		return;
+	m_pNetManager->SendCharaChangeSubState(state, m_User.UUID);
+}
+
+void Chara::sendChangeRespawnStateToNetwork(const std::string& state)
 {
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)

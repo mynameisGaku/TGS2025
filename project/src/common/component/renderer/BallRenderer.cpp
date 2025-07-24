@@ -74,9 +74,13 @@ void BallRenderer::InitVertices()
 	}
 }
 
-void BallRenderer::SetTexture(const BallTexture& texture)
+void BallRenderer::SetTexture(const BallTexture& texture, const std::string& mapKey)
 {
 	m_Texture = texture;
+	if (not mapKey.empty())
+	{
+		m_UsingTexKey = mapKey;
+	}
 }
 
 void BallRenderer::Update()
@@ -148,4 +152,9 @@ void BallRenderer::Draw()
 			DrawPolygon3D(vertices, 2, m_Texture.Texture, TRUE);
 		}
 	}
+}
+
+const BallTexture BallRenderer::GetTexture() const
+{
+	return m_Texture;
 }

@@ -13,6 +13,8 @@
 #include <src/util/editbox/editbox.hpp>
 #include <src/scene/play/chara/CharaManager.h>
 #include <src/util/transform/Transform.h>
+#include <src/util/file/json/VectorJson.h>
+#include <src/util/enum/EnumUtil.h>
 
 // --- 静的メンバの初期化 ---
 SOCKET NetworkManager::g_ListenSock = INVALID_SOCKET;
@@ -22,6 +24,8 @@ SOCKET NetworkManager::g_Sock = INVALID_SOCKET;
 bool NetworkManager::g_Running = false;
 std::vector<User> NetworkManager::g_Users;
 std::string NetworkManager::g_MyUUID = "";
+
+using JSON = nlohmann::json;
 
 // --- コンストラクタ ---
 NetworkManager::NetworkManager()
@@ -164,7 +168,7 @@ void NetworkManager::SendJson(const std::string& json)
 	}
 }
 
-void NetworkManager::SendJson(const nlohmann::json& json)
+void NetworkManager::SendJson(const JSON& json)
 {
 	SendJson(json.dump());
 }
@@ -183,14 +187,14 @@ void NetworkManager::subscribe(const std::string& name)
 
 		g_MyUUID = user.UUID;
 
-		nlohmann::json broadcast;
+		JSON broadcast;
 
 		broadcast["Command"] = "SetUserData";
 		// 返信する内容として、既存のキャラデータをリストアップ
 		for (auto& u : g_Users)
 		{
 			// replyに現在存在するユーザーデータを配列として登録
-			nlohmann::json userJson;
+			JSON userJson;
 			userJson["Name"] = u.Name;
 			userJson["UUID"] = u.UUID;
 			userJson["Socket"] = u.Socket;
@@ -220,7 +224,7 @@ void NetworkManager::SendAddUser(const std::string& name)
 	if (!net.IsNetworkEnable)
 		return;
 	// JSON形式でユーザー追加のコマンドを作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"]		= "AddUser";
 	json["NeedReply"]	= true;
 	json["Name"]		= name;
@@ -237,7 +241,7 @@ void NetworkManager::SendCharaTransform(const Transform& trs, const std::string&
 	if (!net.IsNetworkEnable)
 		return;
 	// TransformデータをJSON形式に変換
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "SetTransform";
 	json["Position"]["X"] = trs.position.x;
 	json["Position"]["Y"] = trs.position.y;
@@ -262,7 +266,7 @@ void NetworkManager::SendSceneTransitToPlay()
 	if (!net.IsNetworkEnable)
 		return;
 	// ゲーム開始のコマンドをJSON形式で作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "TransitToPlay";
 	json["NeedReply"] = false;
 	// JSONを文字列に変換
@@ -273,11 +277,11 @@ void NetworkManager::SendSceneTransitToPlay()
 
 void NetworkManager::SendCharaChangeState(const std::string& state, const std::string& uuid)
 {
-    auto& net = NetworkRef::Inst();
-    if (!net.IsNetworkEnable)
-        return;
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
 	// ステート変更のコマンド作成
-	nlohmann::json json;
+	JSON json;
 	json["Command"] = "ChangeState";
 	json["NeedReply"] = false;
 	json["UUID"] = uuid;
@@ -290,19 +294,150 @@ void NetworkManager::SendCharaChangeState(const std::string& state, const std::s
 
 void NetworkManager::SendCharaChangeSubState(const std::string& state, const std::string& uuid)
 {
-    auto& net = NetworkRef::Inst();
-    if (!net.IsNetworkEnable)
-        return;
-    // ステート変更のコマンド作成
-    nlohmann::json json;
-    json["Command"] = "ChangeSubState";
-    json["NeedReply"] = false;
-    json["UUID"] = uuid;
-    json["State"] = state;
-    // ダンプ
-    std::string jsonStr = json.dump();
-    // 送信
-    SendJson(jsonStr);
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// ステート変更のコマンド作成
+	JSON json;
+	json["Command"] = "ChangeSubState";
+	json["NeedReply"] = false;
+	json["UUID"] = uuid;
+	json["State"] = state;
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendCharaChangeRespawnState(const std::string& state, const std::string& uuid)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// ステート変更のコマンド作成
+	JSON json;
+	json["Command"] = "ChangeRespawnState";
+	json["NeedReply"] = false;
+	json["UUID"] = uuid;
+	json["State"] = state;
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendSetCharaMoveFlag(bool flag, const std::string& uuid)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// フラグセットコマンド作成
+	JSON json;
+	json["Command"] = "SetCharaMoveFlag";
+	json["NeedReply"] = false;
+	json["UUID"] = uuid;
+	json["Flag"] = flag;
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendCharaAllFlag(Chara* chara, const std::string& uuid)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// フラグセットコマンド作成
+	JSON json;
+	json["Command"] = "SetCharaAllFlag";
+	json["NeedReply"] = false;
+	json["UUID"] = uuid;
+
+	json["Flags"]["IsCharging"] = chara->m_IsCharging;
+	json["Flags"]["IsLanding"] = chara->m_IsLanding;
+	json["Flags"]["CanMove"] = chara->m_CanMove;
+	json["Flags"]["CanRot"] = chara->m_CanRot;
+	json["Flags"]["IsMove"] = chara->m_IsMove;
+	json["Flags"]["IsJumping"] = chara->m_IsJumping;
+	json["Flags"]["CanCatch"] = chara->m_CanCatch;
+	json["Flags"]["CanHold"] = chara->m_CanHold;
+	json["Flags"]["CanThrow"] = chara->m_CanThrow;
+	json["Flags"]["IsCatching"] = chara->m_IsCatching;
+	json["Flags"]["IsTargeting"] = chara->m_IsTargeting;
+	json["Flags"]["IsTargeted"] = chara->m_IsTargeted;
+	json["Flags"]["CanTackle"] = chara->m_CanTackle;
+	json["Flags"]["IsTackling"] = chara->m_IsTackling;
+	json["Flags"]["IsInvincible"] = chara->m_IsInvincible;
+	json["Flags"]["IsDamage"] = chara->m_IsDamage;
+	json["Flags"]["IsSliding"] = chara->m_IsSliding;
+	json["Flags"]["IsInhibitionSpeed"] = chara->m_IsInhibitionSpeed;
+	json["Flags"]["CanClimb"] = chara->m_CanClimb;
+	json["Flags"]["IsClimb"] = chara->m_IsClimb;
+	json["Flags"]["IsWall"] = chara->m_IsWall;
+
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendAddBallSpawner(int hModel, const Transform& trs, const BALL_SPAWNER_DESC& desc, const std::string& id)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+	// ボールスポナー生成コマンド作成
+	JSON json;
+	json["Command"] = "AddBallSpawner";
+	json["NeedReply"] = false;
+	json["ID"] = id;
+
+	json["Desc"]["INTERVAL_SEC"]					= desc.INTERVAL_SEC;
+	json["Desc"]["INTERVAL_SEC_RANDOM_RANGE"]		= desc.INTERVAL_SEC_RANDOM_RANGE;
+	json["Desc"]["SPAWN_AMOUNT_ONCE_MAX"]			= desc.SPAWN_AMOUNT_ONCE_MAX;
+	json["Desc"]["SPAWN_AMOUNT_ONCE_MIN"]			= desc.SPAWN_AMOUNT_ONCE_MIN;
+	json["Desc"]["SPAWN_AMOUNT_ONCE_RANDOM_RANGE"]	= desc.SPAWN_AMOUNT_ONCE_RANDOM_RANGE;;
+	json["Desc"]["SPAWN_AMOUNT_INITIAL"]			= desc.SPAWN_AMOUNT_INITIAL;
+	to_json(json["Desc"]["SPAWN_RANGE"], desc.SPAWN_RANGE);
+	to_json(json["Desc"]["SPAWN_INITIAL_VELOCITY"], desc.SPAWN_INITIAL_VELOCITY);
+
+	json["Model"] = hModel;
+	to_json(json["Position"], trs.position);
+	to_json(json["Rotation"], trs.rotation);
+	to_json(json["Scale"], trs.scale);
+
+	// ダンプ
+	std::string jsonStr = json.dump();
+	// 送信
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendBallSpawnBySpawner(const std::string& spawnerID, Ball& generatedBall)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+
+	JSON json;
+	json["Command"]					= "BallSpawnBySpawner";
+	json["NeedReply"]				= false;
+
+	json["SpawnerID"]				= spawnerID;
+
+	JSON ballJson;
+
+	ballJson["ID"]					= generatedBall.GetUniqueID();
+	ballJson["State"]				= EnumUtil::ToString(generatedBall.GetState());
+	ballJson["CharaTag"]			= generatedBall.GetCharaTag();
+	const auto& ballRenderer		= generatedBall.GetBallRenderer();
+	ballJson["TexKey"]				= ballRenderer.GetTextureKey();
+	json["Ball"]					= ballJson;
+
+	// ダンプ
+	std::string jsonStr			= json.dump();
+	// 送信
+	SendJson(jsonStr);
 }
 
 // --- 全クライアントにデータを送信する関数 ---
@@ -362,7 +497,7 @@ unsigned __stdcall ClientThread(void* param)
 			char* jsonData = new char[header.size];
 			recv(sock, jsonData, header.size, MSG_WAITALL);
 
-			nlohmann::json json = nlohmann::json::parse(jsonData);
+			JSON json = JSON::parse(jsonData);
 			delete[] jsonData;
 
 			NetworkManager::HostCommandProcess(json, sock);
@@ -432,7 +567,7 @@ unsigned __stdcall RecvThread(void* param)
 			char* jsonData = new char[header.size];
 			recv(NetworkManager::g_Sock, jsonData, header.size, MSG_WAITALL);
 
-			nlohmann::json json = nlohmann::json::parse(jsonData);
+			JSON json = JSON::parse(jsonData);
 			delete[] jsonData;
 
 			NetworkManager::ClientCommandProcess(json, sock);

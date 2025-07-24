@@ -10,6 +10,7 @@
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include <vendor/magic_enum/magic_enum.hpp>
+#include <src/reference/network/NetworkRef.h>
 
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
@@ -19,6 +20,7 @@
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
 #include "src/scene/play/chara/CharaSpawnPoint.h"
 #include "src/scene/play/ball/BallSpawner.h"
+#include "src/common/stage/SpawnerObjectQueue.h"
 
 // 移動可能範囲
 #include "src/scene/play/movable/MovableArea.h"
@@ -36,6 +38,8 @@ namespace {
 
 	std::vector<StageObject*>* stageObjects;	// ステージオブジェクト
 	std::vector<MovableArea*>* movableAreas;
+
+	BallSpawnerObjectQueue* ballSpawnerQueue = nullptr;
 
 	static unsigned int productionID;	// 製造番号
 	bool canSaveCsv;			// CSVデータを保存できるか
@@ -457,7 +461,23 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 			bdesc.SPAWN_INITIAL_VELOCITY = Vector3(vel.at("x").get<float>(), vel.at("y").get<float>(), vel.at("z").get<float>());
 
 			// 登録
-			AddBallSpawner(info.hModel, tr, bdesc);
+			auto& net = NetworkRef::Inst();
+			if (net.IsNetworkEnable)
+			{
+				// ホストなら生成するスポナーをキューに追加 (後で一気に生成する)
+				if (net.IsHost)
+				{
+					if (not ballSpawnerQueue)
+					{
+						ballSpawnerQueue = new BallSpawnerObjectQueue;
+					}
+					ballSpawnerQueue->Push(info.hModel, tr, bdesc);
+				}
+			}
+			else
+			{
+				AddBallSpawner(info.hModel, tr, bdesc);
+			}
 		}
 		else if (obj.contains("MovableArea") && !obj.at("MovableArea").is_null())
 		{
@@ -820,6 +840,11 @@ std::vector<std::string> StageObjectManager::StageObjectsTheString() {
 	}
 
 	return names;
+}
+
+BallSpawnerObjectQueue* StageObjectManager::GetBallSpawnerQueue()
+{
+	return ballSpawnerQueue;
 }
 
 #ifdef IMGUI

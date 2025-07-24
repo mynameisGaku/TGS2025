@@ -278,7 +278,7 @@ void Chara::Init(std::string tag)
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
 			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descBold.subdivisions = 4; // 補間分割数（大きいほど滑らか）
 			descBold.thick = 50.0f; // トレイルの太さ
 			descBold.lifeTime = lifeTime; // トレイルの寿命
 			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
@@ -286,7 +286,7 @@ void Chara::Init(std::string tag)
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
 			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descSmall.subdivisions = 4; // 補間分割数（大きいほど滑らか）
 			descSmall.thick = 25.0f; // トレイルの太さ
 			descSmall.lifeTime = lifeTime; // トレイルの寿命
 			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
@@ -2254,6 +2254,16 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 		{
 			m_BallChargeRate = 1.0f;
 		}
+
+		// カメラの向きに合わせる
+		m_CanRot = false;
+
+		Camera* camera = CameraManager::GetCamera(m_Index);
+		if (camera != nullptr) {
+			float currentY = transform->rotation.y;
+			float terminusY = camera->transform->rotation.y;
+			transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -2550,7 +2560,7 @@ void Chara::throwBallHoming()
 			else
 				chargeLevel = 2;
 			
-			pBallPhysics->velocity += forward.Normalize() * BALL_REF.ChargeLevels[chargeLevel].Speed * 0.025f;
+			pBallPhysics->velocity += forward.Normalize() * BALL_REF.ChargeLevels[chargeLevel].Speed * GTime.DeltaTime();
 		}
 	}
 

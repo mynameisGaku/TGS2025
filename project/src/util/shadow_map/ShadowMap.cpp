@@ -7,7 +7,7 @@
 
 namespace {
 
-	static const Vector3 SHADOW_MAP_DRAW_AREA = Vector3(1000.0f);	// 影描画を行う範囲
+	static const Vector3 SHADOW_MAP_DRAW_AREA = Vector3(1500.0f);	// 影描画を行う範囲
 
 	int hShadowMap = -1;		// シャドウマップのハンドラ
 	bool isActive = false;		// 稼働しているか
@@ -39,7 +39,7 @@ void ShadowMap::DrawBegin(int cameraIndex) {
 		return;
 
 	Vector3 camPos = camera->transform->Global().position;
-	Vector3 offset = VTransform(SHADOW_MAP_DRAW_AREA, camera->transform->Global().RotationMatrix());
+	Vector3 offset = VTransform(SHADOW_MAP_DRAW_AREA, MGetRotY(camera->transform->Global().rotation.y));
 
 	Vector3 minPosition = camPos - offset;	// 影描画開始地点
 	Vector3 maxPosition = camPos + offset;	// 影描画終了地点

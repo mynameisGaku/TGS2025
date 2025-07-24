@@ -264,7 +264,6 @@ Chara* CharaManager::NearestEnemy(int index, float distance) {
 			continue;
 
 		// ‹——£ŒvŽZ‚â•Ç”»’è‚ð‚¢‚ê‚é
-
 		if ((chara->transform->position - it->m_pObject->transform->position).GetLengthSquared() >= distance * distance)
 			continue;
 

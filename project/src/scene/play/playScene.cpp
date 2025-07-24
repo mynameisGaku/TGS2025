@@ -43,6 +43,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
 	CameraManager::SetIsScreenDivision(true);
 
+    auto& net = NetworkRef::Inst();
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
 	for (int i = 0; i < CAMERA_NUM; i++)
@@ -72,7 +73,10 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	// オフラインプレイのときはいいけど、オンラインのときにカメラ生成がキャラと同時に行われるので
 	// ここでの生成はオンラインのときは無意味。あとで直す
-    Instantiate<UI_Setter_PlayScene>();
+
+	if (not net.IsNetworkEnable)
+		Instantiate<UI_Setter_PlayScene>();
+
 	Instantiate<MatchManager>();
 
 	EnemyManager* enemyManager = Instantiate<EnemyManager>();
@@ -96,7 +100,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	//StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 	StageObjectManager::LoadFromJson("data/json/Stage/" + gameM->GetCurrentStageName() + ".json");
 
-    auto& net = NetworkRef::Inst();
     if (net.IsNetworkEnable)
         CameraManager::SetIsScreenDivision(false);
 }

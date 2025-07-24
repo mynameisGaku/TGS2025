@@ -26,6 +26,7 @@
 #include "src/util/sound/SoundManager.h"
 #include "src/scene/play/tackler/Tackler.h"
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
@@ -101,6 +102,7 @@ Chara::Chara()
 	m_IsInhibitionSpeed = true;
 	m_SpawnPointManager = nullptr;
 	m_TackleIntervalAlarm = nullptr;
+	m_BallTarget = nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -256,14 +258,14 @@ void Chara::Init(std::string tag)
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>>* frameAndTrailNames = new std::vector<std::pair<std::string, std::string>>
 	{
-		{ "mixamorig9:Hips", "HipsTrail" },
-		{ "mixamorig9:Spine2", "Spine1Trail" },
-		{ "mixamorig9:LeftShoulder", "LeftShoulderTrail" },
-		{ "mixamorig9:RightShoulder", "RightShoulderTrail" },
-		{ "mixamorig9:LeftLeg", "LeftLegTrail" },
-		{ "mixamorig9:LeftUpLeg", "LeftUpLegTrail" },
-		{ "mixamorig9:RightLeg", "RightLegTrail" },
-		{ "mixamorig9:RightUpLeg", "RightUpLegTrail"}
+		{ "mixamorig:Hips", "HipsTrail" },
+		{ "mixamorig:Spine2", "Spine1Trail" },
+		{ "mixamorig:LeftShoulder", "LeftShoulderTrail" },
+		{ "mixamorig:RightShoulder", "RightShoulderTrail" },
+		{ "mixamorig:LeftLeg", "LeftLegTrail" },
+		{ "mixamorig:LeftUpLeg", "LeftUpLegTrail" },
+		{ "mixamorig:RightLeg", "RightLegTrail" },
+		{ "mixamorig:RightUpLeg", "RightUpLegTrail"}
 	};
 	ModelFrameTrailRenderer* trail = AddComponent<ModelFrameTrailRenderer>();
 	MODEL_FRAME_TRAIL_RENDERER_DESC desc1;
@@ -321,7 +323,7 @@ void Chara::Init(std::string tag)
 	m_EffectTransform->rotation.y = MathUtil::ToRadians(180.0f);
 
 	m_Animator = AddComponent<Animator>();
-	m_Animator->Init("mixamorig9:Hips", 30.0f, 0.15f);
+	m_Animator->Init("mixamorig:Hips", 30.0f, 0.15f);
 	m_Animator->SetOffsetMatrix(MGetRotY(DX_PI_F));
 
 	m_Animator->LoadAnimsFromJson("data/Json/Chara/CharaAnim.json");
@@ -338,7 +340,10 @@ void Chara::Init(std::string tag)
 	m_Timeline->SetFunction("ThrowBall", &Chara::throwBall);
 	m_Timeline->SetFunction("PlayFootSound", &Chara::playFootStepSound);
 	m_Timeline->SetFunction("PlayTinyFootSound", &Chara::playTinyFootStepSound);
+	m_Timeline->SetFunction("Invincible", &Chara::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
+
+	m_BallTarget = std::make_shared<BallTarget_WithParent>(BallTarget_WithParent(Vector3::SetY(150), transform));
 
 #if FALSE
 
@@ -433,11 +438,11 @@ void Chara::Update() {
 	// ボールの更新
 	if (m_pBall)
 	{
-		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig9:RightHandThumb1"));
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
 		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
 
-		m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
-		m_pBall->transform->position *= m;
+		//m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
+		m_pBall->transform->position = VTransform(Vector3::UnitZ, m);
 		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
 	}
 
@@ -467,10 +472,9 @@ void Chara::Update() {
 
 	HitGroundProcess();
 
-	invincibleUpdate();
-	
-	buttonHintUpdate();
+	//=== 座標更新終了後の処理 ===
 
+	m_BallTarget->UpdatePosition();
 	m_lastUpdatePosition = transform->position;
 
 	// NaN/Infのチェック
@@ -485,6 +489,11 @@ void Chara::Update() {
 		m_pPhysics->resistance = Vector3::Zero;
 		m_pPhysics->angularVelocity = Vector3::Zero;
 	}
+
+	//============================
+
+	invincibleUpdate();
+	buttonHintUpdate();
 }
 
 void Chara::Draw()
@@ -995,6 +1004,15 @@ void Chara::CatchSuccess(const Vector3& velocity)
 	sub_changeStateNetwork(&Chara::SubStateGetBall); // ステートを変更
 }
 
+void Chara::Damage(int sub) {
+
+	m_pHP->Damage(sub);
+
+	main_changeStateNetwork(&Chara::StateDamageToDown);
+
+	playGetHitSound();
+}
+
 void Chara::Tackle()
 {
 	if (not m_CanTackle)
@@ -1190,7 +1208,7 @@ void Chara::StateActionIdleToRun(FSMSignal sig)
 		if (m_Animator->IsFinished())
 		{
 			main_changeStateNetwork(&Chara::StateRun); // ステートを変更
-			m_Animator->Play("Run");
+			//m_Animator->Play("Run");
 			//m_Animator->SetCurrentFrame(3.0f);
 		}
 	}
@@ -2130,7 +2148,7 @@ void Chara::SubStateNone(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->StopSub("mixamorig9:Spine");
+		m_Animator->StopSub("mixamorig:Spine");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2162,7 +2180,7 @@ void Chara::SubStateGetBall(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "GetBall");
+		m_Animator->PlaySub("mixamorig:Spine", "GetBall");
 		m_CanMove = false;
 		m_CanRot = false;
 		m_pPhysics->SetGravity(Vector3::Zero);
@@ -2171,7 +2189,7 @@ void Chara::SubStateGetBall(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
-		if (m_Animator->IsFinishedSub("mixamorig9:Spine"))
+		if (m_Animator->IsFinishedSub("mixamorig:Spine"))
 		{
 			sub_changeStateNetwork(&Chara::SubStateHold); // ステートを変更
 		}
@@ -2198,7 +2216,7 @@ void Chara::SubStateHold(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "Hold");
+		m_Animator->PlaySub("mixamorig:Spine", "Hold");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2226,7 +2244,7 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "HoldToAim");
+		m_Animator->PlaySub("mixamorig:Spine", "HoldToAim");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2255,7 +2273,7 @@ void Chara::SubStateCatch(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
-		m_Animator->PlaySub("mixamorig9:Spine", "Catch");
+		m_Animator->PlaySub("mixamorig:Spine", "Catch");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2492,26 +2510,34 @@ void Chara::throwBallHoming()
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
 	if (camera != nullptr)
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
-
-	if (m_IsLanding == true)
-		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
-	else
 	{
-		if (targetChara != nullptr)
+		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+	}
+
+	if (targetChara != nullptr)
+	{
+		std::shared_ptr<BallTarget> target = targetChara->GetBallTarget();
+
+		if (m_IsLanding == true)
+		{
+			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+		}
+		else
 		{
 			// 自分の向きとターゲットの向きを比較して、投げる角度を調整
-			Vector3 targetDir = Vector3::Normalize(targetChara->transform->position - transform->position);
+			Vector3 targetDir = Vector3::Normalize(target->Position() - transform->position);
 			float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
 
 			// 角度を90度単位で丸める
 			float angleRound = roundf(angle / (DX_PI_F * 0.5f));
 			angle = angleRound * (DX_PI_F * 0.5f);
 
-			m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, angle, 0.5f);	// Magic:)
 		}
-		else
-		m_pBall->ThrowHoming(targetChara, this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+	}
+	else
+	{
+		m_pBall->ThrowDirection(forward, this, m_BallChargeRate);	// Magic:)
 	}
 
 	releaseBall();
@@ -2841,6 +2867,9 @@ void Chara::throwBall(const nlohmann::json& argument)
 
 void Chara::invincible(const nlohmann::json& argument)
 {
+	std::shared_ptr<BallTarget_WithParent> copy(new BallTarget_WithParent(*m_BallTarget));
+	m_BallTarget.reset();
+	m_BallTarget = std::move(copy);
 }
 
 void Chara::playFootStepSound(const nlohmann::json& argument)

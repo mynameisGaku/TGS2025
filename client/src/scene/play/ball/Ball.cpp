@@ -1,24 +1,29 @@
-#include "src/scene/play/ball/Ball.h"
-#include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/common/component/physics/Physics.h"
-#include "src/reference/ball/BallRef.h"
-#include "src/common/component/collider/ColliderCapsule.h"
-#include "src/common/stage/Stage.h"
-#include "src/util/fx/post_effect/bloom/BloomManager.h"
-#include "src/reference/chara/CharaDefineRef.h"
-#include "src/scene/play/chara/Chara.h"
-#include "src/util/fx/effect/EffectManager.h"
-#include "src/common/stage/StageObjectManager.h"
-#include "src/scene/play/ball/BallManager.h"
-#include "src/common/component/renderer/BallRenderer.h"
-#include "src/scene/play/status_tracker/StatusTracker.h"
-#include "src/scene/play/catcher/Catcher.h"
-#include "src/util/fx/trail/trail3D/Trail3D.h"
-#include "src/util/ptr/PtrUtil.h"
-#include "src/util/math/Random.h"
-#include "src/util/math/Vector3Util.h"
-#include "src/util/math/matrix.h"
-#include "src/util/math/MathUtil.h"
+#include <src/scene/play/ball/Ball.h>
+#include <src/util/file/resource_loader/ResourceLoader.h>
+#include <src/common/component/physics/Physics.h>
+#include <src/reference/ball/BallRef.h>
+#include <src/common/component/collider/ColliderCapsule.h>
+#include <src/common/stage/Stage.h>
+#include <src/util/fx/post_effect/bloom/BloomManager.h>
+#include <src/reference/chara/CharaDefineRef.h>
+#include <src/scene/play/chara/Chara.h>
+#include <src/util/fx/effect/EffectManager.h>
+#include <src/common/stage/StageObjectManager.h>
+#include <src/scene/play/ball/BallManager.h>
+#include <src/scene/play/ball/attributes/BallAttribute.h>
+#include <src/scene/play/ball/attributes/BallAttribute_Explosion.h>
+#include <src/common/component/renderer/BallRenderer.h>
+#include <src/scene/play/status_tracker/StatusTracker.h>
+#include <src/scene/play/catcher/Catcher.h>
+#include <src/util/fx/trail/trail3D/Trail3D.h>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/util/math/Random.h>
+#include <src/util/math/Vector3Util.h>
+#include <src/util/math/matrix.h>
+#include <src/util/math/MathUtil.h>
+#include <src/scene/play/ball/BallTarget.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
 
 namespace
 {
@@ -47,6 +52,8 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
+
+	SetAttribute(new BallAttribute_Explosion(this));
 
 	Init();
 }
@@ -139,6 +146,7 @@ void Ball::Update()
 	{
 		return;
 	}
+	auto& net = NetworkRef::Inst();
 	
 	Object3D::Update();
 
@@ -154,11 +162,25 @@ void Ball::Update()
 
 	bool hit = collisionToStage();
 
+	m_pTrail->Update();
+
+
 	if (m_IsHoming && hit)
 	{
 		homingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnGround();
+		}
+	}
+
+	if (net.IsNetworkEnable)
+	{
+		if (not net.IsHost)
+			return;
 	}
 
 	if (m_State != S_OWNED)
@@ -186,7 +208,33 @@ void Ball::Update()
 			m_pTrail->Add(transform->position);
 		}
 	}
-	m_pTrail->Update();
+
+	if (m_State == Ball::S_OWNED)
+	{
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnHave();
+		}
+	}
+
+	if (m_State == Ball::S_THROWN)
+	{
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->Throwing();
+		}
+	}
+
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			if (not m_pNetworkManager)
+				m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+
+			m_pNetworkManager->SendSetBallTransform(m_UniqueID, transform->Global());
+		}
+	}
 }
 
 void Ball::effectUpdate()
@@ -212,7 +260,6 @@ void Ball::effectUpdate()
 	}
 }
 
-
 void Ball::Draw()
 {
 	if (not m_IsActive)
@@ -221,6 +268,11 @@ void Ball::Draw()
 	m_pTrail->Draw();
 
 	Object3D::Draw();
+}
+
+void Ball::SetAttribute(BallAttribute* attribute) {
+
+	m_Attributes.push_back(attribute);
 }
 
 void Ball::Throw(Chara* owner, float chargeRate)
@@ -263,20 +315,20 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
-void Ball::ThrowHoming(const Chara* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
+	std::shared_ptr<BallTarget> temp = target;
+	m_HomingTarget = std::move(temp);
+
 	m_IsHoming			= true;
-	m_DoRefreshHoming = true;
+	m_DoRefreshHoming	= true;
+
 	m_HomingOrigin		= transform->position;
-    m_HomingTargetChara = target;
-	m_HormingCurveAngle = curveAngle;
-	m_HormingCurveScale = curveScale;
-	m_HomingProgress = 0.0f;
+	m_HormingCurveAngle	= curveAngle;
+	m_HormingCurveScale	= curveScale;
+	m_HomingProgress	= 0.0f;
 
 	Vector3 direction = Vector3::Normalize((transform->position + transform->Forward() * 100.0f) - transform->position);
-	
-	if (target != nullptr)
-		direction = Vector3::Normalize(target->transform->position - transform->position);
 
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
@@ -306,10 +358,14 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 		changeState(S_LANDED);
 
-
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
 			m_Owner->SetLastBall(nullptr);
+		}
+
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnHit();
 		}
 
 		// === 他のボールとの衝突対応 ===
@@ -429,13 +485,10 @@ void Ball::changeState(const State& s)
 
 void Ball::homingProcess()
 {
-	if (m_HomingTargetChara == nullptr) return;
+	if (m_HomingTarget == nullptr) return;
 
 	// ---- ホーミング補間 ----
-	if (m_DoRefreshHoming)
-	{
-		m_HomingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
-	}
+	m_HomingTargetPos = m_HomingTarget->Position();
 
 	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
@@ -458,17 +511,12 @@ void Ball::homingProcess()
 		delta = m_HomingSpeed / (distance + ((distance * 0.5f * DX_PI_F) - distance) * m_HormingCurveScale) * GTime.DeltaTime();
 	}
 
-	if (m_HomingTargetChara->IsTackling())
-	{
-		changeState(S_LANDED);
-		m_DoRefreshHoming = false;
-	}
-
 	m_HomingProgress += delta;
 
 	if (m_HomingProgress >= 1.0f)
 	{
 		transform->position = m_HomingTargetPos;
+		homingDeactivate();
 	}
 	else
 	{
@@ -534,4 +582,5 @@ void Ball::homingDeactivate()
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
 	m_IsHoming = false;
+	m_HomingTarget.reset();
 }

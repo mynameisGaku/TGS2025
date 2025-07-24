@@ -374,6 +374,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 					if (user.UUID == net.UUID)
 						CameraManager::CreateCamera(c->GetIndex(), user);
 				}
+				Instantiate<UI_Setter_PlayScene>();
 			}
 		}
 		else

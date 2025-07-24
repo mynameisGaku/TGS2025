@@ -43,6 +43,7 @@ private:
 	BALL_SPAWNER_DESC	m_Desc;					// スポナーの設定
 	float				m_SpawnIntervalSec;		// 生成までの時間を計測する用タイマー
 	bool				m_IsActive;				// Spawnerが有効かどうか
+	bool				m_CanProcess;			// プロセスを行えるか？
 	std::string			m_UniqueID;				// 固有ID
 
 	NetworkManager*		m_pNetworkManager;

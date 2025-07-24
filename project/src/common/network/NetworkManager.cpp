@@ -440,6 +440,44 @@ void NetworkManager::SendBallSpawnBySpawner(const std::string& spawnerID, Ball& 
 	SendJson(jsonStr);
 }
 
+void NetworkManager::SendSetBallTransform(const std::string& uniqueID, const Transform& trs)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+
+	JSON json{};
+
+	json["Command"]				= "SetBallTransform";
+	json["NeedReply"]			= false;
+	json["ID"]					= uniqueID;
+	to_json(json["Position"], trs.position);
+	to_json(json["Rotation"], trs.rotation);
+	to_json(json["Scale"], trs.scale);
+
+	std::string jsonStr = json.dump();
+
+	SendJson(jsonStr);
+}
+
+void NetworkManager::SendSetBallState(const std::string& uniqueID, const Ball::State& state)
+{
+	auto& net = NetworkRef::Inst();
+	if (!net.IsNetworkEnable)
+		return;
+
+	JSON json{};
+
+	json["Command"] = "SetBallState";
+	json["NeedReply"] = false;
+	json["ID"] = uniqueID;
+	json["State"] = EnumUtil::ToString(state);
+
+	std::string jsonStr = json.dump();
+
+	SendJson(jsonStr);
+}
+
 // --- 全クライアントにデータを送信する関数 ---
 void Broadcast(PacketHeader header, const void* data, SOCKET exclude)
 {

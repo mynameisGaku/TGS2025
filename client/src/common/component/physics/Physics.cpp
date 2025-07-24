@@ -21,7 +21,7 @@ Physics::Physics() {
 }
 
 Physics::~Physics() {
-
+	lastTransform->SetParent(nullptr);
 	PtrUtil::SafeDelete(lastTransform);
 }
 

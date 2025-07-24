@@ -35,6 +35,7 @@
 #include "src/scene/play/ui/UI_Setter_PlayScene.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 #include <src/reference/network/NetworkRef.h>
+#include "src/scene/play/enemy/EnemyManager.h"
 
 using namespace KeyDefine;
 
@@ -42,12 +43,14 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 {
 	CameraManager::SetIsScreenDivision(true);
 
+    auto& net = NetworkRef::Inst();
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
 	for (int i = 0; i < CAMERA_NUM; i++)
 		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
 
-
+#ifdef _DEBUG
+#ifdef IMGUI
 	ImGuiManager::AddNode(new ImGuiNode_Button("DebugCamera",
 		[CAMERA_NUM]() {
 			for (int i = 0; i < CAMERA_NUM; i++)
@@ -58,6 +61,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 			for (int i = 0; i < CAMERA_NUM; i++)
 				CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
 		}));
+#endif
+#endif
 
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
 	gameM->SetGameModeName("FreeForAll");
@@ -68,8 +73,14 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	// オフラインプレイのときはいいけど、オンラインのときにカメラ生成がキャラと同時に行われるので
 	// ここでの生成はオンラインのときは無意味。あとで直す
-    Instantiate<UI_Setter_PlayScene>();
+
+	if (not net.IsNetworkEnable)
+		Instantiate<UI_Setter_PlayScene>();
+
 	Instantiate<MatchManager>();
+
+	EnemyManager* enemyManager = Instantiate<EnemyManager>();
+	enemyManager->Create();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);
@@ -89,7 +100,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	//StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 	StageObjectManager::LoadFromJson("data/json/Stage/" + gameM->GetCurrentStageName() + ".json");
 
-    auto& net = NetworkRef::Inst();
     if (net.IsNetworkEnable)
         CameraManager::SetIsScreenDivision(false);
 }

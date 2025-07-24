@@ -14,6 +14,7 @@
 #include <src/common/load_screen/LoadScreen.h>
 #include <src/reference/network/NetworkRef.h>
 #include <src/scene/play/ball/BallSpawner.h>
+#include <src/util/enum/EnumUtil.h>
 
 using JSON = nlohmann::json;
 
@@ -273,6 +274,50 @@ void NetworkManager::HostCommandProcess(JSON& json, SOCKET sock)
 		c->m_CanClimb            = flags["CanClimb"];
 		c->m_IsClimb             = flags["IsClimb"];
 		c->m_IsWall              = flags["IsWall"];
+	}
+	else if (command == "SetBallTransform")
+	{
+		std::string str = json.dump();
+
+		// 送信主以外のクライアントに対しても、同じく変更を要求する
+		PacketHeader header{};
+		header.type = PACKET_JSON;
+		header.size = static_cast<int>(str.size()) + 1;
+		Broadcast(header, str.c_str(), sock);
+
+		Transform trs{};
+		from_json(json["Position"], trs.position);
+		from_json(json["Rotation"], trs.rotation);
+		from_json(json["Scale"], trs.scale);
+		std::string id = json["ID"].get<std::string>();
+		BallManager* ballManager = FindGameObject<BallManager>();
+		if (not ballManager)
+			return;
+		Ball* ball = ballManager->GetBall(id);
+		if (not ball)
+			return;
+		ball->SetTransform(trs);
+	}
+	else if (command == "SetBallState")
+	{
+		std::string str = json.dump();
+
+		// 送信主以外のクライアントに対しても、同じく変更を要求する
+		PacketHeader header{};
+		header.type = PACKET_JSON;
+		header.size = static_cast<int>(str.size()) + 1;
+		Broadcast(header, str.c_str(), sock);
+
+		Ball::State state{};
+		state = EnumUtil::ToEnum(json["State"], Ball::State::S_LANDED);
+		std::string id = json["ID"].get<std::string>();
+		BallManager* ballManager = FindGameObject<BallManager>();
+		if (not ballManager)
+			return;
+		Ball* ball = ballManager->GetBall(id);
+		if (not ball)
+			return;
+		ball->SetState(state);
 	}
 	else
 	{

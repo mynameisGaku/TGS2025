@@ -87,6 +87,10 @@ void BallManager::Update()
 		{
 			m_pPool->DeActive(ball->m_Index);
 		}
+		else
+		{
+			ball->Update();
+		}
 	}
 #else
 	for (auto it = m_Balls.begin(); it != m_Balls.end(); )
@@ -226,16 +230,49 @@ Ball* BallManager::GetBall(uint32_t index)
 	if (index > m_pPool->GetCapacity())
 		return nullptr;
 
-    auto obj = m_pPool->GetItem(index);
+	auto obj = m_pPool->GetItem(index);
 
-    if (obj == nullptr)
-        return nullptr;
+	if (obj == nullptr)
+		return nullptr;
 
-    auto ball = obj->m_pObject;
-    if (ball == nullptr)
-        return nullptr;
+	auto ball = obj->m_pObject;
+	if (ball == nullptr)
+		return nullptr;
 
 	return ball;
+
+#else
+	// PoolŽg‚í‚È‚¢”Å –¢ŽÀ‘•
+
+#endif
+
+}
+
+Ball* BallManager::GetBall(const std::string& id)
+{
+#ifdef USE_POOL
+	if (not m_pPool)
+		return nullptr;
+
+	Ball* result = nullptr;
+
+	for (auto& item : m_pPool->GetAllItems())
+	{
+		auto& ball = item->m_pObject;
+
+		if (not ball)
+			continue;
+
+		if (ball->GetUniqueID() == id)
+		{
+			result = ball;
+		}
+	}
+
+	if (result == nullptr)
+		return nullptr;
+
+	return result;
 
 #else
 	// PoolŽg‚í‚È‚¢”Å –¢ŽÀ‘•

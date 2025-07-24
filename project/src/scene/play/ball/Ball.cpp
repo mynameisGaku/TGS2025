@@ -1,29 +1,29 @@
-#include "src/scene/play/ball/Ball.h"
-#include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/common/component/physics/Physics.h"
-#include "src/reference/ball/BallRef.h"
-#include "src/common/component/collider/ColliderCapsule.h"
-#include "src/common/stage/Stage.h"
-#include "src/util/fx/post_effect/bloom/BloomManager.h"
-#include "src/reference/chara/CharaDefineRef.h"
-#include "src/scene/play/chara/Chara.h"
-#include "src/util/fx/effect/EffectManager.h"
-#include "src/common/stage/StageObjectManager.h"
-
-#include "src/scene/play/ball/BallManager.h"
-#include "src/scene/play/ball/attributes/BallAttribute.h"
-#include "src/scene/play/ball/attributes/BallAttribute_Explosion.h"
-
-#include "src/common/component/renderer/BallRenderer.h"
-#include "src/scene/play/status_tracker/StatusTracker.h"
-#include "src/scene/play/catcher/Catcher.h"
-#include "src/util/fx/trail/trail3D/Trail3D.h"
-#include "src/util/ptr/PtrUtil.h"
-#include "src/util/math/Random.h"
-#include "src/util/math/Vector3Util.h"
-#include "src/util/math/matrix.h"
-#include "src/util/math/MathUtil.h"
-#include "src/scene/play/ball/BallTarget.h"
+#include <src/scene/play/ball/Ball.h>
+#include <src/util/file/resource_loader/ResourceLoader.h>
+#include <src/common/component/physics/Physics.h>
+#include <src/reference/ball/BallRef.h>
+#include <src/common/component/collider/ColliderCapsule.h>
+#include <src/common/stage/Stage.h>
+#include <src/util/fx/post_effect/bloom/BloomManager.h>
+#include <src/reference/chara/CharaDefineRef.h>
+#include <src/scene/play/chara/Chara.h>
+#include <src/util/fx/effect/EffectManager.h>
+#include <src/common/stage/StageObjectManager.h>
+#include <src/scene/play/ball/BallManager.h>
+#include <src/scene/play/ball/attributes/BallAttribute.h>
+#include <src/scene/play/ball/attributes/BallAttribute_Explosion.h>
+#include <src/common/component/renderer/BallRenderer.h>
+#include <src/scene/play/status_tracker/StatusTracker.h>
+#include <src/scene/play/catcher/Catcher.h>
+#include <src/util/fx/trail/trail3D/Trail3D.h>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/util/math/Random.h>
+#include <src/util/math/Vector3Util.h>
+#include <src/util/math/matrix.h>
+#include <src/util/math/MathUtil.h>
+#include <src/scene/play/ball/BallTarget.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
 
 namespace
 {
@@ -146,6 +146,7 @@ void Ball::Update()
 	{
 		return;
 	}
+	auto& net = NetworkRef::Inst();
 	
 	Object3D::Update();
 
@@ -161,6 +162,9 @@ void Ball::Update()
 
 	bool hit = collisionToStage();
 
+	m_pTrail->Update();
+
+
 	if (m_IsHoming && hit)
 	{
 		homingDeactivate();
@@ -171,6 +175,12 @@ void Ball::Update()
 			if (attribute != nullptr)
 				attribute->OnGround();
 		}
+	}
+
+	if (net.IsNetworkEnable)
+	{
+		if (not net.IsHost)
+			return;
 	}
 
 	if (m_State != S_OWNED)
@@ -198,7 +208,6 @@ void Ball::Update()
 			m_pTrail->Add(transform->position);
 		}
 	}
-	m_pTrail->Update();
 
 	if (m_State == Ball::S_OWNED)
 	{
@@ -213,6 +222,17 @@ void Ball::Update()
 		for (const auto& attribute : m_Attributes) {
 			if (attribute != nullptr)
 				attribute->Throwing();
+		}
+	}
+
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			if (not m_pNetworkManager)
+				m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+
+			m_pNetworkManager->SendSetBallTransform(m_UniqueID, transform->Global());
 		}
 	}
 }

@@ -1,201 +1,250 @@
 {
 	"Folder": "data/Animation/",
 	"Files": {
-		"ActionIdleToHold": {
 
-		},
-		"AimToThrow": {
-			"IsFixedRoot": {
-				"Z": true
-			},
-			"EndFrame": 25.0
-		},
-		"Catch": {
-			"IsLoop": true
-		},
-		"Hold": {
-			"IsLoop": true
-		},
-		"HoldToAim": {
-
-		},
-		"ThrowToActionIdle": {
-
-		},
 		"ActionIdle": {
 			"IsLoop": true,
 			"IsFixedRoot": {
 				"Z": true
 			}
 		},
+
 		"ActionIdleEmote": {
 
 		},
+
+		"ActionIdleToHold": {
+			"StartFrame": 50.0,
+			"EndFrame": 69.0
+		},
+
 		"ActionIdleToJump": {
 			"IsFixedRoot": {
 				"Y": true
 			},
-			"Offset": {
-				"Y": 100.0
-			}
+			"StartFrame": 0.0,
+			"EndFrame": 25.0
 		},
+
 		"ActionIdleToRun": {
 			"IsFixedRoot": {
 				"Z": true
 			}
 		},
+
 		"ActionIdleToStandingIdle": {
 			"IsFixedRoot": {
 				"Z": true
 			}
 		},
+
+		"AimToThrow": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 52.0,
+			"EndFrame": 80.0,
+			"DefaultAnimSpeed":1.5
+		},
+
 		"AirSpin": {
 			"IsFixedRoot": {
 				"X": true,
 				"Z": true
-			}
-		},
-		"CrouchToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"CrouchToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"DamageToDown": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"Fall": {
-			"IsLoop": true,
-			"IsFixedRoot": {
-				"Y": true
 			},
-			"Offset": {
-				"Y": 100.0
-			}
+			"StartFrame": 52.0,
+			"EndFrame": 70.0
 		},
-		"FallToCrouch": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"FallToRoll": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"GetBall": {
 
-		},
-		"Roll": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"RollToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"RollToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"Run": {
+		"Catch": {
 			"IsLoop": true
 		},
-		"RunToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"RunToJump": {
-			"IsFixedRoot": {
-				"Y": true,
-				"Z": true
-			},
-			"Offset": {
-				"Y": 100.0
-			}
-		},
-		"RunToSlide": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"Slide": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"SlideToRun": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"StandingIdle": {
-			"IsLoop": true
-		},
-		"StandingIdleEmote": {
 
-		},
-		"StandingIdleToActionIdle": {
-			"IsFixedRoot": {
-				"Z": true
-			}
-		},
-		"Tackle": {
-
-		},
 		"Climb": {
 			"IsFixedRoot": {
 				"Y": true,
 				"Z": true
 			},
-			"Offset": {
-				"Y": 100.0,
-				"Z": 10.0
-			},
-			"StartFrame": 8.0,
-			"EndFrame": 22.0
+			"StartFrame": 15.0,
+			"EndFrame": 29.0
 		},
+		
 		"ClimbToFall": {
 			"IsFixedRoot": {
 				"Y": true
 			},
-			"Offset": {
-				"Y": 100.0
+			"StartFrame": 0.0,
+			"EndFrame": 15.0
+		},
+
+		"CrouchToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
 			}
 		},
+
+		"CrouchToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+
+		"DamageToDown": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 15.0,
+			"EndFrame": 80.0
+		},
+		
+		"Fall": {
+			"IsLoop": true,
+			"IsFixedRoot": {
+				"Y": true
+			},
+			"DefaultAnimSpeed":2.0
+		},
+
+		"FallToCrouch": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 42.0,
+			"EndFrame": 66.0
+		},
+
+		"FallToRoll": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 0.0,
+			"EndFrame": 31.0
+		},
+
+		"GetBall": {
+			"StartFrame": 10.0,
+			"EndFrame": 27.0
+		},
+
+		"Hold": {
+			"StartFrame": 0.0,
+			"EndFrame": 56.0,
+			"IsLoop": true
+		},
+
+		"HoldToAim": {
+			"StartFrame": 0.0,
+			"EndFrame": 16.0
+		},
+
+		"Roll": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 30.0,
+			"EndFrame": 70.0
+		},
+
+		"RollToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 30.0,
+			"EndFrame": 70.0
+		},
+
+		"RollToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 17.0,
+			"EndFrame": 42.0
+		},
+
+		"Run": {
+			"IsLoop": true
+		},
+
+		"RunToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+
+		"RunToJump": {
+			"IsFixedRoot": {
+				"Y": true,
+				"Z": true
+			},
+			"StartFrame": 0.0,
+			"EndFrame": 18.0
+		},
+
+		"RunToSlide": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 0.0,
+			"EndFrame": 10.0
+		},
+
+		"Slide": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 10.0,
+			"EndFrame": 22.0
+		},
+
+		"SlideToRun": {
+			"IsFixedRoot": {
+				"Z": true
+			},
+			"StartFrame": 22.0,
+			"EndFrame": 40.0
+		},
+
+		"StandingIdle": {
+			"IsLoop": true
+		},
+
+		"StandingIdleEmote": {
+
+		},
+
+		"StandingIdleToActionIdle": {
+			"IsFixedRoot": {
+				"Z": true
+			}
+		},
+
+		"Tackle": {
+			
+		},
+
+		"ThrowToActionIdle": {
+			"StartFrame": 35.0,
+			"EndFrame": 50.0
+		},
+
 		"WallStepLeft": {
 			"IsFixedRoot": {
 				"X": true,
 				"Y": true,
 				"Z": true
 			},
-			"Offset": {
-				"Y": 100.0,
-				"Z": 10.0
-			},
-			"StartFrame": 8.0
+			"StartFrame": 21.0,
+			"EndFrame": 34.0
 		},
+
 		"WallStepRight": {
 			"IsFixedRoot": {
 				"X": true,
 				"Y": true,
 				"Z": true
 			},
-			"Offset": {
-				"Y": 100.0,
-				"Z": 10.0
-			},
-			"StartFrame": 8.0
+			"StartFrame": 21.0,
+			"EndFrame": 34.0
 		}
 	}
 }

@@ -11,6 +11,7 @@ Object3D::Object3D(const int& model, const Transform& _transform) {
 	SetTransform(_transform);
 	SetModel(model);
 
+	localMatrix = MGetIdent();
 	isModelDraw = true;
 	isAxisDraw = false;
 }
@@ -39,9 +40,10 @@ void Object3D::Draw() {
 
 	if (hModel < 0 || isModelDraw == false)
 		return;
-
-	MV1SetMatrix(hModel, transform->Global().Matrix());	// MATRIXをモデルに適応
-	MV1DrawModel(hModel);		// モデルの描画
+	static int c;
+	MV1SetMatrix(hModel, localMatrix * transform->Global().Matrix());	// MATRIXをモデルに適応
+    MV1DrawModel(hModel);		// モデルの描画
+    c++;
 }
 
 void Object3D::DrawAixs() {

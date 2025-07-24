@@ -85,21 +85,14 @@ void TargetManager::Draw() {
 		if (charaPool == nullptr)
 			continue;
 
-		// 狙っているキャラ
+		// カメラに対応するキャラ
 		Chara* chara = charaPool->Get(index);
 		if (chara == nullptr)
 			continue;
 
-		// 狙っているキャラに対応するカメラを取得
-		Camera* targetCamera = CameraManager::GetCamera(targetIndex);
-		if (targetCamera == nullptr)
-			continue;
-
-		const Ball* haveBall = chara->GetHaveBall();
-		const Ball* lastBall = chara->LastBall();
-
 		// ボールをチャージしている場合
-		if (haveBall != nullptr && chara->IsCharging()) {
+		if (chara->IsCharging()) {
+			// マーカーは画面中央固定
 			RectTransform markerRect = RectTransform(Anchor::Preset::Middle);
 			Vector2 beginPos = ScreenManager::GetScreenBeginPos(index);
 			Vector2 endPos = ScreenManager::GetScreenEndPos(index);
@@ -113,6 +106,16 @@ void TargetManager::Draw() {
 		else {
 			EffectManager::Stop("LockOnMarker_001.efk", StringUtil::FormatToString("LockOn %d", index));
 		}
+
+		/*
+
+		// 狙っているキャラに対応するカメラを取得
+		Camera* targetCamera = CameraManager::GetCamera(targetIndex);
+		if (targetCamera == nullptr)
+			continue;
+
+		const Ball* lastBall = chara->LastBall();
+		const Ball* haveBall = chara->GetHaveBall();
 
 		// 描画が完了していない場合
 		// 警告マーカーを描画するのは相手方のカメラなので、相手方の描画が終わるのを待つ
@@ -131,6 +134,7 @@ void TargetManager::Draw() {
 			DrawWarning();
 			DrawThorn(lastBall->transform->Global().position, targetIndex);
 		}
+		*/
 
 		checkCamera[i] = true;
 	}

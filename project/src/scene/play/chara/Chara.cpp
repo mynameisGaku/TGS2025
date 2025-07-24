@@ -2477,7 +2477,7 @@ void Chara::throwBallHoming()
 
 	if (camera != nullptr)
 	{
-		target = camera->AimingTarget();
+		target = camera->TargetChara()->GetBallTarget();
 	}
 
 	if (target != nullptr)

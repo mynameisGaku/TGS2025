@@ -185,9 +185,6 @@ public:
 	/// </summary>
 	inline const Chara* TargetChara() const { return m_pTargetChara; }
 
-	// タゲマネ実装必要
-	inline const std::shared_ptr<BallTarget>& AimingTarget() const;
-
 	/// <summary>
 	/// 描画が終了したかどうかを判定
 	/// </summary>

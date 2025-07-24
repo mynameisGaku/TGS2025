@@ -43,7 +43,7 @@ void Physics::Update() {
 	if (IsActive() == false)
 		return;
 
-	float timeLapseRate = GTime.DeltaTime();
+	float timeLapseRate = GTime.DeltaTime() * 60.0f;
 
 	// 前トランスフォームを保存
 	*lastTransform = *pTransform;
@@ -56,7 +56,7 @@ void Physics::Update() {
 void Physics::GravityUpdate() {
 
 	// 時間経過率
-	const float timeLapseRate = GTime.DeltaTime();
+	const float timeLapseRate = GTime.DeltaTime() * 60.0f;
 
 	// 重力加速度を適応
 	velocity += gravity * timeLapseRate;
@@ -65,7 +65,7 @@ void Physics::GravityUpdate() {
 void Physics::VelocityUpdate() {
 
 	// 時間経過率
-	const float timeLapseRate = GTime.DeltaTime();
+	const float timeLapseRate = GTime.DeltaTime() * 60.0f;
 
 	// 座標に加速度を適用
 	pTransform->position += velocity * timeLapseRate;
@@ -77,7 +77,7 @@ void Physics::VelocityUpdate() {
 void Physics::ResistanceUpdate() {
 
 	// 時間経過率
-	const float timeLapseRate = GTime.DeltaTime();
+	const float timeLapseRate = GTime.DeltaTime() * 60.0f;
 
 	//==========================================================================================
 	// ▼加速度に落下時の空気抵抗を適応

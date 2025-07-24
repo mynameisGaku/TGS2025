@@ -225,8 +225,8 @@ void Chara::Init(std::string tag)
 	std::string sIndex;
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-	{
-		sIndex = "1P";
+    {
+        sIndex = "1P";
 	}
 	else
 	{
@@ -278,7 +278,7 @@ void Chara::Init(std::string tag)
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
 			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descBold.subdivisions = 4; // 補間分割数（大きいほど滑らか）
+			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
 			descBold.thick = 50.0f; // トレイルの太さ
 			descBold.lifeTime = lifeTime; // トレイルの寿命
 			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
@@ -286,7 +286,7 @@ void Chara::Init(std::string tag)
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
 			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descSmall.subdivisions = 4; // 補間分割数（大きいほど滑らか）
+			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
 			descSmall.thick = 25.0f; // トレイルの太さ
 			descSmall.lifeTime = lifeTime; // トレイルの寿命
 			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
@@ -2254,16 +2254,6 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 		{
 			m_BallChargeRate = 1.0f;
 		}
-
-		// カメラの向きに合わせる
-		m_CanRot = false;
-
-		Camera* camera = CameraManager::GetCamera(m_Index);
-		if (camera != nullptr) {
-			float currentY = transform->rotation.y;
-			float terminusY = camera->transform->rotation.y;
-			transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
-		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -2516,21 +2506,20 @@ void Chara::throwBallHoming()
 	Vector3 forward = transform->Forward();
 	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
 
-	const Chara* targetChara = nullptr;
 	Camera* camera = CameraManager::GetCamera(m_Index);
+
+	std::shared_ptr<BallTarget> target;
 
 	if (camera != nullptr)
 	{
-		targetChara = camera->TargetChara();	// カメラのターゲットキャラを取得
+		target = camera->TargetChara()->GetBallTarget();
 	}
 
-	if (targetChara != nullptr)
+	if (target != nullptr)
 	{
-		std::shared_ptr<BallTarget> target = targetChara->GetBallTarget();
-
 		if (m_IsLanding == true)
 		{
-			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);	// Magic:)
+			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);
 		}
 		else
 		{
@@ -2547,21 +2536,7 @@ void Chara::throwBallHoming()
 	}
 	else
 	{
-		m_pBall->Throw(this, m_BallChargeRate);	// Magic:)
-
-		Physics* pBallPhysics = m_pBall->GetComponent<Physics>();
-		if (pBallPhysics != nullptr) {
-			int chargeLevel = 0;
-
-			if (m_BallChargeRate < 0.5f)
-					 chargeLevel = 0;
-			else if (m_BallChargeRate < 1.0f)
-				chargeLevel = 1;
-			else
-				chargeLevel = 2;
-			
-			pBallPhysics->velocity += forward.Normalize() * BALL_REF.ChargeLevels[chargeLevel].Speed * GTime.DeltaTime();
-		}
+		m_pBall->ThrowDirection(forward, this, m_BallChargeRate);
 	}
 
 	releaseBall();

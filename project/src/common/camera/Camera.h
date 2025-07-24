@@ -17,6 +17,7 @@
 class StateManager;
 class Chara;
 class NetworkManager;
+class BallTarget;
 
 /// <summary>
 /// ƒJƒƒ‰‚ÌƒNƒ‰ƒX

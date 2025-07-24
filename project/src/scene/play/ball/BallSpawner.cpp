@@ -32,13 +32,17 @@ void BallSpawner::Init(const BALL_SPAWNER_DESC& desc, const std::string& id)
 	{
 		if (net.IsHost)
 		{
-			m_IsActive = true;
+			m_CanProcess = true;
 			m_pNetworkManager = FindGameObject<NetworkManager>();
 		}
 		else
 		{
-			m_IsActive = false;
+			m_CanProcess = false;
 		}
+	}
+	else
+	{
+		m_CanProcess = true;
 	}
 }
 
@@ -61,6 +65,9 @@ void BallSpawner::Update()
 			Activate();
 		}
 	}
+
+	if (not m_CanProcess)
+		return;
 
 	if (not m_IsActive)
 		return;
@@ -96,11 +103,8 @@ void BallSpawner::onSpawn(const Vector3& pos)
 
 void BallSpawner::ForceSpawn(const std::string& ballID, const std::string& charaTag, const BallTexture& texture)
 {
-	if (m_pGeneratedBall)
-	{
-		m_pGeneratedBall->DestroyMe();
-		m_pGeneratedBall = nullptr;
-	}
+    if (m_pGeneratedBall)
+        return;
 
 	Vector3 random = Vector3
 	(

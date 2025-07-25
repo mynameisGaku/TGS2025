@@ -1448,6 +1448,9 @@
     <ClCompile Include="src\scene\play\ball\attributes\BallAttribute.cpp">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ball\BallTargetManager.cpp">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2268,6 +2271,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\ball\attributes\BallAttribute.h">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\BallTargetManager.h">
+      <Filter>src%28application%29\scene\play\chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

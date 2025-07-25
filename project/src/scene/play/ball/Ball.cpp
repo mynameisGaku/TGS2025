@@ -102,6 +102,7 @@ void Ball::Init(std::string charaTag)
 	if (not m_pManager)
 		m_pManager = FindGameObject<BallManager>();
 
+	m_IsThorwing = false;
 	m_IsHoming = false;
 	m_DoRefreshHoming = false;
 	m_IsActive = true;
@@ -165,7 +166,7 @@ void Ball::Update()
 	m_pTrail->Update();
 
 
-	if (m_IsHoming && hit)
+	if ((m_IsHoming || m_IsThorwing) && hit)
 	{
 		homingDeactivate();
 		changeState(S_LANDED);
@@ -175,6 +176,7 @@ void Ball::Update()
 			if (attribute != nullptr)
 				attribute->OnGround();
 		}
+		m_IsThorwing = false;
 	}
 
 	if (net.IsNetworkEnable)
@@ -291,6 +293,8 @@ void Ball::Throw(Chara* owner, float chargeRate)
 	m_Owner = owner;
 	m_LastOwner = m_Owner;
 	m_ChargeRate = chargeRate;
+
+	m_IsThorwing = true;
 }
 
 void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRate)
@@ -312,7 +316,7 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 		chargeLevel = 2;
 	}
 
-	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
+	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed * GTime.DeltaTime();
 }
 
 void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
@@ -329,11 +333,11 @@ void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, 
 	m_HomingProgress	= 0.0f;
 
 	Vector3 direction = Vector3::Normalize((transform->position + transform->Forward() * 100.0f) - transform->position);
-
+	
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
 
-	m_HomingSpeed = m_Physics->velocity.GetLength();
+	m_HomingSpeed = m_Physics->velocity.GetLength() / GTime.DeltaTime();
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)

@@ -7,7 +7,7 @@
     ],
     "CatchRadius": 250.0,
     "EmoteInterval": 2.0,
-    "MoveSpeed": 1500.0,
+    "MoveSpeed": 1200.0,
     "RotSpeed": 600.0,
     "JumpPower": 1000.0,
     "TackleRadius": 150.0,

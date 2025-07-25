@@ -282,7 +282,7 @@ void Ball::Throw(Chara* owner, float chargeRate)
 	changeState(S_THROWN);
 
 	m_Physics->SetGravity(GRAVITY);
-	m_Physics->SetFriction(Vector3(0.99f));
+	m_Physics->SetFriction(FRICTION * 1.1f);
 
 	m_Collider->SetIsActive(true);
 
@@ -358,7 +358,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	{
 		if (m_IsHoming) homingDeactivate();
 
-		m_Physics->velocity = m_Physics->FlatVelocity() * -1.0f + Vector3(0.0f, 80.0f, 0.0f);	// Magic:(
+		m_Physics->velocity = m_Physics->FlatVelocity() * -10.0f + Vector3(0.0f, 200.0f, 0.0f);	// Magic:(
 
 		changeState(S_LANDED);
 

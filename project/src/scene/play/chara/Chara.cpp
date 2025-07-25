@@ -50,7 +50,7 @@ namespace
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 1.0f;
 	static const float CHARGE_BALLSPEED = 1.5f;
-	static const Vector3 CHARA_GRAVITY = GRAVITY * 3.0f;
+	static const Vector3 CHARA_GRAVITY = GRAVITY * 4.0f;
 	static const float ARM_HEIGHT = 100.0f;	// 腕の高さ
 }
 
@@ -2490,7 +2490,7 @@ void Chara::getHit(Ball* hit)
 
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
-	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:外部化
+	m_pPhysics->velocity += transform->Forward() * -2500.0f;	// ToDo:外部化
 
 	playGetHitSound();
 }

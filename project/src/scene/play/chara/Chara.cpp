@@ -2254,6 +2254,16 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 		{
 			m_BallChargeRate = 1.0f;
 		}
+
+		// カメラの向きに合わせる
+		m_CanRot = false;
+
+		Camera* camera = CameraManager::GetCamera(m_Index);
+		if (camera != nullptr) {
+			float currentY = transform->rotation.y;
+			float terminusY = camera->transform->rotation.y;
+			transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
+		}
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -2512,7 +2522,9 @@ void Chara::throwBallHoming()
 
 	if (camera != nullptr)
 	{
-		target = camera->TargetChara()->GetBallTarget();
+		const Chara* targetChara = camera->TargetChara();
+		if (targetChara != nullptr)
+			target = targetChara->GetBallTarget();
 	}
 
 	if (target != nullptr)

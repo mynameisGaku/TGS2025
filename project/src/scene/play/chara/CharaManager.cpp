@@ -248,7 +248,7 @@ const Chara* CharaManager::CharaInst(int index)
 #endif
 }
 
-Chara* CharaManager::NearestEnemy(int index) {
+Chara* CharaManager::NearestEnemy(int index, float distance) {
 
 	const Chara* chara = CharaInst(index);
 	if (chara == nullptr)
@@ -264,6 +264,8 @@ Chara* CharaManager::NearestEnemy(int index) {
 			continue;
 
 		// ‹——£ŒvŽZ‚â•Ç”»’è‚ð‚¢‚ê‚é
+		if ((chara->transform->position - it->m_pObject->transform->position).GetLengthSquared() >= distance * distance)
+			continue;
 
 		return it->m_pObject;
 	}

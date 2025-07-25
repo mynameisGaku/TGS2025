@@ -203,16 +203,48 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 	}
 	else if (command == "BallSpawnBySpawner")
 	{
-		std::string spawnerID		= json["SpawnerID"].get<std::string>();
-		JSON ballJson				= json["Ball"];
-		std::string ballID			= ballJson["ID"].get<std::string>();
-		Ball::State state			= EnumUtil::ToEnum(ballJson["State"].get<std::string>(), Ball::State::S_LANDED);
-		std::string charaTag		= ballJson["CharaTag"].get<std::string>();
-		std::string texKey			= ballJson["TexKey"].get<std::string>();
-		BallManager* ballManager	= FindGameObject<BallManager>();
-		BallTexture ballTexture		= ballManager->GetBallTexture(texKey);
-		BallSpawner* spawner		= GetBallSpawnerFromUniqueID(spawnerID);
+		std::string spawnerID = json["SpawnerID"].get<std::string>();
+		JSON ballJson = json["Ball"];
+		std::string ballID = ballJson["ID"].get<std::string>();
+		Ball::State state = EnumUtil::ToEnum(ballJson["State"].get<std::string>(), Ball::State::S_LANDED);
+		std::string charaTag = ballJson["CharaTag"].get<std::string>();
+		std::string texKey = ballJson["TexKey"].get<std::string>();
+		BallManager* ballManager = FindGameObject<BallManager>();
+		BallTexture ballTexture = ballManager->GetBallTexture(texKey);
+		BallSpawner* spawner = GetBallSpawnerFromUniqueID(spawnerID);
 		spawner->ForceSpawn(ballID, charaTag, ballTexture);
+	}
+	else if (command == "SetBallTransform")
+	{
+		Vector3 position;
+		Vector3 rotation;
+		Vector3 scale;
+		from_json(json["Position"], position);
+		from_json(json["Rotation"], rotation);
+		from_json(json["Scale"], scale);
+		std::string id = json["ID"].get<std::string>();
+		BallManager* ballManager = FindGameObject<BallManager>();
+		if (not ballManager)
+			return;
+		Ball* ball = ballManager->GetBall(id);
+		if (not ball)
+			return;
+		ball->transform->position = position;
+		ball->transform->rotation = rotation;
+		ball->transform->scale = scale;
+	}
+	else if (command == "SetBallState")
+	{
+		Ball::State state{};
+		state = EnumUtil::ToEnum(json["State"], Ball::State::S_LANDED);
+		std::string id = json["ID"].get<std::string>();
+		BallManager* ballManager = FindGameObject<BallManager>();
+		if (not ballManager)
+			return;
+		Ball* ball = ballManager->GetBall(id);
+		if (not ball)
+			return;
+		ball->SetState(state);
 	}
 	else
 	{

@@ -143,7 +143,18 @@ public:
 	/// <param name="spawnerID">スポナーのID</param>
 	/// <param name="generatedBall">生成されたボール</param>
 	void SendBallSpawnBySpawner(const std::string& spawnerID, Ball& generatedBall);
-
+	/// <summary>
+	/// ボールのトランスフォームを設定する命令を送信
+	/// </summary>
+	/// <param name="uniqueID">ボールが持つユニークID</param>
+	/// <param name="trs">セットするトランスフォーム</param>
+	void SendSetBallTransform(const std::string& uniqueID, const Transform& trs);
+	/// <summary>
+	/// ボールのステートを設定する命令を送信
+	/// </summary>
+	/// <param name="uniqueID">ボールが持つユニークID</param>
+	/// <param name="state">セットするステート</param>
+	void SendSetBallState(const std::string& uniqueID, const Ball::State& state);
 
 	static SOCKET					g_ListenSock;		// サーバーが接続を待ち受けるためのソケット
 	static std::vector<ClientInfo*> g_Clients;			// サーバーに接続中のクライアント一覧

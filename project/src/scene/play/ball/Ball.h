@@ -12,6 +12,7 @@ class BallManager;
 class BallAttribute;
 class Trail3D;
 class BallTarget;
+class NetworkManager;
 
 namespace
 {
@@ -40,7 +41,7 @@ public:
 	void Reset(std::string charaTag);
 	void Spawn();
 	void Init(std::string charaTag = "None");
-	void Update() override;
+	void Update();
 	void Draw() override;
 
 	void SetAttribute(BallAttribute* attribute);
@@ -50,6 +51,7 @@ public:
 	void ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
 
 	State GetState() const { return m_State; }
+	void SetState(const Ball::State& state) { m_State = state; }
 
 	/// <summary>
 	/// 当たり判定処理
@@ -98,6 +100,7 @@ private:
 	BallManager*		m_pManager;
 	std::vector<BallAttribute*> m_Attributes;
 	Trail3D*			m_pTrail;
+	NetworkManager*		m_pNetworkManager;
 
 	Physics*			m_Physics;
 	ColliderCapsule*	m_Collider;
@@ -121,6 +124,7 @@ private:
 	Vector3	m_HomingOrigin;			// ホーミング開始地点
 	Vector3	m_HomingTargetPos;		// ホーミング対象の座標
 
+	bool	m_IsThorwing;			// 投擲中か
 	bool	m_IsHoming;				// ホーミング中か
 	bool	m_DoRefreshHoming;		// ホーミング先を更新するか
 

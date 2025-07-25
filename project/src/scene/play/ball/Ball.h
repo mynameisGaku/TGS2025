@@ -49,6 +49,7 @@ public:
 	void Throw(Chara* owner, float chargeRate);
 	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);
 	void ThrowHoming(BallTarget* target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
+	void HomingDeactivate();
 
 	State GetState() const { return m_State; }
 	void SetState(const Ball::State& state) { m_State = state; }
@@ -139,7 +140,6 @@ private:
 	void changeState(const State& s);
 	void effectUpdate();
 	void homingProcess();
-	void homingDeactivate();
 
 	float				m_ChargeRate;
 };

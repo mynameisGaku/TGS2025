@@ -1,5 +1,6 @@
 #pragma once
 #include "src/util/transform/Transform.h"
+#include "src/scene/play/ball/Ball.h"
 
 /// <summary>
 /// ボールを投げるときロックオンできるターゲット
@@ -24,8 +25,12 @@ public:
 
 	void SetIndex(int index) { m_Index = index; }
 	int Index() const { return m_Index; }
+
+	void SetCanRockOn(bool canRockOn) { m_CanRockOn = canRockOn; }
+	bool CanRockOn() const { return m_CanRockOn; }
 private:
 	Vector3 m_Position;	// ターゲットの位置
 	bool m_IsActive;	// ターゲットがアクティブかどうか
+	bool m_CanRockOn;	// ロックオン可能かどうか
 	int m_Index;		// プールのインデックス
 };

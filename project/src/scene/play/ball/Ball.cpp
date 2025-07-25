@@ -169,7 +169,7 @@ void Ball::Update()
 
 	if ((m_IsHoming || m_IsThorwing) && hit)
 	{
-		homingDeactivate();
+		HomingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 
@@ -356,7 +356,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 	if (m_State == S_THROWN)
 	{
-		if (m_IsHoming) homingDeactivate();
+		if (m_IsHoming) HomingDeactivate();
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
 
@@ -463,7 +463,7 @@ void Ball::collisionToGround()
 	bool hit = Stage::ColCheckGround(transform->position + Vector3::SetY(BALL_RADIUS), transform->position - Vector3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)
 	{
-		if (m_IsHoming) homingDeactivate();
+		if (m_IsHoming) HomingDeactivate();
 
 		// Y•ûŒü‚É’µ‚Ë•Ô‚é
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
@@ -520,7 +520,7 @@ void Ball::homingProcess()
 	if (m_HomingProgress >= 1.0f)
 	{
 		transform->position = m_HomingTargetPos;
-		homingDeactivate();
+		HomingDeactivate();
 	}
 	else
 	{
@@ -581,7 +581,7 @@ bool Ball::collisionToStage()
 	return hit;
 }
 
-void Ball::homingDeactivate()
+void Ball::HomingDeactivate()
 {
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);

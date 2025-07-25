@@ -2882,6 +2882,9 @@ void Chara::throwBall(const nlohmann::json& argument)
 
 void Chara::invincible(const nlohmann::json& argument)
 {
+	m_pBallTarget->SetCanRockOn(false);
+
+	m_pBallTarget = m_pBallTargetManager->Create();
 }
 
 void Chara::playFootStepSound(const nlohmann::json& argument)

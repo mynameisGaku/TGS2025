@@ -48,7 +48,7 @@ public:
 
 	void Throw(Chara* owner, float chargeRate);
 	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);
-	void ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
+	void ThrowHoming(BallTarget* target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
 
 	State GetState() const { return m_State; }
 	void SetState(const Ball::State& state) { m_State = state; }
@@ -119,7 +119,7 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	std::shared_ptr<BallTarget> m_HomingTarget;	// ホーミング中のトランスフォームのポインタ
+	BallTarget* m_HomingTarget;	// ホーミング中のトランスフォームのポインタ
 
 	Vector3	m_HomingOrigin;			// ホーミング開始地点
 	Vector3	m_HomingTargetPos;		// ホーミング対象の座標

@@ -22,6 +22,7 @@
 
 //=== ボール ===
 #include "src/scene/play/ball/BallSpawner.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 //=== ステージ ===
 #include "src/common/stage/StageObjectManager.h"
@@ -84,6 +85,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);
+
+	BallTargetManager* ballTargetManager = Instantiate<BallTargetManager>();
 
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
 	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(Vector3(0, 500, 0), Vector3::Zero, Vector3::Ones), 1000.0f, MathUtil::ToRadians(30.0f));

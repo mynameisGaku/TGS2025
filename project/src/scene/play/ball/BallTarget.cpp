@@ -1,38 +1,21 @@
 #include "BallTarget.h"
 
-BallTarget::BallTarget() : BallTarget(Vector3::Zero)
+BallTarget::BallTarget()
 {
+	Reset();
 }
 
-BallTarget::BallTarget(const Vector3& position)
+void BallTarget::Reset()
 {
-	m_Position = position;
+	m_Position = Vector3::Zero;
+	m_IsActive = true;	// 初期状態はアクティブ
+	m_Index = -1;	// プールのインデックスは-1
 }
 
-BallTarget_WithParent::BallTarget_WithParent(const Vector3& offset, Transform* parent, bool doAutoUpdate)
+void BallTarget::SetPositionWithParent(const Vector3& offset, Transform* parent)
 {
-	m_Parent = parent;
-	m_Offset = offset;
-	m_DoAutoUpdate = doAutoUpdate;
-	UpdatePosition();
-}
-
-void BallTarget_WithParent::Update()
-{
-	if (m_DoAutoUpdate)
+	if (parent)
 	{
-		UpdatePosition();
+		m_Position = offset * parent->Global().Matrix();
 	}
-	else
-	{
-		// 親の座標更新を行わない場合は、手動で更新する必要がある
-		// 何もしない
-	}
-}
-
-void BallTarget_WithParent::UpdatePosition()
-{
-	if (not m_Parent) return;
-
-	SetPosition(m_Offset * m_Parent->Matrix());
 }

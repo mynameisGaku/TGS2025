@@ -2,6 +2,7 @@
 #include "framework/gameObject.h"
 
 class BallTarget;
+class BallTarget_WithParent;
 template <class C>
 class Pool;
 
@@ -17,19 +18,15 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	/// <summary>
-	/// ボールターゲットを生成
-	/// </summary>
-	/// <param name="position">位置</param>
-	/// <returns>生成したボールターゲット</returns>
-	BallTarget* Create(const Vector3& position);
+	// ボールターゲットを生成
+	BallTarget* Create();
 
 	/// <summary>
 	/// ボールターゲットを取得
 	/// </summary>
-	/// <param name="index">インデックス</param>
+	/// <param name="index">プールのインデックス</param>
 	/// <returns>ボールターゲット</returns>
-	BallTarget* GetBallTarget(uint32_t index);
+	BallTarget* Get(uint32_t index);
 private:
 	Pool<BallTarget>* m_Pool;
 };

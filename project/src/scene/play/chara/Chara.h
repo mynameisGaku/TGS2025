@@ -17,7 +17,8 @@ class CharaSpawnPointManager;
 
 class Ball;
 class BallManager;
-class BallTarget_WithParent;
+class BallTarget;
+class BallTargetManager;
 
 class Physics;
 
@@ -252,7 +253,7 @@ public:
 	// ユーザー取得
 	inline User GetUser() const { return m_User; }
 	// ロックオンターゲット取得
-	inline const std::shared_ptr<BallTarget_WithParent>& GetBallTarget() const { return m_BallTarget; }
+	inline BallTarget* GetBallTarget() const { return m_pBallTarget; }
 
 	//=======================================================================================
 	// ▼各ステート
@@ -332,8 +333,8 @@ private:
 	BallManager*				m_pBallManager;			// ボールマネージャーのポインター
 	float						m_BallChargeRate;		// ボールのチャージ加速度
 
-	std::shared_ptr
-		<BallTarget_WithParent>	m_BallTarget;	// ボールでロックオンできるターゲット
+	BallTarget*					m_pBallTarget;			// ロックオンできるターゲット
+	BallTargetManager*			m_pBallTargetManager;	// ボールターゲットマネージャーのポインター
 
 	CharaHP*					m_pHP;					// HPのポインター
 	CharaStamina*				m_pStamina;				// スタミナのポインター

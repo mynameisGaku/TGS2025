@@ -27,16 +27,16 @@
 #include "src/scene/play/tackler/Tackler.h"
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
 #include "src/scene/play/ball/BallTarget.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
 #include "src/scene/play/ui/UI_CrossHair.h"
 #include "src/scene/play/ui/UI_HitPoint_Icon.h"
+#include "src/scene/play/ui/UI_Fade.h"
 
 #include <src/reference/ball/BallRef.h>
 
-#include "src/scene/play/chara/CharaSpawnPointManager.h"
-#include "src/scene/play/ui/UI_Fade.h"
 #include <src/reference/network/NetworkRef.h>
 #include <src/common/network/NetworkManager.h>
 
@@ -52,6 +52,7 @@ namespace
 	static const float CHARGE_BALLSPEED = 1.5f;
 	static const Vector3 CHARA_GRAVITY = GRAVITY * 3.0f;
 	static const float ARM_HEIGHT = 100.0f;	// 腕の高さ
+	static const Vector3 TARGET_OFFSET = Vector3::SetY(150);	// ターゲットのオフセット
 }
 
 Chara::Chara()
@@ -102,7 +103,8 @@ Chara::Chara()
 	m_IsInhibitionSpeed = true;
 	m_SpawnPointManager = nullptr;
 	m_TackleIntervalAlarm = nullptr;
-	m_BallTarget = nullptr;
+	m_pBallTarget		= nullptr;
+	//m_BallTarget		= nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -221,6 +223,7 @@ void Chara::Init(std::string tag)
 	m_Tackler->SetParent(this);
 
 	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
+	m_pBallTargetManager = FindGameObject<BallTargetManager>();
 
 	std::string sIndex;
 	auto& net = NetworkRef::Inst();
@@ -343,7 +346,8 @@ void Chara::Init(std::string tag)
 	m_Timeline->SetFunction("Invincible", &Chara::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
-	m_BallTarget = std::make_shared<BallTarget_WithParent>(BallTarget_WithParent(Vector3::SetY(150), transform));
+	m_pBallTarget = m_pBallTargetManager->Create();
+	//m_BallTarget = std::make_shared<BallTarget_WithParent>(BallTarget_WithParent(Vector3::SetY(150), transform));
 
 #if FALSE
 
@@ -474,7 +478,7 @@ void Chara::Update() {
 
 	//=== 座標更新終了後の処理 ===
 
-	m_BallTarget->UpdatePosition();
+	m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
 	m_lastUpdatePosition = transform->position;
 
 	// NaN/Infのチェック
@@ -1006,7 +1010,7 @@ void Chara::CatchSuccess(const Vector3& velocity)
 
 void Chara::Damage(int sub) {
 
-	m_pHP->Damage(sub);
+	m_pHP->Damage((float)sub);
 
 	main_changeStateNetwork(&Chara::StateDamageToDown);
 
@@ -2518,7 +2522,7 @@ void Chara::throwBallHoming()
 
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
-	std::shared_ptr<BallTarget> target;
+	BallTarget* target = nullptr;
 
 	if (camera != nullptr)
 	{
@@ -2531,7 +2535,7 @@ void Chara::throwBallHoming()
 	{
 		if (m_IsLanding == true)
 		{
-			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, 0.0f, 0.0f);
+			m_pBall->ThrowHoming(target, this, m_BallChargeRate, 0.0f, 0.0f);
 		}
 		else
 		{
@@ -2543,7 +2547,7 @@ void Chara::throwBallHoming()
 			float angleRound = roundf(angle / (DX_PI_F * 0.5f));
 			angle = angleRound * (DX_PI_F * 0.5f);
 
-			m_pBall->ThrowHoming(std::move(target), this, m_BallChargeRate, angle, 0.5f);	// Magic:)
+			m_pBall->ThrowHoming(target, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
 		}
 	}
 	else
@@ -2878,9 +2882,6 @@ void Chara::throwBall(const nlohmann::json& argument)
 
 void Chara::invincible(const nlohmann::json& argument)
 {
-	std::shared_ptr<BallTarget_WithParent> copy(new BallTarget_WithParent(*m_BallTarget));
-	m_BallTarget.reset();
-	m_BallTarget = std::move(copy);
 }
 
 void Chara::playFootStepSound(const nlohmann::json& argument)

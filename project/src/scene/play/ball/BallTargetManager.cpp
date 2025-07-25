@@ -62,7 +62,7 @@ void BallTargetManager::Draw()
 	}
 }
 
-BallTarget* BallTargetManager::Create(const Vector3& position)
+BallTarget* BallTargetManager::Create()
 {
 	// 既にアクティブが最大数なら生成しない
 	if (m_Pool->CheckActiveObjectByCapacity()) return nullptr;
@@ -70,14 +70,15 @@ BallTarget* BallTargetManager::Create(const Vector3& position)
 	uint32_t index = m_Pool->GetIndex();
 	BallTarget* ballTarget = m_Pool->Alloc();
 
-	ballTarget->SetPosition(position);
+	ballTarget->Reset();
+	ballTarget->SetIndex(index);
 
 	m_Pool->SetObjectPointer(index, ballTarget);
 
 	return ballTarget;
 }
 
-BallTarget* BallTargetManager::GetBallTarget(uint32_t index)
+BallTarget* BallTargetManager::Get(uint32_t index)
 {
 	if (not m_Pool)
 		return nullptr;

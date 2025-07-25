@@ -52,6 +52,7 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
+	m_HomingTarget = nullptr;
 
 	SetAttribute(new BallAttribute_Explosion(this));
 
@@ -319,10 +320,9 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed * GTime.DeltaTime();
 }
 
-void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
-	std::shared_ptr<BallTarget> temp = target;
-	m_HomingTarget = std::move(temp);
+	m_HomingTarget = target;
 
 	m_IsHoming			= true;
 	m_DoRefreshHoming	= true;
@@ -586,5 +586,5 @@ void Ball::homingDeactivate()
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
 	m_IsHoming = false;
-	m_HomingTarget.reset();
+	m_HomingTarget = nullptr;
 }

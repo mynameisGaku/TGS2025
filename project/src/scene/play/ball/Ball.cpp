@@ -338,6 +338,8 @@ void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float
 	m_Physics->SetIsActive(false);
 
 	m_HomingSpeed = m_Physics->velocity.GetLength() / GTime.DeltaTime();
+
+	target->SetRockOnData(RockOnData(GetIndex()));
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -586,5 +588,6 @@ void Ball::HomingDeactivate()
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
 	m_IsHoming = false;
+	m_HomingTarget->EraseRockOnData(m_Index);
 	m_HomingTarget = nullptr;
 }

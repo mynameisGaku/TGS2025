@@ -3,6 +3,7 @@
 //------------------------------------------------------------
 // ▼インクルード
 //------------------------------------------------------------
+#include <Windows.h>
 #include <vector>
 #include <functional>
 #include <vendor/ImGui/imgui.h>
@@ -29,19 +30,19 @@ private:
         Item() : m_IsActive(false), m_pObject(nullptr), m_Index(-1) {}
         ~Item() { /* DO NOTHING */ }
         bool        m_IsActive; // アクティブ状態かどうか
-        uint32_t    m_Index;  // 自身のインデックス
+        UINT    m_Index;  // 自身のインデックス
         T*          m_pObject; // オブジェクトのポインタ
     };
 
 public:
     
-    using POOL_INIT_FUNC = std::function<T*(uint32_t, T*)>;
+    using POOL_INIT_FUNC = std::function<T*(UINT, T*)>;
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
     /// <param name="capacity">どのくらいの容量を確保するか</param>
-    Pool(uint32_t capacity, POOL_INIT_FUNC func = nullptr)
+    Pool(UINT capacity, POOL_INIT_FUNC func = nullptr)
     {
         reserve(capacity, func);
     }
@@ -79,7 +80,7 @@ public:
     T* Alloc(POOL_INIT_FUNC func = nullptr)
     {
         T* obj = GetDeactiveObject();
-        uint32_t index = GetIndex();
+        UINT index = GetIndex();
 
         if (obj == nullptr)
         {
@@ -120,7 +121,7 @@ public:
     /// [インデックス版] オブジェクトを非アクティブ状態にする こっちのが軽い
     /// </summary>
     /// <param name="index">対象のインデックス</param>
-    void DeActive(uint32_t& index)
+    void DeActive(UINT& index)
     {
         if (index >= m_Capacity)
             return;
@@ -142,7 +143,7 @@ public:
     /// </summary>
     /// <param name="count">確認したい個数</param>
     /// <returns>あればtrue</returns>
-    bool CheckActiveObjectByCount(uint32_t count)
+    bool CheckActiveObjectByCount(UINT count)
     {
         int activeCount = 0;
         for (auto& item : m_Items)
@@ -153,7 +154,7 @@ public:
             }
         }
 
-        if ((uint32_t)activeCount > count)
+        if ((UINT)activeCount > count)
         {
             return true;
         }
@@ -165,7 +166,7 @@ public:
     /// 容量を取得
     /// </summary>
     /// <returns>容量を返す</returns>
-    uint32_t GetCapacity()
+    UINT GetCapacity()
     {
         return m_Capacity;
     }
@@ -184,7 +185,7 @@ public:
     /// めちゃくちゃ重いので、あまり使わない方が良い。
     /// </summary>
     /// <param name="capacity">再確保したい分の容量</param>
-    void ResetCapacity(uint32_t capacity, POOL_INIT_FUNC func = nullptr)
+    void ResetCapacity(UINT capacity, POOL_INIT_FUNC func = nullptr)
     {
         reserve(capacity, func);
     }
@@ -219,7 +220,7 @@ public:
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    Item* GetItem(uint32_t index) const
+    Item* GetItem(UINT index) const
     {
         return m_Items[index];
     }
@@ -229,7 +230,7 @@ public:
     /// </summary>
     /// <param name="index"></param>
     /// <param name="pObj"></param>
-    void SetObjectPointer(uint32_t index, T* pObj)
+    void SetObjectPointer(UINT index, T* pObj)
     {
         m_Items[index]->m_pObject = pObj;
     }
@@ -258,14 +259,14 @@ public:
     /// <para>発見した場合 : 見つかったインデックス</para>
     /// <para>発見できなかった場合 : -1</para>
     /// </returns>
-    uint32_t GetIndex()
+    UINT GetIndex()
     {
         if (m_Items.size() - 1 > m_Capacity)
         {
             return -1;
         }
 
-        for (uint32_t i = 0; i < m_Items.size(); ++i)
+        for (UINT i = 0; i < m_Items.size(); ++i)
         {
             if (not m_Items[i]->m_IsActive)
             {
@@ -318,7 +319,7 @@ private:
     /// めっちゃ重たい
     /// </summary>
     /// <param name="capacity">キャパ</param>
-    void reserve(uint32_t& capacity, POOL_INIT_FUNC func = nullptr)
+    void reserve(UINT& capacity, POOL_INIT_FUNC func = nullptr)
     {
         for (auto& item : m_Items)
         {
@@ -328,13 +329,13 @@ private:
         m_Capacity = capacity - 1;
         m_ActiveObjectCount = 0;
         m_Items.reserve(capacity);
-        for (uint32_t i = 0; i < capacity; ++i)
+        for (UINT i = 0; i < capacity; ++i)
         {
             Item* item = new Item();
             item->m_Index = i;
             if (func)
             {
-                func((uint32_t)i, item->m_pObject);
+                func((UINT)i, item->m_pObject);
             }
             m_Items.push_back(item);
         }
@@ -344,7 +345,7 @@ private:
     // メンバ変数
     //------------------------------------------------------------
     std::vector<Item*>      m_Items;                // オブジェクトのリスト
-    uint32_t                m_Capacity;             // このプールの容量
-    uint32_t                m_ActiveObjectCount;    // アクティブなオブジェクトの数
+    UINT                m_Capacity;             // このプールの容量
+    UINT                m_ActiveObjectCount;    // アクティブなオブジェクトの数
 
 };

@@ -355,6 +355,8 @@
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityFire.cpp" />
+    <ClCompile Include="src\scene\play\active_ball_gimmick\TargetGimmick.cpp" />
+    <ClCompile Include="src\scene\play\active_ball_gimmick\TrampolineGimmick.cpp" />
     <ClCompile Include="src\scene\play\ball\attributes\BallAttribute.cpp" />
     <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Explosion.cpp" />
     <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Fire.cpp" />
@@ -556,6 +558,14 @@
     <ClInclude Include="src\scene\play\ability\AbilityBase.h" />
     <ClInclude Include="src\scene\play\ability\AbilityExplosion.h" />
     <ClInclude Include="src\scene\play\ability\AbilityFire.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\BoostRingBase.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\ButtonBase.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\DestructibleBase.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\GimmickBase.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\TargetBase.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\TrampolineBase.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\TargetGimmick.h" />
+    <ClInclude Include="src\scene\play\active_ball_gimmick\TrampolineGimmick.h" />
     <ClInclude Include="src\scene\play\ball\attributes\BallAttribute.h" />
     <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Explosion.h" />
     <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Fire.h" />

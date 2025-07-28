@@ -433,6 +433,18 @@
     <Filter Include="src%28application%29\scene\play\ability">
       <UniqueIdentifier>{46b28971-23d3-4e08-a593-ba546e14b74c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick">
+      <UniqueIdentifier>{5b9962d0-6bac-41f0-a0b3-b0e2f04efc0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Trampoline">
+      <UniqueIdentifier>{d90ea695-042e-4cee-a4b8-291f49f0c0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Target">
+      <UniqueIdentifier>{d41d3fd3-09a1-48a6-87b3-ec42dbf682ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Interfaces">
+      <UniqueIdentifier>{0f171ba5-0d6c-4139-b7a8-ea67b5561253}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1448,6 +1460,12 @@
     <ClCompile Include="src\scene\play\ball\attributes\BallAttribute.cpp">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\active_ball_gimmick\TrampolineGimmick.cpp">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Trampoline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\active_ball_gimmick\TargetGimmick.cpp">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2268,6 +2286,30 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\ball\attributes\BallAttribute.h">
       <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\TrampolineGimmick.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Trampoline</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\TargetGimmick.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Target</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\TrampolineBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\TargetBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\GimmickBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\DestructibleBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\ButtonBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\BoostRingBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

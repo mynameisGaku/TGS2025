@@ -9,5 +9,5 @@ ForceFieldSphere::ForceFieldSphere(float radius)
 	param.trs.scale = Vector3(radius, radius, radius);
 
 	m_pCollider->BaseInit(param);
-	m_pCollider->SetDraw(true);
+	m_pCollider->SetDraw(false);
 }

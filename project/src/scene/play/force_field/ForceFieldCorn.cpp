@@ -5,6 +5,7 @@
 
 void ForceFieldCorn::Draw()
 {
+	return;
 	DrawCone3D(transform->position, transform->position + transform->Forward() * m_pCollider->transform->scale.x, 30.0f, 8, 0x00FFFF, 0x000000, true);
 }
 

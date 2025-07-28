@@ -32,6 +32,8 @@ void ForceFieldManager::Update()
 
 void ForceFieldManager::Draw()
 {
+	return;
+
 	// —Íê‚Ì•`‰æˆ—
 	for (ForceFieldBase* forceField : m_ForceFields)
 	{

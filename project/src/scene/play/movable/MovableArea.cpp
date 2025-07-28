@@ -22,6 +22,9 @@ void MovableArea::Update()
 
 void MovableArea::Draw()
 {
+	// デバッグ表示
+	return;
+
 	std::list<Vector3> pos;
 
 	pos.push_back(m_AABB.p + m_AABB.hl * Vector3( 1, 0,  1));

@@ -184,7 +184,7 @@ public:
 	/// <summary>
 	/// 注視しているボールターゲット
 	/// </summary>
-	inline const BallTarget* GetBallTarget() const { return m_pBallTarget; }
+	inline BallTarget* GetBallTarget() const { return m_pBallTarget; }
 
 	/// <summary>
 	/// 描画が終了したかどうかを判定

@@ -382,8 +382,8 @@ void Camera::SetDrawArea(int x, int y, int w, int h) {
 void Camera::SetDrawAreaDefault() {
 
 	WindowSetting& wSetting = WindowSetting::Inst();
-	const int width = wSetting.width;
-	const int height = wSetting.height;
+	const int width = (int)wSetting.width;
+	const int height = (int)wSetting.height;
 
 	SetDrawArea(0, 0, width, height);
 }

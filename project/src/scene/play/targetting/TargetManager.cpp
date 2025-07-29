@@ -7,6 +7,7 @@
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/util/string/StringUtil.h"
 #include "src/util/screen/ScreenManager.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 TargetManager::TargetManager() {
 
@@ -45,13 +46,13 @@ void TargetManager::Update() {
 		Camera* camera = CameraManager::GetCamera(i);
 
 		// カメラが誰も注視していない場合
-		if (camera->TargetChara() == nullptr) {
+		if (camera->GetBallTarget() == nullptr) {
 			targetList[i] = -1;
 			continue;
 		}
 
 		// 注視していたキャラの番号を取得
-		targetList[i] = camera->TargetChara()->GetIndex();
+		targetList[i] = camera->GetBallTarget()->Index();
 	}
 
 	// チェック済マークのリセット
@@ -75,7 +76,7 @@ void TargetManager::Draw() {
 			continue;
 
 		int index = i;					// カメラの番号＆キャラの番号
-		int targetIndex = targetList[i];// 注視しているキャラの番号
+		int targetIndex = targetList[i];// 注視しているボールターゲットの番号
 
 		// ターゲットが居ない場合
 		if (targetIndex == -1)

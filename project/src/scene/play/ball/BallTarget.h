@@ -2,6 +2,7 @@
 #include "src/util/transform/Transform.h"
 #include "src/scene/play/ball/Ball.h"
 #include <unordered_map>
+#include <string>
 
 class RockOnData
 {
@@ -47,12 +48,18 @@ public:
 
 	void SetRockOnData(const RockOnData& rockOnData) { m_RockOnData[rockOnData.BallIndex] = rockOnData; }
 	void EraseRockOnData(int ballIndex) { if (m_RockOnData.contains(ballIndex)) m_RockOnData.erase(ballIndex); }
+
+	void SetCharaTag(std::string charaTag) { m_CharaTag = charaTag; }
+	std::string GetCharaTag() const { return m_CharaTag; }
 private:
+	int m_Index;		// プールのインデックス
+
 	Vector3 m_Position;	// ターゲットの位置
+	std::string m_CharaTag;	// 所属チームのタグ
+
 	bool m_IsActive;	// ターゲットがアクティブかどうか
 	bool m_CanRockOn;	// ロックオン可能かどうか
 	bool m_DoDeactivateOnNoRockOn;	// ロックオンがないときに破棄するかどうか
-	int m_Index;		// プールのインデックス
 
-	std::unordered_map<int, RockOnData> m_RockOnData;	// ロックオンデータ
+	std::unordered_map<int, RockOnData> m_RockOnData;	// 自身をロックオンしているものたちのデータ
 };

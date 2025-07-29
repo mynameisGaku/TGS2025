@@ -347,7 +347,7 @@ void Chara::Init(std::string tag)
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
 	m_pBallTarget = m_pBallTargetManager->Create();
-	//m_BallTarget = std::make_shared<BallTarget_WithParent>(BallTarget_WithParent(Vector3::SetY(150), transform));
+	m_pBallTarget->SetCharaTag(m_CharaTag);
 
 #if FALSE
 

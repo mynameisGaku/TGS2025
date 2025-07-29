@@ -117,8 +117,8 @@ BallTarget* BallTargetManager::GetNearest(int index, float distance) const
 			continue;
 
 		// 番号が同じもしくは、チームが同じ場合
-		//if (it->m_Index == index || it->m_pObject->m_CharaTag == chara->m_CharaTag)
-		//	continue;
+		if (it->m_pObject->GetCharaTag() == chara->GetCharaTag())
+			continue;
 
 		// 距離計算
 		if ((chara->transform->position - it->m_pObject->Position()).GetLengthSquared() >= distance * distance)

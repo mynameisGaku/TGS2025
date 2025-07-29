@@ -146,9 +146,9 @@ BallTarget* BallTargetManager::GetNearest(int index, float distance) const
 
 	if (dists.empty()) return nullptr;
 
-	auto aaa = std::min_element(dists.begin(), dists.end(), [](const distPair& a, const distPair& b) {
+	auto minItr = std::min_element(dists.begin(), dists.end(), [](const distPair& a, const distPair& b) {
 		return a.distSq < b.distSq;
 		});
 
-	return Get(aaa->index);
+	return Get(minItr->index);
 }

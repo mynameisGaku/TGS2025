@@ -282,8 +282,8 @@ void Ball::Throw(Chara* owner, float chargeRate)
 {
 	changeState(S_THROWN);
 
-	m_Physics->SetGravity(BALL_REF.Gravity);
-	m_Physics->SetFriction(BALL_REF.Friction);
+	m_Physics->SetGravity(GRAVITY);
+	m_Physics->SetFriction(FRICTION * 1.1f);
 
 	m_Collider->SetIsActive(true);
 
@@ -317,7 +317,7 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 		chargeLevel = 2;
 	}
 
-	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed * GTime.DeltaTime();
+	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
 void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
@@ -337,9 +337,8 @@ void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
 
-	m_HomingSpeed = m_Physics->velocity.GetLength() / GTime.DeltaTime();
-
 	target->SetRockOnData(RockOnData(GetIndex()));
+	m_HomingSpeed = m_Physics->velocity.GetLength();
 }
 
 void Ball::CollisionEvent(const CollisionData& colData)
@@ -360,7 +359,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	{
 		if (m_IsHoming) HomingDeactivate();
 
-		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
+		m_Physics->velocity = m_Physics->FlatVelocity() * -10.0f + Vector3(0.0f, 200.0f, 0.0f);	// Magic:(
 
 		changeState(S_LANDED);
 
@@ -586,7 +585,7 @@ bool Ball::collisionToStage()
 void Ball::HomingDeactivate()
 {
 	m_Physics->SetIsActive(true);
-	m_Physics->SetGravity(BALL_REF.Gravity);
+	m_Physics->SetGravity(GRAVITY);
 	m_IsHoming = false;
 
 	if (m_HomingTarget)

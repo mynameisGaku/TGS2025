@@ -588,6 +588,10 @@ void Ball::HomingDeactivate()
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(BALL_REF.Gravity);
 	m_IsHoming = false;
-	m_HomingTarget->EraseRockOnData(m_Index);
-	m_HomingTarget = nullptr;
+
+	if (m_HomingTarget)
+	{
+		m_HomingTarget->EraseRockOnData(m_Index);
+		m_HomingTarget = nullptr;
+	}
 }

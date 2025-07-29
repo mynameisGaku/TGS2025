@@ -27,7 +27,7 @@ public:
 	void Reset();
 
 	void Update();
-	void Draw() {}
+	void Draw();
 
 	void SetPosition(const Vector3& position) { m_Position = position; }
 	void SetPositionWithParent(const Vector3& offset, Transform* parent);

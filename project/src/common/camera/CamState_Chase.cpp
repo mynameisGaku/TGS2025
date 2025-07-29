@@ -16,7 +16,6 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/network/NetworkManager.h"
-#include <src/reference/network/NetworkRef.h>
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -46,20 +45,9 @@ void Camera::ChaseState(FSMSignal sig)
 		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		// キャラの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
-
-		auto& net = NetworkRef::Inst();
-		// 追従するキャラ
-		if(net.IsNetworkEnable)
-			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
-		else
-			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		if (m_pFollowerChara == nullptr)
-			return;
-		m_CharaIndex = m_pFollowerChara->GetIndex();
+		// カメラを持つキャラを取得
+		findFollowerChara();
+		if (not m_pFollowerChara) return;
 
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 
@@ -92,8 +80,6 @@ void Camera::ChaseState(FSMSignal sig)
 		
 		// Y軸回転に制限をかける
 		MathUtil::RotLimitAssing(&transform->rotation.y);
-
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
 
 		// 注視するキャラが存在、ボタン入力がされた場合
 		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))

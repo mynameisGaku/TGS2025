@@ -274,6 +274,8 @@ private:
 	/// </summary>
 	void drawVirtualCamera();
 
+	void findFollowerChara();
+
 	//================================================================================
 	// ¥ƒƒ“ƒo•Ï”
 

@@ -23,6 +23,8 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/common/network/NetworkManager.h"
 #include "src/common/network/User/User.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/reference/network/NetworkRef.h"
 
 
 using namespace KeyDefine;
@@ -88,6 +90,13 @@ void Camera::Reset() {
 void Camera::Update() {
 
 	m_CameraCone.transform = *transform;
+
+	// キャラの管理者
+	CharaManager* charaM = FindGameObject<CharaManager>();
+	if (charaM)
+	{
+		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
+	}
 
 	if (m_Fsm != nullptr)
 		m_Fsm->Update();
@@ -325,6 +334,24 @@ void Camera::updateAnimation() {
 	default:
 		break;
 	}
+}
+
+void Camera::findFollowerChara()
+{
+	// キャラの管理者
+	CharaManager* charaM = FindGameObject<CharaManager>();
+	if (charaM == nullptr)
+		return;
+
+	auto& net = NetworkRef::Inst();
+	// 追従するキャラ
+	if (net.IsNetworkEnable)
+		m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
+	else
+		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
+	if (m_pFollowerChara == nullptr)
+		return;
+	m_CharaIndex = m_pFollowerChara->GetIndex();
 }
 
 void Camera::SetPerformance(const std::string& perfType) {

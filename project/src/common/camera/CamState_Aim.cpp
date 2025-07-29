@@ -15,7 +15,6 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
-#include <src/reference/network/NetworkRef.h>
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -39,20 +38,10 @@ void Camera::AimState(FSMSignal sig)
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
 
-		// キャラの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
+		// カメラを持つキャラを取得
+		findFollowerChara();
+		if (not m_pFollowerChara) return;
 
-		if (NetworkRef::Inst().IsNetworkEnable)
-			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
-		else
-			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		if (m_pFollowerChara == nullptr)
-			return;
-		m_CharaIndex = m_pFollowerChara->GetIndex();
-
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
@@ -72,20 +61,9 @@ void Camera::AimState(FSMSignal sig)
 	{
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
-		// キャラの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
-
-		if (NetworkRef::Inst().IsNetworkEnable)
-			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
-		else
-			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		if (m_pFollowerChara == nullptr)
-			return;
-		m_CharaIndex = m_pFollowerChara->GetIndex();
-
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
+		// カメラを持つキャラを取得
+		findFollowerChara();
+		if (not m_pFollowerChara) return;
 
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);

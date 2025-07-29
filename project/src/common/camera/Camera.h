@@ -18,6 +18,7 @@ class StateManager;
 class Chara;
 class NetworkManager;
 class BallTarget;
+class CharaManager;
 
 /// <summary>
 /// カメラのクラス
@@ -312,6 +313,7 @@ private:
 	bool m_IsView;		// 描画しているか
 	bool m_DrawFlag;	// 描画が完了しているか
 
+	CharaManager* m_pCharaManager; // キャラクターの管理者
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
     const Chara* m_pTargetChara;	// 注視しているキャラ
 

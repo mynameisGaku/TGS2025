@@ -47,6 +47,7 @@ Camera::Camera() {
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
 	m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+	m_pCharaManager = nullptr;
 }
 
 Camera::~Camera() {
@@ -91,11 +92,12 @@ void Camera::Update() {
 
 	m_CameraCone.transform = *transform;
 
-	// キャラの管理者
-	CharaManager* charaM = FindGameObject<CharaManager>();
-	if (charaM)
+	// プレイシーン以外では取得できないので注意
+	m_pCharaManager = FindGameObject<CharaManager>();
+
+	if (m_pCharaManager)
 	{
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
+		m_pTargetChara = m_pCharaManager->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
 	}
 
 	if (m_Fsm != nullptr)
@@ -339,16 +341,15 @@ void Camera::updateAnimation() {
 void Camera::findFollowerChara()
 {
 	// キャラの管理者
-	CharaManager* charaM = FindGameObject<CharaManager>();
-	if (charaM == nullptr)
+	if (m_pCharaManager == nullptr)
 		return;
 
 	auto& net = NetworkRef::Inst();
 	// 追従するキャラ
 	if (net.IsNetworkEnable)
-		m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
+		m_pFollowerChara = m_pCharaManager->GetFromUUID(m_User.UUID);
 	else
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
+		m_pFollowerChara = m_pCharaManager->CharaInst(m_CharaIndex);
 }
 
 void Camera::SetPerformance(const std::string& perfType) {

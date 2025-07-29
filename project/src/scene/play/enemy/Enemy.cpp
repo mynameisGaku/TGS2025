@@ -4,6 +4,11 @@
 #include "src/scene/play/ball/BallTarget.h"
 #include "src/scene/play/ball/BallTargetManager.h"
 
+namespace
+{
+	static const Vector3 TARGET_OFFSET = Vector3::SetY(60);	// ターゲットのオフセット
+}
+
 Enemy::Enemy()
 {
 	m_Animator = nullptr;
@@ -22,6 +27,9 @@ void Enemy::Init()
 
 	m_pBallTarget = FindGameObject<BallTargetManager>()->Create();
 	m_pBallTarget->SetCharaTag("Enemy");
+
+	m_Animator->LoadAnimsFromJson("data/Json/Enemy/BatAnim.json");
+	m_Animator->Play("Flap");
 }
 
 void Enemy::Update()
@@ -36,6 +44,7 @@ void Enemy::Update()
 		m_Animator->Play("Flap");
 	}
 
+	m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
 }
 
 void Enemy::Draw()

@@ -52,7 +52,7 @@ namespace
 	static const float CHARGE_BALLSPEED = 1.5f;
 	static const Vector3 CHARA_GRAVITY = GRAVITY * 4.0f;
 	static const float ARM_HEIGHT = 100.0f;	// 腕の高さ
-	static const Vector3 TARGET_OFFSET = Vector3::SetY(150);	// ターゲットのオフセット
+	static const Vector3 TARGET_OFFSET = Vector3::SetY(100);	// ターゲットのオフセット
 }
 
 Chara::Chara()

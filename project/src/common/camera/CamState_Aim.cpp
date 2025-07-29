@@ -75,7 +75,7 @@ void Camera::AimState(FSMSignal sig)
 		const Transform TARGET_TRS = Transform(m_pBallTarget->Position());
 
 		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
-		const Vector3 TARGET = TARGET_TRS.position + Vector3::SetY(140.0f);
+		const Vector3 TARGET = TARGET_TRS.position;
 		const Vector3 POSITION = FOLLOWER_TRS.position;
 		const Vector3 TOVEC = TARGET - POSITION;
 		const Vector3 ROTATION = Vector3(MathUtil::ToRadians(-20.0f), MathUtil::RotLimit(atan2f(TOVEC.x, TOVEC.z)), 0.0f);

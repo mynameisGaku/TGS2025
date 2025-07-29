@@ -50,7 +50,7 @@ namespace
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
 	static const float CHARGE_TIME = 1.0f;
 	static const float CHARGE_BALLSPEED = 1.5f;
-	static const Vector3 CHARA_GRAVITY = GRAVITY * 3.0f;
+	static const Vector3 CHARA_GRAVITY = GRAVITY * 4.0f;
 	static const float ARM_HEIGHT = 100.0f;	// 腕の高さ
 }
 
@@ -1852,6 +1852,7 @@ void Chara::StateRunToSlide(FSMSignal sig)
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
+		m_pPhysics->SetFriction(Vector3::Zero);
 
 		if (not m_FSM->HasTransitionWithInThePast(&Chara::StateSlide, 1))
 			m_pPhysics->velocity = m_pPhysics->velocity * 1.5f;
@@ -2396,7 +2397,7 @@ void Chara::slideUpdate()
 		}
 		else
 		{
-			m_pPhysics->SetFriction(FRICTION / 10.0f);
+			m_pPhysics->SetFriction(FRICTION * 0.1f);
 		}
 	}
 
@@ -2490,7 +2491,7 @@ void Chara::getHit(Ball* hit)
 
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
-	m_pPhysics->velocity += transform->Forward() * -50.0f;	// ToDo:外部化
+	m_pPhysics->velocity += transform->Forward() * -2500.0f;	// ToDo:外部化
 
 	playGetHitSound();
 }

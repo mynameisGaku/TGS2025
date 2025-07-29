@@ -43,68 +43,38 @@ void Physics::Update() {
 	if (IsActive() == false)
 		return;
 
-	float timeLapseRate = GTime.DeltaTime() * 60.0f;
+	float timeLapseRate = GTime.DeltaTime();
 
 	// 前トランスフォームを保存
 	*lastTransform = *pTransform;
 
-	GravityUpdate();
-	VelocityUpdate();
-	ResistanceUpdate();
+	updateMovementVelocity();
+	updateResistanceForce();
+	updateFriction();
+	updateGravity();
 }
 
-void Physics::GravityUpdate() {
-
-	// 時間経過率
-	const float timeLapseRate = GTime.DeltaTime() * 60.0f;
+void Physics::updateGravity() {
 
 	// 重力加速度を適応
-	velocity += gravity * timeLapseRate;
+	velocity += gravity * GTime.DeltaTime();
 }
 
-void Physics::VelocityUpdate() {
+void Physics::updateMovementVelocity() {
 
-	// 時間経過率
-	const float timeLapseRate = GTime.DeltaTime() * 60.0f;
-
-	// 座標に加速度を適用
-	pTransform->position += velocity * timeLapseRate;
-
-	// 角速度を適用
-	pTransform->rotation += angularVelocity * timeLapseRate;
+	// 座標に加速度を適応
+	pTransform->position += velocity * GTime.DeltaTime();
+	pTransform->rotation += angularVelocity * GTime.DeltaTime();
 }
 
-void Physics::ResistanceUpdate() {
-
-	// 時間経過率
-	const float timeLapseRate = GTime.DeltaTime() * 60.0f;
-
-	//==========================================================================================
-	// ▼加速度に落下時の空気抵抗を適応
+void Physics::updateResistanceForce() {
 
 	// 座標に抵抗力を適応
-	pTransform->position += resistance * timeLapseRate;
+	pTransform->position += resistance * GTime.DeltaTime();
+}
 
-	float airResistance = velocity.y - fallingAirResistance * timeLapseRate;	// 落下時の空気抵抗
-	float velSize = velocity.GetLength();	// 現在の速度の大きさ
-	float fricSize = friction.GetLength();	// 摩擦係数の大きさ
+void Physics::updateFriction() {
 
-	// 摩擦係数を適応
-	velSize = max(velSize - fricSize * timeLapseRate, 0.0f);
-	
-	velocity = velocity.Normalize() * velSize;
-	velocity.y = airResistance;
-
-	airResistance = resistance.y - fallingAirResistance * timeLapseRate;	// 落下時の空気抵抗
-
-	//==========================================================================================
-	// ▼抵抗力に落下時の空気抵抗を適応
-
-	float res = resistance.GetLength();	// 現在の速度の大きさ
-
-	// 空気抵抗を適応
-	res = max(res - fricSize * timeLapseRate, 0.0f);
-
-	resistance = resistance.Normalize() * res;
-	resistance.y = res;
+	velocity -= velocity * friction * Vector3::Horizontal;
+	resistance -= resistance * friction * Vector3::Horizontal;
 }

@@ -9,6 +9,7 @@ TagManager:
   - CharaSpawner
   - MovableArea
   - MoveableArea
+  - Trampoline
   layers:
   - Default
   - TransparentFX

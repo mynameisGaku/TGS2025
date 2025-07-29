@@ -16,6 +16,7 @@ BallSpawner::BallSpawner()
 	m_IsActive				= false;
 	m_Desc					= {};
 	m_SpawnIntervalSec		= 0.0f;
+	m_VisualRotator			= Vector3::Zero;
 }
 
 BallSpawner::~BallSpawner()
@@ -81,6 +82,15 @@ void BallSpawner::Update()
 
 void BallSpawner::Draw()
 {
+	m_VisualRotator.z = MathUtil::ToRadians(ROTATE_SPEED_Z) * GTime.deltaTime;
+	m_VisualRotator.x = MathUtil::ToRadians(ROTATE_SPEED_X) * GTime.deltaTime;
+	m_VisualRotator.y = MathUtil::ToRadians(ROTATE_SPEED_Y) * GTime.deltaTime;
+	MATRIX rot = 
+		MGetRotZ(m_VisualRotator.z) 
+		* MGetRotX(m_VisualRotator.x) 
+		* MGetRotY(m_VisualRotator.y)
+		;
+	Object3D::SetLocalMatrix(Object3D::localMatrix * rot);
 	Object3D::Draw();
 }
 

@@ -118,18 +118,18 @@ void Ball::Init(std::string charaTag)
 	if (charaTag == "Red")
 	{
 		tag = ColDefine::Tag::tBall;
-		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue, ColDefine::Tag::tGimmick };
 	}
 	else if (charaTag == "Blue")
 	{
 		tag = ColDefine::Tag::tBall;
-		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tRed };
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tRed, ColDefine::Tag::tGimmick };
 	}
 	else
 	{
 		// tagÇ™ïsê≥Ç»ÇÁÉåÉbÉhÇ¡ÇƒÇ±Ç∆Ç…Ç∑ÇÈ
 		tag = ColDefine::Tag::tBall;
-		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue };
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue, ColDefine::Tag::tGimmick };
 	}
 
 	targets.push_back(ColDefine::Tag::tWindArea);

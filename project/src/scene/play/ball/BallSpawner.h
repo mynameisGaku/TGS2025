@@ -10,6 +10,10 @@ class NetworkManager;
 
 class BallSpawner : public Object3D
 {
+private:
+	const float ROTATE_SPEED_X = 15.0f;
+	const float ROTATE_SPEED_Y = 6.0f;
+	const float ROTATE_SPEED_Z = 13.0f;
 public:
 	BallSpawner();
 	~BallSpawner();
@@ -45,6 +49,7 @@ private:
 	bool				m_IsActive;				// Spawnerが有効かどうか
 	bool				m_CanProcess;			// プロセスを行えるか？
 	std::string			m_UniqueID;				// 固有ID
+	Vector3				m_VisualRotator;		// 見た目回転用
 
 	NetworkManager*		m_pNetworkManager;
 };

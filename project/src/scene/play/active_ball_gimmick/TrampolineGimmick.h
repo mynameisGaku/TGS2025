@@ -1,12 +1,14 @@
 #pragma once
 #include "interfaces/TrampolineBase.h"
 #include <src/common/component/collider/CollisionData.h>
+#include <src/util/transform/Transform.h>
+#include <src/common/component/collider/CollisionDefine.h>
 
-typedef struct 
+struct TRAMPOLINE_DESC
 {
     Transform   transform{};
     float       repulsion_force{}; // îΩî≠óÕ (1Ç≈å∏êäÇ»Çµ)
-}TRAMPOLINE_DESC;
+};
 
 class Physics;
 
@@ -18,7 +20,7 @@ class TrampolineGimmick : public TrampolineBase
 public:
     TrampolineGimmick();
     ~TrampolineGimmick();
-    void Init(const TRAMPOLINE_DESC& desc);
+    void Init(const TRAMPOLINE_DESC& desc, const ColDefine::ColBaseParam& col);
     void Update() override;
     void Draw() override;
     void CollisionEvent(const CollisionData& colData) override;
@@ -35,4 +37,6 @@ private:
     void bounce(Physics* pPhys, const type& _type);
     float m_RepulsionForce = 0.0f;
     Vector3 m_SurfaceNormal;
+	float m_BounceCooldown = 0.2f; // ïbêîÅiòAë±îΩéÀã÷é~Åj
+	float m_BounceTimer = 0.0f;
 };

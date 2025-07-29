@@ -33,6 +33,7 @@ namespace ColDefine {
 		tWindArea,	// 風エリア
 		tRed,		// 赤チーム
 		tBlue,		// 青チーム
+		tGimmick,	// ギミック
 		tMax,
 	};
 

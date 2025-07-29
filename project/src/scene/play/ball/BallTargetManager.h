@@ -27,7 +27,7 @@ public:
 	/// </summary>
 	/// <param name="index">プールのインデックス</param>
 	/// <returns>ボールターゲット</returns>
-	BallTarget* Get(uint32_t index);
+	BallTarget* Get(uint32_t index) const;
 
 
 	/// <summary>

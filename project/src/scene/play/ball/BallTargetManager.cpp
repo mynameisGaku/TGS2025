@@ -83,7 +83,7 @@ BallTarget* BallTargetManager::Create()
 	return ballTarget;
 }
 
-BallTarget* BallTargetManager::Get(uint32_t index)
+BallTarget* BallTargetManager::Get(uint32_t index) const
 {
 	if (not m_Pool)
 		return nullptr;
@@ -111,8 +111,21 @@ BallTarget* BallTargetManager::GetNearest(int index, float distance) const
 	if (chara == nullptr)
 		return nullptr;
 
-	for (const auto& it : m_Pool->GetAllItems()) {
+	struct distPair
+	{
+		distPair(uint32_t _index, float _distSq)
+		{
+			index = _index;
+			distSq = _distSq;
+		}
+		uint32_t index = 0;
+		float distSq = 0.0f;
+	};
 
+	std::list<distPair> dists;
+
+	for (const auto& it : m_Pool->GetAllItems())
+	{
 		if (it->m_pObject == nullptr)
 			continue;
 
@@ -121,13 +134,21 @@ BallTarget* BallTargetManager::GetNearest(int index, float distance) const
 			continue;
 
 		// ‹——£ŒvŽZ
-		if ((chara->transform->position - it->m_pObject->Position()).GetLengthSquared() >= distance * distance)
+		float distSq = (chara->transform->position - it->m_pObject->Position()).GetLengthSquared();
+
+		if (distSq >= distance * distance)
 			continue;
 
 		// •Ç”»’èi—\’èj
 
-		return it->m_pObject;
+		dists.push_back(distPair(it->m_pObject->Index(), distSq));
 	}
 
-	return nullptr;
+	if (dists.empty()) return nullptr;
+
+	auto aaa = std::min_element(dists.begin(), dists.end(), [](const distPair& a, const distPair& b) {
+		return a.distSq < b.distSq;
+		});
+
+	return Get(aaa->index);
 }

@@ -82,7 +82,7 @@ void Camera::Reset() {
 
 	m_pHolder = nullptr;
 	m_pFollowerChara = nullptr;
-	m_pTargetChara = nullptr;
+	m_pBallTarget = nullptr;
 
 	m_IsView = true;
 	m_DrawFlag = false;
@@ -97,7 +97,8 @@ void Camera::Update() {
 
 	if (m_pCharaManager)
 	{
-		m_pTargetChara = m_pCharaManager->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// ’‹‚·‚éƒLƒƒƒ‰
+		//m_pTargetChara = m_pCharaManager->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// ’‹‚·‚éƒLƒƒƒ‰
+		m_pBallTarget = nullptr;
 	}
 
 	if (m_Fsm != nullptr)

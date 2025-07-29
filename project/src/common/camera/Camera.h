@@ -182,9 +182,9 @@ public:
 	const Vector3 TargetLay() const;
 
 	/// <summary>
-	/// 注視しているキャラクター
+	/// 注視しているボールターゲット
 	/// </summary>
-	inline const Chara* TargetChara() const { return m_pTargetChara; }
+	inline const BallTarget* GetBallTarget() const { return m_pBallTarget; }
 
 	/// <summary>
 	/// 描画が終了したかどうかを判定
@@ -315,7 +315,7 @@ private:
 
 	CharaManager* m_pCharaManager; // キャラクターの管理者
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
-    const Chara* m_pTargetChara;	// 注視しているキャラ
+	BallTarget* m_pBallTarget;	// 注視しているボールターゲット
 
     NetworkManager* m_pNetworkManager; // 現在のクライアントのUUIDをもらうためのネトマネ
 };

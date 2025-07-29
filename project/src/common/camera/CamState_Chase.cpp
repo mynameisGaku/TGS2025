@@ -16,6 +16,7 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/network/NetworkManager.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -84,7 +85,7 @@ void Camera::ChaseState(FSMSignal sig)
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))
+		if (m_pBallTarget != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))
 		{
 			// 視点移動検知
 			if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
@@ -92,7 +93,7 @@ void Camera::ChaseState(FSMSignal sig)
 				m_TargetTransitionTime = 0.5f;
 
 			// コーン形状の判定内に注視するキャラが居る場合
-			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pTargetChara->transform->position).IsCollision())
+			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision())
 				ChangeState(&Camera::AimState);
 		}
 	}

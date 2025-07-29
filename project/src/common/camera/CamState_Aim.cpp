@@ -15,6 +15,7 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -42,15 +43,15 @@ void Camera::AimState(FSMSignal sig)
 		findFollowerChara();
 		if (not m_pFollowerChara) return;
 
-		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
+		if (m_pFollowerChara == nullptr || m_pBallTarget == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
 		// コーンの範囲に入って居ない場合
-		if (not ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pTargetChara->transform->position).IsCollision() ||
+		if (not ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision() ||
 			MouseController::Info().Move().GetLengthSquared() > 5.0f) {
-			m_pTargetChara = nullptr;
+			m_pBallTarget = nullptr;
 			m_TargetTransitionTime = 0.5f;
 			ChangeState(&Camera::ChaseState);
 			return;
@@ -64,14 +65,14 @@ void Camera::AimState(FSMSignal sig)
 		if (not m_pFollowerChara) return;
 
 		// ロックオン相手がいないならチェイスに戻る
-		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
+		if (m_pFollowerChara == nullptr || m_pBallTarget == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
 		//▼=== チェイスステートから滑らかに視点（オフセット）を変える処理 ===
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
-		const Transform TARGET_TRS = m_pTargetChara->transform->Global();
+		const Transform TARGET_TRS = Transform(m_pBallTarget->Position());
 
 		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
 		const Vector3 TARGET = TARGET_TRS.position + Vector3::SetY(140.0f);
@@ -112,7 +113,7 @@ void Camera::AimState(FSMSignal sig)
 		// ロックオンボタンを離したらチェイスに戻る
 		if (not InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
 		{
-			m_pTargetChara = nullptr;
+			m_pBallTarget = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 
@@ -121,7 +122,7 @@ void Camera::AimState(FSMSignal sig)
 			PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
 		{
 			m_TargetTransitionTime = 0.5f;
-			m_pTargetChara = nullptr;
+			m_pBallTarget = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 	}
@@ -133,7 +134,7 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
-		m_pTargetChara = nullptr;
+		m_pBallTarget = nullptr;
 		canMove = true;
 	}
 	break;

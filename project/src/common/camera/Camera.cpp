@@ -349,9 +349,6 @@ void Camera::findFollowerChara()
 		m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
 	else
 		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-	if (m_pFollowerChara == nullptr)
-		return;
-	m_CharaIndex = m_pFollowerChara->GetIndex();
 }
 
 void Camera::SetPerformance(const std::string& perfType) {

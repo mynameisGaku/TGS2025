@@ -59,17 +59,17 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
-		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
-
 		// カメラを持つキャラを取得
 		findFollowerChara();
 		if (not m_pFollowerChara) return;
 
+		// ロックオン相手がいないならチェイスに戻る
 		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
+		//▼=== チェイスステートから滑らかに視点（オフセット）を変える処理 ===
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 		const Transform TARGET_TRS = m_pTargetChara->transform->Global();
 
@@ -78,6 +78,8 @@ void Camera::AimState(FSMSignal sig)
 		const Vector3 POSITION = FOLLOWER_TRS.position;
 		const Vector3 TOVEC = TARGET - POSITION;
 		const Vector3 ROTATION = Vector3(MathUtil::ToRadians(-20.0f), MathUtil::RotLimit(atan2f(TOVEC.x, TOVEC.z)), 0.0f);
+
+		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
 		if (m_EasingTime > 0.0f)
 		{
@@ -100,16 +102,21 @@ void Camera::AimState(FSMSignal sig)
 			transform->position = POSITION;
 			transform->rotation = ROTATION;
 		}
+		//=========================================================
 
+		// X回転制限
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		// Y回転制限
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
+		// ロックオンボタンを離したらチェイスに戻る
 		if (not InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
 		{
 			m_pTargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 
+		// 視点を移動したらチェイスに戻る
 		if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
 			PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
 		{

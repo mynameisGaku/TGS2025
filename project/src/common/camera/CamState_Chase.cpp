@@ -42,12 +42,13 @@ void Camera::ChaseState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
-		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
-		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
-
 		// カメラを持つキャラを取得
 		findFollowerChara();
 		if (not m_pFollowerChara) return;
+
+		//▼=== エイムステートから滑らかに視点（オフセット）を戻す処理 ===
+		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
+		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 
@@ -67,13 +68,14 @@ void Camera::ChaseState(FSMSignal sig)
 			SetTarget(TARGET);
 			transform->position = POSITION;
 		}
+		//=========================================================
 
-		// スティックによる操作
+		// 入力受付、カメラ回転
 		operationByStick(m_CharaIndex + 1, ViewPointShift::All);
-	
-		// マウスによる操作
-		if (m_CharaIndex == 0)
+		if (m_CharaIndex == 0) // プレイヤー0ならマウス操作も可能
+		{
 			operationByMouse(ViewPointShift::All);
+		}
 		
 		// X軸回転に制限をかける
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);

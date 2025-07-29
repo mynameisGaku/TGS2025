@@ -78,6 +78,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	if (not net.IsNetworkEnable)
 		Instantiate<UI_Setter_PlayScene>();
 
+	BallTargetManager* ballTargetManager = Instantiate<BallTargetManager>();
+
 	Instantiate<MatchManager>();
 
 	EnemyManager* enemyManager = Instantiate<EnemyManager>();
@@ -85,8 +87,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);
-
-	BallTargetManager* ballTargetManager = Instantiate<BallTargetManager>();
 
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
 	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(Vector3(0, 500, 0), Vector3::Zero, Vector3::Ones), 1000.0f, MathUtil::ToRadians(30.0f));

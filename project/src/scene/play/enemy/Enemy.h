@@ -2,6 +2,7 @@
 #include "src/util/object3D/Object3D.h"
 
 class Animator;
+class BallTarget;
 
 /// <summary>
 /// 敵キャラ
@@ -16,4 +17,5 @@ public:
 	void Draw() override;
 private:
 	Animator* m_Animator;
+	BallTarget* m_pBallTarget;			// ロックオンできるターゲット
 };

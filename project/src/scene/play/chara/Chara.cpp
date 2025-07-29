@@ -1852,7 +1852,7 @@ void Chara::StateRunToSlide(FSMSignal sig)
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
-		m_pPhysics->SetFriction(FRICTION * 0.1f);
+		m_pPhysics->SetFriction(Vector3::Zero);
 
 		if (not m_FSM->HasTransitionWithInThePast(&Chara::StateSlide, 1))
 			m_pPhysics->velocity = m_pPhysics->velocity * 1.5f;
@@ -2397,7 +2397,7 @@ void Chara::slideUpdate()
 		}
 		else
 		{
-			m_pPhysics->SetFriction(FRICTION);
+			m_pPhysics->SetFriction(FRICTION * 0.1f);
 		}
 	}
 

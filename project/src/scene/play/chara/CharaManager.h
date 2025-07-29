@@ -49,6 +49,7 @@ public:
 	/// 指定したキャラに対して、最も近い敵キャラを取得する
 	/// </summary>
 	/// <param name="index">キャラID</param>
+	/// <param name="distance">ロックオン制限距離</param>
 	Chara* NearestEnemy(int index, float distance);
 
 	/// <summary>

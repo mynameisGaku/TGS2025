@@ -19,6 +19,7 @@ class Chara;
 class NetworkManager;
 class BallTarget;
 class CharaManager;
+class BallTargetManager;
 
 /// <summary>
 /// カメラのクラス
@@ -316,6 +317,7 @@ private:
 	CharaManager* m_pCharaManager; // キャラクターの管理者
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
 	BallTarget* m_pBallTarget;	// 注視しているボールターゲット
+	BallTargetManager* m_pBallTargetManager;	// ボールターゲットの管理者
 
     NetworkManager* m_pNetworkManager; // 現在のクライアントのUUIDをもらうためのネトマネ
 };

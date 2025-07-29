@@ -5,6 +5,7 @@ class BallTarget;
 class BallTarget_WithParent;
 template <class C>
 class Pool;
+class CharaManager;
 
 /// <summary>
 /// ボールターゲットを管理
@@ -27,6 +28,15 @@ public:
 	/// <param name="index">プールのインデックス</param>
 	/// <returns>ボールターゲット</returns>
 	BallTarget* Get(uint32_t index);
+
+
+	/// <summary>
+	/// 指定したキャラに対して、最も近く、味方ではないボールターゲットを取得する
+	/// </summary>
+	/// <param name="index">キャラID</param>
+	/// <param name="distance">ロックオン制限距離</param>
+	BallTarget* GetNearest(int index, float distance) const;
 private:
 	Pool<BallTarget>* m_Pool;
+	CharaManager* m_pCharaManager;
 };

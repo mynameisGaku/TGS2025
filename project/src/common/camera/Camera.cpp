@@ -25,6 +25,7 @@
 #include "src/common/network/User/User.h"
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/network/NetworkRef.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 
 using namespace KeyDefine;
@@ -94,11 +95,11 @@ void Camera::Update() {
 
 	// プレイシーン以外では取得できないので注意
 	m_pCharaManager = FindGameObject<CharaManager>();
+	m_pBallTargetManager = FindGameObject<BallTargetManager>();
 
-	if (m_pCharaManager)
+	if (m_pBallTargetManager)
 	{
-		//m_pTargetChara = m_pCharaManager->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
-		m_pBallTarget = nullptr;
+		m_pBallTarget = m_pBallTargetManager->GetNearest(m_CharaIndex, this->m_CameraCone.range);	// 注視するボールターゲット
 	}
 
 	if (m_Fsm != nullptr)

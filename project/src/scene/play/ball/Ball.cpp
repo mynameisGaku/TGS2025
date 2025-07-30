@@ -282,7 +282,7 @@ void Ball::Throw(Chara* owner, float chargeRate)
 	changeState(S_THROWN);
 
 	m_Physics->SetGravity(GRAVITY);
-	m_Physics->SetFriction(FRICTION * 1.1f);
+	m_Physics->SetFriction(Vector3(0.01f));
 
 	m_Collider->SetIsActive(true);
 

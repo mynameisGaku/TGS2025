@@ -445,6 +445,9 @@
     <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Interfaces">
       <UniqueIdentifier>{0f171ba5-0d6c-4139-b7a8-ea67b5561253}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\title\ui">
+      <UniqueIdentifier>{24a1a754-e293-4ee0-acdb-b1c505272e92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -753,6 +756,8 @@
     <None Include="data\Json\Enemy\BatAnim.json">
       <Filter>data\Json\Enemy</Filter>
     </None>
+    <None Include="data\Json\Stage\ExportedStage-000.json" />
+    <None Include="data\Json\Stage\TrampolineTestStage.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1465,6 +1470,18 @@
     </ClCompile>
     <ClCompile Include="src\scene\play\active_ball_gimmick\TargetGimmick.cpp">
       <Filter>src%28application%29\scene\play\active_ball_gimmick\Target</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUI.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUICanvas.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUIController.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2310,6 +2327,18 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\BoostRingBase.h">
       <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUI.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUICanvas.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUIController.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUIGridCursor.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

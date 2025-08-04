@@ -7,13 +7,13 @@
 class RockOnData
 {
 public:
-	RockOnData() : RockOnData(-1) {}
+	RockOnData() : RockOnData(0) {}
 
-	RockOnData(int ballIndex) : 
+	RockOnData(uint32_t ballIndex) :
 		BallIndex(ballIndex) 
 	{}
 
-	int BallIndex;	// ボールのインデックス
+	uint32_t BallIndex;	// ボールのインデックス
 };
 
 /// <summary>
@@ -48,6 +48,7 @@ public:
 
 	void SetRockOnData(const RockOnData& rockOnData) { m_RockOnData[rockOnData.BallIndex] = rockOnData; }
 	void EraseRockOnData(int ballIndex) { if (m_RockOnData.contains(ballIndex)) m_RockOnData.erase(ballIndex); }
+	const std::unordered_map<int, RockOnData>& GetRockOnData() const { return m_RockOnData; }
 
 	void SetCharaTag(std::string charaTag) { m_CharaTag = charaTag; }
 	std::string GetCharaTag() const { return m_CharaTag; }

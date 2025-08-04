@@ -334,6 +334,7 @@ private:
 	float						m_BallChargeRate;		// ボールのチャージ加速度
 
 	BallTarget*					m_pBallTarget;			// ロックオンできるターゲット
+	BallTarget*					m_pCameraTarget;		// カメラが注視しているターゲット
 	BallTargetManager*			m_pBallTargetManager;	// ボールターゲットマネージャーのポインター
 
 	CharaHP*					m_pHP;					// HPのポインター
@@ -414,6 +415,7 @@ private:
 	void catchUpdate();
 	void jumpUpdate();
 	void tackleUpdate();
+	void ballTargetUpdate();
 
 	void buttonHintUpdate();
 

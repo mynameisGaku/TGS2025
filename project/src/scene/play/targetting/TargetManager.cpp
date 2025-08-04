@@ -13,7 +13,7 @@ TargetManager::TargetManager() {
 
 	ballManager = nullptr;
 	charaManager = nullptr;
-	checkCamera.clear();
+	//checkCamera.clear();
 	targetList.clear();
 
 	hArrow = LoadGraph("data/texture/arrow.png");
@@ -21,7 +21,7 @@ TargetManager::TargetManager() {
 
 TargetManager::~TargetManager() {
 
-	checkCamera.clear();
+	//checkCamera.clear();
 	targetList.clear();
 
 	DeleteGraph(hArrow);
@@ -32,9 +32,9 @@ void TargetManager::Start() {
 	ballManager = FindGameObject<BallManager>();
 	charaManager = FindGameObject<CharaManager>();
 
-	const int cameraNum = (int)CameraManager::AllCameras().size();
-	for (int i = 0; i < cameraNum; i++)
-		checkCamera.push_back(false);
+	//const int cameraNum = (int)CameraManager::AllCameras().size();
+	//for (int i = 0; i < cameraNum; i++)
+	//	checkCamera.push_back(false);
 }
 
 void TargetManager::Update() {
@@ -55,9 +55,9 @@ void TargetManager::Update() {
 		targetList[i] = camera->GetBallTarget()->Index();
 	}
 
-	// チェック済マークのリセット
-	for (auto check : checkCamera)
-		check = false;
+	//// チェック済マークのリセット
+	//for (auto check : checkCamera)
+	//	check = false;
 }
 
 void TargetManager::Draw() {
@@ -71,9 +71,9 @@ void TargetManager::Draw() {
 		if (camera == nullptr)
 			continue;
 
-		// カメラの描画が完了しているかつ、チェック済の場合
-		if (camera->IsDrawEnd() && checkCamera[i])
-			continue;
+		//// カメラの描画が完了しているかつ、チェック済の場合
+		//if (camera->IsDrawEnd() && checkCamera[i])
+		//	continue;
 
 		int index = i;					// カメラの番号＆キャラの番号
 		int targetIndex = targetList[i];// 注視しているボールターゲットの番号
@@ -108,36 +108,23 @@ void TargetManager::Draw() {
 			EffectManager::Stop("LockOnMarker_001.efk", StringUtil::FormatToString("LockOn %d", index));
 		}
 
-		/*
+		if (not ballManager) continue;
 
-		// 狙っているキャラに対応するカメラを取得
-		Camera* targetCamera = CameraManager::GetCamera(targetIndex);
-		if (targetCamera == nullptr)
-			continue;
+		const BallTarget* charaTarget = chara->GetBallTarget();
+		const std::unordered_map<int, RockOnData> charaRockOnData = charaTarget->GetRockOnData();
 
-		const Ball* lastBall = chara->LastBall();
-		const Ball* haveBall = chara->GetHaveBall();
+		if (charaRockOnData.empty()) continue;
 
-		// 描画が完了していない場合
-		// 警告マーカーを描画するのは相手方のカメラなので、相手方の描画が終わるのを待つ
-		if (not targetCamera->IsDrawEnd())
-			continue;
+		DrawWarning();
 
-		// ボールをチャージしている場合
-		if (haveBall != nullptr && chara->IsCharging()) {
-			DrawWarning();
-			DrawThorn(haveBall->transform->Global().position, targetIndex);
+		for (const auto& item : charaRockOnData) {
+			const RockOnData data = item.second;
+			const Ball* ball = ballManager->GetBall(data.BallIndex);
+
+			DrawThorn(ball->transform->Global().position, targetIndex);
 		}
 
-		// ボールを投げた場合
-		if (lastBall != nullptr && lastBall->GetState() == Ball::State::S_THROWN &&
-			lastBall->GetLastOwner() == chara) {
-			DrawWarning();
-			DrawThorn(lastBall->transform->Global().position, targetIndex);
-		}
-		*/
-
-		checkCamera[i] = true;
+		//checkCamera[i] = true;
 	}
 }
 
@@ -169,8 +156,8 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 	if (targetCamera == nullptr)
 		return;
 
-	if (not targetCamera->IsDrawEnd())
-		return;
+	//if (not targetCamera->IsDrawEnd())
+	//	return;
 
 	// 距離
 	Vector3 dir = ballPos - charaTarget->transform->Global().position;
@@ -240,8 +227,8 @@ void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 	if (targetCamera == nullptr)
 		return;
 
-	if (not targetCamera->IsDrawEnd())
-		return;
+	//if (not targetCamera->IsDrawEnd())
+	//	return;
 
 	Vector2 screenDivSize = CameraManager::GetScreenDivisionSize();
 

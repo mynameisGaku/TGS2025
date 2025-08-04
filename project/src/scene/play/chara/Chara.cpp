@@ -104,7 +104,6 @@ Chara::Chara()
 	m_SpawnPointManager = nullptr;
 	m_TackleIntervalAlarm = nullptr;
 	m_pBallTarget		= nullptr;
-	//m_BallTarget		= nullptr;
 
 	m_HitPoint = 0;
 	m_Stamina = 0.0f;
@@ -2245,6 +2244,8 @@ void Chara::SubStateHold(FSMSignal sig)
 
 void Chara::SubStateHoldToAim(FSMSignal sig)
 {
+	Camera* camera = CameraManager::GetCamera(m_Index);
+
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
@@ -2263,12 +2264,13 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 		// カメラの向きに合わせる
 		m_CanRot = false;
 
-		Camera* camera = CameraManager::GetCamera(m_Index);
 		if (camera != nullptr) {
 			float currentY = transform->rotation.y;
 			float terminusY = camera->transform->rotation.y;
 			transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
 		}
+
+		ballTargetUpdate();
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate: // 更新後の更新
@@ -2482,6 +2484,31 @@ void Chara::tackleUpdate()
 	{
 		// あと隙
 		m_Alarm->Set(0.1f); // magic:>
+	}
+}
+
+void Chara::ballTargetUpdate()
+{
+	Camera* camera = CameraManager::GetCamera(m_Index);
+	if (not camera) return;
+
+	if (not m_pBall) return;
+	if (not m_IsCharging) return;
+
+	BallTarget* lastTarget = m_pCameraTarget;
+	m_pCameraTarget = camera->GetBallTarget();
+
+	if (lastTarget != m_pCameraTarget)
+	{
+		if (lastTarget)
+		{
+			lastTarget->EraseRockOnData(m_pBall->GetIndex());
+		}
+	}
+
+	if (m_pCameraTarget)
+	{
+		m_pCameraTarget->SetRockOnData({ m_pBall->GetIndex() });
 	}
 }
 

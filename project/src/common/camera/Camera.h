@@ -217,7 +217,7 @@ public:
 	/// <param name="y">始点座標(Y軸)</param>
 	/// <param name="w">幅</param>
 	/// <param name="h">高さ</param>
-	void GetDrawArea(int* x, int* y, int* w, int* h) const;
+	void GetDrawArea(int* x = nullptr, int* y = nullptr, int* w = nullptr, int* h = nullptr) const;
 
 	//================================================================================
 	// ▼ステート

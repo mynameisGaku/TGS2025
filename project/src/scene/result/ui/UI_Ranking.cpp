@@ -29,8 +29,8 @@ void UI_Ranking::Draw()
 	{
 		for (int i = 0; i < CAMERA_NUM; ++i)
 		{
-			Vector2 screenBegin = ScreenManager::GetScreenBeginPos(i);
-			Vector2 screenEnd = ScreenManager::GetScreenEndPos(i);
+			Vector2 screenBegin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
+			Vector2 screenEnd = screenBegin + CameraManager::GetDrawingAreaSize_CameraIndex(i);
 			Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
 
 			// Å‘å•\Ž¦”
@@ -59,8 +59,8 @@ void UI_Ranking::Draw()
 	{
 		for (int i = 0; i < CAMERA_NUM; ++i)
 		{
-			Vector2 screenBegin = ScreenManager::GetScreenBeginPos(i);
-			Vector2 screenEnd = ScreenManager::GetScreenEndPos(i);
+			Vector2 screenBegin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
+			Vector2 screenEnd = screenBegin + CameraManager::GetDrawingAreaSize_CameraIndex(i);
 			Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
 
 			const std::string text = "No Contest";

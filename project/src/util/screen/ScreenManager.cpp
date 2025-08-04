@@ -6,9 +6,9 @@
 
 namespace {
 
-	std::unordered_map<std::string, ScreenData*>* m_hTemporaryScreens;
-	std::list<ScreenData*>* m_DrawingScreens;
-	ScreenData* m_DefaultScreen;
+	std::unordered_map<std::string, ScreenImageData*>* m_hTemporaryScreens;	// 仮スクリーン画像
+	std::list<ScreenImageData*>* m_DrawingScreens;	// 描画中のスクリーン画像
+	ScreenImageData* m_DefaultScreen;	// 基本のスクリーン画像
 }
 
 void ScreenManager::Init() {
@@ -74,47 +74,7 @@ void ScreenManager::Release() {
 	}
 }
 
-int ScreenManager::GetScreenDivCount()
-{
-	if (not CameraManager::IsScreenDivision())
-		return 1;
-
-	return (int)CameraManager::AllCameras().size();
-}
-
-int ScreenManager::GetScreenDivWidth()
-{
-	int width = WindowSetting::Inst().width;
-	int divCount = GetScreenDivCount();
-
-	return width / divCount;
-}
-
-int ScreenManager::GetScreenDivHeight()
-{
-	int height = WindowSetting::Inst().height;
-	int divCount = GetScreenDivCount();
-
-	return height / divCount;
-}
-
-Vector2 ScreenManager::GetScreenBeginPos(int divCount) {
-
-	if (divCount < 0)
-		return Vector2::Zero;
-
-	return Vector2((float)GetScreenDivWidth() * divCount, 0.0f);
-}
-
-Vector2 ScreenManager::GetScreenEndPos(int divCount) {
-
-	if (divCount < 0)
-		return Vector2::Zero;
-
-	return Vector2((float)GetScreenDivWidth() * (divCount + 1), WindowSetting::Inst().height);
-}
-
-void ScreenManager::CreateScreen(const ScreenData& data) {
+void ScreenManager::CreateScreen(const ScreenImageData& data) {
 
 	if (m_hTemporaryScreens == nullptr)
 		return;
@@ -122,7 +82,7 @@ void ScreenManager::CreateScreen(const ScreenData& data) {
 	if (m_hTemporaryScreens->contains(data.tag))
 		return;
 
-	(*m_hTemporaryScreens)[data.tag] = new ScreenData(data);
+	(*m_hTemporaryScreens)[data.tag] = new ScreenImageData(data);
 }
 
 void ScreenManager::CreateScreen(const std::string& tag, int drawX, int drawY, int drawW, int drawH) {
@@ -133,7 +93,7 @@ void ScreenManager::CreateScreen(const std::string& tag, int drawX, int drawY, i
 	if (m_hTemporaryScreens->contains(tag))
 		return;
 
-	ScreenData* data = new ScreenData();
+	ScreenImageData* data = new ScreenImageData();
 	data->tag = tag;
 	data->drawX = drawX;
 	data->drawY = drawY;
@@ -151,7 +111,7 @@ void ScreenManager::DrawBegin(const std::string& tag) {
 	if (not m_hTemporaryScreens->contains(tag))
 		return;
 
-	ScreenData* data = (*m_hTemporaryScreens)[tag];
+	ScreenImageData* data = (*m_hTemporaryScreens)[tag];
 
 	if (data->handle == -1) {
 		data->handle = MakeScreen(data->clipW, data->clipH, TRUE);
@@ -159,7 +119,6 @@ void ScreenManager::DrawBegin(const std::string& tag) {
 
 	SetDrawScreen(data->handle);
 	ClearDrawScreen();
-	//CameraManager::Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
 	DrawBox(data->clipX, data->clipY, data->clipX + data->clipW, data->clipY + data->clipH, GetColor(0, 0, 0), TRUE);
@@ -176,12 +135,23 @@ void ScreenManager::DrawEnd(const std::string& tag) {
 	if (not m_hTemporaryScreens->contains(tag))
 		return;
 
-	ScreenData* data = (*m_hTemporaryScreens)[tag];
+	ScreenImageData* data = (*m_hTemporaryScreens)[tag];
 
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255); // アルファ合成
 
-	DrawExtendGraph(data->drawX, data->drawY, data->drawX + data->drawW, data->drawY + data->drawH, data->handle, TRUE);
+	//DrawExtendGraph(data->drawX, data->drawY, data->drawX + data->drawW, data->drawY + data->drawH, data->handle, TRUE);
+
+	int drawCX = data->drawX + data->drawW / 2;
+	int drawCY = data->drawY + data->drawH / 2;
+
+	int clipCX = data->clipX + data->clipW / 2;
+	int clipCY = data->clipY + data->clipH / 2;
+
+	int clipSX = clipCX - data->drawW / 2;
+	int clipSY = 0;
+
+	DrawRectRotaGraph(drawCX, drawCY, clipSX, clipSY, data->drawW, data->drawH, 1.0f, 0.0f, data->handle, TRUE);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); // アルファ合成
 
@@ -194,18 +164,26 @@ void ScreenManager::CleanUp() {
 	if (m_DrawingScreens == nullptr)
 		return;
 
-	//ClearDrawScreen();
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255); // アルファ合成
 
 	for (auto it = m_DrawingScreens->begin(); it != m_DrawingScreens->end();) {
-		ScreenData* clip = *it;
-		if (clip->handle != -1) {
+		ScreenImageData* data = *it;
+		if (data->handle != -1) {
 
-			DrawExtendGraph(clip->drawX, clip->drawY, clip->drawX + clip->drawW, clip->drawY + clip->drawH, clip->handle, TRUE);
+			//int drawCX = data->drawX + data->drawW / 2;
+			//int drawCY = data->drawY + data->drawH / 2;
 
-			DeleteGraph(clip->handle);
-			clip->handle = -1;
+			//int clipCX = data->clipX + data->clipW / 2;
+			//int clipCY = data->clipY + data->clipH / 2;
+
+			//int clipSX = clipCX - data->drawW / 2;
+			//int clipSY = 0;
+
+			//DrawRectRotaGraph(drawCX, drawCY, clipSX, clipSY, data->drawW, data->drawH, 1.0f, 0.0f, data->handle, TRUE);
+
+			DeleteGraph(data->handle);
+			data->handle = -1;
 		}
 		it = m_DrawingScreens->erase(it);
 	}
@@ -218,7 +196,7 @@ void ScreenManager::SetClipPos(const std::string& tag, int x, int y) {
 	if (not IsScreenExist(tag))
 		return;
 
-	ScreenData* data = (*m_hTemporaryScreens)[tag];
+	ScreenImageData* data = (*m_hTemporaryScreens)[tag];
 	data->clipX = x;
 	data->clipY = y;
 }
@@ -228,7 +206,7 @@ void ScreenManager::SetClipSize(const std::string& tag, int w, int h) {
 	if (not IsScreenExist(tag))
 		return;
 
-	ScreenData* data = (*m_hTemporaryScreens)[tag];
+	ScreenImageData* data = (*m_hTemporaryScreens)[tag];
 	data->clipW = w;
 	data->clipH = h;
 }
@@ -238,7 +216,7 @@ void ScreenManager::SetDrawPos(const std::string& tag, int x, int y) {
 	if (not IsScreenExist(tag))
 		return;
 
-	ScreenData* data = (*m_hTemporaryScreens)[tag];
+	ScreenImageData* data = (*m_hTemporaryScreens)[tag];
 	data->drawX = x;
 	data->drawY = y;
 }
@@ -248,12 +226,12 @@ void ScreenManager::SetDrawSize(const std::string& tag, int w, int h) {
 	if (not IsScreenExist(tag))
 		return;
 
-	ScreenData* data = (*m_hTemporaryScreens)[tag];
+	ScreenImageData* data = (*m_hTemporaryScreens)[tag];
 	data->drawW = w;
 	data->drawH = h;
 }
 
-ScreenData* ScreenManager::GetScreenData(const std::string& tag) {
+ScreenImageData* ScreenManager::GetScreenImageData(const std::string& tag) {
 
 	if (not IsScreenExist(tag))
 		return nullptr;

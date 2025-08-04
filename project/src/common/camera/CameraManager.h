@@ -96,6 +96,8 @@ namespace CameraManager {
 	/// </summary>
 	void SetIsScreenDivision(bool value);
 
+	void SetCurrentDrawingCameraID(int index);
+
 	//================================================================================
 	// ▼ゲッター
 
@@ -140,9 +142,14 @@ namespace CameraManager {
 	Vector2 GetScreenDivisionSize();
 
 	/// <summary>
-	/// 画面分割の開始地点を取得する
+	/// 描画領域の開始地点を取得する
 	/// </summary>
-	Vector2 GetScreenDivisionPos_CameraIndex(int index);
+	Vector2 GetDrawingAreaPos_CameraIndex(int index);
+
+	/// <summary>
+	/// 描画領域の大きさを取得する
+	/// </summary>
+	Vector2 GetDrawingAreaSize_CameraIndex(int index);
 
 	/// <summary>
 	/// 画面分割の中心座標を取得する
@@ -150,6 +157,12 @@ namespace CameraManager {
 	Vector2 GetScreenDivisionCenter();
 
 	Vector2 GetDivedByCameraNum();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	int GetCurrentDrawingCameraID();
 
 	//================================================================================
 	// ▼デバッグ機能

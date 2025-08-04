@@ -52,7 +52,7 @@ namespace UI_Manager {
 	/// </summary>
 	/// <param name="uiData">UI情報</param>
 	/// <returns>追加したUI情報のインスタンス</returns>
-	UI_Canvas* Add(UI_Canvas* uiData, const bool& front = false);
+	UI_Canvas* Add(UI_Canvas* uiData, const bool& front = true);
 
 	/// <summary>
 	/// 管理しているUIを切り離す

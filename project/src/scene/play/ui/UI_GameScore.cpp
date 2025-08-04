@@ -40,8 +40,10 @@ void UI_GameScore::Draw()
 		for (int i = 0; i < CAMERA_NUM; i++)
 		{
 			RectTransform rectTrs = RectTransform(Anchor::Preset::MiddleUp);
-			rectTrs.anchor.SetBegin(ScreenManager::GetScreenBeginPos(i));
-			rectTrs.anchor.SetEnd(ScreenManager::GetScreenEndPos(i));
+			Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
+			Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(i);
+			rectTrs.anchor.SetBegin(begin);
+			rectTrs.anchor.SetEnd(begin + size);
 
 			drawTotalScore(rectTrs.Global().position);
 		}

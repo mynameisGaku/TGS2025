@@ -94,8 +94,8 @@ void TargetManager::Draw() {
 		if (chara->IsCharging()) {
 			// マーカーは画面中央固定
 			RectTransform markerRect = RectTransform(Anchor::Preset::Middle);
-			Vector2 beginPos = ScreenManager::GetScreenBeginPos(index);
-			Vector2 endPos = ScreenManager::GetScreenEndPos(index);
+			Vector2 beginPos = CameraManager::GetDrawingAreaPos_CameraIndex(index);
+			Vector2 endPos = beginPos + CameraManager::GetDrawingAreaSize_CameraIndex(index);
 			markerRect.anchor.SetBegin(beginPos);
 			markerRect.anchor.SetEnd(endPos);
 			EffectBase* lockOn = EffectManager::Play2D_Loop("LockOnMarker_001.efk", markerRect, StringUtil::FormatToString("LockOn %d", index));

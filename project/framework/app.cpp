@@ -14,6 +14,8 @@
 #include "src/util/screen/ScreenManager.h"
 #include "src/util/shadow_map/ShadowMap.h"
 
+#include "src/util/ui/UI_Manager.h"
+
 bool exitFlag = false;
 
 void AppInit()
@@ -46,16 +48,15 @@ void AppDraw()
 
 	for (const auto& camera : CameraManager::AllCameras())
 	{
-		cameraIndex++;
 		if (not camera->IsActive())
 			continue;
 
-		std::string scrName = "CameraScreen_No." + std::to_string(cameraIndex);
+		const std::string scrName = "CameraScreen_No." + std::to_string(cameraIndex);
 		int drawX, drawY, drawW, drawH;
 
 		camera->GetDrawArea(&drawX, &drawY, &drawW, &drawH);
 
-		ScreenData* pData = ScreenManager::GetScreenData(scrName);
+		ScreenImageData* pData = ScreenManager::GetScreenImageData(scrName);
 		if (pData == nullptr)
 		{
 			ScreenManager::CreateScreen(scrName, drawX, drawY, drawW, drawH);
@@ -68,15 +69,23 @@ void AppDraw()
 			pData->drawH = drawH;
 		}
 
+		ShadowMap::DrawBegin(cameraIndex);
+			SceneManager::Draw();
+		ShadowMap::DrawEnd();
+		
 		ScreenManager::DrawBegin(scrName);
 
 		camera->Draw();
 		SceneManager::Draw();
+		ShadowMap::CleanUp();
 
 		ScreenManager::DrawEnd(scrName);
+
+		cameraIndex++;
 	}
 
 	ScreenManager::CleanUp();
+	UI_Manager::DrawFront();
 
 	//const int cameraNum = (int)CameraManager::AllCameras().size();
 

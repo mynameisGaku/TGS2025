@@ -143,16 +143,16 @@ void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
 void Camera::ApplyDrawArea() const {
 
-	const int x = screenPosX;
-	const int y = screenPosY;
-	const int w = screenPosX + screenSizeX;
-	const int h = screenPosY + screenSizeY;
+	//const int x = screenPosX;
+	//const int y = screenPosY;
+	//const int w = screenPosX + screenSizeX;
+	//const int h = screenPosY + screenSizeY;
 
-	//DxLib::SetDrawArea(x, y, w, h);
+	////DxLib::SetDrawArea(x, y, w, h);
 
-	const float centerX = (x + w) * 0.5f;
-	const float centerY = h * 0.5f;
-	//SetCameraScreenCenter(centerX, centerY);
+	//const float centerX = (x + w) * 0.5f;
+	//const float centerY = h * 0.5f;
+	////SetCameraScreenCenter(centerX, centerY);
 }
 
 void Camera::rendering() {
@@ -189,6 +189,7 @@ void Camera::rendering() {
 		}
 	}
 	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY, m_CameraRotMat));
+	CameraManager::SetCurrentDrawingCameraID(m_CharaIndex);
 }
 
 Vector3 Camera::colCheckToTerrain(const Vector3& begin, const Vector3& end, Vector3* hitPos) {

@@ -127,8 +127,6 @@ void SystemManager::Draw() {
 	if (isLoading)
 		return;
 
-	UI_Manager::DrawBack();
-
 	Fader::Draw();
 
 #ifdef IMGUI
@@ -144,6 +142,7 @@ void SystemManager::DrawBefore() {
 		return;
 
 	//CameraManager::Draw();
+	UI_Manager::DrawBack();
 	LightManager::Draw();
 	Stage::Draw();
 	StageObjectManager::Draw();

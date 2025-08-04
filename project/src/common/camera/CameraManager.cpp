@@ -23,7 +23,7 @@ namespace {
 	std::vector<Camera*>* cameras;	// カメラ
 	bool isScreenDivision;			// 画面分割の有無
 	bool initialized = false;	// 初期化済みかどうか
-	int m_CurrentDreaCameraIndex = 0;
+	static int m_CurrentDrawingCameraIndex = 0;
 
 	static int screenDivBeginX = 0;	// 画面分割の開始X座標
 	static int screenDivBeginY = 0;	// 画面分割の開始Y座標
@@ -53,7 +53,7 @@ void CameraManager::Init() {
 		Camera* camera2p = CreateCamera();
 	}
 
-	m_CurrentDreaCameraIndex = 0;
+	m_CurrentDrawingCameraIndex = 0;
 
 #ifdef IMGUI
 	InitImGuiNode();
@@ -70,7 +70,7 @@ void CameraManager::Update() {
 	if (cameras->empty())
 		return;
 
-	m_CurrentDreaCameraIndex = 0;
+	m_CurrentDrawingCameraIndex = 0;
 
 	for (const auto& c : *cameras) {
 		c->Update();
@@ -192,7 +192,6 @@ void CameraManager::DrawScreenDivsition(int x, int y, int w, int h, int index) {
 
 	(*cameras)[index]->Draw();
 	//(*cameras)[index]->SetDrawArea(x, y, w, h);
-	m_CurrentDreaCameraIndex = index;
 }
 
 void CameraManager::GetScreenDivision(int index, Vector2* pos, Vector2* size) {
@@ -220,7 +219,7 @@ void CameraManager::ApplyScreenDivision(int index) {
 		Init();
 
 	if (index == -1) {
-		(*cameras)[m_CurrentDreaCameraIndex]->ApplyDrawArea();
+		(*cameras)[m_CurrentDrawingCameraIndex]->ApplyDrawArea();
 		return;
 	}
 
@@ -247,6 +246,11 @@ void CameraManager::SetCameraWork(int number, const std::string& type) {
 void CameraManager::SetIsScreenDivision(bool value) {
 
 	isScreenDivision = value;
+}
+
+void CameraManager::SetCurrentDrawingCameraID(int index)
+{
+	m_CurrentDrawingCameraIndex = index;
 }
 
 //void CameraManager::CameraChangeStateTheString(const std::string& state) {
@@ -310,9 +314,26 @@ Vector2 CameraManager::GetScreenDivisionSize() {
 	return Vector2(screenDivWidth, screenDivHeight);
 }
 
-Vector2 CameraManager::GetScreenDivisionPos_CameraIndex(int index) {
+Vector2 CameraManager::GetDrawingAreaPos_CameraIndex(int index) {
 
-	return Vector2((WindowSetting().width / cameras->size()) * index, 0.0f);
+	Camera* camera = GetCamera(index);
+	if (camera == nullptr)
+		return Vector2::Zero;
+
+	int x, y;
+	camera->GetDrawArea(&x, &y);
+	return Vector2(x, y);
+}
+
+Vector2 CameraManager::GetDrawingAreaSize_CameraIndex(int index) {
+
+	Camera* camera = GetCamera(index);
+	if (camera == nullptr)
+		return Vector2::Zero;
+
+	int w, h;
+	camera->GetDrawArea(nullptr, nullptr, &w, &h);
+	return Vector2(w, h);
 }
 
 Vector2 CameraManager::GetScreenDivisionCenter() {
@@ -323,6 +344,11 @@ Vector2 CameraManager::GetScreenDivisionCenter() {
 Vector2 CameraManager::GetDivedByCameraNum() {
 
 	return Vector2(WindowSetting::Inst().width / AllCameras().size(), WindowSetting::Inst().height / AllCameras().size());
+}
+
+int CameraManager::GetCurrentDrawingCameraID()
+{
+	return m_CurrentDrawingCameraIndex;
 }
 
 #ifdef IMGUI

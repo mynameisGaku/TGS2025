@@ -396,7 +396,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
 		// 追加できるの確認したよ
 		//addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
-		//addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+		addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 		//addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
 		//addCharacter("Blue", Transform(Vector3(350.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 
@@ -604,19 +604,33 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 		// TO:DO チームと画面分割先を紐づける
 		if (m_GameData.m_WinnerTeam == "Red")
 		{
-			m_UI_Result_Won->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(0));
-			m_UI_Result_Won->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(0));
+			//CameraManager::GetDrawingAreaSize_CameraIndex();
 
-			m_UI_Result_Lost->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(1));
-			m_UI_Result_Lost->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(1));
+			Vector2 begin_cam1 = CameraManager::GetDrawingAreaPos_CameraIndex(0);
+			Vector2 size_cam1 = CameraManager::GetDrawingAreaSize_CameraIndex(0);
+
+			Vector2 begin_cam2 = CameraManager::GetDrawingAreaPos_CameraIndex(1);
+			Vector2 size_cam2 = CameraManager::GetDrawingAreaSize_CameraIndex(1);
+
+			m_UI_Result_Won->rectTransform->anchor.SetBegin(begin_cam1);
+			m_UI_Result_Won->rectTransform->anchor.SetEnd(begin_cam1 + size_cam1);
+
+			m_UI_Result_Lost->rectTransform->anchor.SetBegin(begin_cam2);
+			m_UI_Result_Lost->rectTransform->anchor.SetEnd(begin_cam2 + size_cam2);
 		}
 		else
 		{
-			m_UI_Result_Won->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(1));
-			m_UI_Result_Won->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(1));
+			Vector2 begin_cam1 = CameraManager::GetDrawingAreaPos_CameraIndex(0);
+			Vector2 size_cam1 = CameraManager::GetDrawingAreaSize_CameraIndex(0);
 
-			m_UI_Result_Lost->rectTransform->anchor.SetBegin(ScreenManager::GetScreenBeginPos(0));
-			m_UI_Result_Lost->rectTransform->anchor.SetEnd(ScreenManager::GetScreenEndPos(0));
+			Vector2 begin_cam2 = CameraManager::GetDrawingAreaPos_CameraIndex(1);
+			Vector2 size_cam2 = CameraManager::GetDrawingAreaSize_CameraIndex(1);
+
+			m_UI_Result_Won->rectTransform->anchor.SetBegin(begin_cam2);
+			m_UI_Result_Won->rectTransform->anchor.SetEnd(begin_cam2 + size_cam2);
+
+			m_UI_Result_Lost->rectTransform->anchor.SetBegin(begin_cam1);
+			m_UI_Result_Lost->rectTransform->anchor.SetEnd(begin_cam1 + size_cam1);
 		}
 	}
 	break;

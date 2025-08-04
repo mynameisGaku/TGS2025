@@ -1,6 +1,6 @@
 #include "UI_ButtonHint.h"
 #include <src/util/enum/EnumUtil.h>
-#include <src/util/screen/ScreenManager.h>
+#include <src/common/camera/CameraManager.h>
 #include <src/util/file/resource_loader/resourceLoader.h>
 #include <src/util/ui/UI_Manager.h>
 #include <src/util/math/MathUtil.h>
@@ -12,8 +12,8 @@ UI_ButtonHint::UI_ButtonHint(const RectTransform& trs, int index)
 
 	m_CharaIndex = index;
 
-	Vector2 beginPos = ScreenManager::GetScreenBeginPos(m_CharaIndex);
-	Vector2 endPos = ScreenManager::GetScreenEndPos(m_CharaIndex);
+	Vector2 beginPos = CameraManager::GetDrawingAreaPos_CameraIndex(m_CharaIndex);
+	Vector2 endPos = beginPos + CameraManager::GetDrawingAreaSize_CameraIndex(m_CharaIndex);
 
 	RectTransform rectTrs = trs;
 	rectTrs.anchor.SetBegin(beginPos);

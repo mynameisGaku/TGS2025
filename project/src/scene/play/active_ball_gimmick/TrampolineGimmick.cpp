@@ -103,6 +103,8 @@ void TrampolineGimmick::bounce(Physics* pPhys, const type& _type)
 	pPhys->velocity = Vector3::Zero;
 
 	// –@ü‚Ì•û‚É‚Ô‚Á”ò‚Î‚·
-	Vector3 reflection = (m_SurfaceNormal * power * DEFAULT_REPULSION_FORCE) * GTime.deltaTime;
+	Vector3 reflection = (m_SurfaceNormal * power * DEFAULT_REPULSION_FORCE) 
+		//* GTime.deltaTime
+		;
 	pPhys->velocity = vel + reflection;
 }

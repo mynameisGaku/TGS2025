@@ -171,16 +171,16 @@ void ScreenManager::CleanUp() {
 		ScreenImageData* data = *it;
 		if (data->handle != -1) {
 
-			//int drawCX = data->drawX + data->drawW / 2;
-			//int drawCY = data->drawY + data->drawH / 2;
+			int drawCX = data->drawX + data->drawW / 2;
+			int drawCY = data->drawY + data->drawH / 2;
 
-			//int clipCX = data->clipX + data->clipW / 2;
-			//int clipCY = data->clipY + data->clipH / 2;
+			int clipCX = data->clipX + data->clipW / 2;
+			int clipCY = data->clipY + data->clipH / 2;
 
-			//int clipSX = clipCX - data->drawW / 2;
-			//int clipSY = 0;
+			int clipSX = clipCX - data->drawW / 2;
+			int clipSY = 0;
 
-			//DrawRectRotaGraph(drawCX, drawCY, clipSX, clipSY, data->drawW, data->drawH, 1.0f, 0.0f, data->handle, TRUE);
+			DrawRectRotaGraph(drawCX, drawCY, clipSX, clipSY, data->drawW, data->drawH, 1.0f, 0.0f, data->handle, TRUE);
 
 			DeleteGraph(data->handle);
 			data->handle = -1;

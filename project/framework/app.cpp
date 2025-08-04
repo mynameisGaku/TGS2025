@@ -86,45 +86,6 @@ void AppDraw()
 
 	ScreenManager::CleanUp();
 	UI_Manager::DrawFront();
-
-	//const int cameraNum = (int)CameraManager::AllCameras().size();
-
-	//if (cameraNum > 1 && CameraManager::IsScreenDivision()) {
-
-	//	for (int i = 0; i < cameraNum; i++) {
-
-	//		CameraManager::DrawScreenDivsition(i);
-
-	//		ShadowMap::DrawBegin(i);
-	//			SceneManager::Draw();
-
-	//		ShadowMap::DrawEnd();
-	//			CameraManager::DrawScreenDivsition(i);
-	//			SceneManager::Draw();
-
-	//	ShadowMap::CleanUp();
-	//	}
-
-	//}
-	//else {
-
-	//	CameraManager::Draw();
-	//	CameraManager::DefaultScreenSize();
-
-	//	ShadowMap::DrawBegin();
-	//		SceneManager::Draw();
-	//
-	//	ShadowMap::DrawEnd();
-	//
-	//		CameraManager::Draw();
-	//		CameraManager::DefaultScreenSize();
-	//		SceneManager::Draw();
-	//
-	//	ShadowMap::CleanUp();
-
-	//}
-
-	//SetCameraPositionAndTarget_UpVecY(CameraManager::MainCamera()->WorldPos(), CameraManager::MainCamera()->Target());
 }
 
 void AppRelease()

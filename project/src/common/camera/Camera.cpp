@@ -148,11 +148,11 @@ void Camera::ApplyDrawArea() const {
 	const int w = screenPosX + screenSizeX;
 	const int h = screenPosY + screenSizeY;
 
-	DxLib::SetDrawArea(x, y, w, h);
+	//DxLib::SetDrawArea(x, y, w, h);
 
 	const float centerX = (x + w) * 0.5f;
 	const float centerY = h * 0.5f;
-	SetCameraScreenCenter(centerX, centerY);
+	//SetCameraScreenCenter(centerX, centerY);
 }
 
 void Camera::rendering() {
@@ -359,7 +359,12 @@ void Camera::SetDrawAreaDefault() {
 	const int width = wSetting.width;
 	const int height = wSetting.height;
 
-	SetDrawArea(0, 0, width, height);
+	screenPosX = 0;
+	screenPosY = 0;
+	screenSizeX = width;
+	screenSizeY = height;
+
+	//SetDrawArea(0, 0, width, height);
 }
 
 const Vector3 Camera::WorldPos() const {
@@ -418,4 +423,12 @@ bool Camera::IsRightView(const Vector3& pos) const {
 User* Camera::GetUser()
 {
 	return &m_User;
+}
+
+void Camera::GetDrawArea(int* x, int* y, int* w, int* h) const
+{
+	if (x != nullptr)	*x = screenPosX;
+	if (y != nullptr)	*y = screenPosY;
+	if (w != nullptr)	*w = screenSizeX;
+	if (h != nullptr)	*h = screenSizeY;
 }

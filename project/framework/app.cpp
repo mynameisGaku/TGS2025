@@ -8,14 +8,17 @@
 
 #include "vendor/ImGui/imgui.h"
 
-#include "src/common/camera/CameraMAnager.h"
-#include "src/util/shadow_map/ShadowMap.h"
+#include "src/common/camera/CameraManager.h"
 #include "src/common/system/SystemManager.h"
+
+#include "src/util/screen/ScreenManager.h"
+#include "src/util/shadow_map/ShadowMap.h"
 
 bool exitFlag = false;
 
 void AppInit()
 {
+	ScreenManager::Init();
 	SceneManager::Start();
 	exitFlag = false;
 
@@ -30,6 +33,7 @@ void AppUpdate()
 		exitFlag = true;
 
 	GTime.Update();
+	ScreenManager::Update();
 	SceneManager::Update();
 	CameraManager::Update();
 
@@ -38,46 +42,85 @@ void AppUpdate()
 
 void AppDraw()
 {
-	const int cameraNum = (int)CameraManager::AllCameras().size();
+	int cameraIndex = 0;
 
-	if (cameraNum > 1 && CameraManager::IsScreenDivision()) {
-		for (int i = 0; i < cameraNum; i++) {
+	for (const auto& camera : CameraManager::AllCameras())
+	{
+		cameraIndex++;
+		if (not camera->IsActive())
+			continue;
 
-			CameraManager::DrawScreenDivsition(i);
+		std::string scrName = "CameraScreen_No." + std::to_string(cameraIndex);
+		int drawX, drawY, drawW, drawH;
 
-			ShadowMap::DrawBegin(i);
-				SceneManager::Draw();
+		camera->GetDrawArea(&drawX, &drawY, &drawW, &drawH);
 
-			ShadowMap::DrawEnd();
-				CameraManager::DrawScreenDivsition(i);
-				SceneManager::Draw();
-
-		ShadowMap::CleanUp();
+		ScreenData* pData = ScreenManager::GetScreenData(scrName);
+		if (pData == nullptr)
+		{
+			ScreenManager::CreateScreen(scrName, drawX, drawY, drawW, drawH);
 		}
+		else
+		{
+			pData->drawX = drawX;
+			pData->drawY = drawY;
+			pData->drawW = drawW;
+			pData->drawH = drawH;
+		}
+
+		ScreenManager::DrawBegin(scrName);
+
+		camera->Draw();
+		SceneManager::Draw();
+
+		ScreenManager::DrawEnd(scrName);
 	}
-	else {
 
-		CameraManager::Draw();
-		CameraManager::DefaultScreenSize();
+	ScreenManager::CleanUp();
 
-		ShadowMap::DrawBegin();
-			SceneManager::Draw();
-	
-		ShadowMap::DrawEnd();
-	
-			CameraManager::Draw();
-			CameraManager::DefaultScreenSize();
-			SceneManager::Draw();
-	
-		ShadowMap::CleanUp();
+	//const int cameraNum = (int)CameraManager::AllCameras().size();
 
-	}
+	//if (cameraNum > 1 && CameraManager::IsScreenDivision()) {
+
+	//	for (int i = 0; i < cameraNum; i++) {
+
+	//		CameraManager::DrawScreenDivsition(i);
+
+	//		ShadowMap::DrawBegin(i);
+	//			SceneManager::Draw();
+
+	//		ShadowMap::DrawEnd();
+	//			CameraManager::DrawScreenDivsition(i);
+	//			SceneManager::Draw();
+
+	//	ShadowMap::CleanUp();
+	//	}
+
+	//}
+	//else {
+
+	//	CameraManager::Draw();
+	//	CameraManager::DefaultScreenSize();
+
+	//	ShadowMap::DrawBegin();
+	//		SceneManager::Draw();
+	//
+	//	ShadowMap::DrawEnd();
+	//
+	//		CameraManager::Draw();
+	//		CameraManager::DefaultScreenSize();
+	//		SceneManager::Draw();
+	//
+	//	ShadowMap::CleanUp();
+
+	//}
 
 	//SetCameraPositionAndTarget_UpVecY(CameraManager::MainCamera()->WorldPos(), CameraManager::MainCamera()->Target());
 }
 
 void AppRelease()
 {
+	ScreenManager::Release();
 	SceneManager::Release();
 	SingletonDeleter::Delete();
 }

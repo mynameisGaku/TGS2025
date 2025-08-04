@@ -62,4 +62,12 @@ public:
 
 		p.clear();
 	}
+
+	// ポインタのインスタンスチェックと生成
+	template <class C>
+	static inline void CheckInstanceAndCreate(C*& p) {
+		if (p == nullptr) {
+			p = new C();
+		}
+	}
 };

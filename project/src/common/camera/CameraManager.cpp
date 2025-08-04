@@ -191,7 +191,7 @@ void CameraManager::DrawScreenDivsition(int x, int y, int w, int h, int index) {
 		return;
 
 	(*cameras)[index]->Draw();
-	(*cameras)[index]->SetDrawArea(x, y, w, h);
+	//(*cameras)[index]->SetDrawArea(x, y, w, h);
 	m_CurrentDreaCameraIndex = index;
 }
 
@@ -232,8 +232,8 @@ void CameraManager::ApplyScreenDivision(int index) {
 
 void CameraManager::DefaultScreenSize() {
 
-	SetDrawArea(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height);
-	SetCameraScreenCenter(WindowSetting::Inst().width * 0.5f, WindowSetting::Inst().height * 0.5f);
+	//SetDrawArea(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height);
+	//SetCameraScreenCenter(WindowSetting::Inst().width * 0.5f, WindowSetting::Inst().height * 0.5f);
 }
 
 void CameraManager::SetCameraWork(int number, const std::string& type) {

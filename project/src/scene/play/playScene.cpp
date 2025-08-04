@@ -46,8 +46,17 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
     auto& net = NetworkRef::Inst();
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
-	for (int i = 0; i < CAMERA_NUM; i++)
-		CameraManager::GetCamera(i)->ChangeState(&Camera::ChaseState);
+	int w, h;
+	GetWindowSize(&w, &h);
+
+	for (int i = 0; i < CAMERA_NUM; i++) {
+		Camera* camera = CameraManager::GetCamera(i);
+		if (camera == nullptr)
+			continue;
+
+		camera->SetDrawArea((w / CAMERA_NUM) * i, 0, w / CAMERA_NUM, h);
+		camera->ChangeState(&Camera::ChaseState);
+	}
 
 #ifdef _DEBUG
 #ifdef IMGUI

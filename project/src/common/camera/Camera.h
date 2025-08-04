@@ -210,6 +210,15 @@ public:
 	/// </summary>
 	User* GetUser();
 
+	/// <summary>
+	/// このカメラの描画領域を取得する
+	/// </summary>
+	/// <param name="x">始点座標(X軸)</param>
+	/// <param name="y">始点座標(Y軸)</param>
+	/// <param name="w">幅</param>
+	/// <param name="h">高さ</param>
+	void GetDrawArea(int* x, int* y, int* w, int* h) const;
+
 	//================================================================================
 	// ▼ステート
 

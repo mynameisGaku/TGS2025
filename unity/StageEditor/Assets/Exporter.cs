@@ -45,6 +45,7 @@ public class SceneExporterWindow : EditorWindow
 
             CharaSpawnPointDesc charaSpawnerDesc = null;
             BallSpawnerDesc ballSpawnerDesc = null;
+            TrampolineParam trampolineParam = null;
 
             string meshName = "";
             if (mesh != null)
@@ -80,6 +81,15 @@ public class SceneExporterWindow : EditorWindow
                         ballSpawnerDesc = obj.AddComponent<BallSpawnerDesc>();
                     }
                 }
+                else if (obj.tag == "Trampoline")
+                {
+                    meshName = "Trampoline";
+                    trampolineParam = obj.gameObject.GetComponent<TrampolineParam>();
+                    if (trampolineParam == null)
+                    {
+                        trampolineParam = obj.AddComponent<TrampolineParam>();
+                    }
+                }
                 else
                 {
                     meshName = "Unknown";
@@ -93,6 +103,7 @@ public class SceneExporterWindow : EditorWindow
                 Export = true,
                 CharaSpawnPointDesc = charaSpawnerDesc,
                 BallSpawnerDesc = ballSpawnerDesc,
+                TrampolineParam = trampolineParam,
                 CustomMeshName = meshName,
                 IsCollision = obj.GetComponent<Collider>() != null
             });
@@ -166,6 +177,7 @@ public class SceneExporterWindow : EditorWindow
                 Scale = new SimpleVector3(obj.transform.localScale),
                 CharaSpawnPointDesc = item.CharaSpawnPointDesc != null ? new CharaSpawnPointData(item.CharaSpawnPointDesc) : null,
                 BallSpawnerDesc = item.BallSpawnerDesc != null ? new BallSpawnerData(item.BallSpawnerDesc) : null,
+                TrampolineParam = item.TrampolineParam != null ? new TrampolineData(item.TrampolineParam) : null,
                 IsCollision = item.IsCollision
             };
 
@@ -228,6 +240,17 @@ public class SceneExporterWindow : EditorWindow
     }
 
     [System.Serializable]
+    public class TrampolineData
+    {
+        public float RepulsionForce;
+
+        public TrampolineData(TrampolineParam desc)
+        {
+            RepulsionForce = desc.RepulsionForce;
+        }
+    }
+
+    [System.Serializable]
     public class ObjectData
     {
         public string Name;
@@ -238,6 +261,7 @@ public class SceneExporterWindow : EditorWindow
         public SimpleVector3 Scale;
         public CharaSpawnPointData CharaSpawnPointDesc;
         public BallSpawnerData BallSpawnerDesc;
+        public TrampolineData TrampolineParam;
         public bool IsCollision;
     }
 
@@ -253,6 +277,7 @@ public class SceneExporterWindow : EditorWindow
         public bool Export;
         public CharaSpawnPointDesc CharaSpawnPointDesc;
         public BallSpawnerDesc BallSpawnerDesc;
+        public TrampolineParam TrampolineParam;
         public string CustomMeshName;
         public string Tag;
         public bool IsCollision;

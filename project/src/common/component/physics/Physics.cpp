@@ -75,8 +75,6 @@ void Physics::updateResistanceForce() {
 
 void Physics::updateFriction() {
 
-	const Vector3 multFriction = Vector3::Horizontal * friction + Vector3::UnitY;
-
-	velocity *= multFriction;
-	resistance *= multFriction;
+	velocity -= velocity * friction * Vector3::Horizontal;
+	resistance -= resistance * friction * Vector3::Horizontal;
 }

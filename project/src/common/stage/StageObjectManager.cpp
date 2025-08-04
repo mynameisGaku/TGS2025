@@ -25,6 +25,7 @@
 // ˆÚ“®‰Â”\”ÍˆÍ
 #include "src/scene/play/movable/MovableArea.h"
 #include "src/common/component/collider/CollisionFunc.h"
+#include <src/scene/play/active_ball_gimmick/TrampolineGimmick.h>
 
 using namespace StageDefine;
 
@@ -490,6 +491,23 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 			movableArea->SetTag("MovableArea");
 
 			movableAreas->push_back(movableArea);
+		}
+		else if (obj.contains("TrampolineParam") && !obj.at("TrampolineParam").is_null())
+		{
+			info.hModel = ResourceLoader::MV1LoadModel("data/model/Gimmick/Trampoline/" + info.type + ".mv1");
+			nlohmann::json json = obj.at("TrampolineParam");
+			TRAMPOLINE_DESC desc{};
+			desc.repulsion_force = json["RepulsionForce"].get<float>();
+			desc.transform = tr;
+			auto trampoline = Instantiate<TrampolineGimmick>();
+			trampoline->SetModel(info.hModel);
+			ColDefine::ColBaseParam colParam{};
+			colParam.trs = Transform();
+			colParam.trs.scale = tr.scale * 200.0f;
+			colParam.push = false;
+			colParam.tag = Tag::tGimmick;
+			colParam.targetTags = {Tag::tChara, Tag::tBall};
+			trampoline->Init(desc, colParam);
 		}
 		else
 		{

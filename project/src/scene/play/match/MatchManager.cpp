@@ -379,8 +379,19 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 		}
 		else
 		{
-			addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
-			addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+			if (not spawner1 || not spawner2)
+			{
+				addCharacter("Red", Transform(Vector3(100.0f, 100.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+				addCharacter("Blue", Transform(Vector3(-100.0f, 100.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
+			}
+			else
+			{
+				if (spawner1)
+					addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+
+				if (spawner2 && false)
+					addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+			}
 		}
 
 		// ’Ç‰Á‚Å‚«‚é‚ÌŠm”F‚µ‚½‚æ

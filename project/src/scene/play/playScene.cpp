@@ -83,7 +83,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	Instantiate<MatchManager>();
 
 	EnemyManager* enemyManager = Instantiate<EnemyManager>();
-	enemyManager->Create();
+	//enemyManager->Create();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);

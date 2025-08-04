@@ -2,7 +2,7 @@
 #include <string>
 #include "TitleUI.h"
 
-class TitleUIGridCursor;
+class TitleUIController;
 
 /// <summary>
 /// タイトルUIをまとめるためのクラス
@@ -13,7 +13,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Init();
+	void Init(const TitleUIController* pCon);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -27,9 +27,15 @@ public:
 	/// </summary>
 	void Release();
 
-	TitleUIGridCursor* GetGridCursor() const { return m_pGridCursor; }
+	void AddUI(const TitleUI& ui)
+	{
+		m_UIList.push_back(ui);
+	}
+
+	TitleUIController*	Controller() const { return m_pController; }
+
 private:
-	TitleUIGridCursor*	m_pGridCursor	{};	// グリッドカーソル
+	TitleUIController*	m_pController	{};	// このキャンバスを管理するコントローラー
 	std::list<TitleUI>	m_UIList		{};	// タイトルUIのリスト
 	std::string			m_Name			{};	// キャンバスの名前
 	bool				m_IsActive		{};	// 有効か？ このCanvasが所有するすべてのUIに影響する。

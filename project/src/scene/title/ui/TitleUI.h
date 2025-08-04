@@ -30,9 +30,9 @@ enum TUI_COLLISION_MODE
 typedef struct 
 {
 	TUI_EVENT_TRIGGER_TIMING	TIMING					{};	// どのタイミングでトリガーするのか
-	const		TCHAR*			EVENT					{};	// イベントの名前。文字列で指定。TitleUIControllerに登録されているマップと照合される。
+	std::string					EVENT					{};	// イベントの名前。文字列で指定。TitleUIControllerに登録されているマップと照合される。
+	std::string					DESCRIPTION				{};	// このイベントの記述。ほぼデバッグ用
 	bool						IS_WAIT_FOR_COMPLETION	{};	// 実行が完了されるまで待つかどうかのフラグ
-	const		TCHAR*			DESCRIPTION				{};	// このイベントの記述。ほぼデバッグ用
 }TUI_EVENT;
 
 /// <summary>
@@ -50,8 +50,8 @@ typedef struct
 	int						INDEX_X			{};	// Canvas上で動かすCursor用のIndex x
 	int						INDEX_Y			{};	// Canvas上で動かすCursor用のIndex y
 	std::list<TUI_EVENT>	EVENTS			{};	// このUIをクリックしたときに起こるインベントリスト。追加された順に処理されます。
-	TUI_COLLISION_MODE			COLLISION		{};	// このUIの当たり判定方法
-	const		TCHAR*		DESCRIPTION		{};	// このUIに関する記述。概要とか。デバッグ用
+	std::string				DESCRIPTION		{};	// このUIに関する記述。概要とか。デバッグ用
+	TUI_COLLISION_MODE		COLLISION		{};	// このUIの当たり判定方法
 }UI_TITLE_DESC;
 
 
@@ -98,14 +98,16 @@ private:
 	int								m_GraphSrcY				{};	// 画像切り抜き開始位置 y
 	int								m_GraphDestX			{};	// 画像切り抜き終了位置 x
 	int								m_GraphDestY			{};	// 画像切り抜き終了位置 y
+	int								m_IndexX				{};	// Canvas上でのIndex x	重複不可（重複した場合、意図しない動作を引き起こします。）
+	int								m_IndexY				{};	// Canvas上でのIndex y	重複不可（重複した場合、意図しない動作を引き起こします。）
 	bool							m_IsActive				{};	// 有効か？
 	bool							m_IsVisible				{};	// 表示されているか？
 	bool							m_IsHolding				{};	// 押下されているか？
 	bool							m_IsHover				{};	// カーソルがこのUIの上にあるか？
-	const TCHAR*					m_Description			{};	// このUIに関する記述
+	std::string						m_Description			{};	// このUIに関する記述
 	std::list<TUI_EVENT>			m_PressHoldEvents		{};	// このUIを長押ししたときに起こるインベントリスト。追加された順に処理されます。
 	std::list<TUI_EVENT>			m_PressEnterEvents		{};	// このUIを押した瞬間に起こるインベントリスト。追加された順に処理されます。
 	std::list<TUI_EVENT>			m_PressReleaseEvents	{};	// このUIからクリックを離したときに起こるインベントリスト。追加された順に処理されます。
-	TUI_COLLISION_MODE					m_Collision				{};	// このUIの当たり判定方法。デフォルトはなし。クリックイベントを発火させるために必要。
+	TUI_COLLISION_MODE				m_Collision				{};	// このUIの当たり判定方法。デフォルトはなし。クリックイベントを発火させるために必要。
 	TitleUICanvas*					m_pHolder				{};	// このUIを保持しているキャンバス
 };

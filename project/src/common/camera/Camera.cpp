@@ -82,7 +82,6 @@ void Camera::Reset() {
 	m_pTargetChara = nullptr;
 
 	m_IsView = true;
-	m_DrawFlag = false;
 }
 
 void Camera::Update() {
@@ -95,15 +94,9 @@ void Camera::Update() {
 	updateAnimation();
 
 	Object3D::Update();
-
-	m_DrawFlag = false;
 }
 
 void Camera::Draw() {
-
-	// Šù‚É•`‰æÏ‚È‚ç
-	//if (m_DrawFlag)
-	//	return;
 
 	// •`‰æ‚Ì—L–³
 	if (not m_IsView) {
@@ -115,8 +108,6 @@ void Camera::Draw() {
 
 	// ƒJƒƒ‰•`‰æ
 	rendering();
-	
-	//m_DrawFlag = true;	// •`‰æŠ®—¹
 }
 
 void Camera::drawVirtualCamera() {
@@ -141,23 +132,7 @@ void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
     m_Fsm->ChangeState(state);
 }
 
-void Camera::ApplyDrawArea() const {
-
-	//const int x = screenPosX;
-	//const int y = screenPosY;
-	//const int w = screenPosX + screenSizeX;
-	//const int h = screenPosY + screenSizeY;
-
-	////DxLib::SetDrawArea(x, y, w, h);
-
-	//const float centerX = (x + w) * 0.5f;
-	//const float centerY = h * 0.5f;
-	////SetCameraScreenCenter(centerX, centerY);
-}
-
 void Camera::rendering() {
-
-	ApplyDrawArea();
 
 	Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
 	Vector3 targetPos = m_Target * m_pShake->Matrix();
@@ -350,8 +325,6 @@ void Camera::SetDrawArea(int x, int y, int w, int h) {
 	screenPosY = y;
 	screenSizeX = w;
 	screenSizeY = h;
-
-	ApplyDrawArea();
 }
 
 void Camera::SetDrawAreaDefault() {
@@ -432,4 +405,10 @@ void Camera::GetDrawArea(int* x, int* y, int* w, int* h) const
 	if (y != nullptr)	*y = screenPosY;
 	if (w != nullptr)	*w = screenSizeX;
 	if (h != nullptr)	*h = screenSizeY;
+}
+
+void Camera::GetDrawArea(Vector2* pos, Vector2* size)
+{
+	if (pos != nullptr)	*pos = Vector2(screenPosX, screenPosY);
+	if (size != nullptr)*size = Vector2(screenSizeX, screenSizeY);
 }

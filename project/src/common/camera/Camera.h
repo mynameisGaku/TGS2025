@@ -66,11 +66,6 @@ public:
 	/// <param name="state">ステートの関数ポインタ</param>
 	void ChangeState(void(Camera::*state)(FSMSignal));
 
-	/// <summary>
-	/// 描画領域を適用する
-	/// </summary>
-	void ApplyDrawArea() const;
-
 	//================================================================================
 	// ▼セッター
 
@@ -186,11 +181,6 @@ public:
 	inline const Chara* TargetChara() const { return m_pTargetChara; }
 
 	/// <summary>
-	/// 描画が終了したかどうかを判定
-	/// </summary>
-	inline bool IsDrawEnd() const { return m_DrawFlag; }
-
-	/// <summary>
 	/// 描画を行うか
 	/// </summary>
 	inline bool IsView() const { return m_IsView; }
@@ -218,6 +208,13 @@ public:
 	/// <param name="w">幅</param>
 	/// <param name="h">高さ</param>
 	void GetDrawArea(int* x = nullptr, int* y = nullptr, int* w = nullptr, int* h = nullptr) const;
+
+	/// <summary>
+	/// このカメラの描画領域を取得する
+	/// </summary>
+	/// <param name="pos">始点座標</param>
+	/// <param name="size">幅と高さ</param>
+	void GetDrawArea(Vector2* pos, Vector2* size);
 
 	//================================================================================
 	// ▼ステート
@@ -317,7 +314,6 @@ private:
 	int screenSizeX, screenSizeY;	// 描画範囲(大きさ)
 
 	bool m_IsView;		// 描画しているか
-	bool m_DrawFlag;	// 描画が完了しているか
 
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
     const Chara* m_pTargetChara;	// 注視しているキャラ

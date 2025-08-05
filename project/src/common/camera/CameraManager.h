@@ -46,41 +46,6 @@ namespace CameraManager {
 	/// <param name="state">変更するステート</param>
 	void ChangeStateCamera(int number, void(Camera::* state)(FSMSignal));
 
-	/// <summary>
-	/// 画面を分割して定義された領域に描画をする
-	/// </summary>
-	/// <param name="index">描画するカメラ番号</param>
-	void DrawScreenDivsition(int index = -1);
-
-	/// <summary>
-	/// 画面を分割して指定された領域に描画すり
-	/// </summary>
-	/// <param name="x">描画領域の左上隅のX座標</param>
-	/// <param name="y">描画領域の左上隅のY座標</param>
-	/// <param name="w">描画領域の幅</param>
-	/// <param name="h">描画領域の高さ</param>
-	/// <param name="index">描画するカメラ番号</param>
-	void DrawScreenDivsition(int x, int y, int w, int h, int index);
-
-	/// <summary>
-	/// 指定したインデックスに基づいて、画面分割領域の位置とサイズを取得する
-	/// </summary>
-	/// <param name="index">描画するカメラ番号</param>
-	/// <param name="pos">分割領域の左上座標を格納するためのポインタ</param>
-	/// <param name="size">分割領域のサイズを格納するためのポインタ</param>
-	void GetScreenDivision(int index, Vector2* pos, Vector2* size);
-
-	/// <summary>
-	/// 指定したインデックスに対して画面分割を適用する
-	/// </summary>
-	/// <param name="index">描画するカメラ番号</param>
-	void ApplyScreenDivision(int index = -1);
-
-	/// <summary>
-	/// 既定の画面サイズに戻す
-	/// </summary>
-	void DefaultScreenSize();
-
 	//================================================================================
 	// ▼セッター
 
@@ -122,6 +87,12 @@ namespace CameraManager {
 	Camera* GetCamera(const User& user);
 
 	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	Camera* GetCameraDrawing();
+
+	/// <summary>
 	/// 全てのカメラのリストを取得する
 	/// </summary>
 	std::vector<Camera*> AllCameras();
@@ -130,16 +101,6 @@ namespace CameraManager {
 	/// 画面が分割されているか取得する
 	/// </summary>
 	bool IsScreenDivision();
-
-	/// <summary>
-	/// 画面分割の開始地点を取得する
-	/// </summary>
-	Vector2 GetScreenDivisionPos();
-
-	/// <summary>
-	/// 画面分割の大きさを取得する
-	/// </summary>
-	Vector2 GetScreenDivisionSize();
 
 	/// <summary>
 	/// 描画領域の開始地点を取得する
@@ -152,10 +113,9 @@ namespace CameraManager {
 	Vector2 GetDrawingAreaSize_CameraIndex(int index);
 
 	/// <summary>
-	/// 画面分割の中心座標を取得する
+	/// カメラ数によって分割された2Dベクトルを取得します。
 	/// </summary>
-	Vector2 GetScreenDivisionCenter();
-
+	/// <returns>カメラの数で分割された結果の2次元ベクトル。</returns>
 	Vector2 GetDivedByCameraNum();
 
 	/// <summary>

@@ -55,10 +55,18 @@ void BloomManager::Draw()
 {
 	if (not m_DoBloom) return;
 
-	Vector2 pos = CameraManager::GetScreenDivisionPos();
-	Vector2 size = CameraManager::GetScreenDivisionSize();
+	Camera* camera = CameraManager::GetCameraDrawing();
+	if (camera == nullptr)
+		return;
 
-	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
+	Vector2 pos = Vector2::Zero;
+	Vector2 size = Vector2::Zero;
+	Vector2 end = Vector2::Zero;
+	camera->GetDrawArea(&pos, &size);
+
+	end = pos + size;
+
+	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)end.x, (int)end.y);
 }
 
 void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {

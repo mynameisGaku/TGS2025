@@ -2,8 +2,10 @@
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/chara/CharaManager.h"
+
 #include "src/common/camera/CameraManager.h"
 #include "src/common/setting/window/WindowSetting.h"
+
 #include "src/util/fx/effect/EffectManager.h"
 #include "src/util/string/StringUtil.h"
 #include "src/util/screen/ScreenManager.h"
@@ -71,7 +73,7 @@ void TargetManager::Draw() {
 			continue;
 
 		// カメラの描画が完了しているかつ、チェック済の場合
-		if (camera->IsDrawEnd() && checkCamera[i])
+		if (checkCamera[i])
 			continue;
 
 		int index = i;					// カメラの番号＆キャラの番号
@@ -150,8 +152,15 @@ int TargetManager::TargetID(int charaIndex) {
 
 void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
 
+	Camera* camera = CameraManager::GetCamera(targetCharaID);
+	if (camera == nullptr)
+		return;
+
+	int drawAreaX, drawAreaY, drawAreaW, drawAreaH;
+	camera->GetDrawArea(&drawAreaX, &drawAreaY, &drawAreaW, &drawAreaH);
+
 	const float circleRadius = 32.0f;
-	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
+	const Vector2 screenCenter = Vector2(drawAreaX + drawAreaW / 2, drawAreaY + drawAreaH / 2);
 	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
 
 	Pool<Chara>* charaPool = charaManager->GetCharaPool();
@@ -166,9 +175,6 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 	// 狙っているキャラに対応するカメラを取得
 	Camera* targetCamera = CameraManager::GetCamera(targetCharaID);
 	if (targetCamera == nullptr)
-		return;
-
-	if (not targetCamera->IsDrawEnd())
 		return;
 
 	// 距離
@@ -214,16 +220,31 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 
 void TargetManager::DrawWarning() {
 
-	Vector2 scrPos = CameraManager::GetScreenDivisionPos();
-	Vector2 scrSize = CameraManager::GetScreenDivisionSize();
+	Camera* camera = CameraManager::GetCameraDrawing();
+	if (camera == nullptr)
+		return;
 
-	DrawBoxAA(scrPos.x + 1.0f, scrPos.y + 1.0f, scrPos.x + scrSize.x - 1.0f, scrPos.y + scrSize.y - 1.0f, GetColor(255, 0, 0), false, 10.0f);
+	Vector2 pos = Vector2::Zero;
+	Vector2 size = Vector2::Zero;
+	Vector2 end = Vector2::Zero;
+	camera->GetDrawArea(&pos, &size);
+
+	end = pos + size;
+
+	DrawBoxAA(pos.x + 1.0f, pos.y + 1.0f, end.x - 1.0f, end.y - 1.0f, GetColor(255, 0, 0), false, 10.0f);
 }
 
 void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 
+	Camera* camera = CameraManager::GetCamera(targetCharaID);
+	if (camera == nullptr)
+		return;
+
+	int drawAreaX, drawAreaY, drawAreaW, drawAreaH;
+	camera->GetDrawArea(&drawAreaX, &drawAreaY, &drawAreaW, &drawAreaH);
+
 	const float circleRadius = 32.0f;
-	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
+	const Vector2 screenCenter = Vector2(drawAreaX + drawAreaW / 2, drawAreaY + drawAreaH / 2);
 	
 	Pool<Chara>* charaPool = charaManager->GetCharaPool();
 	if (charaPool == nullptr)
@@ -239,10 +260,7 @@ void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 	if (targetCamera == nullptr)
 		return;
 
-	if (not targetCamera->IsDrawEnd())
-		return;
-
-	Vector2 screenDivSize = CameraManager::GetScreenDivisionSize();
+	Vector2 screenDivSize = Vector2(drawAreaW, drawAreaH);
 
 	// 距離
 	Vector3 dir = ballPos - charaTarget->transform->Global().position;

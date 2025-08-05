@@ -133,6 +133,9 @@ BallTarget* BallTargetManager::GetNearest(int index, float distance) const
 		if (it->m_pObject->GetCharaTag() == chara->GetCharaTag())
 			continue;
 
+		if (not it->m_pObject->CanRockOn())
+			continue;
+
 		// ‹——£ŒvŽZ
 		float distSq = (chara->transform->position - it->m_pObject->Position()).GetLengthSquared();
 

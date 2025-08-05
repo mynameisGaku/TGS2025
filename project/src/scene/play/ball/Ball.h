@@ -61,6 +61,7 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 
 	std::string GetCharaTag() const { return m_CharaTag; }
+	void SetCharaTag(const std::string& charaTag) { m_CharaTag = charaTag; };
 
 	Chara* GetLastOwner() const { return m_LastOwner; }
 
@@ -69,14 +70,11 @@ public:
 	/// </summary>
 	/// <returns>有効ならtrue</returns>
 	bool IsActive() const { return m_IsActive; }
-
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
 	void SetTexture(const BallTexture& texture, const std::string& mapKey);
 
 	void SetTrailImage(int hImage);
-
-	void SetOwner(Chara* pChara);
 
 	void PickUp();
 
@@ -88,14 +86,16 @@ public:
 	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
 
 	void SetUniqueID(const std::string& id) { m_UniqueID = id; }
-
 	const std::string& GetUniqueID() const { return m_UniqueID; }
 
 	const uint32_t GetIndex() const { return m_Index; }
 
 	BallRenderer& GetBallRenderer() { return *GetComponent<BallRenderer>(); }
 
-	void SetCharaTag(const std::string& charaTag) { m_CharaTag = charaTag; };
+	void SetHomingTarget(BallTarget* homingTarget) { m_HomingTarget = homingTarget; }
+
+	void SetOwner(Chara* pChara);
+
 private:
 	friend class BallManager;
 	BallManager*		m_pManager;
@@ -120,7 +120,7 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	BallTarget* m_HomingTarget;	// ホーミング中のトランスフォームのポインタ
+	BallTarget* m_HomingTarget;	// ホーミング中のボールターゲットポインタ
 
 	Vector3	m_HomingOrigin;			// ホーミング開始地点
 	Vector3	m_HomingTargetPos;		// ホーミング対象の座標

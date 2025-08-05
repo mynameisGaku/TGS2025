@@ -277,6 +277,7 @@ private:
 	void drawVirtualCamera();
 
 	void findFollowerChara();
+	bool isMoveCamera() const;
 
 	//================================================================================
 	// ¥ƒƒ“ƒo•Ï”

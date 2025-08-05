@@ -97,11 +97,6 @@ void Camera::Update() {
 	m_pCharaManager = FindGameObject<CharaManager>();
 	m_pBallTargetManager = FindGameObject<BallTargetManager>();
 
-	if (m_pBallTargetManager)
-	{
-		m_pBallTarget = m_pBallTargetManager->GetNearest(m_CharaIndex, this->m_CameraCone.range);	// 注視するボールターゲット
-	}
-
 	if (m_Fsm != nullptr)
 		m_Fsm->Update();
 
@@ -148,10 +143,10 @@ void Camera::drawVirtualCamera() {
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
-    if (m_Fsm == nullptr)
-        return;
+	if (m_Fsm == nullptr)
+		return;
 
-    m_Fsm->ChangeState(state);
+	m_Fsm->ChangeState(state);
 }
 
 void Camera::ApplyDrawArea() const {
@@ -243,7 +238,7 @@ void Camera::moveProcess()
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
 	
-    m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
+	m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -352,6 +347,17 @@ void Camera::findFollowerChara()
 		m_pFollowerChara = m_pCharaManager->GetFromUUID(m_User.UUID);
 	else
 		m_pFollowerChara = m_pCharaManager->CharaInst(m_CharaIndex);
+}
+
+bool Camera::isMoveCamera() const
+{
+	if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
+		PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void Camera::SetPerformance(const std::string& perfType) {

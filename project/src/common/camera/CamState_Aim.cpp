@@ -26,6 +26,12 @@ void Camera::AimState(FSMSignal sig)
 	static bool canMove;
 	static const float EASING_TIME = 1.0f;
 
+	if (not m_pBallTarget)
+	{
+
+		ChangeState(&Camera::ChaseState);
+	}
+
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 初期化 (Constractor)
@@ -38,24 +44,6 @@ void Camera::AimState(FSMSignal sig)
 		m_RotationPrev = transform->Global().rotation;
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
-
-		// カメラを持つキャラを取得
-		findFollowerChara();
-		if (not m_pFollowerChara) return;
-
-		if (m_pFollowerChara == nullptr || m_pBallTarget == nullptr) {
-			ChangeState(&Camera::ChaseState);
-			return;
-		}
-
-		// コーンの範囲に入って居ない場合
-		if (not ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision() ||
-			MouseController::Info().Move().GetLengthSquared() > 5.0f) {
-			m_pBallTarget = nullptr;
-			m_TargetTransitionTime = 0.5f;
-			ChangeState(&Camera::ChaseState);
-			return;
-		}
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
@@ -115,11 +103,11 @@ void Camera::AimState(FSMSignal sig)
 		{
 			m_pBallTarget = nullptr;
 			ChangeState(&Camera::ChaseState);
+			// 被ロックオン時のUIがでないよ～
 		}
 
 		// 視点を移動したらチェイスに戻る
-		if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
-			PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+		if (isMoveCamera())
 		{
 			m_TargetTransitionTime = 0.5f;
 			m_pBallTarget = nullptr;

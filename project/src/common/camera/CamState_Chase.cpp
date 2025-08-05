@@ -17,6 +17,7 @@
 #include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/network/NetworkManager.h"
 #include "src/scene/play/ball/BallTarget.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -85,16 +86,29 @@ void Camera::ChaseState(FSMSignal sig)
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_pBallTarget != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))
+		if (InputManager::Hold("TargetCamera", m_CharaIndex + 1))
 		{
-			// 視点移動検知
-			if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
-				PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
-				m_TargetTransitionTime = 0.5f;
+			if (m_pBallTargetManager)
+			{
+				m_pBallTarget = m_pBallTargetManager->GetNearest(m_CharaIndex, this->m_CameraCone.range);	// 注視するボールターゲット
+			}
 
-			// コーン形状の判定内に注視するキャラが居る場合
-			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision())
-				ChangeState(&Camera::AimState);
+			if (m_pBallTarget != nullptr)
+			{
+				// 視点移動検知
+				if (isMoveCamera())
+					m_TargetTransitionTime = 0.5f;
+
+				// コーン形状の判定内に注視するキャラが居る場合
+				if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision())
+				{
+					ChangeState(&Camera::AimState);
+				}
+				else
+				{
+					m_pBallTarget = nullptr;
+				}
+			}
 		}
 	}
 	break;

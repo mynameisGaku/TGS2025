@@ -13,16 +13,11 @@ TargetManager::TargetManager() {
 
 	ballManager = nullptr;
 	charaManager = nullptr;
-	//checkCamera.clear();
-	targetList.clear();
 
 	hArrow = LoadGraph("data/texture/arrow.png");
 }
 
 TargetManager::~TargetManager() {
-
-	//checkCamera.clear();
-	targetList.clear();
 
 	DeleteGraph(hArrow);
 }
@@ -31,33 +26,10 @@ void TargetManager::Start() {
 
 	ballManager = FindGameObject<BallManager>();
 	charaManager = FindGameObject<CharaManager>();
-
-	//const int cameraNum = (int)CameraManager::AllCameras().size();
-	//for (int i = 0; i < cameraNum; i++)
-	//	checkCamera.push_back(false);
 }
 
 void TargetManager::Update() {
 
-	// カメラの総数
-	const int cameraNum = (int)CameraManager::AllCameras().size();
-
-	for (int i = 0; i < cameraNum; i++) {
-		Camera* camera = CameraManager::GetCamera(i);
-
-		// カメラが誰も注視していない場合
-		if (camera->GetBallTarget() == nullptr) {
-			targetList[i] = -1;
-			continue;
-		}
-
-		// 注視していたキャラの番号を取得
-		targetList[i] = camera->GetBallTarget()->Index();
-	}
-
-	//// チェック済マークのリセット
-	//for (auto check : checkCamera)
-	//	check = false;
 }
 
 void TargetManager::Draw() {
@@ -71,16 +43,7 @@ void TargetManager::Draw() {
 		if (camera == nullptr)
 			continue;
 
-		//// カメラの描画が完了しているかつ、チェック済の場合
-		//if (camera->IsDrawEnd() && checkCamera[i])
-		//	continue;
-
 		int index = i;					// カメラの番号＆キャラの番号
-		int targetIndex = targetList[i];// 注視しているボールターゲットの番号
-
-		// ターゲットが居ない場合
-		if (targetIndex == -1)
-			continue;
 
 		Pool<Chara>* charaPool = charaManager->GetCharaPool();
 		if (charaPool == nullptr)
@@ -91,14 +54,29 @@ void TargetManager::Draw() {
 		if (chara == nullptr)
 			continue;
 
+		// カメラが注視しているターゲット
+		BallTarget* cameraTarget = camera->GetBallTarget();
+
 		// ボールをチャージしている場合
-		if (chara->IsCharging()) {
+		if (chara->IsCharging() && cameraTarget) {
+#if 0
+			// 狙っているターゲットをスクリーン座標にしてマーカー表示
+			Vector3 scPosition = ConvWorldPosToScreenPos(cameraTarget->Position());
+
+			RectTransform markerRect = RectTransform(Anchor::Preset::LeftUp, Vector2(scPosition.x, scPosition.y));
+			Vector2 beginPos = ScreenManager::GetScreenBeginPos(index);
+			Vector2 endPos = ScreenManager::GetScreenEndPos(index);
+			markerRect.anchor.SetBegin(beginPos);
+			markerRect.anchor.SetEnd(endPos);
+#else
 			// マーカーは画面中央固定
 			RectTransform markerRect = RectTransform(Anchor::Preset::Middle);
 			Vector2 beginPos = ScreenManager::GetScreenBeginPos(index);
 			Vector2 endPos = ScreenManager::GetScreenEndPos(index);
 			markerRect.anchor.SetBegin(beginPos);
 			markerRect.anchor.SetEnd(endPos);
+#endif // 0
+
 			EffectBase* lockOn = EffectManager::Play2D_Loop("LockOnMarker_001.efk", markerRect, StringUtil::FormatToString("LockOn %d", index));
 
 			lockOn->SetPlaySpeed(2.0f - chara->GetBallChargeRate() * 2.0f + 0.1f);
@@ -121,19 +99,9 @@ void TargetManager::Draw() {
 			const RockOnData data = item.second;
 			const Ball* ball = ballManager->GetBall(data.BallIndex);
 
-			DrawThorn(ball->transform->Global().position, targetIndex);
+			DrawThorn(ball->transform->Global().position, index);
 		}
-
-		//checkCamera[i] = true;
 	}
-}
-
-int TargetManager::TargetID(int charaIndex) {
-
-	if (targetList.contains(charaIndex))
-		return -1;
-
-	return targetList[charaIndex];
 }
 
 void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
@@ -155,9 +123,6 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 	Camera* targetCamera = CameraManager::GetCamera(targetCharaID);
 	if (targetCamera == nullptr)
 		return;
-
-	//if (not targetCamera->IsDrawEnd())
-	//	return;
 
 	// 距離
 	Vector3 dir = ballPos - charaTarget->transform->Global().position;
@@ -226,9 +191,6 @@ void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
 	Camera* targetCamera = CameraManager::GetCamera(targetCharaID);
 	if (targetCamera == nullptr)
 		return;
-
-	//if (not targetCamera->IsDrawEnd())
-	//	return;
 
 	Vector2 screenDivSize = CameraManager::GetScreenDivisionSize();
 

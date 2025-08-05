@@ -44,6 +44,7 @@ void CameraDefineRef::Load(bool ForceLoad)
 	m_RotSpeed = jsonLoader->GetOrDefault<float>("RotSpeed", 0.0f, FILEKEY);
 
 	m_AimResetTime = jsonLoader->GetOrDefault<float>("AimResetTime", 0.0f, FILEKEY);
+	m_AimOcclusionRayOffset = jsonLoader->GetOrDefault<float>("AimOcclusionRayOffset", 0.0f, FILEKEY);
 
 	// ƒ[ƒh‚µ‚½‚æ
 	m_WasLoad = true;

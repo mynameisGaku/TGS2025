@@ -49,5 +49,6 @@
     "ShiftSpeed": 6.0,
     "RotSpeed": 3.0,
 
-    "AimResetTime": 2.0
+    "AimResetTime": 2.0,
+    "AimOcclusionRayOffset": 100.0
 }

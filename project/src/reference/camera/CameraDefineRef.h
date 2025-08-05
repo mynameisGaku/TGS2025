@@ -59,6 +59,7 @@ public:
 	float m_RotSpeed;		// カメラの回転速度
 
 	float m_AimResetTime;	// エイムカメラがリセットされるまでの時間
+	float m_AimOcclusionRayOffset;	// エイムカメラの遮蔽判定レイのずらす量
 
 	void Load(bool ForceLoad = false);
 

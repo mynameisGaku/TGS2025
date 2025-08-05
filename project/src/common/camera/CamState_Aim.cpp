@@ -117,8 +117,17 @@ void Camera::AimState(FSMSignal sig)
 		Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
 		if (StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position()))
 		{
-			m_AimResetTime -= GTime.DeltaTime();
+			Vector3 offset = transform->Right() * CAMERADEFINE_REF.m_AimOcclusionRayOffset;
 
+			if (StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position() + offset) &&
+				StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position() - offset))
+			{
+				m_AimResetTime -= GTime.DeltaTime();
+			}
+			else
+			{
+				m_AimResetTime = CAMERADEFINE_REF.m_AimResetTime;
+			}
 		}
 		else
 		{

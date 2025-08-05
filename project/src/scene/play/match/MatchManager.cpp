@@ -389,7 +389,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 				if (spawner1)
 					addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
 
-				if (spawner2 && false)
+				if (spawner2)
 					addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
 			}
 		}

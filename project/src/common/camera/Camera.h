@@ -18,6 +18,8 @@ class StateManager;
 class Chara;
 class NetworkManager;
 class BallTarget;
+class CharaManager;
+class BallTargetManager;
 
 /// <summary>
 /// カメラのクラス
@@ -181,9 +183,9 @@ public:
 	const Vector3 TargetLay() const;
 
 	/// <summary>
-	/// 注視しているキャラクター
+	/// 注視しているボールターゲット
 	/// </summary>
-	inline const Chara* TargetChara() const { return m_pTargetChara; }
+	inline BallTarget* GetBallTarget() const { return m_pBallTarget; }
 
 	/// <summary>
 	/// 描画が終了したかどうかを判定
@@ -283,6 +285,9 @@ private:
 	/// </summary>
 	void drawVirtualCamera();
 
+	void findFollowerChara();
+	bool isMoveCamera() const;
+
 	//================================================================================
 	// ▼メンバ変数
 
@@ -312,6 +317,7 @@ private:
 
 	float m_EasingTime;				// イージング用タイマー
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
+	float m_AimResetTime;			// ロックオンが外れるタイマー
 
 	int screenPosX, screenPosY;		// 描画範囲(始点)
 	int screenSizeX, screenSizeY;	// 描画範囲(大きさ)
@@ -319,8 +325,10 @@ private:
 	bool m_IsView;		// 描画しているか
 	bool m_DrawFlag;	// 描画が完了しているか
 
+	CharaManager* m_pCharaManager; // キャラクターの管理者
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
-    const Chara* m_pTargetChara;	// 注視しているキャラ
+	BallTarget* m_pBallTarget;	// 注視しているボールターゲット
+	BallTargetManager* m_pBallTargetManager;	// ボールターゲットの管理者
 
     NetworkManager* m_pNetworkManager; // 現在のクライアントのUUIDをもらうためのネトマネ
 };

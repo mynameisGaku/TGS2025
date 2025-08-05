@@ -74,7 +74,7 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 #endif
 
 	auto gameM = SceneManager::CommonScene()->FindGameObject<GameManager>();
-	gameM->SetGameModeName("FreeForAll");
+	gameM->SetGameModeName("1v1");
 	// ゲームモードは GameRef.json 内を参照してください
 	//gameM->SetGameModeName("Debug");
 

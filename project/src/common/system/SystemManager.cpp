@@ -45,7 +45,7 @@ SystemManager::~SystemManager() {
 	InputManager::Release();
 	SoundManager::Release();
 	EffectManager::Release();
-	Fader::Release();
+	//Fader::Release();
 	//CameraManager::Release();
 	LightManager::Release();
 	Stage::Release();
@@ -97,7 +97,7 @@ void SystemManager::Update() {
 	InputManager::Update();
 	SoundManager::Update();
 	EffectManager::Update();
-	Fader::Update();
+	//Fader::Update();
 	//CameraManager::Update();
 	LightManager::Update();
 	Stage::Update();
@@ -127,7 +127,7 @@ void SystemManager::Draw() {
 	if (isLoading)
 		return;
 
-	Fader::Draw();
+	//Fader::Draw();
 
 #ifdef IMGUI
 
@@ -142,7 +142,7 @@ void SystemManager::DrawBefore() {
 		return;
 
 	//CameraManager::Draw();
-	UI_Manager::DrawBack();
+	//UI_Manager::DrawBack();
 	LightManager::Draw();
 	Stage::Draw();
 	StageObjectManager::Draw();
@@ -201,7 +201,7 @@ void SystemManager::LoadUpdate() {
 		}
 		break;
 
-	case ltFader:			Fader::Init();			break;
+	//case ltFader:			Fader::Init();			break;
 	//case ltCameraManager:	CameraManager::Init();	break;
 	case ltLightManager:	LightManager::Init();	break;
 	//case ltShadowMap:		ShadowMap::Init();		break;

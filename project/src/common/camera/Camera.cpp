@@ -23,6 +23,9 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/common/network/NetworkManager.h"
 #include "src/common/network/User/User.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/reference/network/NetworkRef.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 
 using namespace KeyDefine;
@@ -45,6 +48,7 @@ Camera::Camera() {
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
 	m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+	m_pCharaManager = nullptr;
 }
 
 Camera::~Camera() {
@@ -70,6 +74,7 @@ void Camera::Reset() {
 
 	m_EasingTime = 0.0f;
 	m_TargetTransitionTime = 0.0f;
+	m_AimResetTime = 0.0f;
 
 	m_CameraRotMat = MGetIdent();
 
@@ -79,7 +84,7 @@ void Camera::Reset() {
 
 	m_pHolder = nullptr;
 	m_pFollowerChara = nullptr;
-	m_pTargetChara = nullptr;
+	m_pBallTarget = nullptr;
 
 	m_IsView = true;
 }
@@ -87,6 +92,10 @@ void Camera::Reset() {
 void Camera::Update() {
 
 	m_CameraCone.transform = *transform;
+
+	// プレイシーン以外では取得できないので注意
+	m_pCharaManager = FindGameObject<CharaManager>();
+	m_pBallTargetManager = FindGameObject<BallTargetManager>();
 
 	if (m_Fsm != nullptr)
 		m_Fsm->Update();
@@ -126,10 +135,10 @@ void Camera::drawVirtualCamera() {
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
-    if (m_Fsm == nullptr)
-        return;
+	if (m_Fsm == nullptr)
+		return;
 
-    m_Fsm->ChangeState(state);
+	m_Fsm->ChangeState(state);
 }
 
 void Camera::rendering() {
@@ -206,7 +215,7 @@ void Camera::moveProcess()
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
 	
-    m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
+	m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -303,6 +312,31 @@ void Camera::updateAnimation() {
 	}
 }
 
+void Camera::findFollowerChara()
+{
+	// キャラの管理者
+	if (m_pCharaManager == nullptr)
+		return;
+
+	auto& net = NetworkRef::Inst();
+	// 追従するキャラ
+	if (net.IsNetworkEnable)
+		m_pFollowerChara = m_pCharaManager->GetFromUUID(m_User.UUID);
+	else
+		m_pFollowerChara = m_pCharaManager->CharaInst(m_CharaIndex);
+}
+
+bool Camera::isMoveCamera() const
+{
+	if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
+		PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void Camera::SetPerformance(const std::string& perfType) {
 
 	auto perfData = CAMERA_PERFORMANCE_REF.GetPerfDatas(perfType);
@@ -330,8 +364,8 @@ void Camera::SetDrawArea(int x, int y, int w, int h) {
 void Camera::SetDrawAreaDefault() {
 
 	WindowSetting& wSetting = WindowSetting::Inst();
-	const int width = wSetting.width;
-	const int height = wSetting.height;
+	const int width = (int)wSetting.width;
+	const int height = (int)wSetting.height;
 
 	screenPosX = 0;
 	screenPosY = 0;

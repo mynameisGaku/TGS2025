@@ -52,6 +52,7 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
+	m_HomingTarget = nullptr;
 
 	SetAttribute(new BallAttribute_Explosion(this));
 
@@ -168,7 +169,7 @@ void Ball::Update()
 
 	if ((m_IsHoming || m_IsThorwing) && hit)
 	{
-		homingDeactivate();
+		HomingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
 
@@ -319,10 +320,9 @@ void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRa
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
-void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
-	std::shared_ptr<BallTarget> temp = target;
-	m_HomingTarget = std::move(temp);
+	m_HomingTarget = target;
 
 	m_IsHoming			= true;
 	m_DoRefreshHoming	= true;
@@ -337,6 +337,7 @@ void Ball::ThrowHoming(const std::shared_ptr<BallTarget>& target, Chara* owner, 
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
 
+	target->SetRockOnData(RockOnData(GetIndex()));
 	m_HomingSpeed = m_Physics->velocity.GetLength();
 }
 
@@ -356,7 +357,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 
 	if (m_State == S_THROWN)
 	{
-		if (m_IsHoming) homingDeactivate();
+		if (m_IsHoming) HomingDeactivate();
 
 		m_Physics->velocity = m_Physics->FlatVelocity() * -10.0f + Vector3(0.0f, 200.0f, 0.0f);	// Magic:(
 
@@ -463,7 +464,7 @@ void Ball::collisionToGround()
 	bool hit = Stage::ColCheckGround(transform->position + Vector3::SetY(BALL_RADIUS), transform->position - Vector3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)
 	{
-		if (m_IsHoming) homingDeactivate();
+		if (m_IsHoming) HomingDeactivate();
 
 		// Y•ûŒü‚É’µ‚Ë•Ô‚é
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
@@ -520,7 +521,7 @@ void Ball::homingProcess()
 	if (m_HomingProgress >= 1.0f)
 	{
 		transform->position = m_HomingTargetPos;
-		homingDeactivate();
+		HomingDeactivate();
 	}
 	else
 	{
@@ -581,10 +582,15 @@ bool Ball::collisionToStage()
 	return hit;
 }
 
-void Ball::homingDeactivate()
+void Ball::HomingDeactivate()
 {
 	m_Physics->SetIsActive(true);
 	m_Physics->SetGravity(GRAVITY);
 	m_IsHoming = false;
-	m_HomingTarget.reset();
+
+	if (m_HomingTarget)
+	{
+		m_HomingTarget->EraseRockOnData(m_Index);
+		m_HomingTarget = nullptr;
+	}
 }

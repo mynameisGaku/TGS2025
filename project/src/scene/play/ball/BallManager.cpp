@@ -163,7 +163,7 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 	// チームに合わせてトレイルカラー変更
 	obj->SetTrailImage(m_hTrails["Green"]);
 
-	//obj->SetModel(m_Model);
+	obj->SetModel(m_Model);
 	// テスト用 テクスチャをランダムで選択
 	if (not m_Textures.empty())
 	{

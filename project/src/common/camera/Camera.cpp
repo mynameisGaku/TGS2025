@@ -74,6 +74,7 @@ void Camera::Reset() {
 
 	m_EasingTime = 0.0f;
 	m_TargetTransitionTime = 0.0f;
+	m_AimResetTime = 0.0f;
 
 	m_CameraRotMat = MGetIdent();
 

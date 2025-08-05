@@ -16,6 +16,7 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
 #include "src/scene/play/ball/BallTarget.h"
+#include "src/common/stage/StageObjectManager.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -44,6 +45,8 @@ void Camera::AimState(FSMSignal sig)
 		m_RotationPrev = transform->Global().rotation;
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
+
+		m_AimResetTime = CAMERADEFINE_REF.m_AimResetTime;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
@@ -101,16 +104,29 @@ void Camera::AimState(FSMSignal sig)
 		// ロックオンボタンを離したらチェイスに戻る
 		if (not InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
 		{
-			m_pBallTarget = nullptr;
 			ChangeState(&Camera::ChaseState);
-			// 被ロックオン時のUIがでないよ～
 		}
 
 		// 視点を移動したらチェイスに戻る
 		if (isMoveCamera())
 		{
+			ChangeState(&Camera::ChaseState);
 			m_TargetTransitionTime = 0.5f;
-			m_pBallTarget = nullptr;
+		}
+
+		Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
+		if (StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position()))
+		{
+			m_AimResetTime -= GTime.DeltaTime();
+
+		}
+		else
+		{
+			m_AimResetTime = CAMERADEFINE_REF.m_AimResetTime;
+		}
+
+		if (m_AimResetTime <= 0.0f)
+		{
 			ChangeState(&Camera::ChaseState);
 		}
 	}

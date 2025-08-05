@@ -308,6 +308,7 @@ private:
 
 	float m_EasingTime;				// イージング用タイマー
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
+	float m_AimResetTime;			// ロックオンが外れるタイマー
 
 	int screenPosX, screenPosY;		// 描画範囲(始点)
 	int screenSizeX, screenSizeY;	// 描画範囲(大きさ)

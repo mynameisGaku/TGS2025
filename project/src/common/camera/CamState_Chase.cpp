@@ -90,6 +90,7 @@ void Camera::ChaseState(FSMSignal sig)
 		{
 			if (m_pBallTargetManager)
 			{
+				// 一番近い敵しかとれないよ～今はね
 				m_pBallTarget = m_pBallTargetManager->GetNearest(m_CharaIndex, this->m_CameraCone.range);	// 注視するボールターゲット
 			}
 
@@ -99,8 +100,12 @@ void Camera::ChaseState(FSMSignal sig)
 				if (isMoveCamera())
 					m_TargetTransitionTime = 0.5f;
 
+				Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
+
 				// コーン形状の判定内に注視するキャラが居る場合
-				if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision())
+				if (m_TargetTransitionTime <= 0.0f && 
+					ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision() &&
+					not StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position()))
 				{
 					ChangeState(&Camera::AimState);
 				}

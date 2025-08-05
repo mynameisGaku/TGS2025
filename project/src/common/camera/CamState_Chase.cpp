@@ -86,7 +86,7 @@ void Camera::ChaseState(FSMSignal sig)
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (InputManager::Hold("TargetCamera", m_CharaIndex + 1))
+		if (m_pFollowerChara->IsCharging())
 		{
 			if (m_pBallTargetManager)
 			{

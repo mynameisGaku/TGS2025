@@ -102,7 +102,7 @@ void Camera::AimState(FSMSignal sig)
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
 		// ロックオンボタンを離したらチェイスに戻る
-		if (not InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
+		if (not m_pFollowerChara->IsCharging() && not m_pFollowerChara->IsThrowing())
 		{
 			ChangeState(&Camera::ChaseState);
 		}

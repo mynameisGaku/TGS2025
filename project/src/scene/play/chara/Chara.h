@@ -248,6 +248,8 @@ public:
 	inline bool CanTackle() const { return m_CanTackle; }
 	// 無敵中か
 	inline bool IsInvincible() const { return m_IsInvincible; }
+	// 投げモーション中か
+	inline bool IsThrowing() const { return (m_FSM->GetCurrentState() == &Chara::StateAimToThrow); }
 	// タックル後の間隔アラームが鳴っているか
 	bool IsFinishTackleIntervalAlarm();
 	// ユーザー取得

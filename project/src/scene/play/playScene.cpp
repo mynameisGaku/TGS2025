@@ -55,7 +55,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 		if (camera == nullptr)
 			continue;
 
-		camera->SetDrawArea((w / CAMERA_NUM) * i, 0, w / CAMERA_NUM, h);
+		camera->SetDefinedDrawArea((w / CAMERA_NUM) * i, 0, w / CAMERA_NUM, h);
+		camera->ApplyDefinedDrawArea();
 		camera->ChangeState(&Camera::ChaseState);
 	}
 

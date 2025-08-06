@@ -125,12 +125,18 @@ public:
 	/// <param name="y">描画開始地点(Y軸)</param>
 	/// <param name="w">描画の大きさ(X軸)</param>
 	/// <param name="h">描画の大きさ(Y軸)</param>
-	void SetDrawArea(int x, int y, int w, int h);
+	void SetDefinedDrawArea(int x, int y, int w, int h);
+	void SetDafeultDrawArea(int x, int y, int w, int h);
 
 	/// <summary>
 	/// 既定の描画範囲を設定する
 	/// </summary>
-	void SetDrawAreaDefault();
+	void ApplyDefaultDrawArea();
+
+	/// <summary>
+	/// 描画領域を定義されたものに適応させます。
+	/// </summary>
+	void ApplyDefinedDrawArea();
 
 	//================================================================================
 	// ▼ゲッター
@@ -209,14 +215,14 @@ public:
 	/// <param name="y">始点座標(Y軸)</param>
 	/// <param name="w">幅</param>
 	/// <param name="h">高さ</param>
-	void GetDrawArea(int* x = nullptr, int* y = nullptr, int* w = nullptr, int* h = nullptr) const;
+	void GetUsingDrawArea(int* x = nullptr, int* y = nullptr, int* w = nullptr, int* h = nullptr) const;
 
 	/// <summary>
 	/// このカメラの描画領域を取得する
 	/// </summary>
 	/// <param name="pos">始点座標</param>
 	/// <param name="size">幅と高さ</param>
-	void GetDrawArea(Vector2* pos, Vector2* size);
+	void GetUsingDrawArea(Vector2* pos, Vector2* size) const;
 
 	//================================================================================
 	// ▼ステート
@@ -316,14 +322,20 @@ private:
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
 	float m_AimResetTime;			// ロックオンが外れるタイマー
 
-	int screenPosX, screenPosY;		// 描画範囲(始点)
-	int screenSizeX, screenSizeY;	// 描画範囲(大きさ)
+	Vector2 m_UsingScreenPos;		// 現在使用している描画範囲(始点)
+	Vector2 m_UsingScreenSize;		// 現在使用している描画範囲(大きさ)
 
-	bool m_IsView;		// 描画しているか
+	Vector2 m_DefinedScreenPos;		// 定義された描画範囲(始点)
+	Vector2 m_DefinedScreenSize;	// 定義された描画範囲(大きさ)
 
-	CharaManager* m_pCharaManager; // キャラクターの管理者
+	Vector2 m_DefaultScreenPos;		// 既定の描画範囲(始点)
+	Vector2 m_DefaultScreenSize;	// 既定の描画範囲(大きさ)
+
+	bool m_IsView;					// 描画しているか
+
+	CharaManager* m_pCharaManager;	// キャラクターの管理者
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
-	BallTarget* m_pBallTarget;	// 注視しているボールターゲット
+	BallTarget* m_pBallTarget;		// 注視しているボールターゲット
 	BallTargetManager* m_pBallTargetManager;	// ボールターゲットの管理者
 
     NetworkManager* m_pNetworkManager; // 現在のクライアントのUUIDをもらうためのネトマネ

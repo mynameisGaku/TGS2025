@@ -34,7 +34,16 @@ using namespace CameraDefine;
 Camera::Camera() {
 
 	Reset();
-	SetDrawAreaDefault();
+
+	Vector2 windowSize = Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);
+
+	m_UsingScreenPos = Vector2::Zero;
+	m_DefinedScreenPos = Vector2::Zero;
+	m_DefaultScreenPos = Vector2::Zero;
+
+	m_UsingScreenSize = windowSize;
+	m_DefinedScreenSize = windowSize;
+	m_DefaultScreenSize = windowSize;
 
 	m_pShake = AddComponent<Shake>();
 	m_pShake->Init(this);
@@ -353,26 +362,32 @@ void Camera::SetAnimation(const CameraAnimData& animData) {
 	m_AnimData = animData;
 }
 
-void Camera::SetDrawArea(int x, int y, int w, int h) {
+void Camera::SetDefinedDrawArea(int x, int y, int w, int h) {
 
-	screenPosX = x;
-	screenPosY = y;
-	screenSizeX = w;
-	screenSizeY = h;
+	m_DefinedScreenPos.x = x;
+	m_DefinedScreenPos.y = y;
+	m_DefinedScreenSize.x = w;
+	m_DefinedScreenSize.y = h;
 }
 
-void Camera::SetDrawAreaDefault() {
+void Camera::SetDafeultDrawArea(int x, int y, int w, int h)
+{
+	m_DefaultScreenPos.x = x;
+	m_DefaultScreenPos.y = y;
+	m_DefaultScreenSize.x = w;
+	m_DefaultScreenSize.y = h;
+}
 
-	WindowSetting& wSetting = WindowSetting::Inst();
-	const int width = (int)wSetting.width;
-	const int height = (int)wSetting.height;
+void Camera::ApplyDefaultDrawArea() {
 
-	screenPosX = 0;
-	screenPosY = 0;
-	screenSizeX = width;
-	screenSizeY = height;
+	m_UsingScreenPos = m_DefaultScreenPos;
+	m_UsingScreenSize = m_DefaultScreenSize;
+}
 
-	//SetDrawArea(0, 0, width, height);
+void Camera::ApplyDefinedDrawArea() {
+
+	m_UsingScreenPos = m_DefinedScreenPos;
+	m_UsingScreenSize = m_DefinedScreenSize;
 }
 
 const Vector3 Camera::WorldPos() const {
@@ -433,16 +448,16 @@ User* Camera::GetUser()
 	return &m_User;
 }
 
-void Camera::GetDrawArea(int* x, int* y, int* w, int* h) const
+void Camera::GetUsingDrawArea(int* x, int* y, int* w, int* h) const
 {
-	if (x != nullptr)	*x = screenPosX;
-	if (y != nullptr)	*y = screenPosY;
-	if (w != nullptr)	*w = screenSizeX;
-	if (h != nullptr)	*h = screenSizeY;
+	if (x != nullptr)	*x = m_UsingScreenPos.x;
+	if (y != nullptr)	*y = m_UsingScreenPos.y;
+	if (w != nullptr)	*w = m_UsingScreenSize.x;
+	if (h != nullptr)	*h = m_UsingScreenSize.y;
 }
 
-void Camera::GetDrawArea(Vector2* pos, Vector2* size)
+void Camera::GetUsingDrawArea(Vector2* pos, Vector2* size) const
 {
-	if (pos != nullptr)	*pos = Vector2(screenPosX, screenPosY);
-	if (size != nullptr)*size = Vector2(screenSizeX, screenSizeY);
+	if (pos != nullptr)	*pos = m_UsingScreenPos;
+	if (size != nullptr)*size = m_UsingScreenSize;
 }

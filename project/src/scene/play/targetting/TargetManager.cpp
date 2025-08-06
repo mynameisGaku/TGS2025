@@ -9,105 +9,152 @@
 #include "src/util/screen/ScreenManager.h"
 #include "src/scene/play/ball/BallTarget.h"
 
-TargetManager::TargetManager() {
-
+TargetManager::TargetManager()
+{
 	ballManager = nullptr;
 	charaManager = nullptr;
 
 	hArrow = LoadGraph("data/texture/arrow.png");
 }
 
-TargetManager::~TargetManager() {
-
+TargetManager::~TargetManager()
+{
 	DeleteGraph(hArrow);
 }
 
-void TargetManager::Start() {
-
+void TargetManager::Start()
+{
 	ballManager = FindGameObject<BallManager>();
 	charaManager = FindGameObject<CharaManager>();
 }
 
-void TargetManager::Update() {
+void TargetManager::Update()
+{
 
 }
 
-void TargetManager::Draw() {
+void TargetManager::Draw()
+{
+	// 現在描画を行っているカメラID
+	int cameraID = CameraManager::GetCurrentDrawingCameraID();
+	Vector2 pos = CameraManager::GetDrawingAreaPos_CameraIndex(cameraID);
+	Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(cameraID);
 
-	// カメラの総数
-	const int cameraNum = (int)CameraManager::AllCameras().size();
+	Camera* camera = CameraManager::GetCamera(cameraID);
+	if (camera == nullptr)
+		return;
 
-	for (int i = 0; i < cameraNum; i++) {
+	Pool<Chara>* charaPool = charaManager->GetCharaPool();
+	if (charaPool == nullptr)
+		return;
 
-		Camera* camera = CameraManager::GetCamera(i);
-		if (camera == nullptr)
-			continue;
+	// カメラに対応するキャラ
+	Chara* chara = charaPool->Get(cameraID);
+	if (chara == nullptr)
+		return;
 
-		int index = i;					// カメラの番号＆キャラの番号
+	// カメラが注視しているターゲット
+	BallTarget* cameraTarget = camera->GetBallTarget();
 
-		Pool<Chara>* charaPool = charaManager->GetCharaPool();
-		if (charaPool == nullptr)
-			continue;
+	// ボールをチャージしている場合
+	if (chara->IsCharging() && cameraTarget)
+	{
 
-		// カメラに対応するキャラ
-		Chara* chara = charaPool->Get(index);
-		if (chara == nullptr)
-			continue;
-
-		// カメラが注視しているターゲット
-		BallTarget* cameraTarget = camera->GetBallTarget();
-
-		// ボールをチャージしている場合
-		if (chara->IsCharging() && cameraTarget) {
 #if 0
-			// 狙っているターゲットをスクリーン座標にしてマーカー表示
-			Vector3 scPosition = ConvWorldPosToScreenPos(cameraTarget->Position());
+		// 狙っているターゲットをスクリーン座標にしてマーカー表示
+		Vector3 scPosition = ConvWorldPosToScreenPos(cameraTarget->Position());
 
-			RectTransform markerRect = RectTransform(Anchor::Preset::LeftUp, Vector2(scPosition.x, scPosition.y));
-			Vector2 beginPos = ScreenManager::GetScreenBeginPos(index);
-			Vector2 endPos = ScreenManager::GetScreenEndPos(index);
-			markerRect.anchor.SetBegin(beginPos);
-			markerRect.anchor.SetEnd(endPos);
+		RectTransform markerRect = RectTransform(Anchor::Preset::LeftUp, Vector2(scPosition.x, scPosition.y));
+		Vector2 beginPos = ScreenManager::GetScreenBeginPos(cameraID);
+		Vector2 endPos = ScreenManager::GetScreenEndPos(cameraID);
+		markerRect.anchor.SetBegin(beginPos);
+		markerRect.anchor.SetEnd(endPos);
 #else
-			// マーカーは画面中央固定
-			RectTransform markerRect = RectTransform(Anchor::Preset::Middle);
-			Vector2 beginPos = CameraManager::GetDrawingAreaPos_CameraIndex(index);
-			Vector2 endPos = beginPos + CameraManager::GetDrawingAreaSize_CameraIndex(index);
-			markerRect.anchor.SetBegin(beginPos);
-			markerRect.anchor.SetEnd(endPos);
+		// マーカーは画面中央固定
+		RectTransform markerRect = RectTransform(Anchor::Preset::Middle);
+		markerRect.anchor.SetBegin(pos);
+		markerRect.anchor.SetEnd(pos + size);
 #endif // 0
 
-			EffectBase* lockOn = EffectManager::Play2D_Loop("LockOnMarker_001.efk", markerRect, StringUtil::FormatToString("LockOn %d", index));
+		EffectBase* lockOn = EffectManager::Play2D_Loop("LockOnMarker_001.efk", markerRect, StringUtil::FormatToString("LockOn %d", cameraID));
 
-			lockOn->SetPlaySpeed(2.0f - chara->GetBallChargeRate() * 2.0f + 0.1f);
-			lockOn->SetScale2D(1.0f - chara->GetBallChargeRate() * 0.25f);
-		}
-		else {
-			EffectManager::Stop("LockOnMarker_001.efk", StringUtil::FormatToString("LockOn %d", index));
-		}
+		lockOn->SetPlaySpeed(2.0f - chara->GetBallChargeRate() * 2.0f + 0.1f);
+		lockOn->SetScale2D(1.0f - chara->GetBallChargeRate() * 0.25f);
+	}
+	else
+	{
+		EffectManager::Stop("LockOnMarker_001.efk", StringUtil::FormatToString("LockOn %d", cameraID));
+	}
 
-		if (not ballManager) continue;
+	if (not ballManager) return;
 
-		const BallTarget* charaTarget = chara->GetBallTarget();
-		const std::unordered_map<int, RockOnData> charaRockOnData = charaTarget->GetRockOnData();
+	const BallTarget* charaTarget = chara->GetBallTarget();
+	const std::unordered_map<int, RockOnData> charaRockOnData = charaTarget->GetRockOnData();
 
-		if (charaRockOnData.empty()) continue;
+	if (charaRockOnData.empty()) return;
 
-		DrawWarning();
+	// 外周の赤い警告表示
+	DrawBoxAA(size.x * 0.5f, 0.0f, size.x * 1.5f, size.y, GetColor(255, 0, 0), false, 10.0f);
 
-		for (const auto& item : charaRockOnData) {
-			const RockOnData data = item.second;
-			const Ball* ball = ballManager->GetBall(data.BallIndex);
+	// 狙われているボールの位置への棘表示
+	for (const auto& item : charaRockOnData)
+	{
+		const RockOnData data = item.second;
+		const Ball* ball = ballManager->GetBall(data.BallIndex);
 
-			DrawThorn(ball->transform->Global().position, index);
-		}
+		const float circleRadius = 32.0f;
+		const Vector2 screenCenter = Vector2(size.x , size.y * 0.75f);
+
+		Vector2 screenDivSize = size;
+
+		// 距離
+		Vector3 dir = ball->transform->Global().position - chara->transform->Global().position;
+
+		// 距離を長さに変換
+		float distance = dir.GetLength();
+
+		// 角度の計算
+		float angle = atan2f(dir.z, dir.x);
+
+		// Z-X平面で考える
+		float dz = -sinf(angle);
+		float dx = cosf(angle);
+
+		// 描画位置
+		Vector3 drawPoint = Vector3(dx, 0.0f, dz);
+
+		// 描画位置をビュー行列で回す
+		drawPoint = VTransform(drawPoint, camera->transform->RotationMatrix());
+
+		Vector2 thornPos = screenCenter + Vector2(drawPoint.x, drawPoint.z) * screenDivSize;
+
+		Vector2 thornFromCenter = thornPos - screenCenter;
+		float thornAngle = atan2f(thornFromCenter.y, thornFromCenter.x) + DX_PI_F / 2.0f * -1.0f;
+
+		Vector2 thornOffset1 = Vector2(50.0f, 0.0f) * cosf(thornAngle);
+		Vector2 thornOffset2 = Vector2(0.0f, 50.0f) * -sinf(thornAngle);
+		Vector2 thornOffset3 = Vector2(drawPoint.x, drawPoint.z) * screenDivSize * 0.35f;
+
+		Vector2 thornPos1 = thornPos + thornOffset1;
+		Vector2 thornPos2 = thornPos + thornOffset2;
+		Vector2 thornPos3 = screenCenter + thornOffset3;
+		Vector2 thornBackPos3 = screenCenter + Vector2(drawPoint.x, drawPoint.z) * screenDivSize * 0.3f;
+
+		DrawTriangleAA(thornPos1.x, thornPos1.y, thornPos2.x, thornPos2.y, thornBackPos3.x, thornBackPos3.y, GetColor(0, 0, 0), true, 10.0f);
+		DrawTriangleAA(thornPos1.x, thornPos1.y, thornPos2.x, thornPos2.y, thornPos3.x, thornPos3.y, GetColor(255, 255, 255), true, 10.0f);
 	}
 }
 
 void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID) {
 
+	if (CameraManager::GetCurrentDrawingCameraID() != targetCharaID)
+		return;
+
+	Vector2 pos = CameraManager::GetDrawingAreaPos_CameraIndex(targetCharaID);
+	Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(targetCharaID);
+
 	const float circleRadius = 32.0f;
-	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
+	const Vector2 screenCenter = pos + size * 0.5f;
 	DrawCircleAA(screenCenter.x, screenCenter.y, circleRadius, 16, GetColor(255, 0, 0), false, 2.0f);
 
 	Pool<Chara>* charaPool = charaManager->GetCharaPool();
@@ -163,70 +210,4 @@ void TargetManager::DrawBallPosMarker(const Vector3& ballPos, int targetCharaID)
 	DrawRectRotaGraphF(markerPos.x, markerPos.y, 0, 0, 32, 32, 2.0f, arrowAngle, hArrow, true, false);
 
 	SetDrawBright(255, 255, 255);
-}
-
-void TargetManager::DrawWarning() {
-
-	Vector2 scrPos = CameraManager::GetScreenDivisionPos();
-	Vector2 scrSize = CameraManager::GetScreenDivisionSize();
-
-	DrawBoxAA(scrPos.x + 1.0f, scrPos.y + 1.0f, scrPos.x + scrSize.x - 1.0f, scrPos.y + scrSize.y - 1.0f, GetColor(255, 0, 0), false, 10.0f);
-}
-
-void TargetManager::DrawThorn(const Vector3& ballPos, int targetCharaID) {
-
-	const float circleRadius = 32.0f;
-	const Vector2 screenCenter = CameraManager::GetScreenDivisionCenter();
-	
-	Pool<Chara>* charaPool = charaManager->GetCharaPool();
-	if (charaPool == nullptr)
-		return;
-
-	// 狙われているキャラ
-	Chara* charaTarget = charaPool->Get(targetCharaID);
-	if (charaTarget == nullptr)
-		return;
-
-	// 狙っているキャラに対応するカメラを取得
-	Camera* targetCamera = CameraManager::GetCamera(targetCharaID);
-	if (targetCamera == nullptr)
-		return;
-
-	Vector2 screenDivSize = CameraManager::GetScreenDivisionSize();
-
-	// 距離
-	Vector3 dir = ballPos - charaTarget->transform->Global().position;
-
-	// 距離を長さに変換
-	float distance = dir.GetLength();
-
-	// 角度の計算
-	float angle = atan2f(dir.z, dir.x);
-
-	// Z-X平面で考える
-	float dz = -sinf(angle);
-	float dx = cosf(angle);
-
-	// 描画位置
-	Vector3 drawPoint = Vector3(dx, 0.0f, dz);
-
-	// 描画位置をビュー行列で回す
-	drawPoint = VTransform(drawPoint, targetCamera->transform->RotationMatrix());
-
-	Vector2 thornPos = screenCenter + Vector2(drawPoint.x, drawPoint.z) * screenDivSize;
-
-	Vector2 thornFromCenter = thornPos - screenCenter;
-	float thornAngle = atan2f(thornFromCenter.y, thornFromCenter.x) + DX_PI_F / 2.0f * -1.0f;
-
-	Vector2 thornOffset1 = Vector2(50.0f, 0.0f) * cosf(thornAngle);
-	Vector2 thornOffset2 = Vector2(0.0f, 50.0f) * -sinf(thornAngle);
-	Vector2 thornOffset3 = Vector2(drawPoint.x, drawPoint.z) * screenDivSize * 0.35f;
-
-	Vector2 thornPos1 = thornPos + thornOffset1;
-	Vector2 thornPos2 = thornPos + thornOffset2;
-	Vector2 thornPos3 = screenCenter + thornOffset3;
-	Vector2 thornBackPos3 = screenCenter + Vector2(drawPoint.x, drawPoint.z) * screenDivSize * 0.3f;
-
-	DrawTriangleAA(thornPos1.x, thornPos1.y, thornPos2.x, thornPos2.y, thornBackPos3.x, thornBackPos3.y, GetColor(0,0,0), true, 10.0f);
-	DrawTriangleAA(thornPos1.x, thornPos1.y, thornPos2.x, thornPos2.y, thornPos3.x, thornPos3.y, GetColor(255,255,255), true, 10.0f);
 }

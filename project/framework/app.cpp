@@ -48,13 +48,13 @@ void AppDraw()
 
 	for (const auto& camera : CameraManager::AllCameras())
 	{
-		if (not camera->IsActive())
+		if (not camera->IsActive() || not camera->IsView())
 			continue;
 
 		const std::string scrName = "CameraScreen_No." + std::to_string(cameraIndex);
 		int drawX, drawY, drawW, drawH;
 
-		camera->GetDrawArea(&drawX, &drawY, &drawW, &drawH);
+		camera->GetUsingDrawArea(&drawX, &drawY, &drawW, &drawH);
 
 		ScreenImageData* pData = ScreenManager::GetScreenImageData(scrName);
 		if (pData == nullptr)

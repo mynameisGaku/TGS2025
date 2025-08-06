@@ -143,7 +143,7 @@ void UI_GameScore::drawUserScores()
 		Vector2 drawAreaPos = Vector2::Zero;
 		Vector2 drawAreaSize = Vector2::Zero;
 		Vector2 drawAreaEnd = Vector2::Zero;
-		camera->GetDrawArea(&drawAreaPos, &drawAreaSize);
+		camera->GetUsingDrawArea(&drawAreaPos, &drawAreaSize);
 
 		drawAreaEnd = drawAreaPos + drawAreaSize;
 

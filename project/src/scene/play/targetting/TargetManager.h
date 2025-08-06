@@ -27,11 +27,6 @@ private:
 	void DrawBallPosMarker(const Vector3& ballPos, int targetCharaID);
 
 	/// <summary>
-	/// 外周の赤い警告表示
-	/// </summary>
-	void DrawWarning();
-
-	/// <summary>
 	/// 狙われているボールの位置にドゲを描画します
 	/// </summary>
 	/// <param name="ballPos">ボールの座標</param>

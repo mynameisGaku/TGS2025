@@ -85,6 +85,22 @@ void CameraManager::Update() {
 			c->SetIsView(!c->IsView());
 		}
 	}
+
+	Camera* mainCamera = MainCamera();
+	auto& windowSetting = WindowSetting::Inst();
+
+	for (const auto& camera : *cameras) {
+		if (isScreenDivision) {
+			camera->ApplyDefinedDrawArea();
+			camera->SetIsView(true);
+		}
+		else {
+			camera->ApplyDefaultDrawArea();
+
+			if (camera != mainCamera)
+				camera->SetIsView(false);
+		}
+	}
 }
 
 void CameraManager::Draw() {
@@ -249,7 +265,7 @@ Vector2 CameraManager::GetDrawingAreaPos_CameraIndex(int index) {
 		return Vector2::Zero;
 
 	int x, y;
-	camera->GetDrawArea(&x, &y);
+	camera->GetUsingDrawArea(&x, &y);
 	return Vector2(x, y);
 }
 
@@ -260,7 +276,7 @@ Vector2 CameraManager::GetDrawingAreaSize_CameraIndex(int index) {
 		return Vector2::Zero;
 
 	int w, h;
-	camera->GetDrawArea(nullptr, nullptr, &w, &h);
+	camera->GetUsingDrawArea(nullptr, nullptr, &w, &h);
 	return Vector2(w, h);
 }
 

@@ -2910,10 +2910,42 @@ void Chara::invincible(const nlohmann::json& argument)
 {
 	if (not m_pBallTarget) return;
 
-	m_pBallTarget->SetCanRockOn(false);
-	m_pBallTarget->SetDoDeactivateOnNoRockOn(true);
+	// 元居た場所にデコイのターゲットを生成
+	BallTarget* decoy = m_pBallTargetManager->Create();
 
-	m_pBallTarget = m_pBallTargetManager->Create();
+	// 新しくロックオンはできない
+	decoy->SetPosition(m_pBallTarget->Position());
+	decoy->SetCanRockOn(false);
+	decoy->SetDoDeactivateOnNoRockOn(true);
+
+	if (m_pBallManager == nullptr)
+		m_pBallManager = FindGameObject<BallManager>();
+
+	// 今自分をロックオンしていた飛翔中のボールはデコイをロックオンする
+	const auto& rockOnData = m_pBallTarget->GetRockOnData();
+
+	for (const auto& item : rockOnData)
+	{
+		uint32_t ballIndex = item.second.BallIndex;
+
+		Ball* ball = m_pBallManager->GetBall(ballIndex);
+		if (ball->GetState() == Ball::S_THROWN)
+		{
+			ball->SetHomingTarget(decoy);
+			decoy->SetRockOnData({ ballIndex });
+		}
+	}
+
+	// 移したロックオンは削除する
+	const auto& decoyRockOnData = decoy->GetRockOnData();
+
+	for (const auto& item : decoyRockOnData)
+	{
+		uint32_t ballIndex = item.second.BallIndex;
+
+		m_pBallTarget->EraseRockOnData(ballIndex);
+	}
+
 }
 
 void Chara::playFootStepSound(const nlohmann::json& argument)

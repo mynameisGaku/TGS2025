@@ -3,6 +3,7 @@
 #include "src/util/object3D/Object3D.h"
 #include "src/util/time/GameTime.h"
 #include "src/util/easing/easing.h"
+#include <array>
 
 const int BallRenderer::SLICES_COUNT = 8;	// 球の横方向の分割数
 const int BallRenderer::STACKS_COUNT = 8;	// 球の縦方向の分割数
@@ -72,6 +73,20 @@ void BallRenderer::InitVertices()
 
 		m_Vertices.push_back(stacks);
 	}
+
+	// 一直線にしてやるぜ
+	for (size_t i = 0; i < SLICES_COUNT; i++)
+	{
+		for (size_t j = 0; j < STACKS_COUNT; j++)
+		{
+			m_LinearVertices.push_back(m_Vertices[i][j]);
+			m_LinearVertices.push_back(m_Vertices[i][(j + 1) % STACKS_COUNT]);
+			m_LinearVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][j]);
+			m_LinearVertices.push_back(m_Vertices[i][(j + 1) % STACKS_COUNT]);
+			m_LinearVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][(j + 1) % STACKS_COUNT]);
+			m_LinearVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][j]);
+		}
+	}
 }
 
 void BallRenderer::SetTexture(const BallTexture& texture, const std::string& mapKey)
@@ -117,41 +132,38 @@ void BallRenderer::Draw()
 	// マテリアルのパラメータをセット
 	SetMaterialParam(MatParam);
 
-	for (int i = 0; i < SLICES_COUNT; i++)
+	static const size_t SIZE = SLICES_COUNT * STACKS_COUNT * 6;
+
+	std::array<VERTEX3D, SIZE>* vertices = new std::array<VERTEX3D, SIZE>;
+
+	memcpy_s(&vertices[0], sizeof(vertices[0]) * SIZE, 
+		&m_LinearVertices[0], sizeof(m_LinearVertices[0]) * SIZE);
+
+	for (size_t i = 0; i < SIZE; i++)
 	{
-		for (int j = 0; j < STACKS_COUNT; j++)
+		VERTEX3D& v = (*vertices)[i];
+
+		v.u /= m_Texture.FrameCountX;
+		v.u += uAdd;
+		if (v.u >= 1.0f)
 		{
-			VERTEX3D vertices[6];
-			vertices[0] = m_Vertices[i][j];
-			vertices[1] = m_Vertices[i][(j + 1) % STACKS_COUNT];
-			vertices[2] = m_Vertices[(i + 1) % SLICES_COUNT][j];
-			vertices[3] = vertices[1];
-			vertices[4] = m_Vertices[(i + 1) % SLICES_COUNT][(j + 1) % STACKS_COUNT];
-			vertices[5] = vertices[2];
-
-			for (VERTEX3D& v : vertices)
-			{
-				v.u /= m_Texture.FrameCountX;
-				v.u += uAdd;
-				if (v.u >= 1.0f)
-				{
-					v.u -= 1.0f;
-				}
-
-				v.v /= m_Texture.FrameCountX;
-				v.v += vAdd;
-				if (v.v >= 1.0f)
-				{
-					v.v -= 1.0f;
-				}
-
-				v.pos *= m_Radius;
-				v.pos *= trs.Matrix();
-			}
-
-			DrawPolygon3D(vertices, 2, m_Texture.Texture, TRUE);
+			v.u -= 1.0f;
 		}
+
+		v.v /= m_Texture.FrameCountX;
+		v.v += vAdd;
+		if (v.v >= 1.0f)
+		{
+			v.v -= 1.0f;
+		}
+
+		v.pos *= m_Radius;
+		v.pos *= trs.Matrix();
 	}
+
+	DrawPolygon3D(&(*vertices)[0], SIZE / 3, m_Texture.Texture, TRUE);
+
+	delete vertices;
 }
 
 const BallTexture BallRenderer::GetTexture() const

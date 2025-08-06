@@ -56,7 +56,7 @@ void Camera::AimState(FSMSignal sig)
 		if (not m_pFollowerChara) return;
 
 		// ロックオン相手がいないならチェイスに戻る
-		if (m_pFollowerChara == nullptr || m_pBallTarget == nullptr) {
+		if (not m_pBallTarget || not m_pBallTarget->CanRockOn()) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}

@@ -22,7 +22,7 @@ namespace {
 
 	std::vector<Camera*>* cameras;	// カメラ
 	bool isScreenDivision;			// 画面分割の有無
-	bool initialized = false;	// 初期化済みかどうか
+	bool initialized = false;		// 初期化済みかどうか
 	static int m_CurrentDrawingCameraIndex = 0;
 
 	static int screenDivBeginX = 0;	// 画面分割の開始X座標
@@ -83,6 +83,22 @@ void CameraManager::Update() {
 	if (InputManager::Push(KeyDefine::KeyCode::U)) {
 		for (const auto& c : *cameras) {
 			c->SetIsView(!c->IsView());
+		}
+	}
+
+	Camera* mainCamera = MainCamera();
+	auto& windowSetting = WindowSetting::Inst();
+
+	for (const auto& camera : *cameras) {
+		if (isScreenDivision) {
+			camera->ApplyDefinedDrawArea();
+			camera->SetIsView(true);
+		}
+		else {
+			camera->ApplyDefaultDrawArea();
+
+			if (camera != mainCamera)
+				camera->SetIsView(false);
 		}
 	}
 }
@@ -168,73 +184,6 @@ void CameraManager::ChangeStateCamera(int number, void(Camera::* state)(FSMSigna
 	(*cameras)[number]->ChangeState(state);
 }
 
-void CameraManager::DrawScreenDivsition(int index) {
-
-	if (not initialized)
-		Init();
-
-	if (CheckNumber(index) == false)
-		return;
-
-	Vector2 drawPos, drawSize;
-	GetScreenDivision(index, &drawPos, &drawSize);
-
-	DrawScreenDivsition((int)drawPos.x, (int)drawPos.y, (int)drawSize.x, (int)drawSize.y, index);
-}
-
-void CameraManager::DrawScreenDivsition(int x, int y, int w, int h, int index) {
-
-	if (not initialized)
-		Init();
-
-	if (CheckNumber(index) == false)
-		return;
-
-	(*cameras)[index]->Draw();
-	//(*cameras)[index]->SetDrawArea(x, y, w, h);
-}
-
-void CameraManager::GetScreenDivision(int index, Vector2* pos, Vector2* size) {
-
-	if (not initialized)
-		Init();
-
-	if (CheckNumber(index) == false || pos == nullptr || size == nullptr)
-		return;
-
-	const Vector2 screen = Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);
-	const int cameraNum = (int)cameras->size();
-
-	const Vector2 divSize = Vector2(screen.x / cameraNum, screen.y);
-
-	const Vector2 drawPos = Vector2(divSize.x * index, 0.0f);
-
-	*pos = drawPos;
-	*size = divSize;
-}
-
-void CameraManager::ApplyScreenDivision(int index) {
-
-	if (not initialized)
-		Init();
-
-	if (index == -1) {
-		(*cameras)[m_CurrentDrawingCameraIndex]->ApplyDrawArea();
-		return;
-	}
-
-	if (CheckNumber(index) == false)
-		return;
-
-	(*cameras)[index]->ApplyDrawArea();
-}
-
-void CameraManager::DefaultScreenSize() {
-
-	//SetDrawArea(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height);
-	//SetCameraScreenCenter(WindowSetting::Inst().width * 0.5f, WindowSetting::Inst().height * 0.5f);
-}
-
 void CameraManager::SetCameraWork(int number, const std::string& type) {
 
 	if (CameraManager::CheckNumber(number) == false)
@@ -294,6 +243,11 @@ Camera* CameraManager::GetCamera(const User& user)
 	return nullptr;
 }
 
+Camera* CameraManager::GetCameraDrawing() {
+
+	return (*cameras)[m_CurrentDrawingCameraIndex];
+}
+
 std::vector<Camera*> CameraManager::AllCameras() {
 
 	return *cameras;
@@ -304,16 +258,6 @@ bool CameraManager::IsScreenDivision()
 	return isScreenDivision;
 }
 
-Vector2 CameraManager::GetScreenDivisionPos() {
-
-	return Vector2(screenDivBeginX, screenDivBeginY);
-}
-
-Vector2 CameraManager::GetScreenDivisionSize() {
-
-	return Vector2(screenDivWidth, screenDivHeight);
-}
-
 Vector2 CameraManager::GetDrawingAreaPos_CameraIndex(int index) {
 
 	Camera* camera = GetCamera(index);
@@ -321,7 +265,7 @@ Vector2 CameraManager::GetDrawingAreaPos_CameraIndex(int index) {
 		return Vector2::Zero;
 
 	int x, y;
-	camera->GetDrawArea(&x, &y);
+	camera->GetUsingDrawArea(&x, &y);
 	return Vector2(x, y);
 }
 
@@ -332,13 +276,8 @@ Vector2 CameraManager::GetDrawingAreaSize_CameraIndex(int index) {
 		return Vector2::Zero;
 
 	int w, h;
-	camera->GetDrawArea(nullptr, nullptr, &w, &h);
+	camera->GetUsingDrawArea(nullptr, nullptr, &w, &h);
 	return Vector2(w, h);
-}
-
-Vector2 CameraManager::GetScreenDivisionCenter() {
-
-	return GetScreenDivisionPos() + (GetScreenDivisionSize() * 0.5f);
 }
 
 Vector2 CameraManager::GetDivedByCameraNum() {

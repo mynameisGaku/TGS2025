@@ -753,6 +753,12 @@
     <None Include="data\Json\Enemy\BatAnim.json">
       <Filter>data\Json\Enemy</Filter>
     </None>
+    <None Include="data\Json\Stage\ExportedStage-000.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\TrampolineTestStage.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1465,6 +1471,9 @@
     </ClCompile>
     <ClCompile Include="src\scene\play\active_ball_gimmick\TargetGimmick.cpp">
       <Filter>src%28application%29\scene\play\active_ball_gimmick\Target</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\BallTargetManager.cpp">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2310,6 +2319,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\BoostRingBase.h">
       <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\BallTargetManager.h">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

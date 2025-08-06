@@ -23,6 +23,9 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/common/network/NetworkManager.h"
 #include "src/common/network/User/User.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/reference/network/NetworkRef.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 
 using namespace KeyDefine;
@@ -31,7 +34,16 @@ using namespace CameraDefine;
 Camera::Camera() {
 
 	Reset();
-	SetDrawAreaDefault();
+
+	Vector2 windowSize = Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);
+
+	m_UsingScreenPos = Vector2::Zero;
+	m_DefinedScreenPos = Vector2::Zero;
+	m_DefaultScreenPos = Vector2::Zero;
+
+	m_UsingScreenSize = windowSize;
+	m_DefinedScreenSize = windowSize;
+	m_DefaultScreenSize = windowSize;
 
 	m_pShake = AddComponent<Shake>();
 	m_pShake->Init(this);
@@ -45,6 +57,7 @@ Camera::Camera() {
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
 	m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+	m_pCharaManager = nullptr;
 }
 
 Camera::~Camera() {
@@ -70,6 +83,7 @@ void Camera::Reset() {
 
 	m_EasingTime = 0.0f;
 	m_TargetTransitionTime = 0.0f;
+	m_AimResetTime = 0.0f;
 
 	m_CameraRotMat = MGetIdent();
 
@@ -79,15 +93,18 @@ void Camera::Reset() {
 
 	m_pHolder = nullptr;
 	m_pFollowerChara = nullptr;
-	m_pTargetChara = nullptr;
+	m_pBallTarget = nullptr;
 
 	m_IsView = true;
-	m_DrawFlag = false;
 }
 
 void Camera::Update() {
 
 	m_CameraCone.transform = *transform;
+
+	// プレイシーン以外では取得できないので注意
+	m_pCharaManager = FindGameObject<CharaManager>();
+	m_pBallTargetManager = FindGameObject<BallTargetManager>();
 
 	if (m_Fsm != nullptr)
 		m_Fsm->Update();
@@ -95,15 +112,9 @@ void Camera::Update() {
 	updateAnimation();
 
 	Object3D::Update();
-
-	m_DrawFlag = false;
 }
 
 void Camera::Draw() {
-
-	// 既に描画済なら
-	//if (m_DrawFlag)
-	//	return;
 
 	// 描画の有無
 	if (not m_IsView) {
@@ -115,8 +126,6 @@ void Camera::Draw() {
 
 	// カメラ描画
 	rendering();
-	
-	//m_DrawFlag = true;	// 描画完了
 }
 
 void Camera::drawVirtualCamera() {
@@ -135,29 +144,13 @@ void Camera::drawVirtualCamera() {
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
-    if (m_Fsm == nullptr)
-        return;
+	if (m_Fsm == nullptr)
+		return;
 
-    m_Fsm->ChangeState(state);
-}
-
-void Camera::ApplyDrawArea() const {
-
-	//const int x = screenPosX;
-	//const int y = screenPosY;
-	//const int w = screenPosX + screenSizeX;
-	//const int h = screenPosY + screenSizeY;
-
-	////DxLib::SetDrawArea(x, y, w, h);
-
-	//const float centerX = (x + w) * 0.5f;
-	//const float centerY = h * 0.5f;
-	////SetCameraScreenCenter(centerX, centerY);
+	m_Fsm->ChangeState(state);
 }
 
 void Camera::rendering() {
-
-	ApplyDrawArea();
 
 	Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
 	Vector3 targetPos = m_Target * m_pShake->Matrix();
@@ -231,7 +224,7 @@ void Camera::moveProcess()
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
 	
-    m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
+	m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -328,6 +321,31 @@ void Camera::updateAnimation() {
 	}
 }
 
+void Camera::findFollowerChara()
+{
+	// キャラの管理者
+	if (m_pCharaManager == nullptr)
+		return;
+
+	auto& net = NetworkRef::Inst();
+	// 追従するキャラ
+	if (net.IsNetworkEnable)
+		m_pFollowerChara = m_pCharaManager->GetFromUUID(m_User.UUID);
+	else
+		m_pFollowerChara = m_pCharaManager->CharaInst(m_CharaIndex);
+}
+
+bool Camera::isMoveCamera() const
+{
+	if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
+		PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void Camera::SetPerformance(const std::string& perfType) {
 
 	auto perfData = CAMERA_PERFORMANCE_REF.GetPerfDatas(perfType);
@@ -344,28 +362,32 @@ void Camera::SetAnimation(const CameraAnimData& animData) {
 	m_AnimData = animData;
 }
 
-void Camera::SetDrawArea(int x, int y, int w, int h) {
+void Camera::SetDefinedDrawArea(int x, int y, int w, int h) {
 
-	screenPosX = x;
-	screenPosY = y;
-	screenSizeX = w;
-	screenSizeY = h;
-
-	ApplyDrawArea();
+	m_DefinedScreenPos.x = x;
+	m_DefinedScreenPos.y = y;
+	m_DefinedScreenSize.x = w;
+	m_DefinedScreenSize.y = h;
 }
 
-void Camera::SetDrawAreaDefault() {
+void Camera::SetDafeultDrawArea(int x, int y, int w, int h)
+{
+	m_DefaultScreenPos.x = x;
+	m_DefaultScreenPos.y = y;
+	m_DefaultScreenSize.x = w;
+	m_DefaultScreenSize.y = h;
+}
 
-	WindowSetting& wSetting = WindowSetting::Inst();
-	const int width = wSetting.width;
-	const int height = wSetting.height;
+void Camera::ApplyDefaultDrawArea() {
 
-	screenPosX = 0;
-	screenPosY = 0;
-	screenSizeX = width;
-	screenSizeY = height;
+	m_UsingScreenPos = m_DefaultScreenPos;
+	m_UsingScreenSize = m_DefaultScreenSize;
+}
 
-	//SetDrawArea(0, 0, width, height);
+void Camera::ApplyDefinedDrawArea() {
+
+	m_UsingScreenPos = m_DefinedScreenPos;
+	m_UsingScreenSize = m_DefinedScreenSize;
 }
 
 const Vector3 Camera::WorldPos() const {
@@ -426,10 +448,16 @@ User* Camera::GetUser()
 	return &m_User;
 }
 
-void Camera::GetDrawArea(int* x, int* y, int* w, int* h) const
+void Camera::GetUsingDrawArea(int* x, int* y, int* w, int* h) const
 {
-	if (x != nullptr)	*x = screenPosX;
-	if (y != nullptr)	*y = screenPosY;
-	if (w != nullptr)	*w = screenSizeX;
-	if (h != nullptr)	*h = screenSizeY;
+	if (x != nullptr)	*x = m_UsingScreenPos.x;
+	if (y != nullptr)	*y = m_UsingScreenPos.y;
+	if (w != nullptr)	*w = m_UsingScreenSize.x;
+	if (h != nullptr)	*h = m_UsingScreenSize.y;
+}
+
+void Camera::GetUsingDrawArea(Vector2* pos, Vector2* size) const
+{
+	if (pos != nullptr)	*pos = m_UsingScreenPos;
+	if (size != nullptr)*size = m_UsingScreenSize;
 }

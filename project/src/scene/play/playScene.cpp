@@ -22,6 +22,7 @@
 
 //=== ボール ===
 #include "src/scene/play/ball/BallSpawner.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 //=== ステージ ===
 #include "src/common/stage/StageObjectManager.h"
@@ -54,7 +55,8 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 		if (camera == nullptr)
 			continue;
 
-		camera->SetDrawArea((w / CAMERA_NUM) * i, 0, w / CAMERA_NUM, h);
+		camera->SetDefinedDrawArea((w / CAMERA_NUM) * i, 0, w / CAMERA_NUM, h);
+		camera->ApplyDefinedDrawArea();
 		camera->ChangeState(&Camera::ChaseState);
 	}
 
@@ -86,10 +88,12 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	if (not net.IsNetworkEnable)
 		Instantiate<UI_Setter_PlayScene>();
 
+	BallTargetManager* ballTargetManager = Instantiate<BallTargetManager>();
+
 	Instantiate<MatchManager>();
 
 	EnemyManager* enemyManager = Instantiate<EnemyManager>();
-	enemyManager->Create();
+	//enemyManager->Create();
 
 	TargetManager* targetManager = Instantiate<TargetManager>();
 	SetDrawOrder(targetManager, 1000);

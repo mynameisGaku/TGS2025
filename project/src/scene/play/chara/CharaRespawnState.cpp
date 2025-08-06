@@ -1,5 +1,6 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/scene/play/ui/UI_Fade.h"
+#include "src/scene/play/ball/BallTarget.h"
 
 void Chara::RespawnStateNone(FSMSignal sig)
 {
@@ -33,6 +34,8 @@ void Chara::RespawnStateFadeOut(FSMSignal sig)
 		transform->scale = Vector3(0.5f);
 		if (m_pUI_Fade)
 			m_pUI_Fade->StartFadeOut();
+
+		m_pBallTarget->SetCanRockOn(false);
 	}
 	break;
 	case FSMSignal::SIG_Update: // XV
@@ -59,6 +62,8 @@ void Chara::RespawnStateFadeOut(FSMSignal sig)
 		{
 			respawnByPoint();
 		}
+
+		m_pBallTarget->SetCanRockOn(true);
 	}
 	break;
 	}

@@ -14,15 +14,24 @@
 #include <src/reference/network/NetworkRef.h>
 #include <src/common/network/NetworkManager.h>
 
+#include <src/scene/title/ui/TitleUIController.h>
+#include <src/util/ptr/PtrUtil.h>
+
 TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 
 	Fader::FadeIn(1.0f, EasingType::Linear);
 
 	SettingManager* settingManager = Instantiate<SettingManager>();
+
+	m_UIController = Instantiate<TitleUIController>();
+
+	m_UIController->LoadCanvasesFromJson("data/json/ui/title/");
+	m_UIController->Activate();
 }
 
 TitleScene::~TitleScene() {
 
+	PtrUtil::SafeDelete(m_UIController);
 }
 
 void TitleScene::Update() {

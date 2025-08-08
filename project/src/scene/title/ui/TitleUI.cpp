@@ -4,119 +4,47 @@
 #include "TitleUIGridCursor.h"
 #include <src/util/input/InputManager.h>
 #include <src/util/input/MouseController.h>
-
+#include <src/util/file/resource_loader/resourceLoader.h>
+#include <src/util/time/GameTime.h>
+#include <src/reference/game/GameRef.h>
 void TitleUI::Update()
 {
 	if (not m_IsVisible)
 		return;
 
-	m_IsHover = false;  // 状態リセット
-
-	const Vector2 _pos(m_GraphPosX, m_GraphPosY);
-	const Vector2 _size(m_GraphDestX, m_GraphDestY);
-
-	switch (m_Collision)
+	if (m_IsSelectable)
 	{
-	case TUI_COLLISION_MODE_NONE:
-		break;
+		checkCursorCollision();
 
-	case TUI_COLLISION_MODE_RECT:
-	{
-		auto device = InputManager::GetLastInputDevice();
-		switch (device)
+		if (m_IsHover)
 		{
-		case KeyDefine::DeviceType::Mouse:
-		{
-			if (MouseController::ColCheck_CursorToBox(_pos, _size))
+			if (InputManager::Push(KeyDefine::KeyCode::MouseButton1) ||
+				InputManager::Push(KeyDefine::KeyCode::Z) ||
+				InputManager::Push(KeyDefine::KeyCode::ButtonA))
 			{
-				m_IsHover = true;
-				auto gridCursor = m_pHolder->Controller()->GetGridCursor();
-				gridCursor->MoveTo(m_IndexX, m_IndexY);
-
-				if (InputManager::Release(KeyDefine::KeyCode::MouseLeft))
-				{
-					m_IsHolding = true;
-					OnPressRelease();
-					for (const auto& event : m_PressReleaseEvents)
-					{
-						m_pHolder->Controller()->TriggerEvent(event);
-					}
-				}
+				OnPressEnter();
 			}
-			break;
-		}
-		case KeyDefine::DeviceType::Key:
-		case KeyDefine::DeviceType::Pad:
-		{
-			auto gridCursor = m_pHolder->Controller()->GetGridCursor();
-			int indexX = gridCursor->IndexX();
-			int indexY = gridCursor->IndexY();
-
-			if (m_IndexX == indexX && m_IndexY == indexY)
+			if (InputManager::Hold(KeyDefine::KeyCode::MouseButton1) ||
+				InputManager::Hold(KeyDefine::KeyCode::Z) ||
+				InputManager::Hold(KeyDefine::KeyCode::ButtonA))
 			{
-				m_IsHover = true;
-
-				if (InputManager::Push(KeyDefine::KeyCode::Enter) ||
-					InputManager::Push(KeyDefine::KeyCode::Z))
-				{
-					m_IsHolding = true;
-					OnPressEnter();
-					for (const auto& event : m_PressEnterEvents)
-					{
-						m_pHolder->Controller()->TriggerEvent(event);
-					}
-				}
-				else if (InputManager::Push(KeyDefine::KeyCode::Space))
-				{
-					m_IsHolding = true;
-					OnPressHold();
-					for (const auto& event : m_PressHoldEvents)
-					{
-						m_pHolder->Controller()->TriggerEvent(event);
-					}
-				}
-				else if (InputManager::Release(KeyDefine::KeyCode::X))
-				{
-					OnPressRelease();
-					for (const auto& event : m_PressReleaseEvents)
-					{
-						m_pHolder->Controller()->TriggerEvent(event);
-					}
-				}
+				OnPressHold();
 			}
-			else
+			if (InputManager::Release(KeyDefine::KeyCode::MouseButton1) ||
+				InputManager::Release(KeyDefine::KeyCode::Z) ||
+				InputManager::Release(KeyDefine::KeyCode::ButtonA))
 			{
-				m_IsHover = false;
-			}
-			break;
-		}
-		}
-		break;
-	}
-
-	case TUI_COLLISION_MODE_CIRCLE:
-	{
-		Vector2 center(m_GraphPosX, m_GraphPosY);
-		float radius = (float)(std::min(m_GraphDestX, m_GraphDestY) / 2);
-		if (MouseController::ColCheck_CursorToCircle(center, radius))
-		{
-			m_IsHover = true;
-			auto gridCursor = m_pHolder->Controller()->GetGridCursor();
-			gridCursor->MoveTo(m_IndexX, m_IndexY);
-
-			if (InputManager::Release(KeyDefine::KeyCode::MouseLeft))
-			{
-				m_IsHolding = true;
 				OnPressRelease();
-				for (const auto& event : m_PressReleaseEvents)
-				{
-					m_pHolder->Controller()->TriggerEvent(event);
-				}
 			}
 		}
-		break;
 	}
+
+	if (m_IsHover)
+	{
+		OnHover();
 	}
+
+	OnFrame();
 }
 
 void TitleUI::Draw()
@@ -133,16 +61,18 @@ void TitleUI::Draw()
 		SetDrawBright(100, 100, 100); // 押下中色
 	}
 
+	Vector2 point = m_pHolder->GetPoint(m_Anchor);
+
 	DrawRectRotaGraph(
-		m_GraphPosX,
-		m_GraphPosY,
+		(int)point.x + m_OffsetX_FromAnchor,
+		(int)point.y + m_OffsetY_FromAnchor,
 		m_GraphSrcX,
 		m_GraphSrcY,
 		m_GraphDestX,
 		m_GraphDestY,
 		1.0,
 		0.0,
-		m_GraphHandle,
+		m_GraphHandle == -1 ? DX_NONE_GRAPH : m_GraphHandle,
 		true
 	);
 
@@ -160,20 +90,141 @@ void TitleUI::Release()
 	m_PressReleaseEvents.clear();
 }
 
-void TitleUI::OnPressHold()
+void TitleUI::Init(const UI_TITLE_DESC& desc, TitleUICanvas* pCanvas)
 {
-	for( auto& event : m_PressHoldEvents)
+	m_GraphHandle			= ResourceLoader::LoadGraph(desc.GRAPH_PATH);	// 画像のハンドル
+	m_OffsetX_FromAnchor	= desc.OFFSET_X_FROM_ANCHOR;						// 描画開始位置 x
+	m_OffsetY_FromAnchor	= desc.OFFSET_Y_FROM_ANCHOR;						// 描画開始位置 y
+	m_GraphSrcX				= desc.GRAPH_SRC_X;									// 画像切り抜き開始位置 x
+	m_GraphSrcY				= desc.GRAPH_SRC_Y;									// 画像切り抜き開始位置 y
+	m_GraphDestX			= desc.GRAPH_DEST_X;								// 画像切り抜き終了位置 x
+	m_GraphDestY			= desc.GRAPH_DEST_Y;								// 画像切り抜き終了位置 y
+	m_IndexX				= desc.INDEX_X;										// Canvas上でのIndex x
+	m_IndexY				= desc.INDEX_Y;										// Canvas上でのIndex y
+	m_IsActive				= true;												// 有効か？
+	m_IsVisible				= true;												// 表示されているか？
+	m_IsHolding				= false;											// 押下されているか？
+	m_IsHover				= false;											// カーソルがこのUIの上にあるか？
+	m_IsSelectable			= desc.IS_SELECTABLE;								// このUIが選択可能か？
+	m_pHolder				= pCanvas;
+	for (const auto& event : desc.EVENTS)
 	{
 		TUI_EVENT e = event;
-		m_pHolder->Controller()->TriggerEvent(e.EVENT);
+		switch (e.Timing)
+		{
+		case TUI_EVENT_TRIGGER_TIMING_ENTER:
+			m_PressEnterEvents.push_back(e);
+			break;
+		case TUI_EVENT_TRIGGER_TIMING_HOLD:
+			m_PressHoldEvents.push_back(e);
+			break;
+		case TUI_EVENT_TRIGGER_TIMING_RELEASE:
+			m_PressReleaseEvents.push_back(e);
+			break;
+		case TUI_EVENT_TRIGGER_TIMING_HOVER:
+			m_HoverEvents.push_back(e);
+			break;
+		case TUI_EVENT_TRIGGER_TIMING_EVERY_FRAME:
+			m_EveryFrameEvents.push_back(e);
+			break;
+		}
 	}
 }
 
 void TitleUI::OnPressEnter()
 {
+	m_IsHolding = false;
+
+	for (auto& event : m_PressEnterEvents)
+	{
+		m_pHolder->Controller()->TriggerEvent(event, event.Argument);
+	}
+}
+
+void TitleUI::OnPressHold()
+{
+	m_IsHolding = true;
+
+	for( auto& event : m_PressHoldEvents)
+	{
+		m_pHolder->Controller()->TriggerEvent(event, event.Argument);
+	}
 }
 
 void TitleUI::OnPressRelease()
 {
 	m_IsHolding = false;
+
+	for (auto& event : m_PressReleaseEvents)
+	{
+		m_pHolder->Controller()->TriggerEvent(event, event.Argument);
+	}
+}
+
+void TitleUI::OnHover()
+{
+	for (auto& event : m_HoverEvents)
+	{
+		m_pHolder->Controller()->TriggerEvent(event, event.Argument);
+	}
+}
+
+void TitleUI::OnFrame()
+{
+	for (auto& event : m_EveryFrameEvents)
+	{
+		m_pHolder->Controller()->TriggerEvent(event, event.Argument);
+	}
+}
+
+void TitleUI::checkCursorCollision()
+{
+	m_IsHover = false;  // 状態リセット
+
+	auto device = InputManager::GetLastInputDevice();
+	switch (device)
+	{
+	case KeyDefine::DeviceType::Mouse:
+	{
+		switch (m_Collision)
+		{
+		case TUI_COLLISION_MODE_NONE:
+			break;
+		case TUI_COLLISION_MODE_RECT:
+		{
+			static const Vector2 _pos(m_OffsetX_FromAnchor, m_OffsetY_FromAnchor);
+			static const Vector2 _size(m_GraphDestX, m_GraphDestY);
+
+			if (MouseController::ColCheck_CursorToBox(_pos, _size))
+			{
+				m_IsHover = true;
+			}
+		}
+		break;
+		case TUI_COLLISION_MODE_CIRCLE:
+		{
+			Vector2 center(m_OffsetX_FromAnchor, m_OffsetY_FromAnchor);
+			float radius = (float)(min(m_GraphDestX, m_GraphDestY) / 2);
+			if (MouseController::ColCheck_CursorToCircle(center, radius))
+			{
+				m_IsHover = true;
+			}
+		}
+		break;
+		}
+
+		if (m_IsHover)
+			m_pHolder->Controller()->GetGridCursor()->MoveTo(m_IndexX, m_IndexY);
+	}
+	case KeyDefine::DeviceType::Key:
+	case KeyDefine::DeviceType::Pad:
+	{
+		// Pad or Keyの場合、Indexを照合するだけでいい
+		auto gridCursor = m_pHolder->Controller()->GetGridCursor();
+		if (gridCursor->IndexX() == m_IndexX && gridCursor->IndexY() == m_IndexY)
+		{
+			m_IsHover = true;
+		}
+	}
+	}
 }

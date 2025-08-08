@@ -448,6 +448,9 @@
     <Filter Include="src%28application%29\scene\title\ui">
       <UniqueIdentifier>{24a1a754-e293-4ee0-acdb-b1c505272e92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\Json\UI\Title">
+      <UniqueIdentifier>{64bff0a3-d731-49af-9d7e-74b58f739e93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -758,6 +761,9 @@
     </None>
     <None Include="data\Json\Stage\ExportedStage-000.json" />
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
+    <None Include="data\Json\UI\Title\MainCanvas.json">
+      <Filter>data\Json\UI\Title</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

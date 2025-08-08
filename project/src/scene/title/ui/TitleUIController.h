@@ -3,6 +3,9 @@
 #include <string>
 
 #include <framework/gameObject.h>
+#include <vendor/nlohmann/json.hpp>
+#include <functional>
+#include "TitleUI.h"
 
 class TitleUIGridCursor;
 class TitleUICanvas;
@@ -25,12 +28,19 @@ public:
 
 	TitleUIGridCursor* GetGridCursor() const { return m_pGridCursor; }
 
-	void TriggerEvent(const std::string& eventName);
+	void TriggerEvent(TUI_EVENT& event, const nlohmann::json& argument);
 
 private:
-	TitleUIGridCursor*										m_pGridCursor		{};
-	std::unordered_map<std::string, std::function<void()>>	m_EventHandlers		{};
-	std::unordered_map<std::string, TitleUICanvas*>			m_CanvasList		{};
-	TitleUICanvas*											m_pCurrentCanvas	{};
-	bool													m_IsActive			{};
+	void subscribeFunctions();
+
+	void activateCanvas(nlohmann::json argument);
+	void scaling(nlohmann::json argument);
+
+	TitleUIGridCursor*																m_pGridCursor		{};
+	std::unordered_map<std::string, std::function<void(const nlohmann::json&)>>		m_EventHandlers		{};
+	std::unordered_map<std::string, TitleUICanvas*>									m_CanvasList		{};
+	TitleUICanvas*																	m_pCurrentCanvas	{};
+	bool																			m_IsActive			{};
 };
+
+#define SUBSCRIBE_FUNCTION(key, func) m_EventHandlers[key] = [this](const nlohmann::json& argument){this->func(argument);};

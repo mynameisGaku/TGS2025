@@ -1,0 +1,412 @@
+﻿<Window x:Class="MainCanvasEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MainCanvasEditor"
+        mc:Ignorable="d"
+        Title="MainCanvas JSON Editor" Width="1280" Height="800"
+        Background="#1e1f22">
+
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <local:SelectedToBrushConverter x:Key="BooleanToBrush"/>
+        <local:SelectedThicknessConverter x:Key="SelectedThickness"/>
+        <local:JsonAnyToStringConverter x:Key="JsonAnyToString"/>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#f0f0f0"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="#f0f0f0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Foreground" Value="#f0f0f0"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="ファイル">
+                <MenuItem Header="開く..." Click="OnOpenJsonClick"/>
+                <MenuItem Header="保存" Click="OnSaveJsonClick"/>
+                <Separator/>
+                <MenuItem Header="終了" Click="OnExitClick"/>
+            </MenuItem>
+            <MenuItem Header="表示">
+                <MenuItem Header="原寸フィット" IsCheckable="True" IsChecked="{Binding Data.IsFitScreen, Mode=TwoWay}"/>
+                <MenuItem Header="ガイド表示" IsCheckable="True" IsChecked="{Binding ShowGuides, Mode=TwoWay}"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="420"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 左：Unity風ビューポート -->
+            <Border Grid.Column="0" Margin="8" Background="#1F1F1F" BorderBrush="#333" BorderThickness="1">
+                <Grid x:Name="Viewport"
+                      Focusable="True"
+                      MouseWheel="Viewport_MouseWheel"
+                      MouseDown="Viewport_MouseDown"
+                      MouseUp="Viewport_MouseUp"
+                      MouseMove="Viewport_MouseMove"
+                      MouseLeave="Viewport_MouseLeave"
+                      KeyDown="Viewport_KeyDown"
+                      KeyUp="Viewport_KeyUp">
+                    <Grid x:Name="World" RenderTransformOrigin="0,0">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="ZoomTransform" ScaleX="1" ScaleY="1"/>
+                                <TranslateTransform x:Name="PanTransform" X="0" Y="0"/>
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+
+                        <Rectangle Fill="#242629" Width="5000" Height="5000"/>
+
+                        <!-- キャンバス範囲の可視化（枠＋薄い背景） -->
+                        <Grid Canvas.ZIndex="0">
+                            <Border Width="{Binding CanvasWidth}"
+                                    Height="{Binding CanvasHeight}"
+                                    Background="#12000000"
+                                    BorderBrush="#A0FFFFFF"
+                                    BorderThickness="1"
+                                    SnapsToDevicePixels="True"/>
+                            <Ellipse Width="6" Height="6" Fill="#FF66CCFF" StrokeThickness="0"/>
+                            <TextBlock Margin="8,8,0,0" FontSize="12" Opacity="0.8">
+                                <Run Text="{Binding CanvasWidth}"/><Run Text=" x "/><Run Text="{Binding CanvasHeight}"/>
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- 実UI配置キャンバス -->
+                        <Canvas x:Name="DesignCanvas"
+                                Width="{Binding CanvasWidth}"
+                                Height="{Binding CanvasHeight}"
+                                Background="Transparent">
+                            <ItemsControl ItemsSource="{Binding UIItems}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="Canvas.Left" Value="{Binding PosX}"/>
+                                        <Setter Property="Canvas.Top" Value="{Binding PosY}"/>
+                                        <Setter Property="Panel.ZIndex" Value="{Binding ZIndex}"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{Binding IsSelected, Converter={StaticResource BooleanToBrush}}"
+                                                BorderThickness="{Binding IsSelected, Converter={StaticResource SelectedThickness}}"
+                                                Background="Transparent"
+                                                MouseLeftButtonDown="UIElement_MouseLeftButtonDown"
+                                                MouseLeftButtonUp="UIElement_MouseLeftButtonUp"
+                                                MouseMove="UIElement_MouseMove"
+                                                Tag="{Binding}">
+                                            <Grid RenderTransformOrigin="{Binding PivotPoint}">
+                                                <Grid.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform ScaleX="{Binding Scale}" ScaleY="{Binding Scale}"/>
+                                                        <RotateTransform Angle="{Binding Rotation}"/>
+                                                    </TransformGroup>
+                                                </Grid.RenderTransform>
+
+                                                <Image x:Name="img"
+                                                       Source="{Binding ImageSource}"
+                                                       Width="{Binding DisplayWidth}"
+                                                       Height="{Binding DisplayHeight}"
+                                                       Opacity="{Binding Opacity}"
+                                                       Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibility}}"
+                                                       Stretch="Fill"/>
+                                                <Grid x:Name="placeholder" Visibility="Collapsed"
+                                                      Width="{Binding DisplayWidth}"
+                                                      Height="{Binding DisplayHeight}">
+                                                    <Rectangle Stroke="#88FFFFFF" StrokeDashArray="3 3" StrokeThickness="1" Fill="#22000000" RadiusX="2" RadiusY="2"/>
+                                                    <TextBlock Text="NO IMAGE" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7"/>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=img, Path=Source}" Value="{x:Null}">
+                                                <Setter TargetName="placeholder" Property="Visibility" Value="Visible"/>
+                                                <Setter TargetName="img" Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Canvas>
+                    </Grid>
+
+                    <!-- 右下HUD -->
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8"
+                            Background="#66000000" Padding="6" CornerRadius="4">
+                        <TextBlock FontSize="12">
+                            <Run Text="Zoom: "/>
+                            <Run Text="{Binding ElementName=ZoomTransform, Path=ScaleX, StringFormat={}{0:P0}}"/>
+                            <Run Text="  Pan: "/>
+                            <Run Text="{Binding ElementName=PanTransform, Path=X, StringFormat={}{0}}"/>
+                            <Run Text=", "/>
+                            <Run Text="{Binding ElementName=PanTransform, Path=Y, StringFormat={}{0}}"/>
+                        </TextBlock>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- 右：インスペクター -->
+            <Border Grid.Column="1" Margin="8" Padding="10" Background="#2a2c30" BorderBrush="#333" BorderThickness="1">
+                <ScrollViewer>
+                    <StackPanel>
+                        <TextBlock Text="Inspector" FontSize="18" Margin="0,0,0,8"/>
+                        <Separator/>
+
+                        <TextBlock Text="Canvas" FontWeight="Bold" Margin="0,6,0,2"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Content="Name"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Data.CanvasName, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Width"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CanvasWidth, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Content="Height"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CanvasHeight, Mode=TwoWay}"/>
+                        </Grid>
+
+                        <Separator/>
+                        <TextBlock Text="Selected UI" FontWeight="Bold" Margin="0,6,0,2"/>
+
+                        <Grid x:Name="InspectorSelectedGrid" DataContext="{Binding Selected}" Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!--0-->
+                                <RowDefinition Height="Auto"/>
+                                <!--1-->
+                                <RowDefinition Height="Auto"/>
+                                <!--2-->
+                                <RowDefinition Height="Auto"/>
+                                <!--3-->
+                                <RowDefinition Height="Auto"/>
+                                <!--4-->
+                                <RowDefinition Height="Auto"/>
+                                <!--5-->
+                                <RowDefinition Height="Auto"/>
+                                <!--6-->
+                                <RowDefinition Height="Auto"/>
+                                <!--7-->
+                                <RowDefinition Height="Auto"/>
+                                <!--8-->
+                                <RowDefinition Height="Auto"/>
+                                <!--9-->
+                                <RowDefinition Height="Auto"/>
+                                <!--10-->
+                                <RowDefinition Height="Auto"/>
+                                <!--11-->
+                                <RowDefinition Height="Auto"/>
+                                <!--12-->
+                                <RowDefinition Height="Auto"/>
+                                <!--13-->
+                                <RowDefinition Height="Auto"/>
+                                <!--14-->
+                                <RowDefinition Height="Auto"/>
+                                <!--15-->
+                                <RowDefinition Height="Auto"/>
+                                <!--16-->
+                                <RowDefinition Height="Auto"/>
+                                <!--17: label-->
+                                <RowDefinition Height="Auto"/>
+                                <!--18: path+btn-->
+                                <RowDefinition Height="Auto"/>
+                                <!--19: clear-->
+                                <RowDefinition Height="Auto"/>
+                                <!--20: events label-->
+                                <RowDefinition Height="Auto"/>
+                                <!--21: events header-->
+                                <RowDefinition Height="Auto"/>
+                                <!--22: events list-->
+                                <RowDefinition Height="Auto"/>
+                                <!--23: add btn-->
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Content="NAME"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NAME, Mode=TwoWay}" />
+
+                            <Label Grid.Row="1" Content="GRAPH_PATH"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GRAPH_PATH, Mode=TwoWay}" ToolTip="例: Images/Sample.png"/>
+
+                            <Label Grid.Row="2" Content="ANCHORPOINT"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1"
+                                      ItemsSource="{Binding AnchorOptions}"
+                                      SelectedItem="{Binding ANCHORPOINT, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="3" Content="OFFSET X"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding OFFSET_X_FROM_ANCHOR, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="4" Content="OFFSET Y"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding OFFSET_Y_FROM_ANCHOR, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="5" Content="SRC (X,Y)"/>
+                            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+                                <TextBox Width="80" Text="{Binding GRAPH_SRC_X, Mode=TwoWay}"/>
+                                <TextBox Width="80" Text="{Binding GRAPH_SRC_Y, Mode=TwoWay}" Margin="6,0,0,0"/>
+                            </StackPanel>
+
+                            <Label Grid.Row="6" Content="DEST (W,H)"/>
+                            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+                                <TextBox Width="80" Text="{Binding GRAPH_DEST_X, Mode=TwoWay}"/>
+                                <TextBox Width="80" Text="{Binding GRAPH_DEST_Y, Mode=TwoWay}" Margin="6,0,0,0"/>
+                            </StackPanel>
+
+                            <Label Grid.Row="7" Content="INDEX (X,Y)"/>
+                            <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
+                                <TextBox Width="80" Text="{Binding INDEX_X, Mode=TwoWay}"/>
+                                <TextBox Width="80" Text="{Binding INDEX_Y, Mode=TwoWay}" Margin="6,0,0,0"/>
+                            </StackPanel>
+
+                            <Label Grid.Row="8" Content="DESCRIPTION"/>
+                            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding DESCRIPTION, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="9" Content="Selectable"/>
+                            <CheckBox Grid.Row="9" Grid.Column="1" IsChecked="{Binding IS_SELECTABLE, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="10" Content="Visible"/>
+                            <CheckBox Grid.Row="10" Grid.Column="1" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="11" Content="Rotation"/>
+                            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Rotation, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="12" Content="Scale"/>
+                            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Scale, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="13" Content="Opacity"/>
+                            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Opacity, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="14" Content="ZIndex"/>
+                            <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding ZIndex, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="15" Content="LockAspect"/>
+                            <CheckBox Grid.Row="15" Grid.Column="1" IsChecked="{Binding LockAspectRatio, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="16" Content="Pivot (X,Y)"/>
+                            <StackPanel Grid.Row="16" Grid.Column="1" Orientation="Horizontal">
+                                <TextBox Width="80" Text="{Binding PivotX, Mode=TwoWay}"/>
+                                <TextBox Width="80" Text="{Binding PivotY, Mode=TwoWay}" Margin="6,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- 表示用画像（エディタ専用・JSON出力しない） -->
+                            <Label Grid.Row="17" Content="Display Image (editor)" ToolTip="JSONには保存されません"/>
+                            <Grid Grid.Row="18" Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" Text="{Binding DisplayImagePath, Mode=TwoWay}" ToolTip="例: Images/preview_only.png / 絶対パスも可"/>
+                                <Button Grid.Column="1" Content="参照…" Margin="6,0,0,0" Click="OnBrowseDisplayImageClick"/>
+                            </Grid>
+                            <Button Grid.Row="19" Grid.Column="1" Content="表示画像クリア" HorizontalAlignment="Left" Click="OnClearDisplayImageClick" />
+
+                            <!-- ★イベント編集 -->
+                            <TextBlock Grid.Row="20" Text="Events" FontWeight="Bold" Margin="0,10,0,4"/>
+                            <!-- ヘッダー -->
+                            <Grid Grid.Row="21">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Timing"/>
+                                <TextBlock Grid.Column="1" Text="Event (Preset可)"/>
+                                <TextBlock Grid.Column="2" Text="Description"/>
+                                <TextBlock Grid.Column="3" Text="操作"/>
+                            </Grid>
+
+                            <!-- リスト -->
+                            <ItemsControl Grid.Row="22" ItemsSource="{Binding Events}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <!-- 1行目 -->
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="160"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Timing -->
+                                                <ComboBox Grid.Column="0"
+                                                          ItemsSource="{Binding ElementName=InspectorSelectedGrid, Path=DataContext.TimingOptions}"
+                                                          SelectedItem="{Binding Timing, Mode=TwoWay}"
+                                                          MinWidth="140"/>
+
+                                                <!-- Event: プリセット選択＋自由入力（IsEditable） -->
+                                                <ComboBox Grid.Column="1"
+                                                          IsEditable="True"
+                                                          ItemsSource="{Binding DataContext.CatalogPresets, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                          DisplayMemberPath="DisplayName"
+                                                          SelectedValuePath="Key"
+                                                          SelectedValue="{Binding Event, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          StaysOpenOnEdit="True"
+                                                          IsTextSearchEnabled="True"
+                                                          SelectionChanged="OnEventPresetChanged"/>
+
+                                                <!-- Description -->
+                                                <TextBox Grid.Column="2" Text="{Binding Description, Mode=TwoWay}" />
+
+                                                <!-- 削除 -->
+                                                <Button Grid.Column="3" Content="削除" Margin="6,0,0,0"
+                                                        Click="OnRemoveEventClick"/>
+                                            </Grid>
+
+                                            <!-- 2行目：Argument(JSON) -->
+                                            <Grid Margin="0,4,0,8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="160"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="Argument(JSON)"/>
+                                                <TextBox Grid.Column="1"
+                                                         AcceptsReturn="True"
+                                                         Text="{Binding Argument, Converter={StaticResource JsonAnyToString}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                         Height="60" VerticalScrollBarVisibility="Auto"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Grid.Row="23" Grid.Column="1" Content="イベント追加"
+                                    HorizontalAlignment="Left" Click="OnAddEventClick"/>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

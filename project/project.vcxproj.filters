@@ -451,6 +451,9 @@
     <Filter Include="data\Json\UI\Title">
       <UniqueIdentifier>{64bff0a3-d731-49af-9d7e-74b58f739e93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\sol2">
+      <UniqueIdentifier>{a4dac0a8-6403-4586-a35b-7e152785adf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -2345,6 +2348,357 @@
     </ClInclude>
     <ClInclude Include="src\scene\title\ui\TitleUIGridCursor.h">
       <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\abort.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\assert.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\as_args.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\as_returns.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\base_traits.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\bind_traits.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\bytecode.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\call.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\compatibility\compat-5.3.c.h">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\compatibility\compat-5.3.h">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\compatibility\compat-5.4.h">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\compatibility\lua_version.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\compatibility.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\config.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\coroutine.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\debug.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\demangle.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\deprecate.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\detail\build_version.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\dump_handler.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\ebco.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\environment.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\epilogue.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\error.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\error_handler.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\forward.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\forward_as.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\forward_detail.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_result.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_types.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_types_core.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_types_overloaded.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_types_stateful.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_types_stateless.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\function_types_templated.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\inheritance.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\in_place.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\load_result.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\lua_table.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\lua_value.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\make_reference.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\metatable.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\object.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\object_base.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\optional.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\optional_implementation.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\overload.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\packaged_coroutine.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\pairs_iterator.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\pointer_like.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\policies.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\prologue.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\property.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\protect.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\protected_function.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\protected_function_result.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\protected_handler.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\proxy_base.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\raii.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\reference.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\resolve.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\sol.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack\detail\pairs.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_check.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_check_get.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_check_get_qualified.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_check_get_unqualified.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_check_qualified.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_check_unqualified.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_core.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_field.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_get.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_get_qualified.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_get_unqualified.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_guard.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_iterator.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_pop.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_probe.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_proxy.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_proxy_base.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_push.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\stack_reference.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\state.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\state_handling.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\state_view.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\string_view.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\table.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\table_core.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\table_iterator.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\table_proxy.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\thread.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\tie.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\traits.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\trampoline.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\tuple.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\types.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\unicode.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\unique_usertype_traits.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\unreachable.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\unsafe_function.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\unsafe_function_result.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\userdata.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype_container.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype_container_launch.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype_core.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype_proxy.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype_storage.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\usertype_traits.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\utility\is_integer.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\utility\to_string.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\variadic_args.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\variadic_results.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\version.hpp">
+      <Filter>vendor\sol2</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\sol\wrapper.hpp">
+      <Filter>vendor\sol2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

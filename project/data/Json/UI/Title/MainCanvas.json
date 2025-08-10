@@ -9,35 +9,43 @@
     "Y": 1080
   },
   "IsFitScreen": true,
-  "IsDefaultActivate":  true,
-
+  "IsDefaultActivate": true,
   "UIList": [
     {
       "NAME": "TitleLogo",
       "GRAPH_PATH": "data/Img/UI/Title/Logo.png",
-      "OFFSET_X_FROM_ANCHOR": 0,
-      "OFFSET_Y_FROM_ANCHOR": -200,
+      "OFFSET_X_FROM_ANCHOR": 116,
+      "OFFSET_Y_FROM_ANCHOR": 168,
       "GRAPH_SRC_X": 0,
-      "GRAPH_SRC_Y": 0,
+      "GRAPH_SRC_Y": 344,
       "GRAPH_DEST_X": 1024,
-      "GRAPH_DEST_Y": 1024,
+      "GRAPH_DEST_Y": 664,
       "INDEX_X": 0,
       "INDEX_Y": 0,
       "DESCRIPTION": "TitleLogo",
       "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_TOP",
       "COLLISION": "TUI_COLLISION_MODE_NONE",
       "IS_LOOP_EVENT": false,
-      "IS_SELECTABLE": false
+      "IS_SELECTABLE": false,
+      "EVENTS": [],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
     },
     {
       "NAME": "StartButton1",
       "GRAPH_PATH": "data/Img/UI/Title/A.png",
-      "OFFSET_X_FROM_ANCHOR": 0,
-      "OFFSET_Y_FROM_ANCHOR": 50,
+      "OFFSET_X_FROM_ANCHOR": 29,
+      "OFFSET_Y_FROM_ANCHOR": 20,
       "GRAPH_SRC_X": 0,
       "GRAPH_SRC_Y": 0,
-      "GRAPH_DEST_X": 1024,
-      "GRAPH_DEST_Y": 1024,
+      "GRAPH_DEST_X": 64,
+      "GRAPH_DEST_Y": 64,
       "INDEX_X": 0,
       "INDEX_Y": 0,
       "DESCRIPTION": "TitleLogo",
@@ -49,22 +57,30 @@
         {
           "Event": "GameStart",
           "Description": "Start Game",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
             "SceneName": "PlayScene"
-          },
-          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE"
+          }
         }
-      ]
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
     },
     {
       "NAME": "StartButton2",
       "GRAPH_PATH": "data/Img/UI/Title/A.png",
-      "OFFSET_X_FROM_ANCHOR": 0,
-      "OFFSET_Y_FROM_ANCHOR": 150,
+      "OFFSET_X_FROM_ANCHOR": 27,
+      "OFFSET_Y_FROM_ANCHOR": 104,
       "GRAPH_SRC_X": 0,
       "GRAPH_SRC_Y": 0,
-      "GRAPH_DEST_X": 1024,
-      "GRAPH_DEST_Y": 1024,
+      "GRAPH_DEST_X": 64,
+      "GRAPH_DEST_Y": 64,
       "INDEX_X": 0,
       "INDEX_Y": 1,
       "DESCRIPTION": "TitleLogo",
@@ -76,24 +92,32 @@
         {
           "Event": "GameStart",
           "Description": "Start Game",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
             "SceneName": "PlayScene"
-          },
-          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE"
+          }
         }
-      ]
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
     },
     {
       "NAME": "StartButton3",
       "GRAPH_PATH": "data/Img/UI/Title/A.png",
-      "OFFSET_X_FROM_ANCHOR": 50,
-      "OFFSET_Y_FROM_ANCHOR": 50,
+      "OFFSET_X_FROM_ANCHOR": 27,
+      "OFFSET_Y_FROM_ANCHOR": 188,
       "GRAPH_SRC_X": 0,
       "GRAPH_SRC_Y": 0,
-      "GRAPH_DEST_X": 1024,
-      "GRAPH_DEST_Y": 1024,
-      "INDEX_X": 1,
-      "INDEX_Y": 0,
+      "GRAPH_DEST_X": 64,
+      "GRAPH_DEST_Y": 64,
+      "INDEX_X": 0,
+      "INDEX_Y": 2,
       "DESCRIPTION": "TitleLogo",
       "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
       "COLLISION": "TUI_COLLISION_MODE_NONE",
@@ -103,24 +127,32 @@
         {
           "Event": "GameStart",
           "Description": "Start Game",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
             "SceneName": "PlayScene"
-          },
-          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE"
+          }
         }
-      ]
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
     },
     {
       "NAME": "StartButton4",
       "GRAPH_PATH": "data/Img/UI/Title/A.png",
-      "OFFSET_X_FROM_ANCHOR": 50,
-      "OFFSET_Y_FROM_ANCHOR": 150,
+      "OFFSET_X_FROM_ANCHOR": 30,
+      "OFFSET_Y_FROM_ANCHOR": 276,
       "GRAPH_SRC_X": 0,
       "GRAPH_SRC_Y": 0,
-      "GRAPH_DEST_X": 1024,
-      "GRAPH_DEST_Y": 1024,
-      "INDEX_X": 1,
-      "INDEX_Y": 1,
+      "GRAPH_DEST_X": 64,
+      "GRAPH_DEST_Y": 64,
+      "INDEX_X": 0,
+      "INDEX_Y": 3,
       "DESCRIPTION": "TitleLogo",
       "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
       "COLLISION": "TUI_COLLISION_MODE_NONE",
@@ -130,12 +162,20 @@
         {
           "Event": "GameStart",
           "Description": "Start Game",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
             "SceneName": "PlayScene"
-          },
-          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE"
+          }
         }
-      ]
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
     }
   ]
 }

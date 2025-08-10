@@ -30,8 +30,6 @@ TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 }
 
 TitleScene::~TitleScene() {
-
-	PtrUtil::SafeDelete(m_UIController);
 }
 
 void TitleScene::Update() {

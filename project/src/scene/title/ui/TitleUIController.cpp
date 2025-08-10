@@ -148,6 +148,8 @@ void TitleUIController::Update()
 	{
 		m_pCurrentCanvas->Update();
 	}
+
+	m_pGridCursor->Update();
 }
 
 void TitleUIController::Draw()
@@ -166,9 +168,10 @@ void TitleUIController::TriggerEvent(TUI_EVENT& event, const nlohmann::json& arg
 {
 	if (m_EventHandlers.find(event.Event) != m_EventHandlers.end())
 	{
-		nlohmann::json argumentCopy = argument;
+		nlohmann::json argumentCopy;
 		argumentCopy["Duration"] = event.Duration;
 		argumentCopy["Counter"] = event.Counter;
+		argumentCopy["Event"] = argument;
 
 		// イベントハンドラーを呼び出す
 		(m_EventHandlers[event.Event])(argumentCopy);
@@ -188,11 +191,13 @@ void TitleUIController::subscribeFunctions()
 {
 	SUBSCRIBE_FUNCTION("ActivateCanvas", activateCanvas);
 	SUBSCRIBE_FUNCTION("Scaling", scaling);
+	SUBSCRIBE_FUNCTION("GameStart", gameStart);
 }
 
 void TitleUIController::activateCanvas(nlohmann::json argument)
 {
-	std::string name = argument.at("CanvasName").get<std::string>();
+	nlohmann::json event = argument["Event"];
+	std::string name = event.at("CanvasName").get<std::string>();
 
 	if (m_CanvasList.find(name) != m_CanvasList.end())
 	{
@@ -209,8 +214,9 @@ void TitleUIController::activateCanvas(nlohmann::json argument)
 
 void TitleUIController::scaling(nlohmann::json argument)
 {
-	std::string canvasName = argument.at("CanvasName").get<std::string>();
-	std::string targetUIName = argument.at("TargetUIName").get<std::string>();
+	nlohmann::json event = argument["Event"];
+	std::string canvasName = event.at("CanvasName").get<std::string>();
+	std::string targetUIName = event.at("TargetUIName").get<std::string>();
 	if (m_CanvasList.find(canvasName) != m_CanvasList.end())
 	{
 
@@ -221,4 +227,17 @@ void TitleUIController::scaling(nlohmann::json argument)
 		Logger::FormatErrorLog("Canvas with name '{}' not found.", canvasName);
 		return;
 	}
+}
+
+void TitleUIController::gameStart(nlohmann::json argument)
+{
+	nlohmann::json event = argument["Event"];
+	std::string sceneName = event.at("SceneName").get<std::string>();
+	if (sceneName.empty())
+	{
+		Logger::FormatErrorLog("Scene name is empty. Cannot start game.");
+		return;
+	}
+
+	SceneManager::ChangeScene(sceneName);
 }

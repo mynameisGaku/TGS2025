@@ -35,6 +35,7 @@ private:
 
 	void activateCanvas(nlohmann::json argument);
 	void scaling(nlohmann::json argument);
+	void gameStart(nlohmann::json argument);
 
 	TitleUIGridCursor*																m_pGridCursor		{};
 	std::unordered_map<std::string, std::function<void(const nlohmann::json&)>>		m_EventHandlers		{};

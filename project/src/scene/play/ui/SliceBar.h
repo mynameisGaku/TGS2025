@@ -6,7 +6,7 @@ class SliceBar : public UI_Image
 {
 public:
 	SliceBar();
-	SliceBar(const RectTransform& trs, int index);
+	SliceBar(const RectTransform& trs);
 	~SliceBar();
 
 	void Update() override;

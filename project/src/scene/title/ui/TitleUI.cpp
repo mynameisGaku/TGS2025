@@ -7,6 +7,11 @@
 #include <src/util/file/resource_loader/resourceLoader.h>
 #include <src/util/time/GameTime.h>
 #include <src/reference/game/GameRef.h>
+#include <algorithm>
+#include <cmath>
+
+static constexpr double DEG2RAD = 3.14159265358979323846 / 180.0;
+
 void TitleUI::Update()
 {
 	if (not m_IsVisible)
@@ -49,34 +54,37 @@ void TitleUI::Update()
 
 void TitleUI::Draw()
 {
-	if (!m_IsVisible)
-		return;
+	if (!m_IsVisible) return;
 
-	if (m_IsHover)
-	{
-		SetDrawBright(255, 180, 180); // ホバー時色変更（例）
-	}
-	else if (m_IsHolding)
-	{
-		SetDrawBright(100, 100, 100); // 押下中色
-	}
+	const Vector2 anchor = m_pHolder->GetPoint(m_Anchor);
 
-	Vector2 point = m_pHolder->GetPoint(m_Anchor);
+	const float sx = m_pHolder->ScaleX();
+	const float sy = m_pHolder->ScaleY();
+	const float s = m_LockAspect ? min(sx, sy) : sx;
 
-	DrawRectRotaGraph(
-		(int)point.x + m_OffsetX_FromAnchor,
-		(int)point.y + m_OffsetY_FromAnchor,
-		m_GraphSrcX,
-		m_GraphSrcY,
-		m_GraphDestX,
-		m_GraphDestY,
-		1.0,
-		0.0,
-		m_GraphHandle == -1 ? DX_NONE_GRAPH : m_GraphHandle,
-		true
+	const float cx = (float)(m_GraphDestX * m_PivotX);
+	const float cy = (float)(m_GraphDestY * m_PivotY);
+
+	const float x = (float)(anchor.x + m_OffsetX_FromAnchor * sx);
+	const float y = (float)(anchor.y + m_OffsetY_FromAnchor * sy);
+
+	const int alpha = (int)std::round(std::clamp(m_Opacity, 0.0, 1.0) * 255.0);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+
+	const double rad = m_RotationDeg * DX_PI / 180.0;
+
+	DrawRectRotaGraph2F(
+		x, y,
+		m_GraphSrcX, m_GraphSrcY,
+		m_GraphDestX, m_GraphDestY,
+		cx, cy,
+		(float)(s * m_Scale), rad,
+		(m_GraphHandle == -1 ? DX_NONE_GRAPH : m_GraphHandle),
+		TRUE,
+		FALSE
 	);
 
-	SetDrawBright(255, 255, 255); // 明度リセット
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void TitleUI::Release()
@@ -92,21 +100,37 @@ void TitleUI::Release()
 
 void TitleUI::Init(const UI_TITLE_DESC& desc, TitleUICanvas* pCanvas)
 {
-	m_GraphHandle			= ResourceLoader::LoadGraph(desc.GRAPH_PATH);	// 画像のハンドル
-	m_OffsetX_FromAnchor	= desc.OFFSET_X_FROM_ANCHOR;						// 描画開始位置 x
-	m_OffsetY_FromAnchor	= desc.OFFSET_Y_FROM_ANCHOR;						// 描画開始位置 y
-	m_GraphSrcX				= desc.GRAPH_SRC_X;									// 画像切り抜き開始位置 x
-	m_GraphSrcY				= desc.GRAPH_SRC_Y;									// 画像切り抜き開始位置 y
-	m_GraphDestX			= desc.GRAPH_DEST_X;								// 画像切り抜き終了位置 x
-	m_GraphDestY			= desc.GRAPH_DEST_Y;								// 画像切り抜き終了位置 y
-	m_IndexX				= desc.INDEX_X;										// Canvas上でのIndex x
-	m_IndexY				= desc.INDEX_Y;										// Canvas上でのIndex y
-	m_IsActive				= true;												// 有効か？
-	m_IsVisible				= true;												// 表示されているか？
-	m_IsHolding				= false;											// 押下されているか？
-	m_IsHover				= false;											// カーソルがこのUIの上にあるか？
-	m_IsSelectable			= desc.IS_SELECTABLE;								// このUIが選択可能か？
-	m_pHolder				= pCanvas;
+	m_GraphHandle = ResourceLoader::LoadGraph(desc.GRAPH_PATH);
+	m_OffsetX_FromAnchor = desc.OFFSET_X_FROM_ANCHOR;
+	m_OffsetY_FromAnchor = desc.OFFSET_Y_FROM_ANCHOR;
+	m_GraphSrcX = desc.GRAPH_SRC_X;
+	m_GraphSrcY = desc.GRAPH_SRC_Y;
+	m_GraphDestX = desc.GRAPH_DEST_X;
+	m_GraphDestY = desc.GRAPH_DEST_Y;
+	m_IndexX = desc.INDEX_X;
+	m_IndexY = desc.INDEX_Y;
+
+	m_IsActive = true;
+	m_IsVisible = desc.IsVisible;
+	m_IsHolding = false;
+	m_IsHover = false;
+	m_IsSelectable = desc.IS_SELECTABLE;
+
+	m_RotationDeg = desc.RotationDeg;
+	m_Scale = max(0.0001, desc.Scale);
+	m_Opacity = std::clamp(desc.Opacity, 0.0, 1.0);
+	m_ZIndex = desc.ZIndex;
+	m_LockAspect = desc.LockAspectRatio;
+	m_PivotX = std::clamp(desc.PivotX, 0.0, 1.0);
+	m_PivotY = std::clamp(desc.PivotY, 0.0, 1.0);
+
+	m_Name = desc.NAME;
+	m_Description = desc.Description;
+	m_Collision = desc.COLLISION;
+	m_Anchor = desc.ANCHOR;
+	m_pHolder = pCanvas;
+
+	// イベント仕分け
 	for (const auto& event : desc.EVENTS)
 	{
 		TUI_EVENT e = event;
@@ -145,7 +169,7 @@ void TitleUI::OnPressHold()
 {
 	m_IsHolding = true;
 
-	for( auto& event : m_PressHoldEvents)
+	for (auto& event : m_PressHoldEvents)
 	{
 		m_pHolder->Controller()->TriggerEvent(event, event.Argument);
 	}
@@ -179,7 +203,20 @@ void TitleUI::OnFrame()
 
 void TitleUI::checkCursorCollision()
 {
-	m_IsHover = false;  // 状態リセット
+	m_IsHover = false;
+
+	// アンカー＋オフセット位置（Pivotが置かれる位置）
+	const Vector2 anchor = m_pHolder->GetPoint(m_Anchor);
+	const double drawX = static_cast<double>(anchor.x) + static_cast<double>(m_OffsetX_FromAnchor);
+	const double drawY = static_cast<double>(anchor.y) + static_cast<double>(m_OffsetY_FromAnchor);
+
+	// 実表示サイズ（回転は無視してAABBで判定）
+	const double w = static_cast<double>(m_GraphDestX) * m_Scale;
+	const double h = static_cast<double>(m_GraphDestY) * m_Scale;
+
+	// 左上（AABB）
+	const double left = drawX - (static_cast<double>(m_GraphDestX) * m_PivotX) * m_Scale;
+	const double top = drawY - (static_cast<double>(m_GraphDestY) * m_PivotY) * m_Scale;
 
 	auto device = InputManager::GetLastInputDevice();
 	switch (device)
@@ -190,21 +227,22 @@ void TitleUI::checkCursorCollision()
 		{
 		case TUI_COLLISION_MODE_NONE:
 			break;
+
 		case TUI_COLLISION_MODE_RECT:
 		{
-			static const Vector2 _pos(m_OffsetX_FromAnchor, m_OffsetY_FromAnchor);
-			static const Vector2 _size(m_GraphDestX, m_GraphDestY);
-
-			if (MouseController::ColCheck_CursorToBox(_pos, _size))
+			const Vector2 pos(static_cast<float>(left), static_cast<float>(top));
+			const Vector2 size(static_cast<float>(w), static_cast<float>(h));
+			if (MouseController::ColCheck_CursorToBox(pos, size))
 			{
 				m_IsHover = true;
 			}
 		}
 		break;
+
 		case TUI_COLLISION_MODE_CIRCLE:
 		{
-			Vector2 center(m_OffsetX_FromAnchor, m_OffsetY_FromAnchor);
-			float radius = (float)(min(m_GraphDestX, m_GraphDestY) / 2);
+			const Vector2 center(static_cast<float>(left + w * 0.5), static_cast<float>(top + h * 0.5));
+			const float radius = static_cast<float>(min(w, h) * 0.5);
 			if (MouseController::ColCheck_CursorToCircle(center, radius))
 			{
 				m_IsHover = true;
@@ -214,17 +252,24 @@ void TitleUI::checkCursorCollision()
 		}
 
 		if (m_IsHover)
+		{
 			m_pHolder->Controller()->GetGridCursor()->MoveTo(m_IndexX, m_IndexY);
+		}
 	}
+	break;
+
 	case KeyDefine::DeviceType::Key:
 	case KeyDefine::DeviceType::Pad:
 	{
-		// Pad or Keyの場合、Indexを照合するだけでいい
 		auto gridCursor = m_pHolder->Controller()->GetGridCursor();
 		if (gridCursor->IndexX() == m_IndexX && gridCursor->IndexY() == m_IndexY)
 		{
 			m_IsHover = true;
 		}
 	}
+	break;
+
+	default:
+		break;
 	}
 }

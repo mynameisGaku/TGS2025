@@ -54,7 +54,13 @@ public:
 	const Vector2 GetBegin() const;
 	const Vector2 GetEnd() const;
 
+	float ScaleX() const;
+	float ScaleY() const;
+	Vector2 CanvasOriginOnScreen() const;
+	Vector2 CanvasDesignSize() const;
+
 private:
+	void calcMapping(Vector2& origin, float& sx, float& sy) const;
 	Vector2 m_Begin;
 	Vector2 m_End;
 	TitleUIController*	m_pController	{};	// このキャンバスを管理するコントローラー

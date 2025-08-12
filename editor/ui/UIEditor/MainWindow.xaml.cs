@@ -1,296 +1,617 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MainCanvasEditor
 {
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private const double LongPressMs = 350.0;
+        // ====== バインド用 ======
+        public CanvasDocument Data
+        {
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+                OnPropertyChanged();
+                MaybeFit();
+            }
+        }
+        private CanvasDocument _data;
 
-        public CanvasDocument Data { get; set; }
-        public ObservableCollection<UIItemVM> UIItems { get; } = new();
+        public ObservableCollection<UIItemVM> UIItems
+        {
+            get
+            {
+                return _uiItems;
+            }
+            set
+            {
+                _uiItems = value;
+                OnPropertyChanged();
+            }
+        }
+        private ObservableCollection<UIItemVM> _uiItems = new();
 
-        // ★イベントカタログ（プリセット一覧）
-        public ObservableCollection<EventPreset> CatalogPresets { get; } = new();
-
-        private UIItemVM _selected;
         public UIItemVM Selected
         {
-            get => _selected;
-            set { if (_selected == value) return; if (_selected != null) _selected.IsSelected = false; _selected = value; if (_selected != null) _selected.IsSelected = true; OnPropertyChanged(); }
+            get
+            {
+                return _selected;
+            }
+            set
+            {
+                if (_selected == value)
+                {
+                    return;
+                }
+                if (_selected != null)
+                {
+                    _selected.IsSelected = false;
+                }
+                _selected = value;
+                if (_selected != null)
+                {
+                    _selected.IsSelected = true;
+                }
+                OnPropertyChanged();
+            }
+        }
+        private UIItemVM _selected;
+
+        private bool _showGuides;
+        public bool ShowGuides
+        {
+            get
+            {
+                return _showGuides;
+            }
+            set
+            {
+                _showGuides = value;
+                OnPropertyChanged();
+            }
         }
 
-        private bool _showGuides = true;
-        public bool ShowGuides { get => _showGuides; set { _showGuides = value; OnPropertyChanged(); } }
+        private bool _autoFitOnResize = true;
+        public bool AutoFitOnResize
+        {
+            get
+            {
+                return _autoFitOnResize;
+            }
+            set
+            {
+                _autoFitOnResize = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public double CanvasWidth { get => Data?.End?.X - Data?.Begin?.X ?? 1920; set { if (Data?.End != null) { Data.End.X = (int)Math.Round(value + (Data.Begin?.X ?? 0)); OnPropertyChanged(); } } }
-        public double CanvasHeight { get => Data?.End?.Y - Data?.Begin?.Y ?? 1080; set { if (Data?.End != null) { Data.End.Y = (int)Math.Round(value + (Data.Begin?.Y ?? 0)); OnPropertyChanged(); } } }
+        public int CanvasLeft
+        {
+            get
+            {
+                return Data?.Begin?.X ?? 0;
+            }
+            set
+            {
+                if (Data == null)
+                {
+                    return;
+                }
+                Data.Begin ??= new Point2D();
+                Data.Begin.X = value;
+                OnPropertyChanged();
+                RefreshAllItemPositions();
+                MaybeFit();
+            }
+        }
 
-        public string CurrentPath { get; private set; }
+        public int CanvasTop
+        {
+            get
+            {
+                return Data?.Begin?.Y ?? 0;
+            }
+            set
+            {
+                if (Data == null)
+                {
+                    return;
+                }
+                Data.Begin ??= new Point2D();
+                Data.Begin.Y = value;
+                OnPropertyChanged();
+                RefreshAllItemPositions();
+                MaybeFit();
+            }
+        }
 
+        public int CanvasWidth
+        {
+            get
+            {
+                if (Data == null || Data.Begin == null || Data.End == null)
+                {
+                    return 0;
+                }
+                return Data.End.X - Data.Begin.X;
+            }
+            set
+            {
+                if (Data == null)
+                {
+                    return;
+                }
+                Data.Begin ??= new Point2D();
+                Data.End ??= new Point2D();
+                Data.End.X = Data.Begin.X + value;
+                OnPropertyChanged();
+                RefreshAllItemPositions();
+                MaybeFit();
+            }
+        }
+
+        public int CanvasHeight
+        {
+            get
+            {
+                if (Data == null || Data.Begin == null || Data.End == null)
+                {
+                    return 0;
+                }
+                return Data.End.Y - Data.Begin.Y;
+            }
+            set
+            {
+                if (Data == null)
+                {
+                    return;
+                }
+                Data.Begin ??= new Point2D();
+                Data.End ??= new Point2D();
+                Data.End.Y = Data.Begin.Y + value;
+                OnPropertyChanged();
+                RefreshAllItemPositions();
+                MaybeFit();
+            }
+        }
+
+        // ====== 状態 ======
+        public string CurrentPath
+        {
+            get
+            {
+                return _currentPath;
+            }
+            set
+            {
+                _currentPath = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _currentPath = "";
+
+        private bool _isDragging = false;
+        private UIItemVM _pressedItem = null;
+        private Point _pressPosWorld;
+
+        private bool _isPanningMMB = false;
+        private Point _lastMouseScreen;
+
+        private bool _isAltRightDrag = false;
+
+        public double ZoomWheelFactor { get; set; } = 1.1;
+        public double ZoomDragSensitivity { get; set; } = 0.005;
+        public double RotateDragSensitivity { get; set; } = 0.3;
+        public int LongPressMs { get; set; } = 150;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // ====== ctor ======
         public MainWindow()
         {
-            DataContext = this;
             InitializeComponent();
-
-            // ★イベントカタログの読込（なければ既定を生成）
-            var catalogPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Events", "EventsCatalog.json");
-            EventCatalog.EnsureFile(catalogPath);
-            var catalog = EventCatalog.LoadFrom(catalogPath);
-            CatalogPresets.Clear();
-            foreach (var p in catalog.Presets.OrderBy(p => p.Category).ThenBy(p => p.DisplayName))
-                CatalogPresets.Add(p);
+            DataContext = this;
 
             Data = new CanvasDocument
             {
                 CanvasName = "MainCanvas",
                 Begin = new Point2D { X = 0, Y = 0 },
                 End = new Point2D { X = 1920, Y = 1080 },
-                IsFitScreen = true,
                 IsDefaultActivate = true
             };
 
-            // サンプル1件
-            Data.UIList.Add(new UIItem
-            {
-                NAME = "Sample",
-                GRAPH_PATH = "Images/Sample.png",
-                OFFSET_X_FROM_ANCHOR = 0,
-                OFFSET_Y_FROM_ANCHOR = 0,
-                GRAPH_SRC_X = 0,
-                GRAPH_SRC_Y = 0,
-                GRAPH_DEST_X = 256,
-                GRAPH_DEST_Y = 256,
-                INDEX_X = 0,
-                INDEX_Y = 0,
-                DESCRIPTION = "Sample",
-                ANCHORPOINT = "TUI_CANVAS_ANCHOR_POINT_CENTER",
-                COLLISION = "TUI_COLLISION_MODE_RECT",
-                IS_LOOP_EVENT = false,
-                IS_SELECTABLE = true,
-                IsVisible = true,
-                Rotation = 0,
-                Scale = 1.0,
-                Opacity = 1.0,
-                ZIndex = 0,
-                LockAspectRatio = true,
-                PivotX = 0.5,
-                PivotY = 0.5,
-                EVENTS = new ObservableCollection<UIEvent>
-                {
-                    new UIEvent{ Timing="TUI_EVENT_TRIGGER_TIMING_ENTER", Event="GameStart", Description="Start!", Argument = JsonDocument.Parse("{\"SceneName\":\"Main\"}").RootElement.Clone() }
-                }
-            });
-
+            Loaded += (s, e) => FitCanvasToView();
             RebuildUIItems();
-            Selected = UIItems.FirstOrDefault();
+        }
+
+        // ====== 便利関数 ======
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private JsonSerializerOptions JsonOptions()
+        {
+            return new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+            };
         }
 
         private void RebuildUIItems()
         {
             UIItems.Clear();
-            if (Data?.UIList == null) return;
-            foreach (var u in Data.UIList) UIItems.Add(new UIItemVM(u, this));
+            if (Data?.UIList != null)
+            {
+                foreach (var it in Data.UIList)
+                {
+                    UIItems.Add(new UIItemVM(it, this));
+                }
+            }
+            if (UIItems.Count > 0)
+            {
+                Selected = UIItems[0];
+            }
+            RefreshAllItemPositions();
         }
 
-        // ===== ファイル =====
-        private void OnOpenJsonClick(object sender, RoutedEventArgs e)
+        private void RefreshAllItemPositions()
         {
-            var dlg = new Microsoft.Win32.OpenFileDialog { Filter = "JSON file|*.json" };
-            if (dlg.ShowDialog() == true)
+            foreach (var vm in UIItems)
             {
-                try
-                {
-                    var json = File.ReadAllText(dlg.FileName);
-                    var opt = JsonOptions();
-                    var doc = JsonSerializer.Deserialize<CanvasDocument>(json, opt);
-                    if (doc != null)
-                    {
-                        foreach (var ui in doc.UIList)
-                        {
-                            ui.IsVisible ??= true; ui.Rotation ??= 0; ui.Scale ??= 1.0; ui.Opacity ??= 1.0;
-                            ui.ZIndex ??= 0; ui.LockAspectRatio ??= true; ui.PivotX ??= 0.5; ui.PivotY ??= 0.5;
-                        }
-                        Data = doc; CurrentPath = dlg.FileName;
+                vm.RefreshLayout();
+            }
+        }
 
-                        OnPropertyChanged(nameof(Data));
-                        OnPropertyChanged(nameof(CanvasWidth));
-                        OnPropertyChanged(nameof(CanvasHeight));
-                        RebuildUIItems();
-                        Selected = UIItems.FirstOrDefault();
+        private string MakeUniqueName(string baseName)
+        {
+            var name = baseName;
+            int i = 1;
+            while (true)
+            {
+                bool exists = false;
+                foreach (var it in UIItems)
+                {
+                    if (string.Equals(it.NAME, name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        exists = true;
+                        break;
                     }
                 }
-                catch (Exception ex) { MessageBox.Show($"読み込みに失敗: {ex.Message}"); }
+                if (!exists)
+                {
+                    return name;
+                }
+                name = $"{baseName}_{++i}";
+            }
+        }
+
+        // ====== カメラ系 ======
+        private Point ScreenToWorld(Point screen)
+        {
+            var tg = World.RenderTransform.Value;
+            tg.Invert();
+            return tg.Transform(screen);
+        }
+
+        private void ZoomAt(Point screenPos, double factor)
+        {
+            var wBefore = ScreenToWorld(screenPos);
+
+            var oldX = ZoomTransform.ScaleX;
+            var oldY = ZoomTransform.ScaleY;
+            var newX = Math.Clamp(oldX * factor, 0.05, 50);
+            var newY = Math.Clamp(oldY * factor, 0.05, 50);
+            ZoomTransform.ScaleX = newX;
+            ZoomTransform.ScaleY = newY;
+
+            PanTransform.X += (oldX - newX) * wBefore.X;
+            PanTransform.Y += (oldY - newY) * wBefore.Y;
+        }
+
+        private void FitCanvasToView()
+        {
+            if (ViewportHost == null)
+            {
+                return;
+            }
+
+            // 左ペインの実サイズ（枠線も含む）を基準に計算
+            var viewW = Math.Max(1.0, ViewportHost.ActualWidth);
+            var viewH = Math.Max(1.0, ViewportHost.ActualHeight);
+            var cw = Math.Max(1.0, CanvasWidth);
+            var ch = Math.Max(1.0, CanvasHeight);
+
+            // 余白を少し確保（左右上下8pxずつ）
+            const double margin = 16.0;
+            var scaleW = (viewW - margin) / cw;
+            var scaleH = (viewH - margin) / ch;
+            var scale = Math.Max(0.01, Math.Min(scaleW, scaleH));
+
+            ZoomTransform.ScaleX = ZoomTransform.ScaleY = scale;
+
+            PanTransform.X = -CanvasLeft * scale + (viewW - cw * scale) / 2.0;
+            PanTransform.Y = -CanvasTop * scale + (viewH - ch * scale) / 2.0;
+        }
+
+        private void MaybeFit()
+        {
+            if (AutoFitOnResize)
+            {
+                FitCanvasToView();
+            }
+        }
+
+        // ====== メニュー ======
+        private void OnOpenJsonClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog { Filter = "JSON (*.json)|*.json|All Files (*.*)|*.*" };
+            if (dlg.ShowDialog() == true)
+            {
+                var json = File.ReadAllText(dlg.FileName);
+                var doc = JsonSerializer.Deserialize<CanvasDocument>(json, JsonOptions());
+                if (doc != null)
+                {
+                    Data = doc;
+                    CurrentPath = System.IO.Path.GetDirectoryName(dlg.FileName) ?? "";
+                    RebuildUIItems();
+                }
             }
         }
 
         private void OnSaveJsonClick(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(CurrentPath))
+            var dlg = new SaveFileDialog
             {
-                var dlg = new Microsoft.Win32.SaveFileDialog
-                {
-                    Filter = "JSON file|*.json",
-                    FileName = $"{Data?.CanvasName ?? "MainCanvas"}.json"
-                };
-                if (dlg.ShowDialog() == true) CurrentPath = dlg.FileName; else return;
-            }
-
-            try
-            {
-                // ★保存前に Argument をできるだけ JSON 化（文字列ならパースを試す）
-                foreach (var ui in Data.UIList)
-                {
-                    foreach (var ev in ui.EVENTS)
-                    {
-                        if (ev.Argument is string s)
-                        {
-                            try { ev.Argument = JsonDocument.Parse(string.IsNullOrWhiteSpace(s) ? "{}" : s).RootElement.Clone(); }
-                            catch { /* 文字列のままでもC++側で未使用ならOK */ }
-                        }
-                    }
-                }
-
-                var opt = JsonOptions();
-                var json = JsonSerializer.Serialize(Data, opt);
-                File.WriteAllText(CurrentPath, json);
-            }
-            catch (Exception ex) { MessageBox.Show($"保存に失敗: {ex.Message}"); }
-        }
-
-        private void OnExitClick(object sender, RoutedEventArgs e) => Close();
-
-        private static JsonSerializerOptions JsonOptions()
-        {
-            var opt = new JsonSerializerOptions
-            {
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                AllowTrailingCommas = true,
-                WriteIndented = true
+                Filter = "JSON (*.json)|*.json|All Files (*.*)|*.*",
+                FileName = (Data?.CanvasName ?? "MainCanvas") + ".json"
             };
-            opt.Converters.Add(new JsonStringEnumConverter());
-            return opt;
-        }
-
-        // ===== UI長押しドラッグ =====
-        private UIItemVM _pressedItem;
-        private System.Windows.Point _pressPos;
-        private readonly System.Diagnostics.Stopwatch _pressWatch = new();
-        private bool _isDragging;
-
-        private void UIElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Viewport.Focus();
-            if (sender is Border b && b.Tag is UIItemVM vm)
+            if (dlg.ShowDialog() == true)
             {
-                Selected = vm;
-                _pressedItem = vm;
-                _pressPos = e.GetPosition(DesignCanvas);
-                _pressWatch.Restart();
-                _isDragging = false;
-                b.CaptureMouse();
+                var json = JsonSerializer.Serialize(Data, JsonOptions());
+                File.WriteAllText(dlg.FileName, json);
+                CurrentPath = System.IO.Path.GetDirectoryName(dlg.FileName) ?? "";
             }
         }
 
-        private void UIElement_MouseMove(object sender, MouseEventArgs e)
+        private void OnExitClick(object sender, RoutedEventArgs e)
         {
-            if (_pressedItem == null) return;
+            Close();
+        }
 
-            var nowPos = e.GetPosition(DesignCanvas);
-            if (!_isDragging)
+        private void OnFitClick(object sender, RoutedEventArgs e)
+        {
+            FitCanvasToView();
+        }
+
+        // ====== 編集操作 ======
+        private void OnAddUIClick(object sender, RoutedEventArgs e)
+        {
+            if (Data == null)
             {
-                if (_pressWatch.Elapsed.TotalMilliseconds >= LongPressMs) _isDragging = true;
-                else return;
+                return;
             }
 
-            var dx = nowPos.X - _pressPos.X;
-            var dy = nowPos.Y - _pressPos.Y;
+            var item = new UIItem
+            {
+                NAME = MakeUniqueName("NewUI"),
+                GRAPH_PATH = "",
+                ANCHORPOINT = "TUI_CANVAS_ANCHOR_POINT_CENTER",
+                OFFSET_X_FROM_ANCHOR = 0,
+                OFFSET_Y_FROM_ANCHOR = 0,
+                GRAPH_SRC_X = 0,
+                GRAPH_SRC_Y = 0,
+                GRAPH_DEST_X = 64,
+                GRAPH_DEST_Y = 64,
+                INDEX_X = 0,
+                INDEX_Y = 0,
+                DESCRIPTION = "",
+                IS_SELECTABLE = true,
+                IsVisible = true,
+                Rotation = 0.0,
+                Scale = 1.0,
+                Opacity = 1.0,
+                ZIndex = 0,
+                LockAspectRatio = true,
+                PivotX = 0.5,
+                PivotY = 0.5
+            };
 
-            _pressedItem.PosX += dx;
-            _pressedItem.PosY += dy;
-            _pressedItem.SyncOffsetFromPos();
-
-            _pressPos = nowPos;
+            Data.UIList.Add(item);
+            var vm = new UIItemVM(item, this);
+            UIItems.Add(vm);
+            Selected = vm;
         }
 
-        private void UIElement_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void OnDuplicateUIClick(object sender, RoutedEventArgs e)
         {
-            if (sender is Border b) b.ReleaseMouseCapture();
-            _pressedItem = null; _pressWatch.Reset(); _isDragging = false;
+            if (Selected == null || Data == null)
+            {
+                return;
+            }
+
+            var src = Selected.Src;
+            var clone = new UIItem
+            {
+                NAME = MakeUniqueName(src.NAME + "_Copy"),
+                GRAPH_PATH = src.GRAPH_PATH,
+                ANCHORPOINT = src.ANCHORPOINT,
+                OFFSET_X_FROM_ANCHOR = src.OFFSET_X_FROM_ANCHOR + 10,
+                OFFSET_Y_FROM_ANCHOR = src.OFFSET_Y_FROM_ANCHOR + 10,
+                GRAPH_SRC_X = src.GRAPH_SRC_X,
+                GRAPH_SRC_Y = src.GRAPH_SRC_Y,
+                GRAPH_DEST_X = src.GRAPH_DEST_X,
+                GRAPH_DEST_Y = src.GRAPH_DEST_Y,
+                INDEX_X = src.INDEX_X,
+                INDEX_Y = src.INDEX_Y,
+                DESCRIPTION = src.DESCRIPTION,
+                IS_SELECTABLE = src.IS_SELECTABLE,
+                IsVisible = src.IsVisible,
+                Rotation = src.Rotation,
+                Scale = src.Scale,
+                Opacity = src.Opacity,
+                ZIndex = (src.ZIndex ?? 0) + 1,
+                LockAspectRatio = src.LockAspectRatio,
+                PivotX = src.PivotX,
+                PivotY = src.PivotY
+            };
+
+            Data.UIList.Add(clone);
+            var vm = new UIItemVM(clone, this);
+            UIItems.Add(vm);
+            Selected = vm;
         }
 
-        // ===== Unity風ビューポート =====
-        private bool _isPanningMMB;
-        private bool _isAltRightDrag;
-        private Point _lastMouseScreen;
-        private bool _isAltHeld;
-
-        private const double ZoomWheelFactor = 1.2;
-        private const double ZoomDragSensitivity = 0.005;
-        private const double RotateDragSensitivity = 0.25;
-
-        private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void OnDeleteUIClick(object sender, RoutedEventArgs e)
         {
-            var pos = e.GetPosition(World);
-            var factor = e.Delta > 0 ? ZoomWheelFactor : 1.0 / ZoomWheelFactor;
-            ZoomAt(pos, factor);
+            if (Selected == null || Data == null)
+            {
+                return;
+            }
+
+            var idx = UIItems.IndexOf(Selected);
+            Data.UIList.Remove(Selected.Src);
+            UIItems.Remove(Selected);
+
+            if (UIItems.Count > 0)
+            {
+                Selected = UIItems[Math.Clamp(idx - 1, 0, UIItems.Count - 1)];
+            }
+            else
+            {
+                Selected = null;
+            }
+        }
+
+        private void OnBrowseDisplayImageClick(object sender, RoutedEventArgs e)
+        {
+            if (Selected == null)
+            {
+                return;
+            }
+            var dlg = new OpenFileDialog
+            {
+                Filter = "画像 (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp|All Files (*.*)|*.*",
+                InitialDirectory = string.IsNullOrEmpty(CurrentPath) ? null : CurrentPath
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                Selected.DisplayImagePath = dlg.FileName;
+            }
+        }
+
+        // ====== ビューポート入力 ======
+        private void ViewportHost_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            MaybeFit();
         }
 
         private void Viewport_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Viewport.Focus();
+
+            if (e.ChangedButton == MouseButton.Left &&
+                !(Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)))
+            {
+                Selected = null;
+            }
+
             if (e.ChangedButton == MouseButton.Middle)
             {
                 _isPanningMMB = true;
                 _lastMouseScreen = e.GetPosition(Viewport);
-                Mouse.Capture((IInputElement)sender);
+                Mouse.Capture(Viewport);
+                return;
             }
-            else if (e.ChangedButton == MouseButton.Right && _isAltHeld)
+
+            if ((Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt)) &&
+                e.ChangedButton == MouseButton.Right)
             {
                 _isAltRightDrag = true;
                 _lastMouseScreen = e.GetPosition(Viewport);
-                Mouse.Capture((IInputElement)sender);
+                Mouse.Capture(Viewport);
+                return;
             }
         }
 
         private void Viewport_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Middle) _isPanningMMB = false;
-            if (e.ChangedButton == MouseButton.Right) _isAltRightDrag = false;
-            if (!_isPanningMMB && !_isAltRightDrag) Mouse.Capture(null);
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (_isDragging)
+                {
+                    _isDragging = false;
+                    _pressedItem = null;
+                    Mouse.Capture(null);
+                    e.Handled = true;
+                }
+            }
+
+            if (e.ChangedButton == MouseButton.Middle)
+            {
+                _isPanningMMB = false;
+                Mouse.Capture(null);
+            }
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                _isAltRightDrag = false;
+                Mouse.Capture(null);
+            }
         }
 
         private void Viewport_MouseMove(object sender, MouseEventArgs e)
         {
-            var cur = e.GetPosition(Viewport);
+            var pos = e.GetPosition(Viewport);
 
             if (_isPanningMMB)
             {
-                var delta = cur - _lastMouseScreen;
-                PanTransform.X += delta.X;
-                PanTransform.Y += delta.Y;
-                _lastMouseScreen = cur;
+                var d = pos - _lastMouseScreen;
+                PanTransform.X += d.X;
+                PanTransform.Y += d.Y;
+                _lastMouseScreen = pos;
                 return;
             }
 
             if (_isAltRightDrag)
             {
-                var delta = cur - _lastMouseScreen;
+                var d = pos - _lastMouseScreen;
 
-                var zoomFactor = Math.Exp(-delta.Y * ZoomDragSensitivity);
-                var pivot = e.GetPosition(World);
-                ZoomAt(pivot, zoomFactor);
+                if (Selected != null)
+                {
+                    Selected.Rotation += d.X * RotateDragSensitivity;
+                }
 
-                if (Selected != null) Selected.Rotation += delta.X * RotateDragSensitivity;
+                var factor = Math.Pow(1.0 + ZoomDragSensitivity, -d.Y);
+                ZoomAt(pos, factor);
 
-                _lastMouseScreen = cur;
+                _lastMouseScreen = pos;
+                return;
+            }
+
+            if (_isDragging && _pressedItem != null && e.LeftButton == MouseButtonState.Pressed)
+            {
+                var world = ScreenToWorld(pos);
+                var delta = world - _pressPosWorld;
+
+                _pressedItem.PosX += delta.X;
+                _pressedItem.PosY += delta.Y;
+
+                _pressPosWorld = world;
             }
         }
 
@@ -298,124 +619,68 @@ namespace MainCanvasEditor
         {
             _isPanningMMB = false;
             _isAltRightDrag = false;
-            Mouse.Capture(null);
+            if (_isDragging)
+            {
+                _isDragging = false;
+                _pressedItem = null;
+                Mouse.Capture(null);
+            }
+        }
+
+        private void Viewport_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var factor = e.Delta > 0 ? ZoomWheelFactor : (1.0 / ZoomWheelFactor);
+            ZoomAt(e.GetPosition(Viewport), factor);
         }
 
         private void Viewport_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.LeftAlt || e.Key == Key.RightAlt) _isAltHeld = true;
+            if (e.Key == Key.Escape && _isDragging)
+            {
+                _isDragging = false;
+                _pressedItem = null;
+                Mouse.Capture(null);
+                e.Handled = true;
+            }
+            if (e.Key == Key.F)
+            {
+                FitCanvasToView();
+                e.Handled = true;
+            }
         }
 
         private void Viewport_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.LeftAlt || e.Key == Key.RightAlt) _isAltHeld = false;
         }
 
-        private void ZoomAt(Point contentPivot, double factor)
+        // ====== UI要素のクリック系 ======
+        private void UIElement_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var oldScale = ZoomTransform.ScaleX;
-            var newScale = Math.Clamp(oldScale * factor, 0.05, 20.0);
-            factor = newScale / oldScale;
-
-            PanTransform.X = PanTransform.X - (contentPivot.X * (factor - 1.0) * oldScale);
-            PanTransform.Y = PanTransform.Y - (contentPivot.Y * (factor - 1.0) * oldScale);
-
-            ZoomTransform.ScaleX = newScale;
-            ZoomTransform.ScaleY = newScale;
-        }
-
-        // ===== 表示用画像 参照/クリア =====
-        private void OnBrowseDisplayImageClick(object sender, RoutedEventArgs e)
-        {
-            if (Selected == null) return;
-
-            var dlg = new Microsoft.Win32.OpenFileDialog
+            if (sender is FrameworkElement fe && fe.Tag is UIItemVM vm)
             {
-                Filter = "Image files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.webp|All files|*.*",
-                InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images")
-            };
-            if (dlg.ShowDialog() == true)
-            {
-                var baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
-                var chosen = dlg.FileName;
-                string rel;
-                if (chosen.StartsWith(baseDir, StringComparison.OrdinalIgnoreCase))
-                {
-                    rel = chosen.Substring(baseDir.Length).TrimStart(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
-                }
-                else
-                {
-                    rel = chosen;
-                }
-                Selected.DisplayImagePath = rel.Replace(System.IO.Path.DirectorySeparatorChar, '/');
+                Selected = vm;
+                _pressedItem = vm;
+                _pressPosWorld = ScreenToWorld(e.GetPosition(Viewport));
+                _isDragging = true;
+                Mouse.Capture(Viewport);
+                e.Handled = true;
             }
         }
 
-        private void OnClearDisplayImageClick(object sender, RoutedEventArgs e)
+        private void UIElement_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (Selected == null) return;
-            Selected.DisplayImagePath = null;
-        }
-
-        // ===== イベント追加・削除 =====
-        private void OnAddEventClick(object sender, RoutedEventArgs e)
-        {
-            if (Selected == null) return;
-            Selected.Events.Add(new UIEvent
+            if (_isDragging)
             {
-                Timing = "TUI_EVENT_TRIGGER_TIMING_ENTER",
-                Event = "",
-                Description = "",
-                Argument = "{}"
-            });
-        }
-
-        private void OnRemoveEventClick(object sender, RoutedEventArgs e)
-        {
-            if (Selected == null) return;
-            if (sender is Button btn && btn.DataContext is UIEvent ev)
-            {
-                Selected.Events.Remove(ev);
+                _isDragging = false;
+                _pressedItem = null;
+                Mouse.Capture(null);
+                e.Handled = true;
             }
         }
 
-        // ★プリセット選択時の自動補完
-        private void OnEventPresetChanged(object sender, SelectionChangedEventArgs e)
+        private void UIElement_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Selected == null) return;
-            if (sender is not ComboBox cb) return;
-            if (cb.SelectedItem is not EventPreset preset) return;
-            if (cb.DataContext is not UIEvent ev) return;
-
-            // Event は SelectedValuePath=Key によりバインド済み
-            // 未入力項目をプリセットで補完
-            if (string.IsNullOrWhiteSpace(ev.Description))
-                ev.Description = preset.Description ?? "";
-
-            if (string.IsNullOrWhiteSpace(ev.Timing) && !string.IsNullOrWhiteSpace(preset.DefaultTiming))
-                ev.Timing = preset.DefaultTiming;
-
-            if (ev.Argument == null || (ev.Argument is string s && string.IsNullOrWhiteSpace(s)))
-                ev.Argument = ToJsonElementOrString(preset.DefaultArgument);
         }
-
-        private static object ToJsonElementOrString(object? any)
-        {
-            if (any == null) return "{}";
-            try
-            {
-                var json = JsonSerializer.Serialize(any);
-                using var doc = JsonDocument.Parse(json);
-                return doc.RootElement.Clone();
-            }
-            catch
-            {
-                return any.ToString() ?? "{}";
-            }
-        }
-
-        // INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string n = null) => PropertyChanged?.Invoke(this, new(n));
     }
+
 }

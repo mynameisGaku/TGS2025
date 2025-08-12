@@ -17,8 +17,8 @@ namespace fs = std::filesystem;
 
 TitleUIController::TitleUIController()
 {
-	m_pGridCursor		= new TitleUIGridCursor();
-	m_pCurrentCanvas	= nullptr;
+	m_pGridCursor = new TitleUIGridCursor();
+	m_pCurrentCanvas = nullptr;
 
 	subscribeFunctions();
 }
@@ -46,26 +46,27 @@ void TitleUIController::LoadCanvasFromJson(const std::string& file)
 		Logger::FormatErrorLog("Failed to open JSON file: {}", file);
 		return;
 	}
-	
+
 	json root;
 	ifs >> root;
 
-	// Canvasの生成と初期化
+	// Canvas
 	auto* canvas = new TitleUICanvas();
 	UI_TITLE_CANVAS_DESC canvasDesc{};
-	Vector2 begin	{};
-	Vector2 end		{};
+	Vector2 begin{};
+	Vector2 end{};
 	from_json(root["Begin"], begin);
-	from_json(root["End"],	end);
-	
-	canvasDesc.NAME					= root.value("CanvasName", "NoName");
-	canvasDesc.BEGIN				= begin;
-	canvasDesc.END					= end;
-	canvasDesc.IS_FIT_SCREEN		= root.value("IsFitScreen", false);
-	canvasDesc.IS_DEFAULT_ACTIVATE	= root.value("IsDefaultActivate", false);
+	from_json(root["End"], end);
+
+	canvasDesc.NAME = root.value("CanvasName", "NoName");
+	canvasDesc.BEGIN = begin;
+	canvasDesc.END = end;
+	canvasDesc.IS_FIT_SCREEN = root.value("IsFitScreen", false);
+	canvasDesc.IS_DEFAULT_ACTIVATE = root.value("IsDefaultActivate", false);
 
 	canvas->Init(canvasDesc, this);
 
+	// UI
 	for (const auto& uiData : root["UIList"])
 	{
 		UI_TITLE_DESC desc{};
@@ -82,40 +83,48 @@ void TitleUIController::LoadCanvasFromJson(const std::string& file)
 		desc.INDEX_Y = uiData.value("INDEX_Y", INT_MAX);
 		desc.Description = uiData.value("Description", "");
 		desc.IS_SELECTABLE = uiData.value("IS_SELECTABLE", false);
+
+		const std::string anchorStr = uiData.value("ANCHORPOINT",
+			uiData.value("ANCHOR", "TUI_CANVAS_ANCHOR_POINT_TOP_LEFT"));
+		desc.ANCHOR = EnumUtil::ToEnum<TUI_CANVAS_ANCHOR_POINT>(
+			anchorStr, TUI_CANVAS_ANCHOR_POINT_TOP_LEFT);
+
 		desc.COLLISION = EnumUtil::ToEnum<TUI_COLLISION_MODE>(
 			uiData.value("COLLISION", "TUI_COLLISION_MODE_NONE"),
 			TUI_COLLISION_MODE_NONE
 		);
-		desc.ANCHOR = EnumUtil::ToEnum<TUI_CANVAS_ANCHOR_POINT>(
-			uiData.value("ANCHOR", "TUI_CANVAS_ANCHOR_POINT_TOP_LEFT"),
-			TUI_CANVAS_ANCHOR_POINT_TOP_LEFT
-		);
 
-		// イベント読み込み
+		desc.IsVisible = uiData.value("IsVisible", true);
+		desc.RotationDeg = uiData.value("Rotation", 0.0);
+		desc.Scale = uiData.value("Scale", 1.0);
+		desc.Opacity = uiData.value("Opacity", 1.0);
+		desc.ZIndex = uiData.value("ZIndex", 0);
+		desc.LockAspectRatio = uiData.value("LockAspectRatio", true);
+		desc.PivotX = uiData.value("PivotX", 0.5);
+		desc.PivotY = uiData.value("PivotY", 0.5);
+
 		if (uiData.contains("EVENTS"))
 		{
 			for (const auto& e : uiData["EVENTS"])
 			{
-				TUI_EVENT event;
-				event.Event			= e.value("Event", "");
-				event.Description	= e.value("Description", "");
-				event.Argument		= e.value<nlohmann::json>("Argument", nlohmann::json::object());
-				event.Timing		= EnumUtil::ToEnum<TUI_EVENT_TRIGGER_TIMING>(
+				TUI_EVENT ev;
+				ev.Event = e.value("Event", "");
+				ev.Description = e.value("Description", "");
+				ev.Argument = e.value<nlohmann::json>("Argument", nlohmann::json::object());
+				ev.Timing = EnumUtil::ToEnum<TUI_EVENT_TRIGGER_TIMING>(
 					e.value("Timing", "TUI_EVENT_TRIGGER_TIMING_ENTER"),
 					TUI_EVENT_TRIGGER_TIMING_ENTER
 				);
-
-				desc.EVENTS.push_back(event);
+				desc.EVENTS.push_back(ev);
 			}
 		}
 
-		// UI生成・追加
 		TitleUI ui;
 		ui.Init(desc, canvas);
 		canvas->AddUI(ui);
 	}
 
-	m_CanvasList[canvasDesc.NAME]	= canvas;
+	m_CanvasList[canvasDesc.NAME] = canvas;
 }
 
 void TitleUIController::LoadCanvasesFromJson(const std::string& path)
@@ -133,17 +142,15 @@ void TitleUIController::Update()
 {
 	if (!m_IsActive)
 		return;
-	// 現在のキャンバスが有効かチェック
+
 	if (m_pCurrentCanvas && !m_pCurrentCanvas->IsActive())
 	{
 		m_pCurrentCanvas = nullptr;
 	}
-	// キャンバスが設定されていない場合、最初のキャンバスを設定
 	if (!m_pCurrentCanvas && !m_CanvasList.empty())
 	{
 		m_pCurrentCanvas = m_CanvasList.begin()->second;
 	}
-	// キャンバスが有効な場合、更新処理を呼び出す
 	if (m_pCurrentCanvas)
 	{
 		m_pCurrentCanvas->Update();
@@ -157,7 +164,6 @@ void TitleUIController::Draw()
 	if (!m_IsActive)
 		return;
 
-	// キャンバスが有効な場合、描画処理を呼び出す
 	if (m_pCurrentCanvas)
 	{
 		m_pCurrentCanvas->Draw();
@@ -173,12 +179,13 @@ void TitleUIController::TriggerEvent(TUI_EVENT& event, const nlohmann::json& arg
 		argumentCopy["Counter"] = event.Counter;
 		argumentCopy["Event"] = argument;
 
-		// イベントハンドラーを呼び出す
 		(m_EventHandlers[event.Event])(argumentCopy);
 
 		event.Counter += GTime.deltaTime;
 		if (event.Counter >= event.Duration)
-			event.Counter = 0.0f;  // イベントのカウンターをリセット
+		{
+			event.Counter = 0.0f;
+		}
 	}
 	else
 	{
@@ -197,42 +204,36 @@ void TitleUIController::subscribeFunctions()
 void TitleUIController::activateCanvas(nlohmann::json argument)
 {
 	nlohmann::json event = argument["Event"];
-	std::string name = event.at("CanvasName").get<std::string>();
+	std::string name = event.value("CanvasName", "");
 
-	if (m_CanvasList.find(name) != m_CanvasList.end())
-	{
-		m_pCurrentCanvas->Deactivate();
-		m_pCurrentCanvas = m_CanvasList[name];
-		m_pCurrentCanvas->Activate();
-	}
-	else
+	if (name.empty() || m_CanvasList.find(name) == m_CanvasList.end())
 	{
 		Logger::FormatErrorLog("Canvas with name '{}' not found.", name);
 		return;
 	}
+
+	if (m_pCurrentCanvas) m_pCurrentCanvas->Deactivate();
+	m_pCurrentCanvas = m_CanvasList[name];
+	m_pCurrentCanvas->Activate();
 }
 
 void TitleUIController::scaling(nlohmann::json argument)
 {
 	nlohmann::json event = argument["Event"];
-	std::string canvasName = event.at("CanvasName").get<std::string>();
-	std::string targetUIName = event.at("TargetUIName").get<std::string>();
-	if (m_CanvasList.find(canvasName) != m_CanvasList.end())
-	{
-
-		Logger::FormatErrorLog("UI with name '{}' not found in canvas '{}'.", targetUIName, canvasName);
-	}
-	else
+	std::string canvasName = event.value("CanvasName", "");
+	std::string targetUIName = event.value("TargetUIName", "");
+	if (m_CanvasList.find(canvasName) == m_CanvasList.end())
 	{
 		Logger::FormatErrorLog("Canvas with name '{}' not found.", canvasName);
 		return;
 	}
+	Logger::FormatErrorLog("UI with name '{}' not found in canvas '{}'.", targetUIName, canvasName);
 }
 
 void TitleUIController::gameStart(nlohmann::json argument)
 {
 	nlohmann::json event = argument["Event"];
-	std::string sceneName = event.at("SceneName").get<std::string>();
+	std::string sceneName = event.value("SceneName", "");
 	if (sceneName.empty())
 	{
 		Logger::FormatErrorLog("Scene name is empty. Cannot start game.");

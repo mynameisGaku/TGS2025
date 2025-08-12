@@ -1475,6 +1475,12 @@
     <ClCompile Include="src\scene\play\ball\BallTargetManager.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ui\SliceBar.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2322,6 +2328,12 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\ball\BallTargetManager.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\SliceBar.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_ChatBar.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

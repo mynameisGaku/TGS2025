@@ -9,6 +9,7 @@
 #include "src/scene/play/ui/UI_ButtonHint.h"
 #include "src/scene/play/ui/UI_StartCount.h"
 #include "src/scene/play/ui/UI_Fade.h"
+#include "src/scene/play/ui/UI_ChatBar.h"
 
 UI_Setter_PlayScene::UI_Setter_PlayScene()
 {
@@ -38,12 +39,16 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		fade->SetTag("Fade_" + sPlayerNum);
 
+		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
+		chat->SetTag("Chat_" + sPlayerNum);
+
 		m_UIs[crossHair->GetTag()]		= crossHair;
 		m_UIs[hitPointIcon->GetTag()]	= hitPointIcon;
 		m_UIs[matchTime->GetTag()]		= matchTime;
 		m_UIs[buttonHint->GetTag()]		= buttonHint;
 		m_UIs[startCount->GetTag()]		= startCount;
 		m_UIs[fade->GetTag()]			= fade;
+		m_UIs[chat->GetTag()]			= chat;
 	}
 }
 

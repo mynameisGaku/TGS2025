@@ -40,18 +40,6 @@ void TitleScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push("AnyKey"))
-	{
-		auto& net = NetworkRef::Inst();
-		if (net.IsNetworkEnable)
-		{
-			NetworkManager* nm = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
-			nm->SendSceneTransitToPlay();
-		}
-		
-		SceneManager::ChangeScene("PlayScene");
-	}
-
 	SceneBase::Update();
 }
 
@@ -60,7 +48,7 @@ void TitleScene::Draw() {
 	SceneBase::Draw();
 
 #ifdef TRUE //DEBUG
-	DrawString(100, 400, "Push [Z]Key To Play", GetColor(255, 255, 255));
+
 #endif
 }
 

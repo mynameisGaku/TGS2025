@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Unicode;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq;
 
 namespace MainCanvasEditor
 {
@@ -429,7 +430,9 @@ namespace MainCanvasEditor
                 ZIndex = 0,
                 LockAspectRatio = true,
                 PivotX = 0.5,
-                PivotY = 0.5
+                PivotY = 0.5,
+                COLLISION = "TUI_CANVAS_COLLISION_NONE"
+                // EVENTS は空配列のまま
             };
 
             Data.UIList.Add(item);
@@ -468,7 +471,12 @@ namespace MainCanvasEditor
                 ZIndex = (src.ZIndex ?? 0) + 1,
                 LockAspectRatio = src.LockAspectRatio,
                 PivotX = src.PivotX,
-                PivotY = src.PivotY
+                PivotY = src.PivotY,
+                COLLISION = src.COLLISION,
+                // ★ イベントをディープコピー（中身はそのまま保持）
+                EVENTS = new ObservableCollection<UIEvent>(src.EVENTS != null
+                    ? src.EVENTS.Select(ev => ev?.Clone())
+                    : Array.Empty<UIEvent>())
             };
 
             Data.UIList.Add(clone);

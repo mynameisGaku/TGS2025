@@ -56,34 +56,59 @@ void TitleUI::Draw()
 {
 	if (!m_IsVisible) return;
 
+	// アンカー位置（画面座標）
 	const Vector2 anchor = m_pHolder->GetPoint(m_Anchor);
 
+	// キャンバスの等倍スケール（IsFitScreenに基づく）
 	const float sx = m_pHolder->ScaleX();
 	const float sy = m_pHolder->ScaleY();
+
+	// 画像拡大率（ロック時は等倍、解除時はX基準。DxLibのRota系は等方拡大のみ）
 	const float s = m_LockAspect ? min(sx, sy) : sx;
 
-	const float cx = (float)(m_GraphDestX * m_PivotX);
-	const float cy = (float)(m_GraphDestY * m_PivotY);
+	// 画像内の回転中心（左上基準のピクセル）
+	const float cx = static_cast<float>(m_GraphDestX * m_PivotX);
+	const float cy = static_cast<float>(m_GraphDestY * m_PivotY);
 
-	const float x = (float)(anchor.x + m_OffsetX_FromAnchor * sx);
-	const float y = (float)(anchor.y + m_OffsetY_FromAnchor * sy);
+	// 画面上の回転中心（＝エディタの anchor + offset をキャンバススケールで変換）
+	const float x = static_cast<float>(anchor.x + m_OffsetX_FromAnchor * sx);
+	const float y = static_cast<float>(anchor.y + m_OffsetY_FromAnchor * sy);
 
-	const int alpha = (int)std::round(std::clamp(m_Opacity, 0.0, 1.0) * 255.0);
+	// 透明度
+	const int alpha = static_cast<int>(std::round(std::clamp(m_Opacity, 0.0, 1.0) * 255.0));
+
+	if (m_IsHover)
+	{
+		m_pHolder->Controller()->GetGridCursor()->SetPos(Vector2(x, y));
+	}
+
+	if (m_IsHolding)
+	{
+		SetDrawBright(50, 50, 50);
+	}
+
+	if (not m_IsHover && not m_IsHolding)
+	{
+		SetDrawBright(255, 255, 255);
+	}
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 
 	const double rad = m_RotationDeg * DX_PI / 180.0;
 
+	// 中心基準で描画（x,y は画面上の回転中心／cx,cy は画像内の中心）
 	DrawRectRotaGraph2F(
 		x, y,
 		m_GraphSrcX, m_GraphSrcY,
 		m_GraphDestX, m_GraphDestY,
 		cx, cy,
-		(float)(s * m_Scale), rad,
+		static_cast<float>(s * m_Scale), rad,
 		(m_GraphHandle == -1 ? DX_NONE_GRAPH : m_GraphHandle),
 		TRUE,
 		FALSE
 	);
 
+	SetDrawBright(255, 255, 255);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -205,18 +230,27 @@ void TitleUI::checkCursorCollision()
 {
 	m_IsHover = false;
 
-	// アンカー＋オフセット位置（Pivotが置かれる位置）
+	// アンカー位置（画面座標）
 	const Vector2 anchor = m_pHolder->GetPoint(m_Anchor);
-	const double drawX = static_cast<double>(anchor.x) + static_cast<double>(m_OffsetX_FromAnchor);
-	const double drawY = static_cast<double>(anchor.y) + static_cast<double>(m_OffsetY_FromAnchor);
 
-	// 実表示サイズ（回転は無視してAABBで判定）
-	const double w = static_cast<double>(m_GraphDestX) * m_Scale;
-	const double h = static_cast<double>(m_GraphDestY) * m_Scale;
+	// キャンバス等倍スケール
+	const float sx = m_pHolder->ScaleX();
+	const float sy = m_pHolder->ScaleY();
 
-	// 左上（AABB）
-	const double left = drawX - (static_cast<double>(m_GraphDestX) * m_PivotX) * m_Scale;
-	const double top = drawY - (static_cast<double>(m_GraphDestY) * m_PivotY) * m_Scale;
+	// 画像拡大率（描画と同じ）
+	const float s = m_LockAspect ? min(sx, sy) : sx;
+
+	// 画面上の回転中心（＝描画時の x,y と同じ）
+	const double centerX = static_cast<double>(anchor.x) + static_cast<double>(m_OffsetX_FromAnchor) * sx;
+	const double centerY = static_cast<double>(anchor.y) + static_cast<double>(m_OffsetY_FromAnchor) * sy;
+
+	// 拡縮後の実表示サイズ（AABB）
+	const double w = static_cast<double>(m_GraphDestX) * static_cast<double>(m_Scale) * static_cast<double>(s);
+	const double h = static_cast<double>(m_GraphDestY) * static_cast<double>(m_Scale) * static_cast<double>(s);
+
+	// 左上（AABB）＝中心からPivot分を引く
+	const double left = centerX - (static_cast<double>(m_GraphDestX) * m_PivotX) * static_cast<double>(m_Scale) * static_cast<double>(s);
+	const double top = centerY - (static_cast<double>(m_GraphDestY) * m_PivotY) * static_cast<double>(m_Scale) * static_cast<double>(s);
 
 	auto device = InputManager::GetLastInputDevice();
 	switch (device)

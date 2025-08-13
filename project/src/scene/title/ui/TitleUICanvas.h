@@ -37,10 +37,7 @@ public:
 	/// </summary>
 	void Release();
 
-	void AddUI(const TitleUI& ui)
-	{
-		m_UIList.push_back(ui);
-	}
+	void AddUI(const TitleUI& ui);
 
 	TitleUIController*	Controller() const { return m_pController; }
 
@@ -67,5 +64,10 @@ private:
 	std::list<TitleUI>	m_UIList		{};	// タイトルUIのリスト
 	std::string			m_Name			{};	// キャンバスの名前
 	bool				m_IsActive		{};	// 有効か？ このCanvasが所有するすべてのUIに影響する。
-	bool				m_IsFitScreen{};	// このキャンバスが画面全体にフィットするかどうか。trueなら、画面全体にフィットする。falseなら、指定された範囲内で描画される。
+	bool				m_IsFitScreen	{};	// このキャンバスが画面全体にフィットするかどうか。trueなら、画面全体にフィットする。falseなら、指定された範囲内で描画される。
+
+	int					m_BeginIndexX	{};
+	int					m_BeginIndexY	{};
+	int					m_EndIndexX		{};
+	int					m_EndIndexY		{};
 };

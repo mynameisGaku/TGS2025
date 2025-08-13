@@ -22,6 +22,19 @@ void TitleUIGridCursor::Move(int dx, int dy)
 
 void TitleUIGridCursor::Update()
 {
+	if (InputManager::Push(KeyDefine::KeyCode::MouseButton1) ||
+		InputManager::Push(KeyDefine::KeyCode::Z) ||
+		InputManager::Push(KeyDefine::KeyCode::ButtonA) ||
+		InputManager::Hold(KeyDefine::KeyCode::MouseButton1) ||
+		InputManager::Hold(KeyDefine::KeyCode::Z) ||
+		InputManager::Hold(KeyDefine::KeyCode::ButtonA)||
+		InputManager::Release(KeyDefine::KeyCode::MouseButton1) ||
+		InputManager::Release(KeyDefine::KeyCode::Z) ||
+		InputManager::Release(KeyDefine::KeyCode::ButtonA))
+	{
+		return;
+	}
+
 	auto device = InputManager::GetLastInputDevice();
 	switch (device)
 	{
@@ -58,4 +71,13 @@ void TitleUIGridCursor::Update()
 		default:
 			break;
 	}
+}
+
+void TitleUIGridCursor::Draw()
+{
+	if (m_hImage == -1)
+		return;
+	const int x = m_Position.x + m_Offset.x;
+	const int y = m_Position.y + m_Offset.y;
+	DrawGraph(x, y, m_hImage, TRUE);
 }

@@ -110,6 +110,9 @@ public:
 	bool		IsVisible() const { return m_IsVisible; }
 	std::string	GetName()   const { return m_Name; }
 
+	int			GetIndexX() const { return m_IndexX; }
+	int			GetIndexY() const { return m_IndexY; }
+
 private:
 	void checkCursorCollision();
 

@@ -11,6 +11,8 @@
 #include <src/util/time/GameTime.h>
 #include <src/util/file/json/VectorJson.h>
 #include <src/util/transform/RectTransform.h>
+#include <src/util/file/resource_loader/resourceLoader.h>
+#include <framework/app.h>
 
 using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -18,6 +20,9 @@ namespace fs = std::filesystem;
 TitleUIController::TitleUIController()
 {
 	m_pGridCursor = new TitleUIGridCursor();
+	m_pGridCursor->SetImage(ResourceLoader::LoadGraph("data/Img/UI/Title/Cursor.png"));
+	m_pGridCursor->SetOffset(Vector2(-120, -30));
+
 	m_pCurrentCanvas = nullptr;
 
 	subscribeFunctions();
@@ -168,6 +173,8 @@ void TitleUIController::Draw()
 	{
 		m_pCurrentCanvas->Draw();
 	}
+
+	m_pGridCursor->Draw();
 }
 
 void TitleUIController::TriggerEvent(TUI_EVENT& event, const nlohmann::json& argument)
@@ -199,6 +206,7 @@ void TitleUIController::subscribeFunctions()
 	SUBSCRIBE_FUNCTION("ActivateCanvas", activateCanvas);
 	SUBSCRIBE_FUNCTION("Scaling", scaling);
 	SUBSCRIBE_FUNCTION("GameStart", gameStart);
+	SUBSCRIBE_FUNCTION("Exit", exit);
 }
 
 void TitleUIController::activateCanvas(nlohmann::json argument)
@@ -241,4 +249,9 @@ void TitleUIController::gameStart(nlohmann::json argument)
 	}
 
 	SceneManager::ChangeScene(sceneName);
+}
+
+void TitleUIController::exit(nlohmann::json argument)
+{
+	Exit();
 }

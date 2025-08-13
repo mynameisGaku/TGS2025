@@ -1,4 +1,6 @@
 #include "TitleUICanvas.h"
+#include "TitleUIController.h"
+#include "TitleUIGridCursor.h"
 #include <src/common/setting/window/WindowSetting.h>
 #include <src/util/logger/Logger.h>
 #include <vector>
@@ -23,6 +25,17 @@ void TitleUICanvas::Update()
 	{
 		ui.Update();
 	}
+
+	// カーソルの位置を制限
+	auto cursor = m_pController->GetGridCursor();
+	if(cursor->IndexX() > m_EndIndexX)
+		cursor->MoveTo(m_EndIndexX, cursor->IndexY());
+	if (cursor->IndexY() > m_EndIndexY)
+		cursor->MoveTo(cursor->IndexX(), m_EndIndexY);
+	if (cursor->IndexX() < m_BeginIndexX)
+		cursor->MoveTo(m_BeginIndexX, cursor->IndexY());
+	if (cursor->IndexY() < m_BeginIndexY)
+		cursor->MoveTo(cursor->IndexX(), m_BeginIndexY);
 }
 
 void TitleUICanvas::Draw()
@@ -67,6 +80,20 @@ void TitleUICanvas::Release()
 	m_IsActive = false;
 	m_pController = nullptr;
 	m_Name.clear();
+}
+
+void TitleUICanvas::AddUI(const TitleUI& ui)
+{
+	if (ui.GetIndexX() < m_BeginIndexX)
+		m_BeginIndexX = ui.GetIndexX();
+	if (ui.GetIndexY() < m_BeginIndexY)
+		m_BeginIndexY = ui.GetIndexY();
+	if(ui.GetIndexX() > m_EndIndexX)
+		m_EndIndexX = ui.GetIndexX();
+	if (ui.GetIndexY() > m_EndIndexY)
+		m_EndIndexY = ui.GetIndexY();
+
+	m_UIList.push_back(ui);
 }
 
 TitleUI TitleUICanvas::GetUI(const std::string& name)

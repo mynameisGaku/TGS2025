@@ -322,6 +322,8 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
                                 <Label Grid.Row="0" Grid.Column="0" Content="NAME"/>
@@ -395,9 +397,12 @@
 
                                 <Label Grid.Row="17" Grid.Column="0" Content="Display Image (editor)"/>
                                 <DockPanel Grid.Row="17" Grid.Column="1">
-                                    <TextBox x:Name="tbDisplayImage" DockPanel.Dock="Left" Text="{Binding DisplayImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="tbDisplayImage" Width="150"  DockPanel.Dock="Left" Text="{Binding DisplayImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Button Content="参照..." Width="64" Click="OnBrowseDisplayImageClick"/>
                                 </DockPanel>
+
+                                <Label Grid.Row="18" Grid.Column="0" Content="COLLISION"/>
+                                <ComboBox Grid.Row="18" Grid.Column="1" ItemsSource="{Binding CollisionOptions}" SelectedItem="{Binding COLLISION, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </StackPanel>
                     </StackPanel>

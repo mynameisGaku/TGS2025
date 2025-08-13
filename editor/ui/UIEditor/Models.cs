@@ -20,13 +20,37 @@ namespace MainCanvasEditor
         [JsonPropertyName("UIList")] public ObservableCollection<UIItem> UIList { get; set; } = new();
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new(n));
+        protected void OnPropertyChanged(string n)
+        {
+            PropertyChanged?.Invoke(this, new(n));
+        }
     }
 
     public class Point2D
     {
         [JsonPropertyName("X")] public int X { get; set; }
         [JsonPropertyName("Y")] public int Y { get; set; }
+    }
+
+    // ====== UIイベント（JSONそのまま保持） ======
+    public class UIEvent
+    {
+        [JsonPropertyName("Event")] public string Event { get; set; } = "";
+        [JsonPropertyName("Description")] public string Description { get; set; } = "";
+        [JsonPropertyName("Timing")] public string Timing { get; set; } = "";
+        // 形は自由なので object として保持（JsonElement が入ってきます）
+        [JsonPropertyName("Argument")] public object Argument { get; set; }
+
+        public UIEvent Clone()
+        {
+            return new UIEvent
+            {
+                Event = this.Event,
+                Description = this.Description,
+                Timing = this.Timing,
+                Argument = this.Argument // JsonElement でもそのまま保持できる
+            };
+        }
     }
 
     // ====== UI1個分（JSONと1:1） ======
@@ -44,11 +68,15 @@ namespace MainCanvasEditor
         [JsonPropertyName("INDEX_Y")] public int INDEX_Y { get; set; }
         [JsonPropertyName("DESCRIPTION")] public string DESCRIPTION { get; set; }
         [JsonPropertyName("ANCHORPOINT")] public string ANCHORPOINT { get; set; }
-        [JsonPropertyName("COLLISION")] public string COLLISION { get; set; }
+        [JsonPropertyName("COLLISION")] public string COLLISION { get; set; } = "TUI_CANVAS_COLLISION_NONE";
+
         [JsonPropertyName("IS_LOOP_EVENT")] public bool IS_LOOP_EVENT { get; set; }
         [JsonPropertyName("IS_SELECTABLE")] public bool IS_SELECTABLE { get; set; }
 
-        // エディタ拡張（JSONにも保存）
+        // ★ 追加：イベント配列（読み込んだまま保持→保存で復元）
+        [JsonPropertyName("EVENTS")] public ObservableCollection<UIEvent> EVENTS { get; set; } = new();
+
+        // ===== エディタ拡張（JSONにも保存される） =====
         [JsonPropertyName("IsVisible")] public bool? IsVisible { get; set; } = true;
         [JsonPropertyName("Rotation")] public double? Rotation { get; set; } = 0.0;
         [JsonPropertyName("Scale")] public double? Scale { get; set; } = 1.0;
@@ -59,7 +87,7 @@ namespace MainCanvasEditor
         [JsonPropertyName("PivotY")] public double? PivotY { get; set; } = 0.5;
     }
 
-    // ====== 画面表示用VM（JSONは UIItem を参照） ======
+    // ====== 画面表示用VM（UIItem を参照） ======
     public class UIItemVM : INotifyPropertyChanged
     {
         public UIItem Src { get; }
@@ -74,10 +102,16 @@ namespace MainCanvasEditor
         private bool _isSelected;
         public bool IsSelected
         {
-            get => _isSelected;
+            get
+            {
+                return _isSelected;
+            }
             set
             {
-                if (_isSelected == value) return;
+                if (_isSelected == value)
+                {
+                    return;
+                }
                 _isSelected = value;
                 OnPropertyChanged();
             }
@@ -85,7 +119,10 @@ namespace MainCanvasEditor
 
         public string NAME
         {
-            get => Src.NAME;
+            get
+            {
+                return Src.NAME;
+            }
             set
             {
                 Src.NAME = value;
@@ -95,7 +132,10 @@ namespace MainCanvasEditor
 
         public string GRAPH_PATH
         {
-            get => Src.GRAPH_PATH;
+            get
+            {
+                return Src.GRAPH_PATH;
+            }
             set
             {
                 Src.GRAPH_PATH = value;
@@ -107,7 +147,10 @@ namespace MainCanvasEditor
 
         public string ANCHORPOINT
         {
-            get => Src.ANCHORPOINT;
+            get
+            {
+                return Src.ANCHORPOINT;
+            }
             set
             {
                 Src.ANCHORPOINT = value;
@@ -117,9 +160,30 @@ namespace MainCanvasEditor
             }
         }
 
+        // === 衝突（エディタで編集する用の素通し） ===
+        public string COLLISION
+        {
+            get
+            {
+                return Src.COLLISION;
+            }
+            set
+            {
+                if (Src.COLLISION == value)
+                {
+                    return;
+                }
+                Src.COLLISION = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int OFFSET_X_FROM_ANCHOR
         {
-            get => Src.OFFSET_X_FROM_ANCHOR;
+            get
+            {
+                return Src.OFFSET_X_FROM_ANCHOR;
+            }
             set
             {
                 Src.OFFSET_X_FROM_ANCHOR = value;
@@ -130,7 +194,10 @@ namespace MainCanvasEditor
 
         public int OFFSET_Y_FROM_ANCHOR
         {
-            get => Src.OFFSET_Y_FROM_ANCHOR;
+            get
+            {
+                return Src.OFFSET_Y_FROM_ANCHOR;
+            }
             set
             {
                 Src.OFFSET_Y_FROM_ANCHOR = value;
@@ -141,7 +208,10 @@ namespace MainCanvasEditor
 
         public int GRAPH_DEST_X
         {
-            get => Src.GRAPH_DEST_X;
+            get
+            {
+                return Src.GRAPH_DEST_X;
+            }
             set
             {
                 Src.GRAPH_DEST_X = value;
@@ -153,7 +223,10 @@ namespace MainCanvasEditor
 
         public int GRAPH_DEST_Y
         {
-            get => Src.GRAPH_DEST_Y;
+            get
+            {
+                return Src.GRAPH_DEST_Y;
+            }
             set
             {
                 Src.GRAPH_DEST_Y = value;
@@ -163,43 +236,271 @@ namespace MainCanvasEditor
             }
         }
 
-        public int GRAPH_SRC_X { get => Src.GRAPH_SRC_X; set { Src.GRAPH_SRC_X = value; OnPropertyChanged(); } }
-        public int GRAPH_SRC_Y { get => Src.GRAPH_SRC_Y; set { Src.GRAPH_SRC_Y = value; OnPropertyChanged(); } }
-        public int INDEX_X { get => Src.INDEX_X; set { Src.INDEX_X = value; OnPropertyChanged(); } }
-        public int INDEX_Y { get => Src.INDEX_Y; set { Src.INDEX_Y = value; OnPropertyChanged(); } }
-        public string DESCRIPTION { get => Src.DESCRIPTION; set { Src.DESCRIPTION = value; OnPropertyChanged(); } }
-        public bool IS_SELECTABLE { get => Src.IS_SELECTABLE; set { Src.IS_SELECTABLE = value; OnPropertyChanged(); } }
-        public bool IsVisible { get => Src.IsVisible ?? true; set { Src.IsVisible = value; OnPropertyChanged(); } }
-        public double Rotation { get => Src.Rotation ?? 0.0; set { Src.Rotation = value; OnPropertyChanged(); } }
-        public double Scale { get => Src.Scale ?? 1.0; set { Src.Scale = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayWidth)); OnPropertyChanged(nameof(DisplayHeight)); OnPropertyChanged(nameof(PosX)); OnPropertyChanged(nameof(PosY)); } }
-        public double Opacity { get => Src.Opacity ?? 1.0; set { Src.Opacity = value; OnPropertyChanged(); } }
-        public int ZIndex { get => Src.ZIndex ?? 0; set { Src.ZIndex = value; OnPropertyChanged(); } }
-        public bool LockAspectRatio { get => Src.LockAspectRatio ?? true; set { Src.LockAspectRatio = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplayHeight)); } }
-        public double PivotX { get => Src.PivotX ?? 0.5; set { Src.PivotX = value; OnPropertyChanged(); OnPropertyChanged(nameof(PivotPoint)); OnPropertyChanged(nameof(PosX)); } }
-        public double PivotY { get => Src.PivotY ?? 0.5; set { Src.PivotY = value; OnPropertyChanged(); OnPropertyChanged(nameof(PivotPoint)); OnPropertyChanged(nameof(PosY)); } }
-        public Point PivotPoint => new(PivotX, PivotY);
-
-        public double DisplayWidth => GRAPH_DEST_X * Scale;
-        public double DisplayHeight => GRAPH_DEST_Y * Scale;
-
-        public string[] AnchorOptions => new[]
+        public int GRAPH_SRC_X
         {
-        "TUI_CANVAS_ANCHOR_POINT_TOP_LEFT",
-        "TUI_CANVAS_ANCHOR_POINT_TOP",
-        "TUI_CANVAS_ANCHOR_POINT_TOP_RIGHT",
-        "TUI_CANVAS_ANCHOR_POINT_LEFT",
-        "TUI_CANVAS_ANCHOR_POINT_CENTER",
-        "TUI_CANVAS_ANCHOR_POINT_RIGHT",
-        "TUI_CANVAS_ANCHOR_POINT_BOTTOM_LEFT",
-        "TUI_CANVAS_ANCHOR_POINT_BOTTOM",
-        "TUI_CANVAS_ANCHOR_POINT_BOTTOM_RIGHT"
-    };
+            get
+            {
+                return Src.GRAPH_SRC_X;
+            }
+            set
+            {
+                Src.GRAPH_SRC_X = value;
+                OnPropertyChanged();
+            }
+        }
 
-        // エディタ専用の表示画像（JSON非保存）：指定がなければ GRAPH_PATH を使う
+        public int GRAPH_SRC_Y
+        {
+            get
+            {
+                return Src.GRAPH_SRC_Y;
+            }
+            set
+            {
+                Src.GRAPH_SRC_Y = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int INDEX_X
+        {
+            get
+            {
+                return Src.INDEX_X;
+            }
+            set
+            {
+                Src.INDEX_X = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int INDEX_Y
+        {
+            get
+            {
+                return Src.INDEX_Y;
+            }
+            set
+            {
+                Src.INDEX_Y = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DESCRIPTION
+        {
+            get
+            {
+                return Src.DESCRIPTION;
+            }
+            set
+            {
+                Src.DESCRIPTION = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IS_SELECTABLE
+        {
+            get
+            {
+                return Src.IS_SELECTABLE;
+            }
+            set
+            {
+                Src.IS_SELECTABLE = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // === そのまま保存する系 ===
+        public bool IsVisible
+        {
+            get
+            {
+                return Src.IsVisible ?? true;
+            }
+            set
+            {
+                Src.IsVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Rotation
+        {
+            get
+            {
+                return Src.Rotation ?? 0.0;
+            }
+            set
+            {
+                Src.Rotation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Scale
+        {
+            get
+            {
+                return Src.Scale ?? 1.0;
+            }
+            set
+            {
+                Src.Scale = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayWidth));
+                OnPropertyChanged(nameof(DisplayHeight));
+                OnPropertyChanged(nameof(PosX));
+                OnPropertyChanged(nameof(PosY));
+            }
+        }
+
+        public double Opacity
+        {
+            get
+            {
+                return Src.Opacity ?? 1.0;
+            }
+            set
+            {
+                Src.Opacity = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ZIndex
+        {
+            get
+            {
+                return Src.ZIndex ?? 0;
+            }
+            set
+            {
+                Src.ZIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool LockAspectRatio
+        {
+            get
+            {
+                return Src.LockAspectRatio ?? true;
+            }
+            set
+            {
+                Src.LockAspectRatio = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayHeight));
+            }
+        }
+
+        public double PivotX
+        {
+            get
+            {
+                return Src.PivotX ?? 0.5;
+            }
+            set
+            {
+                Src.PivotX = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(PivotPoint));
+                OnPropertyChanged(nameof(PosX));
+            }
+        }
+
+        public double PivotY
+        {
+            get
+            {
+                return Src.PivotY ?? 0.5;
+            }
+            set
+            {
+                Src.PivotY = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(PivotPoint));
+                OnPropertyChanged(nameof(PosY));
+            }
+        }
+
+        // ★ イベント配列（UIで編集しないなら触らずそのまま保存される）
+        public ObservableCollection<UIEvent> EVENTS
+        {
+            get
+            {
+                return Src.EVENTS;
+            }
+        }
+
+        public Point PivotPoint
+        {
+            get
+            {
+                return new(PivotX, PivotY);
+            }
+        }
+
+        public double DisplayWidth
+        {
+            get
+            {
+                return GRAPH_DEST_X * Scale;
+            }
+        }
+
+        public double DisplayHeight
+        {
+            get
+            {
+                return GRAPH_DEST_Y * Scale;
+            }
+        }
+
+        public string[] AnchorOptions
+        {
+            get
+            {
+                return new[]
+                {
+                    "TUI_CANVAS_ANCHOR_POINT_TOP_LEFT",
+                    "TUI_CANVAS_ANCHOR_POINT_TOP",
+                    "TUI_CANVAS_ANCHOR_POINT_TOP_RIGHT",
+                    "TUI_CANVAS_ANCHOR_POINT_LEFT",
+                    "TUI_CANVAS_ANCHOR_POINT_CENTER",
+                    "TUI_CANVAS_ANCHOR_POINT_RIGHT",
+                    "TUI_CANVAS_ANCHOR_POINT_BOTTOM_LEFT",
+                    "TUI_CANVAS_ANCHOR_POINT_BOTTOM",
+                    "TUI_CANVAS_ANCHOR_POINT_BOTTOM_RIGHT"
+                };
+            }
+        }
+
+        public string[] CollisionOptions
+        {
+            get
+            {
+                return new[]
+                {
+                    "TUI_CANVAS_COLLISION_NONE",
+                    "TUI_CANVAS_COLLISION_RECT",
+                    "TUI_CANVAS_COLLISION_CIRCLE"
+                };
+            }
+        }
+
+        // 画像（エディタ表示用）
         private string _displayImagePath;
         public string DisplayImagePath
         {
-            get => _displayImagePath;
+            get
+            {
+                return _displayImagePath;
+            }
             set
             {
                 _displayImagePath = value;
@@ -214,9 +515,15 @@ namespace MainCanvasEditor
         {
             get
             {
-                if (_imageSource != null) return _imageSource;
+                if (_imageSource != null)
+                {
+                    return _imageSource;
+                }
                 var path = !string.IsNullOrWhiteSpace(DisplayImagePath) ? DisplayImagePath : GRAPH_PATH;
-                if (string.IsNullOrWhiteSpace(path)) return null;
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    return null;
+                }
 
                 try
                 {
@@ -242,7 +549,7 @@ namespace MainCanvasEditor
             }
         }
 
-        // ===== レイアウト（Begin/End を反映した Anchor 計算） =====
+        // ===== レイアウト =====
         public double PosX
         {
             get

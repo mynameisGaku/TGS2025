@@ -27,7 +27,9 @@ private:
 	int m_IndexX{};
 	int m_IndexY{};
 	int m_hImage{};
+	int m_FrameCounter{};
 
 	Vector2 m_Position{};
 	Vector2 m_Offset{};
+	Vector2 m_SinCurve{};
 };

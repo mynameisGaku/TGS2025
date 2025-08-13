@@ -22,6 +22,8 @@ void TitleUIGridCursor::Move(int dx, int dy)
 
 void TitleUIGridCursor::Update()
 {
+	m_FrameCounter = m_FrameCounter + 1 % 360;
+
 	if (InputManager::Push(KeyDefine::KeyCode::MouseButton1) ||
 		InputManager::Push(KeyDefine::KeyCode::Z) ||
 		InputManager::Push(KeyDefine::KeyCode::ButtonA) ||
@@ -79,5 +81,8 @@ void TitleUIGridCursor::Draw()
 		return;
 	const int x = m_Position.x + m_Offset.x;
 	const int y = m_Position.y + m_Offset.y;
-	DrawGraph(x, y, m_hImage, TRUE);
+
+	m_SinCurve.x = 2.0f * sinf(m_FrameCounter * 0.1f);
+
+	DrawGraph(x + m_SinCurve.x, y, m_hImage, TRUE);
 }

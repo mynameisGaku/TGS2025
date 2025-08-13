@@ -20,21 +20,9 @@ struct UI_TITLE_CANVAS_DESC
 class TitleUICanvas
 {
 public:
-	/// <summary>
-	/// ‰Šú‰»ˆ—
-	/// </summary>
 	void Init(const UI_TITLE_CANVAS_DESC& desc, TitleUIController* pCon);
-	/// <summary>
-	/// XVˆ—
-	/// </summary>
 	void Update();
-	/// <summary>
-	/// •`‰æˆ—
-	/// </summary>
 	void Draw();
-	/// <summary>
-	/// ‰ğ•úˆ—
-	/// </summary>
 	void Release();
 
 	void AddUI(const TitleUI& ui);

@@ -16,7 +16,8 @@
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
 #include "src/common/network/NetworkManager.h"
-#include <src/reference/network/NetworkRef.h>
+#include "src/scene/play/ball/BallTarget.h"
+#include "src/scene/play/ball/BallTargetManager.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -43,23 +44,13 @@ void Camera::ChaseState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
+		// カメラを持つキャラを取得
+		findFollowerChara();
+		if (not m_pFollowerChara) return;
+
+		//▼=== エイムステートから滑らかに視点（オフセット）を戻す処理 ===
 		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
-
-		// キャラの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
-
-		auto& net = NetworkRef::Inst();
-		// 追従するキャラ
-		if(net.IsNetworkEnable)
-			m_pFollowerChara = charaM->GetFromUUID(m_User.UUID);
-		else
-			m_pFollowerChara = charaM->CharaInst(m_CharaIndex);
-		if (m_pFollowerChara == nullptr)
-			return;
-		m_CharaIndex = m_pFollowerChara->GetIndex();
 
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 
@@ -79,13 +70,14 @@ void Camera::ChaseState(FSMSignal sig)
 			SetTarget(TARGET);
 			transform->position = POSITION;
 		}
+		//=========================================================
 
-		// スティックによる操作
+		// 入力受付、カメラ回転
 		operationByStick(m_CharaIndex + 1, ViewPointShift::All);
-	
-		// マウスによる操作
-		if (m_CharaIndex == 0)
+		if (m_CharaIndex == 0) // プレイヤー0ならマウス操作も可能
+		{
 			operationByMouse(ViewPointShift::All);
+		}
 		
 		// X軸回転に制限をかける
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
@@ -93,19 +85,35 @@ void Camera::ChaseState(FSMSignal sig)
 		// Y軸回転に制限をかける
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex, this->m_CameraCone.range);// 注視するキャラ
-
 		// 注視するキャラが存在、ボタン入力がされた場合
-		if (m_pTargetChara != nullptr && InputManager::Hold("TargetCamera", m_CharaIndex + 1))
+		if (m_pFollowerChara->IsCharging())
 		{
-			// 視点移動検知
-			if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
-				PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
-				m_TargetTransitionTime = 0.5f;
+			if (m_pBallTargetManager)
+			{
+				// 一番近い敵しかとれないよ～今はね
+				m_pBallTarget = m_pBallTargetManager->GetNearest(m_CharaIndex, this->m_CameraCone.range);	// 注視するボールターゲット
+			}
 
-			// コーン形状の判定内に注視するキャラが居る場合
-			if (m_TargetTransitionTime <= 0.0f && ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pTargetChara->transform->position).IsCollision())
-				ChangeState(&Camera::AimState);
+			if (m_pBallTarget != nullptr)
+			{
+				// 視点移動検知
+				if (isMoveCamera())
+					m_TargetTransitionTime = 0.5f;
+
+				Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
+
+				// コーン形状の判定内に注視するキャラが居る場合
+				if (m_TargetTransitionTime <= 0.0f && 
+					ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pBallTarget->Position()).IsCollision() &&
+					not StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position()))
+				{
+					ChangeState(&Camera::AimState);
+				}
+				else
+				{
+					m_pBallTarget = nullptr;
+				}
+			}
 		}
 	}
 	break;

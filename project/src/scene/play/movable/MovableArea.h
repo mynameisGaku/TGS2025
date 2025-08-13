@@ -15,5 +15,4 @@ public:
 
 private:
 	ColDefine::AABB m_AABB;
-
 };

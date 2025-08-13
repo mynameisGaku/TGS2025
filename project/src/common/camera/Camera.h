@@ -18,6 +18,8 @@ class StateManager;
 class Chara;
 class NetworkManager;
 class BallTarget;
+class CharaManager;
+class BallTargetManager;
 
 /// <summary>
 /// カメラのクラス
@@ -65,11 +67,6 @@ public:
 	/// </summary>
 	/// <param name="state">ステートの関数ポインタ</param>
 	void ChangeState(void(Camera::*state)(FSMSignal));
-
-	/// <summary>
-	/// 描画領域を適用する
-	/// </summary>
-	void ApplyDrawArea() const;
 
 	//================================================================================
 	// ▼セッター
@@ -128,12 +125,18 @@ public:
 	/// <param name="y">描画開始地点(Y軸)</param>
 	/// <param name="w">描画の大きさ(X軸)</param>
 	/// <param name="h">描画の大きさ(Y軸)</param>
-	void SetDrawArea(int x, int y, int w, int h);
+	void SetDefinedDrawArea(int x, int y, int w, int h);
+	void SetDafeultDrawArea(int x, int y, int w, int h);
 
 	/// <summary>
 	/// 既定の描画範囲を設定する
 	/// </summary>
-	void SetDrawAreaDefault();
+	void ApplyDefaultDrawArea();
+
+	/// <summary>
+	/// 描画領域を定義されたものに適応させます。
+	/// </summary>
+	void ApplyDefinedDrawArea();
 
 	//================================================================================
 	// ▼ゲッター
@@ -181,14 +184,9 @@ public:
 	const Vector3 TargetLay() const;
 
 	/// <summary>
-	/// 注視しているキャラクター
+	/// 注視しているボールターゲット
 	/// </summary>
-	inline const Chara* TargetChara() const { return m_pTargetChara; }
-
-	/// <summary>
-	/// 描画が終了したかどうかを判定
-	/// </summary>
-	inline bool IsDrawEnd() const { return m_DrawFlag; }
+	inline BallTarget* GetBallTarget() const { return m_pBallTarget; }
 
 	/// <summary>
 	/// 描画を行うか
@@ -209,6 +207,22 @@ public:
 	/// このカメラを所有しているユーザーを取得する
 	/// </summary>
 	User* GetUser();
+
+	/// <summary>
+	/// このカメラの描画領域を取得する
+	/// </summary>
+	/// <param name="x">始点座標(X軸)</param>
+	/// <param name="y">始点座標(Y軸)</param>
+	/// <param name="w">幅</param>
+	/// <param name="h">高さ</param>
+	void GetUsingDrawArea(int* x = nullptr, int* y = nullptr, int* w = nullptr, int* h = nullptr) const;
+
+	/// <summary>
+	/// このカメラの描画領域を取得する
+	/// </summary>
+	/// <param name="pos">始点座標</param>
+	/// <param name="size">幅と高さ</param>
+	void GetUsingDrawArea(Vector2* pos, Vector2* size) const;
 
 	//================================================================================
 	// ▼ステート
@@ -274,6 +288,9 @@ private:
 	/// </summary>
 	void drawVirtualCamera();
 
+	void findFollowerChara();
+	bool isMoveCamera() const;
+
 	//================================================================================
 	// ▼メンバ変数
 
@@ -303,15 +320,23 @@ private:
 
 	float m_EasingTime;				// イージング用タイマー
 	float m_TargetTransitionTime;	// 注視しているキャラに引っ付くまでの時間
+	float m_AimResetTime;			// ロックオンが外れるタイマー
 
-	int screenPosX, screenPosY;		// 描画範囲(始点)
-	int screenSizeX, screenSizeY;	// 描画範囲(大きさ)
+	Vector2 m_UsingScreenPos;		// 現在使用している描画範囲(始点)
+	Vector2 m_UsingScreenSize;		// 現在使用している描画範囲(大きさ)
 
-	bool m_IsView;		// 描画しているか
-	bool m_DrawFlag;	// 描画が完了しているか
+	Vector2 m_DefinedScreenPos;		// 定義された描画範囲(始点)
+	Vector2 m_DefinedScreenSize;	// 定義された描画範囲(大きさ)
 
+	Vector2 m_DefaultScreenPos;		// 既定の描画範囲(始点)
+	Vector2 m_DefaultScreenSize;	// 既定の描画範囲(大きさ)
+
+	bool m_IsView;					// 描画しているか
+
+	CharaManager* m_pCharaManager;	// キャラクターの管理者
 	const Chara* m_pFollowerChara;	// 追尾しているキャラ
-    const Chara* m_pTargetChara;	// 注視しているキャラ
+	BallTarget* m_pBallTarget;		// 注視しているボールターゲット
+	BallTargetManager* m_pBallTargetManager;	// ボールターゲットの管理者
 
     NetworkManager* m_pNetworkManager; // 現在のクライアントのUUIDをもらうためのネトマネ
 };

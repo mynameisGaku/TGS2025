@@ -1,6 +1,7 @@
 #include "UI_Fade.h"
 #include "src/util/ui/UI_Manager.h"
-#include "src/util/screen/ScreenManager.h"
+
+#include "src/common/camera/CameraManager.h"
 
 namespace
 {
@@ -94,8 +95,8 @@ UI_FadeBlack::~UI_FadeBlack()
 
 void UI_FadeBlack::Draw()
 {
-	const Vector2 origin = ScreenManager::GetScreenBeginPos(m_CharaIndex);
-	const Vector2 dest = ScreenManager::GetScreenEndPos(m_CharaIndex);
+	const Vector2 origin = CameraManager::GetDrawingAreaPos_CameraIndex(m_CharaIndex);
+	const Vector2 dest = origin + CameraManager::GetDrawingAreaSize_CameraIndex(m_CharaIndex);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_Alpha);
 	DrawBoxAA(origin.x, origin.y, dest.x, dest.y, 0x000000, TRUE);

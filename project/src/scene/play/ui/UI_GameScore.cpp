@@ -40,8 +40,10 @@ void UI_GameScore::Draw()
 		for (int i = 0; i < CAMERA_NUM; i++)
 		{
 			RectTransform rectTrs = RectTransform(Anchor::Preset::MiddleUp);
-			rectTrs.anchor.SetBegin(ScreenManager::GetScreenBeginPos(i));
-			rectTrs.anchor.SetEnd(ScreenManager::GetScreenEndPos(i));
+			Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
+			Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(i);
+			rectTrs.anchor.SetBegin(begin);
+			rectTrs.anchor.SetEnd(begin + size);
 
 			drawTotalScore(rectTrs.Global().position);
 		}
@@ -134,12 +136,20 @@ void UI_GameScore::drawUserScores()
 
 	for (const auto& rank : ranking)
 	{
-		Vector2 beginPos = CameraManager::GetScreenDivisionPos();
-		Vector2 endPos = CameraManager::GetScreenDivisionSize();
+		Camera* camera = CameraManager::GetCameraDrawing();
+		if (camera == nullptr)
+			return;
+
+		Vector2 drawAreaPos = Vector2::Zero;
+		Vector2 drawAreaSize = Vector2::Zero;
+		Vector2 drawAreaEnd = Vector2::Zero;
+		camera->GetUsingDrawArea(&drawAreaPos, &drawAreaSize);
+
+		drawAreaEnd = drawAreaPos + drawAreaSize;
 
 		RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown, Vector2(-250, -GetFontSize() * dispCount));
-		rectTrs.anchor.SetBegin(beginPos);
-		rectTrs.anchor.SetEnd(beginPos + endPos);
+		rectTrs.anchor.SetBegin(drawAreaPos);
+		rectTrs.anchor.SetEnd(drawAreaEnd);
 
 		const Vector2 size = Vector2(250, GetFontSize());
 		const std::string teamName = m_pMatchManager->GetTeamName(rank.first);

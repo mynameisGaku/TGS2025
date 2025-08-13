@@ -140,7 +140,7 @@ private:
 	std::list<TUI_EVENT>			m_EveryFrameEvents{};
 	TUI_COLLISION_MODE				m_Collision{};
 	TUI_CANVAS_ANCHOR_POINT			m_Anchor{};
-	TitleUICanvas* m_pHolder{};
+	TitleUICanvas*					m_pHolder{};
 	double							m_RotationDeg{ 0.0 };
 	double							m_Scale{ 1.0 };
 	double							m_Opacity{ 1.0 };

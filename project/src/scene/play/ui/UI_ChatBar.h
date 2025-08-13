@@ -1,6 +1,8 @@
 #pragma once
 #include "src/util/ui/UI_Image.h"
 
+class SliceBar;
+
 class UI_ChatBar : public UI_Image {
 public:
 	UI_ChatBar();
@@ -11,4 +13,7 @@ public:
 	void Draw() override;
 
 private:
+	SliceBar* m_BarBack;
+	SliceBar* m_BarGaugeBack;
+
 };

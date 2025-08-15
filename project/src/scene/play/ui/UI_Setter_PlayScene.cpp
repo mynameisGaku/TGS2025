@@ -39,7 +39,7 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		fade->SetTag("Fade_" + sPlayerNum);
 
-		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
+		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::MiddleDown, Vector2(0.0f, -100.0f)), i);
 		chat->SetTag("Chat_" + sPlayerNum);
 
 		m_UIs[crossHair->GetTag()]		= crossHair;

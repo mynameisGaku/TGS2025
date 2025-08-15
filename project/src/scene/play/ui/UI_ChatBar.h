@@ -13,6 +13,7 @@ public:
 	void Draw() override;
 
 private:
+	int m_hBarImage;
 	SliceBar* m_BarBack;
 	SliceBar* m_BarGaugeBack;
 

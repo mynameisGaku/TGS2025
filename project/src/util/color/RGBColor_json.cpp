@@ -5,9 +5,9 @@
 void to_json(nlohmann::json& j, const RGBColor& rgbColor)
 {
 	j = nlohmann::json{
-		{ "R", rgbColor.GetRed() },
-		{ "G", rgbColor.GetGreen() },
-		{ "B", rgbColor.GetBlue() },
+		{ "R", (int)rgbColor.Red },
+		{ "G", (int)rgbColor.Green },
+		{ "B", (int)rgbColor.Blue },
 	};
 }
 

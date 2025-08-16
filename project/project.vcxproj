@@ -354,6 +354,7 @@
     <ClCompile Include="src\reference\input\InputRef.cpp" />
     <ClCompile Include="src\reference\network\NetworkRef.cpp" />
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityFire.cpp" />
@@ -561,6 +562,7 @@
     <ClInclude Include="src\reference\input\InputRef.h" />
     <ClInclude Include="src\reference\network\NetworkRef.h" />
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h" />
+    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ability\AbilityBase.h" />
     <ClInclude Include="src\scene\play\ability\AbilityExplosion.h" />

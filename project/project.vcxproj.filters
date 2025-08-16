@@ -445,6 +445,9 @@
     <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Interfaces">
       <UniqueIdentifier>{0f171ba5-0d6c-4139-b7a8-ea67b5561253}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\getset">
+      <UniqueIdentifier>{20190ae6-e3de-4fa7-a86e-836b1fd6f982}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -1487,6 +1490,9 @@
     <ClCompile Include="src\util\color\RGBColor_json.cpp">
       <Filter>src%28application%29\util\color</Filter>
     </ClCompile>
+    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp">
+      <Filter>src%28application%29\reference\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2347,7 +2353,12 @@
     <ClInclude Include="src\util\color\RGBColor_json.h">
       <Filter>src%28application%29\util\color</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\getset\GetSet.h" />
+    <ClInclude Include="src\util\getset\GetSet.h">
+      <Filter>src%28application%29\util\getset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h">
+      <Filter>src%28application%29\reference\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

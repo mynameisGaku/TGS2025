@@ -1,6 +1,7 @@
 #pragma once
 #include "src/util/ui/UI_Image.h"
-#include "src/util/color/ColorUtil.h"
+#include "src/util/color/RGBColor.h"
+#include "src/util/getset/GetSet.h"
 #include <array>
 
 // 3ƒXƒ‰ƒCƒX‰æ‘œ‚Å”CˆÓ‚Ì’·‚³‚Ì–_‚ð•`‰æ‚·‚é
@@ -16,6 +17,7 @@ public:
 
 	void InitImage(int _hImage);
 
+	GetSet<RGBColor> Color = (&m_Color);
 private:
 	enum SlicePart
 	{
@@ -31,4 +33,6 @@ private:
 	std::array<int, SLICE_COUNT> m_ImagePartWidth;
 
 	bool m_IsInitImage;
+
+	RGBColor m_Color;
 };

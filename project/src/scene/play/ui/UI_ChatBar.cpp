@@ -15,31 +15,46 @@ UI_ChatBar::UI_ChatBar(const RectTransform& trs, int index)
 	SetTransform(trs);
 	UI_Manager::SetAnchorPositionByScreenSplit(this, index);
 
-	m_BarBack = new SliceBar(RectTransform(Vector2::Zero, 0.0f, Vector2(100, 50), rectTransform));
-	m_BarGaugeBack = new SliceBar(RectTransform(Vector2(0, -200), 0.0f, Vector2(300, 70), rectTransform));
+	m_BarList["Back"] = new SliceBar(RectTransform(Vector2::Zero, 0.0f, Vector2(100, 50), rectTransform));
+	m_BarList["GaugeBack"] = new SliceBar(RectTransform(Vector2(0, -200), 0.0f, Vector2(300, 70), rectTransform));
 
-	m_BarBack->InitImage(m_hBarImage);
-	m_BarGaugeBack->InitImage(m_hBarImage);
+	m_BarList["Back"]->SetCenter(Vector2(0, 0));
+	m_BarList["GaugeBack"]->SetCenter(Vector2(1.0f, 0.5f));
 
-	m_BarBack->SetCenter(Vector2(0, 0));
-	m_BarGaugeBack->SetCenter(Vector2(1.0f, 0.5f));
+	m_BarList["Back"]->Color = RGBColor(50);
+	m_BarList["GaugeBack"]->Color = RGBColor(100);
+
+	for (auto& item : m_BarList)
+	{
+		SliceBar* bar = item.second;
+		bar->InitImage(m_hBarImage);
+	}
 }
 
 UI_ChatBar::~UI_ChatBar()
 {
 	ResourceLoader::DeleteGraph(hImage);
-	delete m_BarBack;
-	delete m_BarGaugeBack;
+	for (auto& item : m_BarList)
+	{
+		SliceBar* bar = item.second;
+		delete bar;
+	}
 }
 
 void UI_ChatBar::Update()
 {
-	m_BarBack->Update();
-	m_BarGaugeBack->Update();
+	for (auto& item : m_BarList)
+	{
+		SliceBar* bar = item.second;
+		bar->Update();
+	}
 }
 
 void UI_ChatBar::Draw()
 {
-	m_BarBack->Draw();
-	m_BarGaugeBack->Draw();
+	for (auto& item : m_BarList)
+	{
+		SliceBar* bar = item.second;
+		bar->Draw();
+	}
 }

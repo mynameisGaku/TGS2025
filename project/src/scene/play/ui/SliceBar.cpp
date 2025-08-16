@@ -51,7 +51,7 @@ void SliceBar::Draw()
 
 	//======================
 
-	
+	m_Color.SetDrawBright();
 
 	float cx = center.x * global.scale.x;
 	float cy = center.y * global.scale.y;
@@ -61,7 +61,6 @@ void SliceBar::Draw()
 	for (size_t i = 0; i < SLICE_COUNT; i++)
 	{
 		DrawRectRotaGraph3F(global.position.x + currentWidth - cx, global.position.y - cy, srcX, 0, m_ImagePartWidth[i], m_ImageHeight, 0, 0, partScaleX[i], scaleY, 0.0, hImage, TRUE);
-
 
 		srcX += m_ImagePartWidth[i];
 		currentWidth += m_ImagePartWidth[i] * partScaleX[i];

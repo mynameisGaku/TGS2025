@@ -1,5 +1,7 @@
 #pragma once
 #include "src/util/ui/UI_Image.h"
+#include <unordered_map>
+#include <string>
 
 class SliceBar;
 
@@ -14,7 +16,5 @@ public:
 
 private:
 	int m_hBarImage;
-	SliceBar* m_BarBack;
-	SliceBar* m_BarGaugeBack;
-
+	std::unordered_map<std::string, SliceBar*> m_BarList;
 };

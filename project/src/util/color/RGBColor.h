@@ -1,5 +1,6 @@
 #pragma once
 #include "framework/myDxLib.h"
+#include "src/util/getset/GetSet.h"
 
 // ‚±‚ÌƒNƒ‰ƒX‚ÍDxLib‚ÉˆË‘¶‚µ‚Ä‚¢‚é‚Ì‚Å’ˆÓ
 
@@ -78,6 +79,10 @@ public:
 	void SetRed(int value);
 	void SetGreen(int value);
 	void SetBlue(int value);
+
+	GetSet<int> Red = (&r);
+	GetSet<int> Green = (&g);
+	GetSet<int> Blue = (&b);
 private:
 	enum class RGBParam
 	{

@@ -1481,6 +1481,12 @@
     <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\color\RGBColor.cpp">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\color\RGBColor_json.cpp">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2335,6 +2341,13 @@
     <ClInclude Include="src\scene\play\ui\UI_ChatBar.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\color\RGBColor.h">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\color\RGBColor_json.h">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\getset\GetSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

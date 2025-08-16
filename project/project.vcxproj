@@ -415,6 +415,8 @@
     <ClCompile Include="src\util\behavior_tree\BehaviorTask.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorTree.cpp" />
     <ClCompile Include="src\util\blur_screen\BlurScreen.cpp" />
+    <ClCompile Include="src\util\color\RGBColor.cpp" />
+    <ClCompile Include="src\util\color\RGBColor_json.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiFunc.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiManager.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Button.cpp" />
@@ -629,6 +631,8 @@
     <ClInclude Include="src\util\behavior_tree\BehaviorTree.h" />
     <ClInclude Include="src\util\blur_screen\BlurScreen.h" />
     <ClInclude Include="src\util\color\ColorUtil.h" />
+    <ClInclude Include="src\util\color\RGBColor.h" />
+    <ClInclude Include="src\util\color\RGBColor_json.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiFunc.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiManager.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h" />
@@ -668,6 +672,7 @@
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h" />
     <ClInclude Include="src\util\gauge\gauge.h" />
+    <ClInclude Include="src\util\getset\GetSet.h" />
     <ClInclude Include="src\util\history\History.h" />
     <ClInclude Include="src\util\input\InputManager.h" />
     <ClInclude Include="src\util\input\KeyController.h" />

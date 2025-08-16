@@ -51,7 +51,8 @@ void SliceBar::Draw()
 
 	//======================
 
-	// Ÿ‚ÍƒXƒP[ƒ‹‚É‡‚í‚¹‚Äcx‚ğ•Ï‚¦‚é‚æ‚¤‚É‚·‚é
+	
+
 	float cx = center.x * global.scale.x;
 	float cy = center.y * global.scale.y;
 

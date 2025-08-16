@@ -71,18 +71,15 @@ public:
 	void Set(int i, int value);
 
 	/*▼=== アクセサ ===▼*/
-	inline int GetRed() const { return r; }
-	inline int GetGreen() const { return g; }
-	inline int GetBlue() const { return b; }
 	// 16進数6ケタで表すRGB色をint型で取得
 	inline int GetColorInt() const { return DxLib::GetColor(r, g, b); }
 	void SetRed(int value);
 	void SetGreen(int value);
 	void SetBlue(int value);
 
-	GetSet<int> Red = (&r);
-	GetSet<int> Green = (&g);
-	GetSet<int> Blue = (&b);
+	Getter<int> Red = (&r);
+	Getter<int> Green = (&g);
+	Getter<int> Blue = (&b);
 private:
 	enum class RGBParam
 	{

@@ -131,13 +131,13 @@ int RGBColor::Get(int i) const
 	switch (i)
 	{
 	case (int)RGBParam::RED:
-		return GetRed();
+		return Red;
 		break;
 	case (int)RGBParam::GREEN:
-		return GetGreen();
+		return Green;
 		break;
 	case (int)RGBParam::BLUE:
-		return GetBlue();
+		return Blue;
 		break;
 	}
 

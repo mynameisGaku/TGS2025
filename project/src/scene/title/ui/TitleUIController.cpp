@@ -70,6 +70,8 @@ void TitleUIController::LoadCanvasFromJson(const std::string& file)
 	canvasDesc.IS_DEFAULT_ACTIVATE = root.value("IsDefaultActivate", false);
 
 	canvas->Init(canvasDesc, this);
+	if (canvasDesc.IS_DEFAULT_ACTIVATE)
+		canvas->Activate();
 
 	// UI
 	for (const auto& uiData : root["UIList"])

@@ -120,7 +120,7 @@
           "Description": "Go to the option when clicked",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
-            "SceneName": "OptionCanvas"
+            "CanvasName": "OptionCanvas"
           }
         }
       ],

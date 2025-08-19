@@ -1,5 +1,5 @@
 {
-  "CanvasName": "MainCanvas",
+  "CanvasName": "OptionCanvas",
   "Begin": {
     "X": 0,
     "Y": 0
@@ -85,7 +85,7 @@
           "Description": "Back to the title when clicked",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
-            "SceneName": "MainCanvas"
+            "CanvasName": "MainCanvas"
           }
         }
       ],

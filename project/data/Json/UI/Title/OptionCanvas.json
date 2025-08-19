@@ -1,0 +1,102 @@
+{
+  "CanvasName": "MainCanvas",
+  "Begin": {
+    "X": 0,
+    "Y": 0
+  },
+  "End": {
+    "X": 1920,
+    "Y": 1080
+  },
+  "IsFitScreen": true,
+  "IsDefaultActivate": true,
+  "UIList": [
+    {
+      "NAME": "OptionString",
+      "GRAPH_PATH": "data/Img/UI/Title/Option.png",
+      "OFFSET_X_FROM_ANCHOR": 0,
+      "OFFSET_Y_FROM_ANCHOR": 101,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 0,
+      "DESCRIPTION": "just option string",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_TOP",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": false,
+      "EVENTS": null,
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1.5,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "Bg",
+      "GRAPH_PATH": "data/Img/UI/Title/bg.png",
+      "OFFSET_X_FROM_ANCHOR": 382,
+      "OFFSET_Y_FROM_ANCHOR": 184,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 1920,
+      "GRAPH_DEST_Y": 1080,
+      "INDEX_X": 0,
+      "INDEX_Y": 0,
+      "DESCRIPTION": "",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_NONE",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": false,
+      "EVENTS": [],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1.8,
+      "Opacity": 1,
+      "ZIndex": -100,
+      "LockAspectRatio": false,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "Back",
+      "GRAPH_PATH": "data/Img/UI/Title/Option.png",
+      "OFFSET_X_FROM_ANCHOR": -5,
+      "OFFSET_Y_FROM_ANCHOR": 825,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 0,
+      "DESCRIPTION": "Back to title",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_TOP",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": true,
+      "EVENTS": [
+        {
+          "Event": "ActivateCanvas",
+          "Description": "Back to the title when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SceneName": "MainCanvas"
+          }
+        }
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1.5,
+      "Opacity": 1,
+      "ZIndex": 1,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    }
+  ]
+}

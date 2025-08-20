@@ -451,6 +451,9 @@
     <Filter Include="data\Json\UI\title">
       <UniqueIdentifier>{b8ac198c-c7c7-4c1b-af2c-99968b482d44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\getset">
+      <UniqueIdentifier>{fd71a57b-4923-4099-868f-9152c4d5b7ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -767,6 +770,9 @@
     </None>
     <None Include="data\Json\UI\Title\MainCanvas.json">
       <Filter>data\Json\UI\title</Filter>
+    </None>
+    <None Include="data\Json\UI\ChatBar.json">
+      <Filter>data\Json\UI</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1495,6 +1501,21 @@
     </ClCompile>
     <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp">
       <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\color\RGBColor.cpp">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\file\json\RGBColorJson.cpp">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\SliceBar.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2355,6 +2376,27 @@
     </ClInclude>
     <ClInclude Include="src\scene\title\ui\TitleUIController.h">
       <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\color\RGBColor.h">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\getset\GetSet.h">
+      <Filter>src%28application%29\util\getset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\RGBColorJson.h">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\SliceBar.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_ChatBar.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

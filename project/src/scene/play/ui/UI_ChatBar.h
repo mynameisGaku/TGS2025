@@ -11,6 +11,7 @@ public:
 	UI_ChatBar(const RectTransform& trs, int index);
 	~UI_ChatBar();
 
+	void ReloadParam();
 	void Update() override;
 	void Draw() override;
 

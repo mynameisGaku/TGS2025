@@ -233,6 +233,7 @@
     <None Include="data\Json\Stage\TestStage.json" />
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
     <None Include="data\Json\UI\ButtonHint.json" />
+    <None Include="data\Json\UI\ChatBar.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
     <None Include="data\Model\Stage\Cube.mv1" />
@@ -417,7 +418,7 @@
     <ClCompile Include="src\util\behavior_tree\BehaviorTree.cpp" />
     <ClCompile Include="src\util\blur_screen\BlurScreen.cpp" />
     <ClCompile Include="src\util\color\RGBColor.cpp" />
-    <ClCompile Include="src\util\color\RGBColor_json.cpp" />
+    <ClCompile Include="src\util\file\json\RGBColorJson.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiFunc.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiManager.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Button.cpp" />
@@ -634,7 +635,7 @@
     <ClInclude Include="src\util\blur_screen\BlurScreen.h" />
     <ClInclude Include="src\util\color\ColorUtil.h" />
     <ClInclude Include="src\util\color\RGBColor.h" />
-    <ClInclude Include="src\util\color\RGBColor_json.h" />
+    <ClInclude Include="src\util\file\json\RGBColorJson.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiFunc.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiManager.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h" />
@@ -660,6 +661,7 @@
     <ClInclude Include="src\util\file\FileUtil.h" />
     <ClInclude Include="src\util\file\ini\settings_ini.h" />
     <ClInclude Include="src\util\file\json\BallThrowParamJson.h" />
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
     <ClInclude Include="src\util\file\json\settings_json.h" />
     <ClInclude Include="src\util\file\json\VectorJson.h" />
     <ClInclude Include="src\util\file\resource_loader\resourceLoader.h" />

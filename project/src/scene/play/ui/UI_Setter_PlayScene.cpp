@@ -10,6 +10,7 @@
 #include "src/scene/play/ui/UI_StartCount.h"
 #include "src/scene/play/ui/UI_Fade.h"
 #include "src/scene/play/ui/UI_ChatBar.h"
+#include "src/reference/ui/UI_ChatBarRef.h"
 
 UI_Setter_PlayScene::UI_Setter_PlayScene()
 {
@@ -39,24 +40,31 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		fade->SetTag("Fade_" + sPlayerNum);
 
-		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::MiddleDown, Vector2(0.0f, -100.0f)), i);
+		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::MiddleDown, Vector2(0.0f, UI_CHATBAR_REF.PositionY)), i);
 		chat->SetTag("Chat_" + sPlayerNum);
 
-		m_UIs[crossHair->GetTag()]		= crossHair;
-		m_UIs[hitPointIcon->GetTag()]	= hitPointIcon;
-		m_UIs[matchTime->GetTag()]		= matchTime;
-		m_UIs[buttonHint->GetTag()]		= buttonHint;
-		m_UIs[startCount->GetTag()]		= startCount;
-		m_UIs[fade->GetTag()]			= fade;
-		m_UIs[chat->GetTag()]			= chat;
+		m_UIs[crossHair->GetTag()] = crossHair;
+		m_UIs[hitPointIcon->GetTag()] = hitPointIcon;
+		m_UIs[matchTime->GetTag()] = matchTime;
+		m_UIs[buttonHint->GetTag()] = buttonHint;
+		m_UIs[startCount->GetTag()] = startCount;
+		m_UIs[fade->GetTag()] = fade;
+		m_UIs[chat->GetTag()] = chat;
 	}
 }
 
 UI_Setter_PlayScene::~UI_Setter_PlayScene()
+{
+	release();
+}
+
+void UI_Setter_PlayScene::release()
 {
 	for (auto ui = m_UIs.begin(); ui != m_UIs.end();)
 	{
 		delete ui->second;
 		ui = m_UIs.erase(ui);
 	}
+
+	m_UIs.clear();
 }

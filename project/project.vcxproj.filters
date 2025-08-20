@@ -726,9 +726,6 @@
     <None Include="data\Json\Effect\LockOnMarker.json">
       <Filter>data\Json\Effect</Filter>
     </None>
-    <None Include="data\Json\UI\ButtonHint.json">
-      <Filter>data\Json\UI</Filter>
-    </None>
     <None Include="data\Json\Chara\State\ActionIdleToRun.json">
       <Filter>data\Json\Chara\State</Filter>
     </None>
@@ -762,6 +759,8 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json">
       <Filter>data\Json\Stage</Filter>
     </None>
+    <None Include="data\Json\UI\ButtonHint.json" />
+    <None Include="data\Json\UI\ChatBar.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1487,7 +1486,7 @@
     <ClCompile Include="src\util\color\RGBColor.cpp">
       <Filter>src%28application%29\util\color</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\color\RGBColor_json.cpp">
+    <ClCompile Include="src\util\file\json\RGBColorJson.cpp">
       <Filter>src%28application%29\util\color</Filter>
     </ClCompile>
     <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp">
@@ -2350,7 +2349,7 @@
     <ClInclude Include="src\util\color\RGBColor.h">
       <Filter>src%28application%29\util\color</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\color\RGBColor_json.h">
+    <ClInclude Include="src\util\file\json\RGBColorJson.h">
       <Filter>src%28application%29\util\color</Filter>
     </ClInclude>
     <ClInclude Include="src\util\getset\GetSet.h">
@@ -2359,6 +2358,7 @@
     <ClInclude Include="src\reference\ui\UI_ChatBarRef.h">
       <Filter>src%28application%29\reference\UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

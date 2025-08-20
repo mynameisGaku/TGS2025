@@ -1,6 +1,6 @@
-#include "RGBColor_json.h"
+#include "RGBColorJson.h"
 #include "vendor/nlohmann/json.hpp"
-#include "RGBColor.h"
+#include "src/util/color/RGBColor.h"
 
 void to_json(nlohmann::json& j, const RGBColor& rgbColor)
 {

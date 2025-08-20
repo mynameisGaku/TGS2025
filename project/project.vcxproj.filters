@@ -391,9 +391,6 @@
     <Filter Include="src%28application%29\util\screen">
       <UniqueIdentifier>{53d64be1-4031-4379-932b-4bc767548c1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\Json\UI">
-      <UniqueIdentifier>{18727e79-3bcf-4d78-ae9a-efa968afecab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\reference\UI">
       <UniqueIdentifier>{4eb87772-e531-4b19-b103-600cd3d7f22d}</UniqueIdentifier>
     </Filter>
@@ -447,6 +444,9 @@
     </Filter>
     <Filter Include="src%28application%29\util\getset">
       <UniqueIdentifier>{20190ae6-e3de-4fa7-a86e-836b1fd6f982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\UI">
+      <UniqueIdentifier>{18727e79-3bcf-4d78-ae9a-efa968afecab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -759,8 +759,12 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json">
       <Filter>data\Json\Stage</Filter>
     </None>
-    <None Include="data\Json\UI\ButtonHint.json" />
-    <None Include="data\Json\UI\ChatBar.json" />
+    <None Include="data\Json\UI\ButtonHint.json">
+      <Filter>data\Json\UI</Filter>
+    </None>
+    <None Include="data\Json\UI\ChatBar.json">
+      <Filter>data\Json\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -2358,7 +2362,9 @@
     <ClInclude Include="src\reference\ui\UI_ChatBarRef.h">
       <Filter>src%28application%29\reference\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

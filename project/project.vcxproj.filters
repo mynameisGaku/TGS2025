@@ -391,6 +391,9 @@
     <Filter Include="src%28application%29\util\screen">
       <UniqueIdentifier>{53d64be1-4031-4379-932b-4bc767548c1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\Json\UI">
+      <UniqueIdentifier>{18727e79-3bcf-4d78-ae9a-efa968afecab}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src%28application%29\reference\UI">
       <UniqueIdentifier>{4eb87772-e531-4b19-b103-600cd3d7f22d}</UniqueIdentifier>
     </Filter>
@@ -442,11 +445,11 @@
     <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Interfaces">
       <UniqueIdentifier>{0f171ba5-0d6c-4139-b7a8-ea67b5561253}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\util\getset">
-      <UniqueIdentifier>{20190ae6-e3de-4fa7-a86e-836b1fd6f982}</UniqueIdentifier>
+    <Filter Include="src%28application%29\scene\title\ui">
+      <UniqueIdentifier>{277779ba-14de-42ef-ab03-306e6214e61c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="data\Json\UI">
-      <UniqueIdentifier>{18727e79-3bcf-4d78-ae9a-efa968afecab}</UniqueIdentifier>
+    <Filter Include="data\Json\UI\title">
+      <UniqueIdentifier>{b8ac198c-c7c7-4c1b-af2c-99968b482d44}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -726,6 +729,9 @@
     <None Include="data\Json\Effect\LockOnMarker.json">
       <Filter>data\Json\Effect</Filter>
     </None>
+    <None Include="data\Json\UI\ButtonHint.json">
+      <Filter>data\Json\UI</Filter>
+    </None>
     <None Include="data\Json\Chara\State\ActionIdleToRun.json">
       <Filter>data\Json\Chara\State</Filter>
     </None>
@@ -759,11 +765,8 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json">
       <Filter>data\Json\Stage</Filter>
     </None>
-    <None Include="data\Json\UI\ButtonHint.json">
-      <Filter>data\Json\UI</Filter>
-    </None>
-    <None Include="data\Json\UI\ChatBar.json">
-      <Filter>data\Json\UI</Filter>
+    <None Include="data\Json\UI\Title\MainCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1481,20 +1484,17 @@
     <ClCompile Include="src\scene\play\ball\BallTargetManager.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\SliceBar.cpp">
-      <Filter>src%28application%29\scene\play\ui</Filter>
+    <ClCompile Include="src\scene\title\ui\TitleUI.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp">
-      <Filter>src%28application%29\scene\play\ui</Filter>
+    <ClCompile Include="src\scene\title\ui\TitleUICanvas.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\color\RGBColor.cpp">
-      <Filter>src%28application%29\util\color</Filter>
+    <ClCompile Include="src\scene\title\ui\TitleUIController.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\file\json\RGBColorJson.cpp">
-      <Filter>src%28application%29\util\color</Filter>
-    </ClCompile>
-    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp">
-      <Filter>src%28application%29\reference\UI</Filter>
+    <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2344,26 +2344,17 @@
     <ClInclude Include="src\scene\play\ball\BallTargetManager.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\SliceBar.h">
-      <Filter>src%28application%29\scene\play\ui</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUIGridCursor.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_ChatBar.h">
-      <Filter>src%28application%29\scene\play\ui</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUI.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\color\RGBColor.h">
-      <Filter>src%28application%29\util\color</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUICanvas.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\file\json\RGBColorJson.h">
-      <Filter>src%28application%29\util\color</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\getset\GetSet.h">
-      <Filter>src%28application%29\util\getset</Filter>
-    </ClInclude>
-    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h">
-      <Filter>src%28application%29\reference\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h">
-      <Filter>src%28application%29\util\file\json</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUIController.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -234,6 +234,7 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
     <None Include="data\Json\UI\ButtonHint.json" />
     <None Include="data\Json\UI\ChatBar.json" />
+    <None Include="data\Json\UI\Title\MainCanvas.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
     <None Include="data\Model\Stage\Cube.mv1" />
@@ -410,6 +411,10 @@
     <ClCompile Include="src\scene\result\ui\UI_Winner_Team.cpp" />
     <ClCompile Include="src\scene\result\ui\UI_Setter_ResultScene.cpp" />
     <ClCompile Include="src\scene\title\titleScene.cpp" />
+    <ClCompile Include="src\scene\title\ui\TitleUI.cpp" />
+    <ClCompile Include="src\scene\title\ui\TitleUICanvas.cpp" />
+    <ClCompile Include="src\scene\title\ui\TitleUIController.cpp" />
+    <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp" />
     <ClCompile Include="src\util\alarm\Alarm.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorData.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorDecorator.cpp" />
@@ -626,6 +631,10 @@
     <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h" />
     <ClInclude Include="src\scene\result\ui\UI_Winner_Team.h" />
     <ClInclude Include="src\scene\title\titleScene.h" />
+    <ClInclude Include="src\scene\title\ui\TitleUI.h" />
+    <ClInclude Include="src\scene\title\ui\TitleUICanvas.h" />
+    <ClInclude Include="src\scene\title\ui\TitleUIController.h" />
+    <ClInclude Include="src\scene\title\ui\TitleUIGridCursor.h" />
     <ClInclude Include="src\util\alarm\Alarm.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorData.h" />
     <ClInclude Include="src\util\behavior_tree\BehaviorDecorator.h" />

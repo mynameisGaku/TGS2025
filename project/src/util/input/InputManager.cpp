@@ -30,6 +30,9 @@ namespace {
 
 	InputRef* pRef;
 
+	KeyDefine::DeviceType inputDevice;
+	KeyDefine::DeviceType prevInputDevice;
+
 	struct BUTTON_IMAGE
 	{
 		int hImage = -1;
@@ -282,6 +285,9 @@ bool InputManager::Push(const KeyDefine::KeyCode& keyCode, const int& padNumber)
 	if (isInput)
 		(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(inputData, ADVANCED_ENTRY_TIME));
 
+	prevInputDevice = inputDevice;
+	inputDevice = device;	// 入力されたデバイスを記録
+
 	return isInput;
 }
 
@@ -344,6 +350,9 @@ bool InputManager::Hold(const KeyDefine::KeyCode& keyCode, const int& padNumber)
 	if (isInput)
 		(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(inputData, ADVANCED_ENTRY_TIME));
 
+	prevInputDevice = inputDevice;
+	inputDevice = device;	// 入力されたデバイスを記録
+
 	return isInput;
 }
 
@@ -402,6 +411,9 @@ bool InputManager::Release(const KeyDefine::KeyCode& keyCode, const int& padNumb
 	inputData.isAccepted[padNumber][TouchPhase::Ended] = true;
 
 	(*isInputs)[keyCode] = inputData;
+
+	prevInputDevice = inputDevice;
+	inputDevice = device;	// 入力されたデバイスを記録
 
 	return isInput;
 }
@@ -520,6 +532,16 @@ std::pair<int, int> InputManager::GetImagePair(const std::string& keyName)
 	ret.first = (*pButtonImageMap)[keyName].hImage;
 	ret.second = (*pButtonImageMap)[keyName].hPushImage;
 	return ret;
+}
+
+const KeyDefine::DeviceType& InputManager::GetLastInputDevice()
+{
+	return ::inputDevice;
+}
+
+const bool InputManager::IsChangeInputDevice()
+{
+	return ::inputDevice != ::prevInputDevice;
 }
 
 #ifdef _DEBUG

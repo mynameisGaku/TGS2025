@@ -152,7 +152,7 @@
       "EVENTS": [
         {
           "Event": "Exit",
-          "Description": "Start the game when clicked",
+          "Description": "Exit the game when clicked",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": null
         }

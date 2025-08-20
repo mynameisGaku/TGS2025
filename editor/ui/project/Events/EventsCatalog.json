@@ -1,0 +1,40 @@
+{
+  "Version": 1,
+  "Presets": [
+    {
+      "Key": "GameStart",
+      "DisplayName": "GameStart (シーン開始)",
+      "Category": "System",
+      "Description": "ゲーム開始処理",
+      "DefaultTiming": "TUI_EVENT_TRIGGER_TIMING_ENTER",
+      "DefaultArgument": { "SceneName": "Main" }
+    },
+    {
+      "Key": "PlaySound",
+      "DisplayName": "PlaySound (効果音再生)",
+      "Category": "Audio",
+      "Description": "SEを再生",
+      "DefaultTiming": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+      "DefaultArgument": {
+        "Cue": "ui_click",
+        "Volume": 1.0
+      }
+    },
+    {
+      "Key": "OpenURL",
+      "DisplayName": "OpenURL (外部リンク)",
+      "Category": "System",
+      "Description": "既定ブラウザでURLを開く",
+      "DefaultTiming": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+      "DefaultArgument": { "Url": "https://example.com" }
+    },
+    {
+      "Key": "ActivateCanvas",
+      "DisplayName": "ActivateCanvas (キャンバス切替)",
+      "Category": "UI",
+      "Description": "別キャンバスを有効化",
+      "DefaultTiming": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+      "DefaultArgument": { "Canvas": "MainCanvas" }
+    }
+  ]
+}

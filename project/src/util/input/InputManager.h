@@ -124,6 +124,9 @@ namespace InputManager {
 	std::pair<int, int> GetImagePair(const KeyDefine::KeyCode& keyCode);
 	std::pair<int, int> GetImagePair(const std::string& keyName);
 
+	const KeyDefine::DeviceType& GetLastInputDevice();
+	const bool IsChangeInputDevice();
+
 #ifdef _DEBUG
 
 	//==========================================================================================

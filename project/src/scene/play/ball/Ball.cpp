@@ -71,6 +71,10 @@ Ball::~Ball()
 
 void Ball::Reset(std::string charaTag)
 {
+	if (m_HomingTarget)
+	{
+		m_HomingTarget->EraseRockOnData(m_Index);
+	}
 	Init(charaTag);
 	changeState(S_OWNED);
 }

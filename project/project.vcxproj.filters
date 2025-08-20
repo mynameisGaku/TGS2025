@@ -445,6 +445,12 @@
     <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Interfaces">
       <UniqueIdentifier>{0f171ba5-0d6c-4139-b7a8-ea67b5561253}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\scene\title\ui">
+      <UniqueIdentifier>{277779ba-14de-42ef-ab03-306e6214e61c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\UI\title">
+      <UniqueIdentifier>{b8ac198c-c7c7-4c1b-af2c-99968b482d44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -758,6 +764,12 @@
     </None>
     <None Include="data\Json\Stage\TrampolineTestStage.json">
       <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\UI\Title\MainCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
+    </None>
+    <None Include="data\Json\UI\Title\OptionCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1474,6 +1486,18 @@
     </ClCompile>
     <ClCompile Include="src\scene\play\ball\BallTargetManager.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUI.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUICanvas.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUIController.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2322,6 +2346,18 @@
     </ClInclude>
     <ClInclude Include="src\scene\play\ball\BallTargetManager.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUIGridCursor.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUI.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUICanvas.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\title\ui\TitleUIController.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

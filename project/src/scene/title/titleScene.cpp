@@ -14,15 +14,22 @@
 #include <src/reference/network/NetworkRef.h>
 #include <src/common/network/NetworkManager.h>
 
+#include <src/scene/title/ui/TitleUIController.h>
+#include <src/util/ptr/PtrUtil.h>
+
 TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 
 	Fader::FadeIn(1.0f, EasingType::Linear);
 
 	SettingManager* settingManager = Instantiate<SettingManager>();
+
+	m_UIController = Instantiate<TitleUIController>();
+
+	m_UIController->LoadCanvasesFromJson("data/json/ui/title/");
+	m_UIController->Activate();
 }
 
 TitleScene::~TitleScene() {
-
 }
 
 void TitleScene::Update() {
@@ -33,18 +40,6 @@ void TitleScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push("AnyKey"))
-	{
-		auto& net = NetworkRef::Inst();
-		if (net.IsNetworkEnable)
-		{
-			NetworkManager* nm = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
-			nm->SendSceneTransitToPlay();
-		}
-		
-		SceneManager::ChangeScene("PlayScene");
-	}
-
 	SceneBase::Update();
 }
 
@@ -53,7 +48,7 @@ void TitleScene::Draw() {
 	SceneBase::Draw();
 
 #ifdef TRUE //DEBUG
-	DrawString(100, 400, "Push [Z]Key To Play", GetColor(255, 255, 255));
+
 #endif
 }
 

@@ -20,7 +20,7 @@
   "GameModeDescs": [
     {
       "GameModeName": "1v1",
-      "PlayTimeMaxSec": 300,
+      "PlayTimeMaxSec": 30,
       "WinPointMax": 1
     },
     {

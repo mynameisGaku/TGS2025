@@ -639,7 +639,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 		// 演出が終了して、ボタンが押された場合
 		if (m_UI_Result_Won != nullptr && not m_UI_Result_Won->IsAllEasingRun() && 
 			m_UI_Result_Lost != nullptr && not m_UI_Result_Lost->IsAllEasingRun() &&
-			InputManager::Push("AnyKey"))
+			not m_IsFadeEnd && InputManager::Push("AnyKey"))
 		{
 			Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
 			m_IsFadeEnd = true;

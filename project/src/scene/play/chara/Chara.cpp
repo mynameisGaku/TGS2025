@@ -345,12 +345,10 @@ void Chara::Init(std::string tag)
 	m_Timeline->SetFunction("Invincible", &Chara::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
-	if (m_pBallTargetManager != nullptr)
-	{
+	if (m_pBallTargetManager != nullptr) {
 		m_pBallTarget = m_pBallTargetManager->Create();
 		m_pBallTarget->SetCharaTag(m_CharaTag);
 	}
-
 #if FALSE
 
 	//=== 腕アニメーション（ボールを持つ、投げる） ===
@@ -481,9 +479,7 @@ void Chara::Update() {
 	//=== 座標更新終了後の処理 ===
 
 	if (m_pBallTarget != nullptr)
-	{
 		m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
-	}
 	m_lastUpdatePosition = transform->position;
 
 	// NaN/Infのチェック
@@ -2950,9 +2946,7 @@ void Chara::invincible(const nlohmann::json& argument)
 		uint32_t ballIndex = item.second.BallIndex;
 
 		if (m_pBallTarget != nullptr)
-		{
 			m_pBallTarget->EraseRockOnData(ballIndex);
-		}
 	}
 
 }

@@ -234,6 +234,7 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
     <None Include="data\Json\UI\ButtonHint.json" />
     <None Include="data\Json\UI\Title\MainCanvas.json" />
+    <None Include="data\Json\UI\Title\OptionCanvas.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
     <None Include="data\Model\Stage\Cube.mv1" />

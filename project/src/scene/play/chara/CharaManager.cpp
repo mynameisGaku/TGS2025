@@ -168,12 +168,16 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	colParamChara.trs.scale = Vector3(70.0f);
 	colParamChara.onlyOnce = false;
 
+	COLOR_F teamColor = GetColorF(1.0f, 1.0f, 1.0f, 1.0f);
+
 	if (tag == "Red")
 	{
 		hModel = ResourceLoader::MV1LoadModel("data/model/Chara/NoFaceGuy_Original.mv1");
 
 		colParamChara.tag = ColDefine::Tag::tChara;
 		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tBlue, ColDefine::Tag::tGimmick };
+
+		teamColor = GetColorF(1.0f, 0.0f, 0.0f, 1.0f);
 	}
 	else if (tag == "Blue")
 	{
@@ -181,6 +185,8 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 
 		colParamChara.tag = ColDefine::Tag::tChara;
 		colParamChara.targetTags = { ColDefine::Tag::tChara, ColDefine::Tag::tBall, ColDefine::Tag::tTackle, ColDefine::Tag::tRed,ColDefine::Tag::tGimmick };
+
+		teamColor = GetColorF(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 	colParamChara.targetTags.push_back(ColDefine::Tag::tWindArea);
 
@@ -206,7 +212,7 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 
 	MaterialRenderer* materialChara = newChara->AddComponent<MaterialRenderer>();
 	materialChara->Init(newChara);
-	materialChara->SetMaterialDifColor(0, GetColorF(0.0f, 0.0f, 1.0f, 1.0f), 0.0f);
+	materialChara->SetMaterialDifColor(0, teamColor, 0.0f);
 
 	newChara->m_Index = index;
 	newChara->Init(tag);

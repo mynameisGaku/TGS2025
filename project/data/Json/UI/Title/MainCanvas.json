@@ -114,7 +114,16 @@
       "COLLISION": "TUI_CANVAS_COLLISION_RECT",
       "IS_LOOP_EVENT": false,
       "IS_SELECTABLE": true,
-      "EVENTS": [],
+      "EVENTS": [
+        {
+          "Event": "ActivateCanvas",
+          "Description": "Go to the option when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "CanvasName": "OptionCanvas"
+          }
+        }
+      ],
       "IsVisible": true,
       "Rotation": 0,
       "Scale": 1,

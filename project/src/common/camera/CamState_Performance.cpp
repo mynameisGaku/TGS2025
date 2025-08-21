@@ -16,6 +16,7 @@ void Camera::PerformanceState(FSMSignal sig)
     case FSMSignal::SIG_Enter: // 初期化 (Constractor)
     {
         canMove = true;
+		m_IsPlayingPerformance = true;
 
 		m_Offset = Vector3(0.0f, 0.0f, 0.0f);
 		m_OffsetPrev = Vector3(0.0f, 0.0f, 0.0f);
@@ -89,7 +90,10 @@ void Camera::PerformanceState(FSMSignal sig)
 		transform->rotation.y = dir;
 
 		// 演出の数と終了した演出の数を比較する
-		//if (m_PerformanceDatas.size() == endCount)
+		if (m_PerformanceDatas.size() == endCount)
+			m_IsPlayingPerformance = false;
+		else
+			m_IsPlayingPerformance = true;
     }
     break;
     case FSMSignal::SIG_AfterUpdate: // 更新後の更新 (AfterUpdate)
@@ -100,6 +104,7 @@ void Camera::PerformanceState(FSMSignal sig)
     case FSMSignal::SIG_Exit: // 終了 (Exit)
     {
         canMove = true;
+		m_IsPlayingPerformance = false;
     }
     break;
     }

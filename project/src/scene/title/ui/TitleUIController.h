@@ -37,6 +37,7 @@ private:
 	void scaling(nlohmann::json argument);
 	void gameStart(nlohmann::json argument);
 	void exit(nlohmann::json argument);
+	void setWindowMode(nlohmann::json argument);
 
 	TitleUIGridCursor*																m_pGridCursor		{};
 	std::unordered_map<std::string, std::function<void(const nlohmann::json&)>>		m_EventHandlers		{};

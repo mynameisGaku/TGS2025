@@ -209,6 +209,7 @@ void TitleUIController::subscribeFunctions()
 	SUBSCRIBE_FUNCTION("Scaling", scaling);
 	SUBSCRIBE_FUNCTION("GameStart", gameStart);
 	SUBSCRIBE_FUNCTION("Exit", exit);
+	SUBSCRIBE_FUNCTION("SetWindowMode", setWindowMode);
 }
 
 void TitleUIController::activateCanvas(nlohmann::json argument)
@@ -256,4 +257,47 @@ void TitleUIController::gameStart(nlohmann::json argument)
 void TitleUIController::exit(nlohmann::json argument)
 {
 	Exit();
+}
+
+#include <src/common/camera/CameraManager.h>
+
+void TitleUIController::setWindowMode(nlohmann::json argument)
+{
+	nlohmann::json event = argument["Event"];
+
+	std::string modeStr = event.value("Mode", "WindowMode");
+
+	int w{}, h{};
+
+	if (modeStr == "FullScreen")
+	{
+		w = 1920;
+		h = 1080;
+	}
+
+	if (modeStr == "WindowMode")
+	{
+		w = 1600;
+		h = 900;
+	}
+
+	if (modeStr == "DualScreen")
+	{
+		w = 3840;
+		h = 1080;
+	}
+
+	if(w > 1920)
+	{
+		CameraManager::SetIsScreenDivision(true);
+	}
+	else
+	{
+		CameraManager::SetIsScreenDivision(false);
+	}
+
+
+
+	SetGraphMode(w, h, 32);
+	SetWindowSize(w, h);
 }

@@ -29,6 +29,7 @@ public:
 private:
 	GameManager* m_pGameManager;
 	std::vector<UI_Text*> m_UI_Scores;
+	std::vector<EasingVec2> m_UI_Easing;
 	STATE m_CurrentState;
 	STATE m_PrevState;
 };

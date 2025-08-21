@@ -39,6 +39,7 @@ UI_Ranking::UI_Ranking()
 			UI_Text* ui_score = new UI_Text(text, RectTransform(), font);
 			UI_Manager::Detach(ui_score);
 			m_UI_Scores.push_back(ui_score);
+			m_UI_Easing.push_back(EasingVec2());
 		}
 	}
 
@@ -72,12 +73,21 @@ void UI_Ranking::Update()
 		break;
 	}
 
+	for (auto& score : m_UI_Scores)
+		score->Update();
+
+	for (auto& easing : m_UI_Easing)
+		easing.Update();
+
 	UI_Canvas::Update();
 }
 
 void UI_Ranking::Draw()
 {
 	UI_Canvas::Draw();
+
+	if (m_CurrentState != STATE::S_DISPLAY)
+		return;
 
 	const GameManager::ResultData resultData = m_pGameManager->GetResultData();
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
@@ -109,8 +119,9 @@ void UI_Ranking::Draw()
 				const Vector2 base = Vector2(screenCenter.x - width * 0.5f, screenCenter.y + 150.0f);
 				const Vector2 offset = Vector2(0.0f, 30.0f * j);
 
-				UI_Text* ui_score = m_UI_Scores[j];
-				ui_score->rectTransform->position = base + offset;
+				UI_Text* ui_score = m_UI_Scores[j];		
+				EasingVec2 easing = m_UI_Easing[j];
+				ui_score->rectTransform->position = base + offset + easing.current;
 				ui_score->Draw();
 			}
 		}
@@ -134,14 +145,14 @@ void UI_Ranking::ChangeState(STATE state) {
 
 	m_PrevState = m_CurrentState;
 	m_CurrentState = state;
+	int index = 0;
 
 	switch (m_CurrentState)
 	{
 	case UI_Ranking::STATE::S_FADE_IN:
 
-		//for (const auto& score : m_UI_Scores) {
-		//	score->SetEasing(UI_Canvas::eMove, Vector2(0.0f, 0.0f), Vector2(WindowSetting::Inst().width_half, WindowSetting::Inst().height_half + 150.0f), 1.0f);
-		//}
+		for (auto& easing : m_UI_Easing)
+			easing.SetEasing(Vector2(0.0f, 200.0f + 30.0f * index++), Vector2::Zero, 2.0f / 3.0f, EasingType::OutCubic, true);
 
 		break;
 

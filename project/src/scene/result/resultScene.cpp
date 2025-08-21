@@ -60,7 +60,7 @@ void ResultScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push(KeyDefine::KeyCode::T)) {
+	if (InputManager::Push("AnyKey")) {
 		SceneManager::ChangeScene("TitleScene");
 	}
 

@@ -18,12 +18,14 @@
 #include "src/util/fader/Fader.h"
 
 bool exitFlag = false;
+bool rebootFlag = false;
 
 void AppInit()
 {
 	ScreenManager::Init();
 	SceneManager::Start();
 	exitFlag = false;
+	rebootFlag = false;
 
 	CameraManager::Init();
 	Fader::Init();
@@ -106,7 +108,17 @@ void Exit()
 	exitFlag = true;
 }
 
+void Reboot()
+{
+	rebootFlag = true;
+}
+
 bool IsExit()
 {
 	return exitFlag;
+}
+
+bool IsReboot()
+{
+	return rebootFlag;
 }

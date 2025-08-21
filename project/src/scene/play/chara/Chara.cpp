@@ -2405,7 +2405,7 @@ void Chara::slideUpdate()
 		}
 		else
 		{
-			m_pPhysics->SetFriction(FRICTION * 0.1f);
+			m_pPhysics->SetFriction(FRICTION * 0.03f);
 		}
 	}
 

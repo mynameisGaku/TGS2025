@@ -6,6 +6,8 @@
 #include "src/common/game/GameManager.h"
 #include "src/common/network/NetworkManager.h"
 
+#include "src/util/fader/Fader.h"
+
 BootScene::BootScene(std::string name) : SceneBase(true, name)
 {
 	SceneBase* common = SceneManager::CommonScene();

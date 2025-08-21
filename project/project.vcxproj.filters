@@ -2359,6 +2359,9 @@
     <ClInclude Include="src\scene\title\ui\TitleUIController.h">
       <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\font\FontDefine.h">
+      <Filter>src%28application%29\util\font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

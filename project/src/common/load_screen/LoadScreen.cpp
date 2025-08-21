@@ -6,16 +6,13 @@
 
 LoadScreen::LoadScreen() {
 
-	useFont.color = GetColor(255, 255, 255);
-	useFont.strData.tag = "さざなみ明朝";
-	useFont.size = 28;
-	useFont.edgeSize = 2;
-	useFont.fontType = DX_FONTTYPE_ANTIALIASING_EDGE_4X4;
-	useFont.italic = 0;
-	Font::CreateFontToHandle(&useFont);
+	useFont = Font::BasicFont();
+	useFont.SetColor(GetColor(255, 255, 255)).SetSize(24).SetFontType(DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	Font::Create(useFont, "LoadScreen");
 
 	fadeEasing.SetEasing(0.0f, 0.0f, 0.0f, EasingType::Linear, false);
 
+	scrollType = ScrollType::stNone;
 	rate = 0.0f;
 	textWidth = 0.0f;
 	loadText = LOADING_TEXT;
@@ -129,11 +126,11 @@ void LoadScreen::DrawLoadText() {
 
 	// ▼ロード中テキストの表示
 	if (rate < 1.0f) {
-		DrawFormatStringFToHandle(DRAW_TEXT_POS.x, DRAW_TEXT_POS.y, TEXT_COLOR, useFont.handle, (loadText + "%%").c_str(), rate * 100.0f);
+		DrawFormatStringFToHandle(DRAW_TEXT_POS.x, DRAW_TEXT_POS.y, TEXT_COLOR, useFont.GetHandle(), (loadText + "%%").c_str(), rate * 100.0f);
 	}
 	// ▼ロード完了テキストの表示
 	else {
-		DrawFormatStringFToHandle(DRAW_TEXT_POS.x, DRAW_TEXT_POS.y, TEXT_COLOR, useFont.handle, LOAD_END_TEXT.c_str());
+		DrawFormatStringFToHandle(DRAW_TEXT_POS.x, DRAW_TEXT_POS.y, TEXT_COLOR, useFont.GetHandle(), LOAD_END_TEXT.c_str());
 	}
 }
 
@@ -164,8 +161,8 @@ void LoadScreen::DrawButtonTip() {
 
 	// ▼ロード終了時にボタンヒントを表示する
 	if (canPushFadeOut && rate >= 1.0f) {
-		int width = GetDrawStringWidthToHandle(BUTTON_TIP.c_str(), static_cast<int>(BUTTON_TIP.length()), useFont.handle);
-		DrawFormatStringToHandle(static_cast<int>(WindowSetting::Inst().width) - width - 12, static_cast<int>(WindowSetting::Inst().height) - 32, TEXT_COLOR, useFont.handle, BUTTON_TIP.c_str());
+		int width = GetDrawStringWidthToHandle(BUTTON_TIP.c_str(), static_cast<int>(BUTTON_TIP.length()), useFont.GetHandle());
+		DrawFormatStringToHandle(static_cast<int>(WindowSetting::Inst().width) - width - 12, static_cast<int>(WindowSetting::Inst().height) - 32, TEXT_COLOR, useFont.GetHandle(), BUTTON_TIP.c_str());
 	}
 }
 

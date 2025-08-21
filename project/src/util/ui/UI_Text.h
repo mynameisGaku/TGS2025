@@ -73,7 +73,7 @@ public:
 	void SetText(const std::string& text, const FontInfo& font);
 
 	// 文字の色を変更する
-	inline void SetTextColor(const int& color) { fontInfo.color = color; }
+	inline void SetTextColor(const int& color) { fontInfo.SetColor(color); }
 
 	// スクロールを設定する
 	inline void SetScrollTime(const float& value) { scrollTime = scrollTotalTime = value; }
@@ -102,7 +102,7 @@ public:
 	/// <summary>
 	/// 文字の色を取得する
 	/// </summary>
-	inline int Color() const { return fontInfo.color; }
+	inline int Color() const { return fontInfo.GetColor(); }
 
 	/// <summary>
 	/// 文字送りの効果時間の割合

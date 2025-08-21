@@ -42,14 +42,9 @@ UI_ButtonHint::UI_ButtonHint(const RectTransform& trs, int index)
 		m_ButtonHints[phys.KeyName] = button;
 	}
 
-	m_Font.charSet = DEFAULT_CHARSET;	// 文字セット
-	m_Font.size = 10;					// フォントサイズ
-	m_Font.thick = 0;					// フォントの太さ
-	m_Font.fontType = DX_FONTTYPE_NORMAL;	// フォントのタイプ
-	m_Font.edgeSize = 0;				// 縁の大きさ
-	m_Font.italic = 0;					// イタリック体
-	m_Font.strData = FileUtil::Folder("data/font/", "sazanami_mincho.ttf", "さざなみ明朝");	// フォントの文字列データ
-	m_hFont = Font::CreateFontToHandle(&m_Font);
+	m_Font = Font::BasicFont();
+	m_Font.SetCharSet(DEFAULT_CHARSET).SetSize(10).SetFontType(DX_FONTTYPE_NORMAL);
+	Font::Create(m_Font, "ButtonHint");
 }
 
 UI_ButtonHint::~UI_ButtonHint()

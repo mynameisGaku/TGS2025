@@ -9,7 +9,7 @@
 
 static const int DISP_MAX = 5;
 
-UI_Ranking::UI_Ranking() : UI_Canvas(true)
+UI_Ranking::UI_Ranking()
 {
 	m_pGameManager = SceneManager::CommonScene()->FindGameObject<GameManager>();
 
@@ -34,12 +34,8 @@ UI_Ranking::UI_Ranking() : UI_Canvas(true)
 			const std::string teamName = resultData.CharaInTeamName.at(charaId);
 			const int color = resultData.TeamColor.at(teamName);
 			
-			FontInfo font = FontInfo();
-			font.size = 32;
-			font.color = color;
-			font.strData.filePath = "data/font/";
-			font.strData.resourceName = "sazanami_mincho.ttf";
-			font.strData.tag = "‚³‚´‚È‚Ý–¾’©";
+			FontInfo font = Font::BasicFont();
+			font.SetSize(32).SetColor(color).SetFontType(DX_FONTTYPE_ANTIALIASING_4X4);
 			UI_Text* ui_score = new UI_Text(text, RectTransform(), font);
 			UI_Manager::Detach(ui_score);
 			m_UI_Scores.push_back(ui_score);
@@ -83,44 +79,6 @@ void UI_Ranking::Draw()
 {
 	UI_Canvas::Draw();
 
-	/*const GameManager::ResultData resultData = m_pGameManager->GetResultData();
-	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
-	Vector2 pos = rectTransform->Global().position;
-
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-
-	Vector2 screenBegin = Vector2::Zero;
-	Vector2 screenEnd = Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);
-	Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
-
-	if (m_UI_Scores.empty())
-	{
-		const std::string text = "No Contest";
-		const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
-		DrawExtendFormatString(screenCenter.x - width * 0.5f, screenCenter.y, rectTransform->scale.x, rectTransform->scale.y, GetColor(255, 255, 255), text.c_str());
-	}
-	else
-	{
-		int index = 0;
-		for (const auto& ui : m_UI_Scores)
-		{
-			int charaId = resultData.Ranking[index].first;
-			int score = resultData.Ranking[index].second;
-
-			const std::string text = ("No." + std::to_string(charaId) + " :Score." + std::to_string(score));
-			const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
-			const std::string teamName = resultData.CharaInTeamName.at(charaId);
-			const int color = resultData.TeamColor.at(teamName);
-
-			const Vector2 base = Vector2(screenCenter.x - width * 0.5f, screenCenter.y + 150.0f);
-			const Vector2 offset = Vector2(0.0f, 30.0f * index);
-
-			ui->rectTransform->position = base + offset;
-			ui->Draw();
-			index++;
-		}
-	}*/
-
 	const GameManager::ResultData resultData = m_pGameManager->GetResultData();
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
@@ -138,7 +96,7 @@ void UI_Ranking::Draw()
 
 			for (int j = 0; j < DISP_MAX; j++)
 			{
-				if (j >= resultData.Ranking.size()) break;
+				if (j >= m_UI_Scores.size()) break;
 
 				int charaId = resultData.Ranking[j].first;
 				int score = resultData.Ranking[j].second;
@@ -151,7 +109,9 @@ void UI_Ranking::Draw()
 				const Vector2 base = Vector2(screenCenter.x - width * 0.5f, screenCenter.y + 150.0f);
 				const Vector2 offset = Vector2(0.0f, 30.0f * j);
 
-				DrawExtendFormatString(base.x + offset.x, base.y + offset.y, rectTransform->scale.x, rectTransform->scale.y, color, text.c_str());
+				UI_Text* ui_score = m_UI_Scores[j];
+				ui_score->rectTransform->position = base + offset;
+				ui_score->Draw();
 			}
 		}
 	}

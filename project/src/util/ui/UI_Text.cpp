@@ -53,7 +53,7 @@ void UI_Text::DrawTexts() {
 	Vector2 scale = globalTrs.scale;
 
 	// フォントデータを生成する
-	Font::CreateFontToHandle(&fontInfo);
+	Font::Create(fontInfo, "UI_Text " + text);
 
 	// 不透明度を設定
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
@@ -64,11 +64,11 @@ void UI_Text::DrawTexts() {
 		int textScroll = length - static_cast<int>(length * ScrollRate());
 
 		for (int i = 0; i < textScroll; i++)
-			DrawExtendFormatStringToHandle(letters[i].x + devi.x, letters[i].y + devi.y, scale.x, scale.y, fontInfo.color, fontInfo.handle, letters[i].str.c_str());
+			DrawExtendFormatStringToHandle(letters[i].x + devi.x, letters[i].y + devi.y, scale.x, scale.y, fontInfo.GetColor(), fontInfo.GetHandle(), letters[i].str.c_str());
 	}
 	else {
 		Vector2 pos = globalTrs.position + devi;	// 描画座標
-		DrawExtendFormatStringToHandle(pos.x, pos.y, scale.x, scale.y, fontInfo.color, fontInfo.handle, text.c_str());
+		DrawExtendFormatStringToHandle(pos.x, pos.y, scale.x, scale.y, fontInfo.GetColor(), fontInfo.GetHandle(), text.c_str());
 	}
 
 	if (needAfterImage) {
@@ -77,7 +77,7 @@ void UI_Text::DrawTexts() {
 		devi = DisplacementByAnchorPoint();
 
 		Vector2 pos = globalTrs.position + devi + easingMoveAftImg.current;	// 描画座標
-		DrawExtendFormatStringToHandle(pos.x, pos.y, scale.x, scale.y, fontInfo.color, fontInfo.handle, text.c_str());
+		DrawExtendFormatStringToHandle(pos.x, pos.y, scale.x, scale.y, fontInfo.GetColor(), fontInfo.GetHandle(), text.c_str());
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -134,10 +134,10 @@ void UI_Text::SetText(const std::string& _text, const FontInfo& _font) {
 	length = Len();
 	fontInfo = _font;
 
-	Font::CreateFontToHandle(&fontInfo);	// フォント情報を変更
+	Font::Create(fontInfo, "UI_Text " + text);	// フォント情報を変更
 
-	textSize.x = static_cast<float>(GetDrawStringWidthToHandle(text.c_str(), Len(), fontInfo.handle));
-	textSize.y = static_cast<float>(fontInfo.size);
+	textSize.x = static_cast<float>(GetDrawStringWidthToHandle(text.c_str(), Len(), fontInfo.GetHandle()));
+	textSize.y = static_cast<float>(fontInfo.GetSize());
 
 	RectTransform globalTrs = rectTransform->Global();	// グローバルな座標・回転・拡縮情報
 	Vector2 diff = Vector2::Zero;	// 原点から文字座標へのベクトル
@@ -161,7 +161,7 @@ void UI_Text::SetText(const std::string& _text, const FontInfo& _font) {
 		letters.push_back(StringUtil::Letter(letter, globalTrs.position.x + diff.x, globalTrs.position.y + diff.y));
 
 		// 次の文字の描画座標をずらす
-		diff.x += GetDrawStringWidthToHandle(letter.c_str(), static_cast<int>(letter.length()), fontInfo.handle);
+		diff.x += GetDrawStringWidthToHandle(letter.c_str(), static_cast<int>(letter.length()), fontInfo.GetHandle());
 
 		// 改行の場合
 		if (text.substr(i, 1) == "\n") {

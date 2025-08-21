@@ -664,6 +664,7 @@
     <ClInclude Include="src\util\file\json\VectorJson.h" />
     <ClInclude Include="src\util\file\resource_loader\resourceLoader.h" />
     <ClInclude Include="src\util\font\Font.h" />
+    <ClInclude Include="src\util\font\FontDefine.h" />
     <ClInclude Include="src\util\fsm\StateBase.h" />
     <ClInclude Include="src\util\fsm\StateManager.h" />
     <ClInclude Include="src\util\fsm\TinyFSM.h" />

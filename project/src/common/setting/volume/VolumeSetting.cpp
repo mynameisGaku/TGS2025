@@ -10,11 +10,11 @@ VolumeSetting::VolumeSetting() {
 	if (volumes == nullptr)
 		return;
 
-	sliders.push_back(new UI_Slider("全体音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 125.0f)), &(*volumes)[SoundCategory::cMaster],	0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
-	sliders.push_back(new UI_Slider("BGM音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 200.0f)), &(*volumes)[SoundCategory::cBGM],		0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
-	sliders.push_back(new UI_Slider("SE音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 275.0f)), &(*volumes)[SoundCategory::cSE],		0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
-	sliders.push_back(new UI_Slider("ボイス音量",	RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 350.0f)), &(*volumes)[SoundCategory::cVoice],	0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
-	sliders.push_back(new UI_Slider("環境音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 425.0f)), &(*volumes)[SoundCategory::cENV],		0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
+	sliders.push_back(new UI_Slider("全体音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 125.0f)), &(*volumes)[SoundCategory::cMaster],	0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
+	sliders.push_back(new UI_Slider("BGM音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 200.0f)), &(*volumes)[SoundCategory::cBGM],		0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
+	sliders.push_back(new UI_Slider("SE音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 275.0f)), &(*volumes)[SoundCategory::cSE],		0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
+	sliders.push_back(new UI_Slider("ボイス音量",	RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 350.0f)), &(*volumes)[SoundCategory::cVoice],	0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
+	sliders.push_back(new UI_Slider("環境音量",		RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 425.0f)), &(*volumes)[SoundCategory::cENV],		0.0f, 1.0f, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
 
 	isAdjustable = false;
 }

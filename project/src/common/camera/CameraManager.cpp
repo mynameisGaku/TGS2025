@@ -290,6 +290,22 @@ int CameraManager::GetCurrentDrawingCameraID()
 	return m_CurrentDrawingCameraIndex;
 }
 
+bool CameraManager::IsPlayingPerformance()
+{
+	if (cameras == nullptr)
+		return false;
+
+	for (auto& camera : (*cameras))
+	{
+		if (camera->IsPlayingPerformance())
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 #ifdef IMGUI
 
 void CameraManager::InitImGuiNode() {

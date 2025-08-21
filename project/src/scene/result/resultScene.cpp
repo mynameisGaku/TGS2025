@@ -3,7 +3,6 @@
 // ◇汎用
 #include "framework/SceneManager.h"
 
-
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
 #include "src/util/fader/Fader.h"

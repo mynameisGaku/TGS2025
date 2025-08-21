@@ -7,19 +7,23 @@
 #include "src/util/math/MathUtil.h"
 #include <src/util/ptr/PtrUtil.h>
 
-UI_Canvas::UI_Canvas() {
+UI_Canvas::UI_Canvas() : UI_Canvas(false) {
+
+}
+
+UI_Canvas::UI_Canvas(bool front) {
 
 	//================================================================================
-	// ◇画面サイズに応じて拡縮倍率を変化させる
+// ◇画面サイズに応じて拡縮倍率を変化させる
 
 	ScaleWithScreenSize();
 
 	//================================================================================
 	// ◇イージング挙動
 
-	easingMove	= EasingVec2();
+	easingMove = EasingVec2();
 	easingScale = EasingVec2();
-	easingRot	= EasingFloat();
+	easingRot = EasingFloat();
 	easingAlpha = EasingInt();
 
 	//================================================================================
@@ -34,16 +38,16 @@ UI_Canvas::UI_Canvas() {
 	//================================================================================
 	// ◇残像挙動
 
-	easingMoveAftImg	= EasingVec2();
-	easingScaleAftImg	= EasingVec2();
-	easingRotAftImg		= EasingFloat();
-	easingAlphaAftImg	= EasingInt();
+	easingMoveAftImg = EasingVec2();
+	easingScaleAftImg = EasingVec2();
+	easingRotAftImg = EasingFloat();
+	easingAlphaAftImg = EasingInt();
 
 	needAfterImage = false;
-	
+
 	//================================================================================
 	// ◇変数's
-	
+
 	hImage = -1;
 	priority = 0;
 	alpha = 255;
@@ -53,7 +57,7 @@ UI_Canvas::UI_Canvas() {
 	isUpdate = true;
 	isDraw = true;
 
-	UI_Manager::Add(this);
+	UI_Manager::Add(this, front);
 }
 
 UI_Canvas::~UI_Canvas() {

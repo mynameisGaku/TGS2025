@@ -27,7 +27,7 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		crossHair->SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
 		crossHair->SetTag("CrossHair_" + sPlayerNum);
 
-		UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2::Zero, 0.0f, Vector2::Ones * 2.0f), i);
+		UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2(0.0f, UI_CHATBAR_REF.PositionY - 25.0f), 0.0f, Vector2::Ones * 2.0f), i);
 		hitPointIcon->SetValue(nullptr, 0.0f, 0.0f, 1.0f);
 		hitPointIcon->SetTag("HitPoint_Icon_" + sPlayerNum);
 

@@ -10,6 +10,9 @@
 #include "src/scene/play/ui/UI_StartCount.h"
 #include "src/scene/play/ui/UI_Fade.h"
 #include "src/scene/play/ui/UI_ChatBar.h"
+#include "src/scene/play/ui/UI_GameScore.h"
+
+#include "src/reference/ui/UI_MatchTimeRef.h"
 #include "src/reference/ui/UI_ChatBarRef.h"
 
 UI_Setter_PlayScene::UI_Setter_PlayScene()
@@ -28,7 +31,7 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		hitPointIcon->SetValue(nullptr, 0.0f, 0.0f, 1.0f);
 		hitPointIcon->SetTag("HitPoint_Icon_" + sPlayerNum);
 
-		UI_MatchTime* matchTime = new UI_MatchTime(RectTransform(Anchor::Preset::RightDown, Vector2(0.0f, -165.0f)), i);
+		UI_MatchTime* matchTime = new UI_MatchTime(RectTransform(Anchor::Preset::MiddleUp, Vector2(0.0f, UI_MATCHTIME_REF.PositionY)), i);
 		matchTime->SetTag("MatchTime_" + sPlayerNum);
 
 		UI_ButtonHint* buttonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);

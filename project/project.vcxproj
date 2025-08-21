@@ -234,6 +234,7 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
     <None Include="data\Json\UI\ButtonHint.json" />
     <None Include="data\Json\UI\ChatBar.json" />
+    <None Include="data\Json\UI\MatchTime.json" />
     <None Include="data\Json\UI\Title\MainCanvas.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
     <None Include="data\Model\Chara\Ch06_nonPBR.mv1" />
@@ -357,6 +358,7 @@
     <ClCompile Include="src\reference\network\NetworkRef.cpp" />
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp" />
     <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_MatchTimeRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityFire.cpp" />
@@ -569,6 +571,7 @@
     <ClInclude Include="src\reference\network\NetworkRef.h" />
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h" />
     <ClInclude Include="src\reference\ui\UI_ChatBarRef.h" />
+    <ClInclude Include="src\reference\ui\UI_MatchTimeRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ability\AbilityBase.h" />
     <ClInclude Include="src\scene\play\ability\AbilityExplosion.h" />

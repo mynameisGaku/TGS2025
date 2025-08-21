@@ -508,6 +508,7 @@ void Chara::Draw()
 		m_pTrail[i]->Draw();
 	}*/
 
+#ifdef _DEBUG
 	if (m_pHP->IsDead())
 	{
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
@@ -523,6 +524,7 @@ void Chara::Draw()
 	}
 
 	DrawSphere3D(m_ActionWallPosition, 20.0f, 4, 0x00FFFF, 0x00FFFF, FALSE);
+#endif // _DEBUG
 }
 
 void Chara::CollisionEvent(const CollisionData& colData) {

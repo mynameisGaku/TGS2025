@@ -774,6 +774,7 @@
     <None Include="data\Json\UI\ChatBar.json">
       <Filter>data\Json\UI</Filter>
     </None>
+    <None Include="data\Json\UI\MatchTime.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1517,6 +1518,7 @@
     <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\reference\ui\UI_MatchTimeRef.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2398,6 +2400,7 @@
     <ClInclude Include="src\scene\play\ui\UI_ChatBar.h">
       <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\reference\ui\UI_MatchTimeRef.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

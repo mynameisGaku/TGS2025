@@ -1,0 +1,25 @@
+{
+    "Param": {
+        "PositionY": 0.0,
+
+        "BackScale": {
+            "X": 600,
+            "Y": 50
+        },
+        "BackColor": {
+            "R": 10,
+            "G": 10,
+            "B": 10
+        },
+        "TimeNormalColor": {
+            "R": 255,
+            "G": 255,
+            "B": 255
+        },
+        "TimeWarningColor": {
+            "R": 255,
+            "G": 0,
+            "B": 0
+        }
+    }
+}

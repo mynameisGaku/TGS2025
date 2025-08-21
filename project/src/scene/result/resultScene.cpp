@@ -59,29 +59,31 @@ void ResultScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push("AnyKey")) {
-		SceneManager::ChangeScene("TitleScene");
-	}
-
 	SceneBase::Update();
 }
 
 void ResultScene::Draw() {
 
 	SceneBase::Draw();
-
-	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
-
 }
 
 void ResultScene::BeforePlayUpdate()
 {
+	if (not Fader::IsPlaying())
+		sceneState = SceneState::InPlay;
 }
 
 void ResultScene::InPlayUpdate()
 {
+	if (not CameraManager::IsPlayingPerformance() && InputManager::Push("AnyKey")) {
+
+		Fader::FadeOut(1.0f, EasingType::Linear);
+		sceneState = SceneState::AfterPlay;
+	}
 }
 
 void ResultScene::AfterPlayUpdate()
 {
+	if (not Fader::IsPlaying())
+		SceneManager::ChangeScene("TitleScene");
 }

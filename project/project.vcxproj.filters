@@ -451,6 +451,9 @@
     <Filter Include="data\Json\UI\title">
       <UniqueIdentifier>{b8ac198c-c7c7-4c1b-af2c-99968b482d44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src%28application%29\util\restart">
+      <UniqueIdentifier>{5cdaac80-c70e-4684-b897-e192da8dd422}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\Json\Ball\Ball.json">
@@ -771,6 +774,7 @@
     <None Include="data\Json\UI\Title\OptionCanvas.json">
       <Filter>data\Json\UI\title</Filter>
     </None>
+    <None Include="data\Json\UI\Title\GraphicsSettingCanvas.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -2358,6 +2362,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\title\ui\TitleUIController.h">
       <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\restart\Restart.h">
+      <Filter>src%28application%29\util\restart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

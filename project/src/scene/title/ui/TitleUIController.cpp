@@ -260,6 +260,9 @@ void TitleUIController::exit(nlohmann::json argument)
 }
 
 #include <src/common/camera/CameraManager.h>
+#include <src/util/restart/Restart.h>
+#include <vendor/mINI/ini.h>
+#include <DxLib.h>
 
 void TitleUIController::setWindowMode(nlohmann::json argument)
 {
@@ -287,17 +290,31 @@ void TitleUIController::setWindowMode(nlohmann::json argument)
 		h = 1080;
 	}
 
-	if(w > 1920)
-	{
-		CameraManager::SetIsScreenDivision(true);
-	}
-	else
-	{
-		CameraManager::SetIsScreenDivision(false);
-	}
+	// first, create a file instance
+	mINI::INIFile file("window.ini");
 
+	// next, create a structure that will hold data
+	mINI::INIStructure ini;
 
+	// now we can read the file
+	file.read(ini);
 
-	SetGraphMode(w, h, 32);
-	SetWindowSize(w, h);
+	// read a value
+	//std::string& amountOfApples = ini["fruits"]["apples"];
+
+	// update a value
+	ini["Main_Window"]["Width"] = std::to_string(w);
+	ini["Main_Window"]["Height"] = std::to_string(h);
+
+	// add a new entry
+	//ini["Main_Window"]["bananas"] = "100";
+
+	// write updates to file
+	file.write(ini);
+
+	auto cleanup = []() {
+		DxLib_End(); // DxLib ÇÃèIóπèàóù
+		};
+
+	Restart::RestartAndExit(__argc, __argv, cleanup);
 }

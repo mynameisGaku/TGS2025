@@ -700,6 +700,7 @@
     <ClInclude Include="src\util\object3D\Object3D.h" />
     <ClInclude Include="src\util\pool\Pool.h" />
     <ClInclude Include="src\util\ptr\PtrUtil.h" />
+    <ClInclude Include="src\util\restart\Restart.h" />
     <ClInclude Include="src\util\screen\ScreenManager.h" />
     <ClInclude Include="src\util\shadow_map\ShadowMap.h" />
     <ClInclude Include="src\util\singleton\singleton.h" />

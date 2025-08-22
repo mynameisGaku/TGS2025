@@ -9,7 +9,7 @@
     "Y": 1080
   },
   "IsFitScreen": true,
-  "IsDefaultActivate": true,
+  "IsDefaultActivate": false,
   "UIList": [
     {
       "NAME": "OptionString",

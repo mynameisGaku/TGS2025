@@ -19,27 +19,30 @@ void TitleUI::Update()
 
 	if (m_IsSelectable)
 	{
-		checkCursorCollision();
-
-		if (m_IsHover)
+		if (m_pHolder->Controller()->GetGridCursor()->IsActive())
 		{
-			if (InputManager::Push(KeyDefine::KeyCode::MouseButton1) ||
-				InputManager::Push(KeyDefine::KeyCode::Z) ||
-				InputManager::Push(KeyDefine::KeyCode::ButtonA))
+			checkCursorCollision();
+
+			if (m_IsHover)
 			{
-				OnPressEnter();
-			}
-			if (InputManager::Hold(KeyDefine::KeyCode::MouseButton1) ||
-				InputManager::Hold(KeyDefine::KeyCode::Z) ||
-				InputManager::Hold(KeyDefine::KeyCode::ButtonA))
-			{
-				OnPressHold();
-			}
-			if (InputManager::Release(KeyDefine::KeyCode::MouseButton1) ||
-				InputManager::Release(KeyDefine::KeyCode::Z) ||
-				InputManager::Release(KeyDefine::KeyCode::ButtonA))
-			{
-				OnPressRelease();
+				if (InputManager::Push(KeyDefine::KeyCode::MouseButton1) ||
+					InputManager::Push(KeyDefine::KeyCode::Z) ||
+					InputManager::Push(KeyDefine::KeyCode::ButtonA))
+				{
+					OnPressEnter();
+				}
+				if (InputManager::Hold(KeyDefine::KeyCode::MouseButton1) ||
+					InputManager::Hold(KeyDefine::KeyCode::Z) ||
+					InputManager::Hold(KeyDefine::KeyCode::ButtonA))
+				{
+					OnPressHold();
+				}
+				if (InputManager::Release(KeyDefine::KeyCode::MouseButton1) ||
+					InputManager::Release(KeyDefine::KeyCode::Z) ||
+					InputManager::Release(KeyDefine::KeyCode::ButtonA))
+				{
+					OnPressRelease();
+				}
 			}
 		}
 	}

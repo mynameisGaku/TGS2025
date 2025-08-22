@@ -22,6 +22,7 @@ TitleUIController::TitleUIController()
 	m_pGridCursor = new TitleUIGridCursor();
 	m_pGridCursor->SetImage(ResourceLoader::LoadGraph("data/Img/UI/Title/Cursor.png"));
 	m_pGridCursor->SetOffset(Vector2(-120, -30));
+	m_pGridCursor->Activate();
 
 	m_pCurrentCanvas = nullptr;
 
@@ -154,9 +155,16 @@ void TitleUIController::Update()
 	{
 		m_pCurrentCanvas = nullptr;
 	}
-	if (!m_pCurrentCanvas && !m_CanvasList.empty())
+	if (!m_pCurrentCanvas)
 	{
-		m_pCurrentCanvas = m_CanvasList.begin()->second;
+		for(auto& canvas : m_CanvasList)
+		{
+			if (canvas.second->IsActive())
+			{
+				m_pCurrentCanvas = canvas.second;
+				break;
+			}
+		}
 	}
 	if (m_pCurrentCanvas)
 	{
@@ -226,6 +234,9 @@ void TitleUIController::activateCanvas(nlohmann::json argument)
 	if (m_pCurrentCanvas) m_pCurrentCanvas->Deactivate();
 	m_pCurrentCanvas = m_CanvasList[name];
 	m_pCurrentCanvas->Activate();
+
+	m_pGridCursor->MoveTo(0, 0);
+	m_pGridCursor->Deactivate();
 }
 
 void TitleUIController::scaling(nlohmann::json argument)

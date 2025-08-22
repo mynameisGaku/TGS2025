@@ -774,7 +774,9 @@
     <None Include="data\Json\UI\Title\OptionCanvas.json">
       <Filter>data\Json\UI\title</Filter>
     </None>
-    <None Include="data\Json\UI\Title\GraphicsSettingCanvas.json" />
+    <None Include="data\Json\UI\Title\GraphicsSettingCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

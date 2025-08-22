@@ -775,6 +775,7 @@
       <Filter>data\Json\UI</Filter>
     </None>
     <None Include="data\Json\UI\MatchTime.json" />
+    <None Include="data\Json\UI\ButtonHint_old.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

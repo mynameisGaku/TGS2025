@@ -34,9 +34,6 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_MatchTime* matchTime = new UI_MatchTime(RectTransform(Anchor::Preset::MiddleUp, Vector2(0.0f, UI_MATCHTIME_REF.PositionY)), i);
 		matchTime->SetTag("MatchTime_" + sPlayerNum);
 
-		UI_ButtonHint* buttonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
-		buttonHint->SetTag("ButtonHint_" + sPlayerNum);
-
 		UI_StartCount* startCount = new UI_StartCount(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
 		startCount->SetTag("StartCount_" + sPlayerNum);
 
@@ -45,6 +42,9 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 
 		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::MiddleDown, Vector2(0.0f, UI_CHATBAR_REF.PositionY)), i);
 		chat->SetTag("Chat_" + sPlayerNum);
+
+		UI_ButtonHint* buttonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::LeftDown, Vector2(0.0f, 0.0f)), i);
+		buttonHint->SetTag("ButtonHint_" + sPlayerNum);
 
 		m_UIs[crossHair->GetTag()] = crossHair;
 		m_UIs[hitPointIcon->GetTag()] = hitPointIcon;

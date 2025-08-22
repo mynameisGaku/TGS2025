@@ -4,6 +4,13 @@
 #include <src/util/file/resource_loader/resourceLoader.h>
 #include <src/util/ui/UI_Manager.h>
 #include <src/util/math/MathUtil.h>
+#include <src/util/color/RGBColor.h>
+
+namespace
+{
+	static const float HEIGHT = 40.0f;	// •\Ž¦—Ìˆæ‚Ì‚‚³
+	static const RGBColor BACK_COLOR = RGBColor(100);	// ”wŒiF
+}
 
 UI_ButtonHint::UI_ButtonHint(const RectTransform& trs, int index)
 {
@@ -12,14 +19,17 @@ UI_ButtonHint::UI_ButtonHint(const RectTransform& trs, int index)
 
 	m_CharaIndex = index;
 
-	Vector2 beginPos = CameraManager::GetDrawingAreaPos_CameraIndex(m_CharaIndex);
-	Vector2 endPos = beginPos + CameraManager::GetDrawingAreaSize_CameraIndex(m_CharaIndex);
+	//Vector2 beginPos = CameraManager::GetDrawingAreaPos_CameraIndex(m_CharaIndex);
+	//Vector2 endPos = beginPos + CameraManager::GetDrawingAreaSize_CameraIndex(m_CharaIndex);
 
-	RectTransform rectTrs = trs;
-	rectTrs.anchor.SetBegin(beginPos);
-	rectTrs.anchor.SetEnd(endPos);
+	//RectTransform rectTrs = trs;
+	//rectTrs.anchor.SetBegin(beginPos);
+	//rectTrs.anchor.SetEnd(endPos);
 
-	SetTransform(rectTrs);
+	//SetTransform(rectTrs);
+
+	SetTransform(trs);
+	UI_Manager::SetAnchorPositionByScreenSplit(this, index);
 
 	m_pInputRef = &InputRef::Inst();
 	m_pInputRef->Load(true);
@@ -86,6 +96,8 @@ void UI_ButtonHint::Update()
 
 void UI_ButtonHint::Draw()
 {
+	drawBack();
+
 	if (not m_pInputRef)
 		return;
 	UI_Canvas::Draw();
@@ -102,6 +114,9 @@ void UI_ButtonHint::Draw()
 	{
 		auto button = buttonHint.second;
 		Vector2 pos = globalTrs.position + button.AnchorFromCenter + button.LocalPosition;
+		pos.y -= HEIGHT / 2.0f;
+
+		// NEXT”wŒi•\Ž¦‚·‚é
 
 		if (not button.isActive)
 			continue;
@@ -116,7 +131,7 @@ void UI_ButtonHint::Draw()
 		float center = static_cast<float>(length) / 2.0f;
 		float drawPosX = fsize * center;
 
-		DrawFormatStringFToHandle(pos.x, pos.y + fsize * 1.8f, 0xffffff, m_hFont, button.DisplayString.c_str());
+		DrawFormatStringFToHandle(pos.x, pos.y - fsize * 0.5f, 0xffffff, m_hFont, button.DisplayString.c_str());
 	}
 }
 
@@ -174,4 +189,12 @@ void UI_ButtonHint::Deactivate(const std::string& key)
 	BUTTON& button = m_ButtonHints[key];
 	button.isActive = false;
 	button.isPush = false;
+}
+
+void UI_ButtonHint::drawBack()
+{
+	Vector2 pos = CameraManager::GetDrawingAreaPos_CameraIndex(m_CharaIndex);
+	Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(m_CharaIndex);
+
+	DrawBox(pos.x, pos.y + size.y - HEIGHT, pos.x + size.x, pos.y + size.y, BACK_COLOR.GetColorInt(), true); // ”wŒi‚ð•`‰æ
 }

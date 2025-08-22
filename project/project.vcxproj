@@ -233,6 +233,7 @@
     <None Include="data\Json\Stage\TestStage.json" />
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
     <None Include="data\Json\UI\ButtonHint.json" />
+    <None Include="data\Json\UI\ButtonHint_old.json" />
     <None Include="data\Json\UI\ChatBar.json" />
     <None Include="data\Json\UI\MatchTime.json" />
     <None Include="data\Json\UI\Title\MainCanvas.json" />

@@ -76,8 +76,7 @@ private:
     class TeamManager* m_pTeamManager;
 
     UI_GameScore* m_UI_GameScore;
-	UI_Canvas* m_UI_Result_Won;     // Ÿ—˜‰‰o‰æ‘œ
-	UI_Canvas* m_UI_Result_Lost;    // ”s–k‰‰o‰æ‘œ
+	std::vector<UI_Canvas*> m_UI_GameResult;    // Ÿ”s‰‰o‰æ‘œ
     float m_GameEndTime;
     bool m_IsFadeEnd;
 

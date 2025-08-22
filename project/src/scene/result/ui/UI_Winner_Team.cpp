@@ -8,6 +8,22 @@
 UI_Winner_Team::UI_Winner_Team()
 {
 	m_pGameManager = SceneManager::CommonScene()->FindGameObject<GameManager>();
+
+	if (m_pGameManager != nullptr)
+	{
+		const GameManager::ResultData resultData = m_pGameManager->GetResultData();
+		// リザルトデータに勝者がいない場合
+		if (resultData.WinnerTeamName.empty())
+		{
+			const std::string path = "data/texture/UI/Result/DrawGame.png";
+			hResult = LoadGraph(path.c_str());
+		}
+		else
+		{
+			const std::string path = "data/texture/UI/Result/TeamWin_" + resultData.WinnerTeamName[0] + ".png";
+			hResult = LoadGraph(path.c_str());
+		}
+	}
 }
 
 UI_Winner_Team::~UI_Winner_Team()
@@ -24,36 +40,15 @@ void UI_Winner_Team::Draw()
 	const GameManager::ResultData resultData = m_pGameManager->GetResultData();
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
-	// リザルトデータに勝者がいる場合
-	if (not resultData.WinnerTeamName.empty())
+	for (int i = 0; i < CAMERA_NUM; ++i)
 	{
-		for (int i = 0; i < CAMERA_NUM; ++i)
-		{
-			Vector2 screenBegin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
-			Vector2 screenEnd = screenBegin + CameraManager::GetDrawingAreaSize_CameraIndex(i);
-			Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
+		Vector2 screenBegin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
+		Vector2 screenEnd = screenBegin + CameraManager::GetDrawingAreaSize_CameraIndex(i);
+		Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
+		const Vector2 base = Vector2(screenCenter.x, screenCenter.y - 150.0f);
 
-			const std::string text = (resultData.WinnerTeamName[0] + " Team Won!");
-			const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
-			const std::string teamName = resultData.CharaInTeamName.at(resultData.WinnerCharaIDs[0]);
-			const int color = resultData.TeamColor.at(teamName);
-
-			const Vector2 base = Vector2(screenCenter.x - width * 0.5f, screenCenter.y - 200.0f);
-
-			DrawExtendFormatString(base.x, base.y, rectTransform->scale.x, rectTransform->scale.y, color, text.c_str());
-		}
-	}
-	else
-	{
-		for (int i = 0; i < CAMERA_NUM; ++i)
-		{
-			Vector2 screenBegin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
-			Vector2 screenEnd = screenBegin + CameraManager::GetDrawingAreaSize_CameraIndex(i);
-			Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
-
-			const std::string text = "No Contest";
-			const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
-			DrawExtendFormatString(screenCenter.x - width * 0.5f, screenCenter.y, rectTransform->scale.x, rectTransform->scale.y, GetColor(255, 255, 255), text.c_str());
-		}
+		int w, h;
+		GetGraphSize(hResult, &w, &h);
+		DrawRectRotaGraphF(base.x, base.y, 0, 0, w, h, 1.0f, 0.0f, hResult, TRUE);
 	}
 }

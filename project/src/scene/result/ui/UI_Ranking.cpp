@@ -111,7 +111,7 @@ void UI_Ranking::Draw()
 				int charaId = resultData.Ranking[j].first;
 				int score = resultData.Ranking[j].second;
 
-				const std::string text = ("No." + std::to_string(charaId) + " :Score." + std::to_string(score));
+				const std::string text = StringUtil::FormatToString("No.%2d : Score %3d", charaId, score);
 				const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
 				const std::string teamName = resultData.CharaInTeamName.at(charaId);
 				const int color = resultData.TeamColor.at(teamName);
@@ -124,19 +124,6 @@ void UI_Ranking::Draw()
 				ui_score->rectTransform->position = base + offset + easing.current;
 				ui_score->Draw();
 			}
-		}
-	}
-	else
-	{
-		for (int i = 0; i < CAMERA_NUM; ++i)
-		{
-			Vector2 screenBegin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
-			Vector2 screenEnd = screenBegin + CameraManager::GetDrawingAreaSize_CameraIndex(i);
-			Vector2 screenCenter = screenBegin + (screenEnd - screenBegin) * 0.5f;
-
-			const std::string text = "No Contest";
-			const int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * rectTransform->scale.Average());
-			DrawExtendFormatString(screenCenter.x - width * 0.5f, screenCenter.y, rectTransform->scale.x, rectTransform->scale.y, GetColor(255, 255, 255), text.c_str());
 		}
 	}
 }
@@ -152,7 +139,7 @@ void UI_Ranking::ChangeState(STATE state) {
 	case UI_Ranking::STATE::S_FADE_IN:
 
 		for (auto& easing : m_UI_Easing)
-			easing.SetEasing(Vector2(0.0f, 200.0f + 30.0f * index++), Vector2::Zero, 2.0f / 3.0f, EasingType::OutCubic, true);
+			easing.SetEasing(Vector2(0.0f, 200.0f + 25.0f * index++), Vector2::Zero, 1.0f, EasingType::OutCubic, true);
 
 		break;
 

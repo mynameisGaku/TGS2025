@@ -57,7 +57,7 @@ CurrentGameData::CurrentGameData(const GAME_MODE_DESC& desc, std::vector<std::st
 	for (auto& teamName : teamNames)
 	{
 		m_TeamPointMap[teamName] = 0;
-	}
+	}	
 }
 
 //-----------------------------------------
@@ -78,15 +78,12 @@ MatchManager::~MatchManager()
 		delete m_UI_GameScore;
 	}
 
-	if (m_UI_Result_Won != nullptr)
+	for (auto& ui : m_UI_GameResult)
 	{
-		delete m_UI_Result_Won;
+		delete ui;
 	}
 
-	if (m_UI_Result_Lost != nullptr)
-	{
-		delete m_UI_Result_Lost;
-	}
+	m_UI_GameResult.clear();
 }
 
 void MatchManager::Update()
@@ -262,6 +259,38 @@ void MatchManager::init()
 #endif
 
 	m_IsFadeEnd = false;
+
+	if (m_UI_GameResult.empty())
+	{
+		UI_Canvas* ui_Result_Win = new UI_Canvas();
+		ui_Result_Win->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
+		ui_Result_Win->SetTag("UI_Result_Win");
+		ui_Result_Win->SetImage(LoadGraph("data/texture/UI/Result/YouWin.png"));
+		ui_Result_Win->SetIsDraw(false);
+
+		UI_Canvas* ui_Result_Lose = new UI_Canvas();
+		ui_Result_Lose->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
+		ui_Result_Lose->SetTag("UI_Result_Lose");
+		ui_Result_Lose->SetImage(LoadGraph("data/texture/UI/Result/YouLose.png"));
+		ui_Result_Lose->SetIsDraw(false);
+
+		UI_Canvas* ui_Result_Draw_Scr1 = new UI_Canvas();
+		ui_Result_Draw_Scr1->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
+		ui_Result_Draw_Scr1->SetTag("UI_Result_Draw");
+		ui_Result_Draw_Scr1->SetImage(LoadGraph("data/texture/UI/Result/DrawGame.png"));
+		ui_Result_Draw_Scr1->SetIsDraw(false);
+
+		UI_Canvas* ui_Result_Draw_Scr2 = new UI_Canvas;
+		ui_Result_Draw_Scr2->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
+		ui_Result_Draw_Scr2->SetTag("UI_Result_Draw");
+		ui_Result_Draw_Scr2->SetImage(LoadGraph("data/texture/UI/Result/DrawGame.png"));
+		ui_Result_Draw_Scr2->SetIsDraw(false);
+
+		m_UI_GameResult.push_back(ui_Result_Win);
+		m_UI_GameResult.push_back(ui_Result_Lose);
+		m_UI_GameResult.push_back(ui_Result_Draw_Scr1);
+		m_UI_GameResult.push_back(ui_Result_Draw_Scr2);
+	}
 }
 
 void MatchManager::ImGuiInit()
@@ -574,72 +603,69 @@ void MatchManager::StatePhaseGameOver(FSMSignal sig)
 
 void MatchManager::StatePhaseEnd(FSMSignal sig)
 {
+	Vector2 cam1_Begin = CameraManager::GetDrawingAreaPos_CameraIndex(0);
+	Vector2 cam1_Size = CameraManager::GetDrawingAreaSize_CameraIndex(0);
+
+	Vector2 cam2_Begin = CameraManager::GetDrawingAreaPos_CameraIndex(1);
+	Vector2 cam2_Size = CameraManager::GetDrawingAreaSize_CameraIndex(1);
+
+	UI_Canvas* ui_Draw_Scr1 = nullptr;
+	UI_Canvas* ui_Draw_Scr2 = nullptr;
+
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter:
 	{
-		// 勝利演出画像を設定
-		if (m_UI_Result_Won == nullptr)
-		{
-			m_UI_Result_Won = new UI_Canvas();
-			m_UI_Result_Won->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
-			m_UI_Result_Won->SetTag("UI_Result_Won");
-			m_UI_Result_Won->SetImage(LoadGraph("data/texture/UI/Result/YouWon.png"));
-			m_UI_Result_Won->SetEasing(UI_Canvas::eAlpha, 0, 255, 1.0f, EasingType::Linear);
-			m_UI_Result_Won->SetEasing(UI_Canvas::eScale, Vector2::Zero, Vector2::Ones, 1.0f, EasingType::Linear);
-		}
-
-		// 敗北演出画像を設定
-		if (m_UI_Result_Lost == nullptr)
-		{
-			m_UI_Result_Lost = new UI_Canvas();
-			m_UI_Result_Lost->rectTransform->anchor.SetPreset(Anchor::Preset::Middle);
-			m_UI_Result_Lost->SetTag("UI_Result_Lost");
-			m_UI_Result_Lost->SetImage(LoadGraph("data/texture/UI/Result/YouLost.png"));
-			m_UI_Result_Lost->SetEasing(UI_Canvas::eAlpha, 0, 255, 1.0f, EasingType::Linear);
-			m_UI_Result_Lost->SetEasing(UI_Canvas::eScale, Vector2::Zero, Vector2::Ones, 1.0f, EasingType::Linear);
-		}
-
 		// 勝利チームに応じて、描画位置を変化させる(今のところベタ打ち)
 		// TO:DO チームと画面分割先を紐づける
 		if (m_GameData.m_WinnerTeam == "Red")
 		{
-			//CameraManager::GetDrawingAreaSize_CameraIndex();
-
-			Vector2 begin_cam1 = CameraManager::GetDrawingAreaPos_CameraIndex(0);
-			Vector2 size_cam1 = CameraManager::GetDrawingAreaSize_CameraIndex(0);
-
-			Vector2 begin_cam2 = CameraManager::GetDrawingAreaPos_CameraIndex(1);
-			Vector2 size_cam2 = CameraManager::GetDrawingAreaSize_CameraIndex(1);
-
-			m_UI_Result_Won->rectTransform->anchor.SetBegin(begin_cam1);
-			m_UI_Result_Won->rectTransform->anchor.SetEnd(begin_cam1 + size_cam1);
-
-			m_UI_Result_Lost->rectTransform->anchor.SetBegin(begin_cam2);
-			m_UI_Result_Lost->rectTransform->anchor.SetEnd(begin_cam2 + size_cam2);
+			ui_Draw_Scr1 = m_UI_GameResult[0];
+			ui_Draw_Scr2 = m_UI_GameResult[1];
+		}
+		else if(m_GameData.m_WinnerTeam == "Blue")
+		{
+			ui_Draw_Scr1 = m_UI_GameResult[1];
+			ui_Draw_Scr2 = m_UI_GameResult[0];
 		}
 		else
 		{
-			Vector2 begin_cam1 = CameraManager::GetDrawingAreaPos_CameraIndex(0);
-			Vector2 size_cam1 = CameraManager::GetDrawingAreaSize_CameraIndex(0);
+			ui_Draw_Scr1 = m_UI_GameResult[2];
+			ui_Draw_Scr2 = m_UI_GameResult[3];
+		}
 
-			Vector2 begin_cam2 = CameraManager::GetDrawingAreaPos_CameraIndex(1);
-			Vector2 size_cam2 = CameraManager::GetDrawingAreaSize_CameraIndex(1);
+		if (ui_Draw_Scr1 != nullptr)
+		{
+			ui_Draw_Scr1->SetEasing(UI_Canvas::eAlpha, 0, 255, 1.0f, EasingType::Linear);
+			ui_Draw_Scr1->SetEasing(UI_Canvas::eScale, Vector2::Zero, Vector2::Ones, 1.0f, EasingType::Linear);
+			ui_Draw_Scr1->rectTransform->anchor.SetBegin(cam1_Begin);
+			ui_Draw_Scr1->rectTransform->anchor.SetEnd(cam1_Begin + cam1_Size);
+			ui_Draw_Scr1->SetIsDraw(true);
+		}
 
-			m_UI_Result_Won->rectTransform->anchor.SetBegin(begin_cam2);
-			m_UI_Result_Won->rectTransform->anchor.SetEnd(begin_cam2 + size_cam2);
-
-			m_UI_Result_Lost->rectTransform->anchor.SetBegin(begin_cam1);
-			m_UI_Result_Lost->rectTransform->anchor.SetEnd(begin_cam1 + size_cam1);
+		if (ui_Draw_Scr2 != nullptr)
+		{
+			ui_Draw_Scr2->SetEasing(UI_Canvas::eAlpha, 0, 255, 1.0f, EasingType::Linear);
+			ui_Draw_Scr2->SetEasing(UI_Canvas::eScale, Vector2::Zero, Vector2::Ones, 1.0f, EasingType::Linear);
+			ui_Draw_Scr2->rectTransform->anchor.SetBegin(cam2_Begin);
+			ui_Draw_Scr2->rectTransform->anchor.SetEnd(cam2_Begin + cam2_Size);
+			ui_Draw_Scr2->SetIsDraw(true);
 		}
 	}
 	break;
 	case FSMSignal::SIG_Update:
 	{
+		bool isPlayEasing = false;
+
+		for (const auto& ui : m_UI_GameResult) {
+			if (ui->IsAllEasingRun()) {
+				isPlayEasing = true;
+				break;
+			}
+		}
+
 		// 演出が終了して、ボタンが押された場合
-		if (m_UI_Result_Won != nullptr && not m_UI_Result_Won->IsAllEasingRun() && 
-			m_UI_Result_Lost != nullptr && not m_UI_Result_Lost->IsAllEasingRun() &&
-			not m_IsFadeEnd && InputManager::Push("AnyKey"))
+		if (not isPlayEasing && not m_IsFadeEnd && InputManager::Push("AnyKey"))
 		{
 			Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
 			m_IsFadeEnd = true;

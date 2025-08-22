@@ -14,4 +14,5 @@ public:
 
 private:
 	GameManager* m_pGameManager;
+	int hResult;
 };

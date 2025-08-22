@@ -578,7 +578,7 @@ void Chara::CollisionEvent(const CollisionData& colData) {
 		if (ball->GetState() == Ball::S_LANDED)
 		{
 			// ボールを所持していない場合、自動で取得する
-			if (m_pBall == nullptr)
+			if (m_pBall == nullptr && not m_IsDamage)
 				m_Catcher->CatchSuccese(ball);
 			return;
 		}
@@ -998,17 +998,9 @@ Vector2 Chara::Target(const Ball* ball)
 void Chara::CatchSuccess(const Vector3& velocity)
 {
 	m_CanCatch = false;
-	m_CanMove = false;
-	m_CanRot = false;
 	m_Catcher->SetColliderActive(false);
 
 	playCatchBallSound();
-
-	m_pPhysics->SetGravity(Vector3::Zero);
-	m_pPhysics->SetFriction(Vector3::Zero);
-
-	m_pPhysics->velocity.y = 10.0f;
-	m_pPhysics->velocity += Vector3::Normalize(velocity) * Vector3(1, 0, 1) * 10.0f;
 
 	sub_changeStateNetwork(&Chara::SubStateGetBall); // ステートを変更
 }
@@ -2193,8 +2185,15 @@ void Chara::SubStateGetBall(FSMSignal sig)
 		m_Animator->PlaySub("mixamorig:Spine", "GetBall");
 		m_CanMove = false;
 		m_CanRot = false;
-		m_pPhysics->SetGravity(Vector3::Zero);
 		m_pPhysics->SetFriction(Vector3::Zero);
+
+		Camera* camera = CameraManager::GetCamera(m_Index);
+		const Vector3 CatchRecoil = Vector3(0.0f, 300.0f, -300.0f);
+
+		if (camera != nullptr)
+			m_pPhysics->velocity = camera->transform->Forward() * CatchRecoil;
+		else
+			m_pPhysics->velocity = transform->Forward() * CatchRecoil;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新

@@ -39,7 +39,8 @@ UI_Ranking::UI_Ranking()
 			UI_Text* ui_score = new UI_Text(text, RectTransform(), font);
 			UI_Manager::Detach(ui_score);
 			m_UI_Scores.push_back(ui_score);
-			m_UI_Easing.push_back(EasingVec2());
+			m_UI_Easing_Move.push_back(EasingVec2());
+			m_UI_Easing_Alpha.push_back(EasingInt());
 		}
 	}
 
@@ -76,7 +77,10 @@ void UI_Ranking::Update()
 	for (auto& score : m_UI_Scores)
 		score->Update();
 
-	for (auto& easing : m_UI_Easing)
+	for (auto& easing : m_UI_Easing_Move)
+		easing.Update();
+
+	for (auto& easing : m_UI_Easing_Alpha)
 		easing.Update();
 
 	UI_Canvas::Update();
@@ -120,8 +124,10 @@ void UI_Ranking::Draw()
 				const Vector2 offset = Vector2(0.0f, 30.0f * j);
 
 				UI_Text* ui_score = m_UI_Scores[j];		
-				EasingVec2 easing = m_UI_Easing[j];
+				EasingVec2 easing = m_UI_Easing_Move[j];
+				EasingInt alpha = m_UI_Easing_Alpha[j];
 				ui_score->rectTransform->position = base + offset + easing.current;
+				ui_score->SetAlpha(alpha.current);
 				ui_score->Draw();
 			}
 		}
@@ -132,14 +138,16 @@ void UI_Ranking::ChangeState(STATE state) {
 
 	m_PrevState = m_CurrentState;
 	m_CurrentState = state;
-	int index = 0;
 
 	switch (m_CurrentState)
 	{
 	case UI_Ranking::STATE::S_FADE_IN:
 
-		for (auto& easing : m_UI_Easing)
-			easing.SetEasing(Vector2(0.0f, 200.0f + 25.0f * index++), Vector2::Zero, 1.0f, EasingType::OutCubic, true);
+		for (int i = 0; i < (int)m_UI_Scores.size(); i++)
+		{
+			m_UI_Easing_Move[i].SetEasing(Vector2(0.0f, 100.0f + 25.0f * i), Vector2::Zero, 1.0f, EasingType::OutCubic, true);
+			m_UI_Easing_Alpha[i].SetEasing(0, 255, 1.0f, EasingType::OutCubic, true);
+		}
 
 		break;
 

@@ -5,7 +5,9 @@
 
 void ForceFieldCorn::Draw()
 {
-	DrawCone3D(transform->position, transform->position + transform->Forward() * m_pCollider->transform->scale.x, 30.0f, 8, 0x00FFFF, 0x000000, true);
+#ifdef _DEBUG
+	//DrawCone3D(transform->position, transform->position + transform->Forward() * m_pCollider->transform->scale.x, 30.0f, 8, 0x00FFFF, 0x000000, true);
+#endif // _DEBUG
 }
 
 void ForceFieldCorn::CollisionEvent(const CollisionData& colData)

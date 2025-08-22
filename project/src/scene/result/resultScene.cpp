@@ -3,7 +3,6 @@
 // ◇汎用
 #include "framework/SceneManager.h"
 
-
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
 #include "src/util/fader/Fader.h"
@@ -32,7 +31,7 @@ ResultScene::ResultScene(const std::string& name) : SceneBase(true, name) {
 	const int size = (int)gameM->GetResultData().WinnerCharaIDs.size();
 	for (int i = 0; i < size; i++)
 	{
-		Vector3 position = Vector3((i - (size - 1) / 2.0f) * 80.0f, 0.0f, 0.0f);
+		Vector3 position = Vector3((i - (size - 1) / 2.0f) * 80.0f, 0.0f, 200.0f);
 		charaM->Create(gameM->GetResultData().WinnerTeamName[0], Transform(position, Vector3::Zero, Vector3::Ones));
 	}
 
@@ -60,29 +59,31 @@ void ResultScene::Update() {
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
 	}
 
-	if (InputManager::Push(KeyDefine::KeyCode::T)) {
-		SceneManager::ChangeScene("TitleScene");
-	}
-
 	SceneBase::Update();
 }
 
 void ResultScene::Draw() {
 
 	SceneBase::Draw();
-
-	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
-
 }
 
 void ResultScene::BeforePlayUpdate()
 {
+	if (not Fader::IsPlaying())
+		sceneState = SceneState::InPlay;
 }
 
 void ResultScene::InPlayUpdate()
 {
+	if (not CameraManager::IsPlayingPerformance() && InputManager::Push("AnyKey")) {
+
+		Fader::FadeOut(1.0f, EasingType::Linear);
+		sceneState = SceneState::AfterPlay;
+	}
 }
 
 void ResultScene::AfterPlayUpdate()
 {
+	if (not Fader::IsPlaying())
+		SceneManager::ChangeScene("TitleScene");
 }

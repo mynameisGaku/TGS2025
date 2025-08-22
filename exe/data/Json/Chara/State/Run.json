@@ -1,0 +1,85 @@
+{
+  "Animation": "Run",
+  "Events": [
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 2.5,
+      "Argument": {
+        "Speed": 0.75
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 5.0,
+      "Argument": {
+        "Speed": 1.5
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 10.0,
+      "Argument": {
+        "Speed": 0.75
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 12.5,
+      "Argument": {
+        "Speed": 1.5
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 17.5,
+      "Argument": {
+        "Speed": 0.75
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 20.0,
+      "Argument": {
+        "Speed": 1.5
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 25.0,
+      "Argument": {
+        "Speed": 0.75
+      }
+    },
+    {
+      "Name": "SetAnimationSpeed",
+      "Start": 27.5,
+      "Argument": {
+        "Speed": 1.5
+      }
+    },
+    {
+      "Name": "PlayFootSound",
+      "Start": 4.46,
+      "Argument": {
+      }
+    },
+    {
+      "Name": "PlayFootSound",
+      "Start": 12.0,
+      "Argument": {
+      }
+    },
+    {
+      "Name": "PlayFootSound",
+      "Start": 21.0,
+      "Argument": {
+      }
+    },
+    {
+      "Name": "PlayFootSound",
+      "Start": 29.0,
+      "Argument": {
+      }
+    }
+  ]
+}

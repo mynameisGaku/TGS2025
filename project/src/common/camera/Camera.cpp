@@ -58,6 +58,8 @@ Camera::Camera() {
 
 	m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
 	m_pCharaManager = nullptr;
+
+	m_IsPlayingPerformance = false;
 }
 
 Camera::~Camera() {
@@ -353,6 +355,7 @@ void Camera::SetPerformance(const std::string& perfType) {
 		return;
 
 	m_PerformanceDatas = perfData;	// パフォーマンスデータを設定
+	m_IsPlayingPerformance = true;
 
 	ChangeState(&Camera::PerformanceState);
 }

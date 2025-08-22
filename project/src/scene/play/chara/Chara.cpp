@@ -345,9 +345,10 @@ void Chara::Init(std::string tag)
 	m_Timeline->SetFunction("Invincible", &Chara::invincible);
 	m_Timeline->LoadJsons("data/Json/Chara/State");
 
-	m_pBallTarget = m_pBallTargetManager->Create();
-	m_pBallTarget->SetCharaTag(m_CharaTag);
-
+	if (m_pBallTargetManager != nullptr) {
+		m_pBallTarget = m_pBallTargetManager->Create();
+		m_pBallTarget->SetCharaTag(m_CharaTag);
+	}
 #if FALSE
 
 	//=== 腕アニメーション（ボールを持つ、投げる） ===
@@ -477,7 +478,8 @@ void Chara::Update() {
 
 	//=== 座標更新終了後の処理 ===
 
-	m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
+	if (m_pBallTarget != nullptr)
+		m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
 	m_lastUpdatePosition = transform->position;
 
 	// NaN/Infのチェック
@@ -508,6 +510,8 @@ void Chara::Draw()
 		m_pTrail[i]->Draw();
 	}*/
 
+#ifdef _DEBUG
+	/*
 	if (m_pHP->IsDead())
 	{
 		DrawFormatString(300, 300 + m_Index * 40, 0xff0000, std::string("Dead [index:" + std::to_string(m_Index) + "]").c_str());
@@ -523,6 +527,8 @@ void Chara::Draw()
 	}
 
 	DrawSphere3D(m_ActionWallPosition, 20.0f, 4, 0x00FFFF, 0x00FFFF, FALSE);
+	*/
+#endif // _DEBUG
 }
 
 void Chara::CollisionEvent(const CollisionData& colData) {
@@ -2403,7 +2409,7 @@ void Chara::slideUpdate()
 		}
 		else
 		{
-			m_pPhysics->SetFriction(FRICTION * 0.1f);
+			m_pPhysics->SetFriction(FRICTION * 0.03f);
 		}
 	}
 
@@ -2943,7 +2949,8 @@ void Chara::invincible(const nlohmann::json& argument)
 	{
 		uint32_t ballIndex = item.second.BallIndex;
 
-		m_pBallTarget->EraseRockOnData(ballIndex);
+		if (m_pBallTarget != nullptr)
+			m_pBallTarget->EraseRockOnData(ballIndex);
 	}
 
 }

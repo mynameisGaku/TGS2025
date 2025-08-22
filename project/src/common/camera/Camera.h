@@ -204,6 +204,11 @@ public:
 	bool IsRightView(const Vector3& pos) const;
 
 	/// <summary>
+	/// カメラが演出中か
+	/// </summary>
+	inline bool IsPlayingPerformance() const { return m_IsPlayingPerformance; }
+
+	/// <summary>
 	/// このカメラを所有しているユーザーを取得する
 	/// </summary>
 	User* GetUser();
@@ -314,6 +319,7 @@ private:
 	Shake* m_pShake;	// シェイクコンポーネント
 
 	std::vector<CameraDefine::PerformanceData> m_PerformanceDatas;	// 演出のデータ
+	bool m_IsPlayingPerformance;
 	const Transform* m_pHolder;	// カメラの保有者
 	int m_CharaIndex;			// キャラクターの番号
 	User m_User;				// このカメラを所有しているユーザー

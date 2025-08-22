@@ -1,0 +1,84 @@
+{
+    "Animation": "AimToThrow",
+    "Events": [
+        {
+            "Name": "SetCanMove",
+            "Start": 0.0,
+            "Argument": {
+                "CanMove": false
+            }
+        },
+        {
+            "Name": "SetCanRot",
+            "Start": 0.0,
+            "Argument": {
+                "CanRot": false
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "Argument": {
+                "Speed": 0.5
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 0.0,
+            "End": 1.5,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                }
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 2.5,
+            "Argument": {
+                "Speed": 1.5
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 2.5,
+            "End": 7.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 50
+                }
+            }
+        },
+        {
+            "Name": "ThrowBall",
+            "Start": 2.5,
+            "Argument": {
+            }
+        },
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 5.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        },
+        {
+            "Name": "SetCanMove",
+            "Start": 20.0,
+            "Argument": {
+                "CanMove": true
+            }
+        },
+        {
+            "Name": "SetCanRot",
+            "Start": 20.0,
+            "Argument": {
+                "CanRot": true
+            }
+        }
+    ]
+}

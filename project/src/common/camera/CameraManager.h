@@ -124,6 +124,8 @@ namespace CameraManager {
 	/// <returns></returns>
 	int GetCurrentDrawingCameraID();
 
+	bool IsPlayingPerformance();
+
 	//================================================================================
 	// ▼デバッグ機能
 

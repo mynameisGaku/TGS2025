@@ -168,8 +168,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         ClearDrawScreen();
         AppDraw();
         DrawEffekseer2D();
-        if (ProcessMessage() == -1 || IsExit())
+        if (ProcessMessage() == -1 || IsExit() || IsReboot())
             break;
+
         ScreenFlip();
 
         EndRecordPerformance();
@@ -233,6 +234,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
     _CrtDumpMemoryLeaks();
 #endif
+
+    if (IsReboot())
+    {
+        // 自分自身のパスを取得
+        TCHAR exePath[MAX_PATH];
+        GetModuleFileName(NULL, exePath, MAX_PATH);
+
+        // 新しいプロセスとして自分自身を起動
+        STARTUPINFO si = { sizeof(STARTUPINFO) };
+        PROCESS_INFORMATION pi;
+        CreateProcess(
+            exePath,   // 実行ファイルパス
+            NULL,      // コマンドライン引数
+            NULL, NULL, FALSE,
+            0, NULL, NULL,
+            &si, &pi
+        );
+    }
 
     return 0;				// ソフトの終了 
 }

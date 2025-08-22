@@ -28,7 +28,10 @@ void BallTarget::Update()
 
 void BallTarget::Draw()
 {
-	DrawSphere3D(m_Position, 25.0f, 1, 0xFF00FF, 0x000000, false); // デバッグ用に緑色の球を描画
+#ifdef _DEBUG
+	//DrawSphere3D(m_Position, 25.0f, 1, 0xFF00FF, 0x000000, false); // デバッグ用に緑色の球を描画
+#endif // _DEBUG
+
 }
 
 void BallTarget::SetPositionWithParent(const Vector3& offset, Transform* parent)

@@ -39,7 +39,7 @@ void UI_GameScore::Draw()
 
 		for (int i = 0; i < CAMERA_NUM; i++)
 		{
-			RectTransform rectTrs = RectTransform(Anchor::Preset::MiddleUp);
+			RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown);
 			Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
 			Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(i);
 			rectTrs.anchor.SetBegin(begin);
@@ -53,7 +53,7 @@ void UI_GameScore::Draw()
 		drawTotalScore(rectTransform->Global().position);
 	}
 
-	drawUserScores();
+	//drawUserScores();
 }
 
 void UI_GameScore::SetUserScore(const std::string& teamName, int id, int score)

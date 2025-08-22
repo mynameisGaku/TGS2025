@@ -2185,15 +2185,23 @@ void Chara::SubStateGetBall(FSMSignal sig)
 		m_Animator->PlaySub("mixamorig:Spine", "GetBall");
 		m_CanMove = false;
 		m_CanRot = false;
-		m_pPhysics->SetFriction(Vector3::Zero);
 
 		Camera* camera = CameraManager::GetCamera(m_Index);
-		const Vector3 CatchRecoil = Vector3(0.0f, 300.0f, -300.0f);
+		const float CatchRecoilForward = -10000.0f;
+		const float CatchRecoilUp = 750.0f;
 
 		if (camera != nullptr)
-			m_pPhysics->velocity = camera->transform->Forward() * CatchRecoil;
+		{
+			m_pPhysics->velocity = camera->transform->Forward() * CatchRecoilForward;
+		}
 		else
-			m_pPhysics->velocity = transform->Forward() * CatchRecoil;
+		{
+			m_pPhysics->velocity = transform->Forward() * CatchRecoilForward;
+		}
+
+		m_pPhysics->velocity.y = CatchRecoilUp;
+		m_pPhysics->SetGravity(CHARA_GRAVITY);
+		m_pPhysics->SetFriction(FRICTION);
 	}
 	break;
 	case FSMSignal::SIG_Update: // XV

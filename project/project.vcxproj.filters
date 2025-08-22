@@ -2368,6 +2368,7 @@
     <ClInclude Include="src\util\restart\Restart.h">
       <Filter>src%28application%29\util\restart</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\font\FontDefine.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

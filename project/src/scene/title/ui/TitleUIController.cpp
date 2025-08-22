@@ -274,6 +274,35 @@ void TitleUIController::exit(nlohmann::json argument)
 #include <src/util/restart/Restart.h>
 #include <vendor/mINI/ini.h>
 #include <DxLib.h>
+#include <EffekseerForDXLib.h>
+#include "framework/App.h"
+#include "src/util/font/Font.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/file/ini/settings_ini.h"
+#include "src/util/file/FileUtil.h"
+
+#include "src/reference/bloom/BloomRef.h"
+#include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/reference/chara/CharaHPRef.h"
+#include "src/reference/chara/CharaStaminaRef.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+#include <src/reference/game/GameRef.h>
+#include "src/reference/input/InputRef.h"
+#include <src/util/time/GameTime.h>
+#include <src/reference/ui/UI_ButtonHintRef.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/util/editbox/editbox.hpp>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/reference/camera/CameraPerformanceRef.h>
+#include <src/util/restart/Restart.h>
+#ifdef IMGUI
+#include "vendor/imgui/imgui_impl_dxlib.hpp"
+#endif // IMGUI
+
 
 void TitleUIController::setWindowMode(nlohmann::json argument)
 {
@@ -324,7 +353,43 @@ void TitleUIController::setWindowMode(nlohmann::json argument)
 	file.write(ini);
 
 	auto cleanup = []() {
-		DxLib_End(); // DxLib の終了処理
+
+		AppRelease();
+
+		/*
+		リファレンス解放
+
+		明示的に解放する必要があります。
+		*/
+		Settings_json::Inst()->Destroy();
+		Settings_ini::Inst().Destroy();
+		BLOOM_REF.Destroy();
+		CAMERADEFINE_REF.Destroy();
+		CAMERA_PERFORMANCE_REF.Destroy();
+		CHARADEFINE_REF.Destroy();
+		CHARAHP_REF.Destroy();
+		CHARASTAMINA_REF.Destroy();
+		CRYSTALFRAGMENT_REF.Destroy();
+		CRYSTALFRAGMENTSPAWNER_REF.Destroy();
+		GAME_REF.Destroy();
+		WindowSetting::Inst().Destroy();
+		GTime.Destroy();
+		InputRef::Inst().Destroy();
+		UI_ButtonHintRef::Inst().Destroy();
+		NetworkRef::Inst().Destroy();
+		PtrUtil::SafeDelete(nameText);
+		CameraPerformanceRef::Inst()->Destroy();
+
+#ifdef IMGUI
+
+		// 解放
+		ImGui_ImplDXlib_Shutdown();
+		ImGui::DestroyContext();
+
+#endif // IMGUI
+
+		Effkseer_End();
+		DxLib_End();				// ＤＸライブラリ使用の終了処理
 		};
 
 	Restart::RestartAndExit(__argc, __argv, cleanup);

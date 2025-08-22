@@ -407,7 +407,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
 		ImGuiInit();
 
-		m_UI_GameScore = new UI_GameScore(RectTransform(Anchor::Preset::MiddleUp));
+		m_UI_GameScore = new UI_GameScore(RectTransform(Anchor::Preset::Middle));
 		m_UI_GameScore->SetMatchManager(this);
 		m_UI_GameScore->SetAchievedScore(m_GameData.m_WinPointMax);
 

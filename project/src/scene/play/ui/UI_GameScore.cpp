@@ -40,6 +40,7 @@ void UI_GameScore::Draw()
 		for (int i = 0; i < CAMERA_NUM; i++)
 		{
 			RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown);
+			rectTrs.position = Vector2(0.0f, -100.0f);
 			Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
 			Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(i);
 			rectTrs.anchor.SetBegin(begin);
@@ -87,12 +88,13 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 {
 	int index = 0;
 	const Vector2 adjust = Vector2(120.0f, 80.0f);
+	const float backWidth = adjust.x * m_Size;
 
 	// 背景色を追加
 	for (const auto& it : m_BackColors) {
 
-		const Vector2 begin = Vector2(position.x + adjust.x * (index - 1),	position.y - adjust.y * 0.5f);
-		const Vector2 end	= Vector2(position.x + adjust.x * index,		position.y + adjust.y * 0.5f);
+		const Vector2 begin =	Vector2(position.x + adjust.x * index		- backWidth,			position.y - adjust.y * 0.5f);
+		const Vector2 end =		Vector2(position.x + adjust.x * (index + 1)	- backWidth,	position.y + adjust.y * 0.0f);
 
 		DrawBoxAA(begin.x, begin.y, end.x, end.y, it.second, true);
 		index++;
@@ -105,11 +107,13 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 
 		const std::string scoreText = StringUtil::FormatToString("%d", it.second);
 		const int width = GetDrawStringWidth(scoreText.c_str(), scoreText.length());
-		const Vector2 pos = Vector2(position.x + adjust.x * (index - 1) + adjust.x * 0.5f, position.y + adjust.y * 0.1f);
+		const Vector2 pos = Vector2(position.x + adjust.x * index + adjust.x * 0.5f - backWidth, position.y - adjust.y * 0.4f);
 	
 		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
 		index++;
 	}
+
+	/*
 
 	// 必要スコア表示
 	if (m_AchievedScore > 0)
@@ -123,6 +127,7 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 		DrawBoxAA(pos.x, pos.y, end.x, end.y, 0x999999, true);
 		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
 	}
+	*/
 }
 
 void UI_GameScore::drawUserScores()

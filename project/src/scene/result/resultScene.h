@@ -2,6 +2,8 @@
 #include "framework/SceneBase.h"
 #include <list>
 
+#include "src/common/game/GameManager.h"
+
 /// <summary>
 /// リザルトシーン
 /// </summary>
@@ -40,4 +42,7 @@ public:
 	/// プレイ後の更新処理
 	/// </summary>
 	void AfterPlayUpdate() override;
+
+private:
+	GameManager::ResultData m_ResultData;
 };

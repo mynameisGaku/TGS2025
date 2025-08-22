@@ -63,6 +63,9 @@ CurrentGameData::CurrentGameData(const GAME_MODE_DESC& desc, std::vector<std::st
 //-----------------------------------------
 //  MatchManager
 //-----------------------------------------
+
+static const float GAME_END_TIME = 2.5f;
+
 MatchManager::MatchManager()
 {
 	init();
@@ -258,6 +261,7 @@ void MatchManager::init()
 	m_pFsm->RegisterStateName(&MatchManager::StatePhaseEnd, "End");
 #endif
 
+	m_GameEndTime = GAME_END_TIME;
 	m_IsFadeEnd = false;
 
 	if (m_UI_GameResult.empty())
@@ -655,24 +659,32 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update:
 	{
-		bool isPlayEasing = false;
+		if (not m_IsFadeEnd)
+		{
+			bool isPlayEasing = false;
+			for (const auto& ui : m_UI_GameResult)
+			{
+				if (ui->IsAllEasingRun())
+				{
+					isPlayEasing = true;
+					break;
+				}
+			}
 
-		for (const auto& ui : m_UI_GameResult) {
-			if (ui->IsAllEasingRun()) {
-				isPlayEasing = true;
-				break;
+			m_GameEndTime -= GameTime::Instance().DeltaTime();
+
+			// 演出が終了して、一定時間経過した場合
+			if (not isPlayEasing && m_GameEndTime <= 0.0f)
+			{
+				Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
+				m_IsFadeEnd = true;
 			}
 		}
-
-		// 演出が終了して、ボタンが押された場合
-		if (not isPlayEasing && not m_IsFadeEnd && InputManager::Push("AnyKey"))
+		else
 		{
-			Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
-			m_IsFadeEnd = true;
+			if (not Fader::IsPlaying())
+				SceneManager::ChangeScene("ResultScene");
 		}
-
-		if (m_IsFadeEnd && not Fader::IsPlaying())
-			SceneManager::ChangeScene("ResultScene");
 	}
 	break;
 	case FSMSignal::SIG_AfterUpdate:

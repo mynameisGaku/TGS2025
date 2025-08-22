@@ -10,7 +10,7 @@
 #include "src/common/setting/SettingManager.h"
 #include "src/util/easing/easing.h"
 
-#include "src/common/game/GameManager.h"
+
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/scene/result/ui/UI_Setter_ResultScene.h"
@@ -28,6 +28,7 @@ ResultScene::ResultScene(const std::string& name) : SceneBase(true, name) {
 
 	CharaManager* charaM = Instantiate<CharaManager>();
 
+	m_ResultData = gameM->GetResultData();
 	const int size = (int)gameM->GetResultData().WinnerCharaIDs.size();
 	for (int i = 0; i < size; i++)
 	{
@@ -75,7 +76,12 @@ void ResultScene::BeforePlayUpdate()
 
 void ResultScene::InPlayUpdate()
 {
-	if (not CameraManager::IsPlayingPerformance() && InputManager::Push("AnyKey")) {
+	int padNumber = DX_INPUT_PAD1;
+
+	if (not m_ResultData.WinnerCharaIDs.empty())
+		padNumber = m_ResultData.WinnerCharaIDs[0] + 1;
+
+	if (not CameraManager::IsPlayingPerformance() && InputManager::Push("AnyKey", padNumber)) {
 
 		Fader::FadeOut(1.0f, EasingType::Linear);
 		sceneState = SceneState::AfterPlay;

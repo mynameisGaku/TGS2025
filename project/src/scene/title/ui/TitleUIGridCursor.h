@@ -23,6 +23,11 @@ public:
 	void SetOffset(const Vector2& offset) { m_Offset = offset; }
 	void SetImage(int handle) { m_hImage = handle; }
 
+	const void Activate() { m_IsActive = true; }
+	const void Deactivate() { m_IsActive = false; }
+
+	const bool IsActive() const { return m_IsActive; }
+
 private:
 	int m_IndexX{};
 	int m_IndexY{};
@@ -32,4 +37,6 @@ private:
 	Vector2 m_Position{};
 	Vector2 m_Offset{};
 	Vector2 m_SinCurve{};
+
+	bool m_IsActive{};
 };

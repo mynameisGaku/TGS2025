@@ -22,6 +22,7 @@ TitleUIController::TitleUIController()
 	m_pGridCursor = new TitleUIGridCursor();
 	m_pGridCursor->SetImage(ResourceLoader::LoadGraph("data/Img/UI/Title/Cursor.png"));
 	m_pGridCursor->SetOffset(Vector2(-120, -30));
+	m_pGridCursor->Activate();
 
 	m_pCurrentCanvas = nullptr;
 
@@ -154,9 +155,16 @@ void TitleUIController::Update()
 	{
 		m_pCurrentCanvas = nullptr;
 	}
-	if (!m_pCurrentCanvas && !m_CanvasList.empty())
+	if (!m_pCurrentCanvas)
 	{
-		m_pCurrentCanvas = m_CanvasList.begin()->second;
+		for(auto& canvas : m_CanvasList)
+		{
+			if (canvas.second->IsActive())
+			{
+				m_pCurrentCanvas = canvas.second;
+				break;
+			}
+		}
 	}
 	if (m_pCurrentCanvas)
 	{
@@ -209,6 +217,7 @@ void TitleUIController::subscribeFunctions()
 	SUBSCRIBE_FUNCTION("Scaling", scaling);
 	SUBSCRIBE_FUNCTION("GameStart", gameStart);
 	SUBSCRIBE_FUNCTION("Exit", exit);
+	SUBSCRIBE_FUNCTION("SetWindowMode", setWindowMode);
 }
 
 void TitleUIController::activateCanvas(nlohmann::json argument)
@@ -225,6 +234,9 @@ void TitleUIController::activateCanvas(nlohmann::json argument)
 	if (m_pCurrentCanvas) m_pCurrentCanvas->Deactivate();
 	m_pCurrentCanvas = m_CanvasList[name];
 	m_pCurrentCanvas->Activate();
+
+	m_pGridCursor->MoveTo(0, 0);
+	m_pGridCursor->Deactivate();
 }
 
 void TitleUIController::scaling(nlohmann::json argument)
@@ -256,4 +268,129 @@ void TitleUIController::gameStart(nlohmann::json argument)
 void TitleUIController::exit(nlohmann::json argument)
 {
 	Exit();
+}
+
+#include <src/common/camera/CameraManager.h>
+#include <src/util/restart/Restart.h>
+#include <vendor/mINI/ini.h>
+#include <DxLib.h>
+#include <EffekseerForDXLib.h>
+#include "framework/App.h"
+#include "src/util/font/Font.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/file/ini/settings_ini.h"
+#include "src/util/file/FileUtil.h"
+
+#include "src/reference/bloom/BloomRef.h"
+#include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/reference/chara/CharaHPRef.h"
+#include "src/reference/chara/CharaStaminaRef.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+#include <src/reference/game/GameRef.h>
+#include "src/reference/input/InputRef.h"
+#include <src/util/time/GameTime.h>
+#include <src/reference/ui/UI_ButtonHintRef.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/util/editbox/editbox.hpp>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/reference/camera/CameraPerformanceRef.h>
+#include <src/util/restart/Restart.h>
+#ifdef IMGUI
+#include "vendor/imgui/imgui_impl_dxlib.hpp"
+#endif // IMGUI
+
+
+void TitleUIController::setWindowMode(nlohmann::json argument)
+{
+	nlohmann::json event = argument["Event"];
+
+	std::string modeStr = event.value("Mode", "WindowMode");
+
+	int w{}, h{};
+
+	if (modeStr == "FullScreen")
+	{
+		w = 1920;
+		h = 1080;
+	}
+
+	if (modeStr == "WindowMode")
+	{
+		w = 1600;
+		h = 900;
+	}
+
+	if (modeStr == "DualScreen")
+	{
+		w = 3840;
+		h = 1080;
+	}
+
+	// first, create a file instance
+	mINI::INIFile file("window.ini");
+
+	// next, create a structure that will hold data
+	mINI::INIStructure ini;
+
+	// now we can read the file
+	file.read(ini);
+
+	// read a value
+	//std::string& amountOfApples = ini["fruits"]["apples"];
+
+	// update a value
+	ini["Main_Window"]["Width"] = std::to_string(w);
+	ini["Main_Window"]["Height"] = std::to_string(h);
+
+	// add a new entry
+	//ini["Main_Window"]["bananas"] = "100";
+
+	// write updates to file
+	file.write(ini);
+
+	auto cleanup = []() {
+
+		AppRelease();
+
+		/*
+		リファレンス解放
+
+		明示的に解放する必要があります。
+		*/
+		Settings_json::Inst()->Destroy();
+		Settings_ini::Inst().Destroy();
+		BLOOM_REF.Destroy();
+		CAMERADEFINE_REF.Destroy();
+		CAMERA_PERFORMANCE_REF.Destroy();
+		CHARADEFINE_REF.Destroy();
+		CHARAHP_REF.Destroy();
+		CHARASTAMINA_REF.Destroy();
+		CRYSTALFRAGMENT_REF.Destroy();
+		CRYSTALFRAGMENTSPAWNER_REF.Destroy();
+		GAME_REF.Destroy();
+		WindowSetting::Inst().Destroy();
+		GTime.Destroy();
+		InputRef::Inst().Destroy();
+		UI_ButtonHintRef::Inst().Destroy();
+		NetworkRef::Inst().Destroy();
+		PtrUtil::SafeDelete(nameText);
+		CameraPerformanceRef::Inst()->Destroy();
+
+#ifdef IMGUI
+
+		// 解放
+		ImGui_ImplDXlib_Shutdown();
+		ImGui::DestroyContext();
+
+#endif // IMGUI
+
+		Effkseer_End();
+		DxLib_End();				// ＤＸライブラリ使用の終了処理
+		};
+
+	Restart::RestartAndExit(__argc, __argv, cleanup);
 }

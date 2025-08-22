@@ -32,7 +32,7 @@ public:
 	TitleUI GetUI(const std::string& name);
 
 	void Activate() { m_IsActive = true; }
-	void Deactivate() { m_IsActive = false; }
+	void Deactivate() { m_IsActive = false; m_IsFirstUpdate = true; }
 	bool IsActive() const { return m_IsActive; }
 
 	Vector2 GetPoint(const TUI_CANVAS_ANCHOR_POINT& anchor);
@@ -58,4 +58,6 @@ private:
 	int					m_BeginIndexY	{};
 	int					m_EndIndexX		{};
 	int					m_EndIndexY		{};
+
+	bool				m_IsFirstUpdate{true};
 };

@@ -21,6 +21,13 @@ void TitleUICanvas::Update()
 	if (not m_IsActive)
 		return;
 
+	if (m_IsFirstUpdate)
+	{
+		m_pController->GetGridCursor()->Activate();
+
+		m_IsFirstUpdate = false;
+	}
+
 	for (auto& ui : m_UIList)
 	{
 		ui.Update();

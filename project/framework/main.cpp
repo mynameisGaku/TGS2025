@@ -57,6 +57,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #include <src/util/editbox/editbox.hpp>
 #include <src/util/ptr/PtrUtil.h>
 #include <src/reference/camera/CameraPerformanceRef.h>
+#include <src/util/restart/Restart.h>
 
 #define CoGVersion (2.2)
 
@@ -72,6 +73,8 @@ void EndRecordPerformance();
 // ÉvÉçÉOÉâÉÄÇÕ WinMain Ç©ÇÁénÇ‹ÇËÇ‹Ç∑
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
+    Restart::HandleWaitParentIfNeeded(__argc, __argv);
+
     auto& wSetting = WindowSetting::Inst();
     std::string path = "";
     SearchFilePath("window.ini", path);

@@ -1,5 +1,5 @@
 {
-  "CanvasName": "OptionCanvas",
+  "CanvasName": "GraphicsSettingCanvas",
   "Begin": {
     "X": 0,
     "Y": 0
@@ -12,8 +12,8 @@
   "IsDefaultActivate": false,
   "UIList": [
     {
-      "NAME": "OptionString",
-      "GRAPH_PATH": "data/Img/UI/Title/Option.png",
+      "NAME": "GraphicsSetting",
+      "GRAPH_PATH": "data/Img/UI/Title/Graphics.png",
       "OFFSET_X_FROM_ANCHOR": 0,
       "OFFSET_Y_FROM_ANCHOR": 101,
       "GRAPH_SRC_X": 0,
@@ -22,7 +22,7 @@
       "GRAPH_DEST_Y": 128,
       "INDEX_X": 0,
       "INDEX_Y": 0,
-      "DESCRIPTION": "just option string",
+      "DESCRIPTION": "just Graphics string",
       "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_TOP",
       "COLLISION": "TUI_CANVAS_COLLISION_RECT",
       "IS_LOOP_EVENT": false,
@@ -73,7 +73,7 @@
       "GRAPH_DEST_X": 256,
       "GRAPH_DEST_Y": 128,
       "INDEX_X": 0,
-      "INDEX_Y": 1,
+      "INDEX_Y": 3,
       "DESCRIPTION": "Back to title",
       "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_BOTTOM",
       "COLLISION": "TUI_CANVAS_COLLISION_RECT",
@@ -99,36 +99,103 @@
       "PivotY": 0.5
     },
     {
-      "NAME": "Graphics",
-      "GRAPH_PATH": "data/Img/UI/Title/Graphics.png",
-      "OFFSET_X_FROM_ANCHOR": 0,
-      "OFFSET_Y_FROM_ANCHOR": 0,
+      "NAME": "WindowMode",
+      "GRAPH_PATH": "data/Img/UI/Title/WindowMode.png",
+      "OFFSET_X_FROM_ANCHOR": -3,
+      "OFFSET_Y_FROM_ANCHOR": -147,
       "GRAPH_SRC_X": 0,
       "GRAPH_SRC_Y": 0,
       "GRAPH_DEST_X": 256,
       "GRAPH_DEST_Y": 128,
       "INDEX_X": 0,
       "INDEX_Y": 0,
-      "DESCRIPTION": "Graphics setting",
+      "DESCRIPTION": "Setting WindowMode",
       "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
       "COLLISION": "TUI_CANVAS_COLLISION_RECT",
       "IS_LOOP_EVENT": false,
       "IS_SELECTABLE": true,
       "EVENTS": [
         {
-          "Event": "ActivateCanvas",
-          "Description": "transit to graphics setting menu",
+          "Event": "SetWindowMode",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
-            "CanvasName": "GraphicsSettingCanvas"
+            "Mode": "WindowMode"
           }
         }
       ],
       "IsVisible": true,
       "Rotation": 0,
-      "Scale": 1.5,
+      "Scale": 1.2,
       "Opacity": 1,
       "ZIndex": 2,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "FullScreen",
+      "GRAPH_PATH": "data/Img/UI/Title/FullScreen.png",
+      "OFFSET_X_FROM_ANCHOR": -8,
+      "OFFSET_Y_FROM_ANCHOR": -32,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 1,
+      "DESCRIPTION": "Setting WindowMode",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": true,
+      "EVENTS": [
+        {
+          "Event": "SetWindowMode",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "Mode": "FullScreen"
+          }
+        }
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1.2,
+      "Opacity": 1,
+      "ZIndex": 3,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "DualScreen",
+      "GRAPH_PATH": "data/Img/UI/Title/DualScreen.png",
+      "OFFSET_X_FROM_ANCHOR": -7,
+      "OFFSET_Y_FROM_ANCHOR": 77,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 2,
+      "DESCRIPTION": "Setting WindowMode",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": true,
+      "EVENTS": [
+        {
+          "Event": "SetWindowMode",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "Mode": "DualScreen"
+          }
+        }
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1.2,
+      "Opacity": 1,
+      "ZIndex": 4,
       "LockAspectRatio": true,
       "PivotX": 0.5,
       "PivotY": 0.5

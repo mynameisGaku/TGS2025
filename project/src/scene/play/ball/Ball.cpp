@@ -54,7 +54,7 @@ Ball::Ball()
 	m_ChargeRate = 0.0f;
 	m_HomingTarget = nullptr;
 
-	SetAttribute(new BallAttribute_Explosion(this));
+	//SetAttribute(new BallAttribute_Explosion(this));
 
 	Init();
 }

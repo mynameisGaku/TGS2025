@@ -64,7 +64,7 @@ CurrentGameData::CurrentGameData(const GAME_MODE_DESC& desc, std::vector<std::st
 //  MatchManager
 //-----------------------------------------
 
-static const float GAME_END_TIME = 2.5f;
+static const float GAME_END_TIME = 3.0f;
 
 MatchManager::MatchManager()
 {

@@ -10,7 +10,7 @@
         "y": 0.0
       },
       "LocalPosition": {
-        "x": 350.0,
+        "x": 500.0,
         "y": 0.0
       },
       "DisplayString": {
@@ -28,7 +28,7 @@
         "y": 0.0
       },
       "LocalPosition": {
-        "x": 200.0,
+        "x": 350.0,
         "y": 0.0
       },
       "DisplayString": {
@@ -46,7 +46,7 @@
             "y": 0.0
         },
         "LocalPosition": {
-            "x": 0.0,
+            "x": 200.0,
             "y": 0.0
         },
         "DisplayString": {

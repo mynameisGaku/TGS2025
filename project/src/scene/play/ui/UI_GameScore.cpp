@@ -34,7 +34,7 @@ void UI_GameScore::Update()
 void UI_GameScore::Draw()
 {
 	RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown);
-	rectTrs.position = Vector2(0.0f, -100.0f);
+	rectTrs.position = Vector2(-5.0f, -100.0f);
 
 	if (CameraManager::IsScreenDivision())
 	{

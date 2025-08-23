@@ -116,8 +116,6 @@ void UI_ButtonHint::Draw()
 		Vector2 pos = globalTrs.position + button.AnchorFromCenter + button.LocalPosition;
 		pos.y -= HEIGHT / 2.0f;
 
-		// NEXTîwåiï\é¶Ç∑ÇÈ
-
 		if (not button.isActive)
 			continue;
 
@@ -131,7 +129,7 @@ void UI_ButtonHint::Draw()
 		float center = static_cast<float>(length) / 2.0f;
 		float drawPosX = fsize * center;
 
-		DrawFormatStringFToHandle(pos.x, pos.y - fsize * 0.5f, 0xffffff, m_hFont, button.DisplayString.c_str());
+		DrawFormatStringFToHandle(pos.x + button.ImageWidth * scale * 0.5f, pos.y - fsize * 0.5f, 0xffffff, m_hFont, button.DisplayString.c_str());
 	}
 }
 

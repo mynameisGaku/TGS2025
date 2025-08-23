@@ -95,7 +95,7 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	// 背景色を追加
 	for (const auto& it : m_BackColors) {
 
-		const Vector2 begin =	Vector2(position.x + adjust.x * index		- backWidth,			position.y - adjust.y * 0.5f);
+		const Vector2 begin =	Vector2(position.x + adjust.x * index		- backWidth,	position.y - adjust.y * 0.5f);
 		const Vector2 end =		Vector2(position.x + adjust.x * (index + 1)	- backWidth,	position.y + adjust.y * 0.0f);
 
 		DrawBoxAA(begin.x, begin.y, end.x, end.y, it.second, true);
@@ -108,7 +108,7 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	for (const auto& it : m_TotalScores) {
 
 		const std::string scoreText = StringUtil::FormatToString("%d", it.second);
-		const int width = GetDrawStringWidth(scoreText.c_str(), scoreText.length());
+		const int width = GetDrawStringWidth(scoreText.c_str(), (int)scoreText.length());
 		const Vector2 pos = Vector2(position.x + adjust.x * index + adjust.x * 0.5f - backWidth - width * 0.5f, position.y - adjust.y * 0.4f);
 	
 		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
@@ -119,7 +119,7 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	if (m_AchievedScore > 0)
 	{
 		const std::string scoreText = StringUtil::FormatToString("必要スコア:%d", m_AchievedScore);
-		const int width		= GetDrawStringWidth(scoreText.c_str(), scoreText.length());
+		const int width		= GetDrawStringWidth(scoreText.c_str(), (int)scoreText.length());
 
 		const Vector2 pos	= Vector2(position.x - width * 0.5f - backWidth * 0.5f, position.y - adjust.y * 1.0f);
 		const Vector2 end	= Vector2(pos.x + width, pos.y + adjust.y * 0.5f);
@@ -166,7 +166,7 @@ void UI_GameScore::drawUserScores()
 			rectTrs.Global().position.y + size.y * (index + 1),
 			color, true);
 
-		DrawFormatString(rectTrs.Global().position.x, rectTrs.Global().position.y + index * GetFontSize(), GetColor(255, 255, 255), "ID %d:Score %2d", rank.first, rank.second);
+		DrawFormatString((int)(rectTrs.Global().position.x), (int)(rectTrs.Global().position.y + index * GetFontSize()), GetColor(255, 255, 255), "ID %d:Score %2d", rank.first, rank.second);
 
 		if (++index >= dispCount)
 			break;  // 表示するランキングの数を制限

@@ -23,7 +23,9 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 	{
 		const std::string sPlayerNum = std::to_string(i + 1) + "P";
 
-		UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle), i);
+		// やや上に表示したいけど、ロックオン処理を直すのに時間かかりそうだからいったん中央で
+		//UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
+		UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		crossHair->SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
 		crossHair->SetTag("CrossHair_" + sPlayerNum);
 

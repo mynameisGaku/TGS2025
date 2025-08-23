@@ -33,14 +33,16 @@ void UI_GameScore::Update()
 
 void UI_GameScore::Draw()
 {
+	RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown);
+	rectTrs.position = Vector2(0.0f, -100.0f);
+
 	if (CameraManager::IsScreenDivision())
 	{
 		const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
+
 		for (int i = 0; i < CAMERA_NUM; i++)
 		{
-			RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown);
-			rectTrs.position = Vector2(0.0f, -100.0f);
 			Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
 			Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(i);
 			rectTrs.anchor.SetBegin(begin);
@@ -51,7 +53,7 @@ void UI_GameScore::Draw()
 	}
 	else
 	{
-		drawTotalScore(rectTransform->Global().position);
+		drawTotalScore(rectTrs.Global().position);
 	}
 
 	//drawUserScores();

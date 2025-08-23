@@ -14,8 +14,10 @@ UI_ChatBar::UI_ChatBar(const RectTransform& trs, int index)
 	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar.png");
 	assert(m_hBarImage > 0);
 
+	m_CharaIndex = index;
+
 	SetTransform(trs);
-	UI_Manager::SetAnchorPositionByScreenSplit(this, index);
+	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
 
 	m_BarList["Back"] = new SliceBar(RectTransform(Vector2::Zero, 0.0f, Vector2::Ones, rectTransform));
 	m_BarList["GaugeBack"] = new SliceBar(RectTransform(Vector2::Zero, 0.0f, Vector2::Ones, rectTransform));
@@ -60,6 +62,9 @@ void UI_ChatBar::Update()
 		ReloadParam();
 	}
 #endif
+
+	// 画面分割数切り替え時にアンカーの位置を更新(デバッグ用)
+	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
 
 	for (auto& item : m_BarList)
 	{

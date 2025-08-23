@@ -17,5 +17,6 @@ public:
 
 private:
 	int m_hBarImage;
+	int m_CharaIndex;
 	std::unordered_map<std::string, SliceBar*> m_BarList;
 };

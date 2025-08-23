@@ -3,8 +3,8 @@
         "PositionY": 0.0,
 
         "BackScale": {
-            "X": 600,
-            "Y": 50
+            "X": 100,
+            "Y": 75
         },
         "BackColor": {
             "R": 10,

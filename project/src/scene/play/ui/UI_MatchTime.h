@@ -4,6 +4,7 @@
 #include <vector>
 
 class MatchManager;
+class SliceBar;
 
 class UI_MatchTime : public UI_Canvas {
 public:
@@ -14,7 +15,11 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void ReloadParam();
+
 private:
 	MatchManager* m_pMatchManager;
 	int m_CharaIndex;
+	int m_hBarImage;
+	SliceBar* m_BackBar;
 };

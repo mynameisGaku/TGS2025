@@ -109,13 +109,11 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 
 		const std::string scoreText = StringUtil::FormatToString("%d", it.second);
 		const int width = GetDrawStringWidth(scoreText.c_str(), scoreText.length());
-		const Vector2 pos = Vector2(position.x + adjust.x * index + adjust.x * 0.5f - backWidth, position.y - adjust.y * 0.4f);
+		const Vector2 pos = Vector2(position.x + adjust.x * index + adjust.x * 0.5f - backWidth - width * 0.5f, position.y - adjust.y * 0.4f);
 	
 		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
 		index++;
 	}
-
-	/*
 
 	// 必要スコア表示
 	if (m_AchievedScore > 0)
@@ -123,13 +121,12 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 		const std::string scoreText = StringUtil::FormatToString("必要スコア:%d", m_AchievedScore);
 		const int width		= GetDrawStringWidth(scoreText.c_str(), scoreText.length());
 
-		const Vector2 pos	= Vector2(position.x - width * 0.5f, position.y + adjust.y * 0.5f);
-		const Vector2 end	= Vector2(pos.x + width,			 position.y + adjust.y);
+		const Vector2 pos	= Vector2(position.x - width * 0.5f - backWidth * 0.5f, position.y - adjust.y * 1.0f);
+		const Vector2 end	= Vector2(pos.x + width, pos.y + adjust.y * 0.5f);
 
 		DrawBoxAA(pos.x, pos.y, end.x, end.y, 0x999999, true);
 		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
 	}
-	*/
 }
 
 void UI_GameScore::drawUserScores()

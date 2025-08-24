@@ -14,6 +14,12 @@ UI_GameScore::UI_GameScore(const RectTransform& trs)
 	m_Size = 0;
 	m_AchievedScore = -1;
 	SetTransform(trs);
+
+	FontInfo fontInfo = Font::BasicFont();
+	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(32).SetFontType(DX_FONTTYPE_NORMAL);
+	m_hFontScore = Font::Create(fontInfo, "Score");
+	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(16).SetFontType(DX_FONTTYPE_NORMAL);
+	m_hFontAchievedScore = Font::Create(fontInfo, "AchievedScore");
 }
 
 UI_GameScore::~UI_GameScore()
@@ -108,10 +114,10 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	for (const auto& it : m_TotalScores) {
 
 		const std::string scoreText = StringUtil::FormatToString("%d", it.second);
-		const int width = GetDrawStringWidth(scoreText.c_str(), (int)scoreText.length());
+		const int width = GetDrawStringWidthToHandle(scoreText.c_str(), (int)scoreText.length(), m_hFontScore);
 		const Vector2 pos = Vector2(position.x + adjust.x * index + adjust.x * 0.5f - backWidth - width * 0.5f, position.y - adjust.y * 0.4f);
 	
-		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
+		DrawFormatStringFToHandle(pos.x, pos.y, 0xffffff, m_hFontScore, scoreText.c_str());
 		index++;
 	}
 
@@ -119,13 +125,15 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	if (m_AchievedScore > 0)
 	{
 		const std::string scoreText = StringUtil::FormatToString("必要スコア:%d", m_AchievedScore);
-		const int width		= GetDrawStringWidth(scoreText.c_str(), (int)scoreText.length());
+		int width = 0;
+		int height = 0;
+		GetDrawStringSizeToHandle(&width, &height, nullptr, scoreText.c_str(), (int)scoreText.length(), m_hFontAchievedScore);
 
-		const Vector2 pos	= Vector2(position.x - width * 0.5f - backWidth * 0.5f, position.y - adjust.y * 1.0f);
-		const Vector2 end	= Vector2(pos.x + width, pos.y + adjust.y * 0.5f);
+		const Vector2 pos	= Vector2(position.x - width * 0.5f - backWidth * 0.5f, position.y - adjust.y * 0.5f - height);
+		const Vector2 end	= Vector2(pos.x + width, pos.y + height);
 
 		DrawBoxAA(pos.x, pos.y, end.x, end.y, 0x999999, true);
-		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
+		DrawFormatStringFToHandle(pos.x, pos.y, 0xffffff, m_hFontAchievedScore, scoreText.c_str());
 	}
 }
 

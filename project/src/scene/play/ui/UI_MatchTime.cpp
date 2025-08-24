@@ -7,6 +7,7 @@
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/reference/ui/UI_MatchTimeRef.h"
 #include <src/util/input/InputManager.h>
+#include <src/util/font/Font.h>
 
 UI_MatchTime::UI_MatchTime() : UI_MatchTime(RectTransform(), 0)
 {
@@ -16,6 +17,10 @@ UI_MatchTime::UI_MatchTime(const RectTransform& trs, int index)
 {
 	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar_grad_edge.png");
 	assert(m_hBarImage > 0);
+
+	FontInfo fontInfo = Font::BasicFont();
+	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(32).SetFontType(DX_FONTTYPE_NORMAL);
+	m_hFont = Font::Create(fontInfo, "MatchTime");
 
 	m_pMatchManager = nullptr;
 	m_CharaIndex = index;
@@ -86,10 +91,11 @@ void UI_MatchTime::Draw()
 	else if (matchTime < 60)
 		color = 0xffff00;
 
-	DrawFormatString(
+	DrawFormatStringToHandle(
 		(int)(globalTrs.position.x - width * 0.5f),
 		(int)(globalTrs.position.y - adjust.y * 0.5f),
 		color,
+		m_hFont,
 		text.c_str());
 }
 

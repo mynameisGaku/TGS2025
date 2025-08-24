@@ -22,4 +22,5 @@ private:
 	int m_CharaIndex;
 	int m_hBarImage;
 	SliceBar* m_BackBar;
+	int m_hFont{};
 };

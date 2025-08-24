@@ -5,6 +5,7 @@
 #include <src/util/font/Font.h>
 
 class MatchManager;
+class SliceBar;
 
 class UI_GameScore : public UI_Canvas {
 public:
@@ -37,4 +38,7 @@ private:
 
 	int m_hFontScore{};
 	int m_hFontAchievedScore{};
+
+	int m_hBarImage;
+	SliceBar* m_BackBar;
 };

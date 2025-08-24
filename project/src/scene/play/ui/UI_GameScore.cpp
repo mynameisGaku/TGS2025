@@ -3,6 +3,8 @@
 #include "src/scene/play/match/MatchManager.h"
 #include "src/util/string/StringUtil.h"
 #include "src/util/screen/ScreenManager.h"
+#include "SliceBar.h"
+#include <src/util/file/resource_loader/resourceLoader.h>
 
 UI_GameScore::UI_GameScore() : UI_GameScore(RectTransform())
 {
@@ -20,6 +22,16 @@ UI_GameScore::UI_GameScore(const RectTransform& trs)
 	m_hFontScore = Font::Create(fontInfo, "Score");
 	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(16).SetFontType(DX_FONTTYPE_NORMAL);
 	m_hFontAchievedScore = Font::Create(fontInfo, "AchievedScore");
+
+	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar_rb_grad_edge.png");
+	assert(m_hBarImage > 0);
+
+	m_BackBar = new SliceBar(RectTransform(Vector2::Zero, 0.0f, Vector2(100, 100)));
+	m_BackBar->SetCenter(Vector2(1.0f, 1.0f));
+	m_BackBar->InitImage(m_hBarImage);
+	m_BackBar->SetPriority(Priority() - 1);
+	m_BackBar->Color = RGBColor(255);
+	m_BackBar->SetIsDraw(false);
 }
 
 UI_GameScore::~UI_GameScore()
@@ -98,6 +110,7 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	const Vector2 adjust = Vector2(120.0f, 80.0f);
 	const float backWidth = adjust.x * m_Size;
 
+	/*
 	// 背景色を追加
 	for (const auto& it : m_BackColors) {
 
@@ -107,6 +120,14 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 		DrawBoxAA(begin.x, begin.y, end.x, end.y, it.second, true);
 		index++;
 	}
+	*/
+
+	m_BackBar->rectTransform->position = position;
+	m_BackBar->rectTransform->scale = Vector2(backWidth, adjust.y * 0.5f);
+	m_BackBar->Draw();
+
+	// センターライン描画
+	DrawLineAA(position.x - backWidth * 0.5f, position.y - adjust.y * 0.5f, position.x - backWidth * 0.5f, position.y, RGBColor(10).GetColorInt(), 2);
 
 	index = 0;
 

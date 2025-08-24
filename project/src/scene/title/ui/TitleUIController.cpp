@@ -247,6 +247,7 @@ void TitleUIController::subscribeFunctions()
 {
 	SUBSCRIBE_FUNCTION("ActivateCanvas", activateCanvas);
 	SUBSCRIBE_FUNCTION("Scaling", scaling);
+	SUBSCRIBE_FUNCTION("GameStart", gameStart);
 	SUBSCRIBE_FUNCTION("PlaySound", playSound);
 	SUBSCRIBE_FUNCTION("Exit", exit);
 	SUBSCRIBE_FUNCTION("SetWindowMode", setWindowMode);

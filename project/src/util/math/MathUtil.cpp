@@ -283,3 +283,13 @@ void MathUtil::AddIterationAssingRate(float* value, int iteration, float rate)
 	}
 }
 
+uint8_t MathUtil::RateToByte(float rate)
+{
+	return 255 * rate;
+}
+
+float MathUtil::ByteToRate(uint8_t byte)
+{
+	return (float)byte / 255;
+}
+

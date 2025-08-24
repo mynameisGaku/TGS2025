@@ -49,17 +49,17 @@ void UI_CrossHair::Draw()
 
 	const RectTransform globalTrs = rectTransform->Global();
 
-	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average(), 0.0f, hCrossHairFrame, true);
-	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average(), 0.0f, hCrossHair, true);
+	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average() * 0.5f, 0.0f, hCrossHairFrame, true);
+	DrawRotaGraphF(globalTrs.position.x, globalTrs.position.y, globalTrs.scale.Average() * 0.5f, 0.0f, hCrossHair, true);
 
 	if (m_pValue != nullptr)
 	{
 		float norm = *m_pValue / m_ValueMax;
 
 		if (m_IsDispMode)
-			m_Gauge.DrawRectRotaGraphGauge(globalTrs.position, norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, m_ScrollType);
+			m_Gauge.DrawRectRotaGraphGauge(globalTrs.position, norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones * 1.2f, 0.0f, m_ScrollType);
 		else
-			m_Gauge.DrawRectRotaGraphGauge(globalTrs.position, 1.0f - norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones, 0.0f, m_ScrollType);
+			m_Gauge.DrawRectRotaGraphGauge(globalTrs.position, 1.0f - norm, 1.0f, 0.0f, hCrossHairOutSide, -1, -1, hCrossHairOutSideBack, 1.0f, Vector2::Ones * 1.2f, 0.0f, m_ScrollType);
 	}
 }
 

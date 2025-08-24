@@ -3087,8 +3087,11 @@ void Chara::buttonHintUpdate()
 	if (m_pUI_ButtonHint == nullptr)
 		return;
 
+	// RT、LTはチャットバーに表示するので一回無効化
+
 	// ボタンヒント
 	{
+		/*
 		if (m_CanCatch)
 		{
 			if(not m_IsCatching)
@@ -3098,6 +3101,7 @@ void Chara::buttonHintUpdate()
 		}
 		else
 			m_pUI_ButtonHint->Deactivate("LeftTrigger");
+			*/
 
 		if (m_CanTackle)
 			m_pUI_ButtonHint->Activate("ButtonB");
@@ -3106,15 +3110,20 @@ void Chara::buttonHintUpdate()
 
 		if (m_CanThrow)
 		{
+			/*
 			if (not m_IsCharging)
 				m_pUI_ButtonHint->Activate("RightTrigger");
 			else
 				m_pUI_ButtonHint->PushKey("RightTrigger");
+				*/
 
 			m_pUI_ButtonHint->Activate("ButtonX");
 		}
 		else
+		{
 			m_pUI_ButtonHint->Deactivate("RightTrigger");
+			m_pUI_ButtonHint->Deactivate("ButtonX");
+		}
 
 		if (m_IsLanding)
 		{

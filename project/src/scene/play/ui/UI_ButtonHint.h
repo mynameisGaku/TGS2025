@@ -50,4 +50,6 @@ private:
     std::unordered_map<std::string, BUTTON> m_ButtonHints{};
     FontInfo m_Font{};
     int m_hFont{};
+
+    void drawBack();
 };

@@ -1,0 +1,25 @@
+{
+    "Param": {
+        "PositionY": -70.0,
+
+        "BackScale": {
+            "X": 600,
+            "Y": 50
+        },
+        "BackColor": {
+            "R": 10,
+            "G": 10,
+            "B": 10
+        },
+
+        "GaugeBackScale": {
+            "X": 350,
+            "Y": 35
+        },
+        "GaugeBackColor": {
+            "R": 100,
+            "G": 100,
+            "B": 100
+        }
+    }
+}

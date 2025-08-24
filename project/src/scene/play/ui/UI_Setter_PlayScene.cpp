@@ -38,6 +38,7 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 
 		UI_StartCount* startCount = new UI_StartCount(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
 		startCount->SetTag("StartCount_" + sPlayerNum);
+		startCount->SetPriority(crossHair->Priority() + 1);	// クロスヘアの上に表示する
 
 		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		fade->SetTag("Fade_" + sPlayerNum);

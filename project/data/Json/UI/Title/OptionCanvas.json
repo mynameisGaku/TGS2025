@@ -87,6 +87,14 @@
           "Argument": {
             "CanvasName": "MainCanvas"
           }
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "menu_click"
+          }
         }
       ],
       "IsVisible": true,
@@ -121,6 +129,14 @@
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
             "CanvasName": "GraphicsSettingCanvas"
+          }
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "menu_click"
           }
         }
       ],

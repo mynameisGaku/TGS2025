@@ -61,6 +61,14 @@
           "Argument": {
             "SceneName": "PlayScene"
           }
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "menu_click"
+          }
         }
       ],
       "IsVisible": true,
@@ -122,6 +130,14 @@
           "Argument": {
             "CanvasName": "OptionCanvas"
           }
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "menu_click"
+          }
         }
       ],
       "IsVisible": true,
@@ -155,6 +171,14 @@
           "Description": "Exit the game when clicked",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": null
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "menu_click"
+          }
         }
       ],
       "IsVisible": true,

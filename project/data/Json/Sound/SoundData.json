@@ -237,6 +237,18 @@
           "Name": "tackle_hit",
           "Volume": 120,
           "IsLoop": false
+        },
+        {
+          "FileName": "menu_click.mp3",
+          "Name": "menu_click",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "menu_move.mp3",
+          "Name": "menu_move",
+          "Volume": 120,
+          "IsLoop": false
         }
       ]
     }

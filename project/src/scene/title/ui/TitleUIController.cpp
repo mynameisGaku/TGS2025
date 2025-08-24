@@ -8,11 +8,43 @@
 #include <fstream>
 #include <filesystem>
 #include <src/util/logger/Logger.h>
-#include <src/util/time/GameTime.h>
 #include <src/util/file/json/VectorJson.h>
 #include <src/util/transform/RectTransform.h>
 #include <src/util/file/resource_loader/resourceLoader.h>
 #include <framework/app.h>
+#include <src/util/sound/SoundManager.h>
+
+#include <src/common/camera/CameraManager.h>
+#include <vendor/mINI/ini.h>
+#include <DxLib.h>
+#include <EffekseerForDXLib.h>
+#include "framework/App.h"
+#include "src/util/font/Font.h"
+#include "src/common/setting/window/WindowSetting.h"
+#include "src/util/file/json/settings_json.h"
+#include "src/util/file/ini/settings_ini.h"
+#include "src/util/file/FileUtil.h"
+
+#include "src/reference/bloom/BloomRef.h"
+#include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
+#include "src/reference/chara/CharaDefineRef.h"
+#include "src/reference/chara/CharaHPRef.h"
+#include "src/reference/chara/CharaStaminaRef.h"
+#include "src/reference/crystal/CrystalFragmentRef.h"
+#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
+#include <src/reference/game/GameRef.h>
+#include "src/reference/input/InputRef.h"
+#include <src/util/time/GameTime.h>
+#include <src/reference/ui/UI_ButtonHintRef.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/util/editbox/editbox.hpp>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/reference/camera/CameraPerformanceRef.h>
+#include <src/util/restart/Restart.h>
+#ifdef IMGUI
+#include "vendor/imgui/imgui_impl_dxlib.hpp"
+#endif // IMGUI
 
 using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -215,7 +247,7 @@ void TitleUIController::subscribeFunctions()
 {
 	SUBSCRIBE_FUNCTION("ActivateCanvas", activateCanvas);
 	SUBSCRIBE_FUNCTION("Scaling", scaling);
-	SUBSCRIBE_FUNCTION("GameStart", gameStart);
+	SUBSCRIBE_FUNCTION("PlaySound", playSound);
 	SUBSCRIBE_FUNCTION("Exit", exit);
 	SUBSCRIBE_FUNCTION("SetWindowMode", setWindowMode);
 }
@@ -249,6 +281,9 @@ void TitleUIController::scaling(nlohmann::json argument)
 		Logger::FormatErrorLog("Canvas with name '{}' not found.", canvasName);
 		return;
 	}
+
+
+
 	Logger::FormatErrorLog("UI with name '{}' not found in canvas '{}'.", targetUIName, canvasName);
 }
 
@@ -270,38 +305,18 @@ void TitleUIController::exit(nlohmann::json argument)
 	Exit();
 }
 
-#include <src/common/camera/CameraManager.h>
-#include <src/util/restart/Restart.h>
-#include <vendor/mINI/ini.h>
-#include <DxLib.h>
-#include <EffekseerForDXLib.h>
-#include "framework/App.h"
-#include "src/util/font/Font.h"
-#include "src/common/setting/window/WindowSetting.h"
-#include "src/util/file/json/settings_json.h"
-#include "src/util/file/ini/settings_ini.h"
-#include "src/util/file/FileUtil.h"
+void TitleUIController::playSound(nlohmann::json argument)
+{
+	nlohmann::json event = argument["Event"];
+	std::string soundName = event.value("SoundName", "");
+	if (soundName.empty())
+	{
+		Logger::FormatErrorLog("Sound name is empty. Cannot play sound.");
+		return;
+	}
 
-#include "src/reference/bloom/BloomRef.h"
-#include "src/reference/camera/CameraDefineRef.h"
-#include "src/reference/camera/CameraPerformanceRef.h"
-#include "src/reference/chara/CharaDefineRef.h"
-#include "src/reference/chara/CharaHPRef.h"
-#include "src/reference/chara/CharaStaminaRef.h"
-#include "src/reference/crystal/CrystalFragmentRef.h"
-#include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
-#include <src/reference/game/GameRef.h>
-#include "src/reference/input/InputRef.h"
-#include <src/util/time/GameTime.h>
-#include <src/reference/ui/UI_ButtonHintRef.h>
-#include <src/reference/network/NetworkRef.h>
-#include <src/util/editbox/editbox.hpp>
-#include <src/util/ptr/PtrUtil.h>
-#include <src/reference/camera/CameraPerformanceRef.h>
-#include <src/util/restart/Restart.h>
-#ifdef IMGUI
-#include "vendor/imgui/imgui_impl_dxlib.hpp"
-#endif // IMGUI
+	SoundManager::Play(soundName, soundName);
+}
 
 
 void TitleUIController::setWindowMode(nlohmann::json argument)

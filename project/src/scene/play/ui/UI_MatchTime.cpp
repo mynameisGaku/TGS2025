@@ -14,7 +14,7 @@ UI_MatchTime::UI_MatchTime() : UI_MatchTime(RectTransform(), 0)
 
 UI_MatchTime::UI_MatchTime(const RectTransform& trs, int index)
 {
-	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar.png");
+	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar_grad_edge.png");
 	assert(m_hBarImage > 0);
 
 	m_pMatchManager = nullptr;

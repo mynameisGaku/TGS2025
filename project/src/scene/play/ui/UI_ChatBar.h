@@ -16,7 +16,8 @@ public:
 	void Draw() override;
 
 private:
-	int m_hBarImage;
+	int m_hBarImageBack;
+	int m_hBarImageGaugeBack;
 	int m_CharaIndex;
 	std::unordered_map<std::string, SliceBar*> m_BarList;
 };

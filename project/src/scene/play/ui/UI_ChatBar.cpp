@@ -11,8 +11,10 @@ UI_ChatBar::UI_ChatBar() : UI_ChatBar(RectTransform(), 0)
 
 UI_ChatBar::UI_ChatBar(const RectTransform& trs, int index)
 {
-	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar.png");
-	assert(m_hBarImage > 0);
+	m_hBarImageBack = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar_grad_edge.png");
+	assert(m_hBarImageBack > 0);
+	m_hBarImageGaugeBack = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar.png");
+	assert(m_hBarImageGaugeBack > 0);
 
 	m_CharaIndex = index;
 
@@ -25,18 +27,24 @@ UI_ChatBar::UI_ChatBar(const RectTransform& trs, int index)
 	m_BarList["Back"]->SetCenter(Vector2(0.5f, 0.5f));
 	m_BarList["GaugeBack"]->SetCenter(Vector2(0.5f, 0.5f));
 
+	m_BarList["Back"]->InitImage(m_hBarImageBack);
+	m_BarList["GaugeBack"]->InitImage(m_hBarImageGaugeBack);
+
+	/*
 	for (auto& item : m_BarList)
 	{
 		SliceBar* bar = item.second;
-		bar->InitImage(m_hBarImage);
+		bar->InitImage(m_hBarImageBack);
 	}
+	*/
 
 	ReloadParam();
 }
 
 UI_ChatBar::~UI_ChatBar()
 {
-	ResourceLoader::DeleteGraph(hImage);
+	ResourceLoader::DeleteGraph(m_hBarImageBack);
+	ResourceLoader::DeleteGraph(m_hBarImageGaugeBack);
 	for (auto& item : m_BarList)
 	{
 		SliceBar* bar = item.second;

@@ -4,15 +4,16 @@
 #include "src/util/string/StringUtil.h"
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/easing/easing.h"
+#include <src/util/font/Font.h>
 
 namespace
 {
-	static const float START_DEFAULT_SCALE = 3.0f;
+	static const float START_DEFAULT_SCALE = 0.5f;
 
-	static const float START_MOVING_SCALE = 5.0f;
+	static const float START_MOVING_SCALE = 1.0f;
 	static const float START_MOVING_TIME = 1.0f;
 
-	static const float SCALE_DEFAULT = 5.0f;
+	static const float SCALE_DEFAULT = 1.0f;
 
 	static const float FADE_TIME = 0.1f;
 }
@@ -26,8 +27,12 @@ UI_StartCount::UI_StartCount(const RectTransform& trs, int index)
 	m_pMatchManager = nullptr;
 	m_CharaIndex = index;
 	m_Count = 0;
-	m_Scale = 5.0f;
+	m_Scale = SCALE_DEFAULT;
 	m_Time = 0.0f;
+
+	FontInfo fontInfo = Font::BasicFont();
+	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(192).SetFontType(DX_FONTTYPE_ANTIALIASING_EDGE_16X16);
+	m_hFont = Font::Create(fontInfo, "StartCount");
 
 	SetTransform(trs);
 	UI_Manager::SetAnchorPositionByScreenSplit(this, m_CharaIndex);
@@ -55,7 +60,7 @@ void UI_StartCount::Update()
 	if (m_Count > 0)
 	{
 		m_Time = 0;
-		m_Scale = 5.0f;
+		m_Scale = SCALE_DEFAULT;
 	}
 	else
 	{
@@ -71,7 +76,7 @@ void UI_StartCount::Draw()
 {
 	UI_Canvas::Draw();
 
-	std::string text;
+	std::string text = "";
 	int alpha = 0;
 
 	if (m_Count > 0)
@@ -81,7 +86,7 @@ void UI_StartCount::Draw()
 	}
 	else if (m_Time < START_MOVING_TIME)
 	{
-		text = "s‚¯I";
+		text = "START!";
 
 		if (m_Time < FADE_TIME)
 		{
@@ -97,19 +102,21 @@ void UI_StartCount::Draw()
 		}
 	}
 
-	int width = (int)(GetDrawStringWidth(text.c_str(), text.length()) * m_Scale);
+	int width = 0;
+	int height = 0;
+	GetDrawStringSizeToHandle(&width, &height, nullptr, text.c_str(), (int)text.length(), m_hFont);
 
-	const Vector2 adjust = Vector2(0, 0);
 	const RectTransform globalTrs = rectTransform->Global();
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 
-	DrawExtendFormatString(
-		globalTrs.position.x - width * 0.5f,	// ’†‰›‘µ‚¦
-		globalTrs.position.y - adjust.y * 0.5f,
+	DrawExtendFormatStringToHandle(
+		(int)(globalTrs.position.x - width * m_Scale * 0.5f),	// ’†‰›‘µ‚¦
+		(int)(globalTrs.position.y - height * m_Scale * 0.5f),
 		m_Scale,
 		m_Scale,
 		GetColor(255, 255, 255),
+		m_hFont,
 		text.c_str());
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

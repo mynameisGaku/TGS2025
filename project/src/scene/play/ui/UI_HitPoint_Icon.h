@@ -1,6 +1,8 @@
 #pragma once
 #include "src/util/ui/UI_Image.h"
 
+class SliceBar;
+
 class UI_HitPoint_Icon : public UI_Image {
 public:
 	UI_HitPoint_Icon();
@@ -23,4 +25,7 @@ private:
 	Vector2 m_DiffSize;
 
 	bool m_NeedRelocation;
+
+	int m_hBarImage;
+	SliceBar* m_BackBar;
 };

@@ -234,6 +234,9 @@
     <None Include="data\Json\Stage\TrampolineTestStage.json" />
     <None Include="data\Json\UI\ButtonHint.json" />
     <None Include="data\Json\UI\Title\GraphicsSettingCanvas.json" />
+    <None Include="data\Json\UI\ButtonHint_old.json" />
+    <None Include="data\Json\UI\ChatBar.json" />
+    <None Include="data\Json\UI\MatchTime.json" />
     <None Include="data\Json\UI\Title\MainCanvas.json" />
     <None Include="data\Json\UI\Title\OptionCanvas.json" />
     <None Include="data\Model\Ball\Ball.mv1" />
@@ -357,6 +360,8 @@
     <ClCompile Include="src\reference\input\InputRef.cpp" />
     <ClCompile Include="src\reference\network\NetworkRef.cpp" />
     <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_MatchTimeRef.cpp" />
     <ClCompile Include="src\scene\boot\bootScene.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp" />
     <ClCompile Include="src\scene\play\ability\AbilityFire.cpp" />
@@ -396,7 +401,9 @@
     <ClCompile Include="src\scene\play\targetting\TargetManager.cpp" />
     <ClCompile Include="src\scene\play\team\Team.cpp" />
     <ClCompile Include="src\scene\play\team\TeamManager.cpp" />
+    <ClCompile Include="src\scene\play\ui\SliceBar.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_ButtonHint.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_Fade.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_MatchTime.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_HitPoint_Icon.cpp" />
@@ -420,6 +427,8 @@
     <ClCompile Include="src\util\behavior_tree\BehaviorTask.cpp" />
     <ClCompile Include="src\util\behavior_tree\BehaviorTree.cpp" />
     <ClCompile Include="src\util\blur_screen\BlurScreen.cpp" />
+    <ClCompile Include="src\util\color\RGBColor.cpp" />
+    <ClCompile Include="src\util\file\json\RGBColorJson.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiFunc.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiManager.cpp" />
     <ClCompile Include="src\util\debug\imgui\imGuiNode_Button.cpp" />
@@ -564,6 +573,8 @@
     <ClInclude Include="src\reference\input\InputRef.h" />
     <ClInclude Include="src\reference\network\NetworkRef.h" />
     <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h" />
+    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h" />
+    <ClInclude Include="src\reference\ui\UI_MatchTimeRef.h" />
     <ClInclude Include="src\scene\boot\bootScene.h" />
     <ClInclude Include="src\scene\play\ability\AbilityBase.h" />
     <ClInclude Include="src\scene\play\ability\AbilityExplosion.h" />
@@ -611,7 +622,9 @@
     <ClInclude Include="src\scene\play\targetting\TargetManager.h" />
     <ClInclude Include="src\scene\play\team\Team.h" />
     <ClInclude Include="src\scene\play\team\TeamManager.h" />
+    <ClInclude Include="src\scene\play\ui\SliceBar.h" />
     <ClInclude Include="src\scene\play\ui\UI_ButtonHint.h" />
+    <ClInclude Include="src\scene\play\ui\UI_ChatBar.h" />
     <ClInclude Include="src\scene\play\ui\UI_Fade.h" />
     <ClInclude Include="src\scene\play\ui\UI_MatchTime.h" />
     <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h" />
@@ -636,6 +649,8 @@
     <ClInclude Include="src\util\behavior_tree\BehaviorTree.h" />
     <ClInclude Include="src\util\blur_screen\BlurScreen.h" />
     <ClInclude Include="src\util\color\ColorUtil.h" />
+    <ClInclude Include="src\util\color\RGBColor.h" />
+    <ClInclude Include="src\util\file\json\RGBColorJson.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiFunc.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiManager.h" />
     <ClInclude Include="src\util\debug\imgui\imGuiNode_Base.h" />
@@ -661,6 +676,7 @@
     <ClInclude Include="src\util\file\FileUtil.h" />
     <ClInclude Include="src\util\file\ini\settings_ini.h" />
     <ClInclude Include="src\util\file\json\BallThrowParamJson.h" />
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
     <ClInclude Include="src\util\file\json\settings_json.h" />
     <ClInclude Include="src\util\file\json\VectorJson.h" />
     <ClInclude Include="src\util\file\resource_loader\resourceLoader.h" />
@@ -676,6 +692,7 @@
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h" />
     <ClInclude Include="src\util\gauge\gauge.h" />
+    <ClInclude Include="src\util\getset\GetSet.h" />
     <ClInclude Include="src\util\history\History.h" />
     <ClInclude Include="src\util\input\InputManager.h" />
     <ClInclude Include="src\util\input\KeyController.h" />

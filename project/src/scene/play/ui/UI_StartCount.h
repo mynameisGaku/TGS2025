@@ -20,6 +20,7 @@ private:
 	int m_Count;
 	float m_Scale;
 	float m_Time;
+	int m_hFont{};
 
 	bool isStart() const;
 };

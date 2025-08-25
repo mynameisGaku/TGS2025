@@ -2,8 +2,10 @@
 #include "src/util/ui/UI_Canvas.h"
 #include <unordered_map>
 #include <vector>
+#include <src/util/font/Font.h>
 
 class MatchManager;
+class SliceBar;
 
 class UI_GameScore : public UI_Canvas {
 public:
@@ -33,4 +35,10 @@ private:
 	int m_AchievedScore;
 
 	const MatchManager* m_pMatchManager;
+
+	int m_hFontScore{};
+	int m_hFontAchievedScore{};
+
+	int m_hBarImage;
+	SliceBar* m_BackBar;
 };

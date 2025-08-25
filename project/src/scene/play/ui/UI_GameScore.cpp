@@ -3,6 +3,8 @@
 #include "src/scene/play/match/MatchManager.h"
 #include "src/util/string/StringUtil.h"
 #include "src/util/screen/ScreenManager.h"
+#include "SliceBar.h"
+#include <src/util/file/resource_loader/resourceLoader.h>
 
 UI_GameScore::UI_GameScore() : UI_GameScore(RectTransform())
 {
@@ -14,6 +16,22 @@ UI_GameScore::UI_GameScore(const RectTransform& trs)
 	m_Size = 0;
 	m_AchievedScore = -1;
 	SetTransform(trs);
+
+	FontInfo fontInfo = Font::BasicFont();
+	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(32).SetFontType(DX_FONTTYPE_NORMAL);
+	m_hFontScore = Font::Create(fontInfo, "Score");
+	fontInfo.SetCharSet(DEFAULT_CHARSET).SetSize(16).SetFontType(DX_FONTTYPE_NORMAL);
+	m_hFontAchievedScore = Font::Create(fontInfo, "AchievedScore");
+
+	m_hBarImage = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar_rb_grad_edge.png");
+	assert(m_hBarImage > 0);
+
+	m_BackBar = new SliceBar(RectTransform(Vector2::Zero, 0.0f, Vector2(100, 100)));
+	m_BackBar->SetCenter(Vector2(1.0f, 1.0f));
+	m_BackBar->InitImage(m_hBarImage);
+	m_BackBar->SetPriority(Priority() - 1);
+	m_BackBar->Color = RGBColor(255);
+	m_BackBar->SetIsDraw(false);
 }
 
 UI_GameScore::~UI_GameScore()
@@ -33,13 +51,16 @@ void UI_GameScore::Update()
 
 void UI_GameScore::Draw()
 {
+	RectTransform rectTrs = RectTransform(Anchor::Preset::RightDown);
+	rectTrs.position = Vector2(-5.0f, -100.0f);
+
 	if (CameraManager::IsScreenDivision())
 	{
 		const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
+
 		for (int i = 0; i < CAMERA_NUM; i++)
 		{
-			RectTransform rectTrs = RectTransform(Anchor::Preset::MiddleUp);
 			Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(i);
 			Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(i);
 			rectTrs.anchor.SetBegin(begin);
@@ -50,10 +71,10 @@ void UI_GameScore::Draw()
 	}
 	else
 	{
-		drawTotalScore(rectTransform->Global().position);
+		drawTotalScore(rectTrs.Global().position);
 	}
 
-	drawUserScores();
+	//drawUserScores();
 }
 
 void UI_GameScore::SetUserScore(const std::string& teamName, int id, int score)
@@ -87,16 +108,26 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 {
 	int index = 0;
 	const Vector2 adjust = Vector2(120.0f, 80.0f);
+	const float backWidth = adjust.x * m_Size;
 
+	/*
 	// 背景色を追加
 	for (const auto& it : m_BackColors) {
 
-		const Vector2 begin = Vector2(position.x + adjust.x * (index - 1),	position.y - adjust.y * 0.5f);
-		const Vector2 end	= Vector2(position.x + adjust.x * index,		position.y + adjust.y * 0.5f);
+		const Vector2 begin =	Vector2(position.x + adjust.x * index		- backWidth,	position.y - adjust.y * 0.5f);
+		const Vector2 end =		Vector2(position.x + adjust.x * (index + 1)	- backWidth,	position.y + adjust.y * 0.0f);
 
 		DrawBoxAA(begin.x, begin.y, end.x, end.y, it.second, true);
 		index++;
 	}
+	*/
+
+	m_BackBar->rectTransform->position = position;
+	m_BackBar->rectTransform->scale = Vector2(backWidth, adjust.y * 0.5f);
+	m_BackBar->Draw();
+
+	// センターライン描画
+	DrawLineAA(position.x - backWidth * 0.5f, position.y - adjust.y * 0.5f, position.x - backWidth * 0.5f, position.y, RGBColor(10).GetColorInt(), 2);
 
 	index = 0;
 
@@ -104,10 +135,10 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	for (const auto& it : m_TotalScores) {
 
 		const std::string scoreText = StringUtil::FormatToString("%d", it.second);
-		const int width = GetDrawStringWidth(scoreText.c_str(), scoreText.length());
-		const Vector2 pos = Vector2(position.x + adjust.x * (index - 1) + adjust.x * 0.5f, position.y + adjust.y * 0.1f);
+		const int width = GetDrawStringWidthToHandle(scoreText.c_str(), (int)scoreText.length(), m_hFontScore);
+		const Vector2 pos = Vector2(position.x + adjust.x * index + adjust.x * 0.5f - backWidth - width * 0.5f, position.y - adjust.y * 0.4f);
 	
-		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
+		DrawFormatStringFToHandle(pos.x, pos.y, 0xffffff, m_hFontScore, scoreText.c_str());
 		index++;
 	}
 
@@ -115,13 +146,15 @@ void UI_GameScore::drawTotalScore(const Vector2 position)
 	if (m_AchievedScore > 0)
 	{
 		const std::string scoreText = StringUtil::FormatToString("必要スコア:%d", m_AchievedScore);
-		const int width		= GetDrawStringWidth(scoreText.c_str(), scoreText.length());
+		int width = 0;
+		int height = 0;
+		GetDrawStringSizeToHandle(&width, &height, nullptr, scoreText.c_str(), (int)scoreText.length(), m_hFontAchievedScore);
 
-		const Vector2 pos	= Vector2(position.x - width * 0.5f, position.y + adjust.y * 0.5f);
-		const Vector2 end	= Vector2(pos.x + width,			 position.y + adjust.y);
+		const Vector2 pos	= Vector2(position.x - width * 0.5f - backWidth * 0.5f, position.y - adjust.y * 0.5f - height);
+		const Vector2 end	= Vector2(pos.x + width, pos.y + height);
 
 		DrawBoxAA(pos.x, pos.y, end.x, end.y, 0x999999, true);
-		DrawFormatStringF(pos.x, pos.y, 0xFFFFFF, scoreText.c_str());
+		DrawFormatStringFToHandle(pos.x, pos.y, 0xffffff, m_hFontAchievedScore, scoreText.c_str());
 	}
 }
 
@@ -162,7 +195,7 @@ void UI_GameScore::drawUserScores()
 			rectTrs.Global().position.y + size.y * (index + 1),
 			color, true);
 
-		DrawFormatString(rectTrs.Global().position.x, rectTrs.Global().position.y + index * GetFontSize(), GetColor(255, 255, 255), "ID %d:Score %2d", rank.first, rank.second);
+		DrawFormatString((int)(rectTrs.Global().position.x), (int)(rectTrs.Global().position.y + index * GetFontSize()), GetColor(255, 255, 255), "ID %d:Score %2d", rank.first, rank.second);
 
 		if (++index >= dispCount)
 			break;  // 表示するランキングの数を制限

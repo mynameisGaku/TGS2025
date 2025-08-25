@@ -153,8 +153,8 @@ void PlayScene::Draw()
 	//if (not CameraManager::IsScreenDivision())
 	//	Settings_json::Inst()->RenderImGuiFileManager();
 
-#ifdef DEBUG
-	DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
-	DrawString(100, 500, "Push [R]Key To Result", GetColor(255, 255, 255));
+#ifdef _DEBUG
+	//DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
+	//DrawString(100, 500, "Push [R]Key To Result", GetColor(255, 255, 255));
 #endif
 }

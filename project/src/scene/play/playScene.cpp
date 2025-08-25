@@ -109,12 +109,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	SetDrawOrder(targetManager, 1000);
 
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
-	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(Vector3(0, 500, 0), Vector3::Zero, Vector3::Ones), 1000.0f, MathUtil::ToRadians(30.0f));
-	forceField->SetColTag(ColDefine::Tag::tWindArea);
-	forceField->SetColTargetTags({ ColDefine::Tag::tBall, ColDefine::Tag::tChara });
-
-	std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-500.0f);
-	forceField->SetForce(std::move(force));
 
 	// ƒuƒ‹[ƒ€
 	m_BloomManager = Instantiate<BloomManager>();

@@ -5,11 +5,13 @@
 #include <src/util/ui/UI_Manager.h>
 #include <src/util/math/MathUtil.h>
 #include <src/util/color/RGBColor.h>
+#include <src/reference/ui/UI_ChatBarRef.h>
 
 namespace
 {
 	static const float HEIGHT = 40.0f;	// ï\é¶óÃàÊÇÃçÇÇ≥
 	static const RGBColor BACK_COLOR = RGBColor(100);	// îwåiêF
+	static const float BUTTON_CHATBAR_OFFSET_X = 100.0f;
 }
 
 UI_ButtonHint::UI_ButtonHint(const RectTransform& trs, int index)
@@ -109,11 +111,12 @@ void UI_ButtonHint::Draw()
 	for (auto& buttonHint : m_ButtonHints)
 	{
 		auto button = buttonHint.second;
-		Vector2 pos = globalTrs.position + button.AnchorFromCenter + button.LocalPosition;
-		pos.y -= HEIGHT / 2.0f;
 
 		if (not button.isActive)
 			continue;
+
+		Vector2 pos = globalTrs.position + button.AnchorFromCenter + button.LocalPosition;
+		pos.y -= HEIGHT / 2.0f;
 
 		if (not button.isPush)
 			DrawRectRotaGraphF(pos.x, pos.y, 0, 0, button.ImageWidth, button.ImageHeight, globalTrs.scale.Average() * scale, 0.0f, button.hImage, true);
@@ -126,6 +129,35 @@ void UI_ButtonHint::Draw()
 		float drawPosX = fsize * center;
 
 		DrawFormatStringFToHandle(pos.x + button.ImageWidth * scale * 0.5f, pos.y - fsize * 0.5f, 0xffffff, m_hFont, button.DisplayString.c_str());
+	}
+
+	Vector2 begin = CameraManager::GetDrawingAreaPos_CameraIndex(m_CharaIndex);
+	Vector2 size = CameraManager::GetDrawingAreaSize_CameraIndex(m_CharaIndex);
+
+	{
+		auto button = m_ButtonHints["LeftTrigger"];
+
+		Vector2 pos;
+		pos.x = begin.x + size.x / 2.0f - UI_CHATBAR_REF.BackScale.x / 2.0f + BUTTON_CHATBAR_OFFSET_X;
+		pos.y = begin.y + size.y + UI_CHATBAR_REF.PositionY;
+
+		if (not button.isPush)
+			DrawRectRotaGraphF(pos.x, pos.y, 0, 0, button.ImageWidth, button.ImageHeight, globalTrs.scale.Average() * scale, 0.0f, button.hImage, true);
+		else
+			DrawRectRotaGraphF(pos.x, pos.y, 0, 0, button.ImageWidth, button.ImageHeight, globalTrs.scale.Average() * scale, 0.0f, button.hPushImage, true);
+	}
+
+	{
+		auto button = m_ButtonHints["RightTrigger"];
+
+		Vector2 pos;
+		pos.x = begin.x + size.x / 2.0f + UI_CHATBAR_REF.BackScale.x / 2.0f - BUTTON_CHATBAR_OFFSET_X;
+		pos.y = begin.y + size.y + UI_CHATBAR_REF.PositionY;
+
+		if (not button.isPush)
+			DrawRectRotaGraphF(pos.x, pos.y, 0, 0, button.ImageWidth, button.ImageHeight, globalTrs.scale.Average() * scale, 0.0f, button.hImage, true);
+		else
+			DrawRectRotaGraphF(pos.x, pos.y, 0, 0, button.ImageWidth, button.ImageHeight, globalTrs.scale.Average() * scale, 0.0f, button.hPushImage, true);
 	}
 }
 

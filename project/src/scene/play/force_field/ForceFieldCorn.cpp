@@ -16,7 +16,7 @@ void ForceFieldCorn::CollisionEvent(const CollisionData& colData)
 	const Vector3 forward = transform->Forward();
 	const Vector3 toOther = target->transform->position - transform->position;
 
-	if (Vector3Util::AngleBetween(forward, toOther) <= m_CornAngle)
+	if (fabsf(Vector3Util::AngleBetween(forward.Normalize(), toOther.Normalize())) <= m_CornAngle)
 	{
 		ForceFieldBase::CollisionEvent(colData);
 	}

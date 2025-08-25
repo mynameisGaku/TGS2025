@@ -9,6 +9,12 @@
           "Name": "InMatch",
           "Volume": 100,
           "IsLoop": true
+        },
+        {
+          "FileName": "PlayScene.mp3",
+          "Name": "PlayScene",
+          "Volume": 255,
+          "IsLoop": true
         }
       ]
     },

@@ -1,182 +1,242 @@
-#include "src/util/sound/SoundBase.h"
+#include "SoundBase.h"
 
-// ◇汎用
-#include "framework/myDxLib.h"
-#include "src/util/time/GameTime.h"
+//=================================================================================
+//
+//		コンストラクタ・デストラクタ
+//
+//=================================================================================
 
-// ◇演出・機能
-#include "src/common/camera/cameraManager.h"
-
-using namespace SoundDefine;
-
+//---------------------------------------------------------------------------------
 SoundBase::SoundBase() {
 
-	info = nullptr;
-	fade = SoundFade();
+	soundInfo = nullptr;
+	playPosition = nullptr;
 
+	fade.SetEasing(0.0f, 255.0f, 0.0f, EasingType::Linear, false);
 	label = "";
 
+	isFadeIn = false;
+	isFadeOut= false;
 	isFadeOutEnd = false;
 	isSetPan = false;
-
-	playPos = nullptr;
 }
 
+//---------------------------------------------------------------------------------
 SoundBase::~SoundBase() {
 
 }
 
+//=================================================================================
+//
+//		各種関数
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
 void SoundBase::Update() {
 
-	// Fadeの機能が稼働している場合の処理
-	if (fade.info.isActive) {
-		applyFadeVolume();
-	}
-	else {
+	fade.Update();
 
-		ChangeVolumeSoundMem(info->curVolume, info->handle);
+	// フェード処理が有効な場合は、フェードの進行を行う
+	if (IsFade())
+		ApplyVolumeFade();
 
-		// パン設定を行う場合の処理
-		if (isSetPan)
-			SetPan(playPos);
-	}
+	// パン設定を行う場合の処理
+	if (isSetPan && playPosition != nullptr)
+		SetPan(*playPosition);
 
-	if (IsPlaying() == false)
+	if (not fade.info.isActive && isFadeOutEnd)
 		Stop();
 }
 
-void SoundBase::Play(SoundDefine::SoundInfo* _info, const std::string& _label) {
+//---------------------------------------------------------------------------------
+void SoundBase::ApplyVolume() {
 
-	if (_info == nullptr)
+	if (soundInfo == nullptr)
 		return;
 
-	info = _info;
-	label = _label;
-	fade.current = static_cast<float>(info->curVolume);
-
-	applyFadeVolume();
-	PlaySoundMem(info->handle, info->playType);
+	ChangeVolumeSoundMem(static_cast<int>(soundInfo->curVolume), soundInfo->handle);
 }
 
-void SoundBase::PlaySetPan(SoundDefine::SoundInfo* _info, const std::string& _label, Vector3* pos) {
+//---------------------------------------------------------------------------------
+void SoundBase::ApplyVolumeFade() {
 
-	if (_info == nullptr || pos == nullptr)
+	if (soundInfo == nullptr || not fade.info.isActive)
 		return;
 
-	Play(_info, _label);
-	SetPan(pos);
-
-	isSetPan = true;
+	ChangeVolumeSoundMem(static_cast<int>(fade.current), soundInfo->handle);
 }
 
-void SoundBase::PlaySetFrequency(SoundDefine::SoundInfo* _info, const std::string& _label, const float& frequency) {
+//=================================================================================
+//
+//		再生処理
+//
+//=================================================================================
 
-	if (_info == nullptr)
+//---------------------------------------------------------------------------------
+void SoundBase::Play(const SoundDefine::SoundInfo* info, const std::string& label) {
+
+	if (info == nullptr)
 		return;
 
-	Play(_info, _label);
-	SetFrequency(frequency);
+	soundInfo = info;
+	this->label = label;
+
+	if (IsPlaying())
+		return;
+
+	PlaySoundMem(soundInfo->handle, soundInfo->playType);
+	ApplyVolume();
 }
 
-void SoundBase::SetFrequency(const float& frequency) {
+//=================================================================================
+//
+//		停止処理
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
+void SoundBase::Stop() {
+
+	SetFrequencySoundMem(-1, soundInfo->handle);
+	StopSoundMem(soundInfo->handle);
+}
+
+//=================================================================================
+//
+//		フェード処理
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
+void SoundBase::FadeIn(const SoundDefine::SoundInfo* info, const std::string& label, int begin, int end, float duration_sec, EasingType easing) {
+
+	if (info == nullptr)
+		return;
+
+	Play(info, label);
+
+	float volBegin = (float)begin;
+	float volEnd = (float)end;
+
+	if (begin == -1)
+		volBegin = fade.begin < 0.0f ? fade.begin : fade.current;
+
+	if (end == -1)
+		volEnd = fade.end < 0.0f ? fade.end : (float)info->curVolume;
+
+	fade.SetEasing(volBegin, volEnd, duration_sec, easing, true);
+	ApplyVolumeFade();
+
+	isFadeIn = true;
+	isFadeOut = false;
+	isFadeOutEnd = false;
+}
+
+//---------------------------------------------------------------------------------
+void SoundBase::FadeOut(int end, float duration_sec, EasingType easing, bool isFadeOutEnd) {
+
+	this->isFadeOutEnd = isFadeOutEnd;
+
+	float volBegin = fade.begin < 0.0f ? fade.begin : fade.current;
+	float volEnd = (float)end;
+
+	if (end == -1)
+		volEnd = fade.end < 0 ? fade.end : 0.0f;
+
+	fade.SetEasing(volBegin, volEnd, duration_sec, easing, true);
+	ApplyVolumeFade();
+
+	isFadeIn = false;
+	isFadeOut = true;
+}
+
+//=================================================================================
+//
+//		セッター
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
+void SoundBase::SetPan(const VECTOR& position) {
+
+	VECTOR soundVec = VSub(position, GetCameraPosition());// カメラから再生座標へのベクトル
+
+	const float range = 25.0f * fade.current;	// 聞こえなくなる距離
+
+	int vol = static_cast<int>((range - VSize(soundVec)) / range * 255.0f);	// 距離減衰を反映した音量
+	vol = min(max(vol, 0), 255);	// ストッパーを掛ける
+
+	VECTOR forward = VTransformSR(VGet(1.0f, 0.0f, 0.0f), MGetRotY(GetCameraAngleTRotate()));
+	float pan = VDot(VNorm(soundVec), forward);
+
+	ChangeVolumeSoundMem(vol, soundInfo->handle);
+	ChangePanSoundMem(static_cast<int>(pan * 255) / 2, soundInfo->handle);
+}
+
+//---------------------------------------------------------------------------------
+void SoundBase::SetPanPointer(const VECTOR* position) {
+
+	if (position == nullptr)
+		return;
+
+	playPosition = position;
+
+	VECTOR soundVec = VSub(*playPosition, GetCameraPosition());// カメラから再生座標へのベクトル
+
+	const float range = 25.0f * fade.current;	// 聞こえなくなる距離
+
+	int vol = static_cast<int>((range - VSize(soundVec)) / range * 255.0f);	// 距離減衰を反映した音量
+	vol = min(max(vol, 0), 255);	// ストッパーを掛ける
+
+	VECTOR forward = VTransformSR(VGet(1.0f, 0.0f, 0.0f), MGetRotY(GetCameraAngleTRotate()));
+	float pan = VDot(VNorm(soundVec), forward);
+
+	ChangeVolumeSoundMem(vol, soundInfo->handle);
+	ChangePanSoundMem(static_cast<int>(pan * 255) / 2, soundInfo->handle);
+}
+
+//---------------------------------------------------------------------------------
+void SoundBase::SetFrequency(float frequency) {
 
 	if (frequency != -1) {
 		//元データが44.10KHzのため半分の値を停止時の音とする
 		float setFrequency = (44100.0f * 0.5f) * (1.0f + frequency);
-		SetFrequencySoundMem(static_cast<int>(setFrequency), info->handle);
+		SetFrequencySoundMem(static_cast<int>(setFrequency), soundInfo->handle);
 	}
-	else
-		SetFrequencySoundMem(static_cast<int>(frequency), info->handle);
+	else {
+		SetFrequencySoundMem(static_cast<int>(frequency), soundInfo->handle);
+	}
 
-	applyFadeVolume();
-	PlaySoundMem(info->handle, info->playType);
+	ApplyVolume();
 }
 
-void SoundBase::FadeIn(SoundDefine::SoundInfo* _info, const std::string& _label, const SoundDefine::SoundFade& _fade) {
+//=================================================================================
+//
+//		ゲッター
+//
+//=================================================================================
 
-	if (_info == nullptr)
-		return;
-
-	info = _info;
-	label = _label;
-
-	fade = _fade;
-
-	fade.begin	= fade.begin < 0 ? 0 : fade.begin;
-	fade.end	= fade.end < 0 ? info->curVolume : fade.end;
-
-	fade.info.time = 0.0f;
-	fade.info.isActive = true;
-
-	applyFadeVolume();
-	PlaySoundMem(info->handle, info->playType);
-}
-
-void SoundBase::FadeOut(const SoundDefine::SoundFade& _fade, const bool& _isFadeOutEnd) {
-
-	fade = _fade;
-
-	fade.begin = fade.begin < 0 ? info->curVolume : fade.begin;
-	fade.end = fade.end < 0 ? 0 : fade.end;
-
-	fade.info.time = 0.0f;
-	fade.info.isActive = true;
-
-	isFadeOutEnd = _isFadeOutEnd;
-
-	applyFadeVolume();
-}
-
-void SoundBase::Stop() {
-
-	SetFrequencySoundMem(-1, info->handle);
-	StopSoundMem(info->handle);
-	DestroyMe();
-}
-
-void SoundBase::SetPan(Vector3* pos) {
-
-	if (pos == nullptr)
-		return;
-
-	playPos = pos;
-
-	Camera* camera = CameraManager::MainCamera();	// メインカメラ
-	Vector3 soundVec = *playPos - camera->WorldPos();// カメラから再生座標へのベクトル
-
-	const float range = 25.0f * fade.current;	// 聞こえなくなる距離
-
-	int vol = static_cast<int>((range - soundVec.GetLength()) / range * 255.0f);	// 距離減衰を反映した音量
-	vol = min(max(vol, 0), 255);	// ストッパーを掛ける
-
-	Vector3 forward = Vector3::UnitX * MGetRotY(camera->transform->rotation.y);
-	float pan = VDot(VNorm(soundVec), forward);
-
-	ChangeVolumeSoundMem(vol, info->handle);
-	ChangePanSoundMem(static_cast<int>(pan * 255) / 2, info->handle);
-}
-
+//---------------------------------------------------------------------------------
 bool SoundBase::IsPlaying() const {
 
-	if (info == nullptr)
+	if (soundInfo == nullptr)
 		return false;
 
-	return (CheckSoundMem(info->handle) == 1 || (fade.info.isActive == false && isFadeOutEnd));
+	return (CheckSoundMem(soundInfo->handle) != 0);
 }
 
-bool SoundBase::CheckConsistency(const std::string& typeName, const std::string& _label) const {
+//=================================================================================
+//
+//		確認用
+//
+//=================================================================================
 
-	if (info == nullptr)
+//---------------------------------------------------------------------------------
+bool SoundBase::CheckConsistency(const std::string& name, const std::string& label) const {
+
+	if (soundInfo == nullptr)
 		return false;
 
-	return (info->typeName == typeName && label == _label);
-}
-
-void SoundBase::applyFadeVolume() {
-
-	if (info == nullptr)
-		return;
-
-	fade.Update();
-	ChangeVolumeSoundMem(static_cast<int>(fade.current), info->handle);
+	return (soundInfo->typeName == name && this->label == label);
 }

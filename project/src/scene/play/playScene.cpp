@@ -33,10 +33,14 @@
 #include "src/scene/play/force_field/ForceFieldCorn.h"
 #include "src/scene/play/force_field/ConstantPointForce.h"
 
+//=== UI ===
 #include "src/scene/play/ui/UI_Setter_PlayScene.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 #include <src/reference/network/NetworkRef.h>
 #include "src/scene/play/enemy/EnemyManager.h"
+
+//=== サウンド ===
+#include "src/util/sound/SoundManager.h"
 
 using namespace KeyDefine;
 
@@ -105,12 +109,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	SetDrawOrder(targetManager, 1000);
 
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
-	ForceFieldCorn* forceField = forceFieldManager->CreateForceFieldCorn(Transform(Vector3(0, 500, 0), Vector3::Zero, Vector3::Ones), 1000.0f, MathUtil::ToRadians(30.0f));
-	forceField->SetColTag(ColDefine::Tag::tWindArea);
-	forceField->SetColTargetTags({ ColDefine::Tag::tBall, ColDefine::Tag::tChara });
-
-	std::unique_ptr<ConstantPointForce> force = std::make_unique<ConstantPointForce>(-500.0f);
-	forceField->SetForce(std::move(force));
 
 	// ブルーム
 	m_BloomManager = Instantiate<BloomManager>();
@@ -121,11 +119,15 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
     if (net.IsNetworkEnable)
         CameraManager::SetIsScreenDivision(false);
+
+	SoundManager::FadeIn("BGM_PlayScene.mp3", "BGM", 1.0f, EasingType::Linear);
 }
 
 PlayScene::~PlayScene()
 {
 	CameraManager::SetIsScreenDivision(false);
+
+	SoundManager::Stop("BGM_PlayScene.mp3", "BGM");
 }
 
 void PlayScene::Update()

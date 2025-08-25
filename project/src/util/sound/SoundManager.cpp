@@ -70,7 +70,7 @@ void SoundManager::Update() {
 
 	// 再生中のサウンドのUpdateを呼び出す
 	for (auto itr = sounds->begin(); itr != sounds->end();) {
-		if ((*itr)->IsPlaying() && (*itr)->IsDestroy() == false) {
+		if ((*itr)->IsPlaying()) {
 			(*itr)->Update();
 			itr++;
 			continue;
@@ -285,18 +285,22 @@ SoundBase* SoundManager::Play(const std::string& typeName, const std::string& la
 	if (soundInfoDatas == nullptr || sounds == nullptr || CheckLoadDate(typeName) == false)
 		return nullptr;
 
-	// 既に再生中なら、停止してから再生する
-	if (IsPlaying(typeName, label))
-		Stop(typeName, label);
-
 	// 実体を生成
-	SoundBase* sound = new SoundBase();
+	SoundBase* sound = IsPlaying(typeName, label);
+
+	// 既に再生中なら、停止してから再生する
+	if (sound != nullptr) {
+		sound->Stop();
+	}
+	else {
+		sound = new SoundBase();
+
+		// 再生中サウンドのリストに追加
+		sounds->push_back(sound);
+	}
 	
 	// 再生処理
 	sound->Play(&(*soundInfoDatas)[typeName], label);
-
-	// 再生中サウンドのリストに追加
-	sounds->push_back(sound);
 
 	return sound;
 }
@@ -322,18 +326,23 @@ SoundBase* SoundManager::PlaySetPan(const std::string& typeName, const std::stri
 	if (soundInfoDatas == nullptr || sounds == nullptr || CheckLoadDate(typeName) == false)
 		return nullptr;
 
-	// 既に再生中なら、停止してから再生する
-	if (IsPlaying(typeName, label))
-		Stop(typeName, label);
-
 	// 実体を生成
-	SoundBase* sound = new SoundBase();
+	SoundBase* sound = IsPlaying(typeName, label);
+
+	// 既に再生中なら、停止してから再生する
+	if (sound != nullptr) {
+		sound->Stop();
+	}
+	else {
+		sound = new SoundBase();
+
+		// 再生中サウンドのリストに追加
+		sounds->push_back(sound);
+	}
 	
 	// 再生処理
-	sound->PlaySetPan(&(*soundInfoDatas)[typeName], label, playPos);
-
-	// 再生中サウンドのリストに追加
-	sounds->push_back(sound);
+	sound->Play(&(*soundInfoDatas)[typeName], label);
+	sound->SetPan(*playPos);
 	
 	return sound;
 }
@@ -346,7 +355,7 @@ void SoundManager::SetPan(const std::string& typeName, const std::string& label,
 		return;
 
 	// パンの設定を適応させる
-	sound->SetPan(playPos);
+	sound->SetPan(*playPos);
 }
 
 SoundBase* SoundManager::PlaySetFrequency(const std::string& typeName, const std::string& label, const float& frequency) {
@@ -355,18 +364,23 @@ SoundBase* SoundManager::PlaySetFrequency(const std::string& typeName, const std
 	if (soundInfoDatas == nullptr || sounds == nullptr || CheckLoadDate(typeName) == false)
 		return nullptr;
 
-	// 既に再生中なら、停止してから再生する
-	if (IsPlaying(typeName, label))
-		Stop(typeName, label);
-
 	// 実体を生成
-	SoundBase* sound = new SoundBase();
+	SoundBase* sound = IsPlaying(typeName, label);
+
+	// 既に再生中なら、停止してから再生する
+	if (sound != nullptr) {
+		sound->Stop();
+	}
+	else {
+		sound = new SoundBase();
+
+		// 再生中サウンドのリストに追加
+		sounds->push_back(sound);
+	}
 	
 	// 再生処理
-	sound->PlaySetFrequency(&(*soundInfoDatas)[typeName], label, frequency);
-
-	// 再生中サウンドのリストに追加
-	sounds->push_back(sound);
+	sound->Play(&(*soundInfoDatas)[typeName], label);
+	sound->SetFrequency(frequency);
 
 	return sound;
 }
@@ -382,30 +396,36 @@ void SoundManager::SetFrequency(const std::string& typeName, const std::string& 
 	sound->SetFrequency(frequency);
 }
 
-SoundBase* SoundManager::FadeIn(const std::string& typeName, const std::string& label, const float& sec, const EasingType& easing) {
+SoundBase* SoundManager::FadeIn(const std::string& typeName, const std::string& label, const float& sec, const EasingType& easing, bool isAfterStop) {
 
 	// データが存在しているかを確認する
 	if (soundInfoDatas == nullptr || sounds == nullptr || CheckLoadDate(typeName) == false)
 		return nullptr;
 
-	// 既に再生中なら、停止してから再生する
-	if (IsPlaying(typeName, label))
-		Stop(typeName, label);
-
 	// 実体を生成
-	SoundBase* sound = new SoundBase();
+	SoundBase* sound = IsPlaying(typeName, label);
+
+	// 既に再生中なら、停止してから再生する
+	if (sound != nullptr) {
+		if (isAfterStop)
+			sound->Stop();
+	}
+	else {
+		sound = new SoundBase();
+
+		// 再生中サウンドのリストに追加
+		sounds->push_back(sound);
+	}
 
 	// フェード情報
-	SoundFade fade;
 	float begin = 0.0f;	// 始点
 	float end = static_cast<float>((*soundInfoDatas)[typeName].defVolume);	// 終点
-	fade.SetEasing(begin, end, sec, easing, true);
+
+	if (not isAfterStop)
+		begin = -1.0f;
 
 	// 再生処理
-	sound->FadeIn(&(*soundInfoDatas)[typeName], label, fade);
-
-	// 再生中サウンドのリストに追加
-	sounds->push_back(sound);
+	sound->FadeIn(&(*soundInfoDatas)[typeName], label, begin, end, sec, easing);
 
 	return sound;
 }
@@ -419,11 +439,11 @@ SoundBase* SoundManager::FadeOut(const std::string& typeName, const std::string&
 
 	// フェード情報
 	SoundFade fade;
-	float begin = static_cast<float>(sound->Info()->curVolume);
+	float begin = static_cast<float>(sound->GetSoundInfo()->curVolume);
 	float end = 0.0f;
 	fade.SetEasing(begin, end, sec, easing, true);
 
-	sound->FadeOut(fade, isFadeOutEnd);
+	sound->FadeOut(end, sec, easing, isFadeOutEnd);
 
 	return sound;
 }
@@ -461,7 +481,7 @@ void SoundManager::StopCategory(const SoundCategory& category) {
 
 	// 再生されているサウンドの中から、分類が一致した物の再生を止める
 	for (const auto& itr : *sounds) {
-		if (itr->Info()->category == category)
+		if (itr->GetSoundInfo()->category == category)
 			itr->Stop();
 	}
 }

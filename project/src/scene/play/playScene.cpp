@@ -33,10 +33,14 @@
 #include "src/scene/play/force_field/ForceFieldCorn.h"
 #include "src/scene/play/force_field/ConstantPointForce.h"
 
+//=== UI ===
 #include "src/scene/play/ui/UI_Setter_PlayScene.h"
 #include "src/util/debug/imgui/imGuiManager.h"
 #include <src/reference/network/NetworkRef.h>
 #include "src/scene/play/enemy/EnemyManager.h"
+
+//=== ƒTƒEƒ“ƒh ===
+#include "src/util/sound/SoundManager.h"
 
 using namespace KeyDefine;
 
@@ -121,11 +125,15 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
     if (net.IsNetworkEnable)
         CameraManager::SetIsScreenDivision(false);
+
+	SoundManager::FadeIn("BGM_PlayScene.mp3", "BGM", 1.0f, EasingType::Linear);
 }
 
 PlayScene::~PlayScene()
 {
 	CameraManager::SetIsScreenDivision(false);
+
+	SoundManager::Stop("BGM_PlayScene.mp3", "BGM");
 }
 
 void PlayScene::Update()

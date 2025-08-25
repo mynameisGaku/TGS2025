@@ -46,6 +46,7 @@
 #include <src/common/stage/StageObjectManager.h>
 #include <src/common/stage/SpawnerObjectQueue.h>
 #include <src/scene/play/ball/BallSpawner.h>
+#include <src/util/sound/SoundManager.h>
 
 //-----------------------------------------
 //  CurrentGameData
@@ -485,12 +486,18 @@ void MatchManager::StatePhaseReady(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update:
 	{
+		float lastSec = m_ReadyEndCounterSec;
 		if (m_ReadyEndCounterSec <= 0.0f)
 		{
 			m_pFsm->ChangeState(&MatchManager::StatePhasePlay);
 		}
 		else
 			m_ReadyEndCounterSec -= GTime.deltaTime;
+
+		if ((int)m_ReadyEndCounterSec != (int)lastSec)
+		{
+			SoundManager::Play("SE_play_countdown.mp3", "SE_play_countdown.mp3");
+		}
 	}
 	break;
 	}
@@ -502,7 +509,7 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter:
 	{
-
+		SoundManager::Play("SE_play_start.mp3", "SE_play_start.mp3");
 	}
 	break;
 	case FSMSignal::SIG_Update:

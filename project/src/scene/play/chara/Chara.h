@@ -10,6 +10,7 @@
 #include "src/util/alarm/Alarm.h"
 #include <src/scene/play/ui/UI_ButtonHint.h>
 #include <src/common/network/user/User.h>
+#include <src/scene/play/match/MatchManager.h>
 
 class CharaHP;
 class CharaStamina;
@@ -351,6 +352,7 @@ private:
 	Vector3						m_ActionPosition;		// アクション開始地点
 	Vector3						m_ActionWallPosition;	// アクション開始時の壁の位置
 	Vector3						m_ActionWallNormal;		// アクション開始時の壁の法線
+	Vector3						m_MoveDirection;		// 移動方向
 	float						m_MoveSpeed;			// 移動速度
 	float						m_RotSpeed;				// 回転速度
 	float						m_SpeedScale;			// 速度倍率
@@ -373,6 +375,8 @@ private:
 	Alarm*						m_TackleIntervalAlarm;	// タックル後の間隔アラーム
 
 	CharaSpawnPointManager*		m_SpawnPointManager;	// リスポーン地点
+
+	MatchManager*				m_pMatchManager;
 
 	int							m_hTrailImage;			// トレイルの画像ハンドル
 

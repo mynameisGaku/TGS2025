@@ -223,6 +223,8 @@ void Chara::Init(std::string tag)
 
 	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 	m_pBallTargetManager = FindGameObject<BallTargetManager>();
+	m_pMatchManager = FindGameObject<MatchManager>();
+
 
 	std::string sIndex;
 	auto& net = NetworkRef::Inst();
@@ -401,6 +403,11 @@ void Chara::Init(std::string tag)
 }
 
 void Chara::Update() {
+
+	if (m_pMatchManager->GetReadyTimerSec() > 0)
+	{
+		return;
+	}
 
 	// デバッグ機能
 	if (CheckHitKey(KEY_INPUT_R))
@@ -799,6 +806,8 @@ void Chara::climb(Vector3& normal)
 
 void Chara::Move(const Vector3& dir)
 {
+	m_MoveDirection = dir;
+
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)
 		m_IsMove = dir.GetLengthSquared() > 0;
@@ -969,8 +978,7 @@ void Chara::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
-
-	if (m_pBall != nullptr)
+	if (m_pBall)
 	{
 		m_pBall->HomingDeactivate();
 		m_pBall->ChangeState(Ball::State::S_LANDED);
@@ -2264,18 +2272,33 @@ void Chara::SubStateHold(FSMSignal sig)
 
 void Chara::SubStateHoldToAim(FSMSignal sig)
 {
+	static int chargeRate;
+	static const int PLAY_SOUND_INTERVAL = 12;
+	static const int MAX_CHARGE_RATE = 60;
+
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		chargeRate = 0;
 		m_Animator->PlaySub("mixamorig:Spine", "HoldToAim");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
 		m_BallChargeRate += GTime.deltaTime / CHARGE_TIME;
+
+		// 音
+		if (chargeRate <= MAX_CHARGE_RATE && chargeRate % PLAY_SOUND_INTERVAL == 0)
+		{
+			float progress = (float)chargeRate / (float)MAX_CHARGE_RATE;
+			SoundManager::PlaySetFrequency("SE_charge_ball.mp3", "SE_charge_ball.mp3", 1.0f + progress);
+		}
+		chargeRate++;
+
+
 		if (m_BallChargeRate > 1.0f)
 		{
 			m_BallChargeRate = 1.0f;
@@ -2306,10 +2329,16 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 
 void Chara::SubStateCatch(FSMSignal sig)
 {
+	static const float TIMING_PLAYVACUUMSOUND = 0.4f;
+	static float vacuumTimeCount;
+	static bool wasVacuum;
+
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		vacuumTimeCount = 0.0f;
+		wasVacuum = false;
 		m_Animator->PlaySub("mixamorig:Spine", "Catch");
 	}
 	break;
@@ -2318,6 +2347,15 @@ void Chara::SubStateCatch(FSMSignal sig)
 		if (not m_IsCatching)
 		{
 			sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
+		}
+		vacuumTimeCount += GTime.deltaTime;
+		if (vacuumTimeCount >= TIMING_PLAYVACUUMSOUND)
+		{
+			if (not wasVacuum)
+			{
+				playVacuumSound();
+				wasVacuum = true;
+			}
 		}
 
 		catchUpdate();
@@ -2343,6 +2381,20 @@ void Chara::SubStateCatch(FSMSignal sig)
 		}
 		//m_pCatchReadyEffect = nullptr;
 		//m_pCatchDustEffect = nullptr;
+
+		auto sound = SoundManager::IsPlaying("SE_vacuum_00.mp3", "SE_vacuum_00.mp3");
+
+		if (sound)
+		{
+			if (not sound->IsFade())
+			{
+				SoundManager::FadeOut("SE_vacuum_00.mp3", "SE_vacuum_00.mp3", 1.0f, EasingType::Linear, true);
+			}
+			else
+			{
+				sound->Stop();
+			}
+		}
 	}
 	break;
 	}
@@ -2566,7 +2618,12 @@ void Chara::throwBallHoming()
 		return;
 
 	Vector3 forward = transform->Forward();
-	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+	//Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+	Vector3 dir = m_MoveDirection;
+	if (dir.GetLengthSquared() < 0.01f)	// Magic:)
+	{
+		dir = forward;
+	}
 
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
@@ -2590,8 +2647,17 @@ void Chara::throwBallHoming()
 			float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
 
 			// 角度を90度単位で丸める
-			float angleRound = roundf(angle / (DX_PI_F * 0.5f));
-			angle = angleRound * (DX_PI_F * 0.5f);
+			//float angleRound = roundf(angle / (DX_PI_F * 0.5f));
+			//angle = angleRound * (DX_PI_F * 0.5f);
+			//angle = fabsf(angle);
+			if (angle < 0.0f)
+			{
+				angle += DX_PI_F * 2.0f;
+			}
+			if (angle > DX_PI_F * 0.5f && angle < DX_PI_F * 1.5f)
+			{
+				angle = DX_PI_F - angle;
+			}
 
 			m_pBall->ThrowHoming(target, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
 		}
@@ -2785,6 +2851,12 @@ void Chara::playPickupBallSound()
 
 void Chara::playVacuumSound()
 {
+	std::string base = "SE_vacuum_00";
+	std::string fileType = ".mp3";
+	std::string soundName = base + fileType;
+
+	//SoundManager::Play(soundName, soundName);
+	SoundManager::FadeIn(soundName, soundName, 0.3f);
 }
 
 void Chara::playJumpNormalSound()

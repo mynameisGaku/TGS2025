@@ -80,7 +80,7 @@ void PlayerController::Update() {
         if (chara->CanMove() && not chara->IsJumping())
             chara->Jump();
 
-        chara->WallAction();
+        //chara->WallAction();
     }
 
     ////////////////////////////////////////////////////

@@ -15,6 +15,10 @@ UI_ChatBar::UI_ChatBar(const RectTransform& trs, int index)
 	assert(m_hBarImageBack > 0);
 	m_hBarImageGaugeBack = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/bar.png");
 	assert(m_hBarImageGaugeBack > 0);
+	m_hIconImageThrow = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/throw_linear.png");
+	assert(m_hIconImageThrow > 0);
+	m_hIconImageCatch = ResourceLoader::LoadGraph("data/texture/UI/ChatBar/catch.png");
+	assert(m_hIconImageCatch > 0);
 
 	m_CharaIndex = index;
 
@@ -29,14 +33,12 @@ UI_ChatBar::UI_ChatBar(const RectTransform& trs, int index)
 
 	m_BarList["Back"]->InitImage(m_hBarImageBack);
 	m_BarList["GaugeBack"]->InitImage(m_hBarImageGaugeBack);
-
-	/*
+	
 	for (auto& item : m_BarList)
 	{
 		SliceBar* bar = item.second;
-		bar->InitImage(m_hBarImageBack);
+		bar->SetIsDraw(false);
 	}
-	*/
 
 	ReloadParam();
 }
@@ -45,6 +47,8 @@ UI_ChatBar::~UI_ChatBar()
 {
 	ResourceLoader::DeleteGraph(m_hBarImageBack);
 	ResourceLoader::DeleteGraph(m_hBarImageGaugeBack);
+	ResourceLoader::DeleteGraph(m_hIconImageThrow);
+	ResourceLoader::DeleteGraph(m_hIconImageCatch);
 	for (auto& item : m_BarList)
 	{
 		SliceBar* bar = item.second;
@@ -88,4 +92,9 @@ void UI_ChatBar::Draw()
 		SliceBar* bar = item.second;
 		bar->Draw();
 	}
+
+	RectTransform global = rectTransform->Global();
+
+	DrawRotaGraphF(global.position.x - UI_CHATBAR_REF.IconOffsetX, global.position.y, UI_CHATBAR_REF.IconScale, 0.0f, m_hIconImageCatch, TRUE);
+	DrawRotaGraphF(global.position.x + UI_CHATBAR_REF.IconOffsetX, global.position.y, UI_CHATBAR_REF.IconScale, 0.0f, m_hIconImageThrow, TRUE);
 }

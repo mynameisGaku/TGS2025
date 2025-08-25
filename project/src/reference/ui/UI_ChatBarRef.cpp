@@ -13,6 +13,8 @@ void UI_ChatBarRef::Load(bool forceLoad)
 
 	// 各種データを取り出す処理
 	PositionY = jsonLoader->GetOrDefault("Param.PositionY", 0.0f, FILEKEY);
+	IconOffsetX = jsonLoader->GetOrDefault("Param.IconOffsetX", 0.0f, FILEKEY);
+	IconScale = jsonLoader->GetOrDefault("Param.IconScale", 0.0f, FILEKEY);
 	BackScale = jsonLoader->GetOrDefault("Param.BackScale", Vector2::Zero, FILEKEY);
 	BackColor = jsonLoader->GetOrDefault("Param.BackColor", RGBColor(), FILEKEY);
 	GaugeBackScale = jsonLoader->GetOrDefault("Param.GaugeBackScale", Vector2::Zero, FILEKEY);

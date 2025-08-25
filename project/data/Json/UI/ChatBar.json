@@ -1,6 +1,8 @@
 {
     "Param": {
         "PositionY": -70.0,
+        "IconOffsetX": 250.0,
+        "IconScale": 0.3,
 
         "BackScale": {
             "X": 600,

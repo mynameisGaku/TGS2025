@@ -23,6 +23,7 @@ void Trail3D::Add(const Vector3& pos, bool isActive)
 
 void Trail3D::Update()
 {
+    return;
     m_UpdateInterval = max(1, m_UpdateInterval); // çXêVä‘äuÇÕ1à»è„Ç…Ç∑ÇÈ
     if (GameTime::FrameCount() % m_UpdateInterval != 0)
     {
@@ -42,6 +43,7 @@ void Trail3D::Update()
 
 void Trail3D::Draw()
 {
+	return;
     if (m_Points.size() < 4 || m_TextureHandle == -1)
     {
         return;

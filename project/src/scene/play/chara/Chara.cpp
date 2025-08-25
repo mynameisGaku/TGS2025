@@ -279,16 +279,16 @@ void Chara::Init(std::string tag)
 			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
-			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descBold.interval = 3; // フレーム間隔（何フレームごとに描画するか）
+			descBold.subdivisions = 4; // 補間分割数（大きいほど滑らか）
 			descBold.thick = 50.0f; // トレイルの太さ
 			descBold.lifeTime = lifeTime; // トレイルの寿命
 			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
 			descBold.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
-			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descSmall.interval = 4; // フレーム間隔（何フレームごとに描画するか）
+			descSmall.subdivisions = 4; // 補間分割数（大きいほど滑らか）
 			descSmall.thick = 25.0f; // トレイルの太さ
 			descSmall.lifeTime = lifeTime; // トレイルの寿命
 			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）

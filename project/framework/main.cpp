@@ -160,9 +160,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         ImGui::NewFrame();
 #endif // IMGUI
 
-        ImGui::Begin("TimeRecord");
-        ImGui::Text("time %lf[ms]", tick);
-        ImGui::End();
+        //ImGui::Begin("TimeRecord");
+        //ImGui::Text("time %lf[ms]", tick);
+        //ImGui::End();
 
         AppUpdate();
         ClearDrawScreen();

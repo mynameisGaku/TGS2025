@@ -404,7 +404,7 @@ void Chara::Init(std::string tag)
 
 void Chara::Update() {
 
-	if (m_pMatchManager->GetReadyTimerSec() > 0)
+	if (m_pMatchManager && m_pMatchManager->GetReadyTimerSec() > 0)
 	{
 		return;
 	}

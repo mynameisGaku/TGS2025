@@ -777,6 +777,9 @@
     <None Include="data\Json\UI\Title\GraphicsSettingCanvas.json">
       <Filter>data\Json\UI\title</Filter>
     </None>
+    <None Include="data\Json\UI\ButtonHint_old.json" />
+    <None Include="data\Json\UI\ChatBar.json" />
+    <None Include="data\Json\UI\MatchTime.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">
@@ -1505,6 +1508,12 @@
     <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp">
       <Filter>src%28application%29\scene\title\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_MatchTimeRef.cpp" />
+    <ClCompile Include="src\scene\play\ui\SliceBar.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp" />
+    <ClCompile Include="src\util\color\RGBColor.cpp" />
+    <ClCompile Include="src\util\file\json\RGBColorJson.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2369,6 +2378,14 @@
       <Filter>src%28application%29\util\restart</Filter>
     </ClInclude>
     <ClInclude Include="src\util\font\FontDefine.h" />
+    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h" />
+    <ClInclude Include="src\reference\ui\UI_MatchTimeRef.h" />
+    <ClInclude Include="src\scene\play\ui\SliceBar.h" />
+    <ClInclude Include="src\scene\play\ui\UI_ChatBar.h" />
+    <ClInclude Include="src\util\color\RGBColor.h" />
+    <ClInclude Include="src\util\file\json\RGBColorJson.h" />
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
+    <ClInclude Include="src\util\getset\GetSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

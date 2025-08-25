@@ -351,6 +351,7 @@ private:
 	Vector3						m_ActionPosition;		// アクション開始地点
 	Vector3						m_ActionWallPosition;	// アクション開始時の壁の位置
 	Vector3						m_ActionWallNormal;		// アクション開始時の壁の法線
+	Vector3						m_MoveDirection;		// 移動方向
 	float						m_MoveSpeed;			// 移動速度
 	float						m_RotSpeed;				// 回転速度
 	float						m_SpeedScale;			// 速度倍率

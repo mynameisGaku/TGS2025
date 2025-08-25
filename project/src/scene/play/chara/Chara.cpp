@@ -799,6 +799,8 @@ void Chara::climb(Vector3& normal)
 
 void Chara::Move(const Vector3& dir)
 {
+	m_MoveDirection = dir;
+
 	auto& net = NetworkRef::Inst();
 	if (not net.IsNetworkEnable)
 		m_IsMove = dir.GetLengthSquared() > 0;
@@ -969,10 +971,13 @@ void Chara::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
-	m_pBall->HomingDeactivate();
-	m_pBall->ChangeState(Ball::State::S_LANDED);
-	m_pBall->SetOwner(nullptr);
-	m_pBall = nullptr;
+	if (m_pBall)
+	{
+		m_pBall->HomingDeactivate();
+		m_pBall->ChangeState(Ball::State::S_LANDED);
+		m_pBall->SetOwner(nullptr);
+		m_pBall = nullptr;
+	}
 	m_pLastBall = nullptr;
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;
@@ -2562,7 +2567,12 @@ void Chara::throwBallHoming()
 		return;
 
 	Vector3 forward = transform->Forward();
-	Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+	//Vector3 dir = Vector3::Normalize(forward + Vector3::SetY(0.3f));	// Magic:)
+	Vector3 dir = m_MoveDirection;
+	if (dir.GetLengthSquared() < 0.01f)	// Magic:)
+	{
+		dir = forward;
+	}
 
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
@@ -2586,8 +2596,17 @@ void Chara::throwBallHoming()
 			float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
 
 			// Šp“x‚ð90“x’PˆÊ‚ÅŠÛ‚ß‚é
-			float angleRound = roundf(angle / (DX_PI_F * 0.5f));
-			angle = angleRound * (DX_PI_F * 0.5f);
+			//float angleRound = roundf(angle / (DX_PI_F * 0.5f));
+			//angle = angleRound * (DX_PI_F * 0.5f);
+			//angle = fabsf(angle);
+			if (angle < 0.0f)
+			{
+				angle += DX_PI_F * 2.0f;
+			}
+			if (angle > DX_PI_F * 0.5f && angle < DX_PI_F * 1.5f)
+			{
+				angle = DX_PI_F - angle;
+			}
 
 			m_pBall->ThrowHoming(target, this, m_BallChargeRate, angle, 0.5f);	// Magic:)
 		}

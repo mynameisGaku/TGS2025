@@ -2299,10 +2299,16 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 
 void Chara::SubStateCatch(FSMSignal sig)
 {
+	static const float TIMING_PLAYVACUUMSOUND = 0.4f;
+	static float vacuumTimeCount;
+	static bool wasVacuum;
+
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		vacuumTimeCount = 0.0f;
+		wasVacuum = false;
 		m_Animator->PlaySub("mixamorig:Spine", "Catch");
 	}
 	break;
@@ -2311,6 +2317,15 @@ void Chara::SubStateCatch(FSMSignal sig)
 		if (not m_IsCatching)
 		{
 			sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
+		}
+		vacuumTimeCount += GTime.deltaTime;
+		if (vacuumTimeCount >= TIMING_PLAYVACUUMSOUND)
+		{
+			if (not wasVacuum)
+			{
+				playVacuumSound();
+				wasVacuum = true;
+			}
 		}
 
 		catchUpdate();
@@ -2336,6 +2351,20 @@ void Chara::SubStateCatch(FSMSignal sig)
 		}
 		//m_pCatchReadyEffect = nullptr;
 		//m_pCatchDustEffect = nullptr;
+
+		auto sound = SoundManager::IsPlaying("SE_vacuum_00.mp3", "SE_vacuum_00.mp3");
+
+		if (sound)
+		{
+			if (not sound->IsFade())
+			{
+				SoundManager::FadeOut("SE_vacuum_00.mp3", "SE_vacuum_00.mp3", 1.0f, EasingType::Linear, true);
+			}
+			else
+			{
+				sound->Stop();
+			}
+		}
 	}
 	break;
 	}
@@ -2778,6 +2807,12 @@ void Chara::playPickupBallSound()
 
 void Chara::playVacuumSound()
 {
+	std::string base = "SE_vacuum_00";
+	std::string fileType = ".mp3";
+	std::string soundName = base + fileType;
+
+	//SoundManager::Play(soundName, soundName);
+	SoundManager::FadeIn(soundName, soundName, 0.3f);
 }
 
 void Chara::playJumpNormalSound()

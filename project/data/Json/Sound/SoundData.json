@@ -249,6 +249,12 @@
           "Name": "menu_move",
           "Volume": 120,
           "IsLoop": false
+        },
+        {
+          "FileName": "charge_ball.mp3",
+          "Name": "charge_ball",
+          "Volume": 100,
+          "IsLoop": false
         }
       ]
     }

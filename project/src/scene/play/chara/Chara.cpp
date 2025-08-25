@@ -2257,18 +2257,33 @@ void Chara::SubStateHold(FSMSignal sig)
 
 void Chara::SubStateHoldToAim(FSMSignal sig)
 {
+	static int chargeRate;
+	static const int PLAY_SOUND_INTERVAL = 12;
+	static const int MAX_CHARGE_RATE = 60;
+
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
 	switch (sig)
 	{
 	case FSMSignal::SIG_Enter: // 開始
 	{
+		chargeRate = 0;
 		m_Animator->PlaySub("mixamorig:Spine", "HoldToAim");
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
 		m_BallChargeRate += GTime.deltaTime / CHARGE_TIME;
+
+		// 音
+		if (chargeRate <= MAX_CHARGE_RATE && chargeRate % PLAY_SOUND_INTERVAL == 0)
+		{
+			float progress = (float)chargeRate / (float)MAX_CHARGE_RATE;
+			SoundManager::PlaySetFrequency("SE_charge_ball.mp3", "SE_charge_ball.mp3", 1.0f + progress);
+		}
+		chargeRate++;
+
+
 		if (m_BallChargeRate > 1.0f)
 		{
 			m_BallChargeRate = 1.0f;

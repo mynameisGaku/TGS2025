@@ -10,6 +10,7 @@
 #include "src/util/alarm/Alarm.h"
 #include <src/scene/play/ui/UI_ButtonHint.h>
 #include <src/common/network/user/User.h>
+#include <src/scene/play/match/MatchManager.h>
 
 class CharaHP;
 class CharaStamina;
@@ -373,6 +374,8 @@ private:
 	Alarm*						m_TackleIntervalAlarm;	// タックル後の間隔アラーム
 
 	CharaSpawnPointManager*		m_SpawnPointManager;	// リスポーン地点
+
+	MatchManager*				m_pMatchManager;
 
 	int							m_hTrailImage;			// トレイルの画像ハンドル
 

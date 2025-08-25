@@ -7,14 +7,38 @@
         {
           "FileName": "InMatch.mp3",
           "Name": "InMatch",
-          "Volume": 100,
+          "Volume": 155,
           "IsLoop": true
         },
         {
-          "FileName": "PlayScene.mp3",
-          "Name": "PlayScene",
-          "Volume": 255,
+          "FileName": "TitleScene.wav",
+          "Name": "TitleScene",
+          "Volume": 155,
           "IsLoop": true
+        },
+        {
+          "FileName": "PlayScene.wav",
+          "Name": "PlayScene",
+          "Volume": 155,
+          "IsLoop": true
+        },
+        {
+          "FileName": "ResultScene.wav",
+          "Name": "ResultScene",
+          "Volume": 155,
+          "IsLoop": true
+        },
+        {
+          "FileName": "ResultScene_Draw.wav",
+          "Name": "ResultScene_Draw",
+          "Volume": 155,
+          "IsLoop": true
+        },
+        {
+          "FileName": "ResultScene_Fanfare.wav",
+          "Name": "ResultScene_Fanfare",
+          "Volume": 155,
+          "IsLoop": false
         }
       ]
     },
@@ -253,6 +277,12 @@
         {
           "FileName": "menu_move.mp3",
           "Name": "menu_move",
+          "Volume": 120,
+          "IsLoop": false
+        },
+                {
+          "FileName": "whistle.wav",
+          "Name": "whistle",
           "Volume": 120,
           "IsLoop": false
         }

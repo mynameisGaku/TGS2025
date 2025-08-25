@@ -120,14 +120,14 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
     if (net.IsNetworkEnable)
         CameraManager::SetIsScreenDivision(false);
 
-	SoundManager::FadeIn("BGM_PlayScene.mp3", "BGM", 1.0f, EasingType::Linear);
+	SoundManager::FadeIn("BGM_PlayScene.wav", "BGM", 1.0f, EasingType::Linear);
 }
 
 PlayScene::~PlayScene()
 {
 	CameraManager::SetIsScreenDivision(false);
 
-	SoundManager::Stop("BGM_PlayScene.mp3", "BGM");
+	SoundManager::Stop("BGM_PlayScene.wav", "BGM");
 }
 
 void PlayScene::Update()

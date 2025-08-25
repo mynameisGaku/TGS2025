@@ -35,6 +35,9 @@
 
 #include "src/util/color/ColorUtil.h"
 
+//=== サウンド ===
+#include "src/util/sound/SoundManager.h"
+
 #include "src/util/input/InputManager.h"
 #include "src/util/fader/Fader.h"
 #include <src/reference/network/NetworkRef.h>
@@ -620,6 +623,8 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter:
 	{
+		SoundManager::Play("SE_whistle.wav", "whistle");
+
 		// 勝利チームに応じて、描画位置を変化させる(今のところベタ打ち)
 		// TO:DO チームと画面分割先を紐づける
 		if (m_GameData.m_WinnerTeam == "Red")
@@ -677,6 +682,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 			if (not isPlayEasing && m_GameEndTime <= 0.0f)
 			{
 				Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
+				SoundManager::FadeOut("BGM_PlayScene.wav", "BGM", 1.0f, EasingType::Linear);
 				m_IsFadeEnd = true;
 			}
 		}

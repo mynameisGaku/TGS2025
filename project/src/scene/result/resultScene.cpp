@@ -10,6 +10,8 @@
 #include "src/common/setting/SettingManager.h"
 #include "src/util/easing/easing.h"
 
+//=== ƒTƒEƒ“ƒh ===
+#include "src/util/sound/SoundManager.h"
 
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/common/camera/CameraManager.h"
@@ -45,10 +47,22 @@ ResultScene::ResultScene(const std::string& name) : SceneBase(true, name) {
 		if (camera)
 			camera->SetPerformance("ResultScene");
 	}
+
+	if (m_ResultData.WinnerTeamName.empty())
+	{
+		SoundManager::FadeIn("BGM_ResultScene_Draw.wav", "BGM", 1.0f, EasingType::Linear);
+	}
+	else
+	{
+		SoundManager::FadeIn("BGM_ResultScene.wav", "BGM", 1.0f, EasingType::Linear);
+		SoundManager::Play("BGM_ResultScene_Fanfare.wav", "Fanfare");
+	}
 }
 
 ResultScene::~ResultScene() {
 
+	SoundManager::Stop("BGM_ResultScene.wav", "BGM");
+	SoundManager::Stop("BGM_ResultScene_Draw.wav", "BGM");
 	CameraManager::SetIsScreenDivision(false);
 }
 
@@ -81,7 +95,16 @@ void ResultScene::InPlayUpdate()
 	if (not m_ResultData.WinnerCharaIDs.empty())
 		padNumber = m_ResultData.WinnerCharaIDs[0] + 1;
 
-	if (not CameraManager::IsPlayingPerformance() && InputManager::Push("AnyKey", padNumber)) {
+	if (not CameraManager::IsPlayingPerformance() && InputManager::Push("AnyKey", padNumber))
+	{
+		if (m_ResultData.WinnerTeamName.empty())
+		{
+			SoundManager::FadeOut("BGM_ResultScene_Draw.wav", "BGM", 1.0f, EasingType::Linear);
+		}
+		else
+		{
+			SoundManager::FadeOut("BGM_ResultScene.wav", "BGM", 1.0f, EasingType::Linear);
+		}
 
 		Fader::FadeOut(1.0f, EasingType::Linear);
 		sceneState = SceneState::AfterPlay;

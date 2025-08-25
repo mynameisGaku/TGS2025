@@ -9,6 +9,9 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/fader/Fader.h"
 
+//=== ƒTƒEƒ“ƒh ===
+#include "src/util/sound/SoundManager.h"
+
 #include "src/common/setting/SettingManager.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/util/easing/easing.h"
@@ -41,6 +44,7 @@ TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 		CameraManager::SetIsScreenDivision(true);
 
 	Fader::FadeIn(1.0f, EasingType::Linear);
+	SoundManager::FadeIn("BGM_TitleScene.wav", "BGM", 1.0f, EasingType::Linear);
 
 	SettingManager* settingManager = Instantiate<SettingManager>();
 
@@ -52,6 +56,7 @@ TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 
 TitleScene::~TitleScene() {
 
+	SoundManager::Stop("BGM_TitleScene.wav", "BGM");
 	CameraManager::SetIsScreenDivision(false);
 }
 
@@ -61,29 +66,6 @@ void TitleScene::Update() {
 	case SceneState::BeforePlay:BeforePlayUpdate();	break;
 	case SceneState::InPlay:	InPlayUpdate();		break;
 	case SceneState::AfterPlay:	AfterPlayUpdate();	break;
-	}
-
-	if (InputManager::Push(KeyDefine::KeyCode::Alpha9))
-	{
-		int w, h;
-		CameraManager::SetIsScreenDivision(not CameraManager::IsScreenDivision());
-		if (CameraManager::IsScreenDivision())
-		{
-			w = 3840;
-			h = 1080;
-		}
-		else
-		{
-			w = 1920;
-			h = 1080;
-		}
-		
-		ChangeWindowMode(TRUE);
-		SetWindowSizeChangeEnableFlag(TRUE);
-		SetGraphMode(w, h, 32);
-		
-		//ChangeWindowMode(FALSE);
-		//SetWindowSizeChangeEnableFlag(FALSE);
 	}
 
 	SceneBase::Update();

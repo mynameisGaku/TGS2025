@@ -969,10 +969,14 @@ void Chara::respawn(const Vector3& pos, const Vector3& rot)
 {
 	m_pHP->Reset();
 	m_pStamina->Reset();
-	m_pBall->HomingDeactivate();
-	m_pBall->ChangeState(Ball::State::S_LANDED);
-	m_pBall->SetOwner(nullptr);
-	m_pBall = nullptr;
+
+	if (m_pBall != nullptr)
+	{
+		m_pBall->HomingDeactivate();
+		m_pBall->ChangeState(Ball::State::S_LANDED);
+		m_pBall->SetOwner(nullptr);
+		m_pBall = nullptr;
+	}
 	m_pLastBall = nullptr;
 	m_IsCharging = false;
 	m_BallChargeRate = 0.0f;

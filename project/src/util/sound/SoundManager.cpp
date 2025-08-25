@@ -249,7 +249,7 @@ void SoundManager::LoadFromJson(const std::string& filename)
 			std::string fullPath = path + fileName;
 
 			SoundInfo info{};
-			info.typeName = type + "_" + name + ".mp3";
+			info.typeName = type + "_" + fileName;
 			info.fileName = fullPath;
 
 			if (cat == "BGM")

@@ -261,6 +261,18 @@
           "Name": "charge_ball",
           "Volume": 100,
           "IsLoop": false
+        },
+        {
+            "FileName": "play_start.mp3",
+            "Name": "play_start",
+            "Volume": 255,
+            "IsLoop": false
+        },
+        {
+            "FileName": "play_countdown.mp3",
+            "Name": "play_countdown",
+            "Volume": 255,
+            "IsLoop": false
         }
       ]
     }

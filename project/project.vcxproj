@@ -792,7 +792,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties />
+      <UserProperties data_4Json_4UI_4Title_4OptionCanvas_1json__JsonSchema="https://alec016.github.io/Custom-Machinery/Json%20Schema/src/main/resources/schemas/custom_machinery_recipe.json" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

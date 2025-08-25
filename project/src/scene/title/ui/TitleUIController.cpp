@@ -101,6 +101,7 @@ void TitleUIController::LoadCanvasFromJson(const std::string& file)
 	canvasDesc.END = end;
 	canvasDesc.IS_FIT_SCREEN = root.value("IsFitScreen", false);
 	canvasDesc.IS_DEFAULT_ACTIVATE = root.value("IsDefaultActivate", false);
+	canvasDesc.PREV_NAME = root.value("PrevCanvas", "");
 
 	canvas->Init(canvasDesc, this);
 	if (canvasDesc.IS_DEFAULT_ACTIVATE)
@@ -253,6 +254,22 @@ void TitleUIController::subscribeFunctions()
 	SUBSCRIBE_FUNCTION("SetWindowMode", setWindowMode);
 }
 
+void TitleUIController::activateCanvas(const std::string& canvasName)
+{
+	if (canvasName.empty() || m_CanvasList.find(canvasName) == m_CanvasList.end())
+	{
+		Logger::FormatErrorLog("Canvas with name '{}' not found.", canvasName);
+		return;
+	}
+
+	if (m_pCurrentCanvas) m_pCurrentCanvas->Deactivate();
+	m_pCurrentCanvas = m_CanvasList[canvasName];
+	m_pCurrentCanvas->Activate();
+
+	m_pGridCursor->MoveTo(0, 0);
+	m_pGridCursor->Deactivate();
+} 
+
 void TitleUIController::activateCanvas(nlohmann::json argument)
 {
 	nlohmann::json event = argument["Event"];
@@ -264,12 +281,7 @@ void TitleUIController::activateCanvas(nlohmann::json argument)
 		return;
 	}
 
-	if (m_pCurrentCanvas) m_pCurrentCanvas->Deactivate();
-	m_pCurrentCanvas = m_CanvasList[name];
-	m_pCurrentCanvas->Activate();
-
-	m_pGridCursor->MoveTo(0, 0);
-	m_pGridCursor->Deactivate();
+	activateCanvas(name);
 }
 
 void TitleUIController::scaling(nlohmann::json argument)

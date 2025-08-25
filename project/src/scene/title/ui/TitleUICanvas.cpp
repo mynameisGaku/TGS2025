@@ -5,6 +5,8 @@
 #include <src/util/logger/Logger.h>
 #include <vector>
 #include <algorithm>
+#include <src/util/input/InputManager.h>
+#include <src/util/sound/SoundManager.h>
 
 void TitleUICanvas::Init(const UI_TITLE_CANVAS_DESC& desc, TitleUIController* pCon)
 {
@@ -14,6 +16,7 @@ void TitleUICanvas::Init(const UI_TITLE_CANVAS_DESC& desc, TitleUIController* pC
 	m_End = desc.END;
 	m_IsFitScreen = desc.IS_FIT_SCREEN;
 	m_IsActive = desc.IS_DEFAULT_ACTIVATE;
+	m_PrevCanvas = desc.PREV_NAME;
 }
 
 void TitleUICanvas::Update()
@@ -43,6 +46,16 @@ void TitleUICanvas::Update()
 		cursor->MoveTo(m_BeginIndexX, cursor->IndexY());
 	if (cursor->IndexY() < m_BeginIndexY)
 		cursor->MoveTo(cursor->IndexX(), m_BeginIndexY);
+
+	if (InputManager::Push("Cancel"))
+	{
+		if (not m_PrevCanvas.empty()) 
+		{
+			m_pController->activateCanvas(m_PrevCanvas);
+			SoundManager::Play("SE_menu_click.mp3", "SE_menu_click.mp3");
+		}
+	}
+
 }
 
 void TitleUICanvas::Draw()

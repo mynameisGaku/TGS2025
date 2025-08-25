@@ -31,7 +31,12 @@ public:
 	void TriggerEvent(TUI_EVENT& event, const nlohmann::json& argument);
 
 private:
+
+	friend class TitleUICanvas;
+
 	void subscribeFunctions();
+
+	void activateCanvas(const std::string& canvasName);
 
 	void activateCanvas(nlohmann::json argument);
 	void scaling(nlohmann::json argument);

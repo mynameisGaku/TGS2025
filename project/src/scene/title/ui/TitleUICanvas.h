@@ -8,6 +8,7 @@ class TitleUIController;
 struct UI_TITLE_CANVAS_DESC
 {
 	std::string		NAME{};
+	std::string		PREV_NAME{};
 	Vector2			BEGIN{};
 	Vector2			END{};
 	bool			IS_FIT_SCREEN{};
@@ -51,6 +52,7 @@ private:
 	TitleUIController*	m_pController	{};	// このキャンバスを管理するコントローラー
 	std::list<TitleUI>	m_UIList		{};	// タイトルUIのリスト
 	std::string			m_Name			{};	// キャンバスの名前
+	std::string			m_PrevCanvas	{};	// 一個前のキャンバスの名前
 	bool				m_IsActive		{};	// 有効か？ このCanvasが所有するすべてのUIに影響する。
 	bool				m_IsFitScreen	{};	// このキャンバスが画面全体にフィットするかどうか。trueなら、画面全体にフィットする。falseなら、指定された範囲内で描画される。
 

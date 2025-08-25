@@ -6,6 +6,7 @@
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/json/settings_json.h"
 #include <vendor/magic_enum/magic_enum.hpp>
+#include <src/util/logger/Logger.h>
 
 namespace {
 
@@ -266,6 +267,12 @@ void SoundManager::LoadFromJson(const std::string& filename)
 			info.curVolume = volume;
 			info.playType = isLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK;
 			info.handle = ResourceLoader::LoadSoundMem(fullPath);
+
+			if (info.handle == -1)
+			{
+				Logger::FormatErrorLog("Failed to load sound: %s", fullPath.c_str());
+				continue; // エラーが発生した場合はスキップ
+			}
 
 			Load(info);
 		}

@@ -67,7 +67,7 @@
           "Description": "play sound when clicked",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
-            "SoundName": "menu_click"
+            "SoundName": "SE_menu_click.mp3"
           }
         }
       ],
@@ -136,7 +136,7 @@
           "Description": "play sound when clicked",
           "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
           "Argument": {
-            "SoundName": "menu_click"
+            "SoundName": "SE_menu_click.mp3"
           }
         }
       ],
@@ -175,9 +175,9 @@
         {
           "Event": "PlaySound",
           "Description": "play sound when clicked",
-          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_ENTER",
           "Argument": {
-            "SoundName": "menu_click"
+            "SoundName": "SE_menu_click.mp3"
           }
         }
       ],

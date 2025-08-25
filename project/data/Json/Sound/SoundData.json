@@ -289,7 +289,7 @@
         {
           "FileName": "charge_ball.mp3",
           "Name": "charge_ball",
-          "Volume": 100,
+          "Volume": 255,
           "IsLoop": false
         },
         {

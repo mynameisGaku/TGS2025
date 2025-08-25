@@ -15,6 +15,8 @@ public:
     void Load(bool forceLoad = false);
 
     float PositionY;
+    float IconOffsetX;
+    float IconScale;
     Vector2 BackScale;
     RGBColor BackColor;
     Vector2 GaugeBackScale;

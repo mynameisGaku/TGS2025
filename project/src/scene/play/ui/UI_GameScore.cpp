@@ -36,6 +36,8 @@ UI_GameScore::UI_GameScore(const RectTransform& trs)
 
 UI_GameScore::~UI_GameScore()
 {
+	ResourceLoader::DeleteGraph(m_hBarImage);
+	delete m_BackBar;
 }
 
 void UI_GameScore::Update()

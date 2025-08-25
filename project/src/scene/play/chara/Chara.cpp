@@ -223,6 +223,8 @@ void Chara::Init(std::string tag)
 
 	m_SpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 	m_pBallTargetManager = FindGameObject<BallTargetManager>();
+	m_pMatchManager = FindGameObject<MatchManager>();
+
 
 	std::string sIndex;
 	auto& net = NetworkRef::Inst();
@@ -401,6 +403,11 @@ void Chara::Init(std::string tag)
 }
 
 void Chara::Update() {
+
+	if (m_pMatchManager->GetReadyTimerSec() > 0)
+	{
+		return;
+	}
 
 	// デバッグ機能
 	if (CheckHitKey(KEY_INPUT_R))

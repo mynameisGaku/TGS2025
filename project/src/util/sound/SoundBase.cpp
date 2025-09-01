@@ -134,11 +134,11 @@ void SoundBase::FadeIn(const SoundDefine::SoundInfo* info, const std::string& la
 }
 
 //---------------------------------------------------------------------------------
-void SoundBase::FadeOut(int end, float duration_sec, EasingType easing, bool isFadeOutEnd) {
+void SoundBase::FadeOut(int begin, int end, float duration_sec, EasingType easing, bool isFadeOutEnd) {
 
 	this->isFadeOutEnd = isFadeOutEnd;
 
-	float volBegin = fade.begin < 0.0f ? fade.begin : fade.current;
+	float volBegin = (begin == -1) ? soundInfo->curVolume : begin;
 	float volEnd = (float)end;
 
 	if (end == -1)
@@ -224,6 +224,18 @@ bool SoundBase::IsPlaying() const {
 		return false;
 
 	return (CheckSoundMem(soundInfo->handle) != 0);
+}
+
+float SoundBase::GetPlayingRate() const {
+
+	float rate = 0.0f;
+
+	if (soundInfo != nullptr && soundInfo->totalTimeSample > 0.0f) {
+		int playPos = GetCurrentPositionSoundMem(soundInfo->handle);
+		rate = static_cast<float>(playPos) / static_cast<float>(soundInfo->totalTimeSample);
+	}
+
+	return std::clamp(rate, 0.0f, 1.0f);
 }
 
 //=================================================================================

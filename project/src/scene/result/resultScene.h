@@ -45,4 +45,7 @@ public:
 
 private:
 	GameManager::ResultData m_ResultData;
+	int m_Winner_PadNumber;
+	bool m_Exists_Winner;
+	bool m_IsPlayingBGM_Flag;
 };

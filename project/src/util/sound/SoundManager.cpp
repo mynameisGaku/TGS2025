@@ -141,6 +141,8 @@ void SoundManager::Load(const SoundInfo& info) {
 	if (newInfo.handle < 0)
 		newInfo.handle = ResourceLoader::LoadSoundMem(info.fileName + info.typeName);
 
+	newInfo.totalTimeSample = GetSoundTotalSample(newInfo.handle);
+
 	// ƒf[ƒ^‚Ì“o˜^
 	(*soundInfoDatas)[info.typeName] = newInfo;
 }
@@ -443,7 +445,7 @@ SoundBase* SoundManager::FadeOut(const std::string& typeName, const std::string&
 	float end = 0.0f;
 	fade.SetEasing(begin, end, sec, easing, true);
 
-	sound->FadeOut(end, sec, easing, isFadeOutEnd);
+	sound->FadeOut(-1, end, sec, easing, isFadeOutEnd);
 
 	return sound;
 }
@@ -507,6 +509,16 @@ void SoundManager::SetVolumeRate(const SoundCategory& category, const float& rat
 std::unordered_map<SoundCategory, float>* SoundManager::CategoryVolumeRate() {
 
 	return categoryVolumeRate;
+}
+
+float SoundManager::GetPlayingSoundRate(const std::string& typeName, const std::string& label) {
+
+	// Ä¶’†‚©
+	SoundBase* sound = IsPlaying(typeName, label);
+	if (sound == nullptr)
+		return 0.0f;
+
+	return sound->GetPlayingRate();
 }
 
 bool SoundManager::CheckLoadDate(const std::string& typeName) {

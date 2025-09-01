@@ -13,31 +13,31 @@
         {
           "FileName": "TitleScene.wav",
           "Name": "TitleScene",
-          "Volume": 155,
+          "Volume": 180,
           "IsLoop": true
         },
         {
           "FileName": "PlayScene.wav",
           "Name": "PlayScene",
-          "Volume": 155,
+          "Volume": 180,
           "IsLoop": true
         },
         {
           "FileName": "ResultScene.wav",
           "Name": "ResultScene",
-          "Volume": 155,
-          "IsLoop": true
+          "Volume": 220,
+          "IsLoop": false
         },
         {
           "FileName": "ResultScene_Draw.wav",
           "Name": "ResultScene_Draw",
-          "Volume": 155,
-          "IsLoop": true
+          "Volume": 220,
+          "IsLoop": false
         },
         {
           "FileName": "ResultScene_Fanfare.wav",
           "Name": "ResultScene_Fanfare",
-          "Volume": 155,
+          "Volume": 180,
           "IsLoop": false
         }
       ]
@@ -46,22 +46,16 @@
       "Category": "SE",
       "Path": "data/sound/se/",
       "Datas": [
-        {
-          "FileName": "bound_ball_00.mp3",
+       {
+          "FileName": "bound_ball_00.wav",
           "Name": "bound_ball_00",
-          "Volume": 200,
+          "Volume": 100,
           "IsLoop": false
         },
-        {
-          "FileName": "bound_ball_01.mp3",
+       {
+          "FileName": "bound_ball_01.wav",
           "Name": "bound_ball_01",
-          "Volume": 200,
-          "IsLoop": false
-        },
-        {
-          "FileName": "bound_ball_02.mp3",
-          "Name": "bound_ball_00",
-          "Volume": 200,
+          "Volume": 100,
           "IsLoop": false
         },
         {
@@ -101,30 +95,6 @@
           "IsLoop": false
         },
         {
-          "FileName": "footsound_00.mp3",
-          "Name": "tiny_footsound_00",
-          "Volume": 65,
-          "IsLoop": false
-        },
-        {
-          "FileName": "footsound_01.mp3",
-          "Name": "tiny_footsound_01",
-          "Volume": 65,
-          "IsLoop": false
-        },
-        {
-          "FileName": "footsound_02.mp3",
-          "Name": "tiny_footsound_02",
-          "Volume": 65,
-          "IsLoop": false
-        },
-        {
-          "FileName": "footsound_03.mp3",
-          "Name": "tiny_footsound_03",
-          "Volume": 65,
-          "IsLoop": false
-        },
-        {
           "FileName": "hit_00.mp3",
           "Name": "hit_00",
           "Volume": 200,
@@ -139,6 +109,12 @@
         {
           "FileName": "hit_02.mp3",
           "Name": "hit_02",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "hit_pop_00.wav",
+          "Name": "hit_pop_00",
           "Volume": 200,
           "IsLoop": false
         },
@@ -239,6 +215,12 @@
           "IsLoop": false
         },
         {
+          "FileName": "jump_pop_00.mp3",
+          "Name": "jump_pop_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
           "FileName": "landing.mp3",
           "Name": "landing",
           "Volume": 100,
@@ -303,6 +285,72 @@
             "Name": "play_countdown",
             "Volume": 255,
             "IsLoop": false
+        }
+      ]
+    },
+    "Voice": {
+      "Category": "Voice",
+      "Path": "data/sound/Voice/",
+      "Datas": [
+        {
+          "FileName": "attack_00.wav",
+          "Name": "attack_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "attack_01.wav",
+          "Name": "attack_01",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "damage_00.wav",
+          "Name": "damage_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "damage_01.wav",
+          "Name": "damage_01",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_congratulations_00.wav",
+          "Name": "words_congratulations_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_hello_00.wav",
+          "Name": "words_hello_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_hello_01.wav",
+          "Name": "words_hello_01",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_hey_00.wav",
+          "Name": "words_hey_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_let's_go_00.wav",
+          "Name": "words_let's_go_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_thank_you_00.wav",
+          "Name": "words_thank_you_00",
+          "Volume": 255,
+          "IsLoop": false
         }
       ]
     }

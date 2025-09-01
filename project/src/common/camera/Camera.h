@@ -220,7 +220,7 @@ public:
 	/// <param name="y">始点座標(Y軸)</param>
 	/// <param name="w">幅</param>
 	/// <param name="h">高さ</param>
-	void GetUsingDrawArea(int* x = nullptr, int* y = nullptr, int* w = nullptr, int* h = nullptr) const;
+	void GetUsingDrawArea(int* x, int* y, int* w, int* h) const;
 
 	/// <summary>
 	/// このカメラの描画領域を取得する
@@ -228,6 +228,22 @@ public:
 	/// <param name="pos">始点座標</param>
 	/// <param name="size">幅と高さ</param>
 	void GetUsingDrawArea(Vector2* pos, Vector2* size) const;
+
+	/// <summary>
+	/// このカメラの既定描画領域を取得する
+	/// </summary>
+	/// <param name="x">始点座標(X軸)</param>
+	/// <param name="y">始点座標(Y軸)</param>
+	/// <param name="w">幅</param>
+	/// <param name="h">高さ</param>
+	void GetDefaultDrawArea(int* x, int* y, int* w, int* h) const;
+
+	/// <summary>
+	/// このカメラの既定描画領域を取得する
+	/// </summary>
+	/// <param name="pos">始点座標</param>
+	/// <param name="size">幅と高さ</param>
+	void GetDefaultDrawArea(Vector2* pos, Vector2* size) const;
 
 	//================================================================================
 	// ▼ステート

@@ -18,6 +18,7 @@ void SetDrawScreenWithCamera(int screen)
 BloomManager::BloomManager()
 {
 	m_EmitterScreen = -1;
+	m_LastDrawScreen = -1;
 
 	Reset();
 }
@@ -33,8 +34,8 @@ void BloomManager::Reset()
 
 	DeleteGraph(m_EmitterScreen);
 
-	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, FALSE);
-	SetUseGraphZBuffer(m_EmitterScreen, TRUE);
+	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, TRUE);
+	m_LastDrawScreen = -1;
 	SetParameter(BLOOM_REF.Param);
 	m_DoBloom = true;
 }
@@ -62,7 +63,7 @@ void BloomManager::Draw()
 	Vector2 pos = Vector2::Zero;
 	Vector2 size = Vector2::Zero;
 	Vector2 end = Vector2::Zero;
-	camera->GetUsingDrawArea(&pos, &size);
+	camera->GetDefaultDrawArea(&pos, &size);
 
 	end = pos + size;
 
@@ -76,12 +77,12 @@ void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
 	int highBrightScreen = MakeScreen(w, h, FALSE);
 	int downScaleScreen = MakeScreen(w / m_Parameter.DownScale, h / m_Parameter.DownScale, FALSE);
 
+	int drawScreen = GetDrawScreen();
 	GetDrawScreenGraph(x, y, x + w, y + h, highBrightScreen);
 
 	// •`‰æŒ‹‰Ê‚©‚ç‚‹P“x•”•ª‚Ì‚İ‚ğ”²‚«o‚µ‚½‰æ‘œ‚ğ“¾‚é
 	GraphFilterBlt(highBrightScreen, highBrightScreen, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, m_Parameter.MinBrightness, TRUE, GetColor(0, 0, 0), 255);
 	// ŒÂ•Ê‚Ì”­Œõ‚ğ‰ÁZ‚·‚é
-	GraphBlendBlt(highBrightScreen, m_EmitterScreen, highBrightScreen, 255, DX_GRAPH_BLEND_ADD);
 	GraphBlendBlt(highBrightScreen, m_EmitterScreen, highBrightScreen, 255, DX_GRAPH_BLEND_ADD);
 
 	// ‚‹P“x•”•ª‚ğ‚W•ª‚Ì‚P‚Ék¬‚µ‚½‰æ‘œ‚ğ“¾‚é
@@ -115,13 +116,19 @@ void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
 	ClearDrawScreenZBuffer();
 
 	// •`‰ææ‚ğ–ß‚·
-	SetDrawScreenWithCamera(DX_SCREEN_BACK);
+	SetDrawScreenWithCamera(drawScreen);
 }
 
 void BloomManager::SetDrawScreenToEmitter()
 {
+	m_LastDrawScreen = GetDrawScreen();
 	SetDrawScreenWithCamera(m_EmitterScreen);
-	CopyGraphZBufferImage(m_EmitterScreen, DX_SCREEN_BACK);
+}
+
+void BloomManager::SetDrawScreenToLastScreen()
+{
+	SetDrawScreenWithCamera(m_LastDrawScreen);
+	m_LastDrawScreen = -1;
 }
 
 void BloomManager::SetDrawScreenToBack()
@@ -132,4 +139,9 @@ void BloomManager::SetDrawScreenToBack()
 void BloomManager::SetParameter(BloomRef::Parameter parameter)
 {
 	m_Parameter = parameter;
+}
+
+bool BloomManager::IsUsingEmitterScreen() const
+{
+	return m_LastDrawScreen != -1;
 }

@@ -64,9 +64,13 @@ void BloomManager::Draw()
 	Vector2 end = Vector2::Zero;
 	camera->GetUsingDrawArea(&pos, &size);
 
+	// スクマネの仕様が思ってたのと違ったので、描画位置とサイズを調整する
+	size.x *= 2;
+	pos.x = 0;
+
 	end = pos + size;
 
-	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)end.x, (int)end.y);
+	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
 }
 
 void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
@@ -76,6 +80,7 @@ void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
 	int highBrightScreen = MakeScreen(w, h, FALSE);
 	int downScaleScreen = MakeScreen(w / m_Parameter.DownScale, h / m_Parameter.DownScale, FALSE);
 
+	int drawScreen = GetDrawScreen();
 	GetDrawScreenGraph(x, y, x + w, y + h, highBrightScreen);
 
 	// 描画結果から高輝度部分のみを抜き出した画像を得る
@@ -115,7 +120,7 @@ void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
 	ClearDrawScreenZBuffer();
 
 	// 描画先を戻す
-	SetDrawScreenWithCamera(DX_SCREEN_BACK);
+	SetDrawScreenWithCamera(drawScreen);
 }
 
 void BloomManager::SetDrawScreenToEmitter()

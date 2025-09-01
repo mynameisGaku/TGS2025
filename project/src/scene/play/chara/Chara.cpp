@@ -2697,156 +2697,127 @@ void Chara::lookVelocity()
 
 void Chara::playThrowSound()
 {
-	int rand = Random.GetIntRange(0, 100);
+	//===== 投擲音(投げる強さに応じて変化) =====//
 
-	std::string base = "SE_throw_";
-	std::string power = "";
-	std::string num = "00";
-	std::string fileType = ".mp3";
-
-	std::string impactSoundName = "SE_throw_impact_";
-	std::string impactPower = "normal";
+	std::string seBase = "SE_throw_";
 
 	if (m_BallChargeRate < 0.5f)
 	{
-		power += "weak_";
+		std::string se1 = seBase + "weak_00.mp3";
+		std::string se2 = seBase + "weak_01.mp3";
+		SoundManager::PlayRandom({ se1, se2 }, "SE_Throw_Weak");
 	}
 	else if (m_BallChargeRate < 1.0f)
 	{
-		power += "normal_";
+		std::string se1 = seBase + "normal_00.mp3";
+		std::string se2 = seBase + "normal_01.mp3";
+		SoundManager::PlayRandom({se1, se2 }, "Throw_Normal");
+	
+		SoundManager::Play(seBase + "impact_normal.mp3", "SE_Throw_Impact");
 	}
 	else
 	{
-		impactPower = "strong";
-		power += "strong_";
+		std::string se1 = seBase + "strong_00.mp3";
+		std::string se2 = seBase + "strong_01.mp3";
+		SoundManager::PlayRandom({ se1, se2 }, "Throw_Strong");
+
+		SoundManager::Play(seBase + "impact_strong.mp3", "SE_Throw_Impact");
 	}
 
-	if (rand < 50)
-	{
-		num = "01";
-	}
+	//===== ボイス =====//
 
-	std::string soundName = base + power + num + fileType;
-	std::string soundName2 = impactSoundName + impactPower + fileType;
+	std::string voiceBase = "Voice_";
+	std::vector<std::string> voices;
+	voices.push_back(voiceBase + "attack_00.wav");
+	voices.push_back(voiceBase + "attack_01.wav");
+	voices.push_back(voiceBase + "words_hello_00.wav");
+	voices.push_back(voiceBase + "words_hello_01.wav");
+	voices.push_back(voiceBase + "words_let's_go_00.wav");
 
-	if (not SoundManager::IsPlaying(soundName, soundName))
-		SoundManager::Play(soundName, soundName);
-	if (not SoundManager::IsPlaying(soundName2, soundName2))
-		SoundManager::Play(soundName2, soundName2);
+	SoundManager::PlayRandom(voices, "Voice_Attack");
 }
 
 void Chara::playGetHitSound()
 {
-	int rand = Random.GetIntRange(0, 100);
+	std::vector<std::string> seNames;
 
-	std::string base = "SE_hit_";
-	std::string num = "00";
-	std::string fileType = ".mp3";
+	//===== 被弾音 =====//
 
-	if (rand < 33)
-	{
-		num = "00";
-	}
-	else if (rand < 66)
-	{
-		num = "01";
-	}
-	else
-	{
-		num = "02";
-	}
+	std::string seBase_Hit = "SE_hit_";
+	seNames.push_back(seBase_Hit + "00.mp3");
+	seNames.push_back(seBase_Hit + "01.mp3");
 
-	std::string soundName = base + num + fileType;
+	SoundManager::PlayRandom(seNames, "SE_Hit");
+	seNames.clear();
 
+	SoundManager::Play("SE_hit_pop_00.wav", "SE_Hit");
 
-	std::string base2 = "SE_bound_ball";
-	std::string num2 = "";
+	//===== 跳弾音 =====//
+	
+	std::string seBase_BoundBall = "SE_bound_ball_";
+	seNames.push_back(seBase_BoundBall + "00.wav");
+	seNames.push_back(seBase_BoundBall + "01.wav");
 
-	if (rand < 33)
-	{
-		num = "00";
-	}
-	else if (rand < 66)
-	{
-		num = "01";
-	}
-	else
-	{
-		num = "02";
-	}
-	std::string soundName2 = base2 + num2 + fileType;
+	SoundManager::PlayRandom(seNames, "SE_BoundBall");
+	seNames.clear();
 
-	if (not SoundManager::IsPlaying(soundName, soundName))
-		SoundManager::Play(soundName, soundName);
+	//===== ボイス =====//
 
+	std::string voiceBase = "Voice_";
+	std::vector<std::string> voices;
+	voices.push_back(voiceBase + "damage_00.wav");
+	voices.push_back(voiceBase + "damage_01.wav");
+
+	SoundManager::PlayRandom(voices, "Voice_Damage");
 }
 
 void Chara::playCatchBallSound()
 {
-	int rand = Random.GetIntRange(0, 100);
+	std::vector<std::string> seNames;
 
-	std::string base = "SE_bound_ball";
-	std::string num = "";
-	std::string fileType = ".mp3";
+	//===== 跳弾音 =====//
 
-	if (rand < 33)
-	{
-		num = "00";
-	}
-	else if (rand < 66)
-	{
-		num = "01";
-	}
-	else
-	{
-		num = "02";
-	}
+	std::string seBase_BoundBall = "SE_bound_ball_";
+	seNames.push_back(seBase_BoundBall + "00.wav");
+	seNames.push_back(seBase_BoundBall + "01.wav");
 
-	std::string base2 = "SE_catch_success_";
-	std::string num2 = "";
-	if (rand < 50)
-	{
-		num2 = "00";
-	}
-	else
-	{
-		num2 = "01";
-	}
+	SoundManager::PlayRandom(seNames, "SE_BoundBall");
+	seNames.clear();
 
-	std::string soundName = base + num + fileType;
-	std::string soundName2 = base2 + num2 + fileType;
+	//===== 取得音 =====//
 
-	if (not SoundManager::IsPlaying(soundName, soundName))
-		SoundManager::Play(soundName, soundName);
-	if (not SoundManager::IsPlaying(soundName2, soundName2))
-		SoundManager::Play(soundName2, soundName2);
+	std::string seBase_CatchSuccess = "SE_catch_success_";
+	seNames.push_back(seBase_CatchSuccess + "00.mp3");
+	seNames.push_back(seBase_CatchSuccess + "01.mp3");
+
+	SoundManager::PlayRandom(seNames, "SE_CatchSuccess");
+	seNames.clear();
+
+	//===== ボイス =====//
+
+	std::string voiceBase = "Voice_";
+	std::vector<std::string> voices;
+	voices.push_back(voiceBase + "words_congratulations_00.wav");
+	voices.push_back(voiceBase + "words_let's_go_00.wav");
+	voices.push_back(voiceBase + "words_thank_you_00.wav");
+	voices.push_back(voiceBase + "words_hey_00.wav");
+
+	SoundManager::PlayRandom(voices, "Voice_Catch");
 }
 
 void Chara::playPickupBallSound()
 {
-	int rand = Random.GetIntRange(0, 100);
+	std::vector<std::string> seNames;
 
-	std::string base = "SE_pickup_";
-	std::string num = "";
-	std::string fileType = ".mp3";
+	//===== ボール回収 =====//
 
-	if (rand < 33)
-	{
-		num = "00";
-	}
-	else if (rand < 66)
-	{
-		num = "01";
-	}
-	else
-	{
-		num = "02";
-	}
+	std::string seBase_BoundBall = "SE_pickup_";
+	seNames.push_back(seBase_BoundBall + "00.mp3");
+	seNames.push_back(seBase_BoundBall + "01.mp3");
+	seNames.push_back(seBase_BoundBall + "02.mp3");
 
-	std::string soundName = base + num + fileType;
-
-	if (not SoundManager::IsPlaying(soundName, soundName))
-		SoundManager::Play(soundName, soundName);
+	SoundManager::PlayRandom(seNames, "SE_PickUp");
+	seNames.clear();
 }
 
 void Chara::playVacuumSound()
@@ -2868,6 +2839,8 @@ void Chara::playJumpNormalSound()
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
+
+	SoundManager::Play("SE_jump_pop_00.mp3", "Jump");
 }
 
 void Chara::playJumpDashSound()
@@ -2879,6 +2852,8 @@ void Chara::playJumpDashSound()
 
 	if (not SoundManager::IsPlaying(soundName, soundName))
 		SoundManager::Play(soundName, soundName);
+
+	SoundManager::Play("SE_jump_pop_00.mp3", "Jump");
 }
 
 void Chara::playLandingSound()
@@ -2923,6 +2898,16 @@ void Chara::playTackleSound()
 	std::string soundName = base + fileType;
 
 	SoundManager::Play(soundName, soundName);
+
+	//===== ボイス =====//
+
+	std::string voiceBase = "Voice_";
+	std::vector<std::string> voices;
+	voices.push_back(voiceBase + "attack_00.wav");
+	voices.push_back(voiceBase + "attack_01.wav");
+	voices.push_back(voiceBase + "words_hey_00.wav");
+
+	SoundManager::PlayRandom(voices, "Voice_Tackle");
 }
 
 void Chara::setAnimationSpeed(const nlohmann::json& argument)
@@ -3075,7 +3060,7 @@ void Chara::playTinyFootStepSound(const nlohmann::json& argument)
 {
 	int rand = Random.GetIntRange(0, 100);
 
-	std::string base = "SE_tiny_footsound_";
+	std::string base = "SE_footsound_";
 	std::string num = "00";
 	std::string fileType = ".mp3";
 

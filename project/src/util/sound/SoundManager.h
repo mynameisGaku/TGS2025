@@ -185,6 +185,11 @@ namespace SoundManager {
 
 	std::unordered_map<SoundCategory, float>* CategoryVolumeRate();
 
+	/// <summary>
+	/// Ä¶’†‚Ì‰¹Œ¹‚Ì‰¹—ÊŠ„‡‚ğæ“¾‚·‚é
+	/// </summary>
+	float GetPlayingSoundRate(const std::string& typeName, const std::string& label);
+
 	//================================================================================
 	// ¥Šm”Fˆ—
 

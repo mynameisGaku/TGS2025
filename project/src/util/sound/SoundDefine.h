@@ -33,6 +33,7 @@ namespace SoundDefine {
 		int curVolume;	// 現在の音量
 		int defVolume;	// 既定の音量
 		int playType;	// 再生形式(DX_PLAYTYPE_～～)
+		int totalTimeSample; // 総時間(サンプル単位)
 		SoundCategory category;	// 音の分類
 		std::string fileName;	// ファイルパス
 		std::string typeName;	// 自身の名前
@@ -42,6 +43,7 @@ namespace SoundDefine {
 			curVolume(0),
 			defVolume(0),
 			playType(DX_PLAYTYPE_BACK),
+			totalTimeSample(0),
 			category(SoundCategory::cNone),
 			fileName(""),
 			typeName("")

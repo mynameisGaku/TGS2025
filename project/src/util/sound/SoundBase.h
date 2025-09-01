@@ -87,12 +87,13 @@ public:
 
 	/**
 		@brief		サウンドをフェードアウトする
+		@param		begin			:	フェード開始値
 		@param		end				:	フェード終了値
 		@param		duration_sec	:	効果時間(秒)
 		@param		easing			:	保管方法
 		@param		isFadeOutEnd	:	フェードアウト後に再生を終了するかを設定
 	*/
-	void FadeOut(int end, float duration_sec, EasingType easing = EasingType::Linear, bool isFadeOutEnd = true);
+	void FadeOut(int begin, int end, float duration_sec, EasingType easing = EasingType::Linear, bool isFadeOutEnd = true);
 
 	//=================================================================================
 	//
@@ -152,6 +153,11 @@ public:
 		@brief		フェードアウト後に再生を終了するかを取得する
 	*/
 	bool IsFadeOutEnd() const { return isFadeOutEnd; }
+
+	/**
+		@brief		現在の再生率を取得する
+	*/
+	float GetPlayingRate() const;
 
 	//=================================================================================
 	//

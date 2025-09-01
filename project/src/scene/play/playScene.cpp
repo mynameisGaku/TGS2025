@@ -42,6 +42,10 @@
 //=== サウンド ===
 #include "src/util/sound/SoundManager.h"
 
+//=== 発光テスト用 ===
+#include "src/scene/play/ball/Ball.h"
+#include "src/scene/play/chara/CharaManager.h"
+
 using namespace KeyDefine;
 
 PlayScene::PlayScene(std::string name) : SceneBase(true, name)
@@ -142,12 +146,21 @@ void PlayScene::Update()
 
 void PlayScene::Draw()
 {
-	// ToDo:レイヤー管理
 	m_BloomManager->SetDrawScreenToEmitter();
+
 	EffectManager::Draw();
+	std::list<Ball*> ballList = FindGameObjects<Ball>();
+	for (Ball* ball : ballList)
+	{
+		ball->Draw();
+	}
+	CharaManager* charaM = FindGameObject<CharaManager>();
+	if (charaM != nullptr)
+		charaM->Draw();
+
 	m_BloomManager->SetDrawScreenToLastScreen();
+
 	EffectManager::Draw();
-	//m_BloomManager->SetDrawScreenToBack();
 
 	//if (CameraManager::IsScreenDivision())
 	//	CameraManager::ApplyScreenDivision();

@@ -86,7 +86,9 @@ private:
 		m_Interpolation(Vector3::Zero),
 		m_MoveSpeed(0.0f),
 		m_ShiftSpeed(0.0f),
-		m_RotSpeed(0.0f)
+		m_RotSpeed(0.0f),
+		m_AimResetTime(0.0f),
+		m_AimOcclusionRayOffset(0.0f)
 	{ /*DO NOTHING*/
 	}
 

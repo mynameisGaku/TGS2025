@@ -424,10 +424,16 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 			else
 			{
 				if (spawner1)
-					addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+				{
+					auto c = addCharacter("Red", Transform(spawner1->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+					c->StartRespawn();
+				}
 
 				if (spawner2)
-					addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+				{
+					auto c = addCharacter("Blue", Transform(spawner2->transform->position + Vector3::SetY(100.0f), Vector3::Zero, Vector3::Ones), false);
+					c->StartRespawn();
+				}
 			}
 		}
 

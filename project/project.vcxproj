@@ -226,6 +226,7 @@
     <None Include="data\Json\Input\VirtualKey.json" />
     <None Include="data\Json\Sound\SoundData.json" />
     <None Include="data\Json\Stage\ExportedStage-000.json" />
+    <None Include="data\Json\Stage\ExportedStage-001.json" />
     <None Include="data\Json\Stage\Stage_0.json" />
     <None Include="data\Json\Stage\Stage_1.json" />
     <None Include="data\Json\Stage\Stage_2.json" />

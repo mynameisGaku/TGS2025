@@ -57,7 +57,7 @@
 
   "GameStartCountMaxSec": 5.0,
   "GameEndCountMaxSec": 5.0,
-  "DefaultStageName": "ExportedStage-000",
+  "DefaultStageName": "ExportedStage-001",
   "StageNames": [
     {
       "Name": "Stage_0"
@@ -76,6 +76,9 @@
     },
     {
       "Name": "ExportedStage-000"
+    },
+    {
+      "Name": "ExportedStage-001"
     },
     {
       "Name": "TrampolineTestStage"

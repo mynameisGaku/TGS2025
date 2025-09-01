@@ -780,6 +780,9 @@
     <None Include="data\Json\UI\ButtonHint_old.json" />
     <None Include="data\Json\UI\ChatBar.json" />
     <None Include="data\Json\UI\MatchTime.json" />
+    <None Include="data\Json\Stage\ExportedStage-001.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

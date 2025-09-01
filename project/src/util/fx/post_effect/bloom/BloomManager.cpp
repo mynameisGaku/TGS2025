@@ -36,7 +36,6 @@ void BloomManager::Reset()
 
 	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, TRUE);
 	m_LastDrawScreen = -1;
-	SetUseGraphZBuffer(m_EmitterScreen, TRUE);
 	SetParameter(BLOOM_REF.Param);
 	m_DoBloom = true;
 }
@@ -85,7 +84,6 @@ void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
 	GraphFilterBlt(highBrightScreen, highBrightScreen, DX_GRAPH_FILTER_BRIGHT_CLIP, DX_CMP_LESS, m_Parameter.MinBrightness, TRUE, GetColor(0, 0, 0), 255);
 	// ŒÂ•Ê‚Ì”­Œõ‚ğ‰ÁZ‚·‚é
 	GraphBlendBlt(highBrightScreen, m_EmitterScreen, highBrightScreen, 255, DX_GRAPH_BLEND_ADD);
-	GraphBlendBlt(highBrightScreen, m_EmitterScreen, highBrightScreen, 255, DX_GRAPH_BLEND_ADD);
 
 	// ‚‹P“x•”•ª‚ğ‚W•ª‚Ì‚P‚Ék¬‚µ‚½‰æ‘œ‚ğ“¾‚é
 	GraphFilterBlt(highBrightScreen, downScaleScreen, DX_GRAPH_FILTER_DOWN_SCALE, m_Parameter.DownScale);
@@ -125,7 +123,6 @@ void BloomManager::SetDrawScreenToEmitter()
 {
 	m_LastDrawScreen = GetDrawScreen();
 	SetDrawScreenWithCamera(m_EmitterScreen);
-	CopyGraphZBufferImage(m_EmitterScreen, m_LastDrawScreen);
 }
 
 void BloomManager::SetDrawScreenToLastScreen()
@@ -142,4 +139,9 @@ void BloomManager::SetDrawScreenToBack()
 void BloomManager::SetParameter(BloomRef::Parameter parameter)
 {
 	m_Parameter = parameter;
+}
+
+bool BloomManager::IsUsingEmitterScreen() const
+{
+	return m_LastDrawScreen != -1;
 }

@@ -8,7 +8,6 @@
 
 //=== エフェクト ===
 #include "src/scene/play/targetting/TargetManager.h"
-#include "src/util/fx/effect/EffectManager.h"
 
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
@@ -41,6 +40,10 @@
 
 //=== サウンド ===
 #include "src/util/sound/SoundManager.h"
+
+//=== 発光テスト用 ===
+#include "src/scene/play/ball/Ball.h"
+#include "src/scene/play/chara/CharaManager.h"
 
 using namespace KeyDefine;
 
@@ -140,15 +143,21 @@ void PlayScene::Draw()
 {
 	SceneBase::Draw();
 
-	/*
-	BLOOM_MANAGER.SetDrawScreenToEmitter();
+	if (not BLOOM_MANAGER.IsUsingEmitterScreen())
 	{
-		EffectManager::Draw();
+		BLOOM_MANAGER.SetDrawScreenToEmitter();
+		{
+			std::list<Ball*> ballList = FindGameObjects<Ball>();
+			for (Ball* ball : ballList)
+			{
+				ball->Draw();
+			}
+			CharaManager* charaM = FindGameObject<CharaManager>();
+			if (charaM != nullptr)
+				charaM->Draw();
+		}
+		BLOOM_MANAGER.SetDrawScreenToLastScreen();
 	}
-	BLOOM_MANAGER.SetDrawScreenToLastScreen();
-	*/
-
-	EffectManager::Draw();
 
 	//if (CameraManager::IsScreenDivision())
 	//	CameraManager::ApplyScreenDivision();

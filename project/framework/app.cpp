@@ -14,6 +14,7 @@
 #include "src/util/screen/ScreenManager.h"
 #include "src/util/shadow_map/ShadowMap.h"
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
+#include <src/util/fx/effect/EffectManager.h>
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/fader/Fader.h"
@@ -44,6 +45,7 @@ void AppUpdate()
 	SceneManager::Update();
 	CameraManager::Update();
 	Fader::Update();
+	BLOOM_MANAGER.Update();
 
 	Random.SetSeed(Random.GetInt());
 }
@@ -84,7 +86,19 @@ void AppDraw()
 		ScreenManager::DrawBegin(scrName);
 		{
 			camera->Draw();
+			BLOOM_MANAGER.SetDrawScreenToEmitter();
+			{
+				SceneManager::Draw();	// Zバッファを得るため全描画
+				DrawBox(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, 0x000000, TRUE);	// 描画をリセット（黒塗り）
+			}
+			BLOOM_MANAGER.SetDrawScreenToLastScreen();
 			SceneManager::Draw();
+			EffectManager::Draw();
+			BLOOM_MANAGER.SetDrawScreenToEmitter();
+			{
+				EffectManager::Draw();	// エフェクトは全部発光させる
+			}
+			BLOOM_MANAGER.SetDrawScreenToLastScreen();
 			BLOOM_MANAGER.Draw();
 			ShadowMap::CleanUp();
 		}

@@ -37,6 +37,8 @@ public:
 	void SetDrawScreenToLastScreen();
 	void SetDrawScreenToBack();
 	void SetParameter(BloomRef::Parameter parameter);
+
+	bool IsUsingEmitterScreen() const;
 private:
 	int m_EmitterScreen;	// 個別で発光させたいやつを描画するためのスクリーン
 	int m_LastDrawScreen;	// 発光スクリーンに描画する前に使ってたスクリーン

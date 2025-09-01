@@ -115,7 +115,6 @@ void ScreenManager::DrawBegin(const std::string& tag) {
 
 	if (data->handle == -1) {
 		data->handle = MakeScreen(data->clipW, data->clipH, TRUE);
-		SetUseGraphZBuffer(data->handle, TRUE);
 	}
 
 	SetDrawScreen(data->handle);

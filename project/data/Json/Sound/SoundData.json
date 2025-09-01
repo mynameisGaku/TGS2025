@@ -25,13 +25,13 @@
         {
           "FileName": "ResultScene.wav",
           "Name": "ResultScene",
-          "Volume": 180,
+          "Volume": 220,
           "IsLoop": false
         },
         {
           "FileName": "ResultScene_Draw.wav",
           "Name": "ResultScene_Draw",
-          "Volume": 180,
+          "Volume": 220,
           "IsLoop": false
         },
         {

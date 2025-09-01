@@ -34,7 +34,7 @@ void BloomManager::Reset()
 
 	DeleteGraph(m_EmitterScreen);
 
-	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, FALSE);
+	m_EmitterScreen = MakeScreen((int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, TRUE);
 	m_LastDrawScreen = -1;
 	SetUseGraphZBuffer(m_EmitterScreen, TRUE);
 	SetParameter(BLOOM_REF.Param);
@@ -68,7 +68,7 @@ void BloomManager::Draw()
 
 	end = pos + size;
 
-	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
+	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)end.x, (int)end.y);
 }
 
 void BloomManager::DrawOnScreenDiv(int x, int y, int w, int h) {
@@ -125,7 +125,7 @@ void BloomManager::SetDrawScreenToEmitter()
 {
 	m_LastDrawScreen = GetDrawScreen();
 	SetDrawScreenWithCamera(m_EmitterScreen);
-	CopyGraphZBufferImage(m_EmitterScreen, DX_SCREEN_BACK);
+	CopyGraphZBufferImage(m_EmitterScreen, m_LastDrawScreen);
 }
 
 void BloomManager::SetDrawScreenToLastScreen()

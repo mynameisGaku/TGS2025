@@ -13,6 +13,7 @@
 
 #include "src/util/screen/ScreenManager.h"
 #include "src/util/shadow_map/ShadowMap.h"
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/fader/Fader.h"
@@ -75,16 +76,20 @@ void AppDraw()
 		}
 
 		ShadowMap::DrawBegin(cameraIndex);
+		{
 			SceneManager::Draw();
+		}
 		ShadowMap::DrawEnd();
 		
 		ScreenManager::DrawBegin(scrName);
-
-		camera->Draw();
-		SceneManager::Draw();
-		ShadowMap::CleanUp();
-
+		{
+			camera->Draw();
+			SceneManager::Draw();
+			BLOOM_MANAGER.Draw();
+			ShadowMap::CleanUp();
+		}
 		ScreenManager::DrawEnd(scrName);
+
 		UI_Manager::DrawBack();
 
 		cameraIndex++;

@@ -8,10 +8,10 @@
 
 //=== エフェクト ===
 #include "src/scene/play/targetting/TargetManager.h"
+#include "src/util/fx/effect/EffectManager.h"
 
 //=== ポストエフェクト ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
-#include "src/util/fx/effect/EffectManager.h"
 
 //=== 破片 ===
 #include "src/scene/play/crystal/CrystalFragmentManager.h"
@@ -41,10 +41,6 @@
 
 //=== サウンド ===
 #include "src/util/sound/SoundManager.h"
-
-//=== 発光テスト用 ===
-#include "src/scene/play/ball/Ball.h"
-#include "src/scene/play/chara/CharaManager.h"
 
 using namespace KeyDefine;
 
@@ -114,10 +110,6 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 
 	ForceFieldManager* forceFieldManager = Instantiate<ForceFieldManager>();
 
-	// ブルーム
-	m_BloomManager = Instantiate<BloomManager>();
-	SetDrawOrder(m_BloomManager, 10000);
-
 	//StageObjectManager::LoadFromJson("data/json/Stage/Stage_4.json");
 	StageObjectManager::LoadFromJson("data/json/Stage/" + gameM->GetCurrentStageName() + ".json");
 
@@ -146,26 +138,21 @@ void PlayScene::Update()
 
 void PlayScene::Draw()
 {
-	m_BloomManager->SetDrawScreenToEmitter();
+	SceneBase::Draw();
 
-	EffectManager::Draw();
-	std::list<Ball*> ballList = FindGameObjects<Ball>();
-	for (Ball* ball : ballList)
+	/*
+	BLOOM_MANAGER.SetDrawScreenToEmitter();
 	{
-		ball->Draw();
+		EffectManager::Draw();
 	}
-	CharaManager* charaM = FindGameObject<CharaManager>();
-	if (charaM != nullptr)
-		charaM->Draw();
-
-	m_BloomManager->SetDrawScreenToLastScreen();
+	BLOOM_MANAGER.SetDrawScreenToLastScreen();
+	*/
 
 	EffectManager::Draw();
 
 	//if (CameraManager::IsScreenDivision())
 	//	CameraManager::ApplyScreenDivision();
 
-	SceneBase::Draw();
 
 	//if (not CameraManager::IsScreenDivision())
 	//	Settings_json::Inst()->RenderImGuiFileManager();

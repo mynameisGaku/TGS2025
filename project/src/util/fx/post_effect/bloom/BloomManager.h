@@ -1,6 +1,7 @@
 #pragma once
 #include "framework/gameObject.h"
 #include "src/reference/bloom/BloomRef.h"
+#include "src/util/singleton/singleton.h"
 
 /// <summary>
 /// カメラ設定を維持して描画先を変更する
@@ -12,14 +13,14 @@ void SetDrawScreenWithCamera(int screen);
 /// Draw時に画面にブルームをかける
 /// </summary>
 /// <author>佐藤紘斗</author>
-class BloomManager : public GameObject
+class BloomManager
 {
 public:
 	BloomManager();
 	~BloomManager();
 	void Reset();
-	void Update() override;
-	void Draw() override;
+	void Update();
+	void Draw();
 
 	/// <summary>
 	/// 指定した座標とサイズで分割画面上に描画します
@@ -42,3 +43,5 @@ private:
 	bool m_DoBloom;		// ブルームをかけるかどうか
 	BloomRef::Parameter m_Parameter;	// ブルームのパラメータ
 };
+
+#define BLOOM_MANAGER Singleton<BloomManager>::Instance()

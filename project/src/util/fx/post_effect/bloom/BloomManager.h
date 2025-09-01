@@ -30,11 +30,15 @@ public:
 	/// <param name="h">描画領域の高さ</param>
 	void DrawOnScreenDiv(int x, int y, int w, int h);
 
+	// 個別で発光させたいやつを描画するためのスクリーン
 	void SetDrawScreenToEmitter();
+	// 発光スクリーンに描画する前に使ってたスクリーン
+	void SetDrawScreenToLastScreen();
 	void SetDrawScreenToBack();
 	void SetParameter(BloomRef::Parameter parameter);
 private:
 	int m_EmitterScreen;	// 個別で発光させたいやつを描画するためのスクリーン
+	int m_LastDrawScreen;	// 発光スクリーンに描画する前に使ってたスクリーン
 	bool m_DoBloom;		// ブルームをかけるかどうか
 	BloomRef::Parameter m_Parameter;	// ブルームのパラメータ
 };

@@ -143,7 +143,9 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	// ToDo:ƒŒƒCƒ„[ŠÇ—
-	//m_BloomManager->SetDrawScreenToEmitter();
+	m_BloomManager->SetDrawScreenToEmitter();
+	EffectManager::Draw();
+	m_BloomManager->SetDrawScreenToLastScreen();
 	EffectManager::Draw();
 	//m_BloomManager->SetDrawScreenToBack();
 

@@ -66,10 +66,6 @@ void BloomManager::Draw()
 	Vector2 end = Vector2::Zero;
 	camera->GetDefaultDrawArea(&pos, &size);
 
-	// スクマネの仕様が思ってたのと違ったので、描画位置とサイズを調整する
-	size.x *= 2;
-	pos.x = 0;
-
 	end = pos + size;
 
 	DrawOnScreenDiv((int)pos.x, (int)pos.y, (int)size.x, (int)size.y);

@@ -264,8 +264,8 @@ Vector2 CameraManager::GetDrawingAreaPos_CameraIndex(int index) {
 	if (camera == nullptr)
 		return Vector2::Zero;
 
-	int x, y;
-	camera->GetUsingDrawArea(&x, &y);
+	int x, y, w, h;
+	camera->GetUsingDrawArea(&x, &y, &w, &h);
 	return Vector2(x, y);
 }
 

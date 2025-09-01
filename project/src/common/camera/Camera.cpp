@@ -464,3 +464,17 @@ void Camera::GetUsingDrawArea(Vector2* pos, Vector2* size) const
 	if (pos != nullptr)	*pos = m_UsingScreenPos;
 	if (size != nullptr)*size = m_UsingScreenSize;
 }
+
+void Camera::GetDefaultDrawArea(int* x, int* y, int* w, int* h) const
+{
+	if (x != nullptr)	*x = m_DefaultScreenPos.x;
+	if (y != nullptr)	*y = m_DefaultScreenPos.y;
+	if (w != nullptr)	*w = m_DefaultScreenSize.x;
+	if (h != nullptr)	*h = m_DefaultScreenSize.y;
+}
+
+void Camera::GetDefaultDrawArea(Vector2* pos, Vector2* size) const
+{
+	if (pos != nullptr)	*pos = m_DefaultScreenPos;
+	if (size != nullptr)*size = m_DefaultScreenSize;
+}

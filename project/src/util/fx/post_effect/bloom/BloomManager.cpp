@@ -62,7 +62,7 @@ void BloomManager::Draw()
 	Vector2 pos = Vector2::Zero;
 	Vector2 size = Vector2::Zero;
 	Vector2 end = Vector2::Zero;
-	camera->GetUsingDrawArea(&pos, &size);
+	camera->GetDefaultDrawArea(&pos, &size);
 
 	end = pos + size;
 

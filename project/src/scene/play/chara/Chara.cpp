@@ -1,4 +1,4 @@
-#include "src/scene/play/chara/Chara.h"
+ï»¿#include "src/scene/play/chara/Chara.h"
 #include "src/util/input/InputManager.h"
 #include "src/util/fx/effect/EffectManager.h"
 
@@ -44,15 +44,15 @@ using namespace KeyDefine;
 
 namespace
 {
-	static const float CATCH_STAMINA_USE = 50.0f;	// ƒLƒƒƒbƒ`‚Ég‚¤ƒXƒ^ƒ~ƒii–ˆ•bj
-	static const float CATCH_STAMINA_MIN = 0.0f;	// ƒLƒƒƒbƒ`‚ğŠJn‚·‚é‚Ì‚É•K—v‚ÈcƒXƒ^ƒ~ƒi
-	static const float CATCH_TIME = 0.05f;	// “ü—Íˆê‰ñ‚ÌƒLƒƒƒbƒ`Œp‘±ŠÔ
-	static const float SLIDE_TIME = 0.05f;	// “ü—Íˆê‰ñ‚ÌƒXƒ‰ƒCƒfƒBƒ“ƒOŒp‘±ŠÔ
+	static const float CATCH_STAMINA_USE = 50.0f;	// ã‚­ãƒ£ãƒƒãƒã«ä½¿ã†ã‚¹ã‚¿ãƒŸãƒŠï¼ˆæ¯ç§’ï¼‰
+	static const float CATCH_STAMINA_MIN = 0.0f;	// ã‚­ãƒ£ãƒƒãƒã‚’é–‹å§‹ã™ã‚‹ã®ã«å¿…è¦ãªæ®‹ã‚¹ã‚¿ãƒŸãƒŠ
+	static const float CATCH_TIME = 0.05f;	// å…¥åŠ›ä¸€å›ã®ã‚­ãƒ£ãƒƒãƒç¶™ç¶šæ™‚é–“
+	static const float SLIDE_TIME = 0.05f;	// å…¥åŠ›ä¸€å›ã®ã‚¹ãƒ©ã‚¤ãƒ‡ã‚£ãƒ³ã‚°ç¶™ç¶šæ™‚é–“
 	static const float CHARGE_TIME = 1.0f;
 	static const float CHARGE_BALLSPEED = 1.5f;
 	static const Vector3 CHARA_GRAVITY = GRAVITY * 4.0f;
-	static const float ARM_HEIGHT = 100.0f;	// ˜r‚Ì‚‚³
-	static const Vector3 TARGET_OFFSET = Vector3::SetY(100);	// ƒ^[ƒQƒbƒg‚ÌƒIƒtƒZƒbƒg
+	static const float ARM_HEIGHT = 100.0f;	// è…•ã®é«˜ã•
+	static const Vector3 TARGET_OFFSET = Vector3::SetY(100);	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 }
 
 Chara::Chara()
@@ -123,7 +123,7 @@ Chara::Chara()
 	m_pUI_ButtonHint = nullptr;
 	m_pUI_Fade = nullptr;
 #if TRUE
-	// ‚±‚Ìs’ö‚ÍƒfƒoƒbƒO—pBŠÖ”ƒ|ƒCƒ“ƒ^‚ÍƒRƒ“ƒpƒCƒ‹Œã‚ÉŠÖ”–¼‚ª•Û‚³‚ê‚È‚¢‚Ì‚ÅAƒvƒƒtƒ@ƒCƒŠƒ“ƒO‚·‚é‚É‚Í‚±‚Ìs’ö‚ª•K{B
+	// ã“ã®è¡Œç¨‹ã¯ãƒ‡ãƒãƒƒã‚°ç”¨ã€‚é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã¯ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«å¾Œã«é–¢æ•°åãŒä¿æŒã•ã‚Œãªã„ã®ã§ã€ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒªãƒ³ã‚°ã™ã‚‹ã«ã¯ã“ã®è¡Œç¨‹ãŒå¿…é ˆã€‚
 	m_FSM->RegisterStateName(&Chara::StateActionIdle, "StateActionIdle");
 	m_FSM->RegisterStateName(&Chara::StateActionIdleEmote, "StateActionIdleEmote");
 	m_FSM->RegisterStateName(&Chara::StateActionIdleToJump, "StateActionIdleToJump");
@@ -167,8 +167,8 @@ Chara::Chara()
 	m_RespawnFSM->RegisterStateName(&Chara::RespawnStateNone, "RespawnStateNone");
 #endif // FALSE
 
-	main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
-	sub_changeStateNetwork(&Chara::SubStateNone); // ƒXƒe[ƒg‚ğ•ÏX
+	main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
+	sub_changeStateNetwork(&Chara::SubStateNone); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 Chara::~Chara()
@@ -277,23 +277,23 @@ void Chara::Init(std::string tag)
 
 	auto addTrail = []()
 		{
-			float lt = 0.4f; // ƒgƒŒƒCƒ‹‚Ìõ–½
+			float lt = 0.4f; // ãƒˆãƒ¬ã‚¤ãƒ«ã®å¯¿å‘½
 			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
-			descBold.interval = 1; // ƒtƒŒ[ƒ€ŠÔŠui‰½ƒtƒŒ[ƒ€‚²‚Æ‚É•`‰æ‚·‚é‚©j
-			descBold.subdivisions = 16; // •âŠÔ•ªŠ„”i‘å‚«‚¢‚Ù‚ÇŠŠ‚ç‚©j
-			descBold.thick = 50.0f; // ƒgƒŒƒCƒ‹‚Ì‘¾‚³
-			descBold.lifeTime = lifeTime; // ƒgƒŒƒCƒ‹‚Ìõ–½
-			descBold.appearRate = 0.5f; // ƒgƒŒƒCƒ‹‚ªoŒ»‚·‚éŠm—¦i0.0f`1.0fj
+			descBold.interval = 1; // ãƒ•ãƒ¬ãƒ¼ãƒ é–“éš”ï¼ˆä½•ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«æç”»ã™ã‚‹ã‹ï¼‰
+			descBold.subdivisions = 16; // è£œé–“åˆ†å‰²æ•°ï¼ˆå¤§ãã„ã»ã©æ»‘ã‚‰ã‹ï¼‰
+			descBold.thick = 50.0f; // ãƒˆãƒ¬ã‚¤ãƒ«ã®å¤ªã•
+			descBold.lifeTime = lifeTime; // ãƒˆãƒ¬ã‚¤ãƒ«ã®å¯¿å‘½
+			descBold.appearRate = 0.5f; // ãƒˆãƒ¬ã‚¤ãƒ«ãŒå‡ºç¾ã™ã‚‹ç¢ºç‡ï¼ˆ0.0fï½1.0fï¼‰
 			descBold.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
-			descSmall.interval = 1; // ƒtƒŒ[ƒ€ŠÔŠui‰½ƒtƒŒ[ƒ€‚²‚Æ‚É•`‰æ‚·‚é‚©j
-			descSmall.subdivisions = 16; // •âŠÔ•ªŠ„”i‘å‚«‚¢‚Ù‚ÇŠŠ‚ç‚©j
-			descSmall.thick = 25.0f; // ƒgƒŒƒCƒ‹‚Ì‘¾‚³
-			descSmall.lifeTime = lifeTime; // ƒgƒŒƒCƒ‹‚Ìõ–½
-			descSmall.appearRate = 0.5f; // ƒgƒŒƒCƒ‹‚ªoŒ»‚·‚éŠm—¦i0.0f`1.0fj
+			descSmall.interval = 1; // ãƒ•ãƒ¬ãƒ¼ãƒ é–“éš”ï¼ˆä½•ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«æç”»ã™ã‚‹ã‹ï¼‰
+			descSmall.subdivisions = 16; // è£œé–“åˆ†å‰²æ•°ï¼ˆå¤§ãã„ã»ã©æ»‘ã‚‰ã‹ï¼‰
+			descSmall.thick = 25.0f; // ãƒˆãƒ¬ã‚¤ãƒ«ã®å¤ªã•
+			descSmall.lifeTime = lifeTime; // ãƒˆãƒ¬ã‚¤ãƒ«ã®å¯¿å‘½
+			descSmall.appearRate = 0.5f; // ãƒˆãƒ¬ã‚¤ãƒ«ãŒå‡ºç¾ã™ã‚‹ç¢ºç‡ï¼ˆ0.0fï½1.0fï¼‰
 			descSmall.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			return std::pair<MODEL_FRAME_TRAIL_RENDERER_DESC, MODEL_FRAME_TRAIL_RENDERER_DESC>(descBold, descSmall);
@@ -353,7 +353,7 @@ void Chara::Init(std::string tag)
 	}
 #if FALSE
 
-	//=== ˜rƒAƒjƒ[ƒVƒ‡ƒ“iƒ{[ƒ‹‚ğ‚ÂA“Š‚°‚éj ===
+	//=== è…•ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ï¼ˆãƒœãƒ¼ãƒ«ã‚’æŒã¤ã€æŠ•ã’ã‚‹ï¼‰ ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToHold", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "AimToThrow", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "Catch", AnimOption().SetIsLoop(true));
@@ -361,7 +361,7 @@ void Chara::Init(std::string tag)
 	m_Animator->LoadAnim("data/Animation/", "HoldToAim", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "ThrowToActionIdle", AnimOption());
 
-	//=== ƒƒCƒ“ƒAƒjƒ[ƒVƒ‡ƒ“ ===
+	//=== ãƒ¡ã‚¤ãƒ³ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdle", AnimOption().SetIsLoop(true));
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleEmote", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToJump", AnimOption().SetIsFixedRoot({ false, true, false }).SetOffset(Vector3::SetY(100.0f)));
@@ -409,7 +409,7 @@ void Chara::Update() {
 		return;
 	}
 
-	// ƒfƒoƒbƒO‹@”\
+	// ãƒ‡ãƒãƒƒã‚°æ©Ÿèƒ½
 	if (CheckHitKey(KEY_INPUT_R))
 	{
 		m_Timeline->LoadJsons("data/Json/Chara/State");
@@ -431,7 +431,7 @@ void Chara::Update() {
 		}
 	}
 
-	// ŠÔ‚ª~‚Ü‚Á‚Ä‚½‚çƒAƒbƒvƒf[ƒg‚µ‚È‚¢
+	// æ™‚é–“ãŒæ­¢ã¾ã£ã¦ãŸã‚‰ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã—ãªã„
 	if (GTime.DeltaTime() <= 0.0f) return;
 
 	m_FSM->Update();
@@ -446,7 +446,7 @@ void Chara::Update() {
 #endif
 #endif
 
-	// ƒ{[ƒ‹‚ÌXV
+	// ãƒœãƒ¼ãƒ«ã®æ›´æ–°
 	if (m_pBall)
 	{
 		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
@@ -459,7 +459,7 @@ void Chara::Update() {
 
 	static const float MOVE_ACCEL = 1.8f;
 
-	// ˆÚ“®‘¬“x”{—¦‚ÌXV
+	// ç§»å‹•é€Ÿåº¦å€ç‡ã®æ›´æ–°
 	if (m_IsMove)
 	{
 		m_SpeedScale += MOVE_ACCEL * GTime.DeltaTime();
@@ -483,13 +483,13 @@ void Chara::Update() {
 
 	HitGroundProcess();
 
-	//=== À•WXVI—¹Œã‚Ìˆ— ===
+	//=== åº§æ¨™æ›´æ–°çµ‚äº†å¾Œã®å‡¦ç† ===
 
 	if (m_pBallTarget != nullptr)
 		m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
 	m_lastUpdatePosition = transform->position;
 
-	// NaN/Inf‚Ìƒ`ƒFƒbƒN
+	// NaN/Infã®ãƒã‚§ãƒƒã‚¯
 	if (MathUtil::IsNaNOrInf(static_cast<double>(transform->position.x)) ||
 		MathUtil::IsNaNOrInf(static_cast<double>(transform->position.y)) ||
 		MathUtil::IsNaNOrInf(static_cast<double>(transform->position.z)))
@@ -540,51 +540,51 @@ void Chara::Draw()
 
 void Chara::CollisionEvent(const CollisionData& colData) {
 
-	// “–‚½‚Á‚½‘Šè‚ªƒLƒƒƒ‰ƒNƒ^[‚Ìê‡
+	// å½“ãŸã£ãŸç›¸æ‰‹ãŒã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®å ´åˆ
 	if (colData.Other()->Tag() == ColDefine::Tag::tChara) {
 
-		// ‘Šè‚Ìî•ñ
+		// ç›¸æ‰‹ã®æƒ…å ±
 		Chara* chara = colData.Other()->Parent<Chara>();
 
 		if (chara != nullptr) {
-			Vector3 myPos = transform->Global().position;			// ©g‚ÌÀ•W
-			Vector3 otherPos = chara->transform->Global().position;	// ‘Šè‚ÌÀ•W
+			Vector3 myPos = transform->Global().position;			// è‡ªèº«ã®åº§æ¨™
+			Vector3 otherPos = chara->transform->Global().position;	// ç›¸æ‰‹ã®åº§æ¨™
 
-			Physics* otherPhysics = chara->GetComponent<Physics>();	// ‘Šè‚Ì•¨—‹““®
+			Physics* otherPhysics = chara->GetComponent<Physics>();	// ç›¸æ‰‹ã®ç‰©ç†æŒ™å‹•
 
-			ColliderCapsule* collider = GetComponent<ColliderCapsule>();	// “–‚½‚è”»’è
+			ColliderCapsule* collider = GetComponent<ColliderCapsule>();	// å½“ãŸã‚Šåˆ¤å®š
 
 			if (m_pPhysics == nullptr || otherPhysics == nullptr || collider == nullptr)
 				return;
 
-			// ‘Šè‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
+			// ç›¸æ‰‹ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
 			Vector3 toVec = otherPos - myPos;
 			if (toVec.GetLengthSquared() == 0)
 				toVec = Vector3(0, 0, 1);
 
-			// ”½”­—Í‚Ì‹­‚³‚ğ’è‹`
+			// åç™ºåŠ›ã®å¼·ã•ã‚’å®šç¾©
 			constexpr float REPELLENT_FORCE_SCALE_MAX = 2.0f;
 			constexpr float REPELLENT_FORCE_SCALE_MIN = 1.0f;
 			const float REPELLENT_RADIUS = collider->Radius() * 4.0f;
 
-			// ”½”­—Í
+			// åç™ºåŠ›
 			const Vector3 repellentForce = toVec.Normalize() * (REPELLENT_FORCE_SCALE_MIN + (REPELLENT_FORCE_SCALE_MAX - REPELLENT_FORCE_SCALE_MIN) * max(0.0f, 1.0f - toVec.GetLength() / REPELLENT_RADIUS));
 
-			// ”½”­—Í‚ğ‰Á‚¦‚é
+			// åç™ºåŠ›ã‚’åŠ ãˆã‚‹
 			m_pPhysics->resistance -= repellentForce;
 			otherPhysics->velocity += repellentForce;
 		}
 	}
-	// ƒ{[ƒ‹‚Ìê‡
+	// ãƒœãƒ¼ãƒ«ã®å ´åˆ
 	else if (colData.Other()->Tag() == ColDefine::Tag::tBall)
 	{
-		// ‘Šè‚Ìî•ñ
+		// ç›¸æ‰‹ã®æƒ…å ±
 		Ball* ball = colData.Other()->Parent<Ball>();
 
-		// ƒ{[ƒ‹‚ª“]‚ª‚è’†‚È‚ç–³‹‚·‚é
+		// ãƒœãƒ¼ãƒ«ãŒè»¢ãŒã‚Šä¸­ãªã‚‰ç„¡è¦–ã™ã‚‹
 		if (ball->GetState() == Ball::S_LANDED)
 		{
-			// ƒ{[ƒ‹‚ğŠ‚µ‚Ä‚¢‚È‚¢ê‡A©“®‚Åæ“¾‚·‚é
+			// ãƒœãƒ¼ãƒ«ã‚’æ‰€æŒã—ã¦ã„ãªã„å ´åˆã€è‡ªå‹•ã§å–å¾—ã™ã‚‹
 			if (m_pBall == nullptr && not m_IsDamage)
 				m_Catcher->CatchSuccese(ball);
 			return;
@@ -592,7 +592,7 @@ void Chara::CollisionEvent(const CollisionData& colData) {
 
 		if (ball->GetCharaTag() != m_CharaTag)
 		{
-			// ƒLƒƒƒbƒ`‰Â”\‚È‚ç“–‚½‚ç‚È‚¢
+			// ã‚­ãƒ£ãƒƒãƒå¯èƒ½ãªã‚‰å½“ãŸã‚‰ãªã„
 			if (m_IsCatching == true && m_Catcher->CanCatch(ball))
 				return;
 
@@ -635,7 +635,7 @@ void Chara::CollisionEvent(const CollisionData& colData) {
 
 void Chara::HitGroundProcess() {
 
-	// •¨—‹““®
+	// ç‰©ç†æŒ™å‹•
 	Physics* physics = m_pPhysics;
 	if (physics == nullptr)
 		return;
@@ -650,8 +650,8 @@ void Chara::HitGroundProcess() {
 	Vector3 hitPos;
 	Vector3 normal;
 
-	//=== ‚·‚è”²‚¯”»’è ===
-	static const float CENTER_OFFSET = 50.0f;	// ’†S‚ÌƒIƒtƒZƒbƒg
+	//=== ã™ã‚ŠæŠœã‘åˆ¤å®š ===
+	static const float CENTER_OFFSET = 50.0f;	// ä¸­å¿ƒã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 	const Vector3 moveDir = Vector3::Normalize(transform->position - m_lastUpdatePosition);
 	const Vector3 centerPos = transform->position + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
 	const Vector3 lastCenterPos = m_lastUpdatePosition + Vector3::SetY(CENTER_OFFSET) + moveDir * radius;
@@ -659,10 +659,10 @@ void Chara::HitGroundProcess() {
 	if (StageObjectManager::CollCheckRay(lastCenterPos, centerPos, &hitPos, &normal))
 	{
 		Vector3 pos = (hitPos - Vector3::SetY(CENTER_OFFSET)) - moveDir * radius;
-		transform->position = pos;	// ƒŒƒC‚ÌƒqƒbƒgˆÊ’u‚ÖˆÚ“®
+		transform->position = pos;	// ãƒ¬ã‚¤ã®ãƒ’ãƒƒãƒˆä½ç½®ã¸ç§»å‹•
 	}
 
-	//=== êŠO”»’è ===
+	//=== å ´å¤–åˆ¤å®š ===
 	if (StageObjectManager::CollCheck_MovableArea(centerPos))
 	{
 		if (m_pCharaSpawnPointManager != nullptr) {
@@ -679,7 +679,7 @@ void Chara::HitGroundProcess() {
 			transform->position = Vector3::SetY(CENTER_OFFSET);
 	}
 
-	//=== ’n–Ê‚Æ‚Ì”»’è ===s
+	//=== åœ°é¢ã¨ã®åˆ¤å®š ===s
 	Vector3 headPos = capsuleCol->OffsetWorld();
 	Vector3 footPos = transform->position - Vector3::SetY(DOWN_OFFSET);
 
@@ -702,20 +702,20 @@ void Chara::HitGroundProcess() {
 		m_IsLanding = false;
 	}
 
-	//=== •Ç‚Æ‚Ì”»’è ===
-	static const float CAPSULE_OFFSET = 50.0f;	// ƒJƒvƒZƒ‹‚ÌƒIƒtƒZƒbƒg
+	//=== å£ã¨ã®åˆ¤å®š ===
+	static const float CAPSULE_OFFSET = 50.0f;	// ã‚«ãƒ—ã‚»ãƒ«ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 	Vector3 pushVec;
 
 	if (StageObjectManager::CollCheckCapsule(footPos + Vector3::SetY(radius + CAPSULE_OFFSET), headPos - Vector3::SetY(radius), radius, &pushVec))
 	{
-		// ‰Ÿ‚µo‚µƒxƒNƒgƒ‹‚ÅˆÊ’u‚ğ•â³
+		// æŠ¼ã—å‡ºã—ãƒ™ã‚¯ãƒˆãƒ«ã§ä½ç½®ã‚’è£œæ­£
 		const Vector3 pushVecNorm = pushVec.Normalize();
 		const float pushVecLength = pushVec.GetLength();
 
 		transform->position += (pushVecNorm * pushVecLength);
 
-		// Y¬•ª‚ª‰º•ûŒü‚È‚ç“ªãƒqƒbƒgi“Vˆä‚É‚Ô‚Â‚©‚Á‚½j
+		// Yæˆåˆ†ãŒä¸‹æ–¹å‘ãªã‚‰é ­ä¸Šãƒ’ãƒƒãƒˆï¼ˆå¤©äº•ã«ã¶ã¤ã‹ã£ãŸï¼‰
 		if (pushVec.y < -0.1f)
 		{
 			m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
@@ -723,7 +723,7 @@ void Chara::HitGroundProcess() {
 		}
 	}
 
-	// •ÇƒAƒNƒVƒ‡ƒ“”»’èˆ—
+	// å£ã‚¢ã‚¯ã‚·ãƒ§ãƒ³åˆ¤å®šå‡¦ç†
 	static const float WALL_CAPSULE_RADIUS = 150.0f;
 
 	bool wallHit = false;
@@ -732,7 +732,7 @@ void Chara::HitGroundProcess() {
 	{
 		const Vector3 wallRayStart = transform->position + Vector3::SetY(CENTER_OFFSET);
 		const Vector3 wallRayDir = -pushVec.Normalize();
-		const float wallRayLength = WALL_CAPSULE_RADIUS * 1.5f;	// 90“x‚ÌŠp‚Å‚à“–‚Ä‚é‚½‚ßA1.414”{‚æ‚è‘å‚«‚­‚·‚é
+		const float wallRayLength = WALL_CAPSULE_RADIUS * 1.5f;	// 90åº¦ã®è§’ã§ã‚‚å½“ã¦ã‚‹ãŸã‚ã€1.414å€ã‚ˆã‚Šå¤§ããã™ã‚‹
 		if (StageObjectManager::CollCheckRay(wallRayStart, wallRayStart + wallRayDir * wallRayLength, &hitPos, &normal))
 		{
 			m_WallPosition = hitPos;
@@ -742,7 +742,7 @@ void Chara::HitGroundProcess() {
 	}
 	m_IsWall = wallHit;
 
-	// Õ“Ë‚µ‚Ä‚¢‚È‚¯‚ê‚ÎA’Êí‚Ì‹ó’†‹““®‚Ö
+	// è¡çªã—ã¦ã„ãªã‘ã‚Œã°ã€é€šå¸¸ã®ç©ºä¸­æŒ™å‹•ã¸
 	if (not m_IsLanding && not m_IsClimb)
 	{
 		m_pPhysics->SetGravity(CHARA_GRAVITY);
@@ -838,7 +838,7 @@ void Chara::Move(const Vector3& dir)
 
 		Vector3 newVelocity = normDir * speed;
 
-		// ‘¬“x‚ÌY¬•ª‚Í‚»‚Ì‚Ü‚Ü
+		// é€Ÿåº¦ã®Yæˆåˆ†ã¯ãã®ã¾ã¾
 		m_pPhysics->velocity.x = newVelocity.x;
 		m_pPhysics->velocity.z = newVelocity.z;
 	}
@@ -917,7 +917,7 @@ void Chara::SetBall(Ball* ball)
 void Chara::StartBallCharge()
 {
 	m_IsCharging = true;
-	sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ƒXƒe[ƒg‚ğ•ÏX
+	sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 void Chara::StartThrow()
@@ -927,14 +927,14 @@ void Chara::StartThrow()
 	if (not m_CanThrow)
 		return;
 
-	main_changeStateNetwork(&Chara::StateAimToThrow); // ƒXƒe[ƒg‚ğ•ÏX
+	main_changeStateNetwork(&Chara::StateAimToThrow); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 void Chara::Feint()
 {
 	if (not m_CanThrow)
 		return;
-	main_changeStateNetwork(&Chara::StateFeint); // ƒXƒe[ƒg‚ğ•ÏX
+	main_changeStateNetwork(&Chara::StateFeint); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 void Chara::TeleportToLastBall()
@@ -942,7 +942,7 @@ void Chara::TeleportToLastBall()
 	if (m_pLastBall == nullptr) return;
 	transform->position = m_pLastBall->transform->position;
 
-	// ToDo:Á‚¦‚é‰‰o
+	// ToDo:æ¶ˆãˆã‚‹æ¼”å‡º
 	m_pLastBall->SetIsActive(false);
 
 	GenerateBall();
@@ -993,7 +993,7 @@ void Chara::respawn(const Vector3& pos, const Vector3& rot)
 	transform->position = pos;
 	m_lastUpdatePosition = transform->position;
 	transform->rotation = rot;
-	// ƒLƒƒƒbƒ`ƒƒ[‚ÌˆÊ’u‚ğXV
+	// ã‚­ãƒ£ãƒƒãƒãƒ£ãƒ¼ã®ä½ç½®ã‚’æ›´æ–°
 	if (m_Catcher)
 	{
 		m_Catcher->transform->position = Vector3(0.0f, CHARADEFINE_REF.CatchRadius, CHARADEFINE_REF.CatchRadius);
@@ -1017,7 +1017,7 @@ void Chara::CatchSuccess(const Vector3& velocity)
 
 	playCatchBallSound();
 
-	sub_changeStateNetwork(&Chara::SubStateGetBall); // ƒXƒe[ƒg‚ğ•ÏX
+	sub_changeStateNetwork(&Chara::SubStateGetBall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 void Chara::Damage(int sub) {
@@ -1036,7 +1036,7 @@ void Chara::Tackle()
 
 	m_IsTackling = true;
 	const Vector3 dir = Vector3::Normalize(m_pPhysics->FlatVelocity());
-	float terminusRot = atan2f(dir.x, dir.z);		// I“_‚ÌŒü‚«
+	float terminusRot = atan2f(dir.x, dir.z);		// çµ‚ç‚¹ã®å‘ã
 	transform->rotation.y = terminusRot;
 }
 
@@ -1087,7 +1087,7 @@ void Chara::invincibleUpdate()
 
 void Chara::StartRespawn()
 {
-	respawn_changeStateNetwork(&Chara::RespawnStateFadeOut); // ƒXƒe[ƒg‚ğ•ÏX
+	respawn_changeStateNetwork(&Chara::RespawnStateFadeOut); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 void Chara::Knockback(const Vector3& other, float force_vertical, float force_horizontal)
@@ -1103,7 +1103,7 @@ void Chara::Knockback(const Vector3& other, float force_vertical, float force_ho
 }
 
 //========================================================================
-// ƒƒCƒ“ƒXƒe[ƒg
+// ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
 
 bool Chara::IsFinishTackleIntervalAlarm()
 {
@@ -1114,13 +1114,13 @@ void Chara::StateActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("ActionIdle");
 		m_EmoteTimer = CHARADEFINE_REF.EmoteInterval;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 
@@ -1130,20 +1130,20 @@ void Chara::StateActionIdle(FSMSignal sig)
 			int rand = GetRand(99);
 			if (rand < 50)
 			{
-				main_changeStateNetwork(&Chara::StateActionIdleToStandingIdle); // ƒXƒe[ƒg‚ğ•ÏX
+				main_changeStateNetwork(&Chara::StateActionIdleToStandingIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 			}
 			else
 			{
-				main_changeStateNetwork(&Chara::StateActionIdleEmote); // ƒXƒe[ƒg‚ğ•ÏX
+				main_changeStateNetwork(&Chara::StateActionIdleEmote); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 			}
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1155,25 +1155,25 @@ void Chara::StateActionIdleEmote(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("ActionIdleEmote");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1185,22 +1185,22 @@ void Chara::StateActionIdleToJump(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("ActionIdleToJump");
 		playJumpNormalSound();
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		jumpUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1212,28 +1212,28 @@ void Chara::StateActionIdleToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("ActionIdleToRun");
 		m_Timeline->Play("ActionIdleToRun");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateRun); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 			//m_Animator->Play("Run");
 			//m_Animator->SetCurrentFrame(3.0f);
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1244,25 +1244,25 @@ void Chara::StateActionIdleToStandingIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("ActionIdleToStandingIdle");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateStandingIdleEmote); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateStandingIdleEmote); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1274,25 +1274,25 @@ void Chara::StateActionIdleToTackle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("ActionIdleToTackle");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateStandingIdleEmote); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateStandingIdleEmote); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1304,9 +1304,9 @@ void Chara::StateAimToThrow(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
-		sub_changeStateNetwork(&Chara::SubStateNone); // ƒXƒe[ƒg‚ğ•ÏX
+		sub_changeStateNetwork(&Chara::SubStateNone); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		m_Timeline->Play("AimToThrow");
 		m_CanCatch = false;
 		m_CanHold = false;
@@ -1314,19 +1314,19 @@ void Chara::StateAimToThrow(FSMSignal sig)
 		m_CanTackle = false;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_CanCatch = true;
 		m_CanHold = true;
@@ -1342,24 +1342,24 @@ void Chara::StateAirSpin(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("AirSpin");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateFall); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1370,22 +1370,22 @@ void Chara::StateClimb(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("Climb");
 
 		m_IsClimb = true;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&Chara::StateClimbToFall); // ƒXƒe[ƒg‚ğ•ÏX
+			m_FSM->ChangeState(&Chara::StateClimbToFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_IsClimb = false;
 		m_CanMove = true;
@@ -1400,7 +1400,7 @@ void Chara::StateClimbToFall(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("ClimbToFall");
 		m_pPhysics->SetGravity(Vector3::Zero);
@@ -1408,15 +1408,15 @@ void Chara::StateClimbToFall(FSMSignal sig)
 		m_IsClimb = true;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			m_FSM->ChangeState(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_pPhysics->SetGravity(CHARA_GRAVITY);
 		m_IsClimb = false;
@@ -1432,25 +1432,25 @@ void Chara::StateCrouchToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("CrouchToActionIdle");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1461,25 +1461,25 @@ void Chara::StateCrouchToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("CrouchToRun");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateRun); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1490,7 +1490,7 @@ void Chara::StateDamageToDown(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("DamageToDown");
 
@@ -1500,19 +1500,19 @@ void Chara::StateDamageToDown(FSMSignal sig)
 		m_CanTackle = false;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_CanCatch	= true;
 		m_CanMove	= true;
@@ -1527,23 +1527,23 @@ void Chara::StateFall(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("Fall");
 		m_CanTackle = true;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_IsLanding)
 		{
 			if (m_IsMove)
 			{
-				main_changeStateNetwork(&Chara::StateFallToRoll); // ƒXƒe[ƒg‚ğ•ÏX
+				main_changeStateNetwork(&Chara::StateFallToRoll); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 			}
 			else
 			{
-				main_changeStateNetwork(&Chara::StateFallToCrouch); // ƒXƒe[ƒg‚ğ•ÏX
+				main_changeStateNetwork(&Chara::StateFallToCrouch); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 			}
 		}
 		if (m_IsTackling)
@@ -1552,11 +1552,11 @@ void Chara::StateFall(FSMSignal sig)
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_SlideTimer = 0.0f;
 		m_Timeline->Stop();
@@ -1570,14 +1570,14 @@ void Chara::StateFallToCrouch(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("FallToCrouch");
 		m_CanTackle = true;
 		playLandingSound();
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_IsTackling)
 		{
@@ -1586,19 +1586,19 @@ void Chara::StateFallToCrouch(FSMSignal sig)
 
 		if (m_pPhysics->FlatVelocity().GetLengthSquared() > 0)
 		{
-			main_changeStateNetwork(&Chara::StateCrouchToRun); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateCrouchToRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 		else
 		{
-			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1609,7 +1609,7 @@ void Chara::StateFallToRoll(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("FallToRoll");
 		m_CanTackle = true;
@@ -1617,7 +1617,7 @@ void Chara::StateFallToRoll(FSMSignal sig)
 		playLandingRollSound();
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_IsTackling)
 		{
@@ -1625,11 +1625,11 @@ void Chara::StateFallToRoll(FSMSignal sig)
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 
@@ -1644,9 +1644,9 @@ void Chara::StateFeint(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
-		sub_changeStateNetwork(&Chara::SubStateNone); // ƒXƒe[ƒg‚ğ•ÏX
+		sub_changeStateNetwork(&Chara::SubStateNone); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		m_Timeline->Play("AimToThrow");
 		m_CanCatch = false;
 		m_CanHold = false;
@@ -1654,21 +1654,21 @@ void Chara::StateFeint(FSMSignal sig)
 		m_CanTackle = false;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
-		sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ƒXƒe[ƒg‚ğ•ÏX
+		sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 
 		m_CanCatch = true;
 		m_CanHold = true;
@@ -1685,20 +1685,20 @@ void Chara::StateRoll(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("Roll");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 		m_CanMove = true;
@@ -1712,27 +1712,27 @@ void Chara::StateRollToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		float frame = m_Animator->CurrentFrame();
 		m_Timeline->Play("RollToActionIdle");
 		m_Animator->SetCurrentFrame(frame);
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1744,19 +1744,19 @@ void Chara::StateRollToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		float frame = m_Animator->CurrentFrame();
 		m_Timeline->Play("RollToRun");
 		m_Animator->SetCurrentFrame(frame);
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateRun); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 
 			m_Animator->Play("Run");
 
@@ -1765,11 +1765,11 @@ void Chara::StateRollToRun(FSMSignal sig)
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1781,21 +1781,21 @@ void Chara::StateRun(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("Run");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		runUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 		m_Animator->SetPlaySpeed(1.0f);
@@ -1808,25 +1808,25 @@ void Chara::StateRunToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("RunToActionIdle");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -1838,22 +1838,22 @@ void Chara::StateRunToJump(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("RunToJump");
 		playJumpDashSound();
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		jumpUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1864,7 +1864,7 @@ void Chara::StateRunToSlide(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("RunToSlide");
 		m_pPhysics->velocity = m_pPhysics->UpVelocity() + m_pPhysics->FlatVelocity() * 2.0f;
@@ -1877,20 +1877,20 @@ void Chara::StateRunToSlide(FSMSignal sig)
 		m_CanMove = false;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		slideUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateSlide); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateSlide); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_IsSliding = false;
 		m_CanMove = true;
@@ -1907,27 +1907,27 @@ void Chara::StateSlide(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("Slide");
 		m_CanMove = false;
 		m_IsSliding = true;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		slideUpdate();
 		if (m_SlideTimer <= 0.0f)
 		{
-			main_changeStateNetwork(&Chara::StateSlideToRun); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateSlideToRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_SlideTimer = 0.0f;
 		m_CanMove = true;
@@ -1941,25 +1941,25 @@ void Chara::StateSlideToRun(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("SlideToRun");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		runUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateRun); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1970,21 +1970,21 @@ void Chara::StateStandingIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("StandingIdle");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -1995,25 +1995,25 @@ void Chara::StateStandingIdleEmote(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->Play("StandingIdleEmote");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateStandingIdleToActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateStandingIdleToActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -2024,25 +2024,25 @@ void Chara::StateStandingIdleToActionIdle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("StandingIdleToActionIdle");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		idleUpdate();
 		if (m_Animator->IsFinished())
 		{
-			main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+			main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 	}
@@ -2054,7 +2054,7 @@ void Chara::StateTackle(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("Tackle");
 
@@ -2068,21 +2068,21 @@ void Chara::StateTackle(FSMSignal sig)
 		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		tackleUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
 			if (m_Alarm->IsFinish())
-				main_changeStateNetwork(&Chara::StateActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+				main_changeStateNetwork(&Chara::StateActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Timeline->Stop();
 		m_Tackler->SetColliderActive(false);
@@ -2098,22 +2098,22 @@ void Chara::StateWallStepLeft(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("WallStepLeft");
 
 		m_IsClimb = true;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&Chara::StateFall); // ƒXƒe[ƒg‚ğ•ÏX
+			m_FSM->ChangeState(&Chara::StateFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_IsClimb = false;
 		m_CanMove = true;
@@ -2129,22 +2129,22 @@ void Chara::StateWallStepRight(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Timeline->Play("WallStepRight");
 
 		m_IsClimb = true;
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinished())
 		{
-			m_FSM->ChangeState(&Chara::StateFall); // ƒXƒe[ƒg‚ğ•ÏX
+			m_FSM->ChangeState(&Chara::StateFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_IsClimb = false;
 		m_CanMove = true;
@@ -2157,34 +2157,34 @@ void Chara::StateWallStepRight(FSMSignal sig)
 }
 
 //========================================================================
-// ƒTƒuƒXƒe[ƒg
+// ã‚µãƒ–ã‚¹ãƒ†ãƒ¼ãƒˆ
 
 void Chara::SubStateNone(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->StopSub("mixamorig:Spine");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_CanCatch && m_IsCatching)
 		{
-			sub_changeStateNetwork(&Chara::SubStateCatch); // ƒXƒe[ƒg‚ğ•ÏX
+			sub_changeStateNetwork(&Chara::SubStateCatch); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 		else if (m_CanHold && m_pBall != nullptr)
 		{
-			sub_changeStateNetwork(&Chara::SubStateHold); // ƒXƒe[ƒg‚ğ•ÏX
+			sub_changeStateNetwork(&Chara::SubStateHold); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -2195,7 +2195,7 @@ void Chara::SubStateGetBall(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->PlaySub("mixamorig:Spine", "GetBall");
 		m_CanMove = false;
@@ -2219,19 +2219,19 @@ void Chara::SubStateGetBall(FSMSignal sig)
 		m_pPhysics->SetFriction(FRICTION);
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_Animator->IsFinishedSub("mixamorig:Spine"))
 		{
-			sub_changeStateNetwork(&Chara::SubStateHold); // ƒXƒe[ƒg‚ğ•ÏX
+			sub_changeStateNetwork(&Chara::SubStateHold); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_CanMove = true;
 		m_CanRot = true;
@@ -2246,24 +2246,24 @@ void Chara::SubStateHold(FSMSignal sig)
 {
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		m_Animator->PlaySub("mixamorig:Spine", "Hold");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (m_pBall == nullptr)
 		{
-			sub_changeStateNetwork(&Chara::SubStateNone); // ƒXƒe[ƒg‚ğ•ÏX
+			sub_changeStateNetwork(&Chara::SubStateNone); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -2272,39 +2272,46 @@ void Chara::SubStateHold(FSMSignal sig)
 
 void Chara::SubStateHoldToAim(FSMSignal sig)
 {
-	static int chargeRate;
-	static const int PLAY_SOUND_INTERVAL = 12;
-	static const int MAX_CHARGE_RATE = 60;
+	static float soundTimer;
+	static const float PLAY_SOUND_INTERVAL_SEC = 0.2f; // 12 ãƒ•ãƒ¬ãƒ¼ãƒ 
+	static int soundPlayCount;
+	static const int PLAY_SOUND_MAX_COUNT = 6;
 
 	Camera* camera = CameraManager::GetCamera(m_Index);
 
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
-		chargeRate = 0;
+		soundTimer = 0.0f;
+		soundPlayCount = 0;
 		m_Animator->PlaySub("mixamorig:Spine", "HoldToAim");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		m_BallChargeRate += GTime.deltaTime / CHARGE_TIME;
 
-		// ‰¹
-		if (chargeRate <= MAX_CHARGE_RATE && chargeRate % PLAY_SOUND_INTERVAL == 0)
+		soundTimer += GTime.deltaTime;
+		if (soundTimer >= PLAY_SOUND_INTERVAL_SEC)
 		{
-			float progress = (float)chargeRate / (float)MAX_CHARGE_RATE;
-			SoundManager::PlaySetFrequency("SE_charge_ball.mp3", "SE_charge_ball.mp3", 1.0f + progress);
-		}
-		chargeRate++;
+			if(soundPlayCount < PLAY_SOUND_MAX_COUNT)
+			{
+				float progress = MathUtil::Clamp(m_BallChargeRate, 0.0f, 1.0f);
+				SoundManager::PlaySetFrequency("SE_charge_ball.mp3", "SE_charge_ball.mp3", 1.0f + progress);
+			}
 
+			soundTimer -= PLAY_SOUND_INTERVAL_SEC;
+			if (soundTimer < 0.0f) soundTimer = 0.0f;
+			soundPlayCount++;
+		}
 
 		if (m_BallChargeRate > 1.0f)
 		{
 			m_BallChargeRate = 1.0f;
 		}
 
-		// ƒJƒƒ‰‚ÌŒü‚«‚É‡‚í‚¹‚é
+		// ã‚«ãƒ¡ãƒ©ã®å‘ãã«åˆã‚ã›ã‚‹
 		m_CanRot = false;
 
 		if (camera != nullptr) {
@@ -2316,11 +2323,11 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 		ballTargetUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 	}
 	break;
@@ -2335,18 +2342,18 @@ void Chara::SubStateCatch(FSMSignal sig)
 
 	switch (sig)
 	{
-	case FSMSignal::SIG_Enter: // ŠJn
+	case FSMSignal::SIG_Enter: // é–‹å§‹
 	{
 		vacuumTimeCount = 0.0f;
 		wasVacuum = false;
 		m_Animator->PlaySub("mixamorig:Spine", "Catch");
 	}
 	break;
-	case FSMSignal::SIG_Update: // XV
+	case FSMSignal::SIG_Update: // æ›´æ–°
 	{
 		if (not m_IsCatching)
 		{
-			sub_changeStateNetwork(&Chara::SubStateNone); // ƒXƒe[ƒg‚ğ•ÏX
+			sub_changeStateNetwork(&Chara::SubStateNone); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 		}
 		vacuumTimeCount += GTime.deltaTime;
 		if (vacuumTimeCount >= TIMING_PLAYVACUUMSOUND)
@@ -2361,11 +2368,11 @@ void Chara::SubStateCatch(FSMSignal sig)
 		catchUpdate();
 	}
 	break;
-	case FSMSignal::SIG_AfterUpdate: // XVŒã‚ÌXV
+	case FSMSignal::SIG_AfterUpdate: // æ›´æ–°å¾Œã®æ›´æ–°
 	{
 	}
 	break;
-	case FSMSignal::SIG_Exit: // I—¹
+	case FSMSignal::SIG_Exit: // çµ‚äº†
 	{
 		m_Catcher->SetColliderActive(false);
 
@@ -2401,7 +2408,7 @@ void Chara::SubStateCatch(FSMSignal sig)
 }
 
 //========================================================================
-// privateŠÖ”
+// privateé–¢æ•°
 
 void Chara::land()
 {
@@ -2418,15 +2425,15 @@ void Chara::idleUpdate()
 {
 	if (m_IsJumping)
 	{
-		main_changeStateNetwork(&Chara::StateActionIdleToJump); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateActionIdleToJump); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (not m_IsLanding)
 	{
-		main_changeStateNetwork(&Chara::StateFall); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (m_IsMove)
 	{
-		main_changeStateNetwork(&Chara::StateActionIdleToRun); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateActionIdleToRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (m_IsTackling)
 	{
@@ -2438,19 +2445,19 @@ void Chara::runUpdate()
 {
 	if (m_IsJumping)
 	{
-		main_changeStateNetwork(&Chara::StateRunToJump); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateRunToJump); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (not m_IsLanding)
 	{
-		main_changeStateNetwork(&Chara::StateFall); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (not m_IsMove)
 	{
-		main_changeStateNetwork(&Chara::StateRunToActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateRunToActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (m_SlideTimer > 0.0f)
 	{
-		main_changeStateNetwork(&Chara::StateRunToSlide); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateRunToSlide); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else if (m_IsTackling)
 	{
@@ -2462,7 +2469,7 @@ void Chara::slideUpdate()
 {
 	if (m_pPhysics->velocity.y > 0.0f)
 	{
-		main_changeStateNetwork(&Chara::StateRunToJump); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateRunToJump); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 
 	if (m_SlideTimer > 0.0f)
@@ -2513,7 +2520,7 @@ void Chara::catchUpdate()
 		m_Catcher->SetColliderActive(true);
 		m_pStamina->Use(CATCH_STAMINA_USE * GTime.deltaTime);
 
-		// ƒJƒƒ‰‚ÌŒü‚«‚É‡‚í‚¹‚é
+		// ã‚«ãƒ¡ãƒ©ã®å‘ãã«åˆã‚ã›ã‚‹
 		m_CanRot = false;
 
 		Camera* camera = CameraManager::GetCamera(m_Index);
@@ -2541,7 +2548,7 @@ void Chara::jumpUpdate()
 
 	if (not m_IsJumping)
 	{
-		main_changeStateNetwork(&Chara::StateFall); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateFall); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 
 	if (m_IsTackling)
@@ -2554,7 +2561,7 @@ void Chara::tackleUpdate()
 {
 	if (m_Animator->IsFinished())
 	{
-		// ‚ ‚ÆŒ„
+		// ã‚ã¨éš™
 		m_Alarm->Set(0.1f); // magic:>
 	}
 }
@@ -2594,7 +2601,7 @@ void Chara::getHit(Ball* hit)
 
 	float forwardRad = atan2f(dif.x, dif.z);
 	transform->rotation.y = forwardRad;
-	m_pPhysics->velocity += transform->Forward() * -2500.0f;	// ToDo:ŠO•”‰»
+	m_pPhysics->velocity += transform->Forward() * -2500.0f;	// ToDo:å¤–éƒ¨åŒ–
 
 	playGetHitSound();
 }
@@ -2642,11 +2649,11 @@ void Chara::throwBallHoming()
 		}
 		else
 		{
-			// ©•ª‚ÌŒü‚«‚Æƒ^[ƒQƒbƒg‚ÌŒü‚«‚ğ”äŠr‚µ‚ÄA“Š‚°‚éŠp“x‚ğ’²®
+			// è‡ªåˆ†ã®å‘ãã¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å‘ãã‚’æ¯”è¼ƒã—ã¦ã€æŠ•ã’ã‚‹è§’åº¦ã‚’èª¿æ•´
 			Vector3 targetDir = Vector3::Normalize(target->Position() - transform->position);
 			float angle = Vector3Util::Vec2ToRad(targetDir.z, targetDir.x) - Vector3Util::Vec2ToRad(dir.z, dir.x);
 
-			// Šp“x‚ğ90“x’PˆÊ‚ÅŠÛ‚ß‚é
+			// è§’åº¦ã‚’90åº¦å˜ä½ã§ä¸¸ã‚ã‚‹
 			//float angleRound = roundf(angle / (DX_PI_F * 0.5f));
 			//angle = angleRound * (DX_PI_F * 0.5f);
 			//angle = fabsf(angle);
@@ -2697,7 +2704,7 @@ void Chara::lookVelocity()
 
 void Chara::playThrowSound()
 {
-	//===== “Š±‰¹(“Š‚°‚é‹­‚³‚É‰‚¶‚Ä•Ï‰») =====//
+	//===== æŠ•æ“²éŸ³(æŠ•ã’ã‚‹å¼·ã•ã«å¿œã˜ã¦å¤‰åŒ–) =====//
 
 	std::string seBase = "SE_throw_";
 
@@ -2724,7 +2731,7 @@ void Chara::playThrowSound()
 		SoundManager::Play(seBase + "impact_strong.mp3", "SE_Throw_Impact");
 	}
 
-	//===== ƒ{ƒCƒX =====//
+	//===== ãƒœã‚¤ã‚¹ =====//
 
 	std::string voiceBase = "Voice_";
 	std::vector<std::string> voices;
@@ -2741,7 +2748,7 @@ void Chara::playGetHitSound()
 {
 	std::vector<std::string> seNames;
 
-	//===== ”í’e‰¹ =====//
+	//===== è¢«å¼¾éŸ³ =====//
 
 	std::string seBase_Hit = "SE_hit_";
 	seNames.push_back(seBase_Hit + "00.mp3");
@@ -2752,7 +2759,7 @@ void Chara::playGetHitSound()
 
 	SoundManager::Play("SE_hit_pop_00.wav", "SE_Hit");
 
-	//===== ’µ’e‰¹ =====//
+	//===== è·³å¼¾éŸ³ =====//
 	
 	std::string seBase_BoundBall = "SE_bound_ball_";
 	seNames.push_back(seBase_BoundBall + "00.wav");
@@ -2761,7 +2768,7 @@ void Chara::playGetHitSound()
 	SoundManager::PlayRandom(seNames, "SE_BoundBall");
 	seNames.clear();
 
-	//===== ƒ{ƒCƒX =====//
+	//===== ãƒœã‚¤ã‚¹ =====//
 
 	std::string voiceBase = "Voice_";
 	std::vector<std::string> voices;
@@ -2775,7 +2782,7 @@ void Chara::playCatchBallSound()
 {
 	std::vector<std::string> seNames;
 
-	//===== ’µ’e‰¹ =====//
+	//===== è·³å¼¾éŸ³ =====//
 
 	std::string seBase_BoundBall = "SE_bound_ball_";
 	seNames.push_back(seBase_BoundBall + "00.wav");
@@ -2784,7 +2791,7 @@ void Chara::playCatchBallSound()
 	SoundManager::PlayRandom(seNames, "SE_BoundBall");
 	seNames.clear();
 
-	//===== æ“¾‰¹ =====//
+	//===== å–å¾—éŸ³ =====//
 
 	std::string seBase_CatchSuccess = "SE_catch_success_";
 	seNames.push_back(seBase_CatchSuccess + "00.mp3");
@@ -2793,7 +2800,7 @@ void Chara::playCatchBallSound()
 	SoundManager::PlayRandom(seNames, "SE_CatchSuccess");
 	seNames.clear();
 
-	//===== ƒ{ƒCƒX =====//
+	//===== ãƒœã‚¤ã‚¹ =====//
 
 	std::string voiceBase = "Voice_";
 	std::vector<std::string> voices;
@@ -2809,7 +2816,7 @@ void Chara::playPickupBallSound()
 {
 	std::vector<std::string> seNames;
 
-	//===== ƒ{[ƒ‹‰ñû =====//
+	//===== ãƒœãƒ¼ãƒ«å›å =====//
 
 	std::string seBase_BoundBall = "SE_pickup_";
 	seNames.push_back(seBase_BoundBall + "00.mp3");
@@ -2899,7 +2906,7 @@ void Chara::playTackleSound()
 
 	SoundManager::Play(soundName, soundName);
 
-	//===== ƒ{ƒCƒX =====//
+	//===== ãƒœã‚¤ã‚¹ =====//
 
 	std::string voiceBase = "Voice_";
 	std::vector<std::string> voices;
@@ -2944,18 +2951,18 @@ void Chara::moveToWallPosition(const nlohmann::json& argument)
 
 void Chara::changeToRoll(const nlohmann::json& argument)
 {
-	main_changeStateNetwork(&Chara::StateRoll); // ƒXƒe[ƒg‚ğ•ÏX
+	main_changeStateNetwork(&Chara::StateRoll); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 }
 
 void Chara::endRoll(const nlohmann::json& argument)
 {
 	if (m_IsMove)
 	{
-		main_changeStateNetwork(&Chara::StateRollToRun); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateRollToRun); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 	else
 	{
-		main_changeStateNetwork(&Chara::StateRollToActionIdle); // ƒXƒe[ƒg‚ğ•ÏX
+		main_changeStateNetwork(&Chara::StateRollToActionIdle); // ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´
 	}
 }
 
@@ -2987,10 +2994,10 @@ void Chara::invincible(const nlohmann::json& argument)
 {
 	if (not m_pBallTarget) return;
 
-	// Œ³‹‚½êŠ‚ÉƒfƒRƒC‚Ìƒ^[ƒQƒbƒg‚ğ¶¬
+	// å…ƒå±…ãŸå ´æ‰€ã«ãƒ‡ã‚³ã‚¤ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç”Ÿæˆ
 	BallTarget* decoy = m_pBallTargetManager->Create();
 
-	// V‚µ‚­ƒƒbƒNƒIƒ“‚Í‚Å‚«‚È‚¢
+	// æ–°ã—ããƒ­ãƒƒã‚¯ã‚ªãƒ³ã¯ã§ããªã„
 	decoy->SetPosition(m_pBallTarget->Position());
 	decoy->SetCanRockOn(false);
 	decoy->SetDoDeactivateOnNoRockOn(true);
@@ -2998,7 +3005,7 @@ void Chara::invincible(const nlohmann::json& argument)
 	if (m_pBallManager == nullptr)
 		m_pBallManager = FindGameObject<BallManager>();
 
-	// ¡©•ª‚ğƒƒbƒNƒIƒ“‚µ‚Ä‚¢‚½”òãÄ’†‚Ìƒ{[ƒ‹‚ÍƒfƒRƒC‚ğƒƒbƒNƒIƒ“‚·‚é
+	// ä»Šè‡ªåˆ†ã‚’ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã—ã¦ã„ãŸé£›ç¿”ä¸­ã®ãƒœãƒ¼ãƒ«ã¯ãƒ‡ã‚³ã‚¤ã‚’ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã™ã‚‹
 	const auto& rockOnData = m_pBallTarget->GetRockOnData();
 
 	for (const auto& item : rockOnData)
@@ -3013,7 +3020,7 @@ void Chara::invincible(const nlohmann::json& argument)
 		}
 	}
 
-	// ˆÚ‚µ‚½ƒƒbƒNƒIƒ“‚Ííœ‚·‚é
+	// ç§»ã—ãŸãƒ­ãƒƒã‚¯ã‚ªãƒ³ã¯å‰Šé™¤ã™ã‚‹
 	const auto& decoyRockOnData = decoy->GetRockOnData();
 
 	for (const auto& item : decoyRockOnData)
@@ -3151,9 +3158,9 @@ void Chara::buttonHintUpdate()
 	if (m_pUI_ButtonHint == nullptr)
 		return;
 
-	// RTALT‚Íƒ`ƒƒƒbƒgƒo[‚É•\¦‚·‚é‚Ì‚Åˆê‰ñ–³Œø‰»
+	// RTã€LTã¯ãƒãƒ£ãƒƒãƒˆãƒãƒ¼ã«è¡¨ç¤ºã™ã‚‹ã®ã§ä¸€å›ç„¡åŠ¹åŒ–
 
-	// ƒ{ƒ^ƒ“ƒqƒ“ƒg
+	// ãƒœã‚¿ãƒ³ãƒ’ãƒ³ãƒˆ
 	{
 		/*
 		if (m_CanCatch)

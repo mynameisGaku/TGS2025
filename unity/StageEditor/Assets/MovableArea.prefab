@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5295160504252829226}
   m_Layer: 0
   m_Name: MovableArea
-  m_TagString: MoveableArea
+  m_TagString: MovableArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

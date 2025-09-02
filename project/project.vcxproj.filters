@@ -2386,6 +2386,7 @@
     <ClInclude Include="src\util\file\json\RGBColorJson.h" />
     <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
     <ClInclude Include="src\util\getset\GetSet.h" />
+    <ClInclude Include="src\util\fx\post_effect\bloom\EmitterRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\util\editbox\resource.rc">

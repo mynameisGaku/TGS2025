@@ -143,7 +143,7 @@ void PlayScene::Draw()
 {
 	SceneBase::Draw();
 
-	if (not BLOOM_MANAGER.IsUsingEmitterScreen())
+	if (BLOOM_MANAGER.WasInitEmitterScreen)
 	{
 		BLOOM_MANAGER.SetDrawScreenToEmitter();
 		{

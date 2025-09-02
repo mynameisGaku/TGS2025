@@ -2,6 +2,6 @@
 
 #ifdef _DEBUG
 #ifndef IMGUI
-#define IMGUI
+//#define IMGUI
 #endif
 #endif

@@ -2,6 +2,7 @@
 #include "framework/gameObject.h"
 #include "src/reference/bloom/BloomRef.h"
 #include "src/util/singleton/singleton.h"
+#include "src/util/getset/GetSet.h"
 
 /// <summary>
 /// カメラ設定を維持して描画先を変更する
@@ -31,6 +32,8 @@ public:
 	/// <param name="h">描画領域の高さ</param>
 	void DrawOnScreenDiv(int x, int y, int w, int h);
 
+	// ブルーム対象の色スクリーン
+	void SetDrawScreenToColor();
 	// 個別で発光させたいやつを描画するためのスクリーン
 	void SetDrawScreenToEmitter();
 	// 発光スクリーンに描画する前に使ってたスクリーン
@@ -38,11 +41,17 @@ public:
 	void SetDrawScreenToBack();
 	void SetParameter(BloomRef::Parameter parameter);
 
-	bool IsUsingEmitterScreen() const;
+	const Getter<bool> IsUsingColorScreen = (&m_IsUsingColorScreen);
+	const Getter<bool> IsUsingEmitterScreen = (&m_IsUsingEmitterScreen);
+	const GetSet<bool> WasInitEmitterScreen = (&m_WasInitEmitterScreen);
 private:
+	int m_ColorScreen;		// ブルーム対象の色スクリーン
 	int m_EmitterScreen;	// 個別で発光させたいやつを描画するためのスクリーン
 	int m_LastDrawScreen;	// 発光スクリーンに描画する前に使ってたスクリーン
-	bool m_DoBloom;		// ブルームをかけるかどうか
+	bool m_DoBloom;			// ブルームをかけるかどうか
+	bool m_IsUsingColorScreen;
+	bool m_IsUsingEmitterScreen;
+	bool m_WasInitEmitterScreen;
 	BloomRef::Parameter m_Parameter;	// ブルームのパラメータ
 };
 

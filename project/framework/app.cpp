@@ -86,10 +86,16 @@ void AppDraw()
 		ScreenManager::DrawBegin(scrName);
 		{
 			camera->Draw();
+			BLOOM_MANAGER.SetDrawScreenToColor();
+			{
+				SceneManager::Draw();
+			}
+			BLOOM_MANAGER.SetDrawScreenToLastScreen();
 			BLOOM_MANAGER.SetDrawScreenToEmitter();
 			{
 				SceneManager::Draw();	// Zバッファを得るため全描画
 				DrawBox(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, 0x000000, TRUE);	// 描画をリセット（黒塗り）
+				BLOOM_MANAGER.WasInitEmitterScreen = true;
 			}
 			BLOOM_MANAGER.SetDrawScreenToLastScreen();
 			SceneManager::Draw();

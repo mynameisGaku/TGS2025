@@ -304,6 +304,7 @@ void MatchManager::init()
 void MatchManager::ImGuiInit()
 {
 #ifdef _DEBUG
+#ifdef IMGUI
 	ImGuiRoot* matchRoot = ImGuiManager::AddRoot(new ImGuiRoot("Match"));  // マッチのトップ
 	std::function<void()> func = [&] {ReloadCurrentGameData(); };
 	matchRoot->Add(new ImGuiNode_Button("Reload GameData", func));
@@ -351,6 +352,7 @@ void MatchManager::ImGuiInit()
 		teamTree->Add(new ImGuiNode_Text("TotalPoint", StringUtil::FormatToString("Total Point: %d", team->GetTotalPoint())));
 		teamTree->Add(new ImGuiNode_Space("Space"));
 	}
+#endif // IMGUI
 #endif
 }
 

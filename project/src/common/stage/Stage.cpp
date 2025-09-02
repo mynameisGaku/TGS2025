@@ -12,6 +12,8 @@
 //#include "charaManager.h"
 //#include "player.h"
 
+#include "src/util/fx/post_effect/bloom/BloomManager.h"
+
 using namespace StageDefine;
 
 namespace {
@@ -44,7 +46,16 @@ void Stage::Update() {
 void Stage::Draw() {
 
 	if (sky != nullptr)
-		sky->Draw();
+	{
+		if (BLOOM_MANAGER.IsUsingColorScreen)
+		{
+			//sky->Draw();
+		}
+		else
+		{
+			sky->Draw();
+		}
+	}
 
 	SetFogColor(200, 200, 150);
 	SetFogStartEnd(150.0f, STAGE_RANGE * 5.0f);

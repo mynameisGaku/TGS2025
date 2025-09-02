@@ -22,7 +22,7 @@
 
 #include <DxLib.h>
 
-#define IMGUI
+#include "src/config/imgui/ImGuiConfig.h"
 #ifdef IMGUI
 #include "vendor/imgui/imgui_impl_dxlib.hpp"
 
@@ -113,13 +113,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         return -1;
     }
 
+#ifdef IMGUI
     SetHookWinProc([](HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT /*CALLBACK*/
         {
             // DxLibとImGuiのウィンドウプロシージャを両立させる
             SetUseHookWinProcReturnValue(FALSE);
             return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
         });
-#ifdef IMGUI
     // ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

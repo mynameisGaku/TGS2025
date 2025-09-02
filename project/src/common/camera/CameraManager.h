@@ -2,6 +2,7 @@
 #include "src/common/camera/Camera.h"
 
 #include "src/common/network/user/User.h"
+#include "src/config/imgui/ImGuiConfig.h"
 
 using namespace CameraDefine;
 
@@ -136,10 +137,6 @@ namespace CameraManager {
 	//void CameraChangeStateTheString(const std::string& state);
 
 #ifdef _DEBUG
-#ifndef IMGUI
-#define IMGUI
-#endif
-#endif
 #ifdef IMGUI
 
 	/// <summary>
@@ -153,5 +150,6 @@ namespace CameraManager {
 	void UpdateImGuiNode();
 
 #endif // IMGUI
+#endif
 
 }

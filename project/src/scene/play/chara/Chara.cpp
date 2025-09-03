@@ -259,6 +259,9 @@ void Chara::Init(std::string tag)
 
 	m_pCharaSpawnPointManager = FindGameObject<CharaSpawnPointManager>();
 
+	// === トレイルセットアップ ===
+
+	/*
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>>* frameAndTrailNames = new std::vector<std::pair<std::string, std::string>>
 	{
@@ -313,6 +316,9 @@ void Chara::Init(std::string tag)
 	}
 	trail->Finalize(Model(), descs, m_hTrailImage);
 	delete frameAndTrailNames;
+	*/
+
+	// === =================== ===
 
 	std::string fsmname = std::string(m_User.IsHost ? "[Host] CharaFSM : " : "[Client] CharaFSM : ");
 	std::string index = std::to_string(m_Index);

@@ -46,6 +46,7 @@ public:
 	/// </summary>
 	/// <param name="deg">回転角度(弧度法)</param>
 	inline void SetDegRotation(const Vector3& deg) { m_rotation = deg; }
+	inline void SetInfo(const LightInfo& _info) { info = _info; }
 
 	//==========================================================================================
 	// ▼ゲッター

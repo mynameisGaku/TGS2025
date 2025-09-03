@@ -143,22 +143,6 @@ void PlayScene::Draw()
 {
 	SceneBase::Draw();
 
-	if (BLOOM_MANAGER.WasInitEmitterScreen)
-	{
-		BLOOM_MANAGER.SetDrawScreenToEmitter();
-		{
-			std::list<Ball*> ballList = FindGameObjects<Ball>();
-			for (Ball* ball : ballList)
-			{
-				ball->Draw();
-			}
-			CharaManager* charaM = FindGameObject<CharaManager>();
-			if (charaM != nullptr)
-				charaM->Draw();
-		}
-		BLOOM_MANAGER.SetDrawScreenToLastScreen();
-	}
-
 	//if (CameraManager::IsScreenDivision())
 	//	CameraManager::ApplyScreenDivision();
 

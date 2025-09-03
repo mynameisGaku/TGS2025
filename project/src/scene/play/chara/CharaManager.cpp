@@ -11,6 +11,7 @@
 #include "src/common/component/material_renderer/MaterialRenderer.h"
 
 #include "src/reference/chara/CharaDefineRef.h"
+#include <src/util/fx/post_effect/bloom/BloomManager.h>
 
 CharaManager::CharaManager()
 {
@@ -104,6 +105,12 @@ void CharaManager::Update()
 
 void CharaManager::Draw()
 {
+	if (BLOOM_MANAGER.State == BloomManager::NONE)
+	{
+		BLOOM_MANAGER.AddEmitterTarget(this, 1.0f);
+		return;
+	}
+
 #ifdef USE_POOL
 	auto items = m_pPool->GetAllItems();
 	for (auto& item : items)

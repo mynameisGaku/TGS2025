@@ -44,30 +44,29 @@ void Stage::Update() {
 }
 
 void Stage::Draw() {
-
-	if (sky != nullptr)
+	if (BLOOM_MANAGER.State == BloomManager::NONE)
 	{
-		if (BLOOM_MANAGER.IsUsingColorScreen)
-		{
-			//sky->Draw();
-		}
-		else
+		BLOOM_MANAGER.AddCustomBloomTarget(&Stage::Draw, 0.5f);
+
+		SetFogColor(200, 200, 150);
+		SetFogStartEnd(150.0f, STAGE_RANGE * 5.0f);
+		SetFogEnable(true);
+
+		if (ground != nullptr)
+			ground->Draw();
+
+		if (wall != nullptr)
+			wall->Draw();
+
+		SetFogEnable(false);
+	}
+	else
+	{
+		if (sky != nullptr && sky->IsActive())
 		{
 			sky->Draw();
 		}
 	}
-
-	SetFogColor(200, 200, 150);
-	SetFogStartEnd(150.0f, STAGE_RANGE * 5.0f);
-	SetFogEnable(true);
-
-	if (ground != nullptr)
-		ground->Draw();
-
-	if (wall != nullptr)
-		wall->Draw();
-
-	SetFogEnable(false);
 }
 
 void Stage::Release() {

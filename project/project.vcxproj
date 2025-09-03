@@ -690,6 +690,7 @@
     <ClInclude Include="src\util\fx\effect\EffectDefine.h" />
     <ClInclude Include="src\util\fx\effect\EffectManager.h" />
     <ClInclude Include="src\util\fx\post_effect\bloom\BloomManager.h" />
+    <ClInclude Include="src\util\fx\post_effect\bloom\BloomTarget.h" />
     <ClInclude Include="src\util\fx\post_effect\bloom\EmitterRenderer.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h" />
     <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h" />

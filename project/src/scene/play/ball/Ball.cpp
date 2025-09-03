@@ -269,6 +269,11 @@ void Ball::effectUpdate()
 
 void Ball::Draw()
 {
+	if (BLOOM_MANAGER.State == BloomManager::NONE)
+	{
+		BLOOM_MANAGER.AddEmitterTarget(this, 1.0f);
+		return;
+	}
 	if (not m_IsActive)
 		return;
 

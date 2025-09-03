@@ -20,8 +20,10 @@
 
 #include <src/scene/title/ui/TitleUIController.h>
 #include <src/util/ptr/PtrUtil.h>
+#include <src/common/stage/Stage.h>
 
 TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
+	Stage::Sky()->SetIsActive(false);
 
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
 
@@ -55,7 +57,7 @@ TitleScene::TitleScene(std::string name) : SceneBase(true, name) {
 }
 
 TitleScene::~TitleScene() {
-
+	Stage::Sky()->SetIsActive(true);
 	SoundManager::Stop("BGM_TitleScene.wav", "BGM");
 	CameraManager::SetIsScreenDivision(false);
 }

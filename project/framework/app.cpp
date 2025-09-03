@@ -86,26 +86,29 @@ void AppDraw()
 		ScreenManager::DrawBegin(scrName);
 		{
 			camera->Draw();
-			BLOOM_MANAGER.SetDrawScreenToColor();
+#if FALSE
+			BLOOM_MANAGER.SetDrawScreenToAll();
 			{
 				SceneManager::Draw();
+				EffectManager::Draw();
 			}
-			BLOOM_MANAGER.SetDrawScreenToLastScreen();
+			BLOOM_MANAGER.ResetDrawScreenToAll();
+#else
+			SetDrawZBuffer(GetDrawScreen());	// 複数スクリーンでZバッファを共有するため、Zバッファ保存先をメインスクリーンにする
+			SceneManager::Draw();
+			EffectManager::Draw();
+			BLOOM_MANAGER.CopyDrawScreenToColor();
+			BLOOM_MANAGER.CopyDrawScreenToEmitter();
+#endif
 			BLOOM_MANAGER.SetDrawScreenToEmitter();
 			{
-				SceneManager::Draw();	// Zバッファを得るため全描画
 				DrawBox(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, 0x000000, TRUE);	// 描画をリセット（黒塗り）
 				BLOOM_MANAGER.WasInitEmitterScreen = true;
 			}
 			BLOOM_MANAGER.SetDrawScreenToLastScreen();
-			SceneManager::Draw();
-			EffectManager::Draw();
-			BLOOM_MANAGER.SetDrawScreenToEmitter();
-			{
-				EffectManager::Draw();	// エフェクトは全部発光させる
-			}
-			BLOOM_MANAGER.SetDrawScreenToLastScreen();
+
 			BLOOM_MANAGER.Draw();
+
 			ShadowMap::CleanUp();
 		}
 		ScreenManager::DrawEnd(scrName);

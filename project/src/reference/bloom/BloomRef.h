@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 /// <summary>
 /// ボールのJsonパラメータを読み込む

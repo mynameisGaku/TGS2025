@@ -264,7 +264,7 @@ void Chara::Init(std::string tag)
 
 	// === トレイルセットアップ ===
 
-	/*
+	
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>>* frameAndTrailNames = new std::vector<std::pair<std::string, std::string>>
 	{
@@ -283,8 +283,8 @@ void Chara::Init(std::string tag)
 
 	auto addTrail = []()
 		{
-			float lt = 0.4f; // トレイルの寿命
-			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.5f);
+			float lt = 0.2f; // トレイルの寿命
+			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.2f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
 			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
@@ -319,7 +319,7 @@ void Chara::Init(std::string tag)
 	}
 	trail->Finalize(Model(), descs, m_hTrailImage);
 	delete frameAndTrailNames;
-	*/
+	
 
 	// === =================== ===
 

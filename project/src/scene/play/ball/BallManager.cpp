@@ -1,4 +1,4 @@
-#include "src/scene/play/ball/BallManager.h"
+ï»¿#include "src/scene/play/ball/BallManager.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/ball/BallManager.h"
@@ -10,6 +10,8 @@
 #include "src/common/camera/CameraManager.h"
 #include <src/reference/network/NetworkRef.h>
 #include <vendor/uuid4/uuid4.h>
+#include "src/common/performance_profiler/PerformanceProfiler.h"
+#include <src\util\ptr\PtrUtil.h>
 
 BallManager::BallManager()
 {
@@ -98,7 +100,7 @@ void BallManager::Update()
 		auto ball = (*it);
 		if (not ball->IsActive())
 		{
-			// –³Œø‰»‚³‚ê‚½‚çíœ
+			// ç„¡åŠ¹åŒ–ã•ã‚ŒãŸã‚‰å‰Šé™¤
 			ball->DestroyMe();
 			ball = nullptr;
 			it = m_Balls.erase(it);
@@ -114,7 +116,9 @@ void BallManager::Update()
 void BallManager::Draw()
 {
 	//if (CameraManager::IsScreenDivision())
+	{
 		return;
+	}
 
 	m_pPool->PoolImGuiRendererBegin("ball pool debug");
 
@@ -138,9 +142,9 @@ void BallManager::Draw()
 Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 {
 	auto& ref = BALL_REF;
-	// ŠeíƒŠƒtƒ@ƒŒƒ“ƒX‚ğŒ³‚É‰Šú‰»
+	// å„ç¨®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å…ƒã«åˆæœŸåŒ–
 
-	// ’Ç‰Á
+	// è¿½åŠ 
 #ifdef USE_POOL
 	if (m_pPool->CheckActiveObjectByCount(m_pPool->GetCapacity()))
 	{
@@ -160,11 +164,11 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 
 	obj->transform->position = position;
 
-	// ƒ`[ƒ€‚É‡‚í‚¹‚ÄƒgƒŒƒCƒ‹ƒJƒ‰[•ÏX
+	// ãƒãƒ¼ãƒ ã«åˆã‚ã›ã¦ãƒˆãƒ¬ã‚¤ãƒ«ã‚«ãƒ©ãƒ¼å¤‰æ›´
 	obj->SetTrailImage(m_hTrails["Green"]);
 
 	obj->SetModel(m_Model);
-	// ƒeƒXƒg—p ƒeƒNƒXƒ`ƒƒ‚ğƒ‰ƒ“ƒ_ƒ€‚Å‘I‘ğ
+	// ãƒ†ã‚¹ãƒˆç”¨ ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã§é¸æŠ
 	if (not m_Textures.empty())
 	{
 		BallTexture tex;
@@ -198,6 +202,7 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 		obj->SetTexture(tex, mapKey);
 	}
 	m_pPool->SetObjectPointer(index, obj);
+	obj->SetIndex(index);
 
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
@@ -210,7 +215,7 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 			obj->SetUniqueID(BUF);
 		}
 	}
-
+	obj->OnSpawn();
 	return obj;
 #else
 	Ball* ball = Instantiate<Ball>();
@@ -242,7 +247,7 @@ Ball* BallManager::GetBall(uint32_t index)
 	return ball;
 
 #else
-	// Poolg‚í‚È‚¢”Å –¢À‘•
+	// Poolä½¿ã‚ãªã„ç‰ˆ æœªå®Ÿè£…
 
 #endif
 
@@ -275,7 +280,7 @@ Ball* BallManager::GetBall(const std::string& id)
 	return result;
 
 #else
-	// Poolg‚í‚È‚¢”Å –¢À‘•
+	// Poolä½¿ã‚ãªã„ç‰ˆ æœªå®Ÿè£…
 
 #endif
 

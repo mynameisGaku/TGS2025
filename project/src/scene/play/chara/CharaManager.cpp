@@ -1,4 +1,4 @@
-#include "src/scene/play/chara/CharaManager.h"
+ï»¿#include "src/scene/play/chara/CharaManager.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 
 #ifndef USE_POOL
@@ -12,6 +12,8 @@
 
 #include "src/reference/chara/CharaDefineRef.h"
 #include <src/util/fx/post_effect/bloom/BloomManager.h>
+#include "src/common/performance_profiler/PerformanceProfiler.h"
+#include <src\util\ptr\PtrUtil.h>
 
 CharaManager::CharaManager()
 {
@@ -31,6 +33,12 @@ CharaManager::CharaManager()
 #else
 	m_Charas.clear();
 #endif
+
+	m_pUpdateProfiler = new PerformanceProfiler("All Chara Update");
+	m_pUpdateProfiler->Activate();
+
+	m_pDrawProfiler = new PerformanceProfiler("All Chara Draw");
+	m_pDrawProfiler->Activate();
 }
 
 CharaManager::~CharaManager()
@@ -59,10 +67,13 @@ CharaManager::~CharaManager()
 #else
 	PtrUtil::SafeDeleteVector(m_Charas);
 #endif
+	PtrUtil::SafeDelete(m_pUpdateProfiler);
+	PtrUtil::SafeDelete(m_pDrawProfiler);
 }
 
 void CharaManager::Update()
 {
+	m_pUpdateProfiler->BeginProfiling();
 #ifdef USE_POOL
 	auto items = m_pPool->GetAllItems();
 	for (auto& item : items)
@@ -84,7 +95,7 @@ void CharaManager::Update()
 #else
 	for (auto it = m_Charas.begin(); it != m_Charas.end();)
 	{
-		// Šˆ“®‚µ‚Ä‚¢‚é‚È‚ç
+		// æ´»å‹•ã—ã¦ã„ã‚‹ãªã‚‰
 		if ((*it)->IsActive())
 		{
 			(*it)->Update();
@@ -101,13 +112,16 @@ void CharaManager::Update()
 	{
 		CHARADEFINE_REF.Load(true);
 	}
+	m_pUpdateProfiler->EndProfiling();
 }
 
 void CharaManager::Draw()
 {
+	m_pDrawProfiler->BeginProfiling();
 	if (BLOOM_MANAGER.State == BloomManager::NONE)
 	{
 		BLOOM_MANAGER.AddEmitterTarget(this, 1.0f);
+		m_pDrawProfiler->EndProfiling();
 		return;
 	}
 
@@ -128,19 +142,20 @@ void CharaManager::Draw()
 #else
 	for (const auto& it : m_Charas)
 	{
-		// Šˆ“®‚µ‚Ä‚¢‚é‚È‚ç
+		// æ´»å‹•ã—ã¦ã„ã‚‹ãªã‚‰
 		if (it->IsActive())
 		{
 			it->Draw();
 		}
 	}
 #endif
+	m_pDrawProfiler->EndProfiling();
 }
 
 Chara* CharaManager::Create(const std::string& tag, const Transform& trs) 
 {
 	//////////////////////////////////////////////////////////////
-	// —áŠOˆ—
+	// ä¾‹å¤–å‡¦ç†
 
 #ifdef USE_POOL
 	if (m_pPool->CheckActiveObjectByCapacity())
@@ -154,7 +169,7 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	Chara* newChara = nullptr;
 
 	//////////////////////////////////////////////////////////////
-	// ƒCƒ“ƒfƒbƒNƒXŽæ“¾EƒCƒ“ƒXƒ^ƒ“ƒX‚Ì¶¬
+	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å–å¾—ãƒ»ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ç”Ÿæˆ
 
 #ifdef USE_POOL
 	uint32_t index = m_pPool->GetIndex();
@@ -165,12 +180,12 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 #endif
 
 	//////////////////////////////////////////////////////////////
-	// ”X‚ÌÝ’è
+	// è«¸ã€…ã®è¨­å®š
 
 	*newChara->transform = trs;
 
 	int hModel = -1;
-	// “–‚½‚è”»’è‚Ì\’z
+	// å½“ãŸã‚Šåˆ¤å®šã®æ§‹ç¯‰
 	ColDefine::ColBaseParam colParamChara;
 	colParamChara.trs.scale = Vector3(70.0f);
 	colParamChara.onlyOnce = false;
@@ -200,7 +215,7 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	//newChara->SetTrailImage(m_hTrails[tag]);
 	newChara->SetTrailImage(m_hTrails["Plain_Distortion_Thin"]);
 
-	// ƒ‚ƒfƒ‹‚ª”½“]‚µ‚Ä‚¢‚é‚Ì‚ð180“x‰ñ“]‚³‚¹‚Ä’¼‚·
+	// ãƒ¢ãƒ‡ãƒ«ãŒåè»¢ã—ã¦ã„ã‚‹ã®ã‚’180åº¦å›žè»¢ã•ã›ã¦ç›´ã™
 	int origin = MV1SearchFrame(hModel, "mixamorig:Hips");
 	MV1SetFrameUserLocalMatrix(hModel, origin, MGetRotY(MathUtil::PI));
 
@@ -208,10 +223,10 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	newChara->SetTransform(trs);
 	newChara->SetLocalMatrix(MGetScale(Vector3::Ones * 50.0f));
 
-	// •¨—‹““®‚ðÝ’è
+	// ç‰©ç†æŒ™å‹•ã‚’è¨­å®š
 	newChara->AddComponent<Physics>()->Init(GRAVITY, FRICTION);
 
-	// “–‚½‚è”»’è‚ðÝ’è
+	// å½“ãŸã‚Šåˆ¤å®šã‚’è¨­å®š
 	ColliderCapsule* colliderChara = newChara->AddComponent<ColliderCapsule>();
 	colliderChara->BaseInit(colParamChara);
 	colliderChara->SetOffset(Vector3::SetY(130.0f));
@@ -225,7 +240,7 @@ Chara* CharaManager::Create(const std::string& tag, const Transform& trs)
 	newChara->Init(tag);
 
 	//////////////////////////////////////////////////////////////
-	// ƒŠƒXƒg‚Ö‚Ì“o˜^
+	// ãƒªã‚¹ãƒˆã¸ã®ç™»éŒ²
 
 #ifdef USE_POOL
 	m_pPool->SetObjectPointer(index, newChara);
@@ -272,11 +287,11 @@ Chara* CharaManager::NearestEnemy(int index, float distance) {
 		if (it->m_pObject == nullptr)
 			continue;
 
-		// ”Ô†‚ª“¯‚¶‚à‚µ‚­‚ÍAƒ`[ƒ€‚ª“¯‚¶ê‡
+		// ç•ªå·ãŒåŒã˜ã‚‚ã—ãã¯ã€ãƒãƒ¼ãƒ ãŒåŒã˜å ´åˆ
 		if (it->m_Index == index || it->m_pObject->m_CharaTag == chara->m_CharaTag)
 			continue;
 
-		// ‹——£ŒvŽZ‚â•Ç”»’è‚ð‚¢‚ê‚é
+		// è·é›¢è¨ˆç®—ã‚„å£åˆ¤å®šã‚’ã„ã‚Œã‚‹
 		if ((chara->transform->position - it->m_pObject->transform->position).GetLengthSquared() >= distance * distance)
 			continue;
 

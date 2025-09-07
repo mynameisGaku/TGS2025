@@ -1,32 +1,33 @@
-#include "playScene.h"
+ï»¿#include "playScene.h"
 #include "framework/SceneManager.h"
 
 #include "src/util/input/InputManager.h"
 #include "src/common/camera/CameraManager.h"
 #include "src/common/component/collider/CollisionManager.h"
 #include "src/util/math/MathUtil.h"
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
-//=== ƒGƒtƒFƒNƒg ===
+//=== ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ ===
 #include "src/scene/play/targetting/TargetManager.h"
 
-//=== ƒ|ƒXƒgƒGƒtƒFƒNƒg ===
+//=== ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆ ===
 #include "src/util/fx/post_effect/bloom/BloomManager.h"
 
-//=== ”j•Ğ ===
+//=== ç ´ç‰‡ ===
 #include "src/scene/play/crystal/CrystalFragmentManager.h"
 #include "src/util/file/json/settings_json.h"
 
-//=== is–ğ ===
+//=== é€²è¡Œå½¹ ===
 #include "src/scene/play/match/MatchManager.h"
 
-//=== ƒ{[ƒ‹ ===
+//=== ãƒœãƒ¼ãƒ« ===
 #include "src/scene/play/ball/BallSpawner.h"
 #include "src/scene/play/ball/BallTargetManager.h"
 
-//=== ƒXƒe[ƒW ===
+//=== ã‚¹ãƒ†ãƒ¼ã‚¸ ===
 #include "src/common/stage/StageObjectManager.h"
 
-//=== —Íê ===
+//=== åŠ›å ´ ===
 #include "src/scene/play/force_field/ForceFieldManager.h"
 #include "src/scene/play/force_field/ForceFieldSphere.h"
 #include "src/scene/play/force_field/ForceFieldCorn.h"
@@ -38,12 +39,13 @@
 #include <src/reference/network/NetworkRef.h>
 #include "src/scene/play/enemy/EnemyManager.h"
 
-//=== ƒTƒEƒ“ƒh ===
+//=== ã‚µã‚¦ãƒ³ãƒ‰ ===
 #include "src/util/sound/SoundManager.h"
 
-//=== ”­ŒõƒeƒXƒg—p ===
+//=== ç™ºå…‰ãƒ†ã‚¹ãƒˆç”¨ ===
 #include "src/scene/play/ball/Ball.h"
 #include "src/scene/play/chara/CharaManager.h"
+#include <src\util\ptr\PtrUtil.h>
 
 using namespace KeyDefine;
 
@@ -90,13 +92,13 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
 	gameM->SetGameModeName("FreeForAll");
 #endif // _DEBUG
 
-	// ƒQ[ƒ€ƒ‚[ƒh‚Í GameRef.json “à‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢
+	// ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã¯ GameRef.json å†…ã‚’å‚ç…§ã—ã¦ãã ã•ã„
 	//gameM->SetGameModeName("Debug");
 
 	Instantiate<CollisionManager>();
 
-	// ƒIƒtƒ‰ƒCƒ“ƒvƒŒƒC‚Ì‚Æ‚«‚Í‚¢‚¢‚¯‚ÇAƒIƒ“ƒ‰ƒCƒ“‚Ì‚Æ‚«‚ÉƒJƒƒ‰¶¬‚ªƒLƒƒƒ‰‚Æ“¯‚És‚í‚ê‚é‚Ì‚Å
-	// ‚±‚±‚Å‚Ì¶¬‚ÍƒIƒ“ƒ‰ƒCƒ“‚Ì‚Æ‚«‚Í–³ˆÓ–¡B‚ ‚Æ‚Å’¼‚·
+	// ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ãƒ—ãƒ¬ã‚¤ã®ã¨ãã¯ã„ã„ã‘ã©ã€ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ã®ã¨ãã«ã‚«ãƒ¡ãƒ©ç”ŸæˆãŒã‚­ãƒ£ãƒ©ã¨åŒæ™‚ã«è¡Œã‚ã‚Œã‚‹ã®ã§
+	// ã“ã“ã§ã®ç”Ÿæˆã¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ã®ã¨ãã¯ç„¡æ„å‘³ã€‚ã‚ã¨ã§ç›´ã™
 
 	if (not net.IsNetworkEnable)
 		Instantiate<UI_Setter_PlayScene>();
@@ -120,10 +122,18 @@ PlayScene::PlayScene(std::string name) : SceneBase(true, name)
         CameraManager::SetIsScreenDivision(false);
 
 	SoundManager::FadeIn("BGM_PlayScene.wav", "BGM", 1.0f, EasingType::Linear);
+
+	m_pUpdateProfiler = new PerformanceProfiler("PlaySceneUpdate");
+	m_pUpdateProfiler->Activate();
+
+	m_pDrawProfiler = new PerformanceProfiler("PlaySceneDraw");
+	m_pDrawProfiler->Activate();
 }
 
 PlayScene::~PlayScene()
 {
+	PtrUtil::SafeDelete(m_pUpdateProfiler);
+	PtrUtil::SafeDelete(m_pDrawProfiler);
 	CameraManager::SetIsScreenDivision(false);
 
 	SoundManager::Stop("BGM_PlayScene.wav", "BGM");
@@ -131,16 +141,21 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
+	m_pUpdateProfiler->BeginProfiling();
+
 	if (InputManager::Push(KeyCode::T)) {
 		SceneManager::ChangeScene("TitleScene");
 	}
 
 	SceneBase::Update();
+
+	m_pUpdateProfiler->EndProfiling();
 }
 
 
 void PlayScene::Draw()
 {
+	m_pDrawProfiler->BeginProfiling();
 	SceneBase::Draw();
 
 	//if (CameraManager::IsScreenDivision())
@@ -154,4 +169,5 @@ void PlayScene::Draw()
 	//DrawString(100, 400, "Push [T]Key To Title", GetColor(255, 255, 255));
 	//DrawString(100, 500, "Push [R]Key To Result", GetColor(255, 255, 255));
 #endif
+	m_pDrawProfiler->EndProfiling();
 }

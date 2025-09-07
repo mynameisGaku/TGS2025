@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "src/util/object3D/Object3D.h"
 #include "src/common/component/collider/ColliderCapsule.h"
 #include <string>
@@ -38,7 +38,7 @@ class Trail3D;
 class UI_FadeBase;
 
 /// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[‚ÉŠÖ‚·‚éŠî’êƒNƒ‰ƒX
+/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«é–¢ã™ã‚‹åŸºåº•ã‚¯ãƒ©ã‚¹
 /// </summary>
 class Chara : public Object3D
 {
@@ -51,62 +51,62 @@ public:
 	void Draw() override;
 
 	//=======================================================================================
-	// ¥“–‚½‚è”»’è
+	// â–¼å½“ãŸã‚Šåˆ¤å®š
 
 	/// <summary>
-	/// “–‚½‚è”»’èˆ—
+	/// å½“ãŸã‚Šåˆ¤å®šå‡¦ç†
 	/// </summary>
 	/// <param name="colData"></param>
 	void CollisionEvent(const CollisionData& colData) override;
 
 	/// <summary>
-	/// ’n–Ê‚Æ‚Ì“–‚½‚è”»’è
+	/// åœ°é¢ã¨ã®å½“ãŸã‚Šåˆ¤å®š
 	/// </summary>
 	void HitGroundProcess();
 
 	void climb(Vector3& normal);
 
 	//=======================================================================================
-	// ¥ˆÚ“®
+	// â–¼ç§»å‹•
 
 	/// <summary>
-	/// ˆÚ“®‘¬“x‚ğİ’è‚·‚é
+	/// ç§»å‹•é€Ÿåº¦ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="moveSpeed">ˆÚ“®‘¬“x</param>
+	/// <param name="moveSpeed">ç§»å‹•é€Ÿåº¦</param>
 	inline void SetMoveSpeed(float moveSpeed) { m_MoveSpeed = moveSpeed; }
 
 	/// <summary>
-	/// ‰ñ“]‘¬“x‚ğİ’è‚·‚é
+	/// å›è»¢é€Ÿåº¦ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="rotSpeed">‰ñ“]‘¬“x</param>
+	/// <param name="rotSpeed">å›è»¢é€Ÿåº¦</param>
 	inline void SetRotSpeed(float rotSpeed) { m_RotSpeed = rotSpeed; }
 
 	/// <summary>
-	/// w’è•ûŒü‚ÉˆÚ“®‚·‚é
+	/// æŒ‡å®šæ–¹å‘ã«ç§»å‹•ã™ã‚‹
 	/// </summary>
-	/// <param name="dir">ˆÚ“®•ûŒü</param>
+	/// <param name="dir">ç§»å‹•æ–¹å‘</param>
 	void Move(const Vector3& dir);
 
 	/// <summary>
-	/// ˆê’è‚Ì—Í‚ÅƒWƒƒƒ“ƒv
+	/// ä¸€å®šã®åŠ›ã§ã‚¸ãƒ£ãƒ³ãƒ—
 	/// </summary>
 	void Jump();
 
 	/// <summary>
-	/// ŒÄ‚Ño‚µ’†ƒXƒ‰ƒCƒfƒBƒ“ƒO‚·‚é
+	/// å‘¼ã³å‡ºã—ä¸­ã‚¹ãƒ©ã‚¤ãƒ‡ã‚£ãƒ³ã‚°ã™ã‚‹
 	/// </summary>
 	void Slide();
 
 	/// <summary>
-	/// ‹ß‚­‚É•Ç‚ª‚ ‚ê‚ÎƒAƒNƒVƒ‡ƒ“‚·‚é
+	/// è¿‘ãã«å£ãŒã‚ã‚Œã°ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã™ã‚‹
 	/// </summary>
 	void WallAction();
 
 	//=======================================================================================
-	// ¥ƒ{[ƒ‹
+	// â–¼ãƒœãƒ¼ãƒ«
 
 	/// <summary>
-	/// ƒ{[ƒ‹‚ğ¶¬‚·‚éBƒfƒoƒbƒO—pB
+	/// ãƒœãƒ¼ãƒ«ã‚’ç”Ÿæˆã™ã‚‹ã€‚ãƒ‡ãƒãƒƒã‚°ç”¨ã€‚
 	/// </summary>
 	void GenerateBall();
 
@@ -117,18 +117,18 @@ public:
 	void StartThrow();
 
 	/// <summary>
-	/// “Š‚°‚éƒ‚[ƒVƒ‡ƒ“‚¾‚¯Ä¶
+	/// æŠ•ã’ã‚‹ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã ã‘å†ç”Ÿ
 	/// </summary>
 	void Feint();
 
 	/// <summary>
-	/// ƒ{[ƒ‹‚ğ‚Á‚Ä‚¢‚é‚©H
+	/// ãƒœãƒ¼ãƒ«ã‚’æŒã£ã¦ã„ã‚‹ã‹ï¼Ÿ
 	/// </summary>
 	/// <returns></returns>
 	bool IsHoldingBall() const { return nullptr != m_pBall; }
 
 	/// <summary>
-	/// ƒ`ƒƒ[ƒW’†‚©H
+	/// ãƒãƒ£ãƒ¼ã‚¸ä¸­ã‹ï¼Ÿ
 	/// </summary>
 	/// <returns></returns>
 	bool IsChargingBall() const { return m_IsCharging; }
@@ -138,29 +138,29 @@ public:
 	Ball* HitBall() const { return m_pHitBall; }
 
 	/// <summary>
-	/// ÅŒã‚É“Š‚°‚½ƒ{[ƒ‹‚ÉƒeƒŒƒ|[ƒg‚µA‚»‚ê‚ğƒLƒƒƒbƒ`‚·‚é
+	/// æœ€å¾Œã«æŠ•ã’ãŸãƒœãƒ¼ãƒ«ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã€ãã‚Œã‚’ã‚­ãƒ£ãƒƒãƒã™ã‚‹
 	/// </summary>
 	void TeleportToLastBall();
 
 	void DropBall(const Vector3& other, float force_vertical, float force_horizontal);
 
 	//=======================================================================================
-	// ¥ƒLƒƒƒbƒ`
+	// â–¼ã‚­ãƒ£ãƒƒãƒ
 
 	/// <summary>
-	/// ‚±‚ÌŠÖ”‚ğŒÄ‚Ño‚µ‚Ä‚¢‚éŠÔA‹zˆøƒLƒƒƒbƒ`‚ªs‚í‚ê‚éB
+	/// ã“ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹é–“ã€å¸å¼•ã‚­ãƒ£ãƒƒãƒãŒè¡Œã‚ã‚Œã‚‹ã€‚
 	/// </summary>
 	void Catch();
 
 	void CatchSuccess(const Vector3& velocity);
 
 	//=======================================================================================
-	// ¥ƒ_ƒ[ƒW
+	// â–¼ãƒ€ãƒ¡ãƒ¼ã‚¸
 
 	void Damage(int sub);
 
 	//=======================================================================================
-	// ¥ƒ^ƒbƒNƒ‹
+	// â–¼ã‚¿ãƒƒã‚¯ãƒ«
 	void Tackle();
 
 	void GetTackle(const Vector3& other, float force_horizontal, float force_vertical, bool isForceKnockback);
@@ -168,49 +168,49 @@ public:
 	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
 
 	//=======================================================================================
-	// ¥–³“G
+	// â–¼ç„¡æ•µ
 	void SetInvincible(float duration_sec, bool isOverride);
 private:
 	void invincibleUpdate();
 public:
 	//=======================================================================================
-	// ¥ƒŠƒXƒ|[ƒ“
+	// â–¼ãƒªã‚¹ãƒãƒ¼ãƒ³
 	void StartRespawn();
 
 	//=======================================================================================
-	// ¥‰‰o
+	// â–¼æ¼”å‡º
 
 	void SetTrailImage(int hImage);
 	Vector2 Target(const Ball* ball);
 
 	//=======================================================================================
-	// ¥ƒ†[ƒU[
+	// â–¼ãƒ¦ãƒ¼ã‚¶ãƒ¼
 	inline void SetUser(const User& user) { m_User = user; }
 
 	//=======================================================================================
-	// ¥ˆÚ“®ƒtƒ‰ƒO
+	// â–¼ç§»å‹•ãƒ•ãƒ©ã‚°
 	inline void SetIsMove(bool flag) { m_IsMove = flag; }
 
 	//=======================================================================================
-	// ¥ƒQƒbƒ^[
+	// â–¼ã‚²ãƒƒã‚¿ãƒ¼
 
 	/// <summary>
-	/// HP‚ğæ“¾‚·‚é
+	/// HPã‚’å–å¾—ã™ã‚‹
 	/// </summary>
 	inline const CharaHP* GetHP() const { return m_pHP; }
 
 	/// <summary>
-	/// ƒCƒ“ƒfƒbƒNƒX‚ğæ“¾
+	/// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—
 	/// </summary>
 	inline const int GetIndex() const { return m_Index; }
 
 	/// <summary>
-	/// ƒLƒƒƒ‰ƒ^ƒO(Š‘®ƒ`[ƒ€–¼)‚ğæ“¾
+	/// ã‚­ãƒ£ãƒ©ã‚¿ã‚°(æ‰€å±ãƒãƒ¼ãƒ å)ã‚’å–å¾—
 	/// </summary>
 	inline const std::string GetCharaTag() const { return m_CharaTag; }
 
 	/// <summary>
-	/// ƒXƒe[ƒ^ƒXƒgƒ‰ƒbƒJ[‚ğæ“¾
+	/// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒˆãƒ©ãƒƒã‚«ãƒ¼ã‚’å–å¾—
 	/// </summary>
 	inline StatusTracker* GetStatusTracker() const { return m_pStatusTracker; }
 
@@ -219,47 +219,47 @@ public:
 
 	inline float GetBallChargeRate() const { return m_BallChargeRate; }
 
-	// ƒ{[ƒ‹‚ğƒ`ƒƒ[ƒW‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	// ãƒœãƒ¼ãƒ«ã‚’ãƒãƒ£ãƒ¼ã‚¸ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 	inline bool	IsCharging()	const { return m_IsCharging;}			
-	// ’…’n’†
+	// ç€åœ°ä¸­
 	inline bool	IsLanding()		const { return m_IsLanding;}			
-	// ˆÚ“®‰Â”\‚©
+	// ç§»å‹•å¯èƒ½ã‹
 	inline bool	CanMove()		const { return m_CanMove;}				
-	// ‰ñ“]‰Â”\‚©
+	// å›è»¢å¯èƒ½ã‹
 	inline bool	CanRot()		const { return m_CanRot;}				
-	// ˆÚ“®‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é‚©
+	// ç§»å‹•ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã‹
 	inline bool	IsMove()		const { return m_IsMove;}				
-	// ƒWƒƒƒ“ƒv’†‚©
+	// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‹
 	inline bool	IsJumping()		const { return m_IsJumping;}			
-	// ƒLƒƒƒbƒ`‰Â”\‚©
+	// ã‚­ãƒ£ãƒƒãƒå¯èƒ½ã‹
 	inline bool	CanCatch()		const { return m_CanCatch;}				
-	// ƒ{[ƒ‹‚ğ‚Ä‚é‚©
+	// ãƒœãƒ¼ãƒ«ã‚’æŒã¦ã‚‹ã‹
 	inline bool	CanHold()		const { return m_CanHold;}				
-	// ƒ{[ƒ‹‚ğ“Š‚°‚ç‚ê‚é‚©
+	// ãƒœãƒ¼ãƒ«ã‚’æŠ•ã’ã‚‰ã‚Œã‚‹ã‹
 	inline bool	CanThrow()		const { return m_CanThrow;}				
-	// ƒLƒƒƒbƒ`’†‚©
+	// ã‚­ãƒ£ãƒƒãƒä¸­ã‹
 	inline bool	IsCatching()	const { return m_IsCatching;}	
-	// ƒ^[ƒQƒbƒg‚ğ‘_‚Á‚Ä‚¢‚é‚©
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç‹™ã£ã¦ã„ã‚‹ã‹
 	inline bool IsTargeting() const { return m_IsTargeting; }
-	// ƒ^[ƒQƒbƒg‚³‚ê‚Ä‚¢‚é‚©
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã‹
 	inline bool IsTargeted() const { return m_IsTargeted; }
-	// ƒ^ƒbƒNƒ‹’†‚©
+	// ã‚¿ãƒƒã‚¯ãƒ«ä¸­ã‹
 	inline bool IsTackling() const { return m_IsTackling; }
-	// ƒ^ƒbƒNƒ‹‰Â”\‚©
+	// ã‚¿ãƒƒã‚¯ãƒ«å¯èƒ½ã‹
 	inline bool CanTackle() const { return m_CanTackle; }
-	// –³“G’†‚©
+	// ç„¡æ•µä¸­ã‹
 	inline bool IsInvincible() const { return m_IsInvincible; }
-	// “Š‚°ƒ‚[ƒVƒ‡ƒ“’†‚©
+	// æŠ•ã’ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ã‹
 	inline bool IsThrowing() const { return (m_FSM->GetCurrentState() == &Chara::StateAimToThrow); }
-	// ƒ^ƒbƒNƒ‹Œã‚ÌŠÔŠuƒAƒ‰[ƒ€‚ª–Â‚Á‚Ä‚¢‚é‚©
+	// ã‚¿ãƒƒã‚¯ãƒ«å¾Œã®é–“éš”ã‚¢ãƒ©ãƒ¼ãƒ ãŒé³´ã£ã¦ã„ã‚‹ã‹
 	bool IsFinishTackleIntervalAlarm();
-	// ƒ†[ƒU[æ“¾
+	// ãƒ¦ãƒ¼ã‚¶ãƒ¼å–å¾—
 	inline User GetUser() const { return m_User; }
-	// ƒƒbƒNƒIƒ“ƒ^[ƒQƒbƒgæ“¾
+	// ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 	inline BallTarget* GetBallTarget() const { return m_pBallTarget; }
 
 	//=======================================================================================
-	// ¥ŠeƒXƒe[ƒg
+	// â–¼å„ã‚¹ãƒ†ãƒ¼ãƒˆ
 	void StateActionIdle(FSMSignal sig);
 	void StateActionIdleEmote(FSMSignal sig);
 	void StateActionIdleToJump(FSMSignal sig);
@@ -322,93 +322,96 @@ private:
 	friend class CharaManager;
 	friend class UI_CrossHair;
 
-	NetworkManager*				m_pNetManager;			// ƒlƒbƒgƒ[ƒNŠÖ˜A
-	User						m_User;					// ƒlƒbƒgƒ[ƒNƒ†[ƒU[î•ñ
+	class PerformanceProfiler* m_pUpdateProfiler;
+	class PerformanceProfiler* m_pDrawProfiler;
 
-	int							m_Index;				// ©g‚ÌƒCƒ“ƒfƒbƒNƒX
-	std::string					m_CharaTag;				// ƒLƒƒƒ‰ƒNƒ^[‚Ìƒ`[ƒ€‚Ìƒ^ƒO
-	StatusTracker*				m_pStatusTracker;		// ƒXƒe[ƒ^ƒX‚Ì“Œv
+	NetworkManager*				m_pNetManager;			// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯é–¢é€£
+	User						m_User;					// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ¦ãƒ¼ã‚¶ãƒ¼æƒ…å ±
 
-	Ball*						m_pBall;				// Š—L‚µ‚Ä‚¢‚éƒ{[ƒ‹‚Ìƒ|ƒCƒ“ƒ^[
-	Ball*						m_pLastBall;			// ÅŒã‚É“Š‚°‚½ƒ{[ƒ‹‚Ìƒ|ƒCƒ“ƒ^[
-	Ball*						m_pHitBall;				// ‚ ‚Ä‚ç‚ê‚½ƒ{[ƒ‹‚Ìƒ|ƒCƒ“ƒ^[
-	const Ball*					m_pTargetBall;			// ‘_‚í‚ê‚Ä‚¢‚éƒ{[ƒ‹‚Ìƒ|ƒCƒ“ƒ^[
-	BallManager*				m_pBallManager;			// ƒ{[ƒ‹ƒ}ƒl[ƒWƒƒ[‚Ìƒ|ƒCƒ“ƒ^[
-	float						m_BallChargeRate;		// ƒ{[ƒ‹‚Ìƒ`ƒƒ[ƒW‰Á‘¬“x
+	int							m_Index;				// è‡ªèº«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	std::string					m_CharaTag;				// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ãƒãƒ¼ãƒ ã®ã‚¿ã‚°
+	StatusTracker*				m_pStatusTracker;		// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®çµ±è¨ˆ
 
-	BallTarget*					m_pBallTarget;			// ƒƒbƒNƒIƒ“‚Å‚«‚éƒ^[ƒQƒbƒg
-	BallTarget*					m_pCameraTarget;		// ƒJƒƒ‰‚ª’‹‚µ‚Ä‚¢‚éƒ^[ƒQƒbƒg
-	BallTargetManager*			m_pBallTargetManager;	// ƒ{[ƒ‹ƒ^[ƒQƒbƒgƒ}ƒl[ƒWƒƒ[‚Ìƒ|ƒCƒ“ƒ^[
+	Ball*						m_pBall;				// æ‰€æœ‰ã—ã¦ã„ã‚‹ãƒœãƒ¼ãƒ«ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	Ball*						m_pLastBall;			// æœ€å¾Œã«æŠ•ã’ãŸãƒœãƒ¼ãƒ«ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	Ball*						m_pHitBall;				// ã‚ã¦ã‚‰ã‚ŒãŸãƒœãƒ¼ãƒ«ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	const Ball*					m_pTargetBall;			// ç‹™ã‚ã‚Œã¦ã„ã‚‹ãƒœãƒ¼ãƒ«ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	BallManager*				m_pBallManager;			// ãƒœãƒ¼ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	float						m_BallChargeRate;		// ãƒœãƒ¼ãƒ«ã®ãƒãƒ£ãƒ¼ã‚¸åŠ é€Ÿåº¦
 
-	CharaHP*					m_pHP;					// HP‚Ìƒ|ƒCƒ“ƒ^[
-	CharaStamina*				m_pStamina;				// ƒXƒ^ƒ~ƒi‚Ìƒ|ƒCƒ“ƒ^[
-	float						m_HitPoint;				// ƒqƒbƒgƒ|ƒCƒ“ƒg
-	float						m_Stamina;				// ƒXƒ^ƒ~ƒi
+	BallTarget*					m_pBallTarget;			// ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã§ãã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
+	BallTarget*					m_pCameraTarget;		// ã‚«ãƒ¡ãƒ©ãŒæ³¨è¦–ã—ã¦ã„ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
+	BallTargetManager*			m_pBallTargetManager;	// ãƒœãƒ¼ãƒ«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
 
-	Physics*					m_pPhysics;				// •¨—‹““®‚Ìƒ|ƒCƒ“ƒ^[
-	Vector3						m_lastUpdatePosition;	// ‘O‰ñXV‚ÌÅIˆÊ’u
-	Vector3						m_WallPosition;			// ƒAƒNƒVƒ‡ƒ“‚Å‚«‚é•Ç‚ÌˆÊ’u
-	Vector3						m_WallNormal;			// ƒAƒNƒVƒ‡ƒ“‚Å‚«‚é•Ç‚Ì–@ü
-	Vector3						m_ActionPosition;		// ƒAƒNƒVƒ‡ƒ“ŠJn’n“_
-	Vector3						m_ActionWallPosition;	// ƒAƒNƒVƒ‡ƒ“ŠJn‚Ì•Ç‚ÌˆÊ’u
-	Vector3						m_ActionWallNormal;		// ƒAƒNƒVƒ‡ƒ“ŠJn‚Ì•Ç‚Ì–@ü
-	Vector3						m_MoveDirection;		// ˆÚ“®•ûŒü
-	float						m_MoveSpeed;			// ˆÚ“®‘¬“x
-	float						m_RotSpeed;				// ‰ñ“]‘¬“x
-	float						m_SpeedScale;			// ‘¬“x”{—¦
+	CharaHP*					m_pHP;					// HPã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	CharaStamina*				m_pStamina;				// ã‚¹ã‚¿ãƒŸãƒŠã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	float						m_HitPoint;				// ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆ
+	float						m_Stamina;				// ã‚¹ã‚¿ãƒŸãƒŠ
 
-	Catcher*					m_Catcher;				// ƒLƒƒƒbƒ`‚Ì“–‚½‚è”»’è
-	Tackler*					m_Tackler;				// ƒ^ƒbƒNƒ‹‚Ì“–‚½‚è”»’è
+	Physics*					m_pPhysics;				// ç‰©ç†æŒ™å‹•ã®ãƒã‚¤ãƒ³ã‚¿ãƒ¼
+	Vector3						m_lastUpdatePosition;	// å‰å›æ›´æ–°æ™‚ã®æœ€çµ‚ä½ç½®
+	Vector3						m_WallPosition;			// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã§ãã‚‹å£ã®ä½ç½®
+	Vector3						m_WallNormal;			// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã§ãã‚‹å£ã®æ³•ç·š
+	Vector3						m_ActionPosition;		// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³é–‹å§‹åœ°ç‚¹
+	Vector3						m_ActionWallPosition;	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚ã®å£ã®ä½ç½®
+	Vector3						m_ActionWallNormal;		// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚ã®å£ã®æ³•ç·š
+	Vector3						m_MoveDirection;		// ç§»å‹•æ–¹å‘
+	float						m_MoveSpeed;			// ç§»å‹•é€Ÿåº¦
+	float						m_RotSpeed;				// å›è»¢é€Ÿåº¦
+	float						m_SpeedScale;			// é€Ÿåº¦å€ç‡
 
-	Transform*					m_EffectTransform;		// ƒGƒtƒFƒNƒgo‚·ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
-	EffectBase*					m_pCatchReadyEffect;	// ƒLƒƒƒbƒ`‚Ì€”õƒGƒtƒFƒNƒg
-	EffectBase*					m_pCatchDustEffect;		// ƒLƒƒƒbƒ`‚Ì•²ƒGƒtƒFƒNƒg
+	Catcher*					m_Catcher;				// ã‚­ãƒ£ãƒƒãƒã®å½“ãŸã‚Šåˆ¤å®š
+	Tackler*					m_Tackler;				// ã‚¿ãƒƒã‚¯ãƒ«ã®å½“ãŸã‚Šåˆ¤å®š
 
-	TinyFSM<Chara>*				m_FSM;					// ƒXƒe[ƒgƒ}ƒVƒ“
-	TinyFSM<Chara>*				m_SubFSM;				// ƒXƒe[ƒgƒ}ƒVƒ“
-	TinyFSM<Chara>*				m_RespawnFSM;			// ƒXƒe[ƒgƒ}ƒVƒ“
+	Transform*					m_EffectTransform;		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå‡ºã™ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ 
+	EffectBase*					m_pCatchReadyEffect;	// ã‚­ãƒ£ãƒƒãƒã®æº–å‚™ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
+	EffectBase*					m_pCatchDustEffect;		// ã‚­ãƒ£ãƒƒãƒã®ç²‰ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 
-	Animator*					m_Animator;				// ƒAƒjƒ[ƒVƒ‡ƒ“
-	Timeline<Chara>*			m_Timeline;				// ƒAƒjƒ[ƒVƒ‡ƒ“‚É‡‚í‚¹‚Ä“®‚­ƒ^ƒCƒ€ƒ‰ƒCƒ“
+	TinyFSM<Chara>*				m_FSM;					// ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
+	TinyFSM<Chara>*				m_SubFSM;				// ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
+	TinyFSM<Chara>*				m_RespawnFSM;			// ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
 
-	Alarm*						m_Alarm;				// ƒAƒ‰[ƒ€
-	Alarm*						m_TackleIntervalAlarm;	// ƒ^ƒbƒNƒ‹Œã‚ÌŠÔŠuƒAƒ‰[ƒ€
+	Animator*					m_Animator;				// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	Timeline<Chara>*			m_Timeline;				// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«åˆã‚ã›ã¦å‹•ãã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³
 
-	CharaSpawnPointManager*		m_SpawnPointManager;	// ƒŠƒXƒ|[ƒ“’n“_
+	Alarm*						m_Alarm;				// ã‚¢ãƒ©ãƒ¼ãƒ 
+	Alarm*						m_TackleIntervalAlarm;	// ã‚¿ãƒƒã‚¯ãƒ«å¾Œã®é–“éš”ã‚¢ãƒ©ãƒ¼ãƒ 
+
+	CharaSpawnPointManager*		m_SpawnPointManager;	// ãƒªã‚¹ãƒãƒ¼ãƒ³åœ°ç‚¹
 
 	MatchManager*				m_pMatchManager;
 
-	int							m_hTrailImage;			// ƒgƒŒƒCƒ‹‚Ì‰æ‘œƒnƒ“ƒhƒ‹
+	int							m_hTrailImage;			// ãƒˆãƒ¬ã‚¤ãƒ«ã®ç”»åƒãƒãƒ³ãƒ‰ãƒ«
 
-	float						m_EmoteTimer;			// •ú’uƒAƒjƒ[ƒVƒ‡ƒ“‚Ü‚Å‚ÌŠÔ
-	float						m_SlideTimer;			// ƒXƒ‰ƒCƒfƒBƒ“ƒOc‚èŠÔƒ^ƒCƒ}[
-	float						m_CatchTimer;			// ƒLƒƒƒbƒ`‚Ìc‚èŠÔƒ^ƒCƒ}[
-	float						m_InvincibleTimer;		// –³“Gc‚èŠÔ
+	float						m_EmoteTimer;			// æ”¾ç½®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¾ã§ã®æ™‚é–“
+	float						m_SlideTimer;			// ã‚¹ãƒ©ã‚¤ãƒ‡ã‚£ãƒ³ã‚°æ®‹ã‚Šæ™‚é–“ã‚¿ã‚¤ãƒãƒ¼
+	float						m_CatchTimer;			// ã‚­ãƒ£ãƒƒãƒã®æ®‹ã‚Šæ™‚é–“ã‚¿ã‚¤ãƒãƒ¼
+	float						m_InvincibleTimer;		// ç„¡æ•µæ®‹ã‚Šæ™‚é–“
 
-	bool						m_IsCharging;			// ƒ{[ƒ‹‚ğƒ`ƒƒ[ƒW‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
-	bool						m_IsLanding;			// ’…’n’†
-	bool						m_IsMove;				// ˆÚ“®‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é‚©
-	bool						m_IsJumping;			// ƒWƒƒƒ“ƒv’†‚©
-	bool						m_IsCatching;			// ƒLƒƒƒbƒ`’†‚©
-	bool 						m_IsTargeting;			// ƒ^[ƒQƒbƒg‚ğ‘_‚Á‚Ä‚¢‚é‚©
-	bool 						m_IsTargeted;			// ƒ^[ƒQƒbƒg‚³‚ê‚Ä‚¢‚é‚©
-	bool						m_IsTackling;			// ƒ^ƒbƒNƒ‹’†‚©
-	bool						m_IsInvincible;			// –³“G‚©
-	bool						m_IsDamage;				// ƒ_ƒ[ƒW‹ò‚ç‚¢’†‚©
-    bool						m_IsSliding = false;	// ƒXƒ‰ƒCƒfƒBƒ“ƒO’†‚©
-    bool						m_IsInhibitionSpeed;	// ƒXƒs[ƒh—}§‚·‚é‚©
-	bool						m_IsClimb;				// •Ç“o‚è’†‚©
-	bool						m_IsWall;				// ‹ß‚­‚É•Ç‚ª‚ ‚é‚©
+	bool						m_IsCharging;			// ãƒœãƒ¼ãƒ«ã‚’ãƒãƒ£ãƒ¼ã‚¸ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
+	bool						m_IsLanding;			// ç€åœ°ä¸­
+	bool						m_IsMove;				// ç§»å‹•ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã‹
+	bool						m_IsJumping;			// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‹
+	bool						m_IsCatching;			// ã‚­ãƒ£ãƒƒãƒä¸­ã‹
+	bool 						m_IsTargeting;			// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ç‹™ã£ã¦ã„ã‚‹ã‹
+	bool 						m_IsTargeted;			// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã‹
+	bool						m_IsTackling;			// ã‚¿ãƒƒã‚¯ãƒ«ä¸­ã‹
+	bool						m_IsInvincible;			// ç„¡æ•µã‹
+	bool						m_IsDamage;				// ãƒ€ãƒ¡ãƒ¼ã‚¸å–°ã‚‰ã„ä¸­ã‹
+    bool						m_IsSliding = false;	// ã‚¹ãƒ©ã‚¤ãƒ‡ã‚£ãƒ³ã‚°ä¸­ã‹
+    bool						m_IsInhibitionSpeed;	// ã‚¹ãƒ”ãƒ¼ãƒ‰æŠ‘åˆ¶ã™ã‚‹ã‹
+	bool						m_IsClimb;				// å£ç™»ã‚Šä¸­ã‹
+	bool						m_IsWall;				// è¿‘ãã«å£ãŒã‚ã‚‹ã‹
 
-	bool						m_CanMove;				// ˆÚ“®‰Â”\‚©
-	bool						m_CanRot;				// ‰ñ“]‰Â”\‚©
-	bool						m_CanCatch;				// ƒLƒƒƒbƒ`‰Â”\‚©
-	bool						m_CanHold;				// ƒ{[ƒ‹‚ğ‚Ä‚é‚©
-	bool						m_CanThrow;				// ƒ{[ƒ‹‚ğ“Š‚°‚ç‚ê‚é‚©
-	bool						m_CanTackle;			// ƒ^ƒbƒNƒ‹‰Â”\‚©
-	bool						m_CanClimb;				// •Ç“o‚è‚Å‚«‚é‚©
+	bool						m_CanMove;				// ç§»å‹•å¯èƒ½ã‹
+	bool						m_CanRot;				// å›è»¢å¯èƒ½ã‹
+	bool						m_CanCatch;				// ã‚­ãƒ£ãƒƒãƒå¯èƒ½ã‹
+	bool						m_CanHold;				// ãƒœãƒ¼ãƒ«ã‚’æŒã¦ã‚‹ã‹
+	bool						m_CanThrow;				// ãƒœãƒ¼ãƒ«ã‚’æŠ•ã’ã‚‰ã‚Œã‚‹ã‹
+	bool						m_CanTackle;			// ã‚¿ãƒƒã‚¯ãƒ«å¯èƒ½ã‹
+	bool						m_CanClimb;				// å£ç™»ã‚Šã§ãã‚‹ã‹
 
-	UI_ButtonHint* m_pUI_ButtonHint;			// ƒ{ƒ^ƒ“ƒqƒ“ƒgUI
+	UI_ButtonHint* m_pUI_ButtonHint;			// ãƒœã‚¿ãƒ³ãƒ’ãƒ³ãƒˆUI
 	UI_FadeBase* m_pUI_Fade;
 
 	CharaSpawnPointManager* m_pCharaSpawnPointManager;
@@ -427,25 +430,25 @@ private:
 
 	void getHit(Ball* hit);
 
-	// ƒLƒƒƒ‰‚Ì³–Ê‚É•ûŒüw’èƒ{[ƒ‹‚ğ“Š‚°‚é
+	// ã‚­ãƒ£ãƒ©ã®æ­£é¢ã«æ–¹å‘æŒ‡å®šãƒœãƒ¼ãƒ«ã‚’æŠ•ã’ã‚‹
 	void throwBallForward();
-	// ƒz[ƒ~ƒ“ƒOƒ{[ƒ‹‚ğ“Š‚°‚é
+	// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°ãƒœãƒ¼ãƒ«ã‚’æŠ•ã’ã‚‹
 	void throwBallHoming();
-	// ƒ{[ƒ‹‚ğè•ú‚·ˆ—
+	// ãƒœãƒ¼ãƒ«ã‚’æ‰‹æ”¾ã™å‡¦ç†
 	void releaseBall();
 	/// <summary>
-	/// ‚±‚ÌŠÖ”‚ğŒÄ‚Ño‚·‚ÆAƒpƒ‰ƒ[ƒ^‚ªƒŠƒZƒbƒg‚³‚êAw’èˆÊ’u‚ÉƒŠƒXƒ|[ƒ“‚·‚éB
-	/// ToDo : ƒŠƒXƒ|[ƒ“ƒXƒe[ƒg‚ğì‚é
+	/// ã“ã®é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒãƒªã‚»ãƒƒãƒˆã•ã‚Œã€æŒ‡å®šä½ç½®ã«ãƒªã‚¹ãƒãƒ¼ãƒ³ã™ã‚‹ã€‚
+	/// ToDo : ãƒªã‚¹ãƒãƒ¼ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚’ä½œã‚‹
 	/// </summary>
-	/// <param name="pos">ƒŠƒXƒ|[ƒ“ˆÊ’u</param>
-	/// <param name="rot">ƒŠƒXƒ|[ƒ“‰ñ“]</param>
+	/// <param name="pos">ãƒªã‚¹ãƒãƒ¼ãƒ³æ™‚ä½ç½®</param>
+	/// <param name="rot">ãƒªã‚¹ãƒãƒ¼ãƒ³æ™‚å›è»¢</param>
 	void respawn(const Vector3& pos, const Vector3& rot);
-	// ƒŠƒXƒ|[ƒ“’n“_‚©‚çƒŠƒXƒ|[ƒ“
+	// ãƒªã‚¹ãƒãƒ¼ãƒ³åœ°ç‚¹ã‹ã‚‰ãƒªã‚¹ãƒãƒ¼ãƒ³
 	void respawnByPoint();
-	// is•ûŒü‚ğŒ©‚é
+	// é€²è¡Œæ–¹å‘ã‚’è¦‹ã‚‹
 	void lookVelocity();
 	
-	//=== ƒTƒEƒ“ƒhÄ¶ ===
+	//=== ã‚µã‚¦ãƒ³ãƒ‰å†ç”Ÿ ===
 	void playThrowSound();
 	void playGetHitSound();
 	void playCatchBallSound();
@@ -457,7 +460,7 @@ private:
 	void playLandingRollSound();
 	void playTackleSound();
 
-	//=== ƒ^ƒCƒ€ƒ‰ƒCƒ“—p ===
+	//=== ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ç”¨ ===
 	void setAnimationSpeed(const nlohmann::json& argument);
 	void moveToPosition(const nlohmann::json& argument);
 	void moveToWallPosition(const nlohmann::json& argument);

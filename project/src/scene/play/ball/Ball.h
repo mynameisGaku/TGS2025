@@ -1,8 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include "src/util/object3D/Object3D.h"
 #include "src/common/component/renderer/BallRenderer.h"
 #include <memory>
 #include <string>
+#include <src\common\performance_profiler\PerformanceProfiler.h>
 
 class Physics;
 class ColliderCapsule;
@@ -23,9 +24,9 @@ namespace
 }
 
 /// <summary>
-/// ƒLƒƒƒ‰ƒNƒ^[‚ª“Š‚°‚éƒ{[ƒ‹
+/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãŒæŠ•ã’ã‚‹ãƒœãƒ¼ãƒ«
 /// </summary>
-/// <author>²“¡h“l</author>
+/// <author>ä½è—¤ç´˜æ–—</author>
 class Ball : public Object3D
 {
 public:
@@ -40,6 +41,7 @@ public:
 	~Ball();
 	void Reset(std::string charaTag);
 	void Spawn();
+	void OnSpawn();
 	void Init(std::string charaTag = "None");
 	void Update();
 	void Draw() override;
@@ -55,9 +57,9 @@ public:
 	void SetState(const Ball::State& state) { m_State = state; }
 
 	/// <summary>
-	/// “–‚½‚è”»’èˆ—
+	/// å½“ãŸã‚Šåˆ¤å®šå‡¦ç†
 	/// </summary>
-	/// <param name="colData">“–‚½‚è”»’èî•ñ</param>
+	/// <param name="colData">å½“ãŸã‚Šåˆ¤å®šæƒ…å ±</param>
 	void CollisionEvent(const CollisionData& colData) override;
 
 	std::string GetCharaTag() const { return m_CharaTag; }
@@ -66,9 +68,9 @@ public:
 	Chara* GetLastOwner() const { return m_LastOwner; }
 
 	/// <summary>
-	/// —LŒø‚©H
+	/// æœ‰åŠ¹ã‹ï¼Ÿ
 	/// </summary>
-	/// <returns>—LŒø‚È‚çtrue</returns>
+	/// <returns>æœ‰åŠ¹ãªã‚‰true</returns>
 	bool IsActive() const { return m_IsActive; }
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
@@ -89,6 +91,7 @@ public:
 	const std::string& GetUniqueID() const { return m_UniqueID; }
 
 	const uint32_t GetIndex() const { return m_Index; }
+	void SetIndex(const uint32_t i) { m_Index = i; }
 
 	BallRenderer& GetBallRenderer() { return *GetComponent<BallRenderer>(); }
 
@@ -96,12 +99,14 @@ public:
 
 	void SetOwner(Chara* pChara);
 
+	PerformanceProfiler* DrawProfiler() const { return m_pProfilerDraw; }
+	PerformanceProfiler* UpdateProfiler() const { return m_pProfilerUpdate; }
+
 private:
 	friend class BallManager;
 
-	class PerformanceProfiler* m_pProfilerDraw;
-	class PerformanceProfiler* m_pProfilerUpdate;
-	class PerformanceProfiler* m_pProfilerCollider;
+	class PerformanceProfiler* m_pProfilerDraw{nullptr};
+	class PerformanceProfiler* m_pProfilerUpdate{ nullptr };
 	BallManager*		m_pManager;
 	std::vector<BallAttribute*> m_Attributes;
 	Trail3D*			m_pTrail;
@@ -123,23 +128,23 @@ private:
 	bool				m_IsActive;
 	bool				m_IsPickedUp;
 
-	// ƒz[ƒ~ƒ“ƒOŒn
-	BallTarget* m_HomingTarget;	// ƒz[ƒ~ƒ“ƒO’†‚Ìƒ{[ƒ‹ƒ^[ƒQƒbƒgƒ|ƒCƒ“ƒ^
+	// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°ç³»
+	BallTarget* m_HomingTarget;	// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°ä¸­ã®ãƒœãƒ¼ãƒ«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒã‚¤ãƒ³ã‚¿
 
-	Vector3	m_HomingOrigin;			// ƒz[ƒ~ƒ“ƒOŠJn’n“_
-	Vector3	m_HomingTargetPos;		// ƒz[ƒ~ƒ“ƒO‘ÎÛ‚ÌÀ•W
+	Vector3	m_HomingOrigin;			// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°é–‹å§‹åœ°ç‚¹
+	Vector3	m_HomingTargetPos;		// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°å¯¾è±¡ã®åº§æ¨™
 
-	bool	m_IsThorwing;			// “Š±’†‚©
-	bool	m_IsHoming;				// ƒz[ƒ~ƒ“ƒO’†‚©
-	bool	m_DoRefreshHoming;		// ƒz[ƒ~ƒ“ƒOæ‚ğXV‚·‚é‚©
+	bool	m_IsThorwing;			// æŠ•æ“²ä¸­ã‹
+	bool	m_IsHoming;				// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°ä¸­ã‹
+	bool	m_DoRefreshHoming;		// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°å…ˆã‚’æ›´æ–°ã™ã‚‹ã‹
 
-	float	m_HomingProgress;		// ƒz[ƒ~ƒ“ƒOis“x(0..1)
-	float	m_HomingSpeed;			// ƒz[ƒ~ƒ“ƒO‚Ìi‚Ş‘¬‚³
-	float	m_HormingCurveAngle;	// ƒJ[ƒu•ûŒü‚ğŒˆ‚ß‚éŠp“x
-	float	m_HormingCurveScale;	// ƒJ[ƒu‚Ì‹È‚ª‚è—Ê‚Ì‘å‚«‚³(0..1)
+	float	m_HomingProgress;		// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°é€²è¡Œåº¦(0..1)
+	float	m_HomingSpeed;			// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°ã®é€²ã‚€é€Ÿã•
+	float	m_HormingCurveAngle;	// ã‚«ãƒ¼ãƒ–æ–¹å‘ã‚’æ±ºã‚ã‚‹è§’åº¦
+	float	m_HormingCurveScale;	// ã‚«ãƒ¼ãƒ–ã®æ›²ãŒã‚Šé‡ã®å¤§ãã•(0..1)
 
 	void collisionToGround();
-	// ’nŒ`‚Æ‚Ì‰Ÿ‚µo‚µˆ—A“–‚½‚Á‚½‚çtrue
+	// åœ°å½¢ã¨ã®æŠ¼ã—å‡ºã—å‡¦ç†ã€å½“ãŸã£ãŸã‚‰true
 	bool collisionToStage();
 	void changeState(const State& s);
 	void effectUpdate();

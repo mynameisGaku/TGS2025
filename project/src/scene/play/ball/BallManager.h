@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "framework/gameObject.h"
 #include "src/util/pool/Pool.h"
 #include "src/common/component/renderer/BallRenderer.h"
@@ -10,9 +10,9 @@
 class Ball;
 
 /// <summary>
-/// ƒ{[ƒ‹‚Ì¶¬“™ƒ}ƒl[ƒWƒƒ[
+/// ãƒœãƒ¼ãƒ«ã®ç”Ÿæˆç­‰ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
 /// </summary>
-/// <author>²“¡h“l</author>
+/// <author>ä½è—¤ç´˜æ–—</author>
 class BallManager : public GameObject
 {
 public:
@@ -20,7 +20,10 @@ public:
 	~BallManager();
 
 	void Update() override;
+	void AllBallUpdateProfiler();
 	void Draw() override;
+
+	void AllBallDrawProfiler();
 
 	Ball* CreateBall(const Vector3& position, bool isSpawn = false);
 
@@ -46,6 +49,6 @@ private:
 #ifdef USE_POOL
 	Pool<Ball>* m_pPool;
 #else
-	std::list<Ball*> m_Balls; // ”j•ĞƒŠƒXƒg
+	std::list<Ball*> m_Balls; // ç ´ç‰‡ãƒªã‚¹ãƒˆ
 #endif
 };

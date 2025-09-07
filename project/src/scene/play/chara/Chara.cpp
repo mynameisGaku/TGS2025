@@ -28,6 +28,7 @@
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
 #include "src/scene/play/ball/BallTarget.h"
 #include "src/scene/play/ball/BallTargetManager.h"
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
 #include "src/util/ui/UI_Manager.h"
 #include "src/util/ui/UI_Gauge.h"
@@ -179,6 +180,8 @@ Chara::~Chara()
 	PtrUtil::SafeDelete(m_FSM);
 	PtrUtil::SafeDelete(m_SubFSM);
 	PtrUtil::SafeDelete(m_Timeline);
+	PtrUtil::SafeDelete(m_pUpdateProfiler);
+	PtrUtil::SafeDelete(m_pDrawProfiler);
 
 	m_Catcher->SetParent(nullptr);
 	m_Catcher->DestroyMe();
@@ -406,12 +409,21 @@ void Chara::Init(std::string tag)
 		if (not m_pNetManager)
 			m_pNetManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
 	}
+
+
+	m_pUpdateProfiler = new PerformanceProfiler("Chara [" + m_CharaTag + " " + std::to_string(m_Index) + "] Update");
+	m_pUpdateProfiler->Activate();
+
+	m_pDrawProfiler = new PerformanceProfiler("Chara [" + m_CharaTag + " " + std::to_string(m_Index) + "] Draw");
+	m_pDrawProfiler->Activate();
 }
 
 void Chara::Update() {
+	m_pUpdateProfiler->BeginProfiling();
 
 	if (m_pMatchManager && m_pMatchManager->GetReadyTimerSec() > 0)
 	{
+		m_pUpdateProfiler->EndProfiling();
 		return;
 	}
 
@@ -438,7 +450,11 @@ void Chara::Update() {
 	}
 
 	// 時間が止まってたらアップデートしない
-	if (GTime.DeltaTime() <= 0.0f) return;
+	if (GTime.DeltaTime() <= 0.0f) 
+	{
+		m_pUpdateProfiler->EndProfiling();
+		return;
+	}
 
 	m_FSM->Update();
 	m_SubFSM->Update();
@@ -512,10 +528,12 @@ void Chara::Update() {
 
 	invincibleUpdate();
 	buttonHintUpdate();
+	m_pUpdateProfiler->EndProfiling();
 }
 
 void Chara::Draw()
 {
+	m_pDrawProfiler->BeginProfiling();
 	Object3D::Draw();
 
 	/*for (int i = 0; i < 5; i++)
@@ -542,6 +560,7 @@ void Chara::Draw()
 	DrawSphere3D(m_ActionWallPosition, 20.0f, 4, 0x00FFFF, 0x00FFFF, FALSE);
 	*/
 #endif // _DEBUG
+	m_pDrawProfiler->EndProfiling();
 }
 
 void Chara::CollisionEvent(const CollisionData& colData) {

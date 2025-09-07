@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "framework/gameObject.h"
 #include "src/util/transform/Transform.h"
 #include <vector>
@@ -18,44 +18,44 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// ƒLƒƒƒ‰‚ğ¶¬‚·‚é
+	/// ã‚­ãƒ£ãƒ©ã‚’ç”Ÿæˆã™ã‚‹
 	/// </summary>
 	/// <param name="tag">
-	/// <para>¶¬‚µ‚½‚¢ƒLƒƒƒ‰‚Ìƒ^ƒO‚ğw’è</para>
-	/// <para> (tag)ƒvƒŒƒCƒ„[	: tPlayer</para>
-	/// <para> (tag)ƒGƒlƒ~[	: tEnemy </para>
+	/// <para>ç”Ÿæˆã—ãŸã„ã‚­ãƒ£ãƒ©ã®ã‚¿ã‚°ã‚’æŒ‡å®š</para>
+	/// <para> (tag)ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼	: tPlayer</para>
+	/// <para> (tag)ã‚¨ãƒãƒŸãƒ¼	: tEnemy </para>
 	/// </param>
-	/// <param name="trs">¶¬‚Ìƒgƒ‰ƒ“ƒXƒtƒH[ƒ€</param>
-	/// <returns>¶¬‚³‚ê‚½ƒLƒƒƒ‰‚Ìƒ|ƒCƒ“ƒ^</returns>
+	/// <param name="trs">ç”Ÿæˆæ™‚ã®ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ </param>
+	/// <returns>ç”Ÿæˆã•ã‚ŒãŸã‚­ãƒ£ãƒ©ã®ãƒã‚¤ãƒ³ã‚¿</returns>
 	Chara* Create(const std::string& tag, const Transform& trs);
 	
 	/// <summary>
-	/// ƒLƒƒƒ‰‚ğ¶¬‚·‚é
+	/// ã‚­ãƒ£ãƒ©ã‚’ç”Ÿæˆã™ã‚‹
 	/// </summary>
 	/// <param name="tag">
-	/// <para>¶¬‚µ‚½‚¢ƒLƒƒƒ‰‚Ìƒ^ƒO‚ğw’è</para>
-	/// <para> (tag)ƒvƒŒƒCƒ„[	: tPlayer</para>
-	/// <para> (tag)ƒGƒlƒ~[	: tEnemy </para>
+	/// <para>ç”Ÿæˆã—ãŸã„ã‚­ãƒ£ãƒ©ã®ã‚¿ã‚°ã‚’æŒ‡å®š</para>
+	/// <para> (tag)ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼	: tPlayer</para>
+	/// <para> (tag)ã‚¨ãƒãƒŸãƒ¼	: tEnemy </para>
 	/// </param>
-	/// <param name="user">ƒ†[ƒU[î•ñ</param>
-	/// <param name="trs">¶¬‚Ìƒgƒ‰ƒ“ƒXƒtƒH[ƒ€</param>
-	/// <returns>¶¬‚³‚ê‚½ƒLƒƒƒ‰‚Ìƒ|ƒCƒ“ƒ^</returns>
+	/// <param name="user">ãƒ¦ãƒ¼ã‚¶ãƒ¼æƒ…å ±</param>
+	/// <param name="trs">ç”Ÿæˆæ™‚ã®ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ </param>
+	/// <returns>ç”Ÿæˆã•ã‚ŒãŸã‚­ãƒ£ãƒ©ã®ãƒã‚¤ãƒ³ã‚¿</returns>
 	Chara* Create(const std::string& tag, const Transform& trs, const User& user);
 
 
 	const Chara* CharaInst(int index);
 
 	/// <summary>
-	/// w’è‚µ‚½ƒLƒƒƒ‰‚É‘Î‚µ‚ÄAÅ‚à‹ß‚¢“GƒLƒƒƒ‰‚ğæ“¾‚·‚é
+	/// æŒ‡å®šã—ãŸã‚­ãƒ£ãƒ©ã«å¯¾ã—ã¦ã€æœ€ã‚‚è¿‘ã„æ•µã‚­ãƒ£ãƒ©ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	/// <param name="index">ƒLƒƒƒ‰ID</param>
-	/// <param name="distance">ƒƒbƒNƒIƒ“§ŒÀ‹——£</param>
+	/// <param name="index">ã‚­ãƒ£ãƒ©ID</param>
+	/// <param name="distance">ãƒ­ãƒƒã‚¯ã‚ªãƒ³åˆ¶é™è·é›¢</param>
 	Chara* NearestEnemy(int index, float distance);
 
 	/// <summary>
-	/// ƒLƒƒƒ‰‚Ìƒv[ƒ‹‚ğæ“¾‚·‚é
+	/// ã‚­ãƒ£ãƒ©ã®ãƒ—ãƒ¼ãƒ«ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	/// <returns>ƒv[ƒ‹</returns>
+	/// <returns>ãƒ—ãƒ¼ãƒ«</returns>
 	Pool<Chara>* GetCharaPool() const { return m_pPool; }
 
     Chara* GetFromUUID(const std::string& uuid);
@@ -67,6 +67,10 @@ private:
 	int						 m_Max;
 	std::vector<std::string> m_Tags;
 	std::unordered_map<std::string, int> m_hTrails;
+
+	class PerformanceProfiler* m_pUpdateProfiler;
+	class PerformanceProfiler* m_pDrawProfiler;
+
 
 #ifdef USE_POOL
 	Pool<Chara>*		 m_pPool;

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -22,8 +22,8 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 {
 	std::string command = json["Command"];
 
-	// –³‹ƒŠƒXƒg
-	const std::string const ignores[] = {
+	// ç„¡è¦–ãƒªã‚¹ãƒˆ
+	const std::string ignores[] = {
 		"AddUser",
 	};
 
@@ -44,11 +44,11 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 			user.Socket = data["Socket"].get<UINT>();
 			user.IsHost = data["IsHost"].get<bool>();
 			g_Users.push_back(user);
-			Logger::FormatDebugLog("[óM] ƒ†[ƒU[’Ç‰Á: %s (UUID: %s)", user.Name.c_str(), user.UUID.c_str());
+			Logger::FormatDebugLog("[å—ä¿¡] ãƒ¦ãƒ¼ã‚¶ãƒ¼è¿½åŠ : %s (UUID: %s)", user.Name.c_str(), user.UUID.c_str());
 		}
 		if (json.contains("Added_ID"))
 		{
-			// ’Ç‰Á‚³‚ê‚½ƒ†[ƒU[ = ©•ª‚È‚Ì‚ÅA©g‚ÌMyUUID‚ÉƒZƒbƒg
+			// è¿½åŠ ã•ã‚ŒãŸãƒ¦ãƒ¼ã‚¶ãƒ¼ = è‡ªåˆ†ãªã®ã§ã€è‡ªèº«ã®MyUUIDã«ã‚»ãƒƒãƒˆ
 			g_MyUUID = json.at("Added_ID").get<std::string>();
 		}
 	}
@@ -105,7 +105,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 	}
 	else if (command == "ChangeRespawnState")
 	{
-		// ƒzƒXƒg‘¤‚É‚¢‚é‘ÎÛÒ‚ÌƒXƒe[ƒg‚ğ•ÏX‚·‚é
+		// ãƒ›ã‚¹ãƒˆå´ã«ã„ã‚‹å¯¾è±¡è€…ã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰æ›´ã™ã‚‹
 		std::string uuid = json.at("UUID").get<std::string>();
 		std::string state = json.at("State").get<std::string>();
 
@@ -115,7 +115,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		auto c = cm->GetFromUUID(uuid);
 		if (not c)
 		{
-			Logger::FormatDebugLog("[óM] w’è‚ÌUUID‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B. UUID: %s.", uuid.c_str());
+			Logger::FormatDebugLog("[å—ä¿¡] æŒ‡å®šã®UUIDãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚. UUID: %s.", uuid.c_str());
 			return;
 		}
 		if (not c->m_RespawnFSM)
@@ -133,7 +133,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		auto c = cm->GetFromUUID(uuid);
 		if (not c)
 		{
-			Logger::FormatDebugLog("[óM] w’è‚ÌUUID‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B. UUID: %s.", uuid.c_str());
+			Logger::FormatDebugLog("[å—ä¿¡] æŒ‡å®šã®UUIDãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚. UUID: %s.", uuid.c_str());
 			return;
 		}
 
@@ -150,7 +150,7 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 		auto c = cm->GetFromUUID(uuid);
 		if (not c)
 		{
-			Logger::FormatDebugLog("[óM] w’è‚ÌUUID‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B. UUID: %s.", uuid.c_str());
+			Logger::FormatDebugLog("[å—ä¿¡] æŒ‡å®šã®UUIDãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚. UUID: %s.", uuid.c_str());
 			return;
 		}
 
@@ -248,6 +248,6 @@ void NetworkManager::ClientCommandProcess(JSON& json, SOCKET sock)
 	}
 	else
 	{
-		Logger::FormatDebugLog("[óM] JSON Command: %s", command.c_str());
+		Logger::FormatDebugLog("[å—ä¿¡] JSON Command: %s", command.c_str());
 	}
 }

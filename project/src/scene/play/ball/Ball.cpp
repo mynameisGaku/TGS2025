@@ -1,4 +1,4 @@
-#include <src/scene/play/ball/Ball.h>
+ï»¿#include <src/scene/play/ball/Ball.h>
 #include <src/util/file/resource_loader/ResourceLoader.h>
 #include <src/common/component/physics/Physics.h>
 #include <src/reference/ball/BallRef.h>
@@ -24,6 +24,7 @@
 #include <src/scene/play/ball/BallTarget.h>
 #include <src/reference/network/NetworkRef.h>
 #include <src/common/network/NetworkManager.h>
+#include "src/common/performance_profiler/PerformanceProfiler.h"
 
 namespace
 {
@@ -67,6 +68,8 @@ Ball::~Ball()
 	}
 
 	PtrUtil::SafeDelete(m_pTrail);
+	PtrUtil::SafeDelete(m_pProfilerUpdate);
+	PtrUtil::SafeDelete(m_pProfilerDraw);
 }
 
 void Ball::Reset(std::string charaTag)
@@ -83,6 +86,15 @@ void Ball::Spawn()
 {
 	Init();
 	changeState(S_LANDED);
+}
+
+void Ball::OnSpawn()
+{
+	m_pProfilerUpdate = new PerformanceProfiler("Ball [" + std::to_string(m_Index) + "] Update");
+	m_pProfilerUpdate->Activate();
+
+	m_pProfilerDraw = new PerformanceProfiler("Ball [" + std::to_string(m_Index) + "] Draw");
+	m_pProfilerDraw->Activate();
 }
 
 void Ball::Init(std::string charaTag)
@@ -132,7 +144,7 @@ void Ball::Init(std::string charaTag)
 	}
 	else
 	{
-		// tag‚ª•s³‚È‚çƒŒƒbƒh‚Á‚Ä‚±‚Æ‚É‚·‚é
+		// tagãŒä¸æ­£ãªã‚‰ãƒ¬ãƒƒãƒ‰ã£ã¦ã“ã¨ã«ã™ã‚‹
 		tag = ColDefine::Tag::tBall;
 		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue, ColDefine::Tag::tGimmick };
 	}
@@ -144,12 +156,17 @@ void Ball::Init(std::string charaTag)
 	
 	m_CharaTag = charaTag;
 	EffectManager::Stop("Ball_Outline.efk", "Ball_Outline" + m_CharaTag);
+
+
+
 }
 
 void Ball::Update()
 {
+	m_pProfilerUpdate->BeginProfiling();
 	if (not m_IsActive)
 	{
+		m_pProfilerUpdate->EndProfiling();
 		return;
 	}
 	auto& net = NetworkRef::Inst();
@@ -157,7 +174,7 @@ void Ball::Update()
 	Object3D::Update();
 
 
-	// ƒGƒtƒFƒNƒg
+	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 	effectUpdate();
 
 	if (m_IsHoming)
@@ -187,7 +204,10 @@ void Ball::Update()
 	if (net.IsNetworkEnable)
 	{
 		if (not net.IsHost)
+		{
+			m_pProfilerUpdate->EndProfiling();
 			return;
+		}
 	}
 
 	if (m_State != S_OWNED)
@@ -242,6 +262,7 @@ void Ball::Update()
 			m_pNetworkManager->SendSetBallTransform(m_UniqueID, transform->Global());
 		}
 	}
+	m_pProfilerUpdate->EndProfiling();
 }
 
 void Ball::effectUpdate()
@@ -269,17 +290,24 @@ void Ball::effectUpdate()
 
 void Ball::Draw()
 {
+	m_pProfilerDraw->BeginProfiling();
 	if (BLOOM_MANAGER.State == BloomManager::NONE)
 	{
 		BLOOM_MANAGER.AddEmitterTarget(this, 1.0f);
+		m_pProfilerDraw->EndProfiling();
 		return;
 	}
 	if (not m_IsActive)
+	{
+		m_pProfilerDraw->EndProfiling();
 		return;
+	}
 
 	m_pTrail->Draw();
 
 	Object3D::Draw();
+
+	m_pProfilerDraw->EndProfiling();
 }
 
 void Ball::SetAttribute(BallAttribute* attribute) {
@@ -352,17 +380,26 @@ void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float
 
 void Ball::CollisionEvent(const CollisionData& colData)
 {
+
 	if (not m_IsActive)
+	{
 		return;
+	}
 
 	if (colData.Other()->Parent<Catcher>() != nullptr)
+	{
 		return;
+	}
 
 	if (colData.Other()->Parent<Chara>() == m_Owner)
+	{
 		return;
+	}
 
 	if (colData.Other()->Tag() == ColDefine::Tag::tWindArea)
+	{
 		return;
+	}
 
 	if (m_State == S_THROWN)
 	{
@@ -382,11 +419,11 @@ void Ball::CollisionEvent(const CollisionData& colData)
 				attribute->OnHit();
 		}
 
-		// === ‘¼‚Ìƒ{[ƒ‹‚Æ‚ÌÕ“Ë‘Î‰ž ===
+		// === ä»–ã®ãƒœãƒ¼ãƒ«ã¨ã®è¡çªå¯¾å¿œ ===
 		Ball* otherBall = colData.Other()->Parent<Ball>();
 		if (otherBall != nullptr && otherBall != this)
 		{
-			// --- ‰Ÿ‚µo‚µˆ— ---
+			// --- æŠ¼ã—å‡ºã—å‡¦ç† ---
 			const float minDist = BALL_RADIUS * 2.0f;
 			Vector3 delta = transform->position - otherBall->transform->position;
 			float dist = delta.GetLength();
@@ -398,12 +435,15 @@ void Ball::CollisionEvent(const CollisionData& colData)
 				otherBall->transform->position -= correction;
 			}
 
-			// --- ‰^“®—Ê•Û‘¶{”½”­ŒW”‚É‚æ‚é”½”­ ---
+			// --- é‹å‹•é‡ä¿å­˜ï¼‹åç™ºä¿‚æ•°ã«ã‚ˆã‚‹åç™º ---
 			Vector3 normal = (transform->position - otherBall->transform->position).Normalize();
 			Vector3 relVel = m_Physics->velocity - otherBall->m_Physics->velocity;
 			float relVelAlongNormal = VDot(relVel, normal);
 
-			if (relVelAlongNormal > 0.0f) return;
+			if (relVelAlongNormal > 0.0f)
+			{
+				return;
+			}
 
 			float e = BALL_REF.Bounciness;
 			float j = -(1.0f + e) * relVelAlongNormal / 2.0f;
@@ -412,7 +452,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 			m_Physics->velocity += impulse;
 			otherBall->m_Physics->velocity -= impulse;
 
-			// --- ‰ñ“]‚Ìƒgƒ‹ƒN”½‰f ---
+			// --- å›žè»¢ã®ãƒˆãƒ«ã‚¯åæ˜  ---
 			Vector3 tangent = relVel - normal * relVelAlongNormal;
 			if (tangent.GetLength() > 0.001f)
 			{
@@ -475,11 +515,11 @@ void Ball::collisionToGround()
 	{
 		if (m_IsHoming) HomingDeactivate();
 
-		// Y•ûŒü‚É’µ‚Ë•Ô‚é
+		// Yæ–¹å‘ã«è·³ã­è¿”ã‚‹
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
 		m_Physics->velocity.y *= -BALL_REF.Bounciness;
 
-		// “]‚ª‚Á‚Ä‚¢‚­ˆ—
+		// è»¢ãŒã£ã¦ã„ãå‡¦ç†
 		float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);
 		transform->rotation.y = forwardRad;
 
@@ -501,7 +541,7 @@ void Ball::homingProcess()
 {
 	if (m_HomingTarget == nullptr) return;
 
-	// ---- ƒz[ƒ~ƒ“ƒO•âŠÔ ----
+	// ---- ãƒ›ãƒ¼ãƒŸãƒ³ã‚°è£œé–“ ----
 	m_HomingTargetPos = m_HomingTarget->Position();
 
 	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
@@ -562,21 +602,21 @@ bool Ball::collisionToStage()
 
 			transform->position += pushVec;
 
-			// ‰Ÿ‚µo‚µ•ûŒü
+			// æŠ¼ã—å‡ºã—æ–¹å‘
 			Vector3 normal = pushVec.Normalize();
 
-			// ‘¬“x‚ð”½ŽË‚³‚¹‚é
+			// é€Ÿåº¦ã‚’åå°„ã•ã›ã‚‹
 			const float bounciness = BALL_REF.Bounciness;
 			const Vector3 vel = m_Physics->velocity;
 
 			float dot = VDot(vel, normal);
-			if (dot < 0.0f) // “à‘¤‚©‚ç‚ÌÕ“Ë‚Ì‚Ý”½ŽË
+			if (dot < 0.0f) // å†…å´ã‹ã‚‰ã®è¡çªã®ã¿åå°„
 			{
 				Vector3 reflectVel = vel - normal * (1.0f + bounciness) * dot;
 				m_Physics->velocity = reflectVel;
 			}
 
-			// Y•ûŒü‚Ì”½”­Žž‚É“]‚ª‚è‰ñ“]‚à”­¶
+			// Yæ–¹å‘ã®åç™ºæ™‚ã«è»¢ãŒã‚Šå›žè»¢ã‚‚ç™ºç”Ÿ
 			if (abs(normal.y) > 0.5f)
 			{
 				float forwardRad = atan2f(m_Physics->velocity.x, m_Physics->velocity.z);

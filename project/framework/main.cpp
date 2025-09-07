@@ -81,7 +81,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     SearchFilePath("window.ini", path);
     wSetting.Load(path);
 
-    SetGraphMode((int)wSetting.width, (int)wSetting.height, 32);
+    SetGraphMode((int)wSetting.width, (int)wSetting.height, 32, 144);
     SetOutApplicationLogValidFlag(FALSE); // ログを出さない
 
     SYSTEMTIME t;
@@ -166,7 +166,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
         //ImGui::End();
 
 
-        PerformanceProfilerManager::GetInst()->OnEndFrame();
         PerformanceProfilerManager::GetInst()->Render();
 
         AppUpdate();
@@ -195,7 +194,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
             ImGui::RenderPlatformWindowsDefault();
         }
 #endif // IMGUI
-
+        PerformanceProfilerManager::GetInst()->OnEndFrame();
     }
 
     AppRelease();

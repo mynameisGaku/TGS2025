@@ -1,10 +1,10 @@
-#include "MatchManager.h"
+ï»¿#include "MatchManager.h"
 #include "src/common/game/GameManager.h"
 #include <src/util/time/GameTime.h>
 #include <src/util/debug/imgui/imGuiManager.h>
 #include "src/util/history/History.h"
 
-//=== ƒLƒƒƒ‰ ===
+//=== ã‚­ãƒ£ãƒ© ===
 #include "src/util/math/MathUtil.h"
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/scene/play/chara/CharaHP.h"
@@ -14,19 +14,19 @@
 #include "src/common/component/controller/DebugController.h"
 #include "src/scene/play/status_tracker/StatusTracker.h"
 
-//=== ƒXƒ|ƒi[ ===
+//=== ã‚¹ãƒãƒŠãƒ¼ ===
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
 
-//=== ƒ`[ƒ€ ===
+//=== ãƒãƒ¼ãƒ  ===
 #include "src/scene/play/team/Team.h"
 #include "src/scene/play/team/TeamManager.h"
 
-//=== ƒ{[ƒ‹ ===
+//=== ãƒœãƒ¼ãƒ« ===
 #include "src/scene/play/ball/BallManager.h"
 #include "src/scene/play/ball/Ball.h"
 #include <src/util/string/StringUtil.h>
 
-//=== ƒJƒƒ‰ ===
+//=== ã‚«ãƒ¡ãƒ© ===
 #include "src/common/camera/CameraManager.h"
 
 //=== UI ===
@@ -35,7 +35,7 @@
 
 #include "src/util/color/ColorUtil.h"
 
-//=== ƒTƒEƒ“ƒh ===
+//=== ã‚µã‚¦ãƒ³ãƒ‰ ===
 #include "src/util/sound/SoundManager.h"
 
 #include "src/util/input/InputManager.h"
@@ -106,9 +106,9 @@ void MatchManager::Update()
 				const Chara* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
 			   
 				if (chara == nullptr)
-					continue;  // ƒLƒƒƒ‰‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+					continue;  // ã‚­ãƒ£ãƒ©ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 				if (chara->GetStatusTracker() == nullptr)
-					continue;  // ƒXƒe[ƒ^ƒXƒgƒ‰ƒbƒJ[‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+					continue;  // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒˆãƒ©ãƒƒã‚«ãƒ¼ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 
 				int killCount = chara->GetStatusTracker()->Get_KillCount();
 
@@ -131,12 +131,12 @@ void MatchManager::Update()
 		ImGuiRoot* teamTree = matchRoot->SearchChildren(teamName + " Team");
 		if (!teamTree) continue;
 
-		// ‡Œvƒ|ƒCƒ“ƒg‚ÌXV
+		// åˆè¨ˆãƒã‚¤ãƒ³ãƒˆã®æ›´æ–°
 		teamTree->Node<ImGuiNode_Text>("TotalPoint")->SetText(
 			StringUtil::FormatToString("Total Point: %d", team->GetTotalPoint())
 		);
 
-		// ƒ‰ƒ“ƒLƒ“ƒO‚ÌXV
+		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æ›´æ–°
 		ImGuiRoot* rankingTree = teamTree->SearchChildren("Ranking");
 		if (rankingTree)
 		{
@@ -150,7 +150,7 @@ void MatchManager::Update()
 			}
 		}
 
-		// ƒLƒƒƒ‰ƒNƒ^[‚²‚Æ‚ÌƒXƒe[ƒ^ƒXXV
+		// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã”ã¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æ›´æ–°
 		ImGuiRoot* memberTree = teamTree->SearchChildren("Members");
 		if (!memberTree) continue;
 
@@ -163,7 +163,7 @@ void MatchManager::Update()
 			ImGuiRoot* charaTree = memberTree->SearchChildren(label);
 			if (!charaTree) continue;
 
-			// ”’l‚ªNaN‚âInf‚Ìê‡‚Í 0.0f ‚É•â³
+			// æ•°å€¤ãŒNaNã‚„Infã®å ´åˆã¯ 0.0f ã«è£œæ­£
 			float kd = MathUtil::IsNaN(stat->GetKD()) || MathUtil::IsInf(stat->GetKD()) ? 0.0f : stat->GetKD();
 			float acc = MathUtil::IsNaN(stat->GetAccuracy()) || MathUtil::IsInf(stat->GetAccuracy()) ? 0.0f : stat->GetAccuracy();
 
@@ -184,6 +184,7 @@ void MatchManager::Draw()
 {
 	//if (not CameraManager::IsScreenDivision())
 	//    m_pFsm->ImGuiDebugRender();
+
 }
 
 void MatchManager::ReloadCurrentGameData()
@@ -223,16 +224,16 @@ std::vector<std::pair<int, int>> MatchManager::GetRanking() const {
 	for (const auto chara : m_pCharaManager->GetCharaPool()->GetAllItems())
 	{
 		if (chara->m_pObject == nullptr)
-			continue;  // ƒLƒƒƒ‰‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+			continue;  // ã‚­ãƒ£ãƒ©ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 
 		if (chara->m_pObject->GetStatusTracker() == nullptr)
-			continue;  // ƒXƒe[ƒ^ƒXƒgƒ‰ƒbƒJ[‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+			continue;  // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒˆãƒ©ãƒƒã‚«ãƒ¼ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 
 		int charaPoints = chara->m_pObject->GetStatusTracker()->Get_KillCount();
 		ranking.emplace_back(chara->m_Index, charaPoints);
 	}
 
-	// ƒ|ƒCƒ“ƒg‚Ì~‡‚Åƒ\[ƒg  
+	// ãƒã‚¤ãƒ³ãƒˆã®é™é †ã§ã‚½ãƒ¼ãƒˆ  
 	std::sort(ranking.begin(), ranking.end(), [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
 		return a.second > b.second;
 		});
@@ -305,7 +306,7 @@ void MatchManager::ImGuiInit()
 {
 #ifdef _DEBUG
 #ifdef IMGUI
-	ImGuiRoot* matchRoot = ImGuiManager::AddRoot(new ImGuiRoot("Match"));  // ƒ}ƒbƒ`‚Ìƒgƒbƒv
+	ImGuiRoot* matchRoot = ImGuiManager::AddRoot(new ImGuiRoot("Match"));  // ãƒãƒƒãƒã®ãƒˆãƒƒãƒ—
 	std::function<void()> func = [&] {ReloadCurrentGameData(); };
 	matchRoot->Add(new ImGuiNode_Button("Reload GameData", func));
 
@@ -314,7 +315,7 @@ void MatchManager::ImGuiInit()
 		std::string teamName = team->GetTeamName();
 		ImGuiRoot* teamTree = matchRoot->AddChild(new ImGuiRoot(teamName + " Team"));
 
-		// ƒ‰ƒ“ƒLƒ“ƒO
+		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
 		ImGuiRoot* rankingTree = teamTree->AddChild(new ImGuiRoot("Ranking"));
 		size_t rankIndex = 0;
 		rankingTree->NodeBeginChild(250, 100);
@@ -325,7 +326,7 @@ void MatchManager::ImGuiInit()
 		}
 		rankingTree->NodeEndChild();
 
-		// ƒLƒƒƒ‰î•ñ
+		// ã‚­ãƒ£ãƒ©æƒ…å ±
 		ImGuiRoot* memberTree = teamTree->AddChild(new ImGuiRoot("Members"));
 		for (auto& id : team->GetCharaIDs())
 		{
@@ -347,7 +348,7 @@ void MatchManager::ImGuiInit()
 			charaTree->NodeEndChild();
 		}
 
-		// ‡Œvƒ|ƒCƒ“ƒg
+		// åˆè¨ˆãƒã‚¤ãƒ³ãƒˆ
 		teamTree->Add(new ImGuiNode_Space("Space"));
 		teamTree->Add(new ImGuiNode_Text("TotalPoint", StringUtil::FormatToString("Total Point: %d", team->GetTotalPoint())));
 		teamTree->Add(new ImGuiNode_Space("Space"));
@@ -356,7 +357,7 @@ void MatchManager::ImGuiInit()
 #endif
 }
 
-/* ˆÈ‰ºƒXƒe[ƒg */
+/* ä»¥ä¸‹ã‚¹ãƒ†ãƒ¼ãƒˆ */
 
 void MatchManager::StatePhaseBegin(FSMSignal sig)
 {
@@ -364,7 +365,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter:
 	{
-		/* ‚±‚±‚Å€”õ‚ğs‚¤ */
+		/* ã“ã“ã§æº–å‚™ã‚’è¡Œã† */
 		m_pCharaManager = Instantiate<CharaManager>();
 
 		m_pTeamManager = Instantiate<TeamManager>();
@@ -374,16 +375,16 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 		auto spawner2 = spawnerManager->Get_Near(Vector3(-500, 0, -500));
 
 
-		// Network‚ª—LŒø‚È‚ç
+		// NetworkãŒæœ‰åŠ¹ãªã‚‰
 		auto& net = NetworkRef::Inst();
 		if (net.IsNetworkEnable)
 		{
 			NetworkManager* netManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
 
-			// ƒzƒXƒg‚È‚ç
+			// ãƒ›ã‚¹ãƒˆãªã‚‰
 			if (net.IsHost)
 			{
-				// ƒXƒ|ƒi[¶¬‚·‚é
+				// ã‚¹ãƒãƒŠãƒ¼ç”Ÿæˆã™ã‚‹
 				auto queue = StageObjectManager::GetBallSpawnerQueue();
 				for (auto& bsdesc : queue->Get())
 				{
@@ -392,7 +393,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 				}
 			}
 
-			// NetworkManager‚É“o˜^‚³‚ê‚Ä‚¢‚ég_Users‚ğŒ³‚ÉƒLƒƒƒ‰‚ğ¶¬‚·‚é
+			// NetworkManagerã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹g_Usersã‚’å…ƒã«ã‚­ãƒ£ãƒ©ã‚’ç”Ÿæˆã™ã‚‹
 			{
 				UINT i = 0;
 				for (auto& user : netManager->g_Users)
@@ -409,7 +410,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
 					auto c = addCharacter(user, teamColor, useSpawner->transform->Global(), false);
 
-					// ‚±‚ÌƒNƒ‰ƒCƒAƒ“ƒg‚Å“®ì‚µ‚Ä‚¢‚éƒLƒƒƒ‰ˆÈŠO‚ÌƒJƒƒ‰‚Í¶¬‚µ‚È‚¢B
+					// ã“ã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã§å‹•ä½œã—ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ä»¥å¤–ã®ã‚«ãƒ¡ãƒ©ã¯ç”Ÿæˆã—ãªã„ã€‚
 					if (user.UUID == net.UUID)
 						CameraManager::CreateCamera(c->GetIndex(), user);
 				}
@@ -439,7 +440,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 			}
 		}
 
-		// ’Ç‰Á‚Å‚«‚é‚ÌŠm”F‚µ‚½‚æ
+		// è¿½åŠ ã§ãã‚‹ã®ç¢ºèªã—ãŸã‚ˆ
 		//addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 150.0f), Vector3::Zero, Vector3::Ones), false);
 		//addCharacter("Blue", Transform(Vector3(250.0f, 0.0f, 0.0f), Vector3::Zero, Vector3::Ones), false);
 		//addCharacter("Red", Transform(Vector3(0.0f, 0.0f, 250.0f), Vector3::Zero, Vector3::Ones), false);
@@ -447,7 +448,7 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
 		m_pBallManager = Instantiate<BallManager>();
 
-		// Œ»İ‚ÌƒQ[ƒ€ƒ‚[ƒh‚Æ‚»‚Ìƒf[ƒ^‚ğæ“¾‚µAæ‚Á‚Ä‚¨‚­
+		// ç¾åœ¨ã®ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã¨ãã®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã—ã€å–ã£ã¦ãŠã
 		m_GameData = CurrentGameData(SceneManager::CommonScene()->FindGameObject<GameManager>()->GetCurrentGameModeData());
 
 		ImGuiInit();
@@ -464,9 +465,9 @@ void MatchManager::StatePhaseBegin(FSMSignal sig)
 
 				const Chara* chara = m_pCharaManager->GetCharaPool()->GetItem(id)->m_pObject;
 				if (chara == nullptr)
-					continue;  // ƒLƒƒƒ‰‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+					continue;  // ã‚­ãƒ£ãƒ©ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 				if (chara->GetStatusTracker() == nullptr)
-					continue;  // ƒXƒe[ƒ^ƒXƒgƒ‰ƒbƒJ[‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒXƒLƒbƒv
+					continue;  // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒˆãƒ©ãƒƒã‚«ãƒ¼ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã‚¹ã‚­ãƒƒãƒ—
 
 				int killCount = chara->GetStatusTracker()->Get_KillCount();
 
@@ -544,7 +545,7 @@ void MatchManager::StatePhasePlay(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit:
 	{
-		// ƒQ[ƒ€I—¹‚ÉAŸ—˜ƒ`[ƒ€‚Ìî•ñ‚ğGameManager‚É“n‚·
+		// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚ã«ã€å‹åˆ©ãƒãƒ¼ãƒ ã®æƒ…å ±ã‚’GameManagerã«æ¸¡ã™
 		GameManager::ResultData resultData;
 
 		for (auto& teamName : GAME_REF.TeamNames)
@@ -579,21 +580,21 @@ void MatchManager::StatePhaseGameOver(FSMSignal sig)
 	{
 	case FSMSignal::SIG_Enter:
 	{
-		// Ÿ—˜ƒ`[ƒ€‚ğ‹‚ß‚é
+		// å‹åˆ©ãƒãƒ¼ãƒ ã‚’æ±‚ã‚ã‚‹
 		for (int i = 0; i < GAME_REF.TeamNames.size(); i++)
 		{
-			// —v‘f1
+			// è¦ç´ 1
 			Team* team = m_pTeamManager->GetTeam(GAME_REF.TeamNames[i]);
 
-			// Ÿ—˜ƒ|ƒCƒ“ƒg‚ğ’´‚¦‚Ä‚¢‚é‚©
+			// å‹åˆ©ãƒã‚¤ãƒ³ãƒˆã‚’è¶…ãˆã¦ã„ã‚‹ã‹
 			if (team->GetTotalPoint() >= m_GameData.m_WinPointMax)
 			{
-				// ’´‚¦‚Ä‚½‚ç‚±‚Ìƒ`[ƒ€‚ªŸÒ ( Œ»ó“¯‚ÉŸ—˜ƒ|ƒCƒ“ƒg‚ğ’´‰ß‚·‚é‰Â”\«ƒAƒŠ )
+				// è¶…ãˆã¦ãŸã‚‰ã“ã®ãƒãƒ¼ãƒ ãŒå‹è€… ( ç¾çŠ¶åŒæ™‚ã«å‹åˆ©ãƒã‚¤ãƒ³ãƒˆã‚’è¶…éã™ã‚‹å¯èƒ½æ€§ã‚¢ãƒª )
 				winner = team->GetTeamName();
 				break;
 			}
 
-			// ’´‚¦‚Ä‚È‚¯‚ê‚ÎŒ»ó‚ÌÅ‚ƒ|ƒCƒ“ƒg‚ğ’´‚¦‚Ä‚¢‚é‚©‚ğŒ©‚é
+			// è¶…ãˆã¦ãªã‘ã‚Œã°ç¾çŠ¶ã®æœ€é«˜ãƒã‚¤ãƒ³ãƒˆã‚’è¶…ãˆã¦ã„ã‚‹ã‹ã‚’è¦‹ã‚‹
 			if (team->GetTotalPoint() > high)
 			{
 				winner = team->GetTeamName();
@@ -640,8 +641,8 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 	{
 		SoundManager::Play("SE_whistle.wav", "whistle");
 
-		// Ÿ—˜ƒ`[ƒ€‚É‰‚¶‚ÄA•`‰æˆÊ’u‚ğ•Ï‰»‚³‚¹‚é(¡‚Ì‚Æ‚±‚ëƒxƒ^‘Å‚¿)
-		// TO:DO ƒ`[ƒ€‚Æ‰æ–Ê•ªŠ„æ‚ğ•R‚Ã‚¯‚é
+		// å‹åˆ©ãƒãƒ¼ãƒ ã«å¿œã˜ã¦ã€æç”»ä½ç½®ã‚’å¤‰åŒ–ã•ã›ã‚‹(ä»Šã®ã¨ã“ã‚ãƒ™ã‚¿æ‰“ã¡)
+		// TO:DO ãƒãƒ¼ãƒ ã¨ç”»é¢åˆ†å‰²å…ˆã‚’ç´ã¥ã‘ã‚‹
 		if (m_GameData.m_WinnerTeam == "Red")
 		{
 			ui_Draw_Scr1 = m_UI_GameResult[0];
@@ -693,7 +694,7 @@ void MatchManager::StatePhaseEnd(FSMSignal sig)
 
 			m_GameEndTime -= GameTime::Instance().DeltaTime();
 
-			// ‰‰o‚ªI—¹‚µ‚ÄAˆê’èŠÔŒo‰ß‚µ‚½ê‡
+			// æ¼”å‡ºãŒçµ‚äº†ã—ã¦ã€ä¸€å®šæ™‚é–“çµŒéã—ãŸå ´åˆ
 			if (not isPlayEasing && m_GameEndTime <= 0.0f)
 			{
 				Fader::FadeStart(1.0f, EasingType::Linear, 0.0f, 255.0f, GameTime::AdditionMethod::Usual);
@@ -771,7 +772,7 @@ void MatchManager::registerChara(bool isAI, Chara* chara)
 		}
 		else
 		{
-			// ƒlƒbƒgƒ[ƒNƒ‚[ƒh‚Ìê‡AƒNƒ‰ƒCƒAƒ“ƒg‚Æ•R‚Ã‚¢‚Ä‚¢‚éƒLƒƒƒ‰ˆÈŠO‚ÍƒRƒ“ƒgƒ[ƒ‰[‚ª•s—v‚È‚Ì‚Å‰½‚à‚Â‚¯‚È‚¢
+			// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã€ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¨ç´ã¥ã„ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ä»¥å¤–ã¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒä¸è¦ãªã®ã§ä½•ã‚‚ã¤ã‘ãªã„
 		}
 	}
 	else

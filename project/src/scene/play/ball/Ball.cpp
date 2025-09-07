@@ -1,24 +1,29 @@
-#include "src/scene/play/ball/Ball.h"
-#include "src/util/file/resource_loader/ResourceLoader.h"
-#include "src/common/component/physics/Physics.h"
-#include "src/reference/ball/BallRef.h"
-#include "src/common/component/collider/ColliderCapsule.h"
-#include "src/common/stage/Stage.h"
-#include "src/util/fx/post_effect/bloom/BloomManager.h"
-#include "src/reference/chara/CharaDefineRef.h"
-#include "src/scene/play/chara/CharaBase.h"
-#include "src/util/fx/effect/EffectManager.h"
-#include "src/common/stage/StageObjectManager.h"
-#include "src/scene/play/ball/BallManager.h"
-#include "src/common/component/renderer/BallRenderer.h"
-#include "src/scene/play/status_tracker/StatusTracker.h"
-#include "src/scene/play/catcher/Catcher.h"
-#include "src/util/fx/trail/trail3D/Trail3D.h"
-#include "src/util/ptr/PtrUtil.h"
-#include "src/util/math/Random.h"
-#include "src/util/math/Vector3Util.h"
-#include "src/util/math/matrix.h"
-#include "src/util/math/MathUtil.h"
+#include <src/scene/play/ball/Ball.h>
+#include <src/util/file/resource_loader/ResourceLoader.h>
+#include <src/common/component/physics/Physics.h>
+#include <src/reference/ball/BallRef.h>
+#include <src/common/component/collider/ColliderCapsule.h>
+#include <src/common/stage/Stage.h>
+#include <src/util/fx/post_effect/bloom/BloomManager.h>
+#include <src/reference/chara/CharaDefineRef.h>
+#include <src/scene/play/chara/Chara.h>
+#include <src/util/fx/effect/EffectManager.h>
+#include <src/common/stage/StageObjectManager.h>
+#include <src/scene/play/ball/BallManager.h>
+#include <src/scene/play/ball/attributes/BallAttribute.h>
+#include <src/scene/play/ball/attributes/BallAttribute_Explosion.h>
+#include <src/common/component/renderer/BallRenderer.h>
+#include <src/scene/play/status_tracker/StatusTracker.h>
+#include <src/scene/play/catcher/Catcher.h>
+#include <src/util/fx/trail/trail3D/Trail3D.h>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/util/math/Random.h>
+#include <src/util/math/Vector3Util.h>
+#include <src/util/math/matrix.h>
+#include <src/util/math/MathUtil.h>
+#include <src/scene/play/ball/BallTarget.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/common/network/NetworkManager.h>
 
 namespace
 {
@@ -47,6 +52,9 @@ Ball::Ball()
 	m_pTrail = new Trail3D();
 
 	m_ChargeRate = 0.0f;
+	m_HomingTarget = nullptr;
+
+	//SetAttribute(new BallAttribute_Explosion(this));
 
 	Init();
 }
@@ -63,6 +71,10 @@ Ball::~Ball()
 
 void Ball::Reset(std::string charaTag)
 {
+	if (m_HomingTarget)
+	{
+		m_HomingTarget->EraseRockOnData(m_Index);
+	}
 	Init(charaTag);
 	changeState(S_OWNED);
 }
@@ -95,6 +107,7 @@ void Ball::Init(std::string charaTag)
 	if (not m_pManager)
 		m_pManager = FindGameObject<BallManager>();
 
+	m_IsThorwing = false;
 	m_IsHoming = false;
 	m_DoRefreshHoming = false;
 	m_IsActive = true;
@@ -109,20 +122,22 @@ void Ball::Init(std::string charaTag)
 	
 	if (charaTag == "Red")
 	{
-		tag = ColDefine::Tag::tBallRed;
-		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		tag = ColDefine::Tag::tBall;
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue, ColDefine::Tag::tGimmick };
 	}
 	else if (charaTag == "Blue")
 	{
-		tag = ColDefine::Tag::tBallBlue;
-		targets = { ColDefine::Tag::tCharaRed, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		tag = ColDefine::Tag::tBall;
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tRed, ColDefine::Tag::tGimmick };
 	}
 	else
 	{
 		// tagが不正ならレッドってことにする
-		tag = ColDefine::Tag::tNone;
-		targets = { ColDefine::Tag::tCharaBlue, ColDefine::Tag::tCatchRed, ColDefine::Tag::tCatchBlue, ColDefine::Tag::tTerrain, ColDefine::Tag::tBallBlue, ColDefine::Tag::tBallRed };
+		tag = ColDefine::Tag::tBall;
+		targets = { ColDefine::Tag::tChara, ColDefine::Tag::tCatch, ColDefine::Tag::tCatch, ColDefine::Tag::tTerrain, ColDefine::Tag::tBall, ColDefine::Tag::tBlue, ColDefine::Tag::tGimmick };
 	}
+
+	targets.push_back(ColDefine::Tag::tWindArea);
 	
 	m_Collider->SetTag(tag);
 	m_Collider->SetTargetTags(targets);
@@ -137,6 +152,7 @@ void Ball::Update()
 	{
 		return;
 	}
+	auto& net = NetworkRef::Inst();
 	
 	Object3D::Update();
 
@@ -152,11 +168,26 @@ void Ball::Update()
 
 	bool hit = collisionToStage();
 
-	if (m_IsHoming && hit)
+	m_pTrail->Update();
+
+
+	if ((m_IsHoming || m_IsThorwing) && hit)
 	{
-		homingDeactivate();
+		HomingDeactivate();
 		changeState(S_LANDED);
 		EffectManager::Play3D("Hit_Wall.efk", transform->Global(), "Hit_Wall" + m_CharaTag);
+
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnGround();
+		}
+		m_IsThorwing = false;
+	}
+
+	if (net.IsNetworkEnable)
+	{
+		if (not net.IsHost)
+			return;
 	}
 
 	if (m_State != S_OWNED)
@@ -184,7 +215,33 @@ void Ball::Update()
 			m_pTrail->Add(transform->position);
 		}
 	}
-	m_pTrail->Update();
+
+	if (m_State == Ball::S_OWNED)
+	{
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnHave();
+		}
+	}
+
+	if (m_State == Ball::S_THROWN)
+	{
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->Throwing();
+		}
+	}
+
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			if (not m_pNetworkManager)
+				m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+
+			m_pNetworkManager->SendSetBallTransform(m_UniqueID, transform->Global());
+		}
+	}
 }
 
 void Ball::effectUpdate()
@@ -210,9 +267,13 @@ void Ball::effectUpdate()
 	}
 }
 
-
 void Ball::Draw()
 {
+	if (BLOOM_MANAGER.State == BloomManager::NONE)
+	{
+		BLOOM_MANAGER.AddEmitterTarget(this, 1.0f);
+		return;
+	}
 	if (not m_IsActive)
 		return;
 
@@ -221,12 +282,17 @@ void Ball::Draw()
 	Object3D::Draw();
 }
 
-void Ball::Throw(CharaBase* owner, float chargeRate)
+void Ball::SetAttribute(BallAttribute* attribute) {
+
+	m_Attributes.push_back(attribute);
+}
+
+void Ball::Throw(Chara* owner, float chargeRate)
 {
 	changeState(S_THROWN);
 
-	m_Physics->SetGravity(BALL_REF.Gravity);
-	m_Physics->SetFriction(BALL_REF.Friction);
+	m_Physics->SetGravity(GRAVITY);
+	m_Physics->SetFriction(Vector3(0.01f));
 
 	m_Collider->SetIsActive(true);
 
@@ -237,9 +303,11 @@ void Ball::Throw(CharaBase* owner, float chargeRate)
 	m_Owner = owner;
 	m_LastOwner = m_Owner;
 	m_ChargeRate = chargeRate;
+
+	m_IsThorwing = true;
 }
 
-void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float chargeRate)
+void Ball::ThrowDirection(const Vector3& direction, Chara* owner, float chargeRate)
 {
 	Throw(owner, chargeRate);
 
@@ -261,20 +329,24 @@ void Ball::ThrowDirection(const Vector3& direction, CharaBase* owner, float char
 	m_Physics->velocity = direction * BALL_REF.ChargeLevels[chargeLevel].Speed;
 }
 
-void Ball::ThrowHoming(const CharaBase* target, CharaBase* owner, float chargeRate, float curveAngle, float curveScale)
+void Ball::ThrowHoming(BallTarget* target, Chara* owner, float chargeRate, float curveAngle, float curveScale)
 {
-	m_IsHoming			= true;
-	m_DoRefreshHoming = true;
-	m_HomingOrigin		= transform->position;
-    m_HomingTargetChara = target;
-	m_HormingCurveAngle = curveAngle;
-	m_HormingCurveScale = curveScale;
-	m_HomingProgress = 0.0f;
+	m_HomingTarget = target;
 
-	const Vector3 direction = Vector3::Normalize(target->transform->position - transform->position);
+	m_IsHoming			= true;
+	m_DoRefreshHoming	= true;
+
+	m_HomingOrigin		= transform->position;
+	m_HormingCurveAngle	= curveAngle;
+	m_HormingCurveScale	= curveScale;
+	m_HomingProgress	= 0.0f;
+
+	Vector3 direction = Vector3::Normalize((transform->position + transform->Forward() * 100.0f) - transform->position);
+	
 	ThrowDirection(direction, owner, chargeRate);
 	m_Physics->SetIsActive(false);
 
+	target->SetRockOnData(RockOnData(GetIndex()));
 	m_HomingSpeed = m_Physics->velocity.GetLength();
 }
 
@@ -286,18 +358,28 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	if (colData.Other()->Parent<Catcher>() != nullptr)
 		return;
 
+	if (colData.Other()->Parent<Chara>() == m_Owner)
+		return;
+
+	if (colData.Other()->Tag() == ColDefine::Tag::tWindArea)
+		return;
+
 	if (m_State == S_THROWN)
 	{
-		if (m_IsHoming) homingDeactivate();
+		if (m_IsHoming) HomingDeactivate();
 
-		m_Physics->velocity = m_Physics->FlatVelocity() * -0.5f + Vector3(0, 20, 0);
+		m_Physics->velocity = m_Physics->FlatVelocity() * -10.0f + Vector3(0.0f, 200.0f, 0.0f);	// Magic:(
 
 		changeState(S_LANDED);
-
 
 		if (m_Owner && m_Owner->LastBall() == this)
 		{
 			m_Owner->SetLastBall(nullptr);
+		}
+
+		for (const auto& attribute : m_Attributes) {
+			if (attribute != nullptr)
+				attribute->OnHit();
 		}
 
 		// === 他のボールとの衝突対応 ===
@@ -344,7 +426,7 @@ void Ball::CollisionEvent(const CollisionData& colData)
 	}
 }
 
-void Ball::SetTexture(const BallTexture& texture)
+void Ball::SetTexture(const BallTexture& texture, const std::string& mapKey)
 {
 	BallRenderer* ballRenderer = Object3D::GetComponent<BallRenderer>();
 	if (ballRenderer == nullptr)
@@ -353,7 +435,7 @@ void Ball::SetTexture(const BallTexture& texture)
 		ballRenderer->InitVertices();
 	}
 
-	ballRenderer->SetTexture(texture);
+	ballRenderer->SetTexture(texture, mapKey);
 }
 
 void Ball::SetTrailImage(int hImage)
@@ -361,7 +443,7 @@ void Ball::SetTrailImage(int hImage)
 	m_hTrailImage = hImage;
 }
 
-void Ball::SetOwner(CharaBase* pChara)
+void Ball::SetOwner(Chara* pChara)
 {
 	m_Owner = pChara;
 	m_LastOwner = m_Owner;
@@ -391,7 +473,7 @@ void Ball::collisionToGround()
 	bool hit = Stage::ColCheckGround(transform->position + Vector3::SetY(BALL_RADIUS), transform->position - Vector3::SetY(BALL_RADIUS), &hitPos);
 	if (hit)
 	{
-		if (m_IsHoming) homingDeactivate();
+		if (m_IsHoming) HomingDeactivate();
 
 		// Y方向に跳ね返る
 		transform->position = hitPos + Vector3::SetY(BALL_RADIUS);
@@ -417,18 +499,15 @@ void Ball::changeState(const State& s)
 
 void Ball::homingProcess()
 {
-	if (m_HomingTargetChara == nullptr) return;
+	if (m_HomingTarget == nullptr) return;
 
 	// ---- ホーミング補間 ----
-	if (m_DoRefreshHoming)
-	{
-		m_HomingTargetPos = m_HomingTargetChara->transform->position + Vector3::SetY(150.0f);
-	}
+	m_HomingTargetPos = m_HomingTarget->Position();
 
 	const Vector3 diff = m_HomingTargetPos - m_HomingOrigin;
 	const Vector3 dir = Vector3::Normalize(diff);
 	const Vector3 dirRot = Vector3Util::DirToEuler(dir) + Vector3(0.0f, 0.0f, m_HormingCurveAngle);
-	const MATRIX dirRotMat = (dirRot * Vector3(-1, 1, 1)).ToRotationMatrix();
+	const MATRIX dirRotMat = (dirRot).ToRotationMatrix();
 
 	const Vector3 middle = (m_HomingTargetPos + m_HomingOrigin) / 2.0f;
 	const Vector3 middleToCurrent = transform->position - middle;
@@ -446,17 +525,12 @@ void Ball::homingProcess()
 		delta = m_HomingSpeed / (distance + ((distance * 0.5f * DX_PI_F) - distance) * m_HormingCurveScale) * GTime.DeltaTime();
 	}
 
-	if (m_HomingTargetChara->IsTackling())
-	{
-		changeState(S_LANDED);
-		m_DoRefreshHoming = false;
-	}
-
 	m_HomingProgress += delta;
 
 	if (m_HomingProgress >= 1.0f)
 	{
 		transform->position = m_HomingTargetPos;
+		HomingDeactivate();
 	}
 	else
 	{
@@ -517,9 +591,15 @@ bool Ball::collisionToStage()
 	return hit;
 }
 
-void Ball::homingDeactivate()
+void Ball::HomingDeactivate()
 {
 	m_Physics->SetIsActive(true);
-	m_Physics->SetGravity(BALL_REF.Gravity);
+	m_Physics->SetGravity(GRAVITY);
 	m_IsHoming = false;
+
+	if (m_HomingTarget)
+	{
+		m_HomingTarget->EraseRockOnData(m_Index);
+		m_HomingTarget = nullptr;
+	}
 }

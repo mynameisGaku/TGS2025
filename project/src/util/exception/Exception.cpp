@@ -6,7 +6,7 @@
 
 namespace Exception
 {
-    void Exception::Throw(const char* fmt, ...)
+    void Throw(const char* fmt, ...)
     {
         va_list args;
         va_start(args, fmt);

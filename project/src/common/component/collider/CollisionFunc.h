@@ -183,4 +183,6 @@ namespace ColFunction {
 	/// <param name="t2">線分2のベクトル係数(戻り値)</param>
 	/// <returns>最短距離</returns>
 	float CalcSegmentSegmentDist(const ColDefine::Segment& s1, const ColDefine::Segment& s2, Vector3& p1, Vector3& p2, float& t1, float& t2);
+
+	float CollCheck_PointToAABB(const Vector3& point, const ColDefine::AABB& aabb);
 };

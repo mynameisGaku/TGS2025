@@ -46,6 +46,7 @@ public:
 	/// </summary>
 	/// <param name="deg">âÒì]äpìx(å ìxñ@)</param>
 	inline void SetDegRotation(const Vector3& deg) { m_rotation = deg; }
+	inline void SetInfo(const LightInfo& _info) { info = _info; }
 
 	//==========================================================================================
 	// Å•ÉQÉbÉ^Å[
@@ -57,11 +58,7 @@ public:
 
 private:
 
-#ifdef _DEBUG
-#ifndef IMGUI
-#define IMGUI
-#endif
-#endif
+#include "src/config/imgui/ImGuiConfig.h"
 #ifdef IMGUI
 
 	std::string imguiLabel;	// ImGuiÇ…ìoò^Ç∑ÇÈñºëO

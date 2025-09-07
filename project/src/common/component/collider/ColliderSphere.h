@@ -21,6 +21,6 @@ public:
 	// ¥ƒQƒbƒ^[
 
 	// ”¼Œa‚ðŽæ“¾‚·‚é
-	inline float Radius() const { return transform->Global().scale.Average() / 2.0f; }
+	inline float Radius() const { return transform->Global().scale.x / 2.0f; }
 
 };

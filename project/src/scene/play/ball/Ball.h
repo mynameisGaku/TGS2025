@@ -1,14 +1,18 @@
 #pragma once
 #include "src/util/object3D/Object3D.h"
 #include "src/common/component/renderer/BallRenderer.h"
+#include <memory>
 #include <string>
 
 class Physics;
 class ColliderCapsule;
-class CharaBase;
+class Chara;
 class Collider;
 class BallManager;
+class BallAttribute;
 class Trail3D;
+class BallTarget;
+class NetworkManager;
 
 namespace
 {
@@ -37,14 +41,18 @@ public:
 	void Reset(std::string charaTag);
 	void Spawn();
 	void Init(std::string charaTag = "None");
-	void Update() override;
+	void Update();
 	void Draw() override;
 
-	void Throw(CharaBase* owner, float chargeRate);
-	void ThrowDirection(const Vector3& direction, CharaBase*owner, float chargeRate);
-	void ThrowHoming(const CharaBase* target, CharaBase* owner,  float chargeRate, float curveAngle, float curveScale);
+	void SetAttribute(BallAttribute* attribute);
+
+	void Throw(Chara* owner, float chargeRate);
+	void ThrowDirection(const Vector3& direction, Chara*owner, float chargeRate);
+	void ThrowHoming(BallTarget* target, Chara* owner,  float chargeRate, float curveAngle, float curveScale);
+	void HomingDeactivate();
 
 	State GetState() const { return m_State; }
+	void SetState(const Ball::State& state) { m_State = state; }
 
 	/// <summary>
 	/// 当たり判定処理
@@ -53,30 +61,41 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 
 	std::string GetCharaTag() const { return m_CharaTag; }
+	void SetCharaTag(const std::string& charaTag) { m_CharaTag = charaTag; };
 
-	CharaBase* GetLastOwner() const { return m_LastOwner; }
+	Chara* GetLastOwner() const { return m_LastOwner; }
 
 	/// <summary>
 	/// 有効か？
 	/// </summary>
 	/// <returns>有効ならtrue</returns>
 	bool IsActive() const { return m_IsActive; }
-
 	void SetIsActive(bool flag) { m_IsActive = flag; }
 
-	void SetTexture(const BallTexture& texture);
+	void SetTexture(const BallTexture& texture, const std::string& mapKey);
 
 	void SetTrailImage(int hImage);
-
-	void SetOwner(CharaBase* pChara);
 
 	void PickUp();
 
 	void SetChargeRate(float rate) { m_ChargeRate = rate; }
+	float GetChargeRate() const { return m_ChargeRate; }
 
 	void ChangeState(const State& state) { changeState(state); }
 
 	void Knockback(const Vector3& other, float force_vertical, float force_horizontal);
+
+	void SetUniqueID(const std::string& id) { m_UniqueID = id; }
+	const std::string& GetUniqueID() const { return m_UniqueID; }
+
+	const uint32_t GetIndex() const { return m_Index; }
+
+	BallRenderer& GetBallRenderer() { return *GetComponent<BallRenderer>(); }
+
+	void SetHomingTarget(BallTarget* homingTarget) { m_HomingTarget = homingTarget; }
+
+	void SetOwner(Chara* pChara);
+
 private:
 	friend class BallManager;
 
@@ -84,15 +103,18 @@ private:
 	class PerformanceProfiler* m_pProfilerUpdate;
 	class PerformanceProfiler* m_pProfilerCollider;
 	BallManager*		m_pManager;
+	std::vector<BallAttribute*> m_Attributes;
 	Trail3D*			m_pTrail;
+	NetworkManager*		m_pNetworkManager;
 
 	Physics*			m_Physics;
 	ColliderCapsule*	m_Collider;
 	State				m_State;
 	State				m_StatePrev;
-	CharaBase*			m_Owner;
-	CharaBase*			m_LastOwner;
+	Chara*				m_Owner;
+	Chara*				m_LastOwner;
 	std::string			m_CharaTag;
+	std::string			m_UniqueID;
 	uint32_t			m_Index;
 	float				m_LifeTime;
 	float				m_LifeTimeMax;
@@ -102,15 +124,19 @@ private:
 	bool				m_IsPickedUp;
 
 	// ホーミング系
-	const CharaBase*	m_HomingTargetChara;	// ホーミング中のキャラのポインタ
-	Vector3				m_HomingOrigin;			// ホーミング開始地点
-	Vector3				m_HomingTargetPos;		// ホーミング対象の座標
-	bool				m_IsHoming;	// ホーミング中か
-	bool				m_DoRefreshHoming;	// ホーミング先を更新するか
-	float				m_HomingProgress;
-	float				m_HomingSpeed;
-	float				m_HormingCurveAngle;	// カーブ方向を決める角度
-	float				m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
+	BallTarget* m_HomingTarget;	// ホーミング中のボールターゲットポインタ
+
+	Vector3	m_HomingOrigin;			// ホーミング開始地点
+	Vector3	m_HomingTargetPos;		// ホーミング対象の座標
+
+	bool	m_IsThorwing;			// 投擲中か
+	bool	m_IsHoming;				// ホーミング中か
+	bool	m_DoRefreshHoming;		// ホーミング先を更新するか
+
+	float	m_HomingProgress;		// ホーミング進行度(0..1)
+	float	m_HomingSpeed;			// ホーミングの進む速さ
+	float	m_HormingCurveAngle;	// カーブ方向を決める角度
+	float	m_HormingCurveScale;	// カーブの曲がり量の大きさ(0..1)
 
 	void collisionToGround();
 	// 地形との押し出し処理、当たったらtrue
@@ -118,7 +144,6 @@ private:
 	void changeState(const State& s);
 	void effectUpdate();
 	void homingProcess();
-	void homingDeactivate();
 
 	float				m_ChargeRate;
 };

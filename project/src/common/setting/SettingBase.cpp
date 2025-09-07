@@ -3,11 +3,9 @@
 
 SettingBase::SettingBase() {
 
-	fontInfo.strData.tag = "‚³‚´‚È‚Ý–¾’©";
-	fontInfo.size = 36;
-	fontInfo.fontType = DX_FONTTYPE_ANTIALIASING_EDGE_4X4;
-
-	Font::CreateFontToHandle(&fontInfo);
+	useFont = Font::BasicFont();
+	useFont.SetSize(36).SetFontType(DX_FONTTYPE_ANTIALIASING_EDGE_4X4);
+	Font::Create(useFont, "Setting");
 
 	isAdjustable = false;
 }

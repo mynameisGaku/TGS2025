@@ -26,7 +26,11 @@ public:
 
 	Ball* GetBall(uint32_t index);
 
+	Ball* GetBall(const std::string& id);
+
 	int GetTrailImage(const std::string& teamColor);
+
+	const BallTexture& GetBallTexture(std::string key);
 
 private:
 	Ball* initfunc(uint32_t index, Ball* pBall);

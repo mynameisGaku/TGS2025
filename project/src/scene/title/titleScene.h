@@ -7,6 +7,7 @@
 
 // ◇UI関連
 class UI_Canvas;
+class TitleUIController;
 
 /// <summary>
 /// タイトルシーン
@@ -46,4 +47,7 @@ public:
 	/// プレイ後の更新処理
 	/// </summary>
 	void AfterPlayUpdate() override;
+
+private:
+	TitleUIController* m_UIController;
 };

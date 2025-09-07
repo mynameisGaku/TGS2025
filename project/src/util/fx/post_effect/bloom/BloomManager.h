@@ -1,6 +1,8 @@
 #pragma once
-#include "framework/gameObject.h"
 #include "src/reference/bloom/BloomRef.h"
+#include "src/util/singleton/singleton.h"
+#include "src/util/getset/GetSet.h"
+#include <list>
 
 /// <summary>
 /// カメラ設定を維持して描画先を変更する
@@ -8,18 +10,28 @@
 /// <param name="screen">描画先のスクリーン</param>
 void SetDrawScreenWithCamera(int screen);
 
+class BloomTarget;
+class GameObject;
+
 /// <summary>
 /// Draw時に画面にブルームをかける
 /// </summary>
 /// <author>佐藤紘斗</author>
-class BloomManager : public GameObject
+class BloomManager
 {
 public:
+	enum BloomDrawState
+	{
+		NONE = 0,
+		CUSTOM_BLOOM_OBJECT,
+		EMITTER_OBJECT,
+	};
+
 	BloomManager();
 	~BloomManager();
 	void Reset();
-	void Update() override;
-	void Draw() override;
+	void Update();
+	void Draw();
 
 	/// <summary>
 	/// 指定した座標とサイズで分割画面上に描画します
@@ -30,11 +42,50 @@ public:
 	/// <param name="h">描画領域の高さ</param>
 	void DrawOnScreenDiv(int x, int y, int w, int h);
 
+	// ブルーム対象の色スクリーン
+	void SetDrawScreenToColor();
+	// ブルーム対象のスクリーンに現在の描画内容をコピーする
+	void CopyDrawScreenToColor();
+	// 個別で発光させたいやつを描画するためのスクリーン
 	void SetDrawScreenToEmitter();
+	// 別で発光させたいやつを描画するためのスクリーンに現在の描画内容をコピーする
+	void CopyDrawScreenToEmitter();
+	// 発光スクリーンに描画する前に使ってたスクリーン
+	void SetDrawScreenToLastScreen();
 	void SetDrawScreenToBack();
+
+	// ColorとEmitter同時に描画する設定をする
+	void SetDrawScreenToAll();
+	// ColorとEmitter同時に描画する設定をやめる
+	void ResetDrawScreenToAll();
+
+	void AddEmitterTarget(GameObject* pObject, float effectRate);
+	void AddCustomBloomTarget(GameObject* pObject, float effectRate);
+	void AddEmitterTarget(void(*pDrawFunc)(), float effectRate);
+	void AddCustomBloomTarget(void(*pDrawFunc)(), float effectRate);
+
 	void SetParameter(BloomRef::Parameter parameter);
+
+	const Getter<bool> IsUsingColorScreen = (&m_IsUsingColorScreen);
+	const Getter<bool> IsUsingEmitterScreen = (&m_IsUsingEmitterScreen);
+	const GetSet<bool> WasInitEmitterScreen = (&m_WasInitEmitterScreen);
+	const Getter<BloomDrawState> State = (&m_State);
 private:
+	int m_ColorScreen;		// ブルーム対象の色スクリーン
 	int m_EmitterScreen;	// 個別で発光させたいやつを描画するためのスクリーン
-	bool m_DoBloom;		// ブルームをかけるかどうか
+	int m_LastDrawScreen;	// 発光スクリーンに描画する前に使ってたスクリーン
+	bool m_DoBloom;			// ブルームをかけるかどうか
+	bool m_IsUsingColorScreen;
+	bool m_IsUsingEmitterScreen;
+	bool m_WasInitEmitterScreen;
 	BloomRef::Parameter m_Parameter;	// ブルームのパラメータ
+	BloomDrawState m_State;
+
+	std::list<BloomTarget*> m_EmitterTargets;
+	std::list<BloomTarget*> m_CustomBloomTargets;
+
+	void drawEmitterTargets();
+	void drawCustomBloomTargets();
 };
+
+#define BLOOM_MANAGER Singleton<BloomManager>::Instance()

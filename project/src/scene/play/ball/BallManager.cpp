@@ -8,6 +8,8 @@
 #include <fstream>
 
 #include "src/common/camera/CameraManager.h"
+#include <src/reference/network/NetworkRef.h>
+#include <vendor/uuid4/uuid4.h>
 
 BallManager::BallManager()
 {
@@ -85,6 +87,10 @@ void BallManager::Update()
 		{
 			m_pPool->DeActive(ball->m_Index);
 		}
+		else
+		{
+			ball->Update();
+		}
 	}
 #else
 	for (auto it = m_Balls.begin(); it != m_Balls.end(); )
@@ -107,7 +113,7 @@ void BallManager::Update()
 
 void BallManager::Draw()
 {
-	if (CameraManager::IsScreenDivision())
+	//if (CameraManager::IsScreenDivision())
 		return;
 
 	m_pPool->PoolImGuiRendererBegin("ball pool debug");
@@ -131,7 +137,6 @@ void BallManager::Draw()
 
 Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 {
-
 	auto& ref = BALL_REF;
 	// 各種リファレンスを元に初期化
 
@@ -163,6 +168,7 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 	if (not m_Textures.empty())
 	{
 		BallTexture tex;
+		std::string mapKey = "";
 
 		if (GetRand(99) < 3)
 		{
@@ -186,11 +192,24 @@ Ball* BallManager::CreateBall(const Vector3& position, bool isSpawn)
 			{
 				tex = item.second;
 			}
+			mapKey = item.first;
 		}
 
-		obj->SetTexture(tex);
+		obj->SetTexture(tex, mapKey);
 	}
 	m_pPool->SetObjectPointer(index, obj);
+
+	auto& net = NetworkRef::Inst();
+	if (net.IsNetworkEnable)
+	{
+		if (net.IsHost)
+		{
+			char BUF[UUID4_LEN];
+			uuid4_init();
+			uuid4_generate(BUF);
+			obj->SetUniqueID(BUF);
+		}
+	}
 
 	return obj;
 #else
@@ -211,16 +230,49 @@ Ball* BallManager::GetBall(uint32_t index)
 	if (index > m_pPool->GetCapacity())
 		return nullptr;
 
-    auto obj = m_pPool->GetItem(index);
+	auto obj = m_pPool->GetItem(index);
 
-    if (obj == nullptr)
-        return nullptr;
+	if (obj == nullptr)
+		return nullptr;
 
-    auto ball = obj->m_pObject;
-    if (ball == nullptr)
-        return nullptr;
+	auto ball = obj->m_pObject;
+	if (ball == nullptr)
+		return nullptr;
 
 	return ball;
+
+#else
+	// Pool使わない版 未実装
+
+#endif
+
+}
+
+Ball* BallManager::GetBall(const std::string& id)
+{
+#ifdef USE_POOL
+	if (not m_pPool)
+		return nullptr;
+
+	Ball* result = nullptr;
+
+	for (auto& item : m_pPool->GetAllItems())
+	{
+		auto& ball = item->m_pObject;
+
+		if (not ball)
+			continue;
+
+		if (ball->GetUniqueID() == id)
+		{
+			result = ball;
+		}
+	}
+
+	if (result == nullptr)
+		return nullptr;
+
+	return result;
 
 #else
 	// Pool使わない版 未実装
@@ -235,6 +287,11 @@ int BallManager::GetTrailImage(const std::string& teamColor)
 		return DX_NONE_GRAPH;
 
 	return m_hTrails[teamColor];
+}
+
+const BallTexture& BallManager::GetBallTexture(std::string key)
+{
+	return m_Textures[key];
 }
 
 Ball* BallManager::initfunc(uint32_t index, Ball* pBall)

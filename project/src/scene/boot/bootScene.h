@@ -3,6 +3,9 @@
 #include "framework/sceneBase.h"
 
 class SystemManager;
+class GameManager;
+class NetworkManager;
+class LoadScreen;
 
 class BootScene : public SceneBase {
 public:
@@ -13,4 +16,6 @@ public:
 
 private:
 	SystemManager* systemManager;
+	GameManager* gameM;
+	LoadScreen* loadScreen;
 };

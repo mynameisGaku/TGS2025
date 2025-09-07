@@ -40,9 +40,9 @@ void Fader::Init() {
 
 	color = GetColor(0, 0, 0);
 
-	fadeEasing.current = 255.0f;
-	fadeEasing.begin = 255.0f;
-	fadeEasing.end = 255.0f;
+	fadeEasing.current = 0.0f;
+	fadeEasing.begin = 0.0f;
+	fadeEasing.end = 0.0f;
 }
 
 void Fader::Update() {

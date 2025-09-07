@@ -15,6 +15,8 @@
 #include "src/scene/play/chara/CharaManager.h"
 #include "src/reference/camera/CameraDefineRef.h"
 #include "src/common/component/collider/CollisionFunc.h"
+#include "src/scene/play/ball/BallTarget.h"
+#include "src/common/stage/StageObjectManager.h"
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -24,6 +26,12 @@ void Camera::AimState(FSMSignal sig)
 	// 移動可能か
 	static bool canMove;
 	static const float EASING_TIME = 1.0f;
+
+	if (not m_pBallTarget)
+	{
+
+		ChangeState(&Camera::ChaseState);
+	}
 
 	switch (sig)
 	{
@@ -38,53 +46,32 @@ void Camera::AimState(FSMSignal sig)
 		m_OffsetPrev = Offset();
 		m_TargetPrev = Target();
 
-		// キャラの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
-		
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// 追従するキャラ
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
-		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
-			ChangeState(&Camera::ChaseState);
-			return;
-		}
-
-		// コーンの範囲に入って居ない場合
-		if (not ColFunction::ColCheck_ConeToPoint(m_CameraCone, m_pTargetChara->transform->position).IsCollision() ||
-			MouseController::Info().Move().GetLengthSquared() > 5.0f) {
-			m_pTargetChara = nullptr;
-			m_TargetTransitionTime = 0.5f;
-			ChangeState(&Camera::ChaseState);
-			return;
-		}
+		m_AimResetTime = CAMERADEFINE_REF.m_AimResetTime;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新 (Update)
 	{
-		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
+		// カメラを持つキャラを取得
+		findFollowerChara();
+		if (not m_pFollowerChara) return;
 
-		// キャラの管理者
-		CharaManager* charaM = FindGameObject<CharaManager>();
-		if (charaM == nullptr)
-			return;
-
-		m_pFollowerChara = charaM->CharaInst(m_CharaIndex);	// 追従するキャラ
-		m_pTargetChara = charaM->NearestEnemy(m_CharaIndex);// 注視するキャラ
-
-		if (m_pFollowerChara == nullptr || m_pTargetChara == nullptr) {
+		// ロックオン相手がいないならチェイスに戻る
+		if (not m_pBallTarget || not m_pBallTarget->CanRockOn()) {
 			ChangeState(&Camera::ChaseState);
 			return;
 		}
 
+		//▼=== チェイスステートから滑らかに視点（オフセット）を変える処理 ===
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
-		const Transform TARGET_TRS = m_pTargetChara->transform->Global();
+		const Transform TARGET_TRS = Transform(m_pBallTarget->Position());
 
 		const Vector3 OFFSET = CAMERADEFINE_REF.m_OffsetChase;
-		const Vector3 TARGET = TARGET_TRS.position + Vector3::SetY(10.0f);
+		const Vector3 TARGET = TARGET_TRS.position;
 		const Vector3 POSITION = FOLLOWER_TRS.position;
 		const Vector3 TOVEC = TARGET - POSITION;
 		const Vector3 ROTATION = Vector3(MathUtil::ToRadians(-20.0f), MathUtil::RotLimit(atan2f(TOVEC.x, TOVEC.z)), 0.0f);
+
+		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 
 		if (m_EasingTime > 0.0f)
 		{
@@ -107,21 +94,48 @@ void Camera::AimState(FSMSignal sig)
 			transform->position = POSITION;
 			transform->rotation = ROTATION;
 		}
+		//=========================================================
 
+		// X回転制限
 		MathUtil::ClampAssing(&transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min, CAMERADEFINE_REF.m_RotX_Max);
+		// Y回転制限
 		MathUtil::RotLimitAssing(&transform->rotation.y);
 
-		if (not InputManager::Hold("TargetCamera", m_pFollowerChara->GetIndex() + 1))
+		// ロックオンボタンを離したらチェイスに戻る
+		if (not m_pFollowerChara->IsCharging() && not m_pFollowerChara->IsThrowing())
 		{
-			m_pTargetChara = nullptr;
 			ChangeState(&Camera::ChaseState);
 		}
 
-		if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
-			PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+		// 視点を移動したらチェイスに戻る
+		if (isMoveCamera())
 		{
+			ChangeState(&Camera::ChaseState);
 			m_TargetTransitionTime = 0.5f;
-			m_pTargetChara = nullptr;
+		}
+
+		Vector3 cameraPos = WorldPos() * m_pShake->Matrix();
+		if (StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position()))
+		{
+			Vector3 offset = transform->Right() * CAMERADEFINE_REF.m_AimOcclusionRayOffset;
+
+			if (StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position() + offset) &&
+				StageObjectManager::CollCheckLine(cameraPos, m_pBallTarget->Position() - offset))
+			{
+				m_AimResetTime -= GTime.DeltaTime();
+			}
+			else
+			{
+				m_AimResetTime = CAMERADEFINE_REF.m_AimResetTime;
+			}
+		}
+		else
+		{
+			m_AimResetTime = CAMERADEFINE_REF.m_AimResetTime;
+		}
+
+		if (m_AimResetTime <= 0.0f)
+		{
 			ChangeState(&Camera::ChaseState);
 		}
 	}
@@ -133,7 +147,7 @@ void Camera::AimState(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Exit: // 終了 (Exit)
 	{
-		m_pTargetChara = nullptr;
+		m_pBallTarget = nullptr;
 		canMove = true;
 	}
 	break;

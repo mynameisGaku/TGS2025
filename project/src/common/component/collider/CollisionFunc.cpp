@@ -27,7 +27,6 @@ CollisionData* ColFunction::ColCheck(ColliderBase* col1, ColliderBase* col2) {
 
 	case Shape::sCapsule:
 		switch (col2->Shape()) {
-		case Shape::sSphere:	return new CollisionData(ColCheck_SphereToCapsule(dynamic_cast<ColliderSphere*>(col2),		dynamic_cast<ColliderCapsule*>(col1)));	break;
 		case Shape::sCapsule:	return new CollisionData(ColCheck_CapsuleToCapsule(dynamic_cast<ColliderCapsule*>(col1),	dynamic_cast<ColliderCapsule*>(col2)));	break;
 		default:				return nullptr;
 		}
@@ -346,4 +345,20 @@ float ColFunction::CalcSegmentSegmentDist(const ColDefine::Segment& s1, const Co
 	t1 = MathUtil::Clamp(t1, 0.0f, 1.0f);
 	p1 = s1.getPoint(t1);
 	return (p2 - p1).GetLength();
+}
+
+float ColFunction::CollCheck_PointToAABB(const Vector3& point, const ColDefine::AABB& aabb)
+{
+
+	FLOAT SqLen = 0;   // 長さのべき乗の値を格納
+	int i;
+	for (i = 0; i < 3; i++)
+	{
+		// 各軸で点が最小値以下もしくは最大値以上ならば、差を考慮
+		if (point.Get(i) < aabb.p.Get(i) - aabb.hl.Get(i))  // i=0はX、1はY、2はZの意味です
+			SqLen += (point.Get(i) - aabb.p.Get(i) - aabb.hl.Get(i)) * (point.Get(i) - aabb.p.Get(i) - aabb.hl.Get(i));
+		if (point.Get(i) > aabb.p.Get(i) + aabb.hl.Get(i))
+			SqLen += (point.Get(i) - aabb.p.Get(i) + aabb.hl.Get(i)) * (point.Get(i) - aabb.p.Get(i) + aabb.hl.Get(i));
+	}
+	return sqrt(SqLen);
 }

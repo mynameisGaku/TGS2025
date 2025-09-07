@@ -95,7 +95,7 @@ Vector2 Object2D::DisplacementByAnchorPoint() {
 	const float adjust = 2.0f;	// ’²®’l
 
 	// …•½Ž²‚ÌƒYƒŒ’²®
-	switch (Anchor::PlacementHorizontal(rectTransform->preset)) {
+	switch (Anchor::PlacementHorizontal(rectTransform->anchor.GetPreset())) {
 	case Anchor::Placement::LEFT:	offset.x = ( imageSize.x * 0.5f) * globalTrs.scale.x;	break;
 	case Anchor::Placement::RIGHT:	offset.x = (-imageSize.x * 0.5f) * globalTrs.scale.x;	break;
 	case Anchor::Placement::MIDDLE:	offset.x = 0.0f;				break;
@@ -103,7 +103,7 @@ Vector2 Object2D::DisplacementByAnchorPoint() {
 	}
 
 	// ‚’¼Ž²‚ÌƒYƒŒ’²®
-	switch (Anchor::PlacementVertical(rectTransform->preset)) {
+	switch (Anchor::PlacementVertical(rectTransform->anchor.GetPreset())) {
 	case Anchor::Placement::UP:		offset.y = ( imageSize.y * 0.5f) * globalTrs.scale.y;	break;
 	case Anchor::Placement::DOWN:	offset.y = (-imageSize.y * 0.5f) * globalTrs.scale.y;	break;
 	case Anchor::Placement::MIDDLE:	offset.y = 0.0f;							break;

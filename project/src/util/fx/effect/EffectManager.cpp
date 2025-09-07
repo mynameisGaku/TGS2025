@@ -75,7 +75,6 @@ void EffectManager::Draw() {
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
 
-	DrawEffekseer2D();
 	DrawEffekseer3D();
 
 	// 再生中のエフェクトがない場合、処理を抜ける
@@ -288,7 +287,7 @@ EffectBase* EffectManager::IsPlaying(const std::string& typeName, const std::str
 
 	for (const auto& itr : *effects) {
 		// 引数の情報と一致しているか、整合性チェックを行う
-		if (itr->CheckConsistency(typeName, label) && itr->IsActive())
+		if (itr->CheckConsistency(typeName, label) && itr->IsPlaying())
 			return itr;
 	}
 

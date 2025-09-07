@@ -21,10 +21,13 @@ public:
 	StageObject(StageObjInfo info, const Transform& _transform, int _id, bool _collider);
 	~StageObject();
 
+	void Update() override;
 	void Draw() override;
 
 	//==========================================================================================
 	// ▼セッター
+
+	void SetOpacity(float rate);
 
 	/// <summary>
 	/// IDを設定する
@@ -77,4 +80,8 @@ private:
 	int id;				// ID
 	bool isCollider;	// 当たり判定の可否
 	bool isHitModelDraw;// 当たり判定用モデルの描画切り替え
+
+	float opacity;	// 不透明度(0～1)
+	float opacityTarget;
+	int counter;
 };

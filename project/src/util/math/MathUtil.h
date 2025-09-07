@@ -164,4 +164,15 @@ public:
 	static void RotLimitAssing(float* rot);
 
 	static int CalcList(const std::list<int>& list);
+
+	static void SquareAssing(float* value);
+
+	static void AddIterationAssing(float* value, int iteration);
+
+	static void AddIterationAssingRate(float* value, int iteration, float rate);
+
+	// 割合(0..1) から バイト(0..255) への変換
+	static uint8_t RateToByte(float rate);
+	// バイト(0..255) から 割合(0..1) への変換
+	static float ByteToRate(uint8_t byte);
 };

@@ -126,8 +126,9 @@ namespace SoundManager {
 	/// <param name="label">判別名</param>
 	/// <param name="sec">効果時間(秒)</param>
 	/// <param name="easing">補間方法の種類</param>
+	/// <param name="isAfterStop">Trueの場合、一からフェード再生し直す。Falseの場合、現在再生中の状態からフェードを行う</param>
 	/// <returns>生成した音源の実体</returns>
-	SoundBase* FadeIn(const std::string& typeName, const std::string& label, const float& sec, const EasingType& easing = EasingType::Linear);
+	SoundBase* FadeIn(const std::string& typeName, const std::string& label, const float& sec, const EasingType& easing = EasingType::Linear, bool isAfterStop = true);
 
 	/// <summary>
 	/// 音源の音量を徐々に下げる
@@ -183,6 +184,11 @@ namespace SoundManager {
 	// ▼ゲッター
 
 	std::unordered_map<SoundCategory, float>* CategoryVolumeRate();
+
+	/// <summary>
+	/// 再生中の音源の音量割合を取得する
+	/// </summary>
+	float GetPlayingSoundRate(const std::string& typeName, const std::string& label);
 
 	//================================================================================
 	// ▼確認処理

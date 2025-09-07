@@ -12,11 +12,11 @@ SensiSetting::SensiSetting() {
 	stickSensitivity = PadController::StickSensitivity();
 	mouseSensitivity = MouseController::Info().sensitivity;
 
-	sliders.push_back(new UI_Slider("マウス感度 X軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 125.0f)), &mouseSensitivity.x, 0.1f, MOUSE_SENSI_MAX.x, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
-	sliders.push_back(new UI_Slider("マウス感度 Y軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 200.0f)), &mouseSensitivity.y, 0.1f, MOUSE_SENSI_MAX.y, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
+	sliders.push_back(new UI_Slider("マウス感度 X軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 125.0f)), &mouseSensitivity.x, 0.1f, MOUSE_SENSI_MAX.x, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
+	sliders.push_back(new UI_Slider("マウス感度 Y軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 200.0f)), &mouseSensitivity.y, 0.1f, MOUSE_SENSI_MAX.y, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
 	
-	sliders.push_back(new UI_Slider("スティック感度 X軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 275.0f)), &stickSensitivity.x, 0.1f, STICK_SENSI_MAX.x, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
-	sliders.push_back(new UI_Slider("スティック感度 Y軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 350.0f)), &stickSensitivity.y, 0.1f, STICK_SENSI_MAX.y, Vector2(250.0f, 25.0f), sliderColor, "%.1f", fontInfo));
+	sliders.push_back(new UI_Slider("スティック感度 X軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 275.0f)), &stickSensitivity.x, 0.1f, STICK_SENSI_MAX.x, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
+	sliders.push_back(new UI_Slider("スティック感度 Y軸", RectTransform(Anchor::Preset::MiddleUp, Vector2(150.0f, 350.0f)), &stickSensitivity.y, 0.1f, STICK_SENSI_MAX.y, Vector2(250.0f, 25.0f), sliderColor, "%.1f", useFont));
 
 	isAdjustable = false;
 }

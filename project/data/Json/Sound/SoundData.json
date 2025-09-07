@@ -7,8 +7,38 @@
         {
           "FileName": "InMatch.mp3",
           "Name": "InMatch",
-          "Volume": 100,
+          "Volume": 155,
           "IsLoop": true
+        },
+        {
+          "FileName": "TitleScene.wav",
+          "Name": "TitleScene",
+          "Volume": 180,
+          "IsLoop": true
+        },
+        {
+          "FileName": "PlayScene.wav",
+          "Name": "PlayScene",
+          "Volume": 180,
+          "IsLoop": true
+        },
+        {
+          "FileName": "ResultScene.wav",
+          "Name": "ResultScene",
+          "Volume": 220,
+          "IsLoop": false
+        },
+        {
+          "FileName": "ResultScene_Draw.wav",
+          "Name": "ResultScene_Draw",
+          "Volume": 220,
+          "IsLoop": false
+        },
+        {
+          "FileName": "ResultScene_Fanfare.wav",
+          "Name": "ResultScene_Fanfare",
+          "Volume": 180,
+          "IsLoop": false
         }
       ]
     },
@@ -16,22 +46,16 @@
       "Category": "SE",
       "Path": "data/sound/se/",
       "Datas": [
-        {
-          "FileName": "bound_ball_00.mp3",
+       {
+          "FileName": "bound_ball_00.wav",
           "Name": "bound_ball_00",
-          "Volume": 200,
+          "Volume": 100,
           "IsLoop": false
         },
-        {
-          "FileName": "bound_ball_01.mp3",
+       {
+          "FileName": "bound_ball_01.wav",
           "Name": "bound_ball_01",
-          "Volume": 200,
-          "IsLoop": false
-        },
-        {
-          "FileName": "bound_ball_02.mp3",
-          "Name": "bound_ball_00",
-          "Volume": 200,
+          "Volume": 100,
           "IsLoop": false
         },
         {
@@ -54,19 +78,19 @@
         },
         {
           "FileName": "footsound_01.mp3",
-          "Name": "footsound_00",
+          "Name": "footsound_01",
           "Volume": 100,
           "IsLoop": false
         },
         {
           "FileName": "footsound_02.mp3",
-          "Name": "footsound_00",
+          "Name": "footsound_02",
           "Volume": 100,
           "IsLoop": false
         },
         {
           "FileName": "footsound_03.mp3",
-          "Name": "footsound_00",
+          "Name": "footsound_03",
           "Volume": 100,
           "IsLoop": false
         },
@@ -79,6 +103,18 @@
         {
           "FileName": "hit_01.mp3",
           "Name": "hit_01",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "hit_02.mp3",
+          "Name": "hit_02",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "hit_pop_00.wav",
+          "Name": "hit_pop_00",
           "Volume": 200,
           "IsLoop": false
         },
@@ -134,6 +170,186 @@
           "FileName": "throw_weak_01.mp3",
           "Name": "throw_weak_01",
           "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "pickup_00.mp3",
+          "Name": "pickup_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "pickup_01.mp3",
+          "Name": "pickup_01",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "pickup_02.mp3",
+          "Name": "pickup_02",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_impact_normal.mp3",
+          "Name": "throw_impact_normal",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "throw_impact_strong.mp3",
+          "Name": "throw_impact_strong",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "jump_dash.mp3",
+          "Name": "jump_dash",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "jump_normal.mp3",
+          "Name": "jump_normal",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "jump_pop_00.mp3",
+          "Name": "jump_pop_00",
+          "Volume": 200,
+          "IsLoop": false
+        },
+        {
+          "FileName": "landing.mp3",
+          "Name": "landing",
+          "Volume": 100,
+          "IsLoop": false
+        },
+        {
+          "FileName": "landing_roll.mp3",
+          "Name": "landing_roll",
+          "Volume": 80,
+          "IsLoop": false
+        },
+        {
+          "FileName": "tackle_00.mp3",
+          "Name": "tackle_00",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "tackle_01.mp3",
+          "Name": "tackle_01",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "tackle_hit.mp3",
+          "Name": "tackle_hit",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "menu_click.mp3",
+          "Name": "menu_click",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "menu_move.mp3",
+          "Name": "menu_move",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "whistle.wav",
+          "Name": "whistle",
+          "Volume": 120,
+          "IsLoop": false
+        },
+        {
+          "FileName": "charge_ball.mp3",
+          "Name": "charge_ball",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+            "FileName": "play_start.mp3",
+            "Name": "play_start",
+            "Volume": 255,
+            "IsLoop": false
+        },
+        {
+            "FileName": "play_countdown.mp3",
+            "Name": "play_countdown",
+            "Volume": 255,
+            "IsLoop": false
+        }
+      ]
+    },
+    "Voice": {
+      "Category": "Voice",
+      "Path": "data/sound/Voice/",
+      "Datas": [
+        {
+          "FileName": "attack_00.wav",
+          "Name": "attack_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "attack_01.wav",
+          "Name": "attack_01",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "damage_00.wav",
+          "Name": "damage_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "damage_01.wav",
+          "Name": "damage_01",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_congratulations_00.wav",
+          "Name": "words_congratulations_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_hello_00.wav",
+          "Name": "words_hello_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_hello_01.wav",
+          "Name": "words_hello_01",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_hey_00.wav",
+          "Name": "words_hey_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_let's_go_00.wav",
+          "Name": "words_let's_go_00",
+          "Volume": 255,
+          "IsLoop": false
+        },
+        {
+          "FileName": "words_thank_you_00.wav",
+          "Name": "words_thank_you_00",
+          "Volume": 255,
           "IsLoop": false
         }
       ]

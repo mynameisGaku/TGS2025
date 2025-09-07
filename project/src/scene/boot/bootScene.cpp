@@ -4,6 +4,9 @@
 #include "src/common/system/SystemManager.h"
 #include "src/common/load_screen/LoadScreen.h"
 #include "src/common/game/GameManager.h"
+#include "src/common/network/NetworkManager.h"
+
+#include "src/util/fader/Fader.h"
 
 BootScene::BootScene(std::string name) : SceneBase(true, name)
 {
@@ -11,10 +14,12 @@ BootScene::BootScene(std::string name) : SceneBase(true, name)
 	
 	systemManager = common->Instantiate<SystemManager>();
 
-	LoadScreen* loadScreen = common->Instantiate<LoadScreen>();
+	loadScreen = common->Instantiate<LoadScreen>();
 	common->SetDrawOrder(loadScreen, 10000);
 
-	GameManager* gameM = common->Instantiate<GameManager>();
+	gameM = common->Instantiate<GameManager>();
+
+	NetworkManager* netM = common->Instantiate<NetworkManager>();
 }
 
 BootScene::~BootScene()
@@ -26,7 +31,9 @@ void BootScene::Update()
 	systemManager->LoadUpdate();
 
 	if (systemManager->IsLoadEnd())
+	{
 		SceneManager::ChangeScene("TitleScene"); // ‹N“®‚ªI‚í‚Á‚½‚çTitle‚ğ•\¦
+	}
 }
 
 void BootScene::Draw()

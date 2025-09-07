@@ -88,7 +88,7 @@ public:
 	/// <summary>
 	/// ボタン押下でフェードアウトへ移行するかを設定する
 	/// </summary>
-	inline void SetIsPushFadeOut(const bool& value) { isPushFadeOut = value; }
+	inline void SetIsPushFadeOut(const bool& value) { canPushFadeOut = value; }
 
 	/// <summary>
 	/// フェードインする
@@ -126,7 +126,7 @@ private:
 	std::string loadText;	// ロード中に表示する文字
 
 	int hBackground;	// 背景画像
-	bool isPushFadeOut;	// ボタン押下でフェードアウトへ移行する
+	bool canPushFadeOut;	// ボタン押下でフェードアウトへ移行する
 
 	Vector2 bgPos;	// 背景画像の描画座標
 	ScrollType scrollType;	// 背景画像のスクロール方法

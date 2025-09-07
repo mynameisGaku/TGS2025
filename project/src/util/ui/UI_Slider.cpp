@@ -36,7 +36,7 @@ UI_Slider::UI_Slider(const std::string& _label, const RectTransform& trs, float*
 	SetBackSize(_backSize);
 
 	// フォントデータを生成する
-	Font::CreateFontToHandle(&fontInfo);
+	Font::Create(fontInfo, "UI_Slider " + _label);
 
 	SetFormatStr(format, fontInfo);
 	SetLabelText(label, fontInfo);
@@ -189,7 +189,7 @@ void UI_Slider::SetFormatStr(const std::string& _format, const FontInfo& font) {
 
 	format = _format;
 
-	int labelWidth = GetDrawFormatStringWidthToHandle(font.handle, format.c_str());
+	int labelWidth = GetDrawFormatStringWidthToHandle(font.GetHandle(), format.c_str());
 
 	RectTransform formatTrs;
 	formatTrs.position.x = rectTransform->Global().position.x - ADJUST - (labelWidth * 0.5f);
@@ -208,7 +208,7 @@ void UI_Slider::SetLabelText(const std::string& _label, const FontInfo& font) {
 
 	label = _label;
 
-	int labelWidth = GetDrawFormatStringWidthToHandle(font.handle, label.c_str());
+	int labelWidth = GetDrawFormatStringWidthToHandle(font.GetHandle(), label.c_str());
 
 	RectTransform labelTrs;
 	labelTrs.position.x = rectTransform->Global().position.x - (backSize.x + labelWidth + ADJUST + 40.0f);

@@ -55,20 +55,31 @@ public:
 	/// </summary>
 	void Update() override;
 
-	/// <summary>
-	/// 重力加速度処理の更新
-	/// </summary>
-	void GravityUpdate();
+private:
 
-	/// <summary>
-	/// 加速処理の更新
-	/// </summary>
-	void VelocityUpdate();
+	/**
+		@brief		重力加速度処理の更新
+	*/
+	void updateGravity();
 
-	/// <summary>
-	/// 抵抗処理の更新
-	/// </summary>
-	void ResistanceUpdate();
+	/**
+		@brief		移動速度処理の更新
+	*/
+	void updateMovementVelocity();
+
+	/**
+		@brief		抵抗力処理の更新
+	*/
+	void updateResistanceForce();
+
+	/**
+		@brief		摩擦係数処理の更新
+	*/
+	void updateFriction();
+
+public:
+
+public:
 
 	//==========================================================================================
 	// ▼セッター

@@ -1,0 +1,76 @@
+{
+  "KeyDatas": [
+    {
+      "KeyNames": [
+        "LeftControl",
+        "ButtonB"
+      ],
+      "AnchorFromCenter": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "LocalPosition": {
+        "x": 500.0,
+        "y": 0.0
+      },
+      "DisplayString": {
+        "jp": "タックル",
+        "en": "Tackle"
+      }
+    },
+    {
+      "KeyNames": [
+        "Space",
+        "ButtonA"
+      ],
+      "AnchorFromCenter": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "LocalPosition": {
+        "x": 350.0,
+        "y": 0.0
+      },
+      "DisplayString": {
+        "jp": "ジャンプ",
+        "en": "Jump"
+      }
+    },
+    {
+        "KeyNames": [
+            "F",
+            "ButtonX"
+        ],
+        "AnchorFromCenter": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "LocalPosition": {
+            "x": 200.0,
+            "y": 0.0
+        },
+        "DisplayString": {
+            "jp": "フェイント",
+            "en": "Faint"
+        }
+    },
+    {
+      "KeyNames": [
+        "LeftShift",
+        "LeftShoulder"
+      ],
+      "AnchorFromCenter": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "LocalPosition": {
+        "x": 50.0,
+        "y": 0.0
+      },
+      "DisplayString": {
+        "jp": "スライディング",
+        "en": "Sliding"
+      }
+    }
+  ]
+}

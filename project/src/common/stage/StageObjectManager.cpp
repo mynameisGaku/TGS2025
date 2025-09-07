@@ -10,7 +10,7 @@
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/resource_loader/ResourceLoader.h"
 #include <vendor/magic_enum/magic_enum.hpp>
-#include "src/common/performance_profiler/PerformanceProfiler.h"
+#include <src/reference/network/NetworkRef.h>
 
 // ◇演出・機能
 #include "src/util/input/InputManager.h"
@@ -20,6 +20,12 @@
 #include "src/scene/play/chara/CharaSpawnPointManager.h"
 #include "src/scene/play/chara/CharaSpawnPoint.h"
 #include "src/scene/play/ball/BallSpawner.h"
+#include "src/common/stage/SpawnerObjectQueue.h"
+
+// 移動可能範囲
+#include "src/scene/play/movable/MovableArea.h"
+#include "src/common/component/collider/CollisionFunc.h"
+#include <src/scene/play/active_ball_gimmick/TrampolineGimmick.h>
 
 using namespace StageDefine;
 
@@ -32,13 +38,13 @@ namespace {
 	std::string* csvFilePath_StageObjModel;	// ステージオブジェクトのモデルデータを持つファイルパス
 
 	std::vector<StageObject*>* stageObjects;	// ステージオブジェクト
+	std::vector<MovableArea*>* movableAreas;
+
+	BallSpawnerObjectQueue* ballSpawnerQueue = nullptr;
 
 	static unsigned int productionID;	// 製造番号
 	bool canSaveCsv;			// CSVデータを保存できるか
 	bool initialize = false;	// 初期化処理が行われたか
-
-	PerformanceProfiler* pProfiler;
-	double profileResult;
 }
 
 void StageObjectManager::Init() {
@@ -46,16 +52,14 @@ void StageObjectManager::Init() {
 	if (stageObjects == nullptr)
 		stageObjects = new std::vector<StageObject*>();
 
+	if (movableAreas == nullptr)
+		movableAreas = new std::vector<MovableArea*>();
+
 	if (csvFilePath_StageObjData == nullptr)
 		csvFilePath_StageObjData = new std::string;
 
 	if (csvFilePath_StageObjModel == nullptr)
 		csvFilePath_StageObjModel = new std::string;
-
-	if (pProfiler == nullptr)
-		pProfiler = new PerformanceProfiler("Collision StageObject");
-
-	pProfiler->Activate();
 
 	productionID = 0;
 	canSaveCsv = true;
@@ -93,6 +97,12 @@ void StageObjectManager::Update() {
 			itr->Update();
 	}
 
+	if (movableAreas != nullptr)
+	{
+		for (auto area : *movableAreas)
+			area->Update();
+	}
+
 #ifdef IMGUI
 	UpdateImGui();
 #endif // IMGUI
@@ -114,10 +124,19 @@ void StageObjectManager::Draw() {
 			itr->Draw();
 	}
 
+	if (movableAreas != nullptr)
+	{
+		for (auto area : *movableAreas)
+			area->Draw();
+	}
+
 #else
 
-	for (auto itr : *stageObjects)
-		itr->Draw();
+	if(stageObjects)
+	{
+		for (auto itr : *stageObjects)
+			itr->Draw();
+	}
 
 #endif
 
@@ -129,19 +148,56 @@ void StageObjectManager::Release() {
 	//SaveToCsv();
 	//SaveToJson();
 	EraseAll();
+	EraseAll();
 
 	PtrUtil::SafeDelete(stageObjects);
+	PtrUtil::SafeDelete(movableAreas);
 	PtrUtil::SafeDelete(csvFilePath_StageObjData);
 	PtrUtil::SafeDelete(csvFilePath_StageObjModel);
-	PtrUtil::SafeDelete(pProfiler);
+}
+
+bool StageObjectManager::CollCheckLine(const Vector3& begin, const Vector3& end, Vector3* hitPos) {
+
+	if (stageObjects == nullptr)
+		return false;
+
+	bool hitFlag = false;
+	//VECTOR prevPush = VGet(0, 0, 0);
+	float minDist = VSquareSize(begin - end);
+	VECTOR hitPosition = begin;
+
+	for (auto obj : *stageObjects) {
+
+		obj->SetOpacity(1.0f);
+		MV1SetupCollInfo(obj->Info().hHitModel, -1, 8, 8, 8);
+
+		MV1_COLL_RESULT_POLY ret = MV1CollCheck_Line(obj->Info().hHitModel, -1, end, begin);
+
+		if (ret.HitFlag) {
+			float distX = ret.HitPosition.x - end.x;
+			float distY = ret.HitPosition.y - end.y;
+			float distZ = ret.HitPosition.z - end.z;
+
+			float dist = VSquareSize(Vector3(distX, distY, distZ));
+			if (dist < minDist) {
+				minDist = dist;
+				hitPosition = ret.HitPosition;
+				hitFlag = true;
+			}
+		}
+	}
+
+	// 当たっていたかを判断して、余計な代入を行わない
+	if (hitFlag && hitPos != nullptr)
+		*hitPos = hitPosition;
+
+	return hitFlag;
 }
 
 bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push) {
 
 	if (stageObjects == nullptr)
 		return false;
-
-	pProfiler->BeginProfiling();
 
 	bool hitFlag = false;
 	Vector3 pushVec = VGet(0, 0, 0);
@@ -179,10 +235,6 @@ bool StageObjectManager::CollCheckCapsule(const Vector3& p1, const Vector3& p2, 
 
 	if (push != nullptr)
 		*push = pushVec;
-
-	pProfiler->EndProfiling();
-	profileResult += pProfiler->GetResult();
-
 	return hitFlag;
 }
 
@@ -190,8 +242,6 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 {
 	if (stageObjects == nullptr)
 		return false;
-
-	pProfiler->BeginProfiling();
 
 	bool hitFlag = false;
 	Vector3 pushVec = VGet(0, 0, 0);
@@ -211,34 +261,48 @@ bool StageObjectManager::CollCheckCapsule_Hitpos(const Vector3& p1, const Vector
 		MV1CollResultPolyDimTerminate(dim);
 	}
 
-	pProfiler->EndProfiling();
-	profileResult += pProfiler->GetResult();
 	return hitFlag;
 }
 
-bool StageObjectManager::CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos)
+bool StageObjectManager::CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos, Vector3* normal)
 {
+	Vector3 nearestPos = Vector3::Zero;
+	Vector3 nearestNormal = Vector3::Zero;
+	float nearestDist = 0.0f;
+	bool isHit = false;
 
-	pProfiler->BeginProfiling();
 	for (const auto& obj : *stageObjects) {
 
 		MV1_COLL_RESULT_POLY hit;
 		hit = MV1CollCheck_Line(obj->Model(), 0, begin, end);
 		if (hit.HitFlag > 0) {
-			if (hitPos != nullptr)	// 引数にポインタが入っていたら、代入をする
-				*hitPos = hit.HitPosition;
-			return true;
+
+			float dist = ((Vector3)hit.HitPosition - begin).GetLengthSquared();
+			if ((not isHit) || nearestDist > dist)
+			{
+				nearestPos = hit.HitPosition;
+				nearestNormal = hit.Normal;
+				nearestDist = dist;
+			}
+			isHit = true;
 		}
 	}
-	pProfiler->EndProfiling();
-	profileResult += pProfiler->GetResult();
+
+	if (isHit)
+	{
+		if (hitPos != nullptr)	// 引数にポインタが入っていたら、代入をする
+			*hitPos = nearestPos;
+		if (normal != nullptr)	// 引数にポインタが入っていたら、代入をする
+			*normal = nearestNormal;
+
+		return true;
+	}
+
 	return false;
 }
 
 bool StageObjectManager::CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push)
 {
-
-	pProfiler->BeginProfiling();
 	bool hitFlag = false;
 	VECTOR pushVec = VGet(0, 0, 0);
 	for (const auto& obj : *stageObjects) {
@@ -272,9 +336,25 @@ bool StageObjectManager::CollCheckCapsule_Horizon(const Vector3& begin, const Ve
 
 	if (push != nullptr)
 		*push = pushVec * -1.0f;
-	pProfiler->EndProfiling();
-	profileResult += pProfiler->GetResult();
 	return hitFlag;
+}
+
+bool StageObjectManager::CollCheck_MovableArea(const Vector3& point)
+{
+	Vector3 nearestPos = Vector3::Zero;
+	float nearestDist = 0.0f;
+	bool isHit = false;
+
+	for (const auto& obj : *movableAreas) {
+
+		if (not obj->IsTag("MovableArea"))
+			continue;
+
+		if (ColFunction::CollCheck_PointToAABB(point, obj->GetAABB()) > 0.0f)
+			isHit = true;
+	}
+
+	return isHit;
 }
 
 void StageObjectManager::LoadToCsv(const std::string& filename) {
@@ -382,7 +462,52 @@ void StageObjectManager::LoadFromJson(const std::string& filename)
 			bdesc.SPAWN_INITIAL_VELOCITY = Vector3(vel.at("x").get<float>(), vel.at("y").get<float>(), vel.at("z").get<float>());
 
 			// 登録
-			AddBallSpawner(info.hModel, tr, bdesc);
+			auto& net = NetworkRef::Inst();
+			if (net.IsNetworkEnable)
+			{
+				// ホストなら生成するスポナーをキューに追加 (後で一気に生成する)
+				if (net.IsHost)
+				{
+					if (not ballSpawnerQueue)
+					{
+						ballSpawnerQueue = new BallSpawnerObjectQueue;
+					}
+					ballSpawnerQueue->Push(info.hModel, tr, bdesc);
+				}
+			}
+			else
+			{
+				AddBallSpawner(info.hModel, tr, bdesc);
+			}
+		}
+		else if (obj.contains("MovableArea") && !obj.at("MovableArea").is_null())
+		{
+			// MovableArea
+			info.hModel = ResourceLoader::MV1LoadModel("data/model/stage/Cube.mv1");
+			ColDefine::AABB aabb = ColDefine::AABB(tr.position, (tr.scale * 100.0f) * 0.5f);
+			MovableArea* movableArea = new MovableArea(aabb);
+			movableArea->SetModel(info.hModel);
+			movableArea->SetTransform(tr);
+			movableArea->SetTag("MovableArea");
+
+			movableAreas->push_back(movableArea);
+		}
+		else if (obj.contains("TrampolineParam") && !obj.at("TrampolineParam").is_null())
+		{
+			info.hModel = ResourceLoader::MV1LoadModel("data/model/Gimmick/Trampoline/" + info.type + ".mv1");
+			nlohmann::json json = obj.at("TrampolineParam");
+			TRAMPOLINE_DESC desc{};
+			desc.repulsion_force = json["RepulsionForce"].get<float>();
+			desc.transform = tr;
+			auto trampoline = Instantiate<TrampolineGimmick>();
+			trampoline->SetModel(info.hModel);
+			ColDefine::ColBaseParam colParam{};
+			colParam.trs = Transform();
+			colParam.trs.scale = tr.scale * 200.0f;
+			colParam.push = false;
+			colParam.tag = Tag::tGimmick;
+			colParam.targetTags = {Tag::tChara, Tag::tBall};
+			trampoline->Init(desc, colParam);
 		}
 		else
 		{
@@ -639,7 +764,7 @@ void StageObjectManager::ShiftID(int id) {
 }
 
 void StageObjectManager::DrawEditMode() {
-
+#ifdef IMGUI
 	ImGuiRoot* stageObjTree = ImGuiManager::FindRoot("StageObject");
 	if (stageObjTree == nullptr)
 		return;
@@ -668,6 +793,7 @@ void StageObjectManager::DrawEditMode() {
 
 		itr->Draw();
 	}
+#endif
 }
 
 void StageObjectManager::SaveAndLoad() {
@@ -732,6 +858,11 @@ std::vector<std::string> StageObjectManager::StageObjectsTheString() {
 	}
 
 	return names;
+}
+
+BallSpawnerObjectQueue* StageObjectManager::GetBallSpawnerQueue()
+{
+	return ballSpawnerQueue;
 }
 
 #ifdef IMGUI

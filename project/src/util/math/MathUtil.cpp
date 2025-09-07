@@ -16,8 +16,8 @@
 const float MathUtil::PI = 3.1415926535897932384626433832795f;
 const float MathUtil::PIOver2 = 1.5708f;
 const float MathUtil::EPSILON = 0.00001f;
-const float MathUtil::GRAVITY_2D = 9.8f / 20.0f;
-const float MathUtil::GRAVITY_3D = -GRAVITY_2D;
+const float MathUtil::GRAVITY_2D = 9.8f * 60.0f;
+const float MathUtil::GRAVITY_3D = -9.8f * 60.0f;
 const float MathUtil::PI_SQ = PI * PI;
 const float MathUtil::PI_TW = PI * 2.0f;
 
@@ -258,5 +258,38 @@ int MathUtil::CalcList(const std::list<int>& list)
 		result += it;
 	}
 	return result;
+}
+
+void MathUtil::SquareAssing(float* value)
+{
+    *value = (*value) * (*value);
+}
+
+void MathUtil::AddIterationAssing(float* value, int iteration)
+{
+    float v = *value;
+    for (int i = 0; i < iteration; i++)
+    {
+        *value += v;
+    }
+}
+
+void MathUtil::AddIterationAssingRate(float* value, int iteration, float rate)
+{
+	float v = *value;
+	for (int i = 0; i < iteration; ++i)
+	{
+		*value += v * rate;
+	}
+}
+
+uint8_t MathUtil::RateToByte(float rate)
+{
+	return 255 * rate;
+}
+
+float MathUtil::ByteToRate(uint8_t byte)
+{
+	return (float)byte / 255;
 }
 

@@ -84,7 +84,7 @@ void UI_Gauge::Draw() {
 	RectTransform globalTrs = rectTransform->Global();
 	Vector2 dispPos = globalTrs.position;
 
-	switch (Anchor::PlacementHorizontal(rectTransform->preset)) {
+	switch (Anchor::PlacementHorizontal(rectTransform->anchor.GetPreset())) {
 	case Anchor::Placement::RIGHT:	dispPos.x -= gaugeSize.x;	break;
 	case Anchor::Placement::MIDDLE:	dispPos.x -= gaugeSize.x * 0.5f;	break;
 	case Anchor::Placement::LEFT:
@@ -92,7 +92,7 @@ void UI_Gauge::Draw() {
 		break;
 	}
 
-	switch (Anchor::PlacementVertical(rectTransform->preset)) {
+	switch (Anchor::PlacementVertical(rectTransform->anchor.GetPreset())) {
 	case Anchor::Placement::UP:		dispPos.y += gaugeSize.y;		break;
 	case Anchor::Placement::MIDDLE:	dispPos.y -= gaugeSize.y * 0.5f;break;
 	case Anchor::Placement::DOWN:	dispPos.y -= gaugeSize.y * 0.5f;break;

@@ -43,6 +43,11 @@ public:
     /// </summary>
     std::string GetTeamName() const;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    bool IsCharaIDInPool(int id);
+
 private:
     friend class TeamManager;
 
@@ -51,12 +56,7 @@ private:
     /// </summary>
     bool queryIsRegistered(int id);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    bool isCharaIDInPool(int id);
-
-    class CharaBase* getCharaFromID(int id);
+    class Chara* getCharaFromID(int id);
 
     std::vector<int>                m_CharaIDs;
     std::string                     m_TeamName;

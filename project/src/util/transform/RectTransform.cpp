@@ -11,7 +11,7 @@ RectTransform::RectTransform(const Vector2& pos, const float& rot, const Vector2
 
 RectTransform::RectTransform(Anchor::Preset _preset, const Vector2& _position, const float& _rotation, const Vector2& _scale, RectTransform* _parent) {
 
-	preset = _preset;
+	anchor.SetPreset(_preset);
 	position = _position;
 	rotation = _rotation;
 	scale = _scale;
@@ -37,7 +37,7 @@ const RectTransform RectTransform::Global() const {
 	float globalRotation = rotation;
 	Vector2 globalScale = scale;
 
-	globalPosition += Anchor::Point(preset);
+	globalPosition += anchor.Point();
 
 	// e‚ðŽ‚Âê‡
 	if (parent != nullptr) {
@@ -47,7 +47,7 @@ const RectTransform RectTransform::Global() const {
 			globalScale *= parent->Global().scale;
 	}
 
-	return RectTransform(globalPosition, globalRotation, globalScale, nullptr);
+	return RectTransform(Anchor::Preset::None, globalPosition, globalRotation, globalScale, nullptr);
 }
 
 RectTransform* RectTransform::Copy() const {

@@ -1,6 +1,6 @@
 #include "src/scene/play/tackler/Tackler.h"
 #include "src/common/component/collider/ColliderCapsule.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/reference/chara/CharaDefineRef.h"
 #include "src/common/stage/StageObjectManager.h"
 
@@ -22,17 +22,19 @@ void Tackler::Init(std::string tag)
 
 	if (tag == "Red")
 	{
-		param.tag = ColDefine::Tag::tTackleRed;
+		param.tag = ColDefine::Tag::tRed;
+		param.targetTags = { ColDefine::Tag::tBall, ColDefine::Tag::tChara, ColDefine::Tag::tBlue };
 	}
 	else if (tag == "Blue")
 	{
-		param.tag = ColDefine::Tag::tTackleBlue;
+		param.tag = ColDefine::Tag::tBlue;
+		param.targetTags = { ColDefine::Tag::tBall, ColDefine::Tag::tChara, ColDefine::Tag::tRed };
 	}
 	else
 	{
-		param.tag = ColDefine::Tag::tTackleRed;
+		param.tag = ColDefine::Tag::tRed;
+		param.targetTags = { ColDefine::Tag::tBall, ColDefine::Tag::tChara, ColDefine::Tag::tBlue };
 	}
-	param.targetTags = { ColDefine::Tag::tBallRed, ColDefine::Tag::tBallBlue, ColDefine::Tag::tCharaRed, ColDefine::Tag::tCharaBlue };
 
 	m_Collider->BaseInit(param);
 	//m_Collider->SetDraw(true);
@@ -51,7 +53,7 @@ void Tackler::Draw()
 void Tackler::CollisionEvent(const CollisionData& colData)
 {
 	// ‚ ‚½‚Á‚½‘ŠŽè‚ªƒLƒƒƒ‰‚È‚ç
-	CharaBase* chara = colData.Other()->Parent<CharaBase>();
+	Chara* chara = colData.Other()->Parent<Chara>();
 	if (chara not_eq nullptr)
 	{
 		if (chara == m_Parent)

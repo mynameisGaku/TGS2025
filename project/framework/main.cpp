@@ -1,9 +1,9 @@
- //<summary>
- // CoGƒtƒŒ[ƒ€ƒ[ƒN
- // WinMain()‚©‚çn‚Ü‚è‚Ü‚·
- //</summary>
- //<author>N.Hanai</author>
- 
+ï»¿//<summary>
+// CoGãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¯ãƒ¼ã‚¯
+// WinMain()ã‹ã‚‰å§‹ã¾ã‚Šã¾ã™
+//</summary>
+//<author>N.Hanai</author>
+
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #ifdef _DEBUG
@@ -12,9 +12,17 @@
 #define DBG_NEW new
 #endif
 
+#define WIN32_LEAN_AND_MEAN
+
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h> 
+
+#pragma comment(lib, "ws2_32.lib")
+
 #include <DxLib.h>
 
-#define IMGUI
+#include "src/config/imgui/ImGuiConfig.h"
 #ifdef IMGUI
 #include "vendor/imgui/imgui_impl_dxlib.hpp"
 
@@ -35,187 +43,246 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #include "src/reference/bloom/BloomRef.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/reference/chara/CharaDefineRef.h"
 #include "src/reference/chara/CharaHPRef.h"
 #include "src/reference/chara/CharaStaminaRef.h"
 #include "src/reference/crystal/CrystalFragmentRef.h"
 #include "src/reference/crystal/CrystalFragmentSpawnerRef.h"
 #include <src/reference/game/GameRef.h>
+#include "src/reference/input/InputRef.h"
 #include <src/util/time/GameTime.h>
-#include <src/common/performance_profiler/PerformanceProfilerManager Manager.h>
-#include <src/common/performance_profiler/PerformanceProfiler.h>
+#include <src/reference/ui/UI_ButtonHintRef.h>
+#include <src/reference/network/NetworkRef.h>
+#include <src/util/editbox/editbox.hpp>
+#include <src/util/ptr/PtrUtil.h>
+#include <src/reference/camera/CameraPerformanceRef.h>
+#include <src/util/restart/Restart.h>
+#include <src/common/performance_profiler/PerformanceProfilerManagerManager.h>
 
 #define CoGVersion (2.2)
 
-// ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚è‚Ü‚·
+LARGE_INTEGER freq;
+LARGE_INTEGER start, end;
+int timeRecordCounter = 0;
+double tick = 0.0;
+bool isRefreshTick = false;
+
+void BeginRecordPerformance();
+void EndRecordPerformance();
+
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯ WinMain ã‹ã‚‰å§‹ã¾ã‚Šã¾ã™
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
+    Restart::HandleWaitParentIfNeeded(__argc, __argv);
+
     auto& wSetting = WindowSetting::Inst();
-	std::string path = "";
+    std::string path = "";
     SearchFilePath("window.ini", path);
     wSetting.Load(path);
 
-	SetGraphMode((int)wSetting.width, (int)wSetting.height, 32);
-	SetOutApplicationLogValidFlag(FALSE); // ƒƒO‚ğo‚³‚È‚¢
+    SetGraphMode((int)wSetting.width, (int)wSetting.height, 32);
+    SetOutApplicationLogValidFlag(FALSE); // ãƒ­ã‚°ã‚’å‡ºã•ãªã„
 
-	SetMainWindowText(wSetting.name.c_str());
-	SetWindowSizeExtendRate((double)wSetting.extend);
-	ChangeWindowMode(wSetting.isWindow); // Windowƒ‚[ƒh‚Ìê‡
+    SYSTEMTIME t;
+    GetSystemTime(&t);
 
-#ifdef IMGUI
-	SetHookWinProc(WndProc);	//ƒvƒƒV[ƒWƒƒ‚Ìİ’è
-#endif // IMGUI
+    auto& net = NetworkRef::Inst();
+    net.Load(true);
+    std::string isHost = net.IsHost ? "[HOST]" : "[CLIENT]";
+    std::string wndname = isHost + wSetting.name + std::to_string(t.wMilliseconds);
 
-	SetUseDirect3DVersion(DX_DIRECT3D_11);
-	SetZBufferBitDepth(32);
-
-	if (DxLib_Init() == -1)		// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»ˆ—
-	{
-		return -1;			// ƒGƒ‰[‚ª‹N‚«‚½‚ç’¼‚¿‚ÉI—¹
-	}
-
-	if (Effekseer_Init(18000) == -1)
-	{
-		DxLib_End();
-		return -1;
-	}
-
-	SetHookWinProc([](HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT /*CALLBACK*/
-		{
-			// DxLib‚ÆImGui‚ÌƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚ğ—¼—§‚³‚¹‚é
-			SetUseHookWinProcReturnValue(FALSE);
-			return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-		});
-#ifdef IMGUI
-	// ImGui
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-	io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());	ImGui_ImplDXlib_Init();
-#endif // IMGUI
-
-	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
-	
-	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
-	Effekseer_Set2DSetting((int)wSetting.width, (int)wSetting.height);
-
-	SetFontSize(32);
-	Font::Load("data/font/", "sazanami_mincho.ttf", "‚³‚´‚È‚İ–¾’©");
-
-	SetDrawScreen(DX_SCREEN_BACK);
-	SetAlwaysRunFlag(TRUE);
-	SetUseZBuffer3D(TRUE);
-	SetWriteZBuffer3D(TRUE);
-
-	AppInit();
-
-	PerformanceProfilerManager* ppM = PerformanceProfilerManager::GetInst();
-	PerformanceProfiler* gameLoopProfiler = new PerformanceProfiler("GameLoop");
-	gameLoopProfiler->Activate();
-	PerformanceProfiler* gameLoopProfilerUpdate = new PerformanceProfiler("GameLoop Update");
-	gameLoopProfilerUpdate->Activate();
-	PerformanceProfiler* gameLoopProfilerRendering = new PerformanceProfiler("GameLoop Rendering");
-	gameLoopProfilerRendering->Activate();
-
-	int mStartTime = GetNowCount();
-
-	while (true) {
-
-		gameLoopProfiler->BeginProfiling();
-
-		int cur = GetNowCount();
-		if (cur < mStartTime + 16) //120fps‘Îô
-			continue;
-		mStartTime = cur;
+    SetMainWindowText(wndname.c_str());
+    SetWindowSizeExtendRate((double)wSetting.extend);
+    ChangeWindowMode(wSetting.isWindow); // Windowãƒ¢ãƒ¼ãƒ‰ã®å ´åˆ
 
 #ifdef IMGUI
-		ImGui_ImplDXlib_NewFrame();
-		ImGui::NewFrame();
+    SetHookWinProc(WndProc);	//ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã®è¨­å®š
 #endif // IMGUI
-		ppM->Render();
 
-		gameLoopProfilerUpdate->BeginProfiling();
-		AppUpdate();
-		gameLoopProfilerUpdate->EndProfiling();
-		ClearDrawScreen();
-		gameLoopProfilerRendering->BeginProfiling();
-		AppDraw();
-		gameLoopProfilerRendering->EndProfiling();
-		if (ProcessMessage() == -1 || IsExit())
-			break;
-		ScreenFlip();
+    SetUseDirect3DVersion(DX_DIRECT3D_11);
+    SetZBufferBitDepth(32);
+
+    if (DxLib_Init() == -1)		// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–å‡¦ç†
+    {
+        return -1;			// ã‚¨ãƒ©ãƒ¼ãŒèµ·ããŸã‚‰ç›´ã¡ã«çµ‚äº†
+    }
+
+    if (Effekseer_Init(18000) == -1)
+    {
+        DxLib_End();
+        return -1;
+    }
 
 #ifdef IMGUI
-
-		ImGui::EndFrame();
-		ImGui::Render();
-		ImGui_ImplDXlib_RenderDrawData();
-
-		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-		}
+    SetHookWinProc([](HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT /*CALLBACK*/
+        {
+            // DxLibã¨ImGuiã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã‚’ä¸¡ç«‹ã•ã›ã‚‹
+            SetUseHookWinProcReturnValue(FALSE);
+            return ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
+        });
+    // ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());	ImGui_ImplDXlib_Init();
 #endif // IMGUI
 
-		gameLoopProfiler->EndProfiling();
+    SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
 
-		ppM->OnEndFrame();
-	}
-	
-	delete gameLoopProfiler;
-	delete gameLoopProfilerUpdate;
-	delete gameLoopProfilerRendering;
-	AppRelease();
+    Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+    Effekseer_Set2DSetting((int)wSetting.width, (int)wSetting.height);
 
-	/*
-	ƒŠƒtƒ@ƒŒƒ“ƒX‰ğ•ú
+    SetFontSize(32);
+    Font::Load("data/font/", "sazanami_mincho.ttf", "ã•ã–ãªã¿æ˜æœ");
 
-	–¾¦“I‚É‰ğ•ú‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B
-	*/
-	Settings_json::Inst()->Destroy();
-	Settings_ini::Inst().Destroy();
-	BLOOM_REF.Destroy();
-	CAMERADEFINE_REF.Destroy();
-	CHARADEFINE_REF.Destroy();
-	CHARAHP_REF.Destroy();
-	CHARASTAMINA_REF.Destroy();
-	CRYSTALFRAGMENT_REF.Destroy();
-	CRYSTALFRAGMENTSPAWNER_REF.Destroy();
-	GAME_REF.Destroy();
-	wSetting.Destroy();
-	GTime.Destroy();
-	ppM->Destroy();
+    SetDrawScreen(DX_SCREEN_BACK);
+    SetAlwaysRunFlag(TRUE);
+    SetUseZBuffer3D(TRUE);
+    SetWriteZBuffer3D(TRUE);
+
+    AppInit();
+
+    int mStartTime = GetNowCount();
+
+    while (true) {
+
+        BeginRecordPerformance();
+
+        int cur = GetNowCount();
+        if (cur < mStartTime + 16) //120fpså¯¾ç­–
+            continue;
+        mStartTime = cur;
+
+#ifdef IMGUI
+        ImGui_ImplDXlib_NewFrame();
+        ImGui::NewFrame();
+#endif // IMGUI
+
+        //ImGui::Begin("TimeRecord");
+        //ImGui::Text("time %lf[ms]", tick);
+        //ImGui::End();
+
+
+        PerformanceProfilerManager::GetInst()->OnEndFrame();
+        PerformanceProfilerManager::GetInst()->Render();
+
+        AppUpdate();
+        ClearDrawScreen();
+        AppDraw();
+        DrawEffekseer2D();
+        if (ProcessMessage() == -1 || IsExit() || IsReboot())
+            break;
+
+        ScreenFlip();
+
+        EndRecordPerformance();
+
+        if (++timeRecordCounter % 60 == 0)
+            tick = static_cast<double>(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
 
 #ifdef IMGUI
 
-	// ‰ğ•ú
-	ImGui_ImplDXlib_Shutdown();
-	ImGui::DestroyContext();
+        ImGui::EndFrame();
+        ImGui::Render();
+        ImGui_ImplDXlib_RenderDrawData();
+
+        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+        }
+#endif // IMGUI
+
+    }
+
+    AppRelease();
+
+    /*
+    ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹è§£æ”¾
+
+    æ˜ç¤ºçš„ã«è§£æ”¾ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+    */
+    Settings_json::Inst()->Destroy();
+    Settings_ini::Inst().Destroy();
+    BLOOM_REF.Destroy();
+    CAMERADEFINE_REF.Destroy();
+    CAMERA_PERFORMANCE_REF.Destroy();
+    CHARADEFINE_REF.Destroy();
+    CHARAHP_REF.Destroy();
+    CHARASTAMINA_REF.Destroy();
+    CRYSTALFRAGMENT_REF.Destroy();
+    CRYSTALFRAGMENTSPAWNER_REF.Destroy();
+    GAME_REF.Destroy();
+    wSetting.Destroy();
+    GTime.Destroy();
+    InputRef::Inst().Destroy();
+    UI_ButtonHintRef::Inst().Destroy();
+    NetworkRef::Inst().Destroy();
+    PtrUtil::SafeDelete(nameText);
+    CameraPerformanceRef::Inst()->Destroy();
+    PerformanceProfilerManager::GetInst()->Destroy();
+
+#ifdef IMGUI
+
+    // è§£æ”¾
+    ImGui_ImplDXlib_Shutdown();
+    ImGui::DestroyContext();
 
 #endif // IMGUI
 
-	Effkseer_End();
-	DxLib_End();				// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠg—p‚ÌI—¹ˆ—
+    Effkseer_End();
+    DxLib_End();				// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªä½¿ç”¨ã®çµ‚äº†å‡¦ç†
 
 #ifdef _DEBUG
-	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-	_CrtDumpMemoryLeaks();
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+    _CrtDumpMemoryLeaks();
 #endif
 
-	return 0;				// ƒ\ƒtƒg‚ÌI—¹ 
+    if (IsReboot())
+    {
+        // è‡ªåˆ†è‡ªèº«ã®ãƒ‘ã‚¹ã‚’å–å¾—
+        TCHAR exePath[MAX_PATH];
+        GetModuleFileName(NULL, exePath, MAX_PATH);
+
+        // æ–°ã—ã„ãƒ—ãƒ­ã‚»ã‚¹ã¨ã—ã¦è‡ªåˆ†è‡ªèº«ã‚’èµ·å‹•
+        STARTUPINFO si = { sizeof(STARTUPINFO) };
+        PROCESS_INFORMATION pi;
+        CreateProcess(
+            exePath,   // å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+            NULL,      // ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°
+            NULL, NULL, FALSE,
+            0, NULL, NULL,
+            &si, &pi
+        );
+    }
+
+    return 0;				// ã‚½ãƒ•ãƒˆã®çµ‚äº† 
 }
 
 #ifdef IMGUI
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
-		return true;
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+        return true;
 
-	return false;
+    return false;
 }
 
 #endif // IMGUI
+
+void BeginRecordPerformance()
+{
+    isRefreshTick = false;
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&start);
+}
+
+void EndRecordPerformance()
+{
+    QueryPerformanceCounter(&end);
+    isRefreshTick = true;
+}

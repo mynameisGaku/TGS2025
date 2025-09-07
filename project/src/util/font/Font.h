@@ -1,78 +1,72 @@
 #pragma once
-#include "framework/myDxLib.h"
-#include "src/util/file/FileUtil.h"
-#include <string>
+#include "src/util/font/FontDefine.h"
 
-class FontInfo;
-
-/// <summary>
-/// フォントの読み込み・管理を行う
-/// </summary>
+/**
+	@brief		フォントの読み込み・管理を行う名前空間
+*/
 namespace Font {
 
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
+	//=================================================================================
+	//
+	//		各種関数
+	//
+	//=================================================================================
+
+	/**
+		@brief		初期化処理
+	*/
 	void Init();
 
-	/// <summary>
-	/// 解放処理
-	/// </summary>
+	/**
+		@brief		解放処理
+	*/
 	void Release();
 
-	/// <summary>
-	/// フォントのデータを読み込む
-	/// </summary>
-	/// <param name="filePath">フォントが置かれているファイルパス</param>
-	/// <param name="resourceName">フォントのリソース名</param>
-	/// <param name="fontName">フォントの名前</param>
-	void Load(const std::string& filePath, const std::string& resourceName, const std::string& fontName);
+	//=================================================================================
+	//
+	//		読み込み処理
+	//
+	//=================================================================================
 
-	/// <summary>
-	/// 指定されたフォント情報からフォントハンドルを生成する
-	/// </summary>
-	/// <param name="info">フォント情報</param>
-	/// <returns>フォントハンドル</returns>
-	int CreateFontToHandle(FontInfo* info);
+	/**
+		@brief		フォントを読み込む
+		@param		fileHierarchy	:	ファイル階層
+		@param		dataName		:	データ名
+		@param		fontName		:	フォント名
+	*/
+	void Load(const std::string& fileHierarchy, const std::string& dataName, const std::string& fontname);
 
+	//=================================================================================
+	//
+	//		セッター
+	//
+	//=================================================================================
+
+	/**
+		@brief		基本フォントを設定する
+		@param		fileHierarchy	:	ファイル階層
+		@param		dataName		:	データ名
+		@param		fontName		:	フォント名
+	*/
+	void SetBasicFont(const std::string& fileHierarchy, const std::string& dataName, const std::string& fontname);
+
+	//=================================================================================
+	//
+	//		ゲッター
+	//
+	//=================================================================================
+
+	/**
+		@brief		フォント情報とタグを指定して、新しいフォントデータを作成します。
+					タグが一致している場合は、既存のフォントを再利用します。
+		@param		info	:	フォントの情報
+		@param		tag		:	フォントに関連付けるタグ
+		@returns	フォントのハンドル
+	*/
+	const int Create(const FontInfo& info, const std::string& tag);
+
+	/**
+		@brief		基本フォント情報を取得する。始めに読み込んだフォントが自動で基本フォントとなる。
+	*/
+	const FontInfo BasicFont();
 }
-
-/// <summary>
-/// フォントの情報
-/// </summary>
-class FontInfo {
-public:
-	int handle;		// ハンドル
-	int size;		// 大きさ
-	int thick;		// 太さ
-	int fontType;	// フォントのタイプ(DX_FONTTYPE_~~)
-	int charSet;	// 
-	int edgeSize;	// 縁の大きさ
-	int italic;		// 斜め
-	int color;		// 色
-	FileUtil::Folder strData;// フォントで使用する文字列情報
-
-	FontInfo() :
-		handle(-1),
-		size(-1),
-		thick(-1),
-		fontType(-1),
-		charSet(-1),
-		edgeSize(-1),
-		italic(0),
-		color(GetColor(255, 255, 255))
-	{
-	}
-
-	~FontInfo(){}
-
-	inline void Init(const std::string& tag, const int& _size, const int& _color, const int& _fontType, const int& _edgeSize) {
-		strData.tag = tag;
-		size = _size;
-		color = _color;
-		fontType = _fontType;
-		edgeSize = _edgeSize;
-
-		Font::CreateFontToHandle(this);
-	}
-};

@@ -1,6 +1,9 @@
 #pragma once
 #include "src/common/camera/Camera.h"
 
+#include "src/common/network/user/User.h"
+#include "src/config/imgui/ImGuiConfig.h"
+
 using namespace CameraDefine;
 
 /// <summary>
@@ -20,6 +23,7 @@ namespace CameraManager {
 	/// カメラの生成を行う
 	/// </summary>
 	/// <returns>生成したカメラの実体</returns>
+	Camera* CreateCamera(int charaindex, const User& user);
 	Camera* CreateCamera();
 
 	/// <summary>
@@ -43,35 +47,6 @@ namespace CameraManager {
 	/// <param name="state">変更するステート</param>
 	void ChangeStateCamera(int number, void(Camera::* state)(FSMSignal));
 
-	/// <summary>
-	/// カメラ描画を指定された位置とサイズで分割します
-	/// </summary>
-	/// <param name="x">分割領域の左上隅のX座標</param>
-	/// <param name="y">分割領域の左上隅のY座標</param>
-	/// <param name="w">分割領域の幅</param>
-	/// <param name="h">分割領域の高さ</param>
-	void CameraScreenDivision(int x, int y, int w, int h);
-
-	/// <summary>
-	/// カメラ描画を指定された位置とサイズで分割してから、描画します
-	/// </summary>
-	/// <param name="x">分割領域の左上隅のX座標</param>
-	/// <param name="y">分割領域の左上隅のY座標</param>
-	/// <param name="w">分割領域の幅</param>
-	/// <param name="h">分割領域の高さ</param>
-	/// <param name="number">描画を行うカメラの番号</param>
-	void CameraScreenDivisionDraw(int x, int y, int w, int h, int number);
-
-	/// <summary>
-	/// 画面分割を適用する
-	/// </summary>
-	void ApplyScreenDivision();
-
-	/// <summary>
-	/// 既定の画面サイズに戻す
-	/// </summary>
-	void DefaultScreenSize();
-
 	//================================================================================
 	// ▼セッター
 
@@ -86,6 +61,8 @@ namespace CameraManager {
 	/// 画面分割処理を行うかを設定する
 	/// </summary>
 	void SetIsScreenDivision(bool value);
+
+	void SetCurrentDrawingCameraID(int index);
 
 	//================================================================================
 	// ▼ゲッター
@@ -104,6 +81,19 @@ namespace CameraManager {
 	Camera* GetCamera(int number);
 
 	/// <summary>
+	/// カメラの情報を取得する
+	/// </summary>
+	/// <param name="user">ユーザーのインスタンス</param>
+	/// <returns>カメラのポインター</returns>
+	Camera* GetCamera(const User& user);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	Camera* GetCameraDrawing();
+
+	/// <summary>
 	/// 全てのカメラのリストを取得する
 	/// </summary>
 	std::vector<Camera*> AllCameras();
@@ -114,26 +104,28 @@ namespace CameraManager {
 	bool IsScreenDivision();
 
 	/// <summary>
-	/// 画面分割の開始地点を取得する
+	/// 描画領域の開始地点を取得する
 	/// </summary>
-	Vector2 GetScreenDivisionPos();
+	Vector2 GetDrawingAreaPos_CameraIndex(int index);
 
 	/// <summary>
-	/// 画面分割の大きさを取得する
+	/// 描画領域の大きさを取得する
 	/// </summary>
-	Vector2 GetScreenDivisionSize();
+	Vector2 GetDrawingAreaSize_CameraIndex(int index);
 
 	/// <summary>
-	/// 画面分割の開始地点を取得する
+	/// カメラ数によって分割された2Dベクトルを取得します。
 	/// </summary>
-	Vector2 GetScreenDivisionPos_CameraIndex(int index);
-
-	/// <summary>
-	/// 画面分割の中心座標を取得する
-	/// </summary>
-	Vector2 GetScreenDivisionCenter();
-
+	/// <returns>カメラの数で分割された結果の2次元ベクトル。</returns>
 	Vector2 GetDivedByCameraNum();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	int GetCurrentDrawingCameraID();
+
+	bool IsPlayingPerformance();
 
 	//================================================================================
 	// ▼デバッグ機能
@@ -145,10 +137,6 @@ namespace CameraManager {
 	//void CameraChangeStateTheString(const std::string& state);
 
 #ifdef _DEBUG
-#ifndef IMGUI
-#define IMGUI
-#endif
-#endif
 #ifdef IMGUI
 
 	/// <summary>
@@ -162,5 +150,6 @@ namespace CameraManager {
 	void UpdateImGuiNode();
 
 #endif // IMGUI
+#endif
 
 }

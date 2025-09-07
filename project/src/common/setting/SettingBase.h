@@ -73,7 +73,7 @@ public:
 protected:
 	std::list<UI_Slider*> sliders;		// スライダーの実体
 	UI_Define::SliderColor sliderColor;	// スライダーの色情報
-	FontInfo fontInfo;					// フォント情報
+	FontDefine::FontInfo useFont;					// フォント情報
 	EasingUtils::EasingInt alphaEasing;	// 不透明度
 
 	bool isAdjustable;	// 調整可能か

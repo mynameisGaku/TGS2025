@@ -1,0 +1,194 @@
+{
+  "CanvasName": "MainCanvas",
+  "Begin": {
+    "X": 0,
+    "Y": 0
+  },
+  "End": {
+    "X": 1920,
+    "Y": 1080
+  },
+  "IsFitScreen": true,
+  "IsDefaultActivate": true,
+  "UIList": [
+    {
+      "NAME": "TitleLogo",
+      "GRAPH_PATH": "data/Img/UI/Title/Logo.png",
+      "OFFSET_X_FROM_ANCHOR": -443,
+      "OFFSET_Y_FROM_ANCHOR": 378,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 1024,
+      "GRAPH_DEST_Y": 1024,
+      "INDEX_X": 0,
+      "INDEX_Y": 0,
+      "DESCRIPTION": "TitleLogo",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_TOP",
+      "COLLISION": "TUI_CANVAS_COLLISION_NONE",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": false,
+      "EVENTS": [],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": -1,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "StartButton",
+      "GRAPH_PATH": "data/Img/UI/Title/Start.png",
+      "OFFSET_X_FROM_ANCHOR": -530,
+      "OFFSET_Y_FROM_ANCHOR": 157,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 0,
+      "DESCRIPTION": "StartButton",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": true,
+      "EVENTS": [
+        {
+          "Event": "GameStart",
+          "Description": "Start the game when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SceneName": "PlayScene"
+          }
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "SE_menu_click.mp3"
+          }
+        }
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 0,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "Bg",
+      "GRAPH_PATH": "data/Img/UI/Title/bg.png",
+      "OFFSET_X_FROM_ANCHOR": 382,
+      "OFFSET_Y_FROM_ANCHOR": 184,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 1920,
+      "GRAPH_DEST_Y": 1080,
+      "INDEX_X": 0,
+      "INDEX_Y": 0,
+      "DESCRIPTION": "",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_NONE",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": false,
+      "EVENTS": [],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1.8,
+      "Opacity": 1,
+      "ZIndex": -100,
+      "LockAspectRatio": false,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "OptionButton",
+      "GRAPH_PATH": "data/Img/UI/Title/Option.png",
+      "OFFSET_X_FROM_ANCHOR": -528,
+      "OFFSET_Y_FROM_ANCHOR": 247,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 1,
+      "DESCRIPTION": "OptionButton",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": true,
+      "EVENTS": [
+        {
+          "Event": "ActivateCanvas",
+          "Description": "Go to the option when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "CanvasName": "OptionCanvas"
+          }
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": {
+            "SoundName": "SE_menu_click.mp3"
+          }
+        }
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 1,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    },
+    {
+      "NAME": "QuitButton",
+      "GRAPH_PATH": "data/Img/UI/Title/Quit.png",
+      "OFFSET_X_FROM_ANCHOR": -526,
+      "OFFSET_Y_FROM_ANCHOR": 333,
+      "GRAPH_SRC_X": 0,
+      "GRAPH_SRC_Y": 0,
+      "GRAPH_DEST_X": 256,
+      "GRAPH_DEST_Y": 128,
+      "INDEX_X": 0,
+      "INDEX_Y": 2,
+      "DESCRIPTION": "QuitButton",
+      "ANCHORPOINT": "TUI_CANVAS_ANCHOR_POINT_CENTER",
+      "COLLISION": "TUI_CANVAS_COLLISION_RECT",
+      "IS_LOOP_EVENT": false,
+      "IS_SELECTABLE": true,
+      "EVENTS": [
+        {
+          "Event": "Exit",
+          "Description": "Exit the game when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_RELEASE",
+          "Argument": null
+        },
+        {
+          "Event": "PlaySound",
+          "Description": "play sound when clicked",
+          "Timing": "TUI_EVENT_TRIGGER_TIMING_ENTER",
+          "Argument": {
+            "SoundName": "SE_menu_click.mp3"
+          }
+        }
+      ],
+      "IsVisible": true,
+      "Rotation": 0,
+      "Scale": 1,
+      "Opacity": 1,
+      "ZIndex": 2,
+      "LockAspectRatio": true,
+      "PivotX": 0.5,
+      "PivotY": 0.5
+    }
+  ]
+}

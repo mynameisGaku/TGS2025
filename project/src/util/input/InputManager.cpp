@@ -7,9 +7,14 @@
 #include "src/util/input/KeyController.h"
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
+#include "src/util/enum/EnumUtil.h"
+
+// 参照
+#include "src/reference/input/InputRef.h"
 
 // ◇デバッグ
 #include "src/util/debug/imgui/imGuiManager.h"
+#include <src/util/file/resource_loader/resourceLoader.h>
 
 using namespace KeyDefine;
 
@@ -22,6 +27,18 @@ namespace {
 	std::unordered_map<KeyCode, InputData>* isBeforeInputs;	// 1フレーム前に入力しているか
 
 	std::list<InputData> keyCodes;	// 直近に押されたキー情報を保持する
+
+	InputRef* pRef;
+
+	KeyDefine::DeviceType inputDevice;
+	KeyDefine::DeviceType prevInputDevice;
+
+	struct BUTTON_IMAGE
+	{
+		int hImage = -1;
+		int hPushImage = -1;
+	};
+	std::unordered_map<std::string, BUTTON_IMAGE>* pButtonImageMap;
 }
 
 void InputManager::Init() {
@@ -35,43 +52,59 @@ void InputManager::Init() {
 	PadController::Init();
 	MouseController::Init();
 
+	pRef = &InputRef::Inst();
+	pRef->Load(true);
+
+	pButtonImageMap = new std::unordered_map<std::string, BUTTON_IMAGE>;
+
+	// 画像読み込み & マップ登録
+	const std::string image_path	= "data/Img/UI/ButtonHint/";
+	std::string push				= "_Push";
+	std::string device_type_str		= "None";
+	std::string file_extension		= ".png";
+	for (auto& phys : pRef->PhysicalKeys)
+	{
+		std::string key = phys.KeyName;
+
+		BUTTON_IMAGE button;
+		KeyDefine::DeviceType device = EnumUtil::ToEnum(phys.DeviceName, KeyDefine::DeviceType::None);
+
+		switch (device)
+		{
+		case KeyDefine::DeviceType::Key:
+			device_type_str = "Key/";
+			break;
+		case KeyDefine::DeviceType::Pad:
+			device_type_str = "Pad/";
+			break;
+		case KeyDefine::DeviceType::Mouse:
+			device_type_str = "Mouse/";
+			break;
+		}
+
+		std::string hImagePath = image_path + device_type_str + phys.KeyName + file_extension;
+		std::string hPushImagePath = image_path + device_type_str + phys.KeyName + push + file_extension;
+		button.hImage = ResourceLoader::LoadGraph(hImagePath);
+		button.hPushImage = ResourceLoader::LoadGraph(hPushImagePath);
+		(*pButtonImageMap)[key] = button;
+	}
+
 	//==========================================================================================
 	// ▼仮想ボタンを割り当てる
 
 	if (keyList == nullptr) {
 		keyList = new std::unordered_map<std::string, std::vector<KeyCode>>();
 
-		auto& key = (*keyList);
-
-		key["Select"] = { KeyCode::Z, KeyCode::ButtonA };
-		key["Cancel"] = { KeyCode::X, KeyCode::ButtonB };
-		key["Pause"] = { KeyCode::Escape, KeyCode::Start };
-		key["TargetCamera"] = { KeyCode::MiddleClick, KeyCode::RightThumb };
-		key["Skip"] = { KeyCode::Z, KeyCode::Space, KeyCode::ButtonA, KeyCode::LeftClick };
-
-		key["Up"] = { KeyCode::Up, KeyCode::UpArrow };
-		key["Down"] = { KeyCode::Down, KeyCode::DownArrow };
-		key["Left"] = { KeyCode::Left, KeyCode::LeftArrow };
-		key["Right"] = { KeyCode::Right, KeyCode::RightArrow };
-
-		key["Throw"] = { KeyCode::LeftClick, KeyCode::RightTrigger };
-		key["Catch"] = { KeyCode::RightClick, KeyCode::LeftTrigger };
-		key["Jump"] = { KeyCode::Space, KeyCode::ButtonA };
-		key["Slide"] = { KeyCode::LeftShift, KeyCode::LeftShoulder };
-		key["Teleport"] = { KeyCode::E, KeyCode::ButtonY };
-		key["Feint"] = { KeyCode::F, KeyCode::ButtonX };
-		key["Tackle"] = { KeyCode::LeftControl, KeyCode::ButtonB };
-
-		key["Movement"] = { KeyCode::W, KeyCode::S, KeyCode::A, KeyCode::D };
-		key["MoveUp"] = { KeyCode::W };
-		key["MoveDown"] = { KeyCode::S };
-		key["MoveLeft"] = { KeyCode::A };
-		key["MoveRight"] = { KeyCode::D };
-
-		key["TargetCamera"] = { KeyCode::LeftClick, KeyCode::RightTrigger };
-
-		key["AnyKey"] = { KeyCode::Z, KeyCode::Space, KeyCode::Enter,
-			KeyCode::ButtonA, KeyCode::ButtonB, KeyCode::ButtonX, KeyCode::ButtonY };
+		for (auto& vir : pRef->VirtualKeys)
+		{
+			std::vector<KeyCode> codes;
+			for (auto& keyparam : vir.KeyParams)
+			{
+				KeyCode e = EnumUtil::ToEnum(keyparam, KeyCode::None);
+				codes.push_back(e);
+			}
+			(*keyList)[vir.KeyName] = codes;
+		}
 	}
 
 	//==========================================================================================
@@ -252,6 +285,9 @@ bool InputManager::Push(const KeyDefine::KeyCode& keyCode, const int& padNumber)
 	if (isInput)
 		(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(inputData, ADVANCED_ENTRY_TIME));
 
+	prevInputDevice = inputDevice;
+	inputDevice = device;	// 入力されたデバイスを記録
+
 	return isInput;
 }
 
@@ -314,6 +350,9 @@ bool InputManager::Hold(const KeyDefine::KeyCode& keyCode, const int& padNumber)
 	if (isInput)
 		(*advancedEntry)[padNumber].push_back(AdvancedEntryInfo(inputData, ADVANCED_ENTRY_TIME));
 
+	prevInputDevice = inputDevice;
+	inputDevice = device;	// 入力されたデバイスを記録
+
 	return isInput;
 }
 
@@ -372,6 +411,9 @@ bool InputManager::Release(const KeyDefine::KeyCode& keyCode, const int& padNumb
 	inputData.isAccepted[padNumber][TouchPhase::Ended] = true;
 
 	(*isInputs)[keyCode] = inputData;
+
+	prevInputDevice = inputDevice;
+	inputDevice = device;	// 入力されたデバイスを記録
 
 	return isInput;
 }
@@ -477,6 +519,29 @@ Vector3 InputManager::AnalogStick(int padNumber) {
 	if (analog.GetLength() > 1.0f) analog = analog.Normalize();	// 1を超えないようにリミッターをかける
 
 	return analog;
+}
+
+std::pair<int, int> InputManager::GetImagePair(const KeyDefine::KeyCode& keyCode)
+{
+	return GetImagePair(EnumUtil::ToString(keyCode));
+}
+
+std::pair<int, int> InputManager::GetImagePair(const std::string& keyName)
+{
+	std::pair<int, int> ret{};
+	ret.first = (*pButtonImageMap)[keyName].hImage;
+	ret.second = (*pButtonImageMap)[keyName].hPushImage;
+	return ret;
+}
+
+const KeyDefine::DeviceType& InputManager::GetLastInputDevice()
+{
+	return ::inputDevice;
+}
+
+const bool InputManager::IsChangeInputDevice()
+{
+	return ::inputDevice != ::prevInputDevice;
 }
 
 #ifdef _DEBUG

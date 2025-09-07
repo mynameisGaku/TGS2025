@@ -3,7 +3,10 @@
 #include <string>
 
 class ColliderCapsule;
-class CharaBase;
+class Chara;
+class Ball;
+class ForceFieldManager;
+class ForceFieldCorn;
 
 /// <summary>
 /// キャラクターの吸引キャッチの当たり判定のクラス
@@ -26,10 +29,21 @@ public:
 	void CollisionEvent(const CollisionData& colData) override;
 
 	void SetColliderActive(bool isActive);
-	void SetParent(CharaBase* parent) { m_Parent = parent; }
+	void SetParent(Chara* parent) { m_pParent = parent; }
 
 	bool IsColliderActive() const;
+	// キャッチ角度内にボールがあるかどうか
+	bool CanCatch(Ball* ball) const;
+
+	// キャッチ成功処理
+	void CatchSuccese(Ball* ball);
+
 private:
-	ColliderCapsule* m_Collider;	// 当たり判定
-	CharaBase* m_Parent;			// 親キャラクター
+	ColliderCapsule* m_pCollider;	// 当たり判定
+	Chara* m_pParent;			// 親キャラクター
+	ForceFieldManager* m_pForceFieldManager;	// 吸込み用、力場マネージャー
+	ForceFieldCorn* m_pWindArea;	// 吸込みエリア
+
+	void createWindArea();
+	void deleteWindArea();
 };

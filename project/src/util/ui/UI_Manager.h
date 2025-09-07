@@ -68,6 +68,16 @@ namespace UI_Manager {
 	/// <returns>存在すればその実態を返す。無ければnullptrを返す。</returns>
 	UI_Canvas* Find(const std::string& tag);
 
+	template<class C>
+	C* Find(const std::string& tag)
+	{
+		UI_Canvas* ui = Find(tag);
+		if (ui == nullptr)
+			return nullptr;
+
+		return dynamic_cast<C*>(ui);
+	}
+
 	//================================================================================
 	// ▼セッター
 
@@ -113,4 +123,11 @@ namespace UI_Manager {
 	/// 描画優先度に応じた並び替えを行う処理
 	/// </summary>
 	void UI_Canvas_CombSort(std::vector<UI_Canvas*>& ui);
+
+	/// <summary>
+	/// 画面分割によるアンカー位置の設定を行う
+	/// </summary>
+	/// <param name="ui">アンカー位置の設定を行うUIのポインター</param>
+	/// <param name="cameraIndex">カメラの番号</param>
+	void SetAnchorPositionByScreenSplit(UI_Canvas* ui, int cameraIndex);
 };

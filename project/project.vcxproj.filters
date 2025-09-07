@@ -121,9 +121,6 @@
     <Filter Include="src%28application%29\scene\play\crystal">
       <UniqueIdentifier>{0068d998-e214-4429-a3f6-6c1a1149118f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\scene\result">
-      <UniqueIdentifier>{973ef84f-fb75-4cc1-8ffc-d8ddaeb7d857}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\scene\title">
       <UniqueIdentifier>{d0709ba3-e5dc-461c-8c69-7cb2b1a8ac92}</UniqueIdentifier>
     </Filter>
@@ -361,17 +358,104 @@
     <Filter Include="src%28application%29\scene\play\catcher">
       <UniqueIdentifier>{35cd2b05-3c55-4c66-891c-ddd739769dbd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ini">
-      <UniqueIdentifier>{70787b9f-905b-4ebf-b40b-52bbdcba4047}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src%28application%29\util\exception">
       <UniqueIdentifier>{8a59f6d4-07cc-4719-9d51-71d53cddeb3f}</UniqueIdentifier>
     </Filter>
     <Filter Include="src%28application%29\util\singleton">
       <UniqueIdentifier>{45e5b4d4-9de5-4161-829b-c861ccd6745d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src%28application%29\common\performance_profiler">
-      <UniqueIdentifier>{6c2dc8e7-72a1-46b5-b06c-26ae67ffc56c}</UniqueIdentifier>
+    <Filter Include="src%28application%29\scene\result">
+      <UniqueIdentifier>{973ef84f-fb75-4cc1-8ffc-d8ddaeb7d857}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\history">
+      <UniqueIdentifier>{53739a9d-bdd5-413d-8af2-2868256227e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\force_field">
+      <UniqueIdentifier>{926d2b3c-5b5b-41e5-b718-2fe53fbfcf8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\hint">
+      <UniqueIdentifier>{772421e4-cb68-474c-a3fe-625161810d96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Input">
+      <UniqueIdentifier>{d0bb40e9-5ba5-444e-a19b-0ea2dd2ce6e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\reference\input">
+      <UniqueIdentifier>{40987d2c-35ca-414b-8c30-ce92c351fee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\enum">
+      <UniqueIdentifier>{38163138-5967-4c20-8ca8-9c94953a686b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\color">
+      <UniqueIdentifier>{f8ee4a14-5cc0-45fb-bbb1-b906145f1357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\screen">
+      <UniqueIdentifier>{53d64be1-4031-4379-932b-4bc767548c1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\UI">
+      <UniqueIdentifier>{18727e79-3bcf-4d78-ae9a-efa968afecab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\reference\UI">
+      <UniqueIdentifier>{4eb87772-e531-4b19-b103-600cd3d7f22d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\movable_area">
+      <UniqueIdentifier>{5dd55688-be26-45af-ab6f-56c5f0608d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\result\ui">
+      <UniqueIdentifier>{04f105dc-3db9-4a39-a8ba-0af76cc95d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\reference\network">
+      <UniqueIdentifier>{3c1d3254-5855-49a5-9224-48bcc5405631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\network">
+      <UniqueIdentifier>{a7f0f2a5-b388-4014-afe6-f37e21ed581e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\network\user">
+      <UniqueIdentifier>{aa0218c4-31a7-4f35-bad8-9a553b34c8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\editbox">
+      <UniqueIdentifier>{09805924-a4fd-4f60-a45a-e84489f34156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user_config">
+      <UniqueIdentifier>{70787b9f-905b-4ebf-b40b-52bbdcba4047}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\uuid4">
+      <UniqueIdentifier>{e7789334-0a12-405f-9cc8-37bbff2f2fac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\Enemy">
+      <UniqueIdentifier>{1d0b0897-971f-4270-9578-43e654e3415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\enemy">
+      <UniqueIdentifier>{00dba644-cdaf-4da3-a424-f77e2205bdbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\ball\attributes">
+      <UniqueIdentifier>{60d86a86-5919-4da1-b6cf-79c6ca1a1aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\ability">
+      <UniqueIdentifier>{46b28971-23d3-4e08-a593-ba546e14b74c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick">
+      <UniqueIdentifier>{5b9962d0-6bac-41f0-a0b3-b0e2f04efc0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Trampoline">
+      <UniqueIdentifier>{d90ea695-042e-4cee-a4b8-291f49f0c0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Target">
+      <UniqueIdentifier>{d41d3fd3-09a1-48a6-87b3-ec42dbf682ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\play\active_ball_gimmick\Interfaces">
+      <UniqueIdentifier>{0f171ba5-0d6c-4139-b7a8-ea67b5561253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\scene\title\ui">
+      <UniqueIdentifier>{277779ba-14de-42ef-ab03-306e6214e61c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\Json\UI\title">
+      <UniqueIdentifier>{b8ac198c-c7c7-4c1b-af2c-99968b482d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\util\restart">
+      <UniqueIdentifier>{5cdaac80-c70e-4684-b897-e192da8dd422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src%28application%29\common\performance">
+      <UniqueIdentifier>{15ce816c-bab1-4133-b811-e62e41fe5e04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -639,17 +723,68 @@
     <None Include="data\Json\Stage\Stage_3.json">
       <Filter>data\Json\Stage</Filter>
     </None>
-    <None Include="data\Json\Stage\Stage_4.json">
-      <Filter>data\Json\Stage</Filter>
-    </None>
     <None Include="data\Json\Stage\TestStage.json">
       <Filter>data\Json\Stage</Filter>
     </None>
-    <None Include="imgui.ini">
-      <Filter>ini</Filter>
+    <None Include="data\Json\Input\PhysicalKey.json">
+      <Filter>data\Json\Input</Filter>
+    </None>
+    <None Include="data\Json\Input\VirtualKey.json">
+      <Filter>data\Json\Input</Filter>
+    </None>
+    <None Include="data\Json\Effect\LockOnMarker.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
+    <None Include="data\Json\UI\ButtonHint.json">
+      <Filter>data\Json\UI</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ActionIdleToRun.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\Climb.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\ClimbToFall.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\WallStepLeft.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Chara\State\WallStepRight.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="src\util\editbox\resource.aps">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </None>
+    <None Include="network.json">
+      <Filter>user_config</Filter>
     </None>
     <None Include="window.ini">
-      <Filter>ini</Filter>
+      <Filter>user_config</Filter>
+    </None>
+    <None Include="data\Json\Enemy\BatAnim.json">
+      <Filter>data\Json\Enemy</Filter>
+    </None>
+    <None Include="data\Json\Stage\ExportedStage-000.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\Stage\TrampolineTestStage.json">
+      <Filter>data\Json\Stage</Filter>
+    </None>
+    <None Include="data\Json\UI\Title\MainCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
+    </None>
+    <None Include="data\Json\UI\Title\OptionCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
+    </None>
+    <None Include="data\Json\UI\Title\GraphicsSettingCanvas.json">
+      <Filter>data\Json\UI\title</Filter>
+    </None>
+    <None Include="data\Json\UI\ButtonHint_old.json" />
+    <None Include="data\Json\UI\ChatBar.json" />
+    <None Include="data\Json\UI\MatchTime.json" />
+    <None Include="data\Json\Stage\ExportedStage-001.json">
+      <Filter>data\Json\Stage</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -827,16 +962,13 @@
     <ClCompile Include="src\scene\play\ball\Ball.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\ball\BallAttribute.cpp">
-      <Filter>src%28application%29\scene\play\ball</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene\play\ball\BallManager.cpp">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\play\catcher\Catcher.cpp">
       <Filter>src%28application%29\scene\play\catcher</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\play\chara\CharaBase.cpp">
+    <ClCompile Include="src\scene\play\chara\Chara.cpp">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\play\chara\CharaHP.cpp">
@@ -1250,8 +1382,150 @@
     <ClCompile Include="src\util\singleton\singleton.cpp">
       <Filter>src%28application%29\util\singleton</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\performance_profiler\PerformanceProfiler.cpp" />
-    <ClCompile Include="src\common\performance_profiler\PerformanceProfilerManager Manager.cpp" />
+    <ClCompile Include="src\util\history\HIstory.cpp">
+      <Filter>src%28application%29\util\history</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldBase.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldCorn.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldSphere.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ForceFieldManager.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\force_field\ConstantPointForce.cpp">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\input\InputRef.cpp">
+      <Filter>src%28application%29\reference\input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_MatchTime.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\screen\ScreenManager.cpp">
+      <Filter>src%28application%29\util\screen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_StartCount.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_ButtonHint.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\ui\UI_ButtonHintRef.cpp">
+      <Filter>src%28application%29\scene\play\hint</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\movable\MovableArea.cpp">
+      <Filter>src%28application%29\scene\play\movable_area</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\chara\CharaRespawnState.cpp">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_Fade.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\resultScene.cpp">
+      <Filter>src%28application%29\scene\result</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Setter_ResultScene.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\camera\CamState_Performance.cpp">
+      <Filter>src%28application%29\common\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\camera\CameraPerformanceRef.cpp">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Winner_Team.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\result\ui\UI_Ranking.cpp">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\network\NetworkRef.cpp">
+      <Filter>src%28application%29\reference\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\network\ClientCommandProcess.cpp">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\network\HostCommandProcess.cpp">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\network\NetworkManager.cpp">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\uuid4\uuid4.cpp">
+      <Filter>vendor\uuid4</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\BallTarget.cpp">
+      <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\enemy\Enemy.cpp">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\enemy\EnemyManager.cpp">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Explosion.cpp">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute_Fire.cpp">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ability\AbilityFire.cpp">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ability\AbilityExplosion.cpp">
+      <Filter>src%28application%29\scene\play\ability</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\stage\SpawnerObjectQueue.cpp">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\attributes\BallAttribute.cpp">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\active_ball_gimmick\TrampolineGimmick.cpp">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Trampoline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\active_ball_gimmick\TargetGimmick.cpp">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Target</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\play\ball\BallTargetManager.cpp">
+      <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUI.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUICanvas.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUIController.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\title\ui\TitleUIGridCursor.cpp">
+      <Filter>src%28application%29\scene\title\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reference\ui\UI_ChatBarRef.cpp" />
+    <ClCompile Include="src\reference\ui\UI_MatchTimeRef.cpp" />
+    <ClCompile Include="src\scene\play\ui\SliceBar.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_ChatBar.cpp" />
+    <ClCompile Include="src\util\color\RGBColor.cpp" />
+    <ClCompile Include="src\util\file\json\RGBColorJson.cpp" />
+    <ClCompile Include="src\common\performance_profiler\PerformanceProfiler.cpp">
+      <Filter>src%28application%29\common\performance</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\performance_profiler\PerformanceProfilerManagerManager.cpp">
+      <Filter>src%28application%29\common\performance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -1305,16 +1579,13 @@
     <ClInclude Include="src\scene\play\ball\Ball.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ball\BallAttribute.h">
-      <Filter>src%28application%29\scene\play\ball</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\play\ball\BallManager.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\catcher\Catcher.h">
       <Filter>src%28application%29\scene\play\catcher</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\chara\CharaBase.h">
+    <ClInclude Include="src\scene\play\chara\Chara.h">
       <Filter>src%28application%29\scene\play\chara</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\play\chara\CharaHP.h">
@@ -1710,10 +1981,205 @@
     <ClInclude Include="src\config\imgui\ImGuiConfig.h">
       <Filter>src%28application%29\config\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\nlohmann\adl_serializer.hpp">
-      <Filter>vendor\nlohmann</Filter>
+    <ClInclude Include="src\scene\play\match\MatchManager.h">
+      <Filter>src%28application%29\scene\play\match</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\nlohmann\byte_container_with_subtype.hpp">
+    <ClInclude Include="src\util\string\StringUtil.h">
+      <Filter>src%28application%29\util\string</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ptr\PtrUtil.h">
+      <Filter>src%28application%29\util\ptr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\team\TeamManager.h">
+      <Filter>src%28application%29\scene\play\team</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\team\Team.h">
+      <Filter>src%28application%29\scene\play\team</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\component\renderer\BallRenderer.h">
+      <Filter>src%28application%29\common\component\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h">
+      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\fx\trail\trail3D\TrailPoint3D.h">
+      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\MathUtil.h">
+      <Filter>src%28application%29\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h">
+      <Filter>src%28application%29\scene\play\status_tracker</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ball\BallSpawner.h">
+      <Filter>src%28application%29\scene\play\ball</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\chara\CharaSpawnPointManager.h">
+      <Filter>src%28application%29\scene\play\chara</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.h">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\FrameTrail.h">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h">
+      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_CrossHair.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\targetting\TargetManager.h">
+      <Filter>src%28application%29\scene\play\target</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\math\Vector3Util.h">
+      <Filter>src%28application%29\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\alarm\Alarm.h">
+      <Filter>src%28application%29\util\alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\logger\Logger.h">
+      <Filter>src%28application%29\util\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\tackler\Tackler.h">
+      <Filter>src%28application%29\scene\play\tackler</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imconfig.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_dx9.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_dxlib.hpp">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_impl_win32.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imgui_internal.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imstb_rectpack.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imstb_textedit.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGui\imstb_truetype.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\exception\Exception.h">
+      <Filter>src%28application%29\util\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\file\json\BallThrowParamJson.h">
+      <Filter>src%28application%29\util\file\json</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\singleton\singleton.h">
+      <Filter>src%28application%29\util\singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\history\History.h">
+      <Filter>src%28application%29\util\history</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldBase.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldSphere.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldCorn.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceBase.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ConstantPointForce.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\force_field\ForceFieldManager.h">
+      <Filter>src%28application%29\scene\play\force_field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\input\InputRef.h">
+      <Filter>src%28application%29\reference\input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\enum\EnumUtil.h">
+      <Filter>src%28application%29\util\enum</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_MatchTime.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_GameScore.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\color\ColorUtil.h">
+      <Filter>src%28application%29\util\color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\screen\ScreenManager.h">
+      <Filter>src%28application%29\util\screen</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_StartCount.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_ButtonHint.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\ui\UI_ButtonHintRef.h">
+      <Filter>src%28application%29\scene\play\hint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\movable\MovableArea.h">
+      <Filter>src%28application%29\scene\play\movable_area</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_Fade.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\resultScene.h">
+      <Filter>src%28application%29\scene\result</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\camera\CameraPerformanceRef.h">
+      <Filter>src%28application%29\reference\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Winner_Team.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\result\ui\UI_Ranking.h">
+      <Filter>src%28application%29\scene\result\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\reference\network\NetworkRef.h">
+      <Filter>src%28application%29\reference\network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\network\NetworkManager.h">
+      <Filter>src%28application%29\common\network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\network\user\User.h">
+      <Filter>src%28application%29\common\network\user</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\editbox\editbox.hpp">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\editbox\resource.h">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\nlohmann\ordered_map.hpp">
       <Filter>vendor\nlohmann</Filter>
     </ClInclude>
     <ClInclude Include="vendor\nlohmann\detail\abi_macros.hpp">
@@ -1830,130 +2296,120 @@
     <ClInclude Include="vendor\nlohmann\detail\value_t.hpp">
       <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\nlohmann\json.hpp">
-      <Filter>vendor\nlohmann</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\nlohmann\json_fwd.hpp">
-      <Filter>vendor\nlohmann</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\nlohmann\ordered_map.hpp">
-      <Filter>vendor\nlohmann</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley.hpp">
       <Filter>vendor\nlohmann</Filter>
     </ClInclude>
     <ClInclude Include="vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp">
       <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\match\MatchManager.h">
-      <Filter>src%28application%29\scene\play\match</Filter>
+    <ClInclude Include="vendor\nlohmann\adl_serializer.hpp">
+      <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\string\StringUtil.h">
-      <Filter>src%28application%29\util\string</Filter>
+    <ClInclude Include="vendor\nlohmann\byte_container_with_subtype.hpp">
+      <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\ptr\PtrUtil.h">
-      <Filter>src%28application%29\util\ptr</Filter>
+    <ClInclude Include="vendor\nlohmann\json.hpp">
+      <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\team\TeamManager.h">
-      <Filter>src%28application%29\scene\play\team</Filter>
+    <ClInclude Include="vendor\nlohmann\json_fwd.hpp">
+      <Filter>vendor\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\team\Team.h">
-      <Filter>src%28application%29\scene\play\team</Filter>
+    <ClInclude Include="vendor\uuid4\uuid4.h">
+      <Filter>vendor\uuid4</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\component\renderer\BallRenderer.h">
-      <Filter>src%28application%29\common\component\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\fx\trail\trail3D\Trail3D.h">
-      <Filter>src%28application%29\util\fx\trail\trail3D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\math\MathUtil.h">
-      <Filter>src%28application%29\util\math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\spawner\SpawnerDescs.h">
-      <Filter>src%28application%29\scene\play\spawner</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\status_tracker\StatusTracker.h">
-      <Filter>src%28application%29\scene\play\status_tracker</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\play\ball\BallSpawner.h">
+    <ClInclude Include="src\scene\play\ball\BallTarget.h">
       <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\chara\CharaSpawnPoint.h">
-      <Filter>src%28application%29\scene\play\chara</Filter>
+    <ClInclude Include="src\scene\play\enemy\Enemy.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\chara\CharaSpawnPointManager.h">
-      <Filter>src%28application%29\scene\play\chara</Filter>
+    <ClInclude Include="src\scene\play\enemy\EnemyManager.h">
+      <Filter>src%28application%29\scene\play\enemy</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\component\model_frame_trail_renderer\ModelFrameTrailRenderer.h">
-      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Explosion.h">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\component\model_frame_trail_renderer\FrameTrail.h">
-      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute_Fire.h">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\component\model_frame_trail_renderer\MODEL_FRAME_TRAIL_RENDERER_DESC.h">
-      <Filter>src%28application%29\common\component\model_frame_trail_renderer</Filter>
+    <ClInclude Include="src\scene\play\ability\AbilityExplosion.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_HitPoint_Icon.h">
-      <Filter>src%28application%29\scene\play\ui</Filter>
+    <ClInclude Include="src\scene\play\ability\AbilityFire.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\ui\UI_CrossHair.h">
-      <Filter>src%28application%29\scene\play\ui</Filter>
+    <ClInclude Include="src\scene\play\ability\AbilityBase.h">
+      <Filter>src%28application%29\scene\play\ability</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\targetting\TargetManager.h">
-      <Filter>src%28application%29\scene\play\target</Filter>
+    <ClInclude Include="src\common\stage\SpawnerObjectQueue.h">
+      <Filter>src%28application%29\scene\play\spawner</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\math\Vector3Util.h">
-      <Filter>src%28application%29\util\math</Filter>
+    <ClInclude Include="src\scene\play\ball\attributes\BallAttribute.h">
+      <Filter>src%28application%29\scene\play\ball\attributes</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\alarm\Alarm.h">
-      <Filter>src%28application%29\util\alarm</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\TrampolineGimmick.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Trampoline</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\logger\Logger.h">
-      <Filter>src%28application%29\util\logger</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\TargetGimmick.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Target</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\play\tackler\Tackler.h">
-      <Filter>src%28application%29\scene\play\tackler</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\TrampolineBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imconfig.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\TargetBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\GimmickBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_impl_dx9.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\DestructibleBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_impl_dx11.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\ButtonBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_impl_dxlib.hpp">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\play\active_ball_gimmick\interfaces\BoostRingBase.h">
+      <Filter>src%28application%29\scene\play\active_ball_gimmick\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_impl_win32.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\play\ball\BallTargetManager.h">
+      <Filter>src%28application%29\scene\play\ball</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imgui_internal.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUIGridCursor.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imstb_rectpack.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUI.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imstb_textedit.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUICanvas.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\ImGui\imstb_truetype.h">
-      <Filter>vendor\imgui</Filter>
+    <ClInclude Include="src\scene\title\ui\TitleUIController.h">
+      <Filter>src%28application%29\scene\title\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\exception\Exception.h">
-      <Filter>src%28application%29\util\exception</Filter>
+    <ClInclude Include="src\util\restart\Restart.h">
+      <Filter>src%28application%29\util\restart</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\file\json\BallThrowParamJson.h">
-      <Filter>src%28application%29\util\file\json</Filter>
+    <ClInclude Include="src\util\font\FontDefine.h" />
+    <ClInclude Include="src\reference\ui\UI_ChatBarRef.h" />
+    <ClInclude Include="src\reference\ui\UI_MatchTimeRef.h" />
+    <ClInclude Include="src\scene\play\ui\SliceBar.h" />
+    <ClInclude Include="src\scene\play\ui\UI_ChatBar.h" />
+    <ClInclude Include="src\util\color\RGBColor.h" />
+    <ClInclude Include="src\util\file\json\RGBColorJson.h" />
+    <ClInclude Include="src\util\file\json\SettingsJsonInclude.h" />
+    <ClInclude Include="src\util\getset\GetSet.h" />
+    <ClInclude Include="src\util\fx\post_effect\bloom\EmitterRenderer.h" />
+    <ClInclude Include="src\util\fx\post_effect\bloom\BloomTarget.h" />
+    <ClInclude Include="src\common\performance_profiler\PerformanceProfiler.h">
+      <Filter>src%28application%29\common\performance</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\singleton\singleton.h">
-      <Filter>src%28application%29\util\singleton</Filter>
+    <ClInclude Include="src\common\performance_profiler\PerformanceProfilerManagerManager.h">
+      <Filter>src%28application%29\common\performance</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\performance_profiler\PerformanceProfiler.h" />
-    <ClInclude Include="src\common\performance_profiler\PerformanceProfilerManager Manager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\util\editbox\resource.rc">
+      <Filter>src%28application%29\util\editbox</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

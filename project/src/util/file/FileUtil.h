@@ -118,13 +118,13 @@ std::wstring GetDirectoryPathW(const wchar_t* path);
 	/// フォルダパスの情報を持つ
 	/// </summary>
 	struct Folder {
-		std::string filePath;		// ファイルパス
-		std::string resourceName;	// リソース名
-		std::string tag;			// タグ
+		std::string path;	// ファイルパス
+		std::string name;	// リソース名
+		std::string tag;	// タグ
 
 		Folder() :
-			filePath(""),
-			resourceName(""),
+			path(""),
+			name(""),
 			tag("")
 		{
 		}
@@ -132,12 +132,12 @@ std::wstring GetDirectoryPathW(const wchar_t* path);
 		/// <summary>
 		/// フォルダパスの情報を設定する
 		/// </summary>
-		/// <param name="_filePath">ファイルパス</param>
-		/// <param name="resource">リソース名</param>
+		/// <param name="_path">ファイルパス</param>
+		/// <param name="_name">リソース名</param>
 		/// <param name="_tag">タグ</param>
-		Folder(const std::string& _filePath, const std::string& resource, const std::string& _tag) :
-			filePath(_filePath),
-			resourceName(resource),
+		Folder(const std::string& _path, const std::string& _name, const std::string& _tag) :
+			path(_path),
+			name(_name),
 			tag(_tag)
 		{
 		}
@@ -145,23 +145,23 @@ std::wstring GetDirectoryPathW(const wchar_t* path);
 		/// <summary>
 		/// 指定されたファイルパスと一致しているか
 		/// </summary>
-		/// <param name="file">ファイルパス</param>
+		/// <param name="path">ファイルパス</param>
 		/// <returns>一致している場合true</returns>
-		inline bool IsFilePath(const std::string& file) const { return filePath == file; }
+		inline bool IsPath(const std::string& path) const { return this->path == path; }
 
 		/// <summary>
 		/// 指定されたリソース名と一致しているか
 		/// </summary>
-		/// <param name="resource">リソース名</param>
+		/// <param name="name">リソース名</param>
 		/// <returns>一致している場合true</returns>
-		inline bool IsResourceName(const std::string& resource) const { return resourceName == resource; }
+		inline bool IsName(const std::string& name) const { return this->name == name; }
 
 		/// <summary>
 		/// 指定されたタグと一致しているか
 		/// </summary>
-		/// <param name="_tag">ファイルパス</param>
+		/// <param name="tag">タグ</param>
 		/// <returns>一致している場合true</returns>
-		inline bool IsTag(const std::string& _tag) const { return tag == _tag; }
+		inline bool IsTag(const std::string& tag) const { return this->tag == tag; }
 	};
 
 	// フォルダ内の全ファイルのファイル名を取得

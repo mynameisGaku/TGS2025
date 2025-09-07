@@ -1,0 +1,12 @@
+{
+  "Param": {
+    "magnification": 250.0,
+    "defMagnification": 250.0,
+    "playSpeed": 1.0,
+    "defPlaySpeed": 1.0,
+    "isLoop": false,
+    "fileName": "data/effect/",
+    "typeName": "Ball_Outline.efk",
+    "dimension": "3d"
+  }
+}

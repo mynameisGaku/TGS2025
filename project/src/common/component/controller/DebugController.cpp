@@ -5,7 +5,7 @@
 #include "src/util/input/InputManager.h"
 #include "src/util/input/PadController.h"
 #include "src/common/camera/CameraManager.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/util/fsm/StateManager.h"
 
 #include "src/common/component/physics/Physics.h"
@@ -24,7 +24,7 @@ DebugController::~DebugController()
 
 void DebugController::Init(int _padNumber) 
 {
-	chara = Parent<CharaBase>();
+	chara = Parent<Chara>();
 
 	SetPadNumber(_padNumber);
 }

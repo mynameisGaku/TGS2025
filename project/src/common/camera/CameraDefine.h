@@ -4,6 +4,8 @@
 #include "src/Util/math/Vector3.h"
 #include <src/util/time/GameTime.h>
 
+#include "src/util/easing/EasingUtils.h"
+
 namespace CameraDefine {
 
 	/// <summary>
@@ -34,28 +36,33 @@ namespace CameraDefine {
 	/// <summary>
 	/// カメラ演出の補間で使用する情報
 	/// </summary>
-	class StagingData {
+	class PerformanceData {
 	public:
-		float duration;		// 効果時間
-		float totalDuration;// 総効果時間
-		float affterTaste;	// 余韻
-		bool end;			// 終了したか
 		Vector3 position;	// 座標
 		Vector3 target;		// 注視点
+		float afterTaste;	// 余韻
 		std::string holder;	// 保有者
 
-		StagingData() :
-			duration(0.0f),
-			totalDuration(0.0f),
-			affterTaste(0.0f),
-			end(false),
-			target(Vector3::Zero),
+		EasingInfo easingInfo;	// 補間情報
+		std::string easingName;	// 補間種類名
+
+		PerformanceData() :
 			position(Vector3::Zero),
+			target(Vector3::Zero),
+			afterTaste(0.0f),
 			holder("")
 		{
 		}
 
-		~StagingData(){}
+		PerformanceData(bool active) :
+			position(Vector3::Zero),
+			target(Vector3::Zero),
+			afterTaste(0.0f),
+			holder("")
+		{
+		}
+
+		~PerformanceData(){}
 	};
 
 	class CameraAnimData {

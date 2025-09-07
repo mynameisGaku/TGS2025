@@ -27,14 +27,14 @@ public:
 	void SetScroll(float* value, float min, float max, Gauge::ScrollType scroll, bool isDispMode = true);
 
 private:
-	Gauge gauge;
-	Gauge::ScrollType scrollType;
-	int charaIndex;
+	Gauge m_Gauge;
+	Gauge::ScrollType m_ScrollType;
+	int m_CharaIndex;
 
-	float* value;
-	float valueMin;
-	float valueMax;
-	bool isDispMode;
+	float* m_pValue;
+	float m_ValueMin;
+	float m_ValueMax;
+	bool m_IsDispMode;
 
 	int hCrossHair;
 	int hCrossHairFrame;

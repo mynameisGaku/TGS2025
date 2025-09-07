@@ -10,6 +10,8 @@
 #include "src/common/stage/StageDefine.h"
 #include "src/common/stage/StageObject.h"
 
+class BallSpawnerObjectQueue;
+
 /// <summary>
 /// ステージオブジェクトを管理するクラス
 /// </summary>
@@ -46,6 +48,8 @@ namespace StageObjectManager {
 	//==========================================================================================
 	// ▼当たり判定関連
 
+	bool CollCheckLine(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
+
 	/// <summary>
 	/// カプセルと、StageObjectとの当たり判定をする
 	/// </summary>
@@ -57,8 +61,10 @@ namespace StageObjectManager {
 	bool CollCheckCapsule(const Vector3& p1, const Vector3& p2, float r, Vector3* push);
 	bool CollCheckCapsule_Hitpos(const Vector3& p1, const Vector3& p2, float r, Vector3* hitPos);
 
-	bool CollCheckCapsule_Under(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr);
+	bool CollCheckRay(const Vector3& begin, const Vector3& end, Vector3* hitPos = nullptr, Vector3* normal = nullptr);
 	bool CollCheckCapsule_Horizon(const Vector3& begin, const Vector3& end, float r, Vector3* push = nullptr);
+
+	bool CollCheck_MovableArea(const Vector3& point);
 
 	/// <summary>
 	/// 描画用モデルと当たり判定用モデルを切り替える
@@ -128,6 +134,8 @@ namespace StageObjectManager {
 	/// </summary>
 	std::vector<std::string> StageObjectsTheString();
 
+	BallSpawnerObjectQueue* GetBallSpawnerQueue();
+
 	//==========================================================================================
 	// ▼ステージエディット機能
 
@@ -165,11 +173,7 @@ namespace StageObjectManager {
 	void DrawEditMode();
 
 
-#ifdef _DEBUG
-#ifndef IMGUI
-#define IMGUI
-#endif
-#endif
+#include "src/config/imgui/ImGuiConfig.h"
 #ifdef IMGUI
 
 	/// <summary>

@@ -6,6 +6,7 @@
 #include "src/util/time/GameTime.h"
 #include "src/Util/ptr/PtrUtil.h"
 #include "src/common/stage/Stage.h"
+#include "src/common/stage/StageObjectManager.h"
 #include "src/util/easing/EasingUtils.h"
 #include <assert.h>
 
@@ -17,7 +18,15 @@
 #include "src/util/input/PadController.h"
 #include "src/util/input/MouseController.h"
 #include "src/reference/camera/CameraDefineRef.h"
+#include "src/reference/camera/CameraPerformanceRef.h"
 #include "src/common/setting/window/WindowSetting.h"
+#include "src/scene/play/chara/Chara.h"
+#include "src/common/network/NetworkManager.h"
+#include "src/common/network/User/User.h"
+#include "src/scene/play/chara/CharaManager.h"
+#include "src/reference/network/NetworkRef.h"
+#include "src/scene/play/ball/BallTargetManager.h"
+
 
 using namespace KeyDefine;
 using namespace CameraDefine;
@@ -26,25 +35,36 @@ Camera::Camera() {
 
 	Reset();
 
+	Vector2 windowSize = Vector2(WindowSetting::Inst().width, WindowSetting::Inst().height);
+
+	m_UsingScreenPos = Vector2::Zero;
+	m_DefinedScreenPos = Vector2::Zero;
+	m_DefaultScreenPos = Vector2::Zero;
+
+	m_UsingScreenSize = windowSize;
+	m_DefinedScreenSize = windowSize;
+	m_DefaultScreenSize = windowSize;
+
 	m_pShake = AddComponent<Shake>();
 	m_pShake->Init(this);
 
 	// m_Fsmの初期化
 	m_Fsm = new TinyFSM<Camera>(this);
 	m_Fsm->RegisterStateName(&Camera::DebugState, "DebugState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	//m_Fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
-	m_Fsm->ChangeState(&Camera::DebugState); // ステートを変更
+	m_Fsm->RegisterStateName(&Camera::ChaseState, "ChaseState"); // この行程はデバッグ用。関数ポインタはコンパイル後に関数名が保持されないので、プロファイリングするにはこの行程が必須。
+	m_Fsm->ChangeState(&Camera::ChaseState); // ステートを変更
 	
 	m_AnimData = CameraAnimData(); // カメラアニメーションデータの初期化
 
-	m_CameraWork = nullptr;
-	//m_CameraWork = new CsvReader("data/csv/CameraWork.csv");
+	m_pNetworkManager = SceneManager::CommonScene()->FindGameObject<NetworkManager>();
+	m_pCharaManager = nullptr;
+
+	m_IsPlayingPerformance = false;
 }
 
 Camera::~Camera() {
 
 	PtrUtil::SafeDelete(m_Fsm);
-	PtrUtil::SafeDelete(m_CameraWork);
 
 	RemoveComponent<Shake>();
 }
@@ -65,6 +85,7 @@ void Camera::Reset() {
 
 	m_EasingTime = 0.0f;
 	m_TargetTransitionTime = 0.0f;
+	m_AimResetTime = 0.0f;
 
 	m_CameraRotMat = MGetIdent();
 
@@ -74,15 +95,18 @@ void Camera::Reset() {
 
 	m_pHolder = nullptr;
 	m_pFollowerChara = nullptr;
-	m_pTargetChara = nullptr;
+	m_pBallTarget = nullptr;
 
 	m_IsView = true;
-	m_DrawFlag = false;
 }
 
 void Camera::Update() {
 
 	m_CameraCone.transform = *transform;
+
+	// プレイシーン以外では取得できないので注意
+	m_pCharaManager = FindGameObject<CharaManager>();
+	m_pBallTargetManager = FindGameObject<BallTargetManager>();
 
 	if (m_Fsm != nullptr)
 		m_Fsm->Update();
@@ -90,15 +114,9 @@ void Camera::Update() {
 	updateAnimation();
 
 	Object3D::Update();
-
-	m_DrawFlag = false;
 }
 
 void Camera::Draw() {
-
-	// 既に描画済なら
-	if (m_DrawFlag)
-		return;
 
 	// 描画の有無
 	if (not m_IsView) {
@@ -110,8 +128,6 @@ void Camera::Draw() {
 
 	// カメラ描画
 	rendering();
-	
-	m_DrawFlag = true;	// 描画完了
 }
 
 void Camera::drawVirtualCamera() {
@@ -130,10 +146,10 @@ void Camera::drawVirtualCamera() {
 
 void Camera::ChangeState(void(Camera::* state)(FSMSignal)) {
 
-    if (m_Fsm == nullptr)
-        return;
+	if (m_Fsm == nullptr)
+		return;
 
-    m_Fsm->ChangeState(state);
+	m_Fsm->ChangeState(state);
 }
 
 void Camera::rendering() {
@@ -148,21 +164,55 @@ void Camera::rendering() {
 		targetPos += m_pHolder->Global().position;
 	}
 
+	Vector3 hitPos = Vector3::Zero;
+
+	if (m_pFollowerChara != nullptr)
+	{
+		Vector3 followerPos = m_pFollowerChara->transform->Global().position + Vector3::UnitY * 150.0f;
+		if (StageObjectManager::CollCheckLine(cameraPos, followerPos, &hitPos))
+		{
+			Vector3 apprach = (followerPos - cameraPos).Normalize() * 16.0f;
+			cameraPos = hitPos + apprach;
+		}
+	}
+	else
+	{
+		if (StageObjectManager::CollCheckLine(cameraPos, targetPos, &hitPos))
+		{
+			Vector3 apprach = (targetPos - cameraPos).Normalize() * 16.0f;
+			cameraPos = hitPos + apprach;
+		}
+	}
 	SetCameraPositionAndTargetAndUpVec(cameraPos, targetPos, Vector3::TransformCoord(Vector3::UnitY, m_CameraRotMat));
+	CameraManager::SetCurrentDrawingCameraID(m_CharaIndex);
 }
 
-void Camera::colCheckToTerrain() {
+Vector3 Camera::colCheckToTerrain(const Vector3& begin, const Vector3& end, Vector3* hitPos) {
 
-	Vector3 hitPos = Vector3::Zero;	// 当たった座標
-	Vector3 cameraPos = WorldPos();	// カメラの座標
-	Vector3 lay = Vector3::SetY(-10.0f);
+	Vector3 cameraPos = WorldPos();
+	Vector3 apprach = (end - begin).Normalize() * 100.0f;
 
-	if (Stage::ColCheckGround(m_Target, cameraPos + lay, &hitPos)) {
-		Vector3 terrainPos = (hitPos - OffsetRotAdaptor()) * Vector3::UnitY;	// 地面との設置点
-		Vector3 targePos = m_Target * Vector3::UnitY;
-
-		transform->position = terrainPos + targePos - lay;
+	if (Stage::ColCheckGround(begin, end, hitPos)) {
+		cameraPos = apprach;
+		if (hitPos != nullptr)
+			cameraPos += *hitPos;
 	}
+
+	return cameraPos;
+}
+
+Vector3 Camera::collCheckCapsule_Hitpos(const Vector3& begin, const Vector3& end, Vector3* hitPos) {
+
+	Vector3 cameraPos = WorldPos();
+	Vector3 apprach = (end - begin).Normalize() * 100.0f;
+
+	if (StageObjectManager::CollCheckCapsule_Hitpos(begin, end, 32.0f, hitPos)) {
+		cameraPos = apprach;
+		if (hitPos != nullptr)
+			cameraPos += *hitPos;
+	}
+
+	return cameraPos;
 }
 
 void Camera::moveProcess()
@@ -176,7 +226,7 @@ void Camera::moveProcess()
 	// X軸角度の制限
 	transform->rotation.x = min(max(transform->rotation.x, CAMERADEFINE_REF.m_RotX_Min), CAMERADEFINE_REF.m_RotX_Max);
 	
-    m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
+	m_Target = transform->position + CAMERADEFINE_REF.m_TargetDef * transform->RotationMatrix();
 
 	//====================================================================================================
 	// ▼移動処理
@@ -273,15 +323,74 @@ void Camera::updateAnimation() {
 	}
 }
 
+void Camera::findFollowerChara()
+{
+	// キャラの管理者
+	if (m_pCharaManager == nullptr)
+		return;
+
+	auto& net = NetworkRef::Inst();
+	// 追従するキャラ
+	if (net.IsNetworkEnable)
+		m_pFollowerChara = m_pCharaManager->GetFromUUID(m_User.UUID);
+	else
+		m_pFollowerChara = m_pCharaManager->CharaInst(m_CharaIndex);
+}
+
+bool Camera::isMoveCamera() const
+{
+	if (MouseController::Info().Move().GetLengthSquared() > 5.0f ||
+		PadController::NormalizedRightStick(m_CharaIndex + 1).GetLengthSquared() >= KeyDefine::STICK_DEADZONE)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void Camera::SetPerformance(const std::string& perfType) {
 
-	//stateManager->ChangeState(State::sPerformance);
-	//dynamic_cast<CameraState_Performance*>(stateManager->State(State::sPerformance))->SetCameraWork(perfType);
+	auto perfData = CAMERA_PERFORMANCE_REF.GetPerfDatas(perfType);
+	if (perfData.empty())
+		return;
+
+	m_PerformanceDatas = perfData;	// パフォーマンスデータを設定
+	m_IsPlayingPerformance = true;
+
+	ChangeState(&Camera::PerformanceState);
 }
 
 void Camera::SetAnimation(const CameraAnimData& animData) {
 
 	m_AnimData = animData;
+}
+
+void Camera::SetDefinedDrawArea(int x, int y, int w, int h) {
+
+	m_DefinedScreenPos.x = x;
+	m_DefinedScreenPos.y = y;
+	m_DefinedScreenSize.x = w;
+	m_DefinedScreenSize.y = h;
+}
+
+void Camera::SetDafeultDrawArea(int x, int y, int w, int h)
+{
+	m_DefaultScreenPos.x = x;
+	m_DefaultScreenPos.y = y;
+	m_DefaultScreenSize.x = w;
+	m_DefaultScreenSize.y = h;
+}
+
+void Camera::ApplyDefaultDrawArea() {
+
+	m_UsingScreenPos = m_DefaultScreenPos;
+	m_UsingScreenSize = m_DefaultScreenSize;
+}
+
+void Camera::ApplyDefinedDrawArea() {
+
+	m_UsingScreenPos = m_DefinedScreenPos;
+	m_UsingScreenSize = m_DefinedScreenSize;
 }
 
 const Vector3 Camera::WorldPos() const {
@@ -335,6 +444,37 @@ bool Camera::IsRightView(const Vector3& pos) const {
 		return true;
 
 	return false;
+}
 
-	return false;
+User* Camera::GetUser()
+{
+	return &m_User;
+}
+
+void Camera::GetUsingDrawArea(int* x, int* y, int* w, int* h) const
+{
+	if (x != nullptr)	*x = m_UsingScreenPos.x;
+	if (y != nullptr)	*y = m_UsingScreenPos.y;
+	if (w != nullptr)	*w = m_UsingScreenSize.x;
+	if (h != nullptr)	*h = m_UsingScreenSize.y;
+}
+
+void Camera::GetUsingDrawArea(Vector2* pos, Vector2* size) const
+{
+	if (pos != nullptr)	*pos = m_UsingScreenPos;
+	if (size != nullptr)*size = m_UsingScreenSize;
+}
+
+void Camera::GetDefaultDrawArea(int* x, int* y, int* w, int* h) const
+{
+	if (x != nullptr)	*x = m_DefaultScreenPos.x;
+	if (y != nullptr)	*y = m_DefaultScreenPos.y;
+	if (w != nullptr)	*w = m_DefaultScreenSize.x;
+	if (h != nullptr)	*h = m_DefaultScreenSize.y;
+}
+
+void Camera::GetDefaultDrawArea(Vector2* pos, Vector2* size) const
+{
+	if (pos != nullptr)	*pos = m_DefaultScreenPos;
+	if (size != nullptr)*size = m_DefaultScreenSize;
 }

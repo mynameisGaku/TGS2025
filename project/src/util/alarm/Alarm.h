@@ -1,17 +1,17 @@
 #pragma once
-#include <framework/gameObject.h>
+#include "src/util/object3D/Object3D.h"
 
 /// <summary>
 /// 目覚まし時計のアラーム的な機能を持つクラス
 /// </summary>
 /// <author>藤本樂</author>
-class Alarm : public GameObject
+class Alarm
 {
 public:
     Alarm();
     ~Alarm();
 
-    void Update() override;
+    void Update();
 
     // アラームが鳴っているか
     bool IsFinish() const;

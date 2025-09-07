@@ -8,11 +8,20 @@
     }
   ],
 
+  "Languages": [
+    {
+      "lang": "jp"
+    },
+    {
+      "lang": "en"
+    }
+  ],
+
   "GameModeDescs": [
     {
       "GameModeName": "1v1",
-      "PlayTimeMaxSec": 300,
-      "WinPointMax": 10
+      "PlayTimeMaxSec": 30,
+      "WinPointMax": 1
     },
     {
       "GameModeName": "2v2",
@@ -28,9 +37,51 @@
       "GameModeName": "Debug",
       "PlayTimeMaxSec": 99999999,
       "WinPointMax": 99999999
+    },
+    {
+      "GameModeName": "WinnerTest1",
+      "PlayTimeMaxSec": 99999999,
+      "WinPointMax": 1
+    },
+    {
+      "GameModeName": "WinnerTest2",
+      "PlayTimeMaxSec": 99999999,
+      "WinPointMax": 2
+    },
+    {
+      "GameModeName": "TimeTest",
+      "PlayTimeMaxSec": 15,
+      "WinPointMax": 99999999
     }
   ],
 
   "GameStartCountMaxSec": 5.0,
-  "GameEndCountMaxSec": 5.0
+  "GameEndCountMaxSec": 5.0,
+  "DefaultStageName": "ExportedStage-001",
+  "StageNames": [
+    {
+      "Name": "Stage_0"
+    },
+    {
+      "Name": "Stage_1"
+    },
+    {
+      "Name": "Stage_2"
+    },
+    {
+      "Name": "Stage_3"
+    },
+    {
+      "Name": "TestStage"
+    },
+    {
+      "Name": "ExportedStage-000"
+    },
+    {
+      "Name": "ExportedStage-001"
+    },
+    {
+      "Name": "TrampolineTestStage"
+    }
+  ]
 }

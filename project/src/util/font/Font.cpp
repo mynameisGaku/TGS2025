@@ -1,91 +1,167 @@
-#include "src/util/font/Font.h"
+#include "Font.h"
 
-#include <vector>
 #include <unordered_map>
 
-#include <list>
+#include "src/util/file/FileUtil.h"
 #include "src/util/ptr/PtrUtil.h"
+
+//=================================================================================
+//
+//		変数
+//
+//=================================================================================
 
 namespace {
 
-	std::unordered_map<std::string, std::unordered_map<int, FontInfo>>* fonts;	// フォントデータ [フォントの名前][サイズ] フォント情報
-	std::list<FileUtil::Folder>* folderStrDatas;	// 読み込み済のフォント情報
+	std::unordered_map<std::string, std::unordered_map<std::string, FontInfo*>>* fonts;	// KEY: データ名, KEY:タグ VALUE: フォント情報
+	std::list<FileUtil::Folder>* folderDatas;	// 読み込み済のフォント情報
+	FontInfo* bacisFont;						// 基本フォント情報
+	bool initialized = false;
 }
 
+//=================================================================================
+//
+//		各種関数
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
 void Font::Init() {
 
 	if (fonts == nullptr)
-		fonts = new std::unordered_map<std::string, std::unordered_map<int, FontInfo>>;
+		fonts = new std::unordered_map<std::string, std::unordered_map<std::string, FontInfo*>>();
 
-	if (folderStrDatas == nullptr)
-		folderStrDatas = new std::list<FileUtil::Folder>;
+	if (bacisFont == nullptr) {
+		bacisFont = new FontInfo();
+		bacisFont->SetHandle(DX_DEFAULT_FONT_HANDLE); // デフォルトのフォントハンドルを設定
+	}
+
+	if (folderDatas == nullptr)
+		folderDatas = new std::list<FileUtil::Folder>;
+
+	initialized = true;
 }
 
+//---------------------------------------------------------------------------------
 void Font::Release() {
 
 	if (fonts != nullptr) {
-
-		for (auto type = fonts->begin(); type != fonts->end();) {
-			for (auto& font : type->second) {
-				DeleteFontToHandle(font.second.handle);
+		for (auto font = fonts->begin(); font != fonts->end();) {
+			for (auto it = font->second.begin(); it != font->second.end();) {
+				delete it->second;
+				it = font->second.erase(it);
 			}
 
-			type->second.clear();
-			type = fonts->erase(type);
+			font->second.clear();
+			font = fonts->erase(font);
 		}
 
 		PtrUtil::SafeDelete(fonts);
 	}
 
-	PtrUtil::SafeDelete(folderStrDatas);
+	PtrUtil::SafeDelete(bacisFont);
+	PtrUtil::SafeDelete(folderDatas);
+
+	initialized = false;
 }
 
-void Font::Load(const std::string& filePath, const std::string& resourceName, const std::string& fontName) {
+//=================================================================================
+//
+//		読み込み処理
+//
+//=================================================================================
 
-	//========================================================================
-	// ◇フォント読み込み
+//---------------------------------------------------------------------------------
+void Font::Load(const std::string& fileHierarchy, const std::string& dataName, const std::string& fontname) {
 
-	LPCSTR font_path = filePath.c_str();
-	AddFontResourceEx(font_path, FR_PRIVATE, NULL);
+	if (not initialized)
+		Init();
 
-	//========================================================================
-	// ◇領域確保
+	bool isRegister = false;	// 既に登録済みか
+	for (const auto& filepath : *folderDatas) {
+		if (filepath.IsName(dataName) || filepath.IsTag(fontname)) {
+			isRegister = true;
+			break;
+		}
+	}
 
-	if (fonts == nullptr)
-		fonts = new std::unordered_map<std::string, std::unordered_map<int, FontInfo>>;
+	if (not isRegister) {
+		folderDatas->push_back(FileUtil::Folder(fileHierarchy, dataName, fontname));
 
-	(*fonts)[fontName];
+		// ダングリングポインターを防止  
+		const std::string font_path = fileHierarchy + dataName;
+		AddFontResourceEx(font_path.c_str(), FR_PRIVATE, NULL);
 
-	//========================================================================
-	// ◇文字列を格納
+		OutputDebugString(("Loading Success!	" + font_path + "\n").c_str());
+	}
 
-	if (folderStrDatas == nullptr)
-		folderStrDatas = new std::list<FileUtil::Folder>;
-
-	folderStrDatas->push_back(FileUtil::Folder(filePath, resourceName, fontName));
+	// 最初に読み込まれたフォント情報を基本フォントとして設定  
+	if (bacisFont->GetFontName().empty())
+		SetBasicFont(fileHierarchy, dataName, fontname);
 }
 
-int Font::CreateFontToHandle(FontInfo* info) {
+//=================================================================================
+//
+//		セッター
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
+void Font::SetBasicFont(const std::string& fileHierarchy, const std::string& dataName, const std::string& fontname) {
+
+	if (not initialized)
+		Init();
+
+	bacisFont->SetFilePath(fileHierarchy, dataName, fontname);
+	bacisFont->SetSize(32).SetColor(GetColor(255, 255, 255)).SetFontType(DX_FONTTYPE_NORMAL);
+}
+
+//=================================================================================
+//
+//		ゲッター
+//
+//=================================================================================
+
+//---------------------------------------------------------------------------------
+const int Font::Create(const FontInfo& info, const std::string& tag) {
+
+	if (not initialized)
+		Init();
+
+	const std::string dataName = info.GetDataName();
 
 	if (fonts != nullptr) {
 		// 既にフォントデータが存在している場合、それを返す
-		if (fonts->contains(info->strData.tag) && (*fonts)[info->strData.tag].contains(info->size)) {
-			*info = (*fonts)[info->strData.tag][info->size];
-			return info->handle;
-		}
+		if (fonts->contains(dataName) && (*fonts)[dataName].contains(tag))
+			return (*fonts)[dataName][tag]->GetHandle();
 	}
 
-	if (folderStrDatas == nullptr)
-		return -1;
+	FontInfo* fontInfo = new FontInfo(info);
 
-	for (const auto& itr : *folderStrDatas) {
-		// 指定されたフォント名がロードされているか
-		if (info->strData.IsTag(itr.tag)) {
-			info->handle = DxLib::CreateFontToHandle(info->strData.tag.c_str(), info->size, info->thick, info->fontType, info->charSet, info->edgeSize, info->italic);
-			(*fonts)[info->strData.tag][info->size] = *info;
-			return info->handle;
-		}
+	// データが空っぽなのか確認
+	if (fontInfo->GetHandle() < 0 && fontInfo->CheckName()) {
+
+		// 読み込み
+		int fontHandle = DxLib::CreateFontToHandle(fontInfo->GetFontName().c_str(), fontInfo->GetSize(), fontInfo->GetThick(), fontInfo->GetFontType(), fontInfo->GetCharSet(), fontInfo->GetEdgeSize(), fontInfo->GetItalic());
+
+		// フォントのハンドルの設定
+		if (fontHandle != -1)
+			fontInfo->SetHandle(fontHandle);
+		// フォントの取得に失敗した場合はデフォルトフォントを設定
+		else
+			fontInfo->SetHandle(DX_DEFAULT_FONT_HANDLE);
 	}
-	
-	return -1;
+
+	(*fonts)[dataName][tag] = fontInfo;
+
+	return fontInfo->GetHandle();
+}
+
+//---------------------------------------------------------------------------------
+const FontInfo Font::BasicFont() {
+
+	if (not initialized)
+		Init();
+
+	return *bacisFont;
 }

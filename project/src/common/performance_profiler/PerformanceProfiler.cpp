@@ -1,5 +1,5 @@
-#include "src/common/performance_profiler/PerformanceProfiler.h"
-#include "src/common/performance_profiler/PerformanceProfilerManager Manager.h"
+﻿#include "src/common/performance_profiler/PerformanceProfiler.h"
+#include "src/common/performance_profiler/PerformanceProfilerManagerManager.h"
 
 PerformanceProfiler::PerformanceProfiler(const std::string& name)
 {

@@ -1,5 +1,5 @@
 #include "src/common/component/controller/AIController.h"
-#include "src/scene/play/chara/CharaBase.h"
+#include "src/scene/play/chara/Chara.h"
 #include "src/util/ptr/PtrUtil.h"
 #include "src/util/input/InputManager.h"
 
@@ -26,7 +26,7 @@ AIController::~AIController()
 
 void AIController::Init()
 {
-	m_Chara = Parent<CharaBase>();
+	m_Chara = Parent<Chara>();
 }
 
 void AIController::Reset()

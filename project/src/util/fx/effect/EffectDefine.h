@@ -1,4 +1,5 @@
 #pragma once
+#include <EffekseerForDxLib.h>
 #include <string>
 
 namespace EffectDefine {

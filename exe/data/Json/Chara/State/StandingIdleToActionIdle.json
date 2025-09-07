@@ -1,0 +1,25 @@
+{
+    "Animation": "StandingIdleToActionIdle",
+    "Events": [
+        {
+            "Name": "SetAnimationSpeed",
+            "Start": 0.0,
+            "End": 0.0,
+            "Argument": {
+                "Speed": 1.0
+            }
+        },
+        {
+            "Name": "MoveToPosition",
+            "Start": 14.0,
+            "End": 22.0,
+            "Argument": {
+                "Position": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": -10
+                }
+            }
+        }
+    ]
+}

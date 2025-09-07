@@ -6,7 +6,7 @@
 namespace
 {
 	//ToDo:アニメーターからもらうようにする
-	static const std::string ROOT_NAME = "mixamorig9:Hips";
+	static const std::string ROOT_NAME = "mixamorig:Hips";
 	static const int ANIM_FRAMERATE = 30;
 }
 
@@ -37,7 +37,7 @@ AttachedAnimation::~AttachedAnimation()
 void AttachedAnimation::updateFrame()
 {
 	// 時間を進める
-	m_frame += GTime.deltaTime * m_playSpeed * ANIM_FRAMERATE;
+	m_frame += GTime.deltaTime * m_playSpeed * ANIM_FRAMERATE * m_info.option.defaultAnimSpeed;
 
 	// アニメーション終了時間を超えたら
 	if (m_frame >= m_maxFrame) {

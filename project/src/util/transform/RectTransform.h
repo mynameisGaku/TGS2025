@@ -17,7 +17,7 @@ public:
 	Vector2 position;	// 座標
 	float rotation;		// 回転
 	Vector2 scale;		// 拡縮
-	Anchor::Preset preset;	// アンカーポイント
+	Anchor anchor;	// アンカーポイント
 
 	//================================================================================
 	// ▼コンストラクタ・デストラクタ

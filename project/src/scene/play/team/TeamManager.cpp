@@ -1,6 +1,6 @@
 #include "TeamManager.h"
 #include "src/reference/game/GameRef.h"
-#include "src/scene//play/chara/CharaBase.h"
+#include "src/scene//play/chara/Chara.h"
 
 TeamManager::TeamManager()
 {
@@ -11,7 +11,7 @@ TeamManager::~TeamManager()
 {
 }
 
-void TeamManager::RegisterCharaToTeam(CharaBase* pChara)
+void TeamManager::RegisterCharaToTeam(Chara* pChara)
 {
     for (auto& teamData : m_Teams)
     {
@@ -36,6 +36,20 @@ Team* TeamManager::GetTeam(const std::string& name)
 std::list<Team*> TeamManager::GetTeams()
 {
     return m_Teams;
+}
+
+const std::string TeamManager::GetTeamName(int charaID) const
+{
+    for (const auto& team : m_Teams)
+    {
+        for (const int id : team->GetCharaIDs())
+        {
+            if (charaID == id)
+                return team->GetTeamName();
+        }
+    }
+
+	return std::string();
 }
 
 void TeamManager::init()

@@ -16,4 +16,8 @@ void AppRelease();
 
 void Exit();
 
+void Reboot();
+
 bool IsExit();
+
+bool IsReboot();

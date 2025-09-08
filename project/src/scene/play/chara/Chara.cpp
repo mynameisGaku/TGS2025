@@ -192,6 +192,8 @@ Chara::~Chara()
 	}*/
 
 	PtrUtil::SafeDelete(m_EffectTransform);
+	PtrUtil::SafeDelete(m_TackleIntervalAlarm);
+	PtrUtil::SafeDelete(m_Alarm);
 
 	Camera* camera = CameraManager::GetCamera(m_Index);
 	if (camera != nullptr)
@@ -202,6 +204,9 @@ void Chara::Init(std::string tag)
 {
 	m_Alarm = new Alarm;
 	m_Alarm->Reset();
+
+	m_TackleIntervalAlarm = new Alarm();
+	m_TackleIntervalAlarm->Reset();
 
 	m_lastUpdatePosition = Vector3::Zero;
 
@@ -448,6 +453,9 @@ void Chara::Update() {
 			m_pNetManager->SendCharaAllFlag(this, m_User.UUID);
 		}
 	}
+
+	if (m_TackleIntervalAlarm)
+		m_TackleIntervalAlarm->Update();
 
 	// 時間が止まってたらアップデートしない
 	if (GTime.DeltaTime() <= 0.0f) 
@@ -1081,6 +1089,9 @@ void Chara::Damage(int sub) {
 void Chara::Tackle()
 {
 	if (not m_CanTackle)
+		return;
+
+	if (not m_TackleIntervalAlarm->IsFinish())
 		return;
 
 	m_IsTackling = true;
@@ -2113,8 +2124,7 @@ void Chara::StateTackle(FSMSignal sig)
 		m_Tackler->SetColliderActive(true);
 
 		playTackleSound();
-
-		SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
+		//SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -2138,6 +2148,7 @@ void Chara::StateTackle(FSMSignal sig)
 		m_IsTackling = false;
 		m_CanMove = true;
 		m_CanRot = true;
+		m_TackleIntervalAlarm->Set(1.5f);
 	}
 	break;
 	}

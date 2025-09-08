@@ -5,8 +5,8 @@
 #include "src/util/easing/easing.h"
 #include <array>
 
-const int BallRenderer::SLICES_COUNT = 4;	// ‹…‚Ì‰¡•ûŒü‚Ì•ªŠ„”
-const int BallRenderer::STACKS_COUNT = 4;	// ‹…‚Ìc•ûŒü‚Ì•ªŠ„”
+const int BallRenderer::SLICES_COUNT = 16;	// ‹…‚Ì‰¡•ûŒü‚Ì•ªŠ„”
+const int BallRenderer::STACKS_COUNT = 16;	// ‹…‚Ìc•ûŒü‚Ì•ªŠ„”
 const float BallRenderer::RADIUS = 100.0f;	// ‹…‚Ì”¼Œa
 const float BallRenderer::FRAME_INTERVAL = 0.05f;
 const float BallRenderer::TEXTURE_RADIUS = 0.85f;

@@ -66,7 +66,10 @@ BallManager::~BallManager()
 	ResourceLoader::MV1DeleteModel(m_Model);
 	for (auto item : m_Textures)
 	{
-		ResourceLoader::DeleteGraph(item.second.Texture);
+		for (int& texture : item.second.Textures)
+		{
+			DeleteGraph(texture);
+		}
 	}
 }
 
@@ -313,7 +316,6 @@ void BallManager::loadTextures()
 	for (std::string fileName : fileNames)
 	{
 		BallTexture tex;
-		tex.Texture = ResourceLoader::LoadGraph(FOLDER_TEXTURE + fileName + ".png");
 
 		nlohmann::json json;
 
@@ -323,6 +325,22 @@ void BallManager::loadTextures()
 
 		tex.FrameCountAll = json.at("FrameCountAll").get<int>();
 		tex.FrameCountX = json.at("FrameCountX").get<int>();
+
+		assert(tex.FrameCountAll > 0);
+		assert(tex.FrameCountX > 0);
+
+		static const int TEXTURE_SIZE = 1024;
+
+		int yNum = tex.FrameCountAll / tex.FrameCountX + 1;
+		int size = TEXTURE_SIZE / tex.FrameCountX;
+
+		tex.Textures.reserve(tex.FrameCountAll);
+		for (int i = 0; i < tex.FrameCountAll; i++)
+		{
+			tex.Textures.push_back(-1);
+		}
+
+		LoadDivGraph((FOLDER_TEXTURE + fileName + ".png").c_str(), tex.FrameCountAll, tex.FrameCountX, yNum, size, size, &tex.Textures[0]);
 
 		m_Textures.emplace(fileName, tex);
 	}

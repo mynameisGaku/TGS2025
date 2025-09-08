@@ -404,6 +404,7 @@ private:
     bool						m_IsInhibitionSpeed;	// スピード抑制するか
 	bool						m_IsClimb;				// 壁登り中か
 	bool						m_IsWall;				// 近くに壁があるか
+	bool						m_IsRolling;
 
 	bool						m_CanMove;				// 移動可能か
 	bool						m_CanRot;				// 回転可能か

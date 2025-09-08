@@ -88,6 +88,7 @@ Chara::Chara()
 	m_IsCatching		= false;
 	m_CanHold			= true;
 	m_CanTackle			= true;
+	m_IsRolling			= false;
 	m_IsInvincible		= false;
 	m_CanClimb			= true;
 	m_IsClimb			= false;
@@ -1675,6 +1676,8 @@ void Chara::StateFallToRoll(FSMSignal sig)
 		m_CanTackle = true;
 		playLandingSound();
 		playLandingRollSound();
+
+		m_IsRolling = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1695,6 +1698,7 @@ void Chara::StateFallToRoll(FSMSignal sig)
 
 		m_CanMove = true;
 		m_CanRot = true;
+		m_IsRolling = false;
 	}
 	break;
 	}
@@ -1748,6 +1752,8 @@ void Chara::StateRoll(FSMSignal sig)
 	case FSMSignal::SIG_Enter: // 開始
 	{
 		m_Timeline->Play("Roll");
+
+		m_IsRolling = true;
 	}
 	break;
 	case FSMSignal::SIG_Update: // 更新
@@ -1763,6 +1769,8 @@ void Chara::StateRoll(FSMSignal sig)
 		m_Timeline->Stop();
 		m_CanMove = true;
 		m_CanRot = true;
+
+		m_IsRolling = false;
 	}
 	break;
 	}
@@ -2123,6 +2131,8 @@ void Chara::StateTackle(FSMSignal sig)
 
 		m_Tackler->SetColliderActive(true);
 
+		m_TackleIntervalAlarm->Set(2.0f);
+
 		playTackleSound();
 		//SetInvincible(CHARADEFINE_REF.TackleInvincibleDurationSec, true);
 	}
@@ -2148,7 +2158,6 @@ void Chara::StateTackle(FSMSignal sig)
 		m_IsTackling = false;
 		m_CanMove = true;
 		m_CanRot = true;
-		m_TackleIntervalAlarm->Set(1.5f);
 	}
 	break;
 	}
@@ -2371,13 +2380,15 @@ void Chara::SubStateHoldToAim(FSMSignal sig)
 			m_BallChargeRate = 1.0f;
 		}
 
-		// カメラの向きに合わせる
-		m_CanRot = false;
-
-		if (camera != nullptr) {
-			float currentY = transform->rotation.y;
-			float terminusY = camera->transform->rotation.y;
-			transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
+		if (not m_IsRolling)
+		{
+			// カメラの向きに合わせる
+			m_CanRot = false;
+			if (camera != nullptr) {
+				float currentY = transform->rotation.y;
+				float terminusY = camera->transform->rotation.y;
+				transform->rotation.y = MathUtil::LerpAngle(currentY, terminusY, 0.5f);
+			}
 		}
 
 		ballTargetUpdate();

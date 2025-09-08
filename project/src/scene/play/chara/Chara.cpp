@@ -232,8 +232,8 @@ void Chara::Init(std::string tag)
 	std::string sIndex;
 	auto& net = NetworkRef::Inst();
 	if (net.IsNetworkEnable)
-    {
-        sIndex = "1P";
+	{
+		sIndex = "1P";
 	}
 	else
 	{
@@ -579,26 +579,45 @@ void Chara::CollisionEvent(const CollisionData& colData) {
 			Physics* otherPhysics = chara->GetComponent<Physics>();	// 相手の物理挙動
 
 			ColliderCapsule* collider = GetComponent<ColliderCapsule>();	// 当たり判定
+			// 敵キャラとの押し出し（位置補正なし／バイアス速度のみ／平滑化）
+			if (chara != nullptr)
+			{
+				ColliderCapsule* myCap = GetComponent<ColliderCapsule>();
+				ColliderCapsule* otherCap = chara->GetComponent<ColliderCapsule>();
+				float r1 = (myCap != nullptr) ? myCap->Radius() : 50.0f;
+				float r2 = (otherCap != nullptr) ? otherCap->Radius() : 50.0f;
 
-			if (m_pPhysics == nullptr || otherPhysics == nullptr || collider == nullptr)
-				return;
+				Vector3 p1 = transform->Global().position;
+				Vector3 p2 = chara->transform->Global().position;
 
-			// 相手へ向かうベクトル
-			Vector3 toVec = otherPos - myPos;
-			if (toVec.GetLengthSquared() == 0)
-				toVec = Vector3(0, 0, 1);
+				// 他のキャラとカプセルで当たり判定
+				if (HitCheck_Capsule_Capsule(
+					myCap->transform->position,
+					myCap->transform->position + Vector3(0, 150, 0),
+					r1,
+					otherCap->transform->position,
+					otherCap->transform->position + Vector3(0, 150, 0),
+					r2
+				))
+				{ 
+					// Object3DからEnemyBaseにダウンキャスト
+					Vector3 dif = p1 - p2; 
+					if (dif.GetLengthSquared() == 0) 
+						dif = Vector3(0, 0, 1);
+					// 反発力の強さを定義
+					constexpr float REPELLENT_FORCE_SCALE_MAX = 15.0f;
+					constexpr float REPELLENT_FORCE_SCALE_MIN = 1.0f;
+					const float REPELLENT_RADIUS = r1 * 2.0f;
+					// 反発力を加える
+					Vector3 repellentForce = dif.Normalize() * (REPELLENT_FORCE_SCALE_MIN + (REPELLENT_FORCE_SCALE_MAX - REPELLENT_FORCE_SCALE_MIN) * max(0.0f, 1.0f - dif.GetLength() / REPELLENT_RADIUS));
 
-			// 反発力の強さを定義
-			constexpr float REPELLENT_FORCE_SCALE_MAX = 2.0f;
-			constexpr float REPELLENT_FORCE_SCALE_MIN = 1.0f;
-			const float REPELLENT_RADIUS = collider->Radius() * 4.0f;
+					// 縦方向の押し出しを消す
+					repellentForce.y = 0;
 
-			// 反発力
-			const Vector3 repellentForce = toVec.Normalize() * (REPELLENT_FORCE_SCALE_MIN + (REPELLENT_FORCE_SCALE_MAX - REPELLENT_FORCE_SCALE_MIN) * max(0.0f, 1.0f - toVec.GetLength() / REPELLENT_RADIUS));
-
-			// 反発力を加える
-			m_pPhysics->resistance -= repellentForce;
-			otherPhysics->velocity += repellentForce;
+					chara->GetComponent<Physics>()->velocity -= repellentForce * 100.0f;
+					GetComponent<Physics>()->velocity += repellentForce;
+				}
+			}
 		}
 	}
 	// ボールの場合
@@ -615,6 +634,10 @@ void Chara::CollisionEvent(const CollisionData& colData) {
 				m_Catcher->CatchSuccese(ball);
 			return;
 		}
+
+		// 手に持ってるボールからはダメージ喰らわない
+		if (ball->GetState() == Ball::S_OWNED)
+			return;
 
 		if (ball->GetCharaTag() != m_CharaTag)
 		{

@@ -15,7 +15,7 @@ struct AnimOption {
 	float defaultAnimSpeed;	// 既定再生速度
 	Vector3 offset;		// ルートに加えるオフセット
 	bool isLoop;		// ループ再生の有無
-	std::array<bool, 3> isFixedRoot;	// ルート固定の有無（x,y,z軸）
+	std::array<bool, 3> isFixedRoot;	// ルート固定の有無(x,y,z軸)
 
 	AnimOption() : AnimOption(1.0f, Vector3::Zero, false, { false, false, false })
 	{

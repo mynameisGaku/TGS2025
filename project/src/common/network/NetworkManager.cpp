@@ -82,7 +82,7 @@ NetworkManager::NetworkManager()
 	}
 	else
 	{
-		// --- サーバー（ホスト）として起動 ---
+		// --- サーバー（ホスト)として起動 ---
 
 		// クライアント受付用のソケットを作成
 		g_ListenSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -156,7 +156,7 @@ void NetworkManager::SendJson(const std::string& json)
 		return;
 	}
 
-	// --- ホストの場合（全クライアントに送信） ---
+	// --- ホストの場合(全クライアントに送信) ---
 	if (net.IsHost)
 	{
 		std::lock_guard<std::mutex> lock(g_Mutex);

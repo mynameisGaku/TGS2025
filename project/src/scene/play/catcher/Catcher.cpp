@@ -180,6 +180,15 @@ void Catcher::CatchSuccese(Ball* ball) {
 	if (ball == nullptr)
 		return;
 
+
+	std::string eff = "Ball_Outline_";
+	if (ball->GetLastOwner())
+	{
+		eff += ball->GetLastOwner()->GetCharaTag();
+		eff += "_";
+		EffectManager::Stop(eff + "Holding.efk", eff + std::to_string(ball->GetIndex()));
+	}
+
 	EffectManager::Play3D("Catch_Success.efk", m_pParent->transform->Global() + Vector3(0.0f, 150.0f, 0.0f), "Catch_Success");
 
 	float charge = ball->GetChargeRate();

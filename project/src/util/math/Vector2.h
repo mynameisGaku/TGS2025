@@ -88,19 +88,19 @@ public:
 	*/
 	void Print(const char* format = NULL, FILE* stream = NULL) const;
 
-	// iの値によって要素を取得（0 -> x, 1 -> y）
+	// iの値によって要素を取得(0 -> x, 1 -> y)
 	// ループ処理で使用
 	/**
-		@brief		iの値によって要素を取得（0 -> x, 1 -> y）
+		@brief		iの値によって要素を取得(0 -> x, 1 -> y)
 		@param[in]	i	: 取得したい要素番号
 		@details	ループ処理で使用
 	*/
 	float Get(int i) const;
 
-	// iの値によって要素にvalueをセット（0 -> x, 1 -> y）
+	// iの値によって要素にvalueをセット(0 -> x, 1 -> y)
 	// ループ処理で使用
 	/**
-		@brief		iの値によって要素にvalueをセット（0 -> x, 1 -> y）
+		@brief		iの値によって要素にvalueをセット(0 -> x, 1 -> y)
 		@param[in]	i		: 何番目の要素にセットするか
 		@param[in]	value	: セットする値(float)
 		@details	ループ処理で使用

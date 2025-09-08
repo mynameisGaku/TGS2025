@@ -19,7 +19,7 @@ AttachedAnimation::AttachedAnimation(int parentModel, const AnimInfo& info)
 	m_parentModel = parentModel;	// モデルハンドル
 	m_attachID = -1;	// アタッチ済アニメーションのハンドル
 
-	m_frame = 0.0f;	// 現在フレーム（小数もある）
+	m_frame = 0.0f;	// 現在フレーム(小数もある)
 	m_maxFrame = info.endFrame;	// 最大フレーム
 	m_playSpeed = 1.0f;	// 再生速度倍率
 	m_blendRate = 0.0f;	// ブレンド率

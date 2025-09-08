@@ -142,7 +142,7 @@ BallTarget* BallTargetManager::GetNearest(int index, float distance) const
 		if (distSq >= distance * distance)
 			continue;
 
-		// •Ç”»’èi—\’èj
+		// •Ç”»’è(—\’è)
 
 		dists.push_back(distPair(it->m_pObject->Index(), distSq));
 	}

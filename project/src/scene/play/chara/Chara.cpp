@@ -45,7 +45,7 @@ using namespace KeyDefine;
 
 namespace
 {
-	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ（毎秒）
+	static const float CATCH_STAMINA_USE = 50.0f;	// キャッチに使うスタミナ(毎秒)
 	static const float CATCH_STAMINA_MIN = 0.0f;	// キャッチを開始するのに必要な残スタミナ
 	static const float CATCH_TIME = 0.05f;	// 入力一回のキャッチ継続時間
 	static const float SLIDE_TIME = 0.05f;	// 入力一回のスライディング継続時間
@@ -293,19 +293,19 @@ void Chara::Init(std::string tag)
 			float lifeTime = lt * Random.GetFloatRange(0.8f, 1.2f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descBold{};
-			descBold.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descBold.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descBold.interval = 1; // フレーム間隔(何フレームごとに描画するか)
+			descBold.subdivisions = 16; // 補間分割数(大きいほど滑らか)
 			descBold.thick = 50.0f; // トレイルの太さ
 			descBold.lifeTime = lifeTime; // トレイルの寿命
-			descBold.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descBold.appearRate = 0.5f; // トレイルが出現する確率(0.0f～1.0f)
 			descBold.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			MODEL_FRAME_TRAIL_RENDERER_DESC descSmall{};
-			descSmall.interval = 1; // フレーム間隔（何フレームごとに描画するか）
-			descSmall.subdivisions = 16; // 補間分割数（大きいほど滑らか）
+			descSmall.interval = 1; // フレーム間隔(何フレームごとに描画するか)
+			descSmall.subdivisions = 16; // 補間分割数(大きいほど滑らか)
 			descSmall.thick = 25.0f; // トレイルの太さ
 			descSmall.lifeTime = lifeTime; // トレイルの寿命
-			descSmall.appearRate = 0.5f; // トレイルが出現する確率（0.0f～1.0f）
+			descSmall.appearRate = 0.5f; // トレイルが出現する確率(0.0f～1.0f)
 			descSmall.posRandomRange = Vector3(3.0f, 3.0f, 3.0f);
 
 			return std::pair<MODEL_FRAME_TRAIL_RENDERER_DESC, MODEL_FRAME_TRAIL_RENDERER_DESC>(descBold, descSmall);
@@ -368,7 +368,7 @@ void Chara::Init(std::string tag)
 	}
 #if FALSE
 
-	//=== 腕アニメーション（ボールを持つ、投げる） ===
+	//=== 腕アニメーション(ボールを持つ、投げる) ===
 	m_Animator->LoadAnim("data/Animation/", "ActionIdleToHold", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "AimToThrow", AnimOption());
 	m_Animator->LoadAnim("data/Animation/", "Catch", AnimOption().SetIsLoop(true));
@@ -535,7 +535,7 @@ void Chara::Update() {
 
 	//============================
 
-	invincibleUpdate();
+	InvincibleUpdate();
 	buttonHintUpdate();
 	m_pUpdateProfiler->EndProfiling();
 
@@ -544,6 +544,8 @@ void Chara::Update() {
 void Chara::Draw()
 {
 	m_pDrawProfiler->BeginProfiling();
+
+
 	Object3D::Draw();
 
 	/*for (int i = 0; i < 5; i++)
@@ -588,7 +590,7 @@ void Chara::CollisionEvent(const CollisionData& colData) {
 			Physics* otherPhysics = chara->GetComponent<Physics>();	// 相手の物理挙動
 
 			ColliderCapsule* collider = GetComponent<ColliderCapsule>();	// 当たり判定
-			// 敵キャラとの押し出し（位置補正なし／バイアス速度のみ／平滑化）
+			// 敵キャラとの押し出し(位置補正なし／バイアス速度のみ／平滑化)
 			if (chara != nullptr)
 			{
 				ColliderCapsule* myCap = GetComponent<ColliderCapsule>();
@@ -773,7 +775,7 @@ void Chara::HitGroundProcess() {
 
 		transform->position += (pushVecNorm * pushVecLength);
 
-		// Y成分が下方向なら頭上ヒット（天井にぶつかった）
+		// Y成分が下方向なら頭上ヒット(天井にぶつかった)
 		if (pushVec.y < -0.1f)
 		{
 			m_pPhysics->velocity.y = min(m_pPhysics->velocity.y, 0.0f);
@@ -1116,6 +1118,8 @@ void Chara::GetTackle(const Vector3& other, float force_horizontal, float force_
 
 	SoundManager::Play("SE_tackle_hit.mp3", "SE_tackle_hit.mp3");
 
+	EffectManager::Play3D("Hit_Tackle.efk", *transform->Copy(), "Hit_Tackle" + m_CharaTag, false);
+
 	main_changeStateNetwork(&Chara::StateDamageToDown);
 }
 
@@ -1128,21 +1132,34 @@ void Chara::SetInvincible(float duration_sec, bool isOverride)
 		return;
 	}
 
+	m_InvincibleAlphaTimer = 0.0f;
 	m_InvincibleTimer = duration_sec;
 	m_IsInvincible = true;
 }
 
-void Chara::invincibleUpdate()
+void Chara::InvincibleUpdate()
 {
 	if (m_InvincibleTimer > 0.0f)
 	{
 		m_InvincibleTimer -= GTime.deltaTime;
 		m_IsInvincible = true;
+
+		m_InvincibleAlphaTimer -= GTime.DeltaTime();
+		if (m_InvincibleAlphaTimer <= 0.0f)
+		{
+			m_InvincibleAlphaTimer = 0.1f;
+			m_InvincibleAlpha = m_InvincibleAlpha == 255 ? 200 : 255;
+			float rate = static_cast<float>(m_InvincibleAlpha / 255);
+			MV1SetOpacityRate(Model(), rate);
+		}
 	}
 	else
 	{
 		m_IsInvincible = false;
 		m_InvincibleTimer = 0.0f;
+		m_InvincibleAlphaTimer = 0.0f;
+		m_InvincibleAlpha = 255;
+		MV1SetOpacityRate(Model(), 1.0f);
 	}
 }
 
@@ -1563,6 +1580,7 @@ void Chara::StateDamageToDown(FSMSignal sig)
 	break;
 	case FSMSignal::SIG_Update: // 更新
 	{
+		SetInvincible(0.01f, true);
 		if (m_Animator->IsFinished())
 		{
 			main_changeStateNetwork(&Chara::StateCrouchToActionIdle); // ステートを変更
@@ -1579,6 +1597,7 @@ void Chara::StateDamageToDown(FSMSignal sig)
 		m_CanMove	= true;
 		m_CanRot	= true;
 		m_CanTackle = true;
+		m_Timeline->Stop();
 	}
 	break;
 	}

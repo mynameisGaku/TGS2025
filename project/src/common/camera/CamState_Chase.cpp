@@ -48,7 +48,7 @@ void Camera::ChaseState(FSMSignal sig)
 		findFollowerChara();
 		if (not m_pFollowerChara) return;
 
-		//▼=== エイムステートから滑らかに視点（オフセット）を戻す処理 ===
+		//▼=== エイムステートから滑らかに視点(オフセット)を戻す処理 ===
 		m_TargetTransitionTime = max(m_TargetTransitionTime - GTime.DeltaTime(), 0.0f);
 		m_EasingTime = max(m_EasingTime - GTime.DeltaTime(), 0.0f);
 

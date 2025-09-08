@@ -47,11 +47,11 @@ public:
 	}
 
 	///<summary>
-	/// 再起動要求。現在の exe と引数を引き継ぎつつ、新プロセスを起動する（--wait-parent <自分PID> を付与）。
+	/// 再起動要求。現在の exe と引数を引き継ぎつつ、新プロセスを起動する(--wait-parent <自分PID> を付与)。
 	/// 呼び出し元では true が返ったら「設定保存→DxLib_End()→return」で終了すること。
 	/// @param argc main/WinMain から受けた argc
 	/// @param argv main/WinMain から受けた argv
-	/// @return 起動成功で true。失敗時は false（この場合は続行するか、エラー表示して中止）。
+	/// @return 起動成功で true。失敗時は false(この場合は続行するか、エラー表示して中止)。
 	///</summary>
 	static bool RequestRestart(int argc, char* argv[])
 	{
@@ -72,7 +72,7 @@ public:
 		argsW.emplace_back(L"--wait-parent");
 		argsW.emplace_back(std::to_wstring(GetCurrentProcessId()));
 
-		// CreateProcessW 用のコマンドライン文字列を構築（正しいクォートを行う）
+		// CreateProcessW 用のコマンドライン文字列を構築(正しいクォートを行う)
 		std::wstring cmd = QuoteArgW(exePath);
 		for (const auto& a : argsW)
 		{
@@ -92,7 +92,7 @@ public:
 			nullptr,                 // lpProcessAttributes
 			nullptr,                 // lpThreadAttributes
 			FALSE,                   // bInheritHandles
-			CREATE_NEW_PROCESS_GROUP,// dwCreationFlags（任意）
+			CREATE_NEW_PROCESS_GROUP,// dwCreationFlags(任意)
 			nullptr,                 // lpEnvironment
 			nullptr,                 // lpCurrentDirectory
 			&si, &pi
@@ -116,8 +116,8 @@ public:
 	/// 再起動を要求し、成功したらクリーンアップ関数を呼んで即終了する。
 	/// @param argc argc
 	/// @param argv argv
-	/// @param cleanup 後始末用コールバック（設定保存、スレッド停止、DxLib_End など）。nullptr 可。
-	/// @return 再起動を発行して終了した場合は 0 を返す（そのまま return で使う）。失敗時は -1。
+	/// @param cleanup 後始末用コールバック(設定保存、スレッド停止、DxLib_End など)。nullptr 可。
+	/// @return 再起動を発行して終了した場合は 0 を返す(そのまま return で使う)。失敗時は -1。
 	///</summary>
 	static int RestartAndExit(int argc, char* argv[], void(*cleanup)())
 	{
@@ -127,7 +127,7 @@ public:
 			{
 				cleanup();
 			}
-			// ここで確実に終了（呼び出し側で return 0 してもOK）
+			// ここで確実に終了(呼び出し側で return 0 してもOK)
 			ExitProcess(0);
 			return 0; // 到達しないが、静的解析対策
 		}
@@ -136,7 +136,7 @@ public:
 
 private:
 	///<summary>
-	/// "--wait-parent" のインデックスを探す（見つからなければ -1）
+	/// "--wait-parent" のインデックスを探す(見つからなければ -1)
 	///</summary>
 	static int FindWaitParentIndex(int argc, char* argv[])
 	{
@@ -151,7 +151,7 @@ private:
 	}
 
 	///<summary>
-	/// EXE のフルパス（Unicode）を取得
+	/// EXE のフルパス(Unicode)を取得
 	///</summary>
 	static std::wstring GetExecutablePathW()
 	{
@@ -167,7 +167,7 @@ private:
 	}
 
 	///<summary>
-	/// UTF-8 → UTF-16 の簡易変換（引数継承用）
+	/// UTF-8 → UTF-16 の簡易変換(引数継承用)
 	///</summary>
 	static std::wstring Utf8ToWide(const char* s)
 	{

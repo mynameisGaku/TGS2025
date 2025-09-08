@@ -56,10 +56,10 @@ namespace ScreenManager
 	/// 指定されたタグと描画位置・サイズでスクリーン画像を作成します。
 	/// </summary>
 	/// <param name="tag">識別用タグ</param>
-	/// <param name="drawX">スクリーン画像の描画開始位置（X座標）</param>
-	/// <param name="drawY">スクリーン画像の描画開始位置（Y座標）</param>
-	/// <param name="drawW">スクリーン画像の幅（ピクセル単位）</param>
-	/// <param name="drawH">スクリーン画像の高さ（ピクセル単位）</param>
+	/// <param name="drawX">スクリーン画像の描画開始位置(X座標)</param>
+	/// <param name="drawY">スクリーン画像の描画開始位置(Y座標)</param>
+	/// <param name="drawW">スクリーン画像の幅(ピクセル単位)</param>
+	/// <param name="drawH">スクリーン画像の高さ(ピクセル単位)</param>
 	void CreateScreen(const std::string& tag, int drawX, int drawY, int drawW, int drawH);
 
 	/// <summary>
@@ -91,8 +91,8 @@ namespace ScreenManager
 	/// 指定されたタグに関連付けられた画面への切り抜きのサイズを設定します。
 	/// </summary>
 	/// <param name="tag">識別用タグ</param>
-	/// <param name="w">画面への切り抜きの幅（ピクセル単位）</param>
-	/// <param name="h">画面への切り抜きの高さ（ピクセル単位）</param>
+	/// <param name="w">画面への切り抜きの幅(ピクセル単位)</param>
+	/// <param name="h">画面への切り抜きの高さ(ピクセル単位)</param>
 	void SetClipSize(const std::string& tag, int w, int h);
 
 	/// <summary>
@@ -107,8 +107,8 @@ namespace ScreenManager
 	/// 指定されたタグに関連付けられた描画サイズを設定します。
 	/// </summary>
 	/// <param name="tag">識別用タグ</param>
-	/// <param name="w">設定する幅（ピクセル単位）</param>
-	/// <param name="h">設定する高さ（ピクセル単位）</param>
+	/// <param name="w">設定する幅(ピクセル単位)</param>
+	/// <param name="h">設定する高さ(ピクセル単位)</param>
 	void SetDrawSize(const std::string& tag, int w, int h);
 
 	/// <summary>

@@ -9,7 +9,7 @@
 class Chara;
 
 /// <summary>
-/// キャラクターを操作するクラス（AIが操作する）
+/// キャラクターを操作するクラス(AIが操作する)
 /// </summary>
 /// <author>佐藤紘斗</author>
 class AIController : public Component {

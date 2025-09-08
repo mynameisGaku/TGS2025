@@ -137,7 +137,7 @@ Vector2 TitleUICanvas::GetPoint(const TUI_CANVAS_ANCHOR_POINT& anchor)
 
 	auto at = [&](float nx, float ny) -> Vector2
 		{
-			// nx, ny は 0~1 の正規化アンカー（左上(0,0)~右下(1,1)）
+			// nx, ny は 0~1 の正規化アンカー（左上(0,0)~右下(1,1))
 			return Vector2(origin.x + size.x * nx * sx,
 				origin.y + size.y * ny * sy);
 		};
@@ -183,7 +183,7 @@ void TitleUICanvas::calcMapping(Vector2& origin, float& sx, float& sy) const
 		return;
 	}
 
-	// 画面にフィット（アスペクト維持・レターボックス）
+	// 画面にフィット(アスペクト維持・レターボックス)
 	const float sw = (float)WindowSetting::Inst().width;
 	const float sh = (float)WindowSetting::Inst().height;
 

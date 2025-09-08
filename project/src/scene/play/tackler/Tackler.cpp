@@ -3,6 +3,7 @@
 #include "src/scene/play/chara/Chara.h"
 #include "src/reference/chara/CharaDefineRef.h"
 #include "src/common/stage/StageObjectManager.h"
+#include <src\common\camera\CameraManager.h>
 
 Tackler::Tackler()
 {
@@ -68,7 +69,16 @@ void Tackler::CollisionEvent(const CollisionData& colData)
 		if (chara->IsInvincible())
 			return;
 
+		GameTime::SetHitStopSeconds(10.0f / 60.0f);
+		
+		auto camera = CameraManager::GetCamera(chara->GetIndex());
+		camera->GetComponent<Shake>()->SetParam({ Shake::Type::tAll }, 50.0f, Vector3(0.1f, 0.1f, 0.1f), 10.0f / 60.0f);
+
+		camera = CameraManager::GetCamera(m_Parent->GetIndex());
+		camera->GetComponent<Shake>()->SetParam({ Shake::Type::tAll }, 50.0f, Vector3(0.1f, 0.1f, 0.1f), 10.0f / 60.0f);
+
 		chara->GetTackle(m_Parent->transform->position, CHARADEFINE_REF.TackleForce_Horizontal, CHARADEFINE_REF.TackleForce_Vertical, false);
+
 		return;
 	}
 }

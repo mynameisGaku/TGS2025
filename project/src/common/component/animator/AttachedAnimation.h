@@ -20,9 +20,9 @@ public:
 	inline bool IsLoop() const { return m_info.option.isLoop; }
 
 	/*=== アクセサ ===*/
-	// 現在の進行度（0..1）
+	// 現在の進行度(0..1)
 	inline void SetFrameByRatio(float ratio) { m_frame = m_maxFrame * ratio; }
-	// 現在の進行度（0..1）
+	// 現在の進行度(0..1)
 	inline float FrameByRatio() const { return m_maxFrame > 0 ? m_frame / m_maxFrame : 1.0f; }
 	// 現在のフレーム
 	inline void SetFrame(float frame) { m_frame = frame; }
@@ -51,7 +51,7 @@ protected:
 	int m_parentModel;	// モデルハンドル
 	int m_attachID;	// アタッチ済アニメーションのハンドル
 
-	float m_frame;	// 現在フレーム（小数もある）
+	float m_frame;	// 現在フレーム(小数もある)
 	float m_maxFrame;	// 最大フレーム
 	float m_playSpeed;	// 再生速度倍率
 	float m_blendRate;	// ブレンド率

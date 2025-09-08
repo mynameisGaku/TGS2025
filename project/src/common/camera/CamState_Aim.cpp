@@ -61,7 +61,7 @@ void Camera::AimState(FSMSignal sig)
 			return;
 		}
 
-		//▼=== チェイスステートから滑らかに視点（オフセット）を変える処理 ===
+		//▼=== チェイスステートから滑らかに視点(オフセット)を変える処理 ===
 		const Transform FOLLOWER_TRS = m_pFollowerChara->transform->Global();
 		const Transform TARGET_TRS = Transform(m_pBallTarget->Position());
 

@@ -45,7 +45,7 @@ public:
     /// 死亡しているかを取得する
     bool IsDead() const;
 
-    /// 最小HPを設定（0以上）
+    /// 最小HPを設定(0以上)
     void SetMinHP(float value);
 
     /// オーバーヒールを許可・不許可設定

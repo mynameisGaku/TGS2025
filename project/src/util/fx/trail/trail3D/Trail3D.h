@@ -30,6 +30,6 @@ private:
     float m_MaxLifeTime = 1.0f;
     float m_TrailWidth = 1.0f;
 
-    int m_UpdateInterval = 1; // 更新間隔（フレーム単位）
-    int m_Subdivisions = 16; // 補間分割数（大きいほど滑らか）
+    int m_UpdateInterval = 1; // 更新間隔(フレーム単位)
+    int m_Subdivisions = 16; // 補間分割数(大きいほど滑らか)
 };

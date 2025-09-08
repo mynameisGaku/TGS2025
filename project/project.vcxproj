@@ -189,6 +189,7 @@
     <None Include="data\Json\Chara\State\AimToThrow.json" />
     <None Include="data\Json\Chara\State\Climb.json" />
     <None Include="data\Json\Chara\State\ClimbToFall.json" />
+    <None Include="data\Json\Chara\State\DamageToDown.json" />
     <None Include="data\Json\Chara\State\Fall.json" />
     <None Include="data\Json\Chara\State\FallToRoll.json" />
     <None Include="data\Json\Chara\State\Roll.json" />
@@ -217,6 +218,7 @@
     <None Include="data\Json\Effect\Hit_Gray.json" />
     <None Include="data\Json\Effect\Hit_NoColor.json" />
     <None Include="data\Json\Effect\Hit_Red.json" />
+    <None Include="data\Json\Effect\Hit_Tackle.json" />
     <None Include="data\Json\Effect\Hit_Wall.json" />
     <None Include="data\Json\Effect\LockOnMarker.json" />
     <None Include="data\Json\Effect\Template.json" />

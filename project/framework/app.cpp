@@ -102,7 +102,7 @@ void AppDraw()
 #endif
 			BLOOM_MANAGER.SetDrawScreenToEmitter();
 			{
-				DrawBox(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, 0x000000, TRUE);	// 描画をリセット（黒塗り）
+				DrawBox(0, 0, (int)WindowSetting::Inst().width, (int)WindowSetting::Inst().height, 0x000000, TRUE);	// 描画をリセット(黒塗り)
 				BLOOM_MANAGER.WasInitEmitterScreen = true;
 			}
 			BLOOM_MANAGER.SetDrawScreenToLastScreen();

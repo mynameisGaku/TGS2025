@@ -37,6 +37,6 @@ private:
     void bounce(Physics* pPhys, const type& _type);
     float m_RepulsionForce = 0.0f;
     Vector3 m_SurfaceNormal;
-	float m_BounceCooldown = 0.2f; // •b”i˜A‘±”½Ë‹Ö~j
+	float m_BounceCooldown = 0.2f; // •b”(˜A‘±”½Ë‹Ö~)
 	float m_BounceTimer = 0.0f;
 };

@@ -45,7 +45,7 @@ public:
     /// </summary>
     /// <typeparam name="T">取得する値の型</typeparam>
     /// <param name="key">取得対象のキー</param>
-    /// <param name="fileKey">対象ファイルのキー（省略可）</param>
+    /// <param name="fileKey">対象ファイルのキー（省略可)</param>
     /// <returns>指定された型の値</returns>
     template<typename T>
     T Get(const std::string& key, const std::string& fileKey = "") const
@@ -76,7 +76,7 @@ public:
     /// <typeparam name="T">設定する値の型</typeparam>
     /// <param name="key">設定対象のキー</param>
     /// <param name="value">設定する値</param>
-    /// <param name="fileKey">対象ファイルのキー（省略可）</param>
+    /// <param name="fileKey">対象ファイルのキー（省略可)</param>
     template<typename T>
     void Set(const std::string& key, const T& value, const std::string& fileKey = "")
     {
@@ -94,7 +94,7 @@ public:
     /// INI 設定をファイルに保存します。
     /// </summary>
     /// <param name="filepath">保存先ファイルのパス</param>
-    /// <param name="fileKey">対象ファイルのキー（省略可）</param>
+    /// <param name="fileKey">対象ファイルのキー（省略可)</param>
     void Save(const std::string& filepath, const std::string& fileKey = "");
 
     /// <summary>
@@ -116,12 +116,12 @@ public:
     /// <summary>
     /// ImGui を使用して設定をリアルタイム編集します。
     /// </summary>
-    /// <param name="fileKey">対象ファイルのキー（省略可）</param>
+    /// <param name="fileKey">対象ファイルのキー（省略可)</param>
     void RenderImGui(const std::string& fileKey = "");
 
 private:
     /// <summary>
-    /// コンストラクタ（シングルトンのため private）。
+    /// コンストラクタ(シングルトンのため private)。
     /// </summary>
     Settings_ini();
 

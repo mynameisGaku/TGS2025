@@ -786,6 +786,12 @@
     <None Include="data\Json\Stage\ExportedStage-001.json">
       <Filter>data\Json\Stage</Filter>
     </None>
+    <None Include="data\Json\Chara\State\DamageToDown.json">
+      <Filter>data\Json\Chara\State</Filter>
+    </None>
+    <None Include="data\Json\Effect\Hit_Tackle.json">
+      <Filter>data\Json\Effect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\Json\Chara\CharaAnim.json">

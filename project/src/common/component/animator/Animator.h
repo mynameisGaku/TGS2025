@@ -73,7 +73,7 @@ public:
 	// ▼セッター
 
 	/// <summary>
-	/// アニメーションの再生速度（倍率）を変更する
+	/// アニメーションの再生速度(倍率)を変更する
 	/// 標準速度は1.0f
 	/// </summary>
 	/// <param name="speed">再生速度</param>
@@ -82,7 +82,7 @@ public:
 	/// <summary>
 	/// 今のアニメーションの進行度をセット
 	/// </summary>
-	/// <param name="ratio">進行度（0..1）</param>
+	/// <param name="ratio">進行度(0..1)</param>
 	inline void SetCurrentRatio(float ratio) { current->SetFrameByRatio(ratio); }
 
 	/// <summary>

@@ -6,16 +6,16 @@
 //    graph.handle = -1; // 画像ハンドル
 //    graph.size_x = 0;  // 画像の横サイズ
 //    graph.size_y = 0;  // 画像の縦サイズ
-//    graph.cell_x = 1;  // 画像のセル数（横）
-//    graph.cell_y = 1;  // 画像のセル数（縦）
+//    graph.cell_x = 1;  // 画像のセル数(横)
+//    graph.cell_y = 1;  // 画像のセル数(縦)
 //    graph.center_x = 0.0f;
 //    graph.center_y = 0.0f;
 //    graph.alpha = 255.0f;  // 画像のアルファ値
 //    graph.ext = 1.0f;    // 拡大率
 //    graph.angle = 0.0f;  // 回転角度
-//    graph.bright.red = 255.0f;    // 輝度（赤）
-//    graph.bright.green = 255.0f;  // 輝度（緑）
-//    graph.bright.blue = 255.0f;   // 輝度（青）
+//    graph.bright.red = 255.0f;    // 輝度(赤)
+//    graph.bright.green = 255.0f;  // 輝度(緑)
+//    graph.bright.blue = 255.0f;   // 輝度(青)
 //    graph.pos = Vector2(0.0f, 0.0f);  // 画像の位置
 //
 //    //ビルボード初期化

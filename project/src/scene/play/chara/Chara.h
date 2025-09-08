@@ -170,9 +170,9 @@ public:
 	//=======================================================================================
 	// ▼無敵
 	void SetInvincible(float duration_sec, bool isOverride);
-private:
-	void invincibleUpdate();
-public:
+
+	void InvincibleUpdate();
+
 	//=======================================================================================
 	// ▼リスポーン
 	void StartRespawn();
@@ -384,6 +384,9 @@ private:
 	MatchManager*				m_pMatchManager;
 
 	int							m_hTrailImage;			// トレイルの画像ハンドル
+
+	int							m_InvincibleAlpha;
+	float						m_InvincibleAlphaTimer;
 
 	float						m_EmoteTimer;			// 放置アニメーションまでの時間
 	float						m_SlideTimer;			// スライディング残り時間タイマー

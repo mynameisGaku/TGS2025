@@ -201,11 +201,11 @@
 //	// Size: ゲージのサイズ
 //	// MaxValue: ゲージの最大値
 //	// CurrentValue: 現在の値
-//	// Angle: ゲージの傾き（ラジアン単位）
+//	// Angle: ゲージの傾き(ラジアン単位)
 //	// GrHandle: 描画する画像のハンドル
-//	// TransFlag: 画像の透明度を有効にするかどうか（TRUE: 有効, FALSE: 無効）
-//	// ReverseFlagX: 画像を左右反転するかどうか（true: 有効, false: 無効）
-//	// ReverseFlagY: 画像を上下反転するかどうか（true: 有効, false: 無効）
+//	// TransFlag: 画像の透明度を有効にするかどうか(TRUE: 有効, FALSE: 無効)
+//	// ReverseFlagX: 画像を左右反転するかどうか(true: 有効, false: 無効)
+//	// ReverseFlagY: 画像を上下反転するかどうか(true: 有効, false: 無効)
 //	void DrawHorizontalGauge(Vector2 Pos, float cx, float cy, float Size, float MaxValue, float CurrentValue, float Angle, int GrHandle, int TransFlag, bool ReverseFlagX = false, bool ReverseFlagY = false);
 //
 //	// 平行四辺形のゲージを描画 (画像非対応)
@@ -215,11 +215,11 @@
 //	// Size: ゲージのサイズ
 //	// MaxValue: ゲージの最大値
 //	// CurrentValue: 現在の値
-//	// Angle: ゲージの傾き（ラジアン単位）
+//	// Angle: ゲージの傾き(ラジアン単位)
 //	// Color: ゲージの色
-//	// FillFlag: ゲージを塗りつぶすかどうか（TRUE: 塗りつぶす, FALSE: 枠線のみ）
-//	// ReverseFlagX: ゲージを左右反転するかどうか（true: 有効, false: 無効）
-//	// ReverseFlagY: ゲージを上下反転するかどうか（true: 有効, false: 無効）
+//	// FillFlag: ゲージを塗りつぶすかどうか(TRUE: 塗りつぶす, FALSE: 枠線のみ)
+//	// ReverseFlagX: ゲージを左右反転するかどうか(true: 有効, false: 無効)
+//	// ReverseFlagY: ゲージを上下反転するかどうか(true: 有効, false: 無効)
 //	void DrawParallelGauge(Vector2 Pos, float cx, float cy, float Width, float Height, float MaxValue, float CurrentValue, float Angle, int Color, int FillFlag, bool ReverseFlagX = false, bool ReverseFlagY = false);
 //
 //	/// <summary>

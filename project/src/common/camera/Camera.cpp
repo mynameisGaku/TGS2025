@@ -98,6 +98,9 @@ void Camera::Reset() {
 	m_pBallTarget = nullptr;
 
 	m_IsView = true;
+
+	m_PerformanceDatas.clear();
+	m_IsPlayingPerformance = false;
 }
 
 void Camera::Update() {

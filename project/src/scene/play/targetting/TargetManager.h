@@ -5,6 +5,8 @@
 class BallManager;
 class CharaManager;
 
+class UI_Target;
+
 /// <summary>
 /// ロックオン時のUI、被ロックオン時のUIを描画する
 /// </summary>
@@ -18,23 +20,19 @@ public:
 	void Update() override;
 	void Draw() override;
 
-private:
-	/// <summary>
-	/// 狙われているボールの位置にマーカーを描画します
-	/// </summary>
-	/// <param name="ballPos">ボールの座標</param>
-	/// <param name="targetCharaID">マーカーを表示する対象キャラクターのID</param>
-	void DrawBallPosMarker(const Vector3& ballPos, int targetCharaID);
+	void UpdateUI();
+	void DrawUI();
 
+private:
 	/// <summary>
 	/// 狙われているボールの位置にドゲを描画します
 	/// </summary>
 	/// <param name="ballPos">ボールの座標</param>
 	/// <param name="targetCharaID">マーカーを表示する対象キャラクターのID</param>
-	void DrawThorn(const Vector3& ballPos, int targetCharaID);
+	void DrawThorn();
 
 	BallManager* ballManager;	// ボールの管理者
 	CharaManager* charaManager;	// キャラの管理者
 
-	int hArrow; // マーカー用画像
+	UI_Target* m_UI_Target;
 };

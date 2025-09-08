@@ -1532,6 +1532,9 @@
     <ClCompile Include="src\common\performance_profiler\PerformanceProfilerManagerManager.cpp">
       <Filter>src%28application%29\common\performance</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\play\ui\UI_Target.cpp">
+      <Filter>src%28application%29\scene\play\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework\app.h">
@@ -2411,6 +2414,9 @@
     </ClInclude>
     <ClInclude Include="src\common\performance_profiler\PerformanceProfilerManagerManager.h">
       <Filter>src%28application%29\common\performance</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\play\ui\UI_Target.h">
+      <Filter>src%28application%29\scene\play\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

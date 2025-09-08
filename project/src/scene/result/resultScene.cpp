@@ -46,8 +46,8 @@ ResultScene::ResultScene(const std::string& name) : SceneBase(true, name) {
 		const int size = (int)m_ResultData.WinnerCharaIDs.size();
 		for (int i = 0; i < size; i++)
 		{
-			Vector3 position = Vector3((i - (size - 1) / 2.0f) * 80.0f, 0.0f, 200.0f);
-			charaM->Create(gameM->GetResultData().WinnerTeamName[0], Transform(position, Vector3::Zero, Vector3::Ones));
+			Vector3 position = Vector3((i - (size - 1) / 2.0f) * 80.0f, 350.0f, 0.0f);
+			charaM->Create(gameM->GetResultData().WinnerTeamName[0], Transform(position, Vector3(0.0f, 0.0f, 0.0f), Vector3::Ones));
 		}
 	}
 	Instantiate<UI_Setter_ResultScene>();

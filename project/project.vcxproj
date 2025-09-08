@@ -416,6 +416,7 @@
     <ClCompile Include="src\scene\play\ui\UI_GameScore.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_Setter_PlayScene.cpp" />
     <ClCompile Include="src\scene\play\ui\UI_StartCount.cpp" />
+    <ClCompile Include="src\scene\play\ui\UI_Target.cpp" />
     <ClCompile Include="src\scene\result\resultScene.cpp" />
     <ClCompile Include="src\scene\result\ui\UI_Ranking.cpp" />
     <ClCompile Include="src\scene\result\ui\UI_Winner_Team.cpp" />
@@ -639,6 +640,7 @@
     <ClInclude Include="src\scene\play\ui\UI_GameScore.h" />
     <ClInclude Include="src\scene\play\ui\UI_Setter_PlayScene.h" />
     <ClInclude Include="src\scene\play\ui\UI_StartCount.h" />
+    <ClInclude Include="src\scene\play\ui\UI_Target.h" />
     <ClInclude Include="src\scene\result\resultScene.h" />
     <ClInclude Include="src\scene\result\ui\UI_Ranking.h" />
     <ClInclude Include="src\scene\result\ui\UI_Setter_ResultScene.h" />

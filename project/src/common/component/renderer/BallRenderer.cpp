@@ -11,6 +11,11 @@ const float BallRenderer::RADIUS = 100.0f;	// 球の半径
 const float BallRenderer::FRAME_INTERVAL = 0.05f;
 const float BallRenderer::TEXTURE_RADIUS = 0.85f;
 
+namespace
+{
+	static const size_t LINEAR_VERTICES_COUNT = BallRenderer::SLICES_COUNT * BallRenderer::STACKS_COUNT * 6;
+}
+
 BallRenderer::BallRenderer()
 {
 	m_Radius = 0.0f;
@@ -18,6 +23,7 @@ BallRenderer::BallRenderer()
 	m_StacksCount = 0;
 	m_Frame = 0;
 	m_FrameTimer = 0.0f;
+	m_WasSetTransform = false;
 }
 
 BallRenderer::~BallRenderer()
@@ -74,6 +80,9 @@ void BallRenderer::InitVertices()
 		m_Vertices.push_back(stacks);
 	}
 
+	m_LinearVertices.reserve(LINEAR_VERTICES_COUNT);
+	m_TransformVertices.reserve(LINEAR_VERTICES_COUNT);
+
 	// 一直線にしてやるぜ
 	for (size_t i = 0; i < SLICES_COUNT; i++)
 	{
@@ -85,6 +94,13 @@ void BallRenderer::InitVertices()
 			m_LinearVertices.push_back(m_Vertices[i][(j + 1) % STACKS_COUNT]);
 			m_LinearVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][(j + 1) % STACKS_COUNT]);
 			m_LinearVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][j]);
+
+			m_TransformVertices.push_back(m_Vertices[i][j]);
+			m_TransformVertices.push_back(m_Vertices[i][(j + 1) % STACKS_COUNT]);
+			m_TransformVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][j]);
+			m_TransformVertices.push_back(m_Vertices[i][(j + 1) % STACKS_COUNT]);
+			m_TransformVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][(j + 1) % STACKS_COUNT]);
+			m_TransformVertices.push_back(m_Vertices[(i + 1) % SLICES_COUNT][j]);
 		}
 	}
 }
@@ -118,16 +134,11 @@ void BallRenderer::Update()
 
 void BallRenderer::Draw()
 {
-
-	static const size_t SIZE = SLICES_COUNT * STACKS_COUNT * 6;
-
-	std::array<VERTEX3D, SIZE>* vertices = new std::array<VERTEX3D, SIZE>;
-
-	memcpy_s(&vertices[0], sizeof((*vertices)[0]) * SIZE,
-		&m_LinearVertices[0], sizeof(m_LinearVertices[0]) * SIZE);
-
 	if (not m_WasSetTransform)
 	{
+		memcpy_s(&m_TransformVertices[0], sizeof(m_TransformVertices[0]) * LINEAR_VERTICES_COUNT,
+			&m_LinearVertices[0], sizeof(m_LinearVertices[0]) * LINEAR_VERTICES_COUNT);
+
 		Transform trs = Parent<Object3D>()->transform->Global();
 	
 		float uAdd = (float)(m_Frame % m_Texture.FrameCountX) / m_Texture.FrameCountX;
@@ -144,10 +155,9 @@ void BallRenderer::Draw()
 		// マテリアルのパラメータをセット
 		SetMaterialParam(MatParam);
 
-		for (size_t i = 0; i < SIZE; i++)
+		for (size_t i = 0; i < LINEAR_VERTICES_COUNT; i++)
 		{
-			VERTEX3D& v = (*vertices)[i];
-
+			VERTEX3D& v = m_TransformVertices[i];
 		
 			v.u /= m_Texture.FrameCountX;
 			v.u += uAdd;
@@ -171,9 +181,7 @@ void BallRenderer::Draw()
 	}
 
 	// 頂点を頑張って動かすより、画像を分割して読み込み、ここで変える方がいいかも！
-	DrawPolygon3D(&(*vertices)[0], SIZE / 3, m_Texture.Textures[m_Frame], TRUE);
-
-	delete vertices;
+	DrawPolygon3D(&m_TransformVertices[0], LINEAR_VERTICES_COUNT / 3, m_Texture.Textures[m_Frame], TRUE);
 }
 
 const BallTexture BallRenderer::GetTexture() const

@@ -48,4 +48,5 @@ private:
 
 	std::vector<std::vector<VERTEX3D>> m_Vertices{};
 	std::vector<VERTEX3D> m_LinearVertices{};
+	std::vector<VERTEX3D> m_TransformVertices{};
 };

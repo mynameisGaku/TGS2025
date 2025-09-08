@@ -477,17 +477,6 @@ void Chara::Update() {
 #endif
 #endif
 
-	// ボールの更新
-	if (m_pBall)
-	{
-		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
-		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
-
-		//m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
-		m_pBall->transform->position = VTransform(Vector3::UnitZ, m);
-		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
-	}
-
 	static const float MOVE_ACCEL = 1.8f;
 
 	// 移動速度倍率の更新
@@ -519,6 +508,16 @@ void Chara::Update() {
 	if (m_pBallTarget != nullptr)
 		m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
 	m_lastUpdatePosition = transform->position;
+
+	// ボールの更新
+	if (m_pBall)
+	{
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
+		Vector3 dir = Vector3(1, 0, 0) * MGetRotElem(m);
+
+		m_pBall->transform->position = VTransform(Vector3::UnitY, m);
+		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
+	}
 
 	// NaN/Infのチェック
 	if (MathUtil::IsNaNOrInf(static_cast<double>(transform->position.x)) ||
@@ -1731,7 +1730,6 @@ void Chara::StateFeint(FSMSignal sig)
 	{
 		sub_changeStateNetwork(&Chara::SubStateNone); // ステートを変更
 		m_Timeline->Play("AimToThrow");
-		m_CanCatch = false;
 		m_CanHold = false;
 		m_CanThrow = false;
 		m_CanTackle = false;
@@ -1753,7 +1751,6 @@ void Chara::StateFeint(FSMSignal sig)
 	{
 		sub_changeStateNetwork(&Chara::SubStateHoldToAim); // ステートを変更
 
-		m_CanCatch = true;
 		m_CanHold = true;
 		m_CanThrow = true;
 		m_CanTackle = true;
@@ -3248,54 +3245,60 @@ void Chara::buttonHintUpdate()
 	if (m_pUI_ButtonHint == nullptr)
 		return;
 
-	// RT、LTはチャットバーに表示するので一回無効化
-
 	// ボタンヒント
 	{
-		/*
-		if (m_CanCatch)
+		if (not m_IsJumping)
 		{
-			if(not m_IsCatching)
-				m_pUI_ButtonHint->Activate("LeftTrigger");
-			else 
-				m_pUI_ButtonHint->PushKey("LeftTrigger");
+			m_pUI_ButtonHint->Activate("ButtonA");
 		}
 		else
-			m_pUI_ButtonHint->Deactivate("LeftTrigger");
-			*/
+		{
+			m_pUI_ButtonHint->Deactivate("ButtonA");
+		}
 
 		if (m_CanTackle)
-			m_pUI_ButtonHint->Activate("ButtonB");
-		else
-			m_pUI_ButtonHint->Deactivate("ButtonB");
-
-		if (m_CanThrow)
 		{
-			/*
-			if (not m_IsCharging)
-				m_pUI_ButtonHint->Activate("RightTrigger");
-			else
-				m_pUI_ButtonHint->PushKey("RightTrigger");
-				*/
+			m_pUI_ButtonHint->Activate("ButtonB");
+		}
+		else
+		{
+			m_pUI_ButtonHint->Deactivate("ButtonB");
+		}
 
-			m_pUI_ButtonHint->Activate("ButtonX");
+		if (m_IsLanding)
+		{
+			m_pUI_ButtonHint->Activate("LeftShoulder");
+		}
+		else
+		{
+			m_pUI_ButtonHint->Deactivate("LeftShoulder");
+		}
+
+		if (m_CanCatch)
+		{
+			m_pUI_ButtonHint->Activate("LeftTrigger");
+		}
+		else
+		{
+			m_pUI_ButtonHint->Deactivate("LeftTrigger");
+		}
+
+		if (m_pBall != nullptr && m_CanThrow)
+		{
+			m_pUI_ButtonHint->Activate("RightTrigger");
+			if (m_IsCharging)
+			{
+				m_pUI_ButtonHint->Activate("ButtonX");
+			}
+			else
+			{
+				m_pUI_ButtonHint->Deactivate("ButtonX");
+			}
 		}
 		else
 		{
 			m_pUI_ButtonHint->Deactivate("RightTrigger");
 			m_pUI_ButtonHint->Deactivate("ButtonX");
 		}
-
-		if (m_IsLanding)
-		{
-			m_pUI_ButtonHint->Activate("ButtonA");
-
-			if (not m_IsSliding)
-				m_pUI_ButtonHint->Activate("LeftShoulder");
-			else
-				m_pUI_ButtonHint->PushKey("LeftShoulder");
-		}
-		else
-			m_pUI_ButtonHint->Deactivate("ButtonA");
 	}
 }

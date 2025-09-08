@@ -30,8 +30,8 @@
     },
     {
       "GameModeName": "FreeForAll",
-      "PlayTimeMaxSec": 600,
-      "WinPointMax": 10
+      "PlayTimeMaxSec": 180,
+      "WinPointMax": 3
     },
     {
       "GameModeName": "Debug",
@@ -55,7 +55,7 @@
     }
   ],
 
-  "GameStartCountMaxSec": 5.0,
+  "GameStartCountMaxSec": 3.0,
   "GameEndCountMaxSec": 5.0,
   "DefaultStageName": "ExportedStage-001",
   "StageNames": [

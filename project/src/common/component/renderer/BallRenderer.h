@@ -6,7 +6,7 @@
 
 struct BallTexture
 {
-	int Texture = -1;
+	std::vector<int> Textures;
 	int FrameCountAll = 0;
 	int FrameCountX = 0;
 };
@@ -18,6 +18,12 @@ struct BallTexture
 class BallRenderer : public Component
 {
 public:
+	static const int SLICES_COUNT;	// 球の横方向の分割数
+	static const int STACKS_COUNT;// 球の縦方向の分割数
+	static const float RADIUS;	// 球の半径
+	static const float FRAME_INTERVAL;
+	static const float TEXTURE_RADIUS;
+
 	BallRenderer();
 	~BallRenderer();
 
@@ -28,11 +34,6 @@ public:
 	const BallTexture GetTexture() const;
 	const std::string& GetTextureKey() const { return m_UsingTexKey; }
 private:
-	static const int SLICES_COUNT;	// 球の横方向の分割数
-	static const int STACKS_COUNT;// 球の縦方向の分割数
-	static const float RADIUS;	// 球の半径
-	static const float FRAME_INTERVAL;
-	static const float TEXTURE_RADIUS;
 	
 	BallTexture m_Texture{};
 	int m_Frame{};
@@ -40,9 +41,12 @@ private:
 	float m_Radius{};
 	std::string m_UsingTexKey{};
 
+	bool m_WasSetTransform;	// 描画前のトランスフォーム適用をやったか
+
 	int m_SlicesCount{};
 	int m_StacksCount{};
 
 	std::vector<std::vector<VERTEX3D>> m_Vertices{};
 	std::vector<VERTEX3D> m_LinearVertices{};
+	std::vector<VERTEX3D> m_TransformVertices{};
 };

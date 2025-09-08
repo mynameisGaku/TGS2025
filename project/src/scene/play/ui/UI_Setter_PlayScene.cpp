@@ -15,6 +15,20 @@
 #include "src/reference/ui/UI_MatchTimeRef.h"
 #include "src/reference/ui/UI_ChatBarRef.h"
 
+namespace
+{
+	enum UI_Set_Layer
+	{
+		l_CROSSHAIR,
+		l_HITPOINT,
+		l_MATCHTIME,
+		l_CHATBAR,
+		l_BUTTONHINT,
+		l_FADE,
+		l_STARTCOUNT,
+	};
+}
+
 UI_Setter_PlayScene::UI_Setter_PlayScene()
 {
 	const int CAMERA_NUM = (int)CameraManager::AllCameras().size();
@@ -28,26 +42,32 @@ UI_Setter_PlayScene::UI_Setter_PlayScene()
 		UI_CrossHair* crossHair = new UI_CrossHair(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		crossHair->SetScroll(nullptr, 0.0f, 1.0f, Gauge::ScrollType::eUp, false);
 		crossHair->SetTag("CrossHair_" + sPlayerNum);
+		crossHair->SetPriority(l_CROSSHAIR);
 
 		UI_HitPoint_Icon* hitPointIcon = new UI_HitPoint_Icon(RectTransform(Anchor::Preset::LeftDown, Vector2(0.0f, UI_CHATBAR_REF.PositionY - 30.0f), 0.0f, Vector2::Ones), i);
 		hitPointIcon->SetValue(nullptr, 0.0f, 0.0f, 1.0f);
 		hitPointIcon->SetTag("HitPoint_Icon_" + sPlayerNum);
+		hitPointIcon->SetPriority(l_HITPOINT);
 
 		UI_MatchTime* matchTime = new UI_MatchTime(RectTransform(Anchor::Preset::MiddleUp, Vector2(0.0f, UI_MATCHTIME_REF.PositionY)), i);
 		matchTime->SetTag("MatchTime_" + sPlayerNum);
+		matchTime->SetPriority(l_MATCHTIME);
 
 		UI_StartCount* startCount = new UI_StartCount(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, -100.0f)), i);
 		startCount->SetTag("StartCount_" + sPlayerNum);
-		startCount->SetPriority(crossHair->Priority() + 1);	// クロスヘアの上に表示する
+		startCount->SetPriority(l_STARTCOUNT);	// クロスヘアの上に表示する
 
 		UI_FadeBase* fade = new UI_FadeBlack(RectTransform(Anchor::Preset::Middle, Vector2(0.0f, 0.0f)), i);
 		fade->SetTag("Fade_" + sPlayerNum);
+		fade->SetPriority(l_FADE);
 
 		UI_ChatBar* chat = new UI_ChatBar(RectTransform(Anchor::Preset::MiddleDown, Vector2(0.0f, UI_CHATBAR_REF.PositionY)), i);
 		chat->SetTag("Chat_" + sPlayerNum);
+		chat->SetPriority(l_CHATBAR);
 
 		UI_ButtonHint* buttonHint = new UI_ButtonHint(RectTransform(Anchor::Preset::LeftDown, Vector2(0.0f, 0.0f)), i);
 		buttonHint->SetTag("ButtonHint_" + sPlayerNum);
+		buttonHint->SetPriority(l_BUTTONHINT);
 
 		m_UIs[crossHair->GetTag()] = crossHair;
 		m_UIs[hitPointIcon->GetTag()] = hitPointIcon;

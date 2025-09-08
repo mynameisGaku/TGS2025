@@ -30,8 +30,8 @@
     },
     {
       "GameModeName": "FreeForAll",
-      "PlayTimeMaxSec": 600,
-      "WinPointMax": 10
+      "PlayTimeMaxSec": 180,
+      "WinPointMax": 3
     },
     {
       "GameModeName": "Debug",

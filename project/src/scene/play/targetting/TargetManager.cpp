@@ -25,6 +25,9 @@ TargetManager::TargetManager()
 
 TargetManager::~TargetManager()
 {
+	m_UI_Target->SetTargetManager(nullptr);
+	UI_Manager::Detach(m_UI_Target);
+	delete m_UI_Target;
 }
 
 void TargetManager::Start()

@@ -597,7 +597,7 @@ void MatchManager::StatePhaseGameOver(FSMSignal sig)
 			// 超えてなければ現状の最高ポイントを超えているかを見る
 			if (team->GetTotalPoint() > high)
 			{
-				winner = team->GetTeamName();
+				//winner = team->GetTeamName();
 				high = team->GetTotalPoint();
 			}
 		}

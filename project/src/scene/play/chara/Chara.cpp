@@ -477,17 +477,6 @@ void Chara::Update() {
 #endif
 #endif
 
-	// ボールの更新
-	if (m_pBall)
-	{
-		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
-		Vector3 dir = Vector3(0, 0, 1) * MGetRotElem(m);
-
-		//m_pBall->transform->position = Vector3(0.0f, BALL_RADIUS, -BALL_RADIUS);
-		m_pBall->transform->position = VTransform(Vector3::UnitZ, m);
-		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
-	}
-
 	static const float MOVE_ACCEL = 1.8f;
 
 	// 移動速度倍率の更新
@@ -519,6 +508,16 @@ void Chara::Update() {
 	if (m_pBallTarget != nullptr)
 		m_pBallTarget->SetPositionWithParent(TARGET_OFFSET, transform);
 	m_lastUpdatePosition = transform->position;
+
+	// ボールの更新
+	if (m_pBall)
+	{
+		MATRIX m = MV1GetFrameLocalWorldMatrix(Model(), MV1SearchFrame(Model(), "mixamorig:RightHand"));
+		Vector3 dir = Vector3(1, 0, 0) * MGetRotElem(m);
+
+		m_pBall->transform->position = VTransform(Vector3::UnitY, m);
+		m_pBall->transform->rotation = Vector3Util::DirToEuler(dir);
+	}
 
 	// NaN/Infのチェック
 	if (MathUtil::IsNaNOrInf(static_cast<double>(transform->position.x)) ||

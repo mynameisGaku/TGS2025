@@ -55,7 +55,7 @@
     }
   ],
 
-  "GameStartCountMaxSec": 5.0,
+  "GameStartCountMaxSec": 3.0,
   "GameEndCountMaxSec": 5.0,
   "DefaultStageName": "ExportedStage-001",
   "StageNames": [

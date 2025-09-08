@@ -16,13 +16,16 @@ public:
     ModelFrameTrailRenderer() = default;
     ~ModelFrameTrailRenderer();
 
-    void Finalize(int hModel, const std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC>& descs, int hImage = -1);
+    void Build(int hModel, const std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC>& descs, int hImage = -1);
 
     void Update() override;
     void Draw() override;
 
 private:
-    std::unordered_map<std::string, FrameTrail*>*   m_Trails; // フレーム名とトレイルのマップ
+    std::unordered_map<std::string, FrameTrail*>*   m_Trails{}; // フレーム名とトレイルのマップ
     int                                             m_hImage{};
     int                                             m_hModel{}; // モデルハンドル
+
+    class PerformanceProfiler*                      m_pUpdateProfiler{};
+    class PerformanceProfiler*                      m_pDrawProfiler{};
 };

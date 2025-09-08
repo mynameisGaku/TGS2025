@@ -7,12 +7,16 @@
 #include "src/util/file/csv/CsvReader.h"
 #include "src/util/file/json/settings_json.h"
 #include <src/util/ptr/PtrUtil.h>
+#include <src/common/performance_profiler/PerformanceProfilerManagerManager.h>
 
 namespace {
 
 	std::unordered_map<std::string, EffectInfo>* effectInfoDatas;	// 読み込んだエフェクトデータを保持する
 	std::list<EffectBase*>* effects;	// 再生中のエフェクト
 	std::string* csvFilePath;			// 読み込み用Csvファイルのパス
+
+	PerformanceProfiler* pUpdateProfiler	= nullptr;
+	PerformanceProfiler* pDrawProfiler		= nullptr;
 
 	bool initialize = false;	// 初期化処理が行われたか
 }
@@ -28,6 +32,10 @@ void EffectManager::Init() {
 	if (csvFilePath == nullptr)
 		csvFilePath = new std::string();
 
+	pUpdateProfiler = new PerformanceProfiler("Effect Update");
+	pUpdateProfiler->Activate();
+	pDrawProfiler = new PerformanceProfiler("Effect Draw");
+	pDrawProfiler->Activate();
 	initialize = false;
 }
 
@@ -44,6 +52,8 @@ void EffectManager::Start() {
 }
 
 void EffectManager::Update() {
+	if (pUpdateProfiler)
+		pUpdateProfiler->BeginProfiling();
 
 	// 初期化処理がまだ行われていない場合
 	if (initialize == false)
@@ -54,7 +64,10 @@ void EffectManager::Update() {
 
 	// 再生中のエフェクトがない場合
 	if (effects == nullptr)
+	{
+		pUpdateProfiler->EndProfiling();
 		return;
+	}
 
 	// 再生中のエフェクトのUpdateを呼び出す
 	for (auto itr = effects->begin(); itr != effects->end();) {
@@ -68,9 +81,15 @@ void EffectManager::Update() {
 		itr = effects->erase(itr);
 		if (itr == effects->end()) break;
 	}
+
+	if (pUpdateProfiler)
+		pUpdateProfiler->EndProfiling();
 }
 
 void EffectManager::Draw() {
+
+	if (pDrawProfiler)
+		pDrawProfiler->BeginProfiling();
 
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
@@ -79,13 +98,20 @@ void EffectManager::Draw() {
 
 	// 再生中のエフェクトがない場合、処理を抜ける
 	if (effects == nullptr)
+	{
+		if (pDrawProfiler)
+			pDrawProfiler->EndProfiling();
 		return;
+	}
 
 	// 再生中のエフェクトのDrawを呼び出す
 	for (const auto& itr : *effects) {
 		if (itr->IsActive())
 			itr->Draw();
 	}
+
+	if (pDrawProfiler)
+		pDrawProfiler->EndProfiling();
 }
 
 void EffectManager::Release() {
@@ -110,6 +136,9 @@ void EffectManager::Release() {
 
 	// 保持していた読み込み用Csvファイルのパスを削除する
 	PtrUtil::SafeDelete(csvFilePath);
+
+	PtrUtil::SafeDelete(pUpdateProfiler);
+	PtrUtil::SafeDelete(pDrawProfiler);
 
 	// 読み込んだ全てのエフェクトデータを解放する
 	AllReleaseInfo();

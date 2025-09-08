@@ -268,10 +268,10 @@ void Chara::Init(std::string tag)
 	std::vector<MODEL_FRAME_TRAIL_RENDERER_DESC> descs;
 	std::vector<std::pair<std::string, std::string>>* frameAndTrailNames = new std::vector<std::pair<std::string, std::string>>
 	{
-		{ "mixamorig:Hips", "HipsTrail" },
-		{ "mixamorig:Spine2", "Spine1Trail" },
-		{ "mixamorig:LeftShoulder", "LeftShoulderTrail" },
-		{ "mixamorig:RightShoulder", "RightShoulderTrail" },
+		//{ "mixamorig:Hips", "HipsTrail" },
+		//{ "mixamorig:Spine2", "Spine1Trail" },
+		//{ "mixamorig:LeftShoulder", "LeftShoulderTrail" },
+		//{ "mixamorig:RightShoulder", "RightShoulderTrail" },
 		{ "mixamorig:LeftLeg", "LeftLegTrail" },
 		{ "mixamorig:LeftUpLeg", "LeftUpLegTrail" },
 		{ "mixamorig:RightLeg", "RightLegTrail" },
@@ -317,7 +317,7 @@ void Chara::Init(std::string tag)
 		descs.push_back(desc1);
 		descs.push_back(desc2);
 	}
-	trail->Finalize(Model(), descs, m_hTrailImage);
+	trail->Build(Model(), descs, m_hTrailImage);
 	delete frameAndTrailNames;
 	
 
@@ -529,6 +529,7 @@ void Chara::Update() {
 	invincibleUpdate();
 	buttonHintUpdate();
 	m_pUpdateProfiler->EndProfiling();
+
 }
 
 void Chara::Draw()

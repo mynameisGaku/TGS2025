@@ -55,7 +55,10 @@ public:
 	static bool IsNaNOrInf(float value) { return (IsNaN(value) || IsInf(value)); }
 
 	/// 値が NaN(非数) または 無限大 かを判定します。
-	static bool IsNaNOrInf(double value) { return (IsNaN(value) || IsInf(value)); }
+	static bool IsNaNOrInf(double value)
+	{
+		return (IsNaN(value) || IsInf(value)); 
+	}
 
 	/**
 		@brief		等加速度運動の式で値を計算します。

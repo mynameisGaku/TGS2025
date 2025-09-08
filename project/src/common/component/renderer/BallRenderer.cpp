@@ -162,7 +162,6 @@ void BallRenderer::Draw()
 			{
 				v.v -= 1.0f;
 			}
-		
 
 			v.pos *= m_Radius;
 			v.pos *= trs.Matrix();

@@ -100,6 +100,8 @@ void BallRenderer::SetTexture(const BallTexture& texture, const std::string& map
 
 void BallRenderer::Update()
 {
+	m_WasSetTransform = false;
+
 	m_FrameTimer += GTime.deltaTime;
 
 	if (m_FrameTimer > FRAME_INTERVAL)
@@ -116,52 +118,61 @@ void BallRenderer::Update()
 
 void BallRenderer::Draw()
 {
-	Transform trs = Parent<Object3D>()->transform->Global();
-	
-	float uAdd = (float)(m_Frame % m_Texture.FrameCountX) / m_Texture.FrameCountX;
-	float vAdd = (float)(m_Frame / m_Texture.FrameCountX) / m_Texture.FrameCountX;
-
-	MATERIALPARAM MatParam;
-
-	MatParam.Diffuse = GetColorF(0.0f, 0.0f, 0.0f, 1.0f);	// ディフューズカラーは白
-	MatParam.Ambient = GetColorF(1.0f, 1.0f, 1.0f, 1.0f);	// アンビエントカラーは白( ライトのアンビエントカラーをそのまま反映する )
-	MatParam.Specular = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);	// スペキュラカラーは無し
-	MatParam.Emissive = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);	// エミッシブカラー( 自己発光 )もなし
-	MatParam.Power = 0.0f;						// スペキュラはないので０
-
-	// マテリアルのパラメータをセット
-	SetMaterialParam(MatParam);
 
 	static const size_t SIZE = SLICES_COUNT * STACKS_COUNT * 6;
 
 	std::array<VERTEX3D, SIZE>* vertices = new std::array<VERTEX3D, SIZE>;
 
-	memcpy_s(&vertices[0], sizeof(vertices[0]) * SIZE, 
+	memcpy_s(&vertices[0], sizeof((*vertices)[0]) * SIZE,
 		&m_LinearVertices[0], sizeof(m_LinearVertices[0]) * SIZE);
 
-	for (size_t i = 0; i < SIZE; i++)
+	if (not m_WasSetTransform)
 	{
-		VERTEX3D& v = (*vertices)[i];
+		Transform trs = Parent<Object3D>()->transform->Global();
+	
+		float uAdd = (float)(m_Frame % m_Texture.FrameCountX) / m_Texture.FrameCountX;
+		float vAdd = (float)(m_Frame / m_Texture.FrameCountX) / m_Texture.FrameCountX;
 
-		v.u /= m_Texture.FrameCountX;
-		v.u += uAdd;
-		if (v.u >= 1.0f)
+		MATERIALPARAM MatParam;
+
+		MatParam.Diffuse = GetColorF(0.0f, 0.0f, 0.0f, 1.0f);	// ディフューズカラーは白
+		MatParam.Ambient = GetColorF(1.0f, 1.0f, 1.0f, 1.0f);	// アンビエントカラーは白( ライトのアンビエントカラーをそのまま反映する )
+		MatParam.Specular = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);	// スペキュラカラーは無し
+		MatParam.Emissive = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);	// エミッシブカラー( 自己発光 )もなし
+		MatParam.Power = 0.0f;						// スペキュラはないので０
+
+		// マテリアルのパラメータをセット
+		SetMaterialParam(MatParam);
+
+		for (size_t i = 0; i < SIZE; i++)
 		{
-			v.u -= 1.0f;
+			VERTEX3D& v = (*vertices)[i];
+
+		
+			v.u /= m_Texture.FrameCountX;
+			v.u += uAdd;
+			if (v.u >= 1.0f)
+			{
+				v.u -= 1.0f;
+			}
+
+			v.v /= m_Texture.FrameCountX;
+			v.v += vAdd;
+			if (v.v >= 1.0f)
+			{
+				v.v -= 1.0f;
+			}
+		
+
+			v.pos *= m_Radius;
+			v.pos *= trs.Matrix();
 		}
 
-		v.v /= m_Texture.FrameCountX;
-		v.v += vAdd;
-		if (v.v >= 1.0f)
-		{
-			v.v -= 1.0f;
-		}
-
-		v.pos *= m_Radius;
-		v.pos *= trs.Matrix();
+		m_WasSetTransform = true;
 	}
 
-	DrawPolygon3D(&(*vertices)[0], SIZE / 3, m_Texture.Texture, TRUE);
+	// 頂点を頑張って動かすより、画像を分割して読み込み、ここで変える方がいいかも！
+	DrawPolygon3D(&(*vertices)[0], SIZE / 3, m_Texture.Textures[m_Frame], TRUE);
 
 	delete vertices;
 }
